@@ -1,0 +1,16 @@
+.turnHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-ui);
+}
+
+.date {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.turn {
+  font-size: 1.1rem;
+  color: var(--color-text-muted);
+}
