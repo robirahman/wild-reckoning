@@ -110,7 +110,7 @@ export const useGameStore = create<GameState>((set, get) => {
     turnHistory: [],
     eventCooldowns: {},
 
-    startGame(speciesId, backstory, sex) {
+    startGame(_speciesId, backstory, sex) {
       const newSeed = Date.now();
       set({
         phase: 'playing',

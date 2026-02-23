@@ -11,7 +11,7 @@ interface HealthTickResult {
 }
 
 /** Process one turn of health effects: parasite progression, injury healing */
-export function tickHealth(animal: AnimalState, rng: Rng, turn: number): HealthTickResult {
+export function tickHealth(animal: AnimalState, rng: Rng, _turn: number): HealthTickResult {
   const narratives: string[] = [];
   let updatedAnimal = { ...animal };
 
