@@ -12,10 +12,17 @@ import type { SpeciesDataBundle } from '../types/speciesConfig';
 import type { SpeciesConfig } from '../types/speciesConfig';
 import type { TurnResult } from '../types/turnResult';
 import type { Difficulty } from '../types/difficulty';
+import type { EcosystemState } from '../types/ecosystem';
+import type { TerritoryState } from '../types/territory';
+import type { ScenarioDefinition } from '../types/scenario';
+import type { LineageTraits } from '../types/lineage';
 import { DIFFICULTY_PRESETS } from '../types/difficulty';
 import { StatId } from '../types/stats';
 import { DEFAULT_BEHAVIORAL_SETTINGS } from '../types/behavior';
 import { INITIAL_ITEROPAROUS_STATE, INITIAL_SEMELPAROUS_STATE } from '../types/reproduction';
+import { INITIAL_TERRITORY } from '../types/territory';
+import { initializeEcosystem, modifyPopulation } from '../engine/EcosystemSystem';
+import { computeInheritedTraits, applyLineageBiases } from '../engine/LineageSystem';
 import { createStatBlock, addModifier, tickModifiers, removeModifiersBySource } from '../engine/StatCalculator';
 import { createInitialTime, advanceTime } from '../engine/TimeSystem';
 import { createRng, type Rng } from '../engine/RandomUtils';
@@ -79,6 +86,21 @@ export interface GameState {
   // History
   turnHistory: TurnRecord[];
   eventCooldowns: Record<string, number>;
+
+  // Ambient text
+  ambientText: string | null;
+
+  // Ecosystem
+  ecosystem: EcosystemState;
+
+  // Territory
+  territory: TerritoryState;
+
+  // Scenario
+  scenario: ScenarioDefinition | null;
+
+  // Lineage
+  lineage: LineageTraits | null;
 
   // Actions
   startGame: (speciesId: string, backstory: Backstory, sex: 'male' | 'female', difficulty?: Difficulty) => void;
@@ -158,6 +180,11 @@ export const useGameStore = create<GameState>((set, get) => {
     showingResults: false,
     turnHistory: [],
     eventCooldowns: {},
+    ambientText: null,
+    ecosystem: initializeEcosystem(),
+    territory: { ...INITIAL_TERRITORY },
+    scenario: null,
+    lineage: null,
 
     startGame(speciesId, backstory, sex, difficulty) {
       const newSeed = Date.now();
@@ -184,6 +211,11 @@ export const useGameStore = create<GameState>((set, get) => {
         showingResults: false,
         turnHistory: [],
         eventCooldowns: {},
+        ambientText: null,
+        ecosystem: initializeEcosystem(),
+        territory: { ...INITIAL_TERRITORY },
+        scenario: null,
+        lineage: null,
       });
     },
 
@@ -404,6 +436,18 @@ export const useGameStore = create<GameState>((set, get) => {
               },
             });
           }
+          break;
+        }
+        case 'modify_population': {
+          const newEco = modifyPopulation(state.ecosystem, consequence.speciesName, consequence.amount);
+          set({ ecosystem: newEco });
+          break;
+        }
+        case 'modify_territory': {
+          const t = { ...state.territory };
+          if (consequence.sizeChange) t.size = Math.max(0, Math.min(100, t.size + consequence.sizeChange));
+          if (consequence.qualityChange) t.quality = Math.max(0, Math.min(100, t.quality + consequence.qualityChange));
+          set({ territory: t });
           break;
         }
         default:
@@ -653,7 +697,21 @@ export const useGameStore = create<GameState>((set, get) => {
       if (config.lineageMode && state.reproduction.type === 'semelparous' && state.reproduction.spawned) {
         const backstory = state.animal.backstory;
         const sex = state.rng.chance(0.5) ? 'male' as const : 'female' as const;
+
+        // Compute inherited traits for next generation
+        const parentStats: Record<StatId, number> = {} as Record<StatId, number>;
+        for (const id of Object.values(StatId)) {
+          parentStats[id] = computeEffectiveValue(state.animal.stats[id]);
+        }
+        const newLineage = computeInheritedTraits(parentStats, state.lineage, config, state.rng);
+
+        // Create new animal with inherited biases
         const newAnimal = createInitialAnimal(config, backstory, sex);
+        const biasedBases = applyLineageBiases(
+          Object.fromEntries(Object.values(StatId).map((id) => [id, config.baseStats[id]])) as Record<StatId, number>,
+          newLineage,
+        );
+        newAnimal.stats = createStatBlock(biasedBases);
 
         set({
           animal: newAnimal,
@@ -661,6 +719,7 @@ export const useGameStore = create<GameState>((set, get) => {
           currentEvents: [],
           pendingChoices: [],
           revocableChoices: {},
+          lineage: newLineage,
         });
         return;
       }

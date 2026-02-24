@@ -7,6 +7,11 @@ import { checkAchievements } from '../engine/AchievementChecker';
 import { useAchievementStore } from '../store/achievementStore';
 import { introduceNPC, incrementEncounter } from '../engine/NPCSystem';
 import { tickStorylines } from '../engine/StorylineSystem';
+import { generateAmbientText } from '../engine/AmbientTextGenerator';
+import { tickEcosystem } from '../engine/EcosystemSystem';
+import { tickTerritory, TERRITORIAL_SPECIES } from '../engine/TerritorySystem';
+import { ENCYCLOPEDIA_ENTRIES } from '../data/encyclopedia';
+import { useEncyclopediaStore } from '../store/encyclopediaStore';
 
 export function useGameEngine() {
   const store = useGameStore();
@@ -47,7 +52,37 @@ export function useGameEngine() {
     }
 
     const currentState = useGameStore.getState();
-    const events = generateTurnEvents(currentState);
+
+    // Generate ambient text for this turn
+    const ambientText = generateAmbientText({
+      season: currentState.time.season,
+      speciesId: currentState.animal.speciesId,
+      regionId: currentState.animal.region,
+      weatherType: currentState.currentWeather?.type,
+      rng: currentState.rng,
+    });
+    useGameStore.setState({ ambientText });
+
+    // Tick ecosystem populations
+    const ecoResult = tickEcosystem(
+      currentState.ecosystem,
+      currentState.animal.region,
+      currentState.time.turn,
+      currentState.rng,
+    );
+    useGameStore.setState({ ecosystem: ecoResult.ecosystem });
+
+    // Tick territory for territorial species
+    if (TERRITORIAL_SPECIES.has(currentState.animal.speciesId)) {
+      const newTerritory = tickTerritory(
+        currentState.territory,
+        currentState.animal.speciesId,
+        currentState.rng,
+      );
+      useGameStore.setState({ territory: newTerritory });
+    }
+
+    const events = generateTurnEvents(useGameStore.getState());
 
     // Tick storylines and inject storyline events
     const storylineResult = tickStorylines({
@@ -145,6 +180,21 @@ export function useGameEngine() {
 
     // Check achievements after turn
     checkAchievements(useGameStore.getState(), 'turn');
+
+    // Check encyclopedia unlocks
+    const encStore = useEncyclopediaStore.getState();
+    const achStore = useAchievementStore.getState();
+    for (const entry of ENCYCLOPEDIA_ENTRIES) {
+      if (encStore.unlockedEntryIds.has(entry.id)) continue;
+      const cond = entry.unlockCondition;
+      if (cond.type === 'default') {
+        encStore.unlock(entry.id);
+      } else if (cond.type === 'species_played' && achStore.speciesPlayed.has(cond.speciesId)) {
+        encStore.unlock(entry.id);
+      } else if (cond.type === 'achievement' && achStore.unlockedIds.has(cond.achievementId)) {
+        encStore.unlock(entry.id);
+      }
+    }
   }, [store]);
 
   const dismissResults = useCallback(() => {

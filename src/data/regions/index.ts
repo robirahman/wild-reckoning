@@ -241,6 +241,128 @@ export const REGION_DEFINITIONS: Record<string, RegionDefinition> = {
       { parasiteId: 'parasitoid-wasp', baseChance: 0.04, seasonalModifier: { spring: 0.8, summer: 1.3, autumn: 1.1, winter: 0.5 } },
     ],
   },
+
+  'midwest-prairie-apiary': {
+    id: 'midwest-prairie-apiary',
+    name: 'Midwest Prairie',
+    climate: {
+      temperatureByMonth: [22, 27, 38, 52, 63, 73, 78, 76, 67, 54, 39, 25],
+      precipitationByMonth: [1.0, 1.1, 2.2, 3.5, 4.2, 4.5, 3.8, 3.6, 3.2, 2.8, 2.0, 1.2],
+      firstFrostMonth: 9,
+      lastFrostMonth: 4,
+    },
+    flora: [
+      { id: 'white-clover', name: 'White Clover', availableSeasons: ['spring', 'summer', 'autumn'], nutritiveValue: 70, abundanceByMonth: [0, 0, 0.2, 0.5, 0.8, 1.0, 0.9, 0.7, 0.5, 0.2, 0, 0] },
+      { id: 'goldenrod', name: 'Goldenrod', availableSeasons: ['summer', 'autumn'], nutritiveValue: 80, abundanceByMonth: [0, 0, 0, 0, 0, 0.3, 0.6, 0.9, 1.0, 0.5, 0, 0] },
+      { id: 'alfalfa', name: 'Alfalfa', availableSeasons: ['spring', 'summer'], nutritiveValue: 75, abundanceByMonth: [0, 0, 0.1, 0.4, 0.8, 1.0, 1.0, 0.8, 0.5, 0.2, 0, 0] },
+    ],
+    fauna: ['honeybee', 'bumblebee', 'monarch-butterfly', 'meadowlark', 'grasshopper'],
+    predators: ['bee-eater', 'spider', 'dragonfly', 'robber-fly'],
+    parasitePrevalence: [
+      { parasiteId: 'varroa-mite', baseChance: 0.10, seasonalModifier: { spring: 0.8, summer: 1.5, autumn: 1.3, winter: 0.4 } },
+      { parasiteId: 'nosema-ceranae', baseChance: 0.06, seasonalModifier: { spring: 1.3, summer: 0.8, autumn: 0.9, winter: 1.5 } },
+    ],
+  },
+
+  'mediterranean-reef': {
+    id: 'mediterranean-reef',
+    name: 'Mediterranean Reef',
+    climate: {
+      temperatureByMonth: [55, 55, 57, 60, 66, 73, 79, 80, 76, 69, 62, 57],
+      precipitationByMonth: [2.5, 2.0, 1.8, 1.2, 0.8, 0.3, 0.1, 0.2, 0.8, 2.0, 3.0, 2.8],
+      firstFrostMonth: -1,
+      lastFrostMonth: -1,
+    },
+    flora: [
+      { id: 'posidonia-seagrass', name: 'Posidonia Seagrass', availableSeasons: ['spring', 'summer', 'autumn', 'winter'], nutritiveValue: 15, abundanceByMonth: [0.4, 0.4, 0.5, 0.6, 0.7, 0.8, 0.8, 0.8, 0.7, 0.6, 0.5, 0.4] },
+      { id: 'coralline-algae', name: 'Coralline Algae', availableSeasons: ['spring', 'summer', 'autumn', 'winter'], nutritiveValue: 10, abundanceByMonth: [0.5, 0.5, 0.6, 0.7, 0.8, 0.9, 0.9, 0.9, 0.8, 0.7, 0.6, 0.5] },
+    ],
+    fauna: ['shore-crab', 'spider-crab', 'damselfish', 'grouper', 'mussel', 'sea-urchin'],
+    predators: ['moray-eel', 'conger-eel', 'grouper', 'bottlenose-dolphin'],
+    parasitePrevalence: [
+      { parasiteId: 'aggregata-coccidian', baseChance: 0.08, seasonalModifier: { spring: 1.0, summer: 1.4, autumn: 1.2, winter: 0.7 } },
+      { parasiteId: 'dicyemid-parasite', baseChance: 0.05, seasonalModifier: { spring: 1.0, summer: 1.2, autumn: 1.0, winter: 0.8 } },
+    ],
+  },
+  'arctic-breeding-colony': {
+    id: 'arctic-breeding-colony',
+    name: 'Arctic Breeding Colony',
+    climate: {
+      temperatureByMonth: [-5, -2, 10, 25, 38, 48, 52, 50, 40, 28, 12, 0],
+      precipitationByMonth: [0.5, 0.4, 0.6, 0.8, 1.2, 1.5, 1.8, 2.0, 1.5, 1.0, 0.7, 0.5],
+      firstFrostMonth: 8,
+      lastFrostMonth: 5,
+    },
+    flora: [
+      { id: 'tundra-moss', name: 'Tundra Moss', availableSeasons: ['summer'], nutritiveValue: 5, abundanceByMonth: [0, 0, 0, 0, 0.2, 0.6, 0.8, 0.7, 0.3, 0, 0, 0] },
+      { id: 'arctic-lichen', name: 'Arctic Lichen', availableSeasons: ['summer', 'autumn'], nutritiveValue: 5, abundanceByMonth: [0, 0, 0, 0, 0.3, 0.5, 0.6, 0.6, 0.4, 0.2, 0, 0] },
+    ],
+    fauna: ['sand-eel', 'arctic-char', 'lemming', 'arctic-fox', 'snowy-owl'],
+    predators: ['great-skua', 'herring-gull', 'arctic-fox', 'peregrine-falcon'],
+    parasitePrevalence: [
+      { parasiteId: 'feather-lice', baseChance: 0.08, seasonalModifier: { spring: 0.8, summer: 1.5, autumn: 1.0, winter: 0.5 } },
+      { parasiteId: 'cestode-tapeworm', baseChance: 0.05, seasonalModifier: { spring: 1.0, summer: 1.3, autumn: 1.0, winter: 0.8 } },
+    ],
+  },
+
+  'atlantic-flyway': {
+    id: 'atlantic-flyway',
+    name: 'Atlantic Flyway',
+    climate: {
+      temperatureByMonth: [45, 46, 50, 55, 62, 68, 72, 71, 66, 58, 50, 45],
+      precipitationByMonth: [3.0, 2.8, 3.2, 3.5, 3.8, 3.5, 3.0, 3.2, 3.5, 3.2, 3.0, 3.0],
+      firstFrostMonth: -1,
+      lastFrostMonth: -1,
+    },
+    flora: [
+      { id: 'sargassum', name: 'Sargassum Seaweed', availableSeasons: ['spring', 'summer', 'autumn', 'winter'], nutritiveValue: 10, abundanceByMonth: [0.4, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.9, 0.7, 0.5, 0.4, 0.4] },
+    ],
+    fauna: ['flying-fish', 'sand-eel', 'herring', 'squid', 'jellyfish'],
+    predators: ['peregrine-falcon', 'great-skua', 'herring-gull'],
+    parasitePrevalence: [
+      { parasiteId: 'avian-malaria', baseChance: 0.04, seasonalModifier: { spring: 1.0, summer: 1.5, autumn: 1.2, winter: 0.5 } },
+    ],
+  },
+
+  'antarctic-pack-ice-edge': {
+    id: 'antarctic-pack-ice-edge',
+    name: 'Antarctic Pack Ice Edge',
+    climate: {
+      temperatureByMonth: [30, 28, 22, 15, 8, 2, 0, 2, 10, 18, 24, 28],
+      precipitationByMonth: [1.0, 0.8, 0.8, 0.6, 0.5, 0.4, 0.4, 0.5, 0.6, 0.8, 0.9, 1.0],
+      firstFrostMonth: 3,
+      lastFrostMonth: 9,
+    },
+    flora: [
+      { id: 'ice-algae', name: 'Ice Algae', availableSeasons: ['spring', 'summer', 'autumn', 'winter'], nutritiveValue: 5, abundanceByMonth: [0.6, 0.5, 0.4, 0.3, 0.2, 0.1, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6] },
+    ],
+    fauna: ['antarctic-krill', 'silverfish', 'squid', 'petrel', 'penguin'],
+    predators: ['leopard-seal', 'south-polar-skua'],
+    parasitePrevalence: [
+      { parasiteId: 'feather-lice', baseChance: 0.06, seasonalModifier: { spring: 1.0, summer: 1.2, autumn: 1.0, winter: 0.6 } },
+    ],
+  },
+
+  'costa-rican-rainforest': {
+    id: 'costa-rican-rainforest',
+    name: 'Costa Rican Rainforest',
+    climate: {
+      temperatureByMonth: [75, 76, 78, 79, 79, 78, 77, 77, 77, 76, 75, 75],
+      precipitationByMonth: [0.5, 0.3, 0.5, 2.5, 8.5, 10.0, 7.5, 8.0, 10.5, 11.0, 6.5, 1.5],
+      firstFrostMonth: -1,
+      lastFrostMonth: -1,
+    },
+    flora: [
+      { id: 'bromeliad', name: 'Bromeliad', availableSeasons: ['spring', 'summer', 'autumn', 'winter'], nutritiveValue: 5, abundanceByMonth: [0.8, 0.8, 0.8, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.8] },
+      { id: 'heliconia', name: 'Heliconia', availableSeasons: ['spring', 'summer', 'autumn', 'winter'], nutritiveValue: 10, abundanceByMonth: [0.6, 0.6, 0.7, 0.8, 0.9, 0.9, 0.8, 0.8, 0.9, 0.9, 0.8, 0.7] },
+    ],
+    fauna: ['oribatid-mite', 'formicine-ant', 'fruit-fly', 'tree-frog', 'anole'],
+    predators: ['cat-eyed-snake', 'wandering-spider', 'centipede', 'bird'],
+    parasitePrevalence: [
+      { parasiteId: 'chytrid-fungus', baseChance: 0.06, seasonalModifier: { spring: 1.0, summer: 1.3, autumn: 1.2, winter: 0.8 } },
+      { parasiteId: 'frog-nematode', baseChance: 0.05, seasonalModifier: { spring: 1.0, summer: 1.4, autumn: 1.1, winter: 0.7 } },
+    ],
+  },
 };
 
 export function getRegionDefinition(id: string): RegionDefinition | undefined {

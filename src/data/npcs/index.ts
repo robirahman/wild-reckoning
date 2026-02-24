@@ -156,6 +156,94 @@ export const NPC_TEMPLATES: Record<string, NPCTemplate[]> = {
       namePool: ['Amber Wing', 'The Dancer', 'Sunset', 'Golden Dust', 'Meadow'],
     },
   ],
+  'honeybee-worker': [
+    {
+      type: 'rival',
+      speciesLabel: 'robber bee',
+      namePool: ['The Dark One', 'Waxy Thief', 'The Raider', 'Foreign Scent'],
+    },
+    {
+      type: 'ally',
+      speciesLabel: 'sister worker',
+      namePool: ['The Dancer', 'Wax Builder', 'The Nurse', 'Pollen Legs', 'Steady Wing'],
+    },
+    {
+      type: 'predator',
+      speciesLabel: 'bee-eater',
+      namePool: ['Green Flash', 'The Swooper', 'Branch Beater', 'The Quick One'],
+    },
+    {
+      type: 'mate',
+      speciesLabel: 'drone',
+      namePool: ['The Big One', 'Loud Wings', 'The Loafer', 'The Lucky Drone'],
+    },
+  ],
+  'common-octopus': [
+    {
+      type: 'rival',
+      speciesLabel: 'octopus',
+      namePool: ['The Scarred One', 'Big Arms', 'The Red Ghost', 'Reef Shadow', 'The Lurker'],
+    },
+    {
+      type: 'ally',
+      speciesLabel: 'cleaner shrimp',
+      namePool: ['The Tiny Dancer', 'Red Stripe', 'The Groomer', 'Den Guest'],
+    },
+    {
+      type: 'predator',
+      speciesLabel: 'moray eel',
+      namePool: ['Green Maw', 'The Reef Snake', 'Night Hunter', 'Gap Tooth', 'The Sinuous One'],
+    },
+    {
+      type: 'mate',
+      speciesLabel: 'octopus',
+      namePool: ['The Large Female', 'Coral Den', 'The Bold One', 'Deep Reef', 'Eight Arms'],
+    },
+  ],
+  'arctic-tern': [
+    {
+      type: 'rival',
+      speciesLabel: 'male tern',
+      namePool: ['The Red Beak', 'Windcutter', 'The Screamer', 'Colony King', 'The Diver'],
+    },
+    {
+      type: 'ally',
+      speciesLabel: 'mate',
+      namePool: ['Steady Wing', 'The Fish Bringer', 'Colony Heart', 'The Sentinel'],
+    },
+    {
+      type: 'predator',
+      speciesLabel: 'great skua',
+      namePool: ['The Bonxie', 'Dark Wing', 'The Pirate', 'Heavy Beak', 'The Raider'],
+    },
+    {
+      type: 'mate',
+      speciesLabel: 'female tern',
+      namePool: ['Silver', 'The Chooser', 'Bright Eye', 'Graceful', 'The Swift One'],
+    },
+  ],
+  'poison-dart-frog': [
+    {
+      type: 'rival',
+      speciesLabel: 'male frog',
+      namePool: ['The Loud One', 'Red Back', 'The Wrestler', 'Bright Throat', 'Corner Caller'],
+    },
+    {
+      type: 'ally',
+      speciesLabel: 'female frog',
+      namePool: ['The Careful Mother', 'Moss Back', 'The Climber', 'Pool Finder'],
+    },
+    {
+      type: 'predator',
+      speciesLabel: 'cat-eyed snake',
+      namePool: ['The Slitherer', 'Night Eyes', 'Leaf Glider', 'The Patient One'],
+    },
+    {
+      type: 'mate',
+      speciesLabel: 'female frog',
+      namePool: ['The Chooser', 'Bright Belly', 'Blue Legs', 'Golden Back', 'The Bold One'],
+    },
+  ],
   'fig-wasp': [
     {
       type: 'rival',

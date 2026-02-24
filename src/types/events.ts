@@ -59,7 +59,9 @@ export type Consequence =
   | { type: 'start_pregnancy'; offspringCount: number }
   | { type: 'sire_offspring'; offspringCount: number }
   | { type: 'spawn' }
-  | { type: 'introduce_npc'; npcType: 'rival' | 'ally' | 'mate' | 'predator' | 'offspring' };
+  | { type: 'introduce_npc'; npcType: 'rival' | 'ally' | 'mate' | 'predator' | 'offspring' }
+  | { type: 'modify_population'; speciesName: string; amount: number }
+  | { type: 'modify_territory'; sizeChange?: number; qualityChange?: number };
 
 // ── Sub-Events ──
 

@@ -10,6 +10,7 @@ export function TurnHeader({ onToggleHistory }: Props) {
   const time = useGameStore((s) => s.time);
   const config = useGameStore((s) => s.speciesBundle.config);
   const animal = useGameStore((s) => s.animal);
+  const ambientText = useGameStore((s) => s.ambientText);
 
   // Determine lifecycle phase for species with phases
   const currentPhase = config.phases?.slice().reverse().find(
@@ -29,6 +30,19 @@ export function TurnHeader({ onToggleHistory }: Props) {
         )}
         <WeatherBadge />
       </span>
+      {ambientText && (
+        <div style={{
+          fontFamily: 'var(--font-narrative)',
+          fontSize: '0.82rem',
+          fontStyle: 'italic',
+          color: 'var(--color-text-muted)',
+          marginTop: 4,
+          lineHeight: 1.4,
+          gridColumn: '1 / -1',
+        }}>
+          {ambientText}
+        </div>
+      )}
       <span className={styles.turn}>
         {onToggleHistory && (
           <button

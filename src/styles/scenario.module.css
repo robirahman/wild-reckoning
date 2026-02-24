@@ -1,0 +1,122 @@
+/* Phase 8: Scenario/Challenge Mode styles */
+
+.container {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 48px 32px;
+}
+
+.title {
+  font-family: var(--font-ui);
+  font-size: 1.8rem;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  text-align: center;
+  color: var(--color-text-muted);
+  font-family: var(--font-narrative);
+  font-style: italic;
+  margin-bottom: 32px;
+}
+
+.grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.card {
+  padding: 16px 20px;
+  border: 2px solid var(--color-border);
+  border-radius: 4px;
+  background: var(--color-panel-bg);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.card:hover {
+  border-color: var(--color-text);
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.cardName {
+  font-family: var(--font-ui);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.difficulty {
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 2px 8px;
+  border-radius: 3px;
+}
+
+.easy {
+  color: #5a9e5a;
+  border: 1px solid #5a9e5a;
+}
+
+.normal {
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+}
+
+.hard {
+  color: var(--color-danger);
+  border: 1px solid var(--color-danger);
+}
+
+.species {
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin-bottom: 8px;
+}
+
+.description {
+  font-family: var(--font-narrative);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+
+.objective {
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.bestScore {
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  color: #5a9e5a;
+  margin-top: 6px;
+}
+
+.backButton {
+  display: block;
+  margin: 0 auto;
+  padding: 10px 32px;
+  font-family: var(--font-ui);
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: 2px solid var(--color-border);
+  border-radius: 4px;
+  background: var(--color-panel-bg);
+  cursor: pointer;
+}

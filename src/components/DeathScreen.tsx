@@ -1,6 +1,7 @@
 import { useGameStore } from '../store/gameStore';
 import { deleteSaveGame } from '../store/persistence';
 import { AchievementList } from './achievements/AchievementList';
+import { RunSummary } from './RunSummary';
 import { formatWeight } from '../utils/formatWeight';
 import type { Offspring } from '../types/reproduction';
 
@@ -32,6 +33,7 @@ export function DeathScreen() {
   const turnHistory = useGameStore((s) => s.turnHistory);
   const reproduction = useGameStore((s) => s.reproduction);
   const config = useGameStore((s) => s.speciesBundle.config);
+  const lineage = useGameStore((s) => s.lineage);
   const tv = config.templateVars;
 
   const isIteroparous = reproduction.type === 'iteroparous';
@@ -59,6 +61,17 @@ export function DeathScreen() {
       }}>
         You Have Died
       </h1>
+
+      {lineage && lineage.generation > 1 && (
+        <div style={{
+          fontFamily: 'var(--font-ui)',
+          fontSize: '0.85rem',
+          color: 'var(--color-text-muted)',
+          marginBottom: 8,
+        }}>
+          Generation {lineage.generation}
+        </div>
+      )}
 
       <p style={{ fontSize: '1.05rem', lineHeight: 1.7, marginBottom: 32 }}>
         {animal.causeOfDeath || 'Your body could no longer sustain the burden of survival.'}
@@ -209,6 +222,8 @@ export function DeathScreen() {
         <div><strong>Injuries sustained:</strong> {animal.injuries.length}</div>
         <div><strong>Events experienced:</strong> {turnHistory.length} turns</div>
       </div>
+
+      <RunSummary />
 
       <AchievementList />
 

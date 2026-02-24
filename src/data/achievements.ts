@@ -496,4 +496,158 @@ export const ACHIEVEMENTS: AchievementDefinition[] = [
       s.animal.flags.has('fig-combat-attempted') &&
       s.animal.flags.has('mated-in-fig'),
   },
+
+  // Honeybee Worker achievements
+  {
+    id: 'bee-first-forager',
+    name: 'Into the Light',
+    description: 'Complete your first foraging flight as a honeybee.',
+    checkOn: 'turn',
+    species: 'honeybee-worker',
+    check: (s) => s.animal.flags.has('first-flight-complete'),
+  },
+  {
+    id: 'bee-waggle-dancer',
+    name: 'The Language of Dance',
+    description: 'Perform a waggle dance to communicate a food source.',
+    checkOn: 'turn',
+    species: 'honeybee-worker',
+    check: (s) => s.animal.flags.has('waggle-dance-performed'),
+  },
+  {
+    id: 'bee-hive-defender',
+    name: 'For the Colony',
+    description: 'Successfully defend the hive from an intruder.',
+    checkOn: 'turn',
+    species: 'honeybee-worker',
+    check: (s) => s.animal.flags.has('hive-defender'),
+  },
+  {
+    id: 'bee-winter-survivor',
+    name: 'The Long Cold',
+    description: 'Survive an entire winter as a honeybee.',
+    checkOn: 'turn',
+    species: 'honeybee-worker',
+    check: (s) => s.animal.age >= 5 && s.time.season === 'spring',
+  },
+
+  // Common Octopus achievements
+  {
+    id: 'octopus-tool-use',
+    name: 'The Inventor',
+    description: 'Discover tool use as an octopus.',
+    checkOn: 'turn',
+    species: 'common-octopus',
+    check: (s) => s.animal.flags.has('tool-use-discovered'),
+  },
+  {
+    id: 'octopus-camouflage',
+    name: 'Invisible',
+    description: 'Activate camouflage to avoid a predator.',
+    checkOn: 'turn',
+    species: 'common-octopus',
+    check: (s) => s.animal.flags.has('camouflage-active'),
+  },
+  {
+    id: 'octopus-den-builder',
+    name: 'Architect',
+    description: 'Build a fortified den on the reef.',
+    checkOn: 'turn',
+    species: 'common-octopus',
+    check: (s) => s.animal.flags.has('den-built'),
+  },
+  {
+    id: 'octopus-full-cycle',
+    name: 'Eight Arms, One Purpose',
+    description: 'Complete the full octopus lifecycle: mate and lay eggs.',
+    checkOn: 'both',
+    species: 'common-octopus',
+    check: (s) => s.animal.flags.has('eggs-laid'),
+  },
+
+  // Arctic Tern achievements
+  {
+    id: 'tern-first-migration',
+    name: 'Pole to Pole',
+    description: 'Complete your first southward migration.',
+    checkOn: 'turn',
+    species: 'arctic-tern',
+    check: (s) => s.animal.flags.has('arrived-antarctic'),
+  },
+  {
+    id: 'tern-ten-year-survivor',
+    name: 'Decade Flyer',
+    description: 'Survive 10 years (120 months) as an arctic tern.',
+    checkOn: 'turn',
+    species: 'arctic-tern',
+    check: (s) => s.animal.age >= 120,
+  },
+  {
+    id: 'tern-raise-chicks',
+    name: 'Colony Parent',
+    description: 'Raise chicks to fledging age.',
+    checkOn: 'turn',
+    species: 'arctic-tern',
+    check: (s) =>
+      s.reproduction.type === 'iteroparous' &&
+      s.reproduction.offspring.some((o) => o.matured),
+  },
+  {
+    id: 'tern-tenth-migration',
+    name: 'The Endless Summer',
+    description: 'Complete 10 pole-to-pole migrations.',
+    checkOn: 'turn',
+    species: 'arctic-tern',
+    check: (s) => s.animal.flags.has('tenth-migration-noted'),
+  },
+
+  // Poison Dart Frog achievements
+  {
+    id: 'frog-toxin-master',
+    name: 'Chemical Warrior',
+    description: 'Build high toxin levels from foraging on alkaloid-rich prey.',
+    checkOn: 'turn',
+    species: 'poison-dart-frog',
+    check: (s) => s.animal.flags.has('toxin-level-high'),
+  },
+  {
+    id: 'frog-metamorphosis',
+    name: 'From Water to Land',
+    description: 'Complete metamorphosis from tadpole to frog.',
+    checkOn: 'turn',
+    species: 'poison-dart-frog',
+    check: (s) => s.animal.flags.has('metamorphosis-complete'),
+  },
+  {
+    id: 'frog-wrestling-victor',
+    name: 'The Wrestler',
+    description: 'Win a wrestling match against a rival male.',
+    checkOn: 'turn',
+    species: 'poison-dart-frog',
+    check: (s) => s.animal.sex === 'male' && s.animal.flags.has('wrestling-match'),
+  },
+  {
+    id: 'frog-raise-tadpoles',
+    name: 'Devoted Parent',
+    description: 'Successfully raise tadpoles to independence.',
+    checkOn: 'turn',
+    species: 'poison-dart-frog',
+    check: (s) =>
+      s.reproduction.type === 'iteroparous' &&
+      s.reproduction.offspring.some((o) => o.matured),
+  },
+
+  // Cross-species Easter Egg achievement (Phase 15)
+  {
+    id: 'cross-species-observer',
+    name: 'Through Their Eyes',
+    description: 'Play as 4 different species.',
+    checkOn: 'turn',
+    check: (s) => {
+      // This checks the achievement store, but since we only have game state here,
+      // we check if the current species has been played
+      void s;
+      return false; // Handled by achievementStore.speciesPlayed.size >= 4
+    },
+  },
 ];

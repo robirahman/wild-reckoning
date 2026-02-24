@@ -7,12 +7,35 @@ import type { Backstory } from '../types/species';
 import type { Difficulty } from '../types/difficulty';
 import { DIFFICULTY_DESCRIPTIONS } from '../types/difficulty';
 import { AchievementList } from './achievements/AchievementList';
+import { ScenarioSelect } from './ScenarioSelect';
+import { Encyclopedia } from './Encyclopedia';
+import { SPECIES_UNLOCKS } from '../data/speciesUnlocks';
+import { useAchievementStore } from '../store/achievementStore';
+import { SCENARIOS } from '../data/scenarios';
+
+function isSpeciesUnlocked(speciesId: string, unlockedAchievements: Set<string>, speciesPlayed: Set<string>): boolean {
+  const unlock = SPECIES_UNLOCKS.find((u) => u.speciesId === speciesId);
+  if (!unlock) return true; // No unlock requirement = always available
+  if (unlock.requirement.type === 'default') return true;
+  if (unlock.requirement.type === 'achievement') return unlockedAchievements.has(unlock.requirement.achievementId);
+  if (unlock.requirement.type === 'species_played') return speciesPlayed.has(unlock.requirement.speciesId);
+  return true;
+}
+
+function getUnlockHint(speciesId: string): string | null {
+  const unlock = SPECIES_UNLOCKS.find((u) => u.speciesId === speciesId);
+  if (!unlock || unlock.requirement.type === 'default') return null;
+  return unlock.requirement.description;
+}
 
 export function StartScreen() {
   const startGame = useGameStore((s) => s.startGame);
   const resumeGame = useGameStore((s) => s.resumeGame);
   const allBundles = getAllSpeciesBundles();
   const [saveExists] = useState(() => hasSaveGame());
+  const [subScreen, setSubScreen] = useState<'none' | 'scenarios' | 'encyclopedia'>('none');
+  const unlockedAchievements = useAchievementStore((s) => s.unlockedIds);
+  const speciesPlayed = useAchievementStore((s) => s.speciesPlayed);
 
   const [selectedSpeciesId, setSelectedSpeciesId] = useState(allBundles[0].config.id);
   const selectedBundle = allBundles.find((b) => b.config.id === selectedSpeciesId)!;
@@ -29,6 +52,25 @@ export function StartScreen() {
 
   const backstory: Backstory = selectedBundle.backstories.find((b) => b.type === selectedBackstoryType)
     ?? selectedBundle.backstories[0];
+
+  const handleScenarioSelect = (scenarioId: string) => {
+    const scenario = SCENARIOS.find((s) => s.id === scenarioId);
+    if (!scenario) return;
+    const bundle = allBundles.find((b) => b.config.id === scenario.speciesId);
+    if (!bundle) return;
+    const scenarioBackstory = scenario.backstoryType
+      ? bundle.backstories.find((b) => b.type === scenario.backstoryType) ?? bundle.backstories[0]
+      : bundle.backstories[0];
+    const sex = scenario.sex ?? 'female';
+    startGame(scenario.speciesId, scenarioBackstory, sex, scenario.difficulty);
+  };
+
+  if (subScreen === 'scenarios') {
+    return <ScenarioSelect onSelect={handleScenarioSelect} onBack={() => setSubScreen('none')} />;
+  }
+  if (subScreen === 'encyclopedia') {
+    return <Encyclopedia onBack={() => setSubScreen('none')} />;
+  }
 
   return (
     <div style={{
@@ -79,34 +121,51 @@ export function StartScreen() {
       <div style={{ marginBottom: 32 }}>
         <h3 style={{ fontFamily: 'var(--font-ui)', marginBottom: 12 }}>Species</h3>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          {allBundles.map((bundle) => (
-            <button
-              key={bundle.config.id}
-              onClick={() => handleSpeciesChange(bundle)}
-              style={{
-                padding: '12px 16px',
-                border: `2px solid ${selectedSpeciesId === bundle.config.id ? 'var(--color-text)' : 'var(--color-border)'}`,
-                borderRadius: 4,
-                background: selectedSpeciesId === bundle.config.id ? 'var(--color-bar-bg)' : 'var(--color-panel-bg)',
-                textAlign: 'left',
-                cursor: 'pointer',
-              }}
-            >
-              <div style={{ fontFamily: 'var(--font-ui)', fontSize: '0.95rem', fontWeight: selectedSpeciesId === bundle.config.id ? 700 : 400 }}>
-                {bundle.config.name}
-                <span style={{ color: 'var(--color-text-muted)', fontWeight: 400, marginLeft: 8, fontSize: '0.85rem' }}>
-                  ({bundle.config.scientificName})
-                </span>
-              </div>
-              <div style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', marginTop: 4 }}>
-                {bundle.config.description}
-              </div>
-              <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginTop: 4, fontFamily: 'var(--font-ui)' }}>
-                {bundle.config.defaultRegionDisplayName}
-                {bundle.config.reproduction.type === 'semelparous' && ' — Semelparous lifecycle'}
-              </div>
-            </button>
-          ))}
+          {allBundles.map((bundle) => {
+            const unlocked = isSpeciesUnlocked(bundle.config.id, unlockedAchievements, speciesPlayed);
+            const hint = getUnlockHint(bundle.config.id);
+
+            return (
+              <button
+                key={bundle.config.id}
+                onClick={() => unlocked && handleSpeciesChange(bundle)}
+                disabled={!unlocked}
+                style={{
+                  padding: '12px 16px',
+                  border: `2px solid ${selectedSpeciesId === bundle.config.id && unlocked ? 'var(--color-text)' : 'var(--color-border)'}`,
+                  borderRadius: 4,
+                  background: selectedSpeciesId === bundle.config.id && unlocked ? 'var(--color-bar-bg)' : 'var(--color-panel-bg)',
+                  textAlign: 'left',
+                  cursor: unlocked ? 'pointer' : 'default',
+                  opacity: unlocked ? 1 : 0.45,
+                }}
+              >
+                <div style={{ fontFamily: 'var(--font-ui)', fontSize: '0.95rem', fontWeight: selectedSpeciesId === bundle.config.id && unlocked ? 700 : 400 }}>
+                  {unlocked ? bundle.config.name : '???'}
+                  {unlocked && (
+                    <span style={{ color: 'var(--color-text-muted)', fontWeight: 400, marginLeft: 8, fontSize: '0.85rem' }}>
+                      ({bundle.config.scientificName})
+                    </span>
+                  )}
+                </div>
+                {unlocked ? (
+                  <>
+                    <div style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', marginTop: 4 }}>
+                      {bundle.config.description}
+                    </div>
+                    <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginTop: 4, fontFamily: 'var(--font-ui)' }}>
+                      {bundle.config.defaultRegionDisplayName}
+                      {bundle.config.reproduction.type === 'semelparous' && ' — Semelparous lifecycle'}
+                    </div>
+                  </>
+                ) : (
+                  <div style={{ fontSize: '0.8rem', fontStyle: 'italic', color: 'var(--color-text-muted)', marginTop: 4 }}>
+                    Locked — {hint}
+                  </div>
+                )}
+              </button>
+            );
+          })}
         </div>
       </div>
 
@@ -212,10 +271,46 @@ export function StartScreen() {
           background: 'var(--color-text)',
           color: 'var(--color-panel-bg)',
           cursor: 'pointer',
+          marginBottom: 12,
         }}
       >
         Begin
       </button>
+
+      <div style={{ display: 'flex', gap: 12, marginBottom: 16 }}>
+        <button
+          onClick={() => setSubScreen('scenarios')}
+          style={{
+            flex: 1,
+            padding: '10px 16px',
+            fontSize: '0.95rem',
+            fontFamily: 'var(--font-ui)',
+            fontWeight: 600,
+            border: '2px solid var(--color-border)',
+            borderRadius: 4,
+            background: 'var(--color-panel-bg)',
+            cursor: 'pointer',
+          }}
+        >
+          Challenge Mode
+        </button>
+        <button
+          onClick={() => setSubScreen('encyclopedia')}
+          style={{
+            flex: 1,
+            padding: '10px 16px',
+            fontSize: '0.95rem',
+            fontFamily: 'var(--font-ui)',
+            fontWeight: 600,
+            border: '2px solid var(--color-border)',
+            borderRadius: 4,
+            background: 'var(--color-panel-bg)',
+            cursor: 'pointer',
+          }}
+        >
+          Encyclopedia
+        </button>
+      </div>
     </div>
   );
 }

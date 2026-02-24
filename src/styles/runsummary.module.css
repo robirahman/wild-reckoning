@@ -1,0 +1,100 @@
+.container {
+  text-align: left;
+  margin-bottom: 32px;
+}
+
+.toggleButton {
+  padding: 8px 20px;
+  font-size: 0.85rem;
+  font-family: var(--font-ui);
+  font-weight: 600;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  background: var(--color-panel-bg);
+  cursor: pointer;
+  margin-bottom: 16px;
+}
+
+.timeline {
+  position: relative;
+  padding-left: 28px;
+  margin-top: 16px;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 8px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--color-border);
+}
+
+.entry {
+  position: relative;
+  padding: 8px 0 12px 16px;
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.entry::before {
+  content: '';
+  position: absolute;
+  left: -24px;
+  top: 12px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--color-text-muted);
+  border: 2px solid var(--color-panel-bg);
+}
+
+.entry.injury::before {
+  background: var(--color-danger);
+}
+
+.entry.parasite::before {
+  background: #9b59b6;
+}
+
+.entry.offspring::before {
+  background: #5a9e5a;
+}
+
+.entry.migration::before {
+  background: #3498db;
+}
+
+.entry.milestone::before {
+  background: #f1c40f;
+}
+
+.entry.death::before {
+  background: var(--color-danger);
+  width: 12px;
+  height: 12px;
+  left: -25px;
+  top: 11px;
+}
+
+.entryDate {
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+  margin-bottom: 2px;
+}
+
+.entryText {
+  color: var(--color-text);
+}
+
+@media (max-width: 768px) {
+  .timeline {
+    padding-left: 24px;
+  }
+
+  .entry {
+    font-size: 0.78rem;
+  }
+}

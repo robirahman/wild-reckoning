@@ -1,7 +1,13 @@
 import type { GameEvent } from '../../types/events';
 import { StatId } from '../../types/stats';
+import { HUMAN_ENCOUNTER_EVENTS } from './human-encounter-events';
+import { CROSS_SPECIES_EVENTS } from './cross-species-events';
+import { TERRITORY_EVENTS } from './territory-events';
 
 export const allEvents: GameEvent[] = [
+  ...HUMAN_ENCOUNTER_EVENTS,
+  ...CROSS_SPECIES_EVENTS,
+  ...TERRITORY_EVENTS,
   // ══════════════════════════════════════════════
   //  FORAGING EVENTS
   // ══════════════════════════════════════════════
