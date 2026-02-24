@@ -1,0 +1,144 @@
+.eventsSection {
+  margin-bottom: var(--space-lg);
+}
+
+.sectionTitle {
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: var(--font-ui);
+  margin-bottom: var(--space-md);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Event Card */
+.eventCard {
+  margin-bottom: var(--space-lg);
+}
+
+.eventHeader {
+  margin-bottom: var(--space-xs);
+}
+
+.eventNumber {
+  font-weight: 700;
+  font-size: 1rem;
+  margin-right: var(--space-sm);
+}
+
+.eventBody {
+  padding-left: var(--space-md);
+}
+
+.narrativeRow {
+  display: flex;
+  gap: var(--space-md);
+  align-items: flex-start;
+}
+
+.eventImage {
+  width: 120px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 4px;
+  flex-shrink: 0;
+  float: right;
+  margin-left: var(--space-md);
+}
+
+.narrative {
+  font-family: var(--font-narrative);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: var(--space-sm);
+}
+
+/* Stat Effect Tags */
+.effectTags {
+  font-size: 0.85rem;
+  margin-top: var(--space-xs);
+  margin-bottom: var(--space-sm);
+}
+
+.statEffect {
+  font-weight: 700;
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+}
+
+.effectPositive {
+  color: var(--color-positive);
+}
+
+.effectNegative {
+  color: var(--color-negative);
+}
+
+/* Sub-events */
+.subEvent {
+  margin-top: var(--space-md);
+  padding-top: var(--space-sm);
+  border-top: 1px dashed var(--color-border-light);
+}
+
+.footnote {
+  font-size: 0.8rem;
+  font-style: italic;
+  color: var(--color-danger);
+  margin-top: var(--space-xs);
+}
+
+/* Choices */
+.choices {
+  display: flex;
+  gap: var(--space-md);
+  margin-top: var(--space-md);
+  justify-content: center;
+}
+
+.choiceButton {
+  padding: var(--space-sm) var(--space-lg);
+  font-size: 0.9rem;
+  border: 2px solid;
+  border-radius: 4px;
+  background: var(--color-panel-bg);
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.choiceDefault {
+  border-color: var(--color-positive);
+  color: var(--color-positive);
+}
+
+.choiceDefault:hover {
+  background: var(--color-positive-light);
+}
+
+.choiceDanger {
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+}
+
+.choiceDanger:hover {
+  background: var(--color-negative-light);
+}
+
+.choiceSelected {
+  font-weight: 700;
+}
+
+.revocableNote {
+  font-size: 0.8rem;
+  font-style: italic;
+  color: var(--color-text-muted);
+  text-align: center;
+  margin-top: var(--space-sm);
+}
+
+/* Passive Events */
+.passiveEvent {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-md);
+}

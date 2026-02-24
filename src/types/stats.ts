@@ -1,0 +1,121 @@
+/** The nine sub-stats visible on the stats panel */
+export enum StatId {
+  // Physical Stresses
+  IMM = 'IMM', // Immune
+  CLI = 'CLI', // Climate
+  HOM = 'HOM', // Homeostasis
+
+  // Mental Stresses
+  TRA = 'TRA', // Trauma
+  ADV = 'ADV', // Adversity
+  NOV = 'NOV', // Novelty
+
+  // General Fitness
+  WIS = 'WIS', // Wisdom
+  HEA = 'HEA', // Health
+  STR = 'STR', // Stresses (aggregate)
+}
+
+export enum StatCategory {
+  PHYSICAL = 'Physical Stresses',
+  MENTAL = 'Mental Stresses',
+  FITNESS = 'General Fitness',
+}
+
+/** Maps each stat to its category */
+export const STAT_CATEGORIES: Record<StatId, StatCategory> = {
+  [StatId.IMM]: StatCategory.PHYSICAL,
+  [StatId.CLI]: StatCategory.PHYSICAL,
+  [StatId.HOM]: StatCategory.PHYSICAL,
+  [StatId.TRA]: StatCategory.MENTAL,
+  [StatId.ADV]: StatCategory.MENTAL,
+  [StatId.NOV]: StatCategory.MENTAL,
+  [StatId.WIS]: StatCategory.FITNESS,
+  [StatId.HEA]: StatCategory.FITNESS,
+  [StatId.STR]: StatCategory.FITNESS,
+};
+
+/** Full display names for each stat abbreviation */
+export const STAT_NAMES: Record<StatId, string> = {
+  [StatId.IMM]: 'IMMune',
+  [StatId.CLI]: 'CLImate',
+  [StatId.HOM]: 'HOmeostasis',
+  [StatId.TRA]: 'TRAuma',
+  [StatId.ADV]: 'ADVersity',
+  [StatId.NOV]: 'NOVelty',
+  [StatId.WIS]: 'WISdom',
+  [StatId.HEA]: 'HEAlth',
+  [StatId.STR]: 'STResses',
+};
+
+/** Display level derived from numeric value (0-100) */
+export type StatLevel = 'Low' | '- Medium' | 'Medium' | '+ Medium' | 'High' | '+ High';
+
+/**
+ * Whether a stat's positive direction is good or bad for the animal.
+ * Physical and Mental stresses going up = bad. Fitness stats going up = good (except STR).
+ */
+export const STAT_POLARITY: Record<StatId, 'positive' | 'negative'> = {
+  [StatId.IMM]: 'negative', // More immune stress = bad
+  [StatId.CLI]: 'negative',
+  [StatId.HOM]: 'negative',
+  [StatId.TRA]: 'negative',
+  [StatId.ADV]: 'negative',
+  [StatId.NOV]: 'negative',
+  [StatId.WIS]: 'positive', // More wisdom = good
+  [StatId.HEA]: 'positive',
+  [StatId.STR]: 'negative', // More overall stress = bad
+};
+
+export type ModifierSourceType =
+  | 'parasite'
+  | 'injury'
+  | 'event'
+  | 'seasonal'
+  | 'behavioral'
+  | 'condition'
+  | 'permanent';
+
+export interface StatModifier {
+  id: string;
+  source: string; // Human-readable label: "GI Roundworm", "Blueberry foraging"
+  sourceType: ModifierSourceType;
+  stat: StatId;
+  amount: number; // Positive = increase, Negative = decrease
+  duration?: number; // Turns remaining; undefined = permanent
+}
+
+export interface StatValue {
+  base: number; // Permanent base value (0-100)
+  modifiers: StatModifier[];
+}
+
+export type StatBlock = Record<StatId, StatValue>;
+
+/** Convert a numeric stat value (0-100) to a display level */
+export function getStatLevel(value: number): StatLevel {
+  if (value <= 15) return 'Low';
+  if (value <= 30) return '- Medium';
+  if (value <= 50) return 'Medium';
+  if (value <= 70) return '+ Medium';
+  if (value <= 85) return 'High';
+  return '+ High';
+}
+
+/** Get the sign prefix for display: "+" or "-" based on the stat bar direction */
+export function getStatSign(stat: StatId, value: number): '+' | '-' {
+  if (stat === StatId.STR) {
+    // STR under Fitness is an inverse aggregate — shows negative when stresses are present
+    return value > 50 ? '-' : '+';
+  }
+  if (STAT_POLARITY[stat] === 'positive') {
+    return '+';
+  }
+  return '+';
+}
+
+/** Compute the effective value of a stat: base + sum of all modifiers, clamped 0-100 */
+export function computeEffectiveValue(stat: StatValue): number {
+  const total = stat.base + stat.modifiers.reduce((sum, m) => sum + m.amount, 0);
+  return Math.max(0, Math.min(100, total));
+}

@@ -1,0 +1,40 @@
+.gameLayout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas:
+    "header   header"
+    "events   sidebar"
+    "behavior behavior";
+  max-width: 960px;
+  margin: 0 auto;
+  min-height: 100vh;
+  border: 1px solid var(--color-border);
+  background: var(--color-panel-bg);
+}
+
+.header {
+  grid-area: header;
+  padding: var(--space-md) var(--space-lg);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-panel-bg);
+}
+
+.events {
+  grid-area: events;
+  padding: var(--space-md) var(--space-lg);
+  border-right: 1px solid var(--color-border);
+  overflow-y: auto;
+}
+
+.sidebar {
+  grid-area: sidebar;
+  padding: var(--space-md) var(--space-lg);
+  overflow-y: auto;
+}
+
+.behavior {
+  grid-area: behavior;
+  padding: var(--space-sm) var(--space-lg);
+  border-top: 1px solid var(--color-border);
+}

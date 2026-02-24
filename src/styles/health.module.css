@@ -1,0 +1,65 @@
+.healthSection {
+  margin-bottom: var(--space-lg);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-border-light);
+}
+
+.sectionTitle {
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: var(--font-ui);
+  margin-bottom: var(--space-md);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.card {
+  margin-bottom: var(--space-md);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.card:last-child {
+  border-bottom: none;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-xs);
+}
+
+.cardIcon {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.cardName {
+  font-weight: 700;
+  font-family: var(--font-ui);
+  font-size: 0.95rem;
+}
+
+.effectsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.effectItem {
+  color: var(--color-text);
+  padding-left: var(--space-sm);
+}
+
+.injuryDescription {
+  font-family: var(--font-narrative);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--color-text);
+}
