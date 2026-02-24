@@ -43,6 +43,11 @@ export const NPC_TEMPLATES: Record<string, NPCTemplate[]> = {
       namePool: ['Hook-Jaw', 'The Red One', 'Old Kype', 'Silver Flash', 'Deep Runner'],
     },
     {
+      type: 'ally',
+      speciesLabel: 'female',
+      namePool: ['Bright Scales', 'The Swift One', 'Current Rider', 'Silver Side', 'Deep Diver'],
+    },
+    {
       type: 'predator',
       speciesLabel: 'bear',
       namePool: ['The Brown Shadow', 'Fishhook', 'River King', 'The Patient One'],

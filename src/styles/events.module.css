@@ -97,12 +97,23 @@
 }
 
 .choiceButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding: var(--space-sm) var(--space-lg);
   font-size: 0.9rem;
   border: 2px solid;
   border-radius: 4px;
   background: var(--color-panel-bg);
   transition: background 0.15s, border-color 0.15s;
+}
+
+.choiceDescription {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--color-text-muted);
+  margin-top: 2px;
 }
 
 .choiceDefault {

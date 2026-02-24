@@ -12,6 +12,7 @@ interface EventCardProps {
   choices?: {
     id: string;
     label: string;
+    description?: string;
     style: 'default' | 'danger';
     revocable: boolean;
     selected?: boolean;
@@ -75,6 +76,7 @@ export function EventCard({
               <EventChoice
                 key={choice.id}
                 label={choice.label}
+                description={choice.description}
                 style={choice.style}
                 selected={choiceMade === choice.id}
                 onClick={() => onChoiceSelect?.(choice.id)}

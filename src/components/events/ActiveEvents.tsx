@@ -33,6 +33,7 @@ export function ActiveEvents() {
           choices={event.definition.choices?.map((c) => ({
             id: c.id,
             label: c.label,
+            description: c.description,
             style: c.style,
             revocable: c.revocable,
             selected: event.choiceMade === c.id,

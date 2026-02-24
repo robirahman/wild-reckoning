@@ -1,4 +1,5 @@
 import type { EventOutcome } from '../../types/turnResult';
+import { useGameStore } from '../../store/gameStore';
 import styles from '../../styles/results.module.css';
 
 interface EventOutcomeCardProps {
@@ -7,6 +8,9 @@ interface EventOutcomeCardProps {
 }
 
 export function EventOutcomeCard({ outcome, index }: EventOutcomeCardProps) {
+  const parasiteDefs = useGameStore((s) => s.speciesBundle.parasites);
+  const injuryDefs = useGameStore((s) => s.speciesBundle.injuries);
+
   // Truncate the event narrative for the summary view
   const shortNarrative = outcome.eventNarrative.length > 120
     ? outcome.eventNarrative.slice(0, 120) + '...'
@@ -65,7 +69,7 @@ export function EventOutcomeCard({ outcome, index }: EventOutcomeCardProps) {
           .filter((c) => c.type === 'add_parasite')
           .map((c, i) => (
             <span key={`p-${i}`} className={`${styles.badge} ${styles.badgeNegative}`}>
-              {'parasiteId' in c ? `Contracted ${c.parasiteId}` : ''}
+              {'parasiteId' in c ? `Contracted ${parasiteDefs[c.parasiteId]?.name ?? c.parasiteId}` : ''}
             </span>
           ))}
 
@@ -73,7 +77,7 @@ export function EventOutcomeCard({ outcome, index }: EventOutcomeCardProps) {
           .filter((c) => c.type === 'add_injury')
           .map((c, i) => (
             <span key={`inj-${i}`} className={`${styles.badge} ${styles.badgeNegative}`}>
-              {'injuryId' in c ? `Injury: ${c.injuryId}` : ''}
+              {'injuryId' in c ? `Injury: ${injuryDefs[c.injuryId]?.name ?? c.injuryId}` : ''}
             </span>
           ))}
 

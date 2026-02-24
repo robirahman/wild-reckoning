@@ -86,6 +86,7 @@ export interface GameState {
   dismissResults: () => void;
   resumeGame: () => boolean;
   returnToMenu: () => void;
+  setEventCooldowns: (cooldowns: Record<string, number>) => void;
   setNPCs: (npcs: NPC[]) => void;
   setActiveStorylines: (storylines: ActiveStoryline[]) => void;
   advanceTutorial: () => void;
@@ -559,6 +560,11 @@ export const useGameStore = create<GameState>((set, get) => {
 
     dismissResults() {
       set({ turnResult: null, showingResults: false });
+    },
+
+    setEventCooldowns(cooldowns) {
+      const state = get();
+      set({ eventCooldowns: { ...state.eventCooldowns, ...cooldowns } });
     },
 
     setNPCs(npcs) {

@@ -113,6 +113,27 @@ function contextMultiplier(event: GameEvent, ctx: GenerationContext): number {
   if (event.category === 'health') {
     const hea = computeEffectiveValue(ctx.animal.stats[StatId.HEA]);
     mult *= 1.5 - (hea / 100);
+    // High immune stress → more health events (parasites/disease)
+    const imm = computeEffectiveValue(ctx.animal.stats[StatId.IMM]);
+    mult *= 0.8 + (imm / 100) * 0.8;  // 0.8 to 1.6x
+  }
+
+  // High climate stress → more environmental/seasonal events
+  if (event.category === 'environmental' || event.category === 'seasonal') {
+    const cli = computeEffectiveValue(ctx.animal.stats[StatId.CLI]);
+    mult *= 0.7 + (cli / 100) * 1.0;  // 0.7 to 1.7x
+  }
+
+  // High novelty → more exploration/migration events
+  if (event.category === 'migration') {
+    const nov = computeEffectiveValue(ctx.animal.stats[StatId.NOV]);
+    mult *= 0.6 + (nov / 100) * 1.0;  // 0.6 to 1.6x
+  }
+
+  // High adversity → more predator encounters
+  if (event.category === 'predator') {
+    const adv = computeEffectiveValue(ctx.animal.stats[StatId.ADV]);
+    mult *= 0.7 + (adv / 100) * 0.8;  // 0.7 to 1.5x
   }
 
   return mult;
@@ -137,8 +158,11 @@ export function resolveTemplate(text: string, ctx: GenerationContext): string {
     .replace(/\{\{species\.groupNoun\}\}/g, tv.groupNoun)
     .replace(/\{\{species\.habitat\}\}/g, tv.habitat)
     .replace(/\{\{npc\.rival\.name\}\}/g, ctx.npcs?.find((n) => n.type === 'rival' && n.alive)?.name ?? 'a rival')
+    .replace(/\{\{npc\.rival\.encounters\}\}/g, String(ctx.npcs?.find((n) => n.type === 'rival' && n.alive)?.encounters ?? 0))
     .replace(/\{\{npc\.ally\.name\}\}/g, ctx.npcs?.find((n) => n.type === 'ally' && n.alive)?.name ?? 'a companion')
+    .replace(/\{\{npc\.ally\.encounters\}\}/g, String(ctx.npcs?.find((n) => n.type === 'ally' && n.alive)?.encounters ?? 0))
     .replace(/\{\{npc\.predator\.name\}\}/g, ctx.npcs?.find((n) => n.type === 'predator' && n.alive)?.name ?? 'a predator')
+    .replace(/\{\{npc\.predator\.encounters\}\}/g, String(ctx.npcs?.find((n) => n.type === 'predator' && n.alive)?.encounters ?? 0))
     .replace(/\{\{npc\.mate\.name\}\}/g, ctx.npcs?.find((n) => n.type === 'mate' && n.alive)?.name ?? 'a mate');
 }
 

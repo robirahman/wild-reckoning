@@ -35,6 +35,7 @@ export function introduceNPC(
     alive: true,
     introducedOnTurn: turn,
     lastSeenTurn: turn,
+    encounters: 0,
   };
 }
 
@@ -43,4 +44,17 @@ export function introduceNPC(
  */
 export function getNPCByType(npcs: NPC[], type: NPCType): NPC | undefined {
   return npcs.find((n) => n.type === type && n.alive);
+}
+
+/**
+ * Increment the encounter count for an NPC by ID.
+ * Returns the updated NPC array.
+ */
+export function incrementEncounter(npcs: NPC[], npcId: string, turn: number): NPC[] {
+  return npcs.map((n) => {
+    if (n.id === npcId) {
+      return { ...n, encounters: n.encounters + 1, lastSeenTurn: turn };
+    }
+    return n;
+  });
 }

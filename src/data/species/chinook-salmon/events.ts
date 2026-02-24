@@ -1116,4 +1116,337 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     cooldown: 4,
     tags: ['migration', 'health'],
   },
+
+  // ══════════════════════════════════════════════
+  //  SPAWNING EVENTS (extended)
+  // ══════════════════════════════════════════════
+
+  {
+    id: 'salmon-nest-site-selection',
+    type: 'active',
+    category: 'reproduction',
+    narrativeText: "The gravel bed spreads before you in a mosaic of possibility. Your body reads each patch like a text \u2014 the size of the stones, the speed of the current threading between them, the oxygen content of the water welling up from below. Two sites hold your attention. The first is prime territory: clean, loose gravel in the main current where the water runs fastest and coldest, but another hen is already circling it, her tail working the substrate in slow, proprietary sweeps. The second is tucked against a fallen hemlock, sheltered from the worst of the flow, its gravel finer and less exposed. No one has claimed it. The eggs you carry are the sum of everything you have survived. Where you place them will decide whether that survival meant anything at all.",
+    statEffects: [],
+    choices: [
+      {
+        id: 'prime-spot',
+        label: 'Contest the prime gravel bed',
+        description: 'Better oxygenation, but you will have to fight for it',
+        statEffects: [
+          { stat: StatId.ADV, amount: 8, label: '+ADV' },
+        ],
+        consequences: [],
+        revocable: false,
+        style: 'danger',
+      },
+      {
+        id: 'sheltered-spot',
+        label: 'Take the sheltered site by the hemlock',
+        description: 'Quieter, safer \u2014 good enough for a careful mother',
+        statEffects: [
+          { stat: StatId.HOM, amount: 5, label: '+HOM' },
+        ],
+        consequences: [],
+        revocable: false,
+        style: 'default',
+      },
+    ],
+    conditions: [
+      { type: 'has_flag', flag: 'reached-spawning-grounds' },
+    ],
+    weight: 12,
+    cooldown: 8,
+    tags: ['mating', 'migration'],
+  },
+
+  {
+    id: 'salmon-rival-redd-confrontation',
+    type: 'active',
+    category: 'reproduction',
+    narrativeText: "A shadow slides into the edge of your vision \u2014 another male, his jaw hooked into a grotesque curve, his flanks mottled crimson and black with spawning pigment. He is hovering over your redd, his body angled toward the hen, his intent unmistakable. {{npc.rival.name}} has been circling since dawn, darting in whenever you turn to chase off the jacks. Now he holds his ground, his pectoral fins flared wide, his body trembling with aggression. Every cell in your ruined body screams for rest, but the eggs in that gravel carry your bloodline, and this interloper means to replace it with his own.",
+    statEffects: [
+      { stat: StatId.ADV, amount: 6, label: '+ADV' },
+    ],
+    choices: [
+      {
+        id: 'fight-rival-redd',
+        label: 'Attack the rival',
+        description: 'Ram him, bite him, drive him off \u2014 but your body is failing',
+        statEffects: [
+          { stat: StatId.HOM, amount: 10, label: '+HOM' },
+        ],
+        consequences: [],
+        revocable: false,
+        style: 'danger',
+      },
+      {
+        id: 'yield-position',
+        label: 'Yield your position',
+        description: 'Conserve what little strength remains \u2014 find another redd',
+        statEffects: [
+          { stat: StatId.TRA, amount: 8, label: '+TRA' },
+        ],
+        consequences: [],
+        revocable: false,
+        style: 'default',
+      },
+    ],
+    subEvents: [
+      {
+        eventId: 'redd-fight-injury',
+        chance: 0.2,
+        narrativeText: 'His hooked jaw rakes across your flank, tearing a ragged gash through already-weakened skin. Blood clouds the water between you.',
+        footnote: '(Wounded in spawning fight)',
+        statEffects: [],
+        consequences: [
+          { type: 'add_injury', injuryId: 'scale-damage', severity: 1 },
+        ],
+      },
+    ],
+    conditions: [
+      { type: 'has_flag', flag: 'reached-spawning-grounds' },
+      { type: 'sex', sex: 'male' },
+    ],
+    weight: 10,
+    cooldown: 6,
+    tags: ['mating', 'social', 'danger'],
+  },
+
+  {
+    id: 'salmon-egg-laying',
+    type: 'passive',
+    category: 'reproduction',
+    narrativeText: "The moment arrives without ceremony. Your body arches, your tail fans the gravel one final time, and then the eggs come \u2014 a pale, translucent stream of them, each one a sphere of amber light settling into the spaces between the stones. Thousands of them. The current swirls them gently into the redd, and you feel the weight leave your body like a breath held for years finally released. The male drifts in from downstream, his milt clouding the water in a white veil that settles over the eggs like snow. You sweep gravel across them with movements that are no longer desperate but deliberate, almost tender. Something has been completed. The river accepted what you carried, and now the stones will keep it safe. Your body is hollowed, your strength nearly gone, but there is a stillness inside you that feels nothing like defeat.",
+    statEffects: [
+      { stat: StatId.WIS, amount: 5, label: '+WIS' },
+      { stat: StatId.NOV, amount: 5, label: '+NOV' },
+      { stat: StatId.HOM, amount: 8, label: '+HOM' },
+    ],
+    conditions: [
+      { type: 'has_flag', flag: 'reached-spawning-grounds' },
+      { type: 'sex', sex: 'female' },
+    ],
+    weight: 15,
+    cooldown: 10,
+    tags: ['mating', 'migration'],
+  },
+
+  // ══════════════════════════════════════════════
+  //  RIVER HAZARD EVENTS
+  // ══════════════════════════════════════════════
+
+  {
+    id: 'salmon-waterfall-cascade',
+    type: 'active',
+    category: 'migration',
+    narrativeText: "The river drops away in a staircase of stone \u2014 not one waterfall but three, stacked in a cascading series of ledges, each pouring into a boiling plunge pool before spilling over the next. The spray is so thick it obscures the top, and the roar is a physical weight pressing against your lateral line. Other salmon are gathered in the lowest pool, finning against the current, mustering the explosive energy each leap demands. You can see the broken bodies of those who misjudged the jump lodged in the crevices between the falls. There is no way around. There is only up.",
+    statEffects: [
+      { stat: StatId.ADV, amount: 5, label: '+ADV' },
+    ],
+    choices: [
+      {
+        id: 'power-through-cascade',
+        label: 'Power through all three falls at once',
+        description: 'Spend everything \u2014 every reserve, every muscle fiber',
+        statEffects: [
+          { stat: StatId.STR, amount: -8, label: '-STR' },
+          { stat: StatId.HOM, amount: 10, label: '+HOM' },
+        ],
+        consequences: [],
+        revocable: false,
+        style: 'danger',
+      },
+      {
+        id: 'rest-between-falls',
+        label: 'Rest in each pool between leaps',
+        description: 'Slower and you burn precious fat, but your body survives',
+        statEffects: [],
+        consequences: [
+          { type: 'modify_weight', amount: -2 },
+        ],
+        revocable: false,
+        style: 'default',
+      },
+    ],
+    conditions: [
+      { type: 'has_flag', flag: 'spawning-migration-begun' },
+    ],
+    weight: 9,
+    cooldown: 6,
+    tags: ['migration', 'environmental'],
+  },
+
+  {
+    id: 'salmon-gravel-bar-stranding',
+    type: 'active',
+    category: 'migration',
+    narrativeText: "The channel betrays you. One moment you are swimming in thigh-deep current; the next, the bottom rises sharply and your belly scrapes gravel. The water thins to a sheet barely an inch deep, running fast but flat over an exposed bar of sun-baked stones. You are stranded \u2014 your dorsal fin breaking the surface, your gills laboring in the insufficient flow, the air pressing down on you like a foreign element. A heron stalks the far edge of the bar, its yellow eye locked on you with predatory patience.",
+    statEffects: [
+      { stat: StatId.TRA, amount: 5, label: '+TRA' },
+    ],
+    choices: [
+      {
+        id: 'thrash-to-safety-gravel',
+        label: 'Thrash violently toward deeper water',
+        description: 'Burn energy, tear scales, but reach the channel',
+        statEffects: [
+          { stat: StatId.HOM, amount: 6, label: '+HOM' },
+        ],
+        consequences: [],
+        revocable: false,
+        style: 'danger',
+        deathChance: {
+          probability: 0.04,
+          cause: 'You could not reach the channel. The sun and the heron finished what the river started.',
+          statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
+        },
+      },
+      {
+        id: 'wait-for-surge',
+        label: 'Wait for a surge in the current',
+        description: 'Patience \u2014 the river sometimes gives back what it takes',
+        statEffects: [
+          { stat: StatId.ADV, amount: 8, label: '+ADV' },
+          { stat: StatId.TRA, amount: 5, label: '+TRA' },
+        ],
+        consequences: [],
+        revocable: false,
+        style: 'default',
+        deathChance: {
+          probability: 0.05,
+          cause: 'The surge never came. You dried out on the gravel bar under a merciless sky.',
+          statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
+        },
+      },
+    ],
+    conditions: [
+      { type: 'has_flag', flag: 'spawning-migration-begun' },
+    ],
+    weight: 8,
+    cooldown: 5,
+    tags: ['migration', 'environmental', 'danger'],
+  },
+
+  {
+    id: 'salmon-temperature-shock',
+    type: 'passive',
+    category: 'health',
+    narrativeText: "The water changes without warning. A tributary feeds in from the south, carrying snowmelt or spring water several degrees colder than the main channel, and the thermal boundary hits your body like a wall. Your muscles seize. Your gills flare and stutter, struggling to recalibrate to the shifted oxygen levels. For a terrible, suspended moment your heart seems to hesitate, unsure of its own rhythm. Then the shock passes, leaving you shaken and gasping, your lateral line tingling with a phantom electricity. The river does not care what your body was built to tolerate. It changes, and you either adapt or you do not.",
+    statEffects: [
+      { stat: StatId.CLI, amount: 8, label: '+CLI' },
+      { stat: StatId.HEA, amount: -5, label: '-HEA' },
+    ],
+    conditions: [
+      { type: 'has_flag', flag: 'spawning-migration-begun' },
+    ],
+    weight: 8,
+    cooldown: 6,
+    tags: ['health', 'environmental', 'migration'],
+  },
+
+  // ══════════════════════════════════════════════
+  //  OCEAN EVENTS (extended)
+  // ══════════════════════════════════════════════
+
+  {
+    id: 'salmon-jellyfish-bloom',
+    type: 'passive',
+    category: 'environmental',
+    narrativeText: "The ocean has become a cathedral of translucent bells. A jellyfish bloom of staggering density fills the water column from surface to thermocline \u2014 millions of them, their bodies pulsing in slow, hypnotic rhythm, trailing curtains of stinging tentacles through the green water. Your feeding grounds are buried behind this living wall. The krill and herring you depend on have scattered or been consumed, and every attempt to push through earns you another line of welts across your flanks. You circle the bloom's edge, hungry and frustrated, searching for a gap that does not exist.",
+    statEffects: [
+      { stat: StatId.HOM, amount: 6, label: '+HOM' },
+      { stat: StatId.ADV, amount: 4, label: '+ADV' },
+    ],
+    conditions: [],
+    weight: 7,
+    cooldown: 6,
+    tags: ['environmental', 'foraging'],
+  },
+
+  {
+    id: 'salmon-deep-dive-hunt',
+    type: 'active',
+    category: 'foraging',
+    narrativeText: "Below you, far below, the sonar-scatter layer is rising with the dusk \u2014 a vast, living carpet of krill, copepods, and lanternfish ascending from the abyss to feed in the fading light. The concentration of food down there is extraordinary, a density the surface waters cannot match. But the dive means cold \u2014 bone-numbing, muscle-slowing cold \u2014 and the pressure increases with every body-length of descent. Your swim bladder aches as you descend, and the light fades from green to indigo to black.",
+    statEffects: [],
+    choices: [
+      {
+        id: 'go-deeper',
+        label: 'Dive to the deep scatter layer',
+        description: 'Rich feeding, but the cold will cost you',
+        statEffects: [
+          { stat: StatId.CLI, amount: 6, label: '+CLI' },
+        ],
+        consequences: [
+          { type: 'modify_weight', amount: 3 },
+        ],
+        revocable: false,
+        style: 'danger',
+      },
+      {
+        id: 'stay-shallow-hunt',
+        label: 'Stay in the shallows and pick off stragglers',
+        description: 'Less food, but no risk from the cold',
+        statEffects: [],
+        consequences: [
+          { type: 'modify_weight', amount: 1 },
+        ],
+        revocable: false,
+        style: 'default',
+      },
+    ],
+    conditions: [],
+    weight: 9,
+    cooldown: 4,
+    tags: ['foraging', 'food', 'exploration'],
+  },
+
+  // ══════════════════════════════════════════════
+  //  NPC ENCOUNTER TRACKING EVENTS
+  // ══════════════════════════════════════════════
+
+  {
+    id: 'salmon-rival-spawning-site',
+    type: 'active',
+    category: 'reproduction',
+    narrativeText:
+      '{{npc.rival.name}} is here — hovering over the best gravel bed in the pool, his hooked jaw open in a silent threat. You have seen this fish before, fought him before, and the scars on your flank are his signature. He is larger now, his crimson flanks darker, his kype more pronounced. The female is watching from the shallows, waiting to see which of you will claim the redd.',
+    statEffects: [
+      { stat: StatId.ADV, amount: 8, label: '+ADV' },
+      { stat: StatId.TRA, amount: 5, label: '+TRA' },
+    ],
+    choices: [
+      {
+        id: 'fight-rival-salmon',
+        label: 'Charge and bite',
+        description: 'Drive him off the redd with force',
+        statEffects: [
+          { stat: StatId.HOM, amount: 10, label: '+HOM' },
+        ],
+        consequences: [
+          { type: 'modify_weight', amount: -2 },
+        ],
+        revocable: false,
+        style: 'danger',
+      },
+      {
+        id: 'sneak-spawn',
+        label: 'Wait for an opening to sneak-spawn',
+        description: 'Let him guard the redd, then dart in',
+        statEffects: [
+          { stat: StatId.WIS, amount: 3, label: '+WIS' },
+        ],
+        consequences: [],
+        revocable: false,
+        style: 'default',
+      },
+    ],
+    conditions: [
+      { type: 'has_flag', flag: 'reached-spawning-grounds' },
+      { type: 'sex', sex: 'male' },
+    ],
+    weight: 8,
+    cooldown: 6,
+    tags: ['mating', 'confrontation'],
+  },
 ];

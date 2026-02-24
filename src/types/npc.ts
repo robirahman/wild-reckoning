@@ -11,6 +11,7 @@ export interface NPC {
   alive: boolean;
   introducedOnTurn: number;
   lastSeenTurn: number;
+  encounters: number;
 }
 
 export interface NPCTemplate {

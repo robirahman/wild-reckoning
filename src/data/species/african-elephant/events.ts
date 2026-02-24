@@ -1082,4 +1082,393 @@ export const AFRICAN_ELEPHANT_EVENTS: GameEvent[] = [
     cooldown: 8,
     tags: ['social', 'herd'],
   },
+
+  // ══════════════════════════════════════════════
+  //  SEASONAL EVENTS (extended)
+  // ══════════════════════════════════════════════
+
+  {
+    id: 'elephant-dry-water-search',
+    type: 'active',
+    category: 'seasonal',
+    narrativeText:
+      "The riverbed is a pale scar across the landscape, cracked into tessellated plates that curl at their edges like dead leaves. The herd has been walking since before dawn, trunks swinging low, testing the air for the faintest ghost of moisture. The matriarch pauses at a bend where the sand looks darker than the rest \u2014 a subtle difference that only decades of memory could detect. You could dig here, trust her reading of the earth, or press on toward the old route where water has always waited before.",
+    statEffects: [],
+    choices: [
+      {
+        id: 'dig-new-well',
+        label: 'Dig a new well here',
+        description: 'Trust the matriarch\u2019s instinct \u2014 exhausting work, but wisdom earned',
+        statEffects: [
+          { stat: StatId.WIS, amount: 5, label: '+WIS' },
+        ],
+        consequences: [
+          { type: 'modify_weight', amount: -3 },
+        ],
+        revocable: false,
+        style: 'default',
+      },
+      {
+        id: 'follow-old-route',
+        label: 'Follow the old route to the known waterhole',
+        description: 'A longer march, but the path is certain',
+        statEffects: [
+          { stat: StatId.HOM, amount: 5, label: '+HOM' },
+        ],
+        consequences: [],
+        revocable: false,
+        style: 'default',
+      },
+    ],
+    conditions: [
+      { type: 'season', seasons: ['winter'] },
+    ],
+    weight: 10,
+    cooldown: 6,
+    tags: ['seasonal', 'water'],
+  },
+
+  {
+    id: 'elephant-wet-mud-bath',
+    type: 'passive',
+    category: 'seasonal',
+    narrativeText:
+      "The rains have transformed the pan into a vast, warm lake of grey mud, and the herd has abandoned all dignity. Calves belly-flop into the shallows, sending up curtains of slurry. Cows roll onto their sides, coating every fold and crease in a thick, cooling plaster that will armor them against sun and insects for days. You wade in until the mud reaches your chest, feeling it suck at your legs with a gentle, insistent grip, and spray great arcs of it over your back with your trunk. The world smells of wet earth and contentment, and for a long, unhurried afternoon, nothing else matters.",
+    statEffects: [
+      { stat: StatId.CLI, amount: -6, label: '-CLI' },
+      { stat: StatId.TRA, amount: -5, label: '-TRA' },
+      { stat: StatId.HOM, amount: -4, label: '-HOM' },
+    ],
+    conditions: [
+      { type: 'season', seasons: ['spring', 'summer'] },
+    ],
+    weight: 10,
+    cooldown: 5,
+    tags: ['seasonal', 'water', 'social'],
+  },
+
+  {
+    id: 'elephant-seasonal-fruit',
+    type: 'active',
+    category: 'seasonal',
+    narrativeText:
+      "The wild figs are ripe. You smell them from a quarter mile away \u2014 a dense, syrupy sweetness that draws the whole herd at a lumbering trot through the golden grass. The trees are heavy with fruit, their branches bowed nearly to the ground, and the earth beneath them is carpeted in split, fermenting globes alive with wasps and beetles. You gorge without restraint, your trunk working in a blur, stuffing handfuls of soft, seedy pulp into your mouth as fast as you can chew. Juice runs down your chin and pools in the creases of your skin. The abundance is almost obscene after months of dry browse.",
+    statEffects: [
+      { stat: StatId.HOM, amount: -8, label: '-HOM' },
+    ],
+    consequences: [
+      { type: 'modify_weight', amount: 4 },
+    ],
+    conditions: [
+      { type: 'season', seasons: ['autumn'] },
+    ],
+    weight: 10,
+    cooldown: 6,
+    tags: ['seasonal', 'foraging', 'food'],
+  },
+
+  {
+    id: 'elephant-brush-fire',
+    type: 'active',
+    category: 'seasonal',
+    narrativeText:
+      "A line of orange light appears on the horizon, shimmering in the heat haze, and then the wind shifts and the smell hits you \u2014 smoke, thick and acrid, laced with the crackle of burning thorn scrub. The fire is moving fast, driven by dry-season gusts, consuming the tall grass in roaring curtains of flame. Ash falls like grey snow on your back. The herd mills in confusion, trunks raised, testing the wind for a path through. You can see a gap where the fire has already passed, the ground still glowing with embers, or you can swing wide around the flank \u2014 a longer route, but away from the flames.",
+    statEffects: [
+      { stat: StatId.TRA, amount: 8, label: '+TRA' },
+      { stat: StatId.ADV, amount: 6, label: '+ADV' },
+    ],
+    choices: [
+      {
+        id: 'charge-through-flames',
+        label: 'Charge through the burned gap',
+        description: 'The embers are still hot, but the path is short',
+        statEffects: [
+          { stat: StatId.ADV, amount: 8, label: '+ADV' },
+        ],
+        consequences: [],
+        revocable: false,
+        style: 'danger',
+        deathChance: {
+          probability: 0.03,
+          cause: 'The fire rekindled in the wind. The flames closed around you.',
+          statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
+        },
+      },
+      {
+        id: 'detour-around-fire',
+        label: 'Detour around the fire\u2019s flank',
+        description: 'Longer and exhausting, but safer ground',
+        statEffects: [
+          { stat: StatId.HOM, amount: 8, label: '+HOM' },
+        ],
+        consequences: [
+          { type: 'modify_weight', amount: -4 },
+        ],
+        revocable: false,
+        style: 'default',
+      },
+    ],
+    conditions: [],
+    weight: 6,
+    cooldown: 10,
+    tags: ['environmental', 'danger', 'seasonal'],
+  },
+
+  // ══════════════════════════════════════════════
+  //  MIGRATION EVENTS
+  // ══════════════════════════════════════════════
+
+  {
+    id: 'elephant-long-march',
+    type: 'active',
+    category: 'migration',
+    narrativeText:
+      "The matriarch has turned east, and you know what that means: the long march. For three days the herd walks in single file across a featureless expanse of sun-bleached scrub, following a route that exists only in the matriarch\u2019s memory. Dust coats your skin until you are the color of the earth itself. Your feet ache on the baked ground. The calves stumble and are steadied by trunks pressed gently against their rumps. At night you walk by starlight, guided by a map no human has ever seen, trusting the ancient, infallible compass of an elephant\u2019s mind. On the fourth morning, the smell of water reaches you \u2014 faint, impossibly sweet \u2014 and the herd quickens its pace.",
+    statEffects: [
+      { stat: StatId.HOM, amount: 10, label: '+HOM' },
+      { stat: StatId.ADV, amount: 6, label: '+ADV' },
+    ],
+    consequences: [
+      { type: 'modify_weight', amount: -5 },
+    ],
+    conditions: [],
+    weight: 7,
+    cooldown: 10,
+    tags: ['migration', 'environmental'],
+  },
+
+  {
+    id: 'elephant-territory-boundary',
+    type: 'active',
+    category: 'migration',
+    narrativeText:
+      "The dung piles appear first \u2014 enormous, still-fresh mounds marking a line across the trail as deliberate as any fence. Then the infrasound reaches you through the ground: a deep, territorial rumble that vibrates in your chest. Another herd claims this corridor, and their matriarch is not inclined to share. Her family is visible through the thorn trees, ears flared wide, bodies angled toward you in unmistakable warning. The water you need lies beyond them.",
+    statEffects: [
+      { stat: StatId.TRA, amount: 5, label: '+TRA' },
+    ],
+    choices: [
+      {
+        id: 'press-through-territory',
+        label: 'Press through their territory',
+        description: 'Assert your right of passage \u2014 confrontation likely',
+        statEffects: [
+          { stat: StatId.ADV, amount: 8, label: '+ADV' },
+          { stat: StatId.TRA, amount: 5, label: '+TRA' },
+        ],
+        consequences: [],
+        revocable: false,
+        style: 'danger',
+      },
+      {
+        id: 'go-around-territory',
+        label: 'Go around their range',
+        description: 'A longer detour, but you avoid a fight',
+        statEffects: [
+          { stat: StatId.HOM, amount: 5, label: '+HOM' },
+        ],
+        consequences: [
+          { type: 'modify_weight', amount: -3 },
+        ],
+        revocable: false,
+        style: 'default',
+      },
+    ],
+    conditions: [],
+    weight: 7,
+    cooldown: 8,
+    tags: ['migration', 'social'],
+  },
+
+  {
+    id: 'elephant-lost-watering-hole',
+    type: 'passive',
+    category: 'migration',
+    narrativeText:
+      "You remember this place. The acacia that leaned over the bank, the flat rock where you used to rest your trunk while drinking, the particular way the light fell across the water in the late afternoon. But the water is gone. The hole is a shallow depression of cracked, bone-white clay, its surface etched with the footprints of animals who came here expecting life and found only dust. A dead catfish lies curled in the center like a question mark. The memory of water is so strong you can almost taste it, but memory cannot slake thirst. The herd stands in bewildered silence, and then the matriarch turns away, and you follow, carrying one more loss in a mind that forgets nothing.",
+    statEffects: [
+      { stat: StatId.TRA, amount: 8, label: '+TRA' },
+      { stat: StatId.HOM, amount: 8, label: '+HOM' },
+      { stat: StatId.WIS, amount: 3, label: '+WIS' },
+    ],
+    conditions: [],
+    weight: 7,
+    cooldown: 8,
+    tags: ['migration', 'environmental', 'psychological'],
+  },
+
+  // ══════════════════════════════════════════════
+  //  SOCIAL EVENTS (extended)
+  // ══════════════════════════════════════════════
+
+  {
+    id: 'elephant-mourning-fallen',
+    type: 'passive',
+    category: 'social',
+    narrativeText:
+      "She went down during the night \u2014 the old cow who always walked at the back of the herd, her gait stiff with arthritis, her tusks worn to blunt stumps. You find her lying on her side in the grey dawn light, her ribs still, her trunk outstretched as though reaching for something. The herd gathers slowly, forming a half-circle around her body. One by one, they approach and touch her with their trunks \u2014 her face, her ears, the hollow behind her jaw where the pulse once beat. A young bull drapes his trunk across her flank and stands there, swaying. Nobody feeds. Nobody moves to leave. The grief is silent and enormous, filling the space between you like floodwater, and you understand with a certainty beyond language that this is not just loss. It is love, expressed in the only way left to express it.",
+    statEffects: [
+      { stat: StatId.TRA, amount: 12, label: '+TRA' },
+      { stat: StatId.WIS, amount: 5, label: '+WIS' },
+      { stat: StatId.NOV, amount: -5, label: '-NOV' },
+    ],
+    conditions: [],
+    weight: 5,
+    cooldown: 15,
+    tags: ['social', 'psychological'],
+  },
+
+  {
+    id: 'elephant-teaching-young',
+    type: 'passive',
+    category: 'social',
+    narrativeText:
+      "The calves crowd around you as you move through a stand of mixed scrub, their small trunks reaching eagerly for everything they see. You steer them away from the Euphorbia with a low rumble \u2014 its milky sap will blister their mouths and blind their eyes. You guide them instead toward the wild sage, demonstrating with slow, deliberate movements how to strip the leaves without taking the woody stem. One calf tries to eat a seed pod from a sausage tree and you nudge it away with your foot, a correction so gentle it could be mistaken for affection. It is affection. Every lesson you teach is a life you may be saving, passed down through a chain of mothers that stretches back further than memory, further than bone.",
+    statEffects: [
+      { stat: StatId.WIS, amount: 8, label: '+WIS' },
+      { stat: StatId.TRA, amount: -3, label: '-TRA' },
+    ],
+    conditions: [
+      { type: 'sex', sex: 'female' },
+      { type: 'age_range', min: 180 },
+    ],
+    weight: 8,
+    cooldown: 8,
+    tags: ['social', 'herd', 'learning'],
+  },
+
+  {
+    id: 'elephant-greeting-herd',
+    type: 'active',
+    category: 'social',
+    narrativeText:
+      "The waterhole is occupied. Another family group is already there \u2014 eight or nine elephants, their wet hides gleaming in the midday heat, calves splashing in the shallows. Their matriarch raises her head and watches your approach with calm, appraising eyes. Her ears are relaxed, not flared, but she has positioned herself between you and her young. The air is thick with chemical signals \u2014 breath, temporal gland secretion, the particular musk of unfamiliar elephants. You could approach openly, trunk extended in greeting, or hold back and wait your turn at the water\u2019s edge.",
+    statEffects: [],
+    choices: [
+      {
+        id: 'approach-peacefully',
+        label: 'Approach with trunk extended',
+        description: 'A greeting ritual \u2014 exchange breath and establish trust',
+        statEffects: [
+          { stat: StatId.WIS, amount: 5, label: '+WIS' },
+          { stat: StatId.TRA, amount: -5, label: '-TRA' },
+        ],
+        consequences: [],
+        revocable: false,
+        style: 'default',
+      },
+      {
+        id: 'maintain-distance',
+        label: 'Maintain a respectful distance',
+        description: 'Wait on the periphery \u2014 cautious, but you miss the exchange',
+        statEffects: [
+          { stat: StatId.ADV, amount: 3, label: '+ADV' },
+        ],
+        consequences: [],
+        revocable: false,
+        style: 'default',
+      },
+    ],
+    conditions: [],
+    weight: 8,
+    cooldown: 6,
+    tags: ['social', 'herd'],
+  },
+
+  // ══════════════════════════════════════════════
+  //  NPC ENCOUNTER TRACKING EVENTS
+  // ══════════════════════════════════════════════
+
+  {
+    id: 'elephant-rival-musth-challenge',
+    type: 'active',
+    category: 'social',
+    narrativeText:
+      '{{npc.rival.name}} is back. You smell him before you see him — the thick, acrid musk of musth pouring off his temporal glands like a chemical declaration of war. He emerges from the tree line with his ears flared and his head held high, the same swagger you have seen before. But this time there is something different in his eyes — a deeper fury, a more desperate need. He has been losing, and losing makes bulls dangerous.',
+    statEffects: [
+      { stat: StatId.ADV, amount: 10, label: '+ADV' },
+      { stat: StatId.TRA, amount: 5, label: '+TRA' },
+    ],
+    choices: [
+      {
+        id: 'fight-rival-npc',
+        label: 'Lock tusks and fight',
+        description: 'End this rivalry once and for all',
+        statEffects: [
+          { stat: StatId.HOM, amount: 10, label: '+HOM' },
+          { stat: StatId.STR, amount: -5, label: '-STR' },
+        ],
+        consequences: [
+          { type: 'modify_weight', amount: -4 },
+        ],
+        revocable: false,
+        style: 'danger',
+        deathChance: {
+          probability: 0.02,
+          cause: '{{npc.rival.name}} drove a tusk through your skull in the heat of combat.',
+          statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
+        },
+      },
+      {
+        id: 'back-down-rival-npc',
+        label: 'Lower your head and retreat',
+        description: 'Live to fight another day',
+        statEffects: [
+          { stat: StatId.TRA, amount: 8, label: '+TRA' },
+        ],
+        consequences: [],
+        revocable: false,
+        style: 'default',
+      },
+    ],
+    conditions: [
+      { type: 'sex', sex: 'male' },
+      { type: 'age_range', min: 144 },
+    ],
+    weight: 7,
+    cooldown: 10,
+    tags: ['social', 'confrontation', 'mating'],
+  },
+
+  {
+    id: 'elephant-predator-pride-learning',
+    type: 'active',
+    category: 'predator',
+    narrativeText:
+      'The lions are back — {{npc.predator.name}} and the rest of the pride, padding through the grass with the quiet confidence of hunters who know their territory. They have been watching your herd for days, learning the patterns: when the calves stray, when the matriarch sleeps, which approaches offer cover. Each encounter they probe a little further, test a little more boldly. They are not hunting yet. They are studying.',
+    statEffects: [
+      { stat: StatId.TRA, amount: 12, label: '+TRA' },
+      { stat: StatId.ADV, amount: 10, label: '+ADV' },
+    ],
+    choices: [
+      {
+        id: 'charge-pride',
+        label: 'Charge the pride to scatter them',
+        description: 'Break their confidence before they strike',
+        statEffects: [
+          { stat: StatId.ADV, amount: -5, label: '-ADV' },
+        ],
+        consequences: [
+          { type: 'modify_weight', amount: -2 },
+        ],
+        revocable: false,
+        style: 'danger',
+      },
+      {
+        id: 'tighten-formation',
+        label: 'Tighten the herd formation',
+        description: 'Keep the calves in the center — deny them an opening',
+        statEffects: [
+          { stat: StatId.TRA, amount: 5, label: '+TRA' },
+          { stat: StatId.WIS, amount: 3, label: '+WIS' },
+        ],
+        consequences: [],
+        revocable: false,
+        style: 'default',
+      },
+    ],
+    conditions: [],
+    weight: 6,
+    cooldown: 8,
+    tags: ['predator', 'danger'],
+  },
 ];

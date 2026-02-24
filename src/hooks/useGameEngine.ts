@@ -65,6 +65,15 @@ export function useGameEngine() {
       preStats[id] = computeEffectiveValue(state.animal.stats[id]);
     }
 
+    // Set cooldowns for all fired events
+    const cooldownUpdates: Record<string, number> = {};
+    for (const event of state.currentEvents) {
+      if (event.definition.cooldown) {
+        cooldownUpdates[event.definition.id] = event.definition.cooldown;
+      }
+    }
+    store.setEventCooldowns(cooldownUpdates);
+
     // Resolve all event effects
     const result = resolveTurn(state);
 
@@ -129,7 +138,9 @@ export function useGameEngine() {
     for (const parasite of animal.parasites) {
       const def = parasiteDefs[parasite.definitionId];
       if (def && parasite.currentStage === def.stages.length - 1) {
-        if (state.rng.chance(config.diseaseDeathChanceAtCritical)) {
+        const imm = computeEffectiveValue(animal.stats[StatId.IMM]);
+        const immFactor = 1.0 + (imm / 100);  // High IMM = higher death chance
+        if (state.rng.chance(config.diseaseDeathChanceAtCritical * immFactor)) {
           store.killAnimal(
             `Died from complications of ${def.name} (${def.scientificName || 'unknown pathogen'}). ` +
             `The infection reached a critical stage your body could not overcome.`

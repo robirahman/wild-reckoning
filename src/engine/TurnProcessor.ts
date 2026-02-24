@@ -95,6 +95,10 @@ export function resolveTurn(state: GameState): {
             prob += (predVuln.underweightThreshold - state.animal.weight) * predVuln.underweightFactor;
           }
 
+          // High adversity slightly increases predator danger
+          const adv = computeEffectiveValue(state.animal.stats[StatId.ADV]);
+          prob += (adv / 100) * 0.03;
+
           // Apply difficulty multiplier to death chance
           prob *= DIFFICULTY_PRESETS[state.difficulty ?? 'normal'].deathChanceFactor;
 
