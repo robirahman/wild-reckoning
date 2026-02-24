@@ -1,5 +1,5 @@
 import type { GameEvent, EventCondition, ResolvedEvent, ResolvedSubEvent } from '../types/events';
-import type { AnimalState, Diet } from '../types/species';
+import type { AnimalState } from '../types/species';
 import type { TimeState } from '../types/world';
 import type { BehavioralSettings } from '../types/behavior';
 import type { SpeciesConfig } from '../types/speciesConfig';
