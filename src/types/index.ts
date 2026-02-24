@@ -5,3 +5,4 @@ export * from './events';
 export * from './world';
 export * from './behavior';
 export * from './reproduction';
+export * from './speciesConfig';

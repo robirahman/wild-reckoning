@@ -1,11 +1,19 @@
 import { useGameStore } from '../store/gameStore';
 import type { Offspring } from '../types/reproduction';
 
-function getFitnessRating(fitness: number): { label: string; color: string } {
+function getIteroparousFitnessRating(fitness: number): { label: string; color: string } {
   if (fitness === 0) return { label: 'No Surviving Offspring', color: 'var(--color-danger)' };
   if (fitness === 1) return { label: 'Below Average', color: '#c87533' };
   if (fitness === 2) return { label: 'Average — Replacement Rate', color: 'var(--color-text)' };
   if (fitness <= 4) return { label: 'Above Average', color: '#5a9e5a' };
+  return { label: 'Exceptional', color: '#3a8a3a' };
+}
+
+function getSemelparousFitnessRating(fitness: number, spawned: boolean): { label: string; color: string } {
+  if (!spawned) return { label: 'Failed to Spawn', color: 'var(--color-danger)' };
+  if (fitness <= 3) return { label: 'Below Average', color: '#c87533' };
+  if (fitness <= 8) return { label: 'Average', color: 'var(--color-text)' };
+  if (fitness <= 15) return { label: 'Above Average', color: '#5a9e5a' };
   return { label: 'Exceptional', color: '#3a8a3a' };
 }
 
@@ -20,9 +28,17 @@ export function DeathScreen() {
   const time = useGameStore((s) => s.time);
   const turnHistory = useGameStore((s) => s.turnHistory);
   const reproduction = useGameStore((s) => s.reproduction);
+  const config = useGameStore((s) => s.speciesBundle.config);
+  const tv = config.templateVars;
 
-  const rating = getFitnessRating(reproduction.totalFitness);
-  const hasOffspring = reproduction.offspring.length > 0;
+  const isIteroparous = reproduction.type === 'iteroparous';
+  const isSemelparous = reproduction.type === 'semelparous';
+
+  const rating = isIteroparous
+    ? getIteroparousFitnessRating(reproduction.totalFitness)
+    : getSemelparousFitnessRating(reproduction.totalFitness, reproduction.spawned);
+
+  const hasOffspring = isIteroparous && reproduction.offspring.length > 0;
 
   return (
     <div style={{
@@ -80,7 +96,10 @@ export function DeathScreen() {
           color: 'var(--color-text-muted)',
           marginBottom: 8,
         }}>
-          offspring survived to reproductive age
+          {isSemelparous
+            ? 'estimated surviving adults from eggs'
+            : 'offspring survived to reproductive age'
+          }
         </div>
         <div style={{
           fontSize: '0.9rem',
@@ -92,8 +111,36 @@ export function DeathScreen() {
         </div>
       </div>
 
-      {/* ── Offspring Breakdown ── */}
-      {hasOffspring && (
+      {/* ── Semelparous Egg Breakdown ── */}
+      {isSemelparous && reproduction.spawned && (
+        <div style={{
+          padding: '16px 20px',
+          border: '1px solid var(--color-border)',
+          borderRadius: 4,
+          background: 'var(--color-panel-bg)',
+          textAlign: 'left',
+          marginBottom: 24,
+          fontFamily: 'var(--font-ui)',
+          fontSize: '0.85rem',
+          lineHeight: 1.8,
+        }}>
+          <div style={{
+            fontWeight: 600,
+            marginBottom: 8,
+            fontSize: '0.8rem',
+            textTransform: 'uppercase',
+            letterSpacing: '0.03em',
+            color: 'var(--color-text-muted)',
+          }}>
+            Spawning Results
+          </div>
+          <div><strong>Eggs Spawned:</strong> {reproduction.eggCount.toLocaleString()}</div>
+          <div><strong>Estimated Surviving Adults:</strong> {reproduction.estimatedSurvivors}</div>
+        </div>
+      )}
+
+      {/* ── Iteroparous Offspring Breakdown ── */}
+      {hasOffspring && isIteroparous && (
         <div style={{
           padding: '16px 20px',
           border: '1px solid var(--color-border)',
@@ -124,7 +171,7 @@ export function DeathScreen() {
             }}>
               <span>
                 {o.sex === 'female' ? '\u2640' : '\u2642'}{' '}
-                Fawn (born Year {o.bornInYear})
+                {tv.youngNoun.charAt(0).toUpperCase() + tv.youngNoun.slice(1)} (born Year {o.bornInYear})
                 {o.siredByPlayer && <span style={{ color: 'var(--color-text-muted)' }}> — sired</span>}
               </span>
               <span style={{
@@ -150,7 +197,7 @@ export function DeathScreen() {
         fontSize: '0.9rem',
         lineHeight: 1.8,
       }}>
-        <div><strong>Species:</strong> White-Tailed Deer</div>
+        <div><strong>Species:</strong> {config.name}</div>
         <div><strong>Sex:</strong> {animal.sex === 'female' ? 'Female' : 'Male'}</div>
         <div><strong>Age at death:</strong> {animal.age} months ({Math.floor(animal.age / 12)} years)</div>
         <div><strong>Final weight:</strong> {animal.weight} lbs</div>

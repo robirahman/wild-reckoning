@@ -16,19 +16,39 @@ export interface Offspring {
 export interface PregnancyState {
   conceivedOnTurn: number;
   turnsRemaining: number;
-  fawnCount: number;
+  offspringCount: number;
 }
 
-export interface ReproductionState {
+export interface IteroparousReproductionState {
+  type: 'iteroparous';
   offspring: Offspring[];
   pregnancy: PregnancyState | null;
   matedThisSeason: boolean;
   totalFitness: number;
 }
 
-export const INITIAL_REPRODUCTION_STATE: ReproductionState = {
+export interface SemelparousReproductionState {
+  type: 'semelparous';
+  spawned: boolean;
+  eggCount: number;
+  estimatedSurvivors: number;
+  totalFitness: number;
+}
+
+export type ReproductionState = IteroparousReproductionState | SemelparousReproductionState;
+
+export const INITIAL_ITEROPAROUS_STATE: IteroparousReproductionState = {
+  type: 'iteroparous',
   offspring: [],
   pregnancy: null,
   matedThisSeason: false,
+  totalFitness: 0,
+};
+
+export const INITIAL_SEMELPAROUS_STATE: SemelparousReproductionState = {
+  type: 'semelparous',
+  spawned: false,
+  eggCount: 0,
+  estimatedSurvivors: 0,
   totalFitness: 0,
 };

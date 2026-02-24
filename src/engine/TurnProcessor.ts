@@ -12,6 +12,8 @@ export function generateTurnEvents(state: GameState): ResolvedEvent[] {
     behavior: state.behavioralSettings,
     cooldowns: state.eventCooldowns,
     rng: state.rng,
+    events: state.speciesBundle.events,
+    config: state.speciesBundle.config,
   });
 }
 
@@ -25,6 +27,8 @@ export function resolveTurn(state: GameState): {
   healthNarratives: string[];
   animal: typeof state.animal;
 } {
+  const config = state.speciesBundle.config;
+  const predVuln = config.predationVulnerability;
   const allStatEffects: StatEffect[] = [];
   const allConsequences: Consequence[] = [];
 
@@ -62,15 +66,15 @@ export function resolveTurn(state: GameState): {
           }
 
           // Adjust by injuries and parasites
-          prob += state.animal.injuries.length * 0.05;
-          prob += state.animal.parasites.length * 0.02;
+          prob += state.animal.injuries.length * predVuln.injuryProbIncrease;
+          prob += state.animal.parasites.length * predVuln.parasiteProbIncrease;
 
           // Underweight = more vulnerable
-          if (state.animal.weight < 80) {
-            prob += (80 - state.animal.weight) * 0.003;
+          if (state.animal.weight < predVuln.underweightThreshold) {
+            prob += (predVuln.underweightThreshold - state.animal.weight) * predVuln.underweightFactor;
           }
 
-          prob = Math.max(0.01, Math.min(0.80, prob));
+          prob = Math.max(predVuln.deathChanceMin, Math.min(predVuln.deathChanceMax, prob));
 
           if (state.rng.chance(prob)) {
             allConsequences.push({ type: 'death', cause: dc.cause });
@@ -80,43 +84,46 @@ export function resolveTurn(state: GameState): {
     }
   }
 
-  // ── Buck competition resolution ──
-  if (state.animal.flags.has('attempted-buck-challenge')) {
-    const hea = computeEffectiveValue(state.animal.stats[StatId.HEA]);
-    const str = computeEffectiveValue(state.animal.stats[StatId.STR]);
-    const winProb = computeBuckWinProbability(
-      hea,
-      state.animal.weight,
-      str,
-      state.animal.injuries.length,
-      state.animal.parasites.length,
-    );
+  // ── Buck competition resolution (iteroparous species with male competition) ──
+  if (config.reproduction.type === 'iteroparous' && config.reproduction.maleCompetition.enabled) {
+    const maleComp = config.reproduction.maleCompetition;
 
-    if (state.rng.chance(winProb)) {
-      // Won the competition — sire offspring
-      const fawnCount = determineFawnCount(state.animal.weight, hea, state.rng);
-      allConsequences.push({ type: 'sire_offspring', fawnCount });
-      allConsequences.push({ type: 'set_flag', flag: 'mated-this-season' });
-    } else {
-      // Lost — may be injured
-      if (state.rng.chance(0.4)) {
-        const bodyParts = ['right shoulder', 'left shoulder', 'left flank', 'right flank', 'right haunch'];
-        const bodyPart = state.rng.pick(bodyParts);
-        allConsequences.push({
-          type: 'add_injury',
-          injuryId: 'antler-wound',
-          severity: state.rng.int(0, 1),
-          bodyPart,
-        });
+    if (state.animal.flags.has(maleComp.challengeFlag)) {
+      const hea = computeEffectiveValue(state.animal.stats[StatId.HEA]);
+      const str = computeEffectiveValue(state.animal.stats[StatId.STR]);
+      const winProb = computeBuckWinProbability(
+        hea,
+        state.animal.weight,
+        str,
+        state.animal.injuries.length,
+        state.animal.parasites.length,
+      );
+
+      if (state.rng.chance(winProb)) {
+        // Won the competition — sire offspring
+        const offspringCount = determineFawnCount(state.animal.weight, hea, state.rng);
+        allConsequences.push({ type: 'sire_offspring', offspringCount });
+        allConsequences.push({ type: 'set_flag', flag: maleComp.matedFlag });
+      } else {
+        // Lost — may be injured
+        if (state.rng.chance(maleComp.lossInjuryChance)) {
+          const bodyPart = state.rng.pick(maleComp.lossInjuryBodyParts);
+          allConsequences.push({
+            type: 'add_injury',
+            injuryId: maleComp.lossInjuryId,
+            severity: state.rng.int(0, 1),
+            bodyPart,
+          });
+        }
       }
-    }
 
-    // Always remove the challenge flag
-    allConsequences.push({ type: 'remove_flag', flag: 'attempted-buck-challenge' });
+      // Always remove the challenge flag
+      allConsequences.push({ type: 'remove_flag', flag: maleComp.challengeFlag });
+    }
   }
 
   // Tick health system
-  const healthResult = tickHealth(state.animal, state.rng, state.time.turn);
+  const healthResult = tickHealth(state.animal, state.rng, state.speciesBundle.parasites);
 
   return {
     statEffects: allStatEffects,

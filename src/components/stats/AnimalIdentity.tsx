@@ -4,27 +4,28 @@ import styles from '../../styles/stats.module.css';
 export function AnimalIdentity() {
   const animal = useGameStore((s) => s.animal);
   const reproduction = useGameStore((s) => s.reproduction);
+  const config = useGameStore((s) => s.speciesBundle.config);
   const sexSymbol = animal.sex === 'female' ? '\u2640' : '\u2642';
+  const tv = config.templateVars;
 
-  const backstoryNote = animal.backstory.type === 'rehabilitation'
-    ? `${animal.backstory.monthsSinceEvent} months post-rehabilitation`
-    : animal.backstory.type === 'orphaned'
-    ? `${animal.backstory.monthsSinceEvent} months since orphaned`
-    : undefined;
-
-  const pregnancyWeeks = reproduction.pregnancy
+  const pregnancyWeeks = reproduction.type === 'iteroparous' && reproduction.pregnancy
     ? reproduction.pregnancy.turnsRemaining
     : null;
 
-  const dependentFawns = reproduction.offspring.filter(
-    (o) => o.alive && !o.independent,
-  ).length;
+  const dependentYoung = reproduction.type === 'iteroparous'
+    ? reproduction.offspring.filter((o) => o.alive && !o.independent).length
+    : 0;
+
+  // Determine lifecycle phase for species with phases
+  const currentPhase = config.phases?.slice().reverse().find(
+    (p) => !p.entryFlag || animal.flags.has(p.entryFlag)
+  );
 
   return (
     <div className={styles.identity}>
       <div className={styles.identityMain}>
-        <span className={styles.speciesName}>White-Tailed Deer</span>
-        <span className={styles.region}>(Northern Minnesota)</span>
+        <span className={styles.speciesName}>{config.name}</span>
+        <span className={styles.region}>({tv.regionName})</span>
       </div>
       <div className={styles.identityDetails}>
         <span>{animal.age} months old</span>
@@ -33,17 +34,24 @@ export function AnimalIdentity() {
         <span className={styles.separator}>|</span>
         <span className={styles.sexSymbol}>{sexSymbol}</span>
       </div>
-      {backstoryNote && (
-        <div className={styles.backstoryNote}>{backstoryNote}</div>
+      {animal.backstory.monthsSinceEvent > 0 && (
+        <div className={styles.backstoryNote}>
+          {animal.backstory.monthsSinceEvent} months since {animal.backstory.label.toLowerCase()}
+        </div>
+      )}
+      {currentPhase && config.phases && config.phases.length > 1 && (
+        <div className={styles.statusNote}>
+          {currentPhase.label}
+        </div>
       )}
       {pregnancyWeeks !== null && (
         <div className={styles.statusNote}>
           Pregnant — {pregnancyWeeks} weeks until birth
         </div>
       )}
-      {dependentFawns > 0 && (
+      {dependentYoung > 0 && (
         <div className={styles.statusNote}>
-          Caring for {dependentFawns} dependent fawn{dependentFawns > 1 ? 's' : ''}
+          Caring for {dependentYoung} dependent {dependentYoung > 1 ? tv.youngNounPlural : tv.youngNoun}
         </div>
       )}
     </div>

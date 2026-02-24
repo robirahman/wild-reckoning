@@ -1,10 +1,10 @@
 import type { GameEvent, EventCondition, ResolvedEvent, ResolvedSubEvent } from '../types/events';
-import type { AnimalState } from '../types/species';
+import type { AnimalState, Diet } from '../types/species';
 import type { TimeState } from '../types/world';
 import type { BehavioralSettings } from '../types/behavior';
+import type { SpeciesConfig } from '../types/speciesConfig';
 import { StatId, computeEffectiveValue } from '../types/stats';
 import type { Rng } from './RandomUtils';
-import { allEvents } from '../data/events';
 
 interface GenerationContext {
   animal: AnimalState;
@@ -12,6 +12,8 @@ interface GenerationContext {
   behavior: BehavioralSettings;
   cooldowns: Record<string, number>;
   rng: Rng;
+  events: GameEvent[];
+  config: SpeciesConfig;
 }
 
 /** Check if a single condition is met */
@@ -24,7 +26,7 @@ function checkCondition(cond: EventCondition, ctx: GenerationContext): boolean {
     case 'species':
       return cond.speciesIds.includes(ctx.animal.speciesId);
     case 'diet':
-      return cond.diets.includes('herbivore'); // White-tailed deer hardcoded for now
+      return cond.diets.includes(ctx.config.diet);
     case 'stat_above': {
       const val = computeEffectiveValue(ctx.animal.stats[cond.stat]);
       return val > cond.threshold;
@@ -112,20 +114,27 @@ function contextMultiplier(event: GameEvent, ctx: GenerationContext): number {
 
 /** Apply template variables to narrative text */
 export function resolveTemplate(text: string, ctx: GenerationContext): string {
+  const tv = ctx.config.templateVars;
   return text
-    .replace(/\{\{animal\.species\}\}/g, 'White-Tailed Deer')
+    .replace(/\{\{animal\.species\}\}/g, tv.speciesName)
     .replace(/\{\{animal\.sex_pronoun\}\}/g, ctx.animal.sex === 'female' ? 'she' : 'he')
     .replace(/\{\{animal\.sex_possessive\}\}/g, ctx.animal.sex === 'female' ? 'her' : 'his')
     .replace(/\{\{animal\.weight\}\}/g, String(ctx.animal.weight))
     .replace(/\{\{animal\.age\}\}/g, String(ctx.animal.age))
     .replace(/\{\{time\.season\}\}/g, ctx.time.season)
     .replace(/\{\{time\.month\}\}/g, ctx.time.month)
-    .replace(/\{\{region\.name\}\}/g, 'Northern Minnesota');
+    .replace(/\{\{region\.name\}\}/g, tv.regionName)
+    .replace(/\{\{species\.youngNoun\}\}/g, tv.youngNoun)
+    .replace(/\{\{species\.youngNounPlural\}\}/g, tv.youngNounPlural)
+    .replace(/\{\{species\.maleNoun\}\}/g, tv.maleNoun)
+    .replace(/\{\{species\.femaleNoun\}\}/g, tv.femaleNoun)
+    .replace(/\{\{species\.groupNoun\}\}/g, tv.groupNoun)
+    .replace(/\{\{species\.habitat\}\}/g, tv.habitat);
 }
 
 /** Generate events for a single turn */
 export function generateEvents(ctx: GenerationContext): ResolvedEvent[] {
-  const events = allEvents;
+  const events = ctx.events;
   const results: ResolvedEvent[] = [];
 
   // Filter eligible events

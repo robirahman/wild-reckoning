@@ -1,8 +1,7 @@
 import type { AnimalState } from '../types/species';
-import type { ActiveParasite, ActiveInjury } from '../types/health';
+import type { ActiveParasite, ActiveInjury, ParasiteDefinition } from '../types/health';
 import type { StatModifier } from '../types/stats';
 import type { Rng } from './RandomUtils';
-import { parasiteDefinitions } from '../data/parasites';
 import { addModifier, removeModifiersBySource } from './StatCalculator';
 
 interface HealthTickResult {
@@ -11,7 +10,11 @@ interface HealthTickResult {
 }
 
 /** Process one turn of health effects: parasite progression, injury healing */
-export function tickHealth(animal: AnimalState, rng: Rng, _turn: number): HealthTickResult {
+export function tickHealth(
+  animal: AnimalState,
+  rng: Rng,
+  parasiteDefs: Record<string, ParasiteDefinition>,
+): HealthTickResult {
   const narratives: string[] = [];
   let updatedAnimal = { ...animal };
 
@@ -20,7 +23,7 @@ export function tickHealth(animal: AnimalState, rng: Rng, _turn: number): Health
   let stats = { ...updatedAnimal.stats };
 
   for (const parasite of updatedAnimal.parasites) {
-    const def = parasiteDefinitions[parasite.definitionId];
+    const def = parasiteDefs[parasite.definitionId];
     if (!def) {
       updatedParasites.push(parasite);
       continue;

@@ -680,7 +680,7 @@ export const allEvents: GameEvent[] = [
           { stat: StatId.WIS, amount: 3, label: '+WIS' },
         ],
         consequences: [
-          { type: 'start_pregnancy', fawnCount: 0 },
+          { type: 'start_pregnancy', offspringCount: 0 },
         ],
         revocable: false,
         style: 'default',

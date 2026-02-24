@@ -6,11 +6,22 @@ This document describes the full game mechanics and their biological justificati
 
 ## 1. Overview
 
-Wild Reckoning simulates the life of a white-tailed deer (*Odocoileus virginianus*) in northern Minnesota. The game is turn-based, with each turn representing one week. The player makes behavioral decisions and responds to events while the game simulates physiology, parasitology, weather, reproduction, and predation.
+Wild Reckoning simulates the life of a wild animal. Three species are playable:
+- **White-Tailed Deer** (*Odocoileus virginianus*) — Northern Minnesota, iteroparous
+- **African Elephant** (*Loxodonta africana*) — East African Savanna, iteroparous
+- **Chinook Salmon** (*Oncorhynchus tshawytscha*) — Pacific Northwest, semelparous
 
-The game ends when the animal dies. The player's score is their **inclusive genetic fitness** — the number of offspring that survive to reproductive age (18 months). Most playthroughs end with a fitness score of 0.
+The game is turn-based, with each turn representing one week. The player makes behavioral decisions and responds to events while the game simulates physiology, parasitology, weather, reproduction, and predation.
+
+The game ends when the animal dies. The player's score is their **inclusive genetic fitness**:
+- **Iteroparous species** (deer, elephant): Number of offspring that survive to reproductive age
+- **Semelparous species** (salmon): Estimated surviving adults from eggs spawned
 
 **Time scale:** 1 turn = 1 week. 4 turns = 1 month. 48 turns = 1 year. Age increments by 1 month when `week === 1` in a new month.
+
+### Multi-Species Architecture
+
+All species-specific values are stored in a `SpeciesConfig` and `SpeciesDataBundle`. The engine reads from these at runtime. Each bundle contains: config (all numerical constants), events, parasites, injuries, and backstories. The species registry (`src/data/species/index.ts`) maps species IDs to bundles.
 
 ---
 
@@ -513,4 +524,109 @@ A female who mates in Year 2, survives through birth and fawn dependence, and li
 |-----------|-------|
 | Injury worsening chance (not resting) | 10% per turn |
 | Injury worsening penalty | +4 turns healing, +1 severity |
-| Disease death chance (critical stage) | 8% per turn |
+| Disease death chance (critical stage) | 8% per turn (deer), 6% (elephant), 10% (salmon) |
+
+---
+
+## 11. African Elephant (*Loxodonta africana*)
+
+### Species Overview
+
+The largest living land animal. Lives in matriarchal herds on the East African savanna. Threats include poaching, human-wildlife conflict, drought, and lion predation (primarily on calves). Extremely long-lived with slow reproduction.
+
+### Key Constants
+
+| Parameter | Value |
+|-----------|-------|
+| Starting weight (F/M) | 6000 / 10000 lbs |
+| Starvation death | < 2000 lbs |
+| Starvation debuff | < 3500 lbs |
+| Vulnerability threshold | 3000 lbs |
+| Old age onset | 540 months (45 years) |
+| Old age escalation | 1.3× per year |
+| Gestation | 88 turns (22 months) |
+| Calf dependence | 144 turns (~3 years) |
+| Calf maturation | 480 turns (~10 years) |
+| Offspring base survival | 99.2% per turn |
+| Male competition base win | 20% (max 50%) |
+
+### Reproduction
+
+Year-round mating (no seasonal restriction). Musth-based male competition. Almost always single calves (95% chance of single, 4.9% twins, 0.1% triplets). Mating eligibility at 144 months (12 years).
+
+### Parasites
+
+- **Elephant Roundworm** (*Murshidia sp.*) — 4 stages, gut parasite
+- **Elephant Tick** (*Amblyomma tholloni*) — 3 stages, immune drain
+- **Trypanosomiasis** (*Trypanosoma sp.*) — 3 stages, tsetse-transmitted, neurological
+
+### Injuries
+
+- **Tusk Wound** — Male competition, 2 severities
+- **Thorn Wound** — Foot injury, 2 severities
+- **Gunshot Wound** — Poaching, 3 severities
+
+### Events (18)
+
+4 foraging (acacia, bark stripping, crop raiding, digging water), 4 predator (lion, poacher, farmer, crocodile), 3 seasonal (dry/wet season, musth), 2 social (matriarch, mourning), 3 reproduction (mating, competition, calf independence), 2 health (thorn, muddy waterhole).
+
+---
+
+## 12. Chinook Salmon (*Oncorhynchus tshawytscha*)
+
+### Species Overview
+
+An anadromous Pacific salmon with a **semelparous** lifecycle — it spawns once and dies. The player experiences ocean life, upstream migration, and spawning. Threats include seals, orcas, fishing nets, bears, eagles, dams, and pollution.
+
+### Key Constants
+
+| Parameter | Value |
+|-----------|-------|
+| Starting weight (F/M) | 25 / 30 lbs |
+| Starvation death | < 4 lbs |
+| Starvation debuff | < 8 lbs |
+| Old age onset | 72 months (6 years) |
+| Old age escalation | 2.0× per year |
+| Base egg count | 4000 |
+| Egg survival base | 0.1% |
+| Spawning min age | 36 months |
+| Male competition base win | 30% (max 60%) |
+
+### Semelparous Lifecycle
+
+Unlike deer and elephant, salmon reproduce **once and then die**. The lifecycle progresses through three phases driven by flags:
+
+1. **Ocean** (default) — Open water feeding, predator avoidance, growth
+2. **Upstream Migration** — Triggered at age 36+ in autumn by player choice; sets `spawning-migration-begun` flag; region changes to Columbia River; stat drain from exhaustion
+3. **Spawning** — Triggered by `reached-spawning-grounds` flag; `spawn` consequence calculates egg count and estimated survivors; animal dies 1-2 turns post-spawn
+
+### Fitness Scoring (Semelparous)
+
+```
+eggCount = 4000 + HEA × 30 + weight × 100
+survivalRate = 0.001 + WIS × 0.00003
+estimatedSurvivors = round(eggCount × survivalRate)
+```
+
+| Score | Rating |
+|-------|--------|
+| Failed to Spawn | "Failed to Spawn" (died before reproducing) |
+| 1–3 | Below Average |
+| 4–8 | Average |
+| 9–15 | Above Average |
+| 16+ | Exceptional |
+
+### Parasites
+
+- **Sea Lice** (*Lepeophtheirus salmonis*) — 3 stages, immune drain + weight loss
+- **Ich / White Spot** (*Ichthyophthirius multifiliis*) — 2 stages, skin/gill
+- **Bacterial Kidney Disease** (*Renibacterium salmoninarum*) — 3 stages, systemic
+
+### Injuries
+
+- **Scale Damage** — From rapids/nets, 2 severities
+- **Bear Claw Wound** — From predation, 2 severities
+
+### Events (19)
+
+4 ocean foraging (krill, baitfish, deep dive, jellyfish), 5 predator (seal, orca, fishing net, seabird, bear), 5 migration (trigger, rapids, waterfall, dam, eagle), 2 spawning (finding redd, spawning event), 3 environmental (temperature, sea lice, pollution).

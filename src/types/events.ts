@@ -55,8 +55,9 @@ export type Consequence =
   | { type: 'modify_age'; amount: number }
   | { type: 'death'; cause: string }
   | { type: 'trigger_event'; eventId: string }
-  | { type: 'start_pregnancy'; fawnCount: number }
-  | { type: 'sire_offspring'; fawnCount: number };
+  | { type: 'start_pregnancy'; offspringCount: number }
+  | { type: 'sire_offspring'; offspringCount: number }
+  | { type: 'spawn' };
 
 // ── Sub-Events ──
 

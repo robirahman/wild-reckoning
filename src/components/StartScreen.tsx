@@ -1,13 +1,27 @@
 import { useState } from 'react';
 import { useGameStore } from '../store/gameStore';
-import { BACKSTORY_OPTIONS, type BackstoryType } from '../types/species';
+import { getAllSpeciesBundles } from '../data/species';
+import type { SpeciesDataBundle } from '../types/speciesConfig';
+import type { Backstory } from '../types/species';
 
 export function StartScreen() {
   const startGame = useGameStore((s) => s.startGame);
-  const [selectedBackstory, setSelectedBackstory] = useState<BackstoryType>('rehabilitation');
+  const allBundles = getAllSpeciesBundles();
+
+  const [selectedSpeciesId, setSelectedSpeciesId] = useState(allBundles[0].config.id);
+  const selectedBundle = allBundles.find((b) => b.config.id === selectedSpeciesId)!;
+
+  const [selectedBackstoryType, setSelectedBackstoryType] = useState(selectedBundle.backstories[0].type);
   const [selectedSex, setSelectedSex] = useState<'male' | 'female'>('female');
 
-  const backstory = BACKSTORY_OPTIONS.find((b) => b.type === selectedBackstory)!;
+  // Reset backstory when species changes
+  const handleSpeciesChange = (bundle: SpeciesDataBundle) => {
+    setSelectedSpeciesId(bundle.config.id);
+    setSelectedBackstoryType(bundle.backstories[0].type);
+  };
+
+  const backstory: Backstory = selectedBundle.backstories.find((b) => b.type === selectedBackstoryType)
+    ?? selectedBundle.backstories[0];
 
   return (
     <div style={{
@@ -33,24 +47,42 @@ export function StartScreen() {
         A wildlife survival simulator
       </p>
 
+      {/* ── Species Selector ── */}
       <div style={{ marginBottom: 32 }}>
         <h3 style={{ fontFamily: 'var(--font-ui)', marginBottom: 12 }}>Species</h3>
-        <div style={{
-          padding: '12px 16px',
-          border: '1px solid var(--color-border)',
-          borderRadius: 4,
-          background: 'var(--color-panel-bg)',
-        }}>
-          <strong>White-Tailed Deer</strong>
-          <span style={{ color: 'var(--color-text-muted)', marginLeft: 8 }}>
-            (Odocoileus virginianus)
-          </span>
-          <p style={{ fontSize: '0.9rem', marginTop: 4, color: 'var(--color-text-muted)' }}>
-            Northern Minnesota
-          </p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          {allBundles.map((bundle) => (
+            <button
+              key={bundle.config.id}
+              onClick={() => handleSpeciesChange(bundle)}
+              style={{
+                padding: '12px 16px',
+                border: `2px solid ${selectedSpeciesId === bundle.config.id ? 'var(--color-text)' : 'var(--color-border)'}`,
+                borderRadius: 4,
+                background: selectedSpeciesId === bundle.config.id ? 'var(--color-bar-bg)' : 'var(--color-panel-bg)',
+                textAlign: 'left',
+                cursor: 'pointer',
+              }}
+            >
+              <div style={{ fontFamily: 'var(--font-ui)', fontSize: '0.95rem', fontWeight: selectedSpeciesId === bundle.config.id ? 700 : 400 }}>
+                {bundle.config.name}
+                <span style={{ color: 'var(--color-text-muted)', fontWeight: 400, marginLeft: 8, fontSize: '0.85rem' }}>
+                  ({bundle.config.scientificName})
+                </span>
+              </div>
+              <div style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', marginTop: 4 }}>
+                {bundle.config.description}
+              </div>
+              <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginTop: 4, fontFamily: 'var(--font-ui)' }}>
+                {bundle.config.defaultRegionDisplayName}
+                {bundle.config.reproduction.type === 'semelparous' && ' — Semelparous lifecycle'}
+              </div>
+            </button>
+          ))}
         </div>
       </div>
 
+      {/* ── Sex Selector ── */}
       <div style={{ marginBottom: 32 }}>
         <h3 style={{ fontFamily: 'var(--font-ui)', marginBottom: 12 }}>Sex</h3>
         <div style={{ display: 'flex', gap: 12 }}>
@@ -70,27 +102,31 @@ export function StartScreen() {
                 fontWeight: selectedSex === sex ? 700 : 400,
               }}
             >
-              {sex === 'female' ? '\u2640 Female' : '\u2642 Male'}
+              {sex === 'female'
+                ? `\u2640 ${selectedBundle.config.templateVars.femaleNoun.charAt(0).toUpperCase() + selectedBundle.config.templateVars.femaleNoun.slice(1)}`
+                : `\u2642 ${selectedBundle.config.templateVars.maleNoun.charAt(0).toUpperCase() + selectedBundle.config.templateVars.maleNoun.slice(1)}`
+              }
             </button>
           ))}
         </div>
       </div>
 
+      {/* ── Backstory Selector ── */}
       <div style={{ marginBottom: 32 }}>
         <h3 style={{ fontFamily: 'var(--font-ui)', marginBottom: 12 }}>Backstory</h3>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          {BACKSTORY_OPTIONS.map((option) => (
+          {selectedBundle.backstories.map((option) => (
             <button
               key={option.type}
-              onClick={() => setSelectedBackstory(option.type)}
+              onClick={() => setSelectedBackstoryType(option.type)}
               style={{
                 padding: '12px 16px',
-                border: `2px solid ${selectedBackstory === option.type ? 'var(--color-text)' : 'var(--color-border)'}`,
+                border: `2px solid ${selectedBackstoryType === option.type ? 'var(--color-text)' : 'var(--color-border)'}`,
                 borderRadius: 4,
-                background: selectedBackstory === option.type ? 'var(--color-bar-bg)' : 'var(--color-panel-bg)',
+                background: selectedBackstoryType === option.type ? 'var(--color-bar-bg)' : 'var(--color-panel-bg)',
                 textAlign: 'left',
                 cursor: 'pointer',
-                fontWeight: selectedBackstory === option.type ? 600 : 400,
+                fontWeight: selectedBackstoryType === option.type ? 600 : 400,
               }}
             >
               <div style={{ fontFamily: 'var(--font-ui)', fontSize: '0.95rem', marginBottom: 4 }}>
@@ -105,7 +141,7 @@ export function StartScreen() {
       </div>
 
       <button
-        onClick={() => startGame('white-tailed-deer', backstory, selectedSex)}
+        onClick={() => startGame(selectedSpeciesId, backstory, selectedSex)}
         style={{
           width: '100%',
           padding: '14px 24px',

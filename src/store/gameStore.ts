@@ -6,15 +6,17 @@ import type { ResolvedEvent, StatEffect, Consequence } from '../types/events';
 import type { StatModifier } from '../types/stats';
 import type { ActiveParasite, ActiveInjury } from '../types/health';
 import type { ReproductionState } from '../types/reproduction';
+import type { SpeciesDataBundle } from '../types/speciesConfig';
+import type { SpeciesConfig } from '../types/speciesConfig';
 import { StatId } from '../types/stats';
 import { DEFAULT_BEHAVIORAL_SETTINGS } from '../types/behavior';
-import { BACKSTORY_OPTIONS } from '../types/species';
-import { INITIAL_REPRODUCTION_STATE } from '../types/reproduction';
+import { INITIAL_ITEROPAROUS_STATE, INITIAL_SEMELPAROUS_STATE } from '../types/reproduction';
 import { createStatBlock, addModifier, tickModifiers, removeModifiersBySource } from '../engine/StatCalculator';
 import { createInitialTime, advanceTime } from '../engine/TimeSystem';
 import { createRng, type Rng } from '../engine/RandomUtils';
 import { computeEffectiveValue } from '../types/stats';
 import { tickReproduction, determineFawnCount, createFawns } from '../engine/ReproductionSystem';
+import { getSpeciesBundle } from '../data/species';
 
 export type GamePhase = 'menu' | 'playing' | 'dead';
 
@@ -29,6 +31,9 @@ export interface GameState {
   phase: GamePhase;
   rng: Rng;
   seed: number;
+
+  // Species
+  speciesBundle: SpeciesDataBundle;
 
   // Core state
   animal: AnimalState;
@@ -56,18 +61,8 @@ export interface GameState {
   killAnimal: (cause: string) => void;
 }
 
-function createInitialAnimal(backstory: Backstory, sex: 'male' | 'female'): AnimalState {
-  const baseBases: Record<StatId, number> = {
-    [StatId.IMM]: 40,
-    [StatId.CLI]: 20,
-    [StatId.HOM]: 35,
-    [StatId.TRA]: 30,
-    [StatId.ADV]: 30,
-    [StatId.NOV]: 40,
-    [StatId.WIS]: 25,
-    [StatId.HEA]: 60,
-    [StatId.STR]: 35,
-  };
+function createInitialAnimal(config: SpeciesConfig, backstory: Backstory, sex: 'male' | 'female'): AnimalState {
+  const baseBases: Record<StatId, number> = { ...config.baseStats };
 
   for (const adj of backstory.statAdjustments) {
     const statId = adj.stat as StatId;
@@ -77,11 +72,11 @@ function createInitialAnimal(backstory: Backstory, sex: 'male' | 'female'): Anim
   }
 
   return {
-    speciesId: 'white-tailed-deer',
-    age: backstory.type === 'rehabilitation' ? 17 : 12,
-    weight: sex === 'female' ? 84 : 110,
+    speciesId: config.id,
+    age: config.startingAge[backstory.type] ?? Object.values(config.startingAge)[0],
+    weight: sex === 'female' ? config.startingWeight.female : config.startingWeight.male,
     sex,
-    region: 'northern-minnesota',
+    region: config.defaultRegion,
     stats: createStatBlock(baseBases),
     parasites: [],
     injuries: [],
@@ -92,34 +87,44 @@ function createInitialAnimal(backstory: Backstory, sex: 'male' | 'female'): Anim
   };
 }
 
+function initialReproduction(config: SpeciesConfig): ReproductionState {
+  return config.reproduction.type === 'iteroparous'
+    ? { ...INITIAL_ITEROPAROUS_STATE }
+    : { ...INITIAL_SEMELPAROUS_STATE };
+}
+
 export const useGameStore = create<GameState>((set, get) => {
   const seed = Date.now();
   const rng = createRng(seed);
+  const defaultBundle = getSpeciesBundle('white-tailed-deer');
 
   return {
     phase: 'menu',
     rng,
     seed,
-    animal: createInitialAnimal(BACKSTORY_OPTIONS[0], 'female'),
+    speciesBundle: defaultBundle,
+    animal: createInitialAnimal(defaultBundle.config, defaultBundle.backstories[0], 'female'),
     time: createInitialTime(5, 1),
     behavioralSettings: { ...DEFAULT_BEHAVIORAL_SETTINGS },
-    reproduction: { ...INITIAL_REPRODUCTION_STATE },
+    reproduction: initialReproduction(defaultBundle.config),
     currentEvents: [],
     pendingChoices: [],
     revocableChoices: {},
     turnHistory: [],
     eventCooldowns: {},
 
-    startGame(_speciesId, backstory, sex) {
+    startGame(speciesId, backstory, sex) {
       const newSeed = Date.now();
+      const bundle = getSpeciesBundle(speciesId);
       set({
         phase: 'playing',
         seed: newSeed,
         rng: createRng(newSeed),
-        animal: createInitialAnimal(backstory, sex),
+        speciesBundle: bundle,
+        animal: createInitialAnimal(bundle.config, backstory, sex),
         time: createInitialTime(5, 1),
         behavioralSettings: { ...DEFAULT_BEHAVIORAL_SETTINGS },
-        reproduction: { ...INITIAL_REPRODUCTION_STATE },
+        reproduction: initialReproduction(bundle.config),
         currentEvents: [],
         pendingChoices: [],
         revocableChoices: {},
@@ -182,6 +187,7 @@ export const useGameStore = create<GameState>((set, get) => {
     applyConsequence(consequence) {
       const state = get();
       const animal = { ...state.animal };
+      const config = state.speciesBundle.config;
 
       switch (consequence.type) {
         case 'add_parasite': {
@@ -217,7 +223,7 @@ export const useGameStore = create<GameState>((set, get) => {
           break;
         }
         case 'modify_weight': {
-          animal.weight = Math.max(20, animal.weight + consequence.amount);
+          animal.weight = Math.max(config.weight.minFloor, animal.weight + consequence.amount);
           set({ animal });
           break;
         }
@@ -247,15 +253,18 @@ export const useGameStore = create<GameState>((set, get) => {
           break;
         }
         case 'start_pregnancy': {
-          if (animal.sex === 'female' && !state.reproduction.pregnancy) {
+          if (animal.sex === 'female' && state.reproduction.type === 'iteroparous' && !state.reproduction.pregnancy) {
+            const reproConfig = config.reproduction;
+            if (reproConfig.type !== 'iteroparous') break;
+
             const hea = computeEffectiveValue(animal.stats[StatId.HEA]);
-            const fawnCount = consequence.fawnCount > 0
-              ? consequence.fawnCount
+            const count = consequence.offspringCount > 0
+              ? consequence.offspringCount
               : determineFawnCount(animal.weight, hea, state.rng);
 
             const newFlags = new Set(animal.flags);
-            newFlags.add('pregnant');
-            newFlags.add('mated-this-season');
+            newFlags.add(reproConfig.pregnantFlag);
+            newFlags.add(reproConfig.maleCompetition.matedFlag);
             animal.flags = newFlags;
 
             set({
@@ -264,8 +273,8 @@ export const useGameStore = create<GameState>((set, get) => {
                 ...state.reproduction,
                 pregnancy: {
                   conceivedOnTurn: state.time.turn,
-                  turnsRemaining: 28,
-                  fawnCount,
+                  turnsRemaining: reproConfig.gestationTurns,
+                  offspringCount: count,
                 },
                 matedThisSeason: true,
               },
@@ -274,17 +283,20 @@ export const useGameStore = create<GameState>((set, get) => {
           break;
         }
         case 'sire_offspring': {
-          if (animal.sex === 'male') {
+          if (animal.sex === 'male' && state.reproduction.type === 'iteroparous') {
+            const reproConfig = config.reproduction;
+            if (reproConfig.type !== 'iteroparous') break;
+
             const hea = computeEffectiveValue(animal.stats[StatId.HEA]);
-            const fawnCount = consequence.fawnCount > 0
-              ? consequence.fawnCount
+            const count = consequence.offspringCount > 0
+              ? consequence.offspringCount
               : determineFawnCount(animal.weight, hea, state.rng);
 
             const wis = computeEffectiveValue(animal.stats[StatId.WIS]);
-            const fawns = createFawns(fawnCount, state.time.turn, state.time.year, wis, true, state.rng);
+            const fawns = createFawns(count, state.time.turn, state.time.year, wis, true, state.rng);
 
             const newFlags = new Set(animal.flags);
-            newFlags.add('mated-this-season');
+            newFlags.add(reproConfig.maleCompetition.matedFlag);
             animal.flags = newFlags;
 
             set({
@@ -298,6 +310,38 @@ export const useGameStore = create<GameState>((set, get) => {
           }
           break;
         }
+        case 'spawn': {
+          if (state.reproduction.type === 'semelparous' && !state.reproduction.spawned) {
+            const reproConfig = config.reproduction;
+            if (reproConfig.type !== 'semelparous') break;
+
+            const hea = computeEffectiveValue(animal.stats[StatId.HEA]);
+            const wis = computeEffectiveValue(animal.stats[StatId.WIS]);
+            const eggCount = Math.round(
+              reproConfig.baseEggCount +
+              hea * reproConfig.eggCountHeaFactor +
+              animal.weight * reproConfig.eggCountWeightFactor
+            );
+            const survivalRate = reproConfig.eggSurvivalBase + wis * reproConfig.eggSurvivalWisFactor;
+            const estimatedSurvivors = Math.round(eggCount * survivalRate);
+
+            const newFlags = new Set(animal.flags);
+            newFlags.add(reproConfig.spawningCompleteFlag);
+            animal.flags = newFlags;
+
+            set({
+              animal,
+              reproduction: {
+                ...state.reproduction,
+                spawned: true,
+                eggCount,
+                estimatedSurvivors,
+                totalFitness: estimatedSurvivors,
+              },
+            });
+          }
+          break;
+        }
         default:
           break;
       }
@@ -305,6 +349,7 @@ export const useGameStore = create<GameState>((set, get) => {
 
     advanceTurn() {
       const state = get();
+      const config = state.speciesBundle.config;
 
       const newTime = advanceTime(state.time);
       let tickedStats = tickModifiers(state.animal.stats);
@@ -322,31 +367,35 @@ export const useGameStore = create<GameState>((set, get) => {
 
       // Starvation debuffs: approaching starvation weakens the animal
       tickedStats = removeModifiersBySource(tickedStats, 'starvation-debuff');
-      if (state.animal.weight < 60 && state.animal.weight >= 35) {
-        const severity = (60 - state.animal.weight) / 25;
+      if (state.animal.weight < config.weight.starvationDebuff && state.animal.weight >= config.weight.starvationDeath) {
+        const severity = (config.weight.starvationDebuff - state.animal.weight) /
+          (config.weight.starvationDebuff - config.weight.starvationDeath);
         const debuffModifier: StatModifier = {
           id: 'starvation-debuff',
           source: 'Near-starvation',
           sourceType: 'condition',
           stat: StatId.HEA,
-          amount: -Math.round(severity * 15),
+          amount: -Math.round(severity * config.weight.debuffMaxPenalty),
           duration: 1,
         };
         tickedStats = addModifier(tickedStats, debuffModifier);
       }
 
-      // Tick reproduction
-      const reproResult = tickReproduction(
-        state.reproduction,
-        state.animal,
-        newTime,
-        state.rng,
-      );
-
-      // Apply reproduction flag changes
+      // Tick reproduction (iteroparous only — semelparous handled via events)
       const newFlags = new Set(state.animal.flags);
-      for (const f of reproResult.flagsToAdd) newFlags.add(f);
-      for (const f of reproResult.flagsToRemove) newFlags.delete(f);
+      let updatedReproduction = state.reproduction;
+
+      if (state.reproduction.type === 'iteroparous') {
+        const reproResult = tickReproduction(
+          state.reproduction,
+          state.animal,
+          newTime,
+          state.rng,
+        );
+        for (const f of reproResult.flagsToAdd) newFlags.add(f);
+        for (const f of reproResult.flagsToRemove) newFlags.delete(f);
+        updatedReproduction = reproResult.reproduction;
+      }
 
       // Save turn to history
       const record: TurnRecord = {
@@ -363,7 +412,7 @@ export const useGameStore = create<GameState>((set, get) => {
           age: newAge,
           flags: newFlags,
         },
-        reproduction: reproResult.reproduction,
+        reproduction: updatedReproduction,
         currentEvents: [],
         pendingChoices: [],
         turnHistory: [...state.turnHistory, record],
@@ -384,34 +433,33 @@ export const useGameStore = create<GameState>((set, get) => {
     killAnimal(cause) {
       const state = get();
 
-      // Kill dependent fawns if the mother dies
-      let updatedOffspring = state.reproduction.offspring;
-      if (state.animal.sex === 'female') {
-        updatedOffspring = updatedOffspring.map((fawn) => {
-          if (fawn.alive && !fawn.independent) {
-            return {
-              ...fawn,
-              alive: false,
-              causeOfDeath: 'Mother died while dependent',
-            };
-          }
-          return fawn;
+      if (state.reproduction.type === 'iteroparous') {
+        // Kill dependent offspring if the mother dies
+        let updatedOffspring = state.reproduction.offspring;
+        if (state.animal.sex === 'female') {
+          updatedOffspring = updatedOffspring.map((o) => {
+            if (o.alive && !o.independent) {
+              return { ...o, alive: false, causeOfDeath: 'Mother died while dependent' };
+            }
+            return o;
+          });
+        }
+
+        set({
+          phase: 'dead',
+          animal: { ...state.animal, alive: false, causeOfDeath: cause },
+          reproduction: {
+            ...state.reproduction,
+            offspring: updatedOffspring,
+            totalFitness: updatedOffspring.filter((o) => o.matured).length,
+          },
+        });
+      } else {
+        set({
+          phase: 'dead',
+          animal: { ...state.animal, alive: false, causeOfDeath: cause },
         });
       }
-
-      set({
-        phase: 'dead',
-        animal: {
-          ...state.animal,
-          alive: false,
-          causeOfDeath: cause,
-        },
-        reproduction: {
-          ...state.reproduction,
-          offspring: updatedOffspring,
-          totalFitness: updatedOffspring.filter((o) => o.matured).length,
-        },
-      });
     },
   };
 });

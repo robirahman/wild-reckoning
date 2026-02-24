@@ -1,4 +1,4 @@
-import type { Offspring, ReproductionState } from '../types/reproduction';
+import type { Offspring, IteroparousReproductionState } from '../types/reproduction';
 import type { AnimalState } from '../types/species';
 import type { TimeState, Season } from '../types/world';
 import { StatId, computeEffectiveValue } from '../types/stats';
@@ -104,12 +104,12 @@ const FAWN_DEATH_CAUSES = [
 
 /** Tick reproduction state each turn */
 export function tickReproduction(
-  reproduction: ReproductionState,
+  reproduction: IteroparousReproductionState,
   animal: AnimalState,
   time: TimeState,
   rng: Rng,
 ): {
-  reproduction: ReproductionState;
+  reproduction: IteroparousReproductionState;
   narratives: string[];
   flagsToAdd: string[];
   flagsToRemove: string[];
@@ -126,7 +126,7 @@ export function tickReproduction(
     if (newTurnsRemaining <= 0) {
       // Birth
       const wis = computeEffectiveValue(animal.stats[StatId.WIS]);
-      const count = updated.pregnancy.fawnCount;
+      const count = updated.pregnancy.offspringCount;
       const fawns = createFawns(count, time.turn, time.year, wis, false, rng);
       updated = {
         ...updated,

@@ -1,7 +1,6 @@
 import { useCallback } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { generateTurnEvents, resolveTurn } from '../engine/TurnProcessor';
-import { parasiteDefinitions } from '../data/parasites';
 
 export function useGameEngine() {
   const store = useGameStore();
@@ -37,6 +36,8 @@ export function useGameEngine() {
   const checkDeathConditions = useCallback(() => {
     const state = useGameStore.getState();
     const animal = state.animal;
+    const config = state.speciesBundle.config;
+    const parasiteDefs = state.speciesBundle.parasites;
 
     // Already dead from a death consequence (predator, etc.)
     if (!animal.alive) {
@@ -45,7 +46,7 @@ export function useGameEngine() {
     }
 
     // 1. Starvation
-    if (animal.weight < 35) {
+    if (animal.weight < config.weight.starvationDeath) {
       store.killAnimal(
         'Starvation — your body weight dropped below the threshold your organs could sustain.'
       );
@@ -54,9 +55,9 @@ export function useGameEngine() {
 
     // 2. Disease death: parasites at final (critical) stage
     for (const parasite of animal.parasites) {
-      const def = parasiteDefinitions[parasite.definitionId];
+      const def = parasiteDefs[parasite.definitionId];
       if (def && parasite.currentStage === def.stages.length - 1) {
-        if (state.rng.chance(0.08)) {
+        if (state.rng.chance(config.diseaseDeathChanceAtCritical)) {
           store.killAnimal(
             `Died from complications of ${def.name} (${def.scientificName || 'unknown pathogen'}). ` +
             `The infection reached a critical stage your body could not overcome.`
@@ -66,17 +67,26 @@ export function useGameEngine() {
       }
     }
 
-    // 3. Old age: escalating probability after 96 months (8 years)
-    if (animal.age > 96) {
-      const yearsOver = (animal.age - 96) / 12;
-      const ageDeathChance = 0.02 * Math.pow(1.5, yearsOver);
-      if (state.rng.chance(Math.min(ageDeathChance, 0.95))) {
+    // 3. Old age: escalating probability after onset
+    if (animal.age > config.age.oldAgeOnsetMonths) {
+      const yearsOver = (animal.age - config.age.oldAgeOnsetMonths) / 12;
+      const ageDeathChance = config.age.oldAgeBaseChance * Math.pow(config.age.oldAgeEscalation, yearsOver);
+      if (state.rng.chance(Math.min(ageDeathChance, config.age.maxOldAgeChance))) {
         store.killAnimal(
           `Died of old age at ${Math.floor(animal.age / 12)} years. ` +
           `Your body, worn by seasons of survival, finally gave out.`
         );
         return;
       }
+    }
+
+    // 4. Post-spawning death (semelparous species)
+    if (state.reproduction.type === 'semelparous' && state.reproduction.spawned) {
+      store.killAnimal(
+        'Having completed the spawning that was your life\'s purpose, your body gives out. ' +
+        'The cycle is complete.'
+      );
+      return;
     }
   }, [store]);
 

@@ -44,7 +44,7 @@ export interface SpeciesDefinition {
 
 // ── Backstory ──
 
-export type BackstoryType = 'rehabilitation' | 'wild-born' | 'orphaned';
+export type BackstoryType = string;
 
 export interface Backstory {
   type: BackstoryType;
