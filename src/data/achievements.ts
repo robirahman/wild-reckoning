@@ -448,4 +448,52 @@ export const ACHIEVEMENTS: AchievementDefinition[] = [
     species: 'monarch-butterfly',
     check: (s) => s.animal.flags.has('garden-eggs'),
   },
+
+  // Fig Wasp achievements
+  {
+    id: 'figwasp-full-cycle',
+    name: 'The Mutualism',
+    description: 'Complete the full lifecycle: develop, emerge, fly, enter a new fig, pollinate, and lay eggs.',
+    checkOn: 'both',
+    species: 'fig-wasp',
+    check: (s) => s.animal.flags.has('eggs-laid'),
+  },
+  {
+    id: 'figwasp-tunnel-hero',
+    name: 'The Tunnel Maker',
+    description: 'As a male, successfully chew an exit tunnel through the fig wall.',
+    checkOn: 'turn',
+    species: 'fig-wasp',
+    check: (s) => s.animal.sex === 'male' && s.animal.flags.has('tunnel-chewed'),
+  },
+  {
+    id: 'figwasp-pollen-carrier',
+    name: 'Pollen Courier',
+    description: 'Collect pollen and carry it to a new fig as a female.',
+    checkOn: 'turn',
+    species: 'fig-wasp',
+    check: (s) =>
+      s.animal.sex === 'female' &&
+      s.animal.flags.has('pollen-collected') &&
+      s.animal.flags.has('entered-new-fig'),
+  },
+  {
+    id: 'figwasp-lineage-3',
+    name: 'Three Figs Deep',
+    description: 'Survive across 3 generations in lineage mode.',
+    checkOn: 'turn',
+    species: 'fig-wasp',
+    check: (s) => s.time.turn >= 48,
+  },
+  {
+    id: 'figwasp-male-combat-victor',
+    name: 'King of the Dark',
+    description: 'Win a combat encounter as a wingless, blind male inside the fig.',
+    checkOn: 'turn',
+    species: 'fig-wasp',
+    check: (s) =>
+      s.animal.sex === 'male' &&
+      s.animal.flags.has('fig-combat-attempted') &&
+      s.animal.flags.has('mated-in-fig'),
+  },
 ];

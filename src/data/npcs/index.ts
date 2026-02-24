@@ -156,4 +156,26 @@ export const NPC_TEMPLATES: Record<string, NPCTemplate[]> = {
       namePool: ['Amber Wing', 'The Dancer', 'Sunset', 'Golden Dust', 'Meadow'],
     },
   ],
+  'fig-wasp': [
+    {
+      type: 'rival',
+      speciesLabel: 'male fig wasp',
+      namePool: ['The Big-Jawed One', 'Gall Fighter', 'The Dark One', 'Mandible', 'The Blind Brawler'],
+    },
+    {
+      type: 'ally',
+      speciesLabel: 'sibling',
+      namePool: ['Gall Neighbor', 'The Early Emerger', 'Pollen Carrier', 'The Other Foundress Line'],
+    },
+    {
+      type: 'predator',
+      speciesLabel: 'parasitoid wasp',
+      namePool: ['The Long Ovipositor', 'The Driller', 'The Wall-Piercer', 'The Cheater'],
+    },
+    {
+      type: 'mate',
+      speciesLabel: 'male',
+      namePool: ['The First Emerged', 'Tunnel Maker', 'The Strong One', 'Gall Chewer'],
+    },
+  ],
 };

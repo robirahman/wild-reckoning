@@ -220,6 +220,27 @@ export const REGION_DEFINITIONS: Record<string, RegionDefinition> = {
       { parasiteId: 'trichinella', baseChance: 0.03, seasonalModifier: { spring: 1.2, summer: 0.5, autumn: 0.5, winter: 1.5 } },
     ],
   },
+
+  'florida-fig-hammock': {
+    id: 'florida-fig-hammock',
+    name: 'Florida Tropical Hammock',
+    climate: {
+      temperatureByMonth: [67, 68, 72, 76, 80, 83, 84, 84, 83, 79, 74, 69],
+      precipitationByMonth: [2.0, 2.3, 3.0, 3.2, 5.5, 8.5, 6.5, 7.0, 8.0, 6.0, 3.5, 2.0],
+      firstFrostMonth: -1,
+      lastFrostMonth: -1,
+    },
+    flora: [
+      { id: 'ficus-aurea-fig', name: 'Strangler Fig (Ficus aurea)', availableSeasons: ['spring', 'summer', 'autumn', 'winter'], nutritiveValue: 90, abundanceByMonth: [0.4, 0.5, 0.7, 0.8, 0.9, 1.0, 1.0, 0.9, 0.8, 0.7, 0.5, 0.4] },
+      { id: 'gumbo-limbo', name: 'Gumbo Limbo', availableSeasons: ['spring', 'summer', 'autumn', 'winter'], nutritiveValue: 10, abundanceByMonth: [0.6, 0.6, 0.7, 0.8, 0.8, 0.8, 0.8, 0.8, 0.7, 0.7, 0.6, 0.6] },
+    ],
+    fauna: ['fig-wasp', 'non-pollinating-wasp', 'ant', 'spider', 'anole-lizard', 'tree-frog'],
+    predators: ['spider', 'ant', 'parasitoid-wasp', 'bird'],
+    parasitePrevalence: [
+      { parasiteId: 'fig-nematode', baseChance: 0.06, seasonalModifier: { spring: 1.0, summer: 1.4, autumn: 1.2, winter: 0.6 } },
+      { parasiteId: 'parasitoid-wasp', baseChance: 0.04, seasonalModifier: { spring: 0.8, summer: 1.3, autumn: 1.1, winter: 0.5 } },
+    ],
+  },
 };
 
 export function getRegionDefinition(id: string): RegionDefinition | undefined {
