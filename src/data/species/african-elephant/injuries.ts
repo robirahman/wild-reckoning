@@ -1,6 +1,7 @@
 import type { InjuryDefinition } from '../../../types/health';
 import { StatId } from '../../../types/stats';
 
+// Note: healing times are in turns (1 turn = 1 month for elephants)
 export const AFRICAN_ELEPHANT_INJURIES: Record<string, InjuryDefinition> = {
   'tusk-wound': {
     id: 'tusk-wound',
@@ -19,7 +20,7 @@ export const AFRICAN_ELEPHANT_INJURIES: Record<string, InjuryDefinition> = {
           { stat: StatId.HEA, amount: -4 },
           { stat: StatId.HOM, amount: 5 },
         ],
-        baseHealingTime: 8,
+        baseHealingTime: 2,
         worseningChance: 0.08,
         permanentDebuffChance: 0.01,
       },
@@ -30,7 +31,7 @@ export const AFRICAN_ELEPHANT_INJURIES: Record<string, InjuryDefinition> = {
           { stat: StatId.HEA, amount: -10 },
           { stat: StatId.HOM, amount: 12 },
         ],
-        baseHealingTime: 16,
+        baseHealingTime: 4,
         worseningChance: 0.12,
         permanentDebuffChance: 0.05,
       },
@@ -54,7 +55,7 @@ export const AFRICAN_ELEPHANT_INJURIES: Record<string, InjuryDefinition> = {
           { stat: StatId.HEA, amount: -3 },
           { stat: StatId.HOM, amount: 4 },
         ],
-        baseHealingTime: 6,
+        baseHealingTime: 2,
         worseningChance: 0.10,
         permanentDebuffChance: 0.02,
       },
@@ -66,7 +67,7 @@ export const AFRICAN_ELEPHANT_INJURIES: Record<string, InjuryDefinition> = {
           { stat: StatId.HOM, amount: 10 },
           { stat: StatId.ADV, amount: 5 },
         ],
-        baseHealingTime: 14,
+        baseHealingTime: 4,
         worseningChance: 0.15,
         permanentDebuffChance: 0.08,
       },
@@ -92,7 +93,7 @@ export const AFRICAN_ELEPHANT_INJURIES: Record<string, InjuryDefinition> = {
           { stat: StatId.HEA, amount: -5 },
           { stat: StatId.TRA, amount: 8 },
         ],
-        baseHealingTime: 10,
+        baseHealingTime: 3,
         worseningChance: 0.12,
         permanentDebuffChance: 0.03,
       },
@@ -104,7 +105,7 @@ export const AFRICAN_ELEPHANT_INJURIES: Record<string, InjuryDefinition> = {
           { stat: StatId.TRA, amount: 15 },
           { stat: StatId.HOM, amount: 10 },
         ],
-        baseHealingTime: 20,
+        baseHealingTime: 5,
         worseningChance: 0.18,
         permanentDebuffChance: 0.10,
       },
@@ -117,7 +118,7 @@ export const AFRICAN_ELEPHANT_INJURIES: Record<string, InjuryDefinition> = {
           { stat: StatId.HOM, amount: 18 },
           { stat: StatId.ADV, amount: 12 },
         ],
-        baseHealingTime: 30,
+        baseHealingTime: 8,
         worseningChance: 0.25,
         permanentDebuffChance: 0.25,
       },

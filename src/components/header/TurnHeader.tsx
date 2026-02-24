@@ -18,7 +18,9 @@ export function TurnHeader({ onToggleHistory }: Props) {
   return (
     <div className={styles.turnHeader}>
       <span className={styles.date}>
-        Week {time.week}, {time.month}, Year {time.year}
+        {(config.turnUnit ?? 'week') === 'month'
+          ? `${time.month}, Year ${time.year}`
+          : `Week ${time.week}, ${time.month}, Year ${time.year}`}
         {currentPhase && config.phases && config.phases.length > 1 && (
           <span style={{ color: 'var(--color-text-muted)', marginLeft: 8 }}>
             — {currentPhase.label}

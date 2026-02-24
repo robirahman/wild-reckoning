@@ -39,12 +39,12 @@ export const AFRICAN_ELEPHANT_CONFIG: SpeciesConfig = {
 
   age: {
     oldAgeOnsetMonths: 540,
-    oldAgeBaseChance: 0.02,
+    oldAgeBaseChance: 0.08,   // Scaled for monthly turns (was 0.02 at weekly)
     oldAgeEscalation: 1.3,
     maxOldAgeChance: 0.95,
   },
 
-  diseaseDeathChanceAtCritical: 0.06,
+  diseaseDeathChanceAtCritical: 0.22,  // Scaled for monthly turns (was 0.06 at weekly)
 
   predationVulnerability: {
     injuryProbIncrease: 0.03,
@@ -55,12 +55,14 @@ export const AFRICAN_ELEPHANT_CONFIG: SpeciesConfig = {
     deathChanceMax: 0.60,
   },
 
+  turnUnit: 'month',
+
   seasonalWeight: {
-    spring: 1.5,    // Wet season start — good grazing
-    summer: 1.0,    // Wet season — moderate
+    spring: 6.0,    // Wet season start — good grazing (scaled for monthly turns)
+    summer: 4.0,    // Wet season — moderate
     autumn: 0.0,    // Dry season approach — neutral
-    winter: -2.0,   // Dry season — significant scarcity
-    foragingBonus: 0.4,
+    winter: -8.0,   // Dry season — significant scarcity
+    foragingBonus: 1.6,
   },
 
   agePhases: [
@@ -100,7 +102,7 @@ export const AFRICAN_ELEPHANT_CONFIG: SpeciesConfig = {
       challengeFlag: 'attempted-musth-challenge',
       matedFlag: 'mated-this-season',
     },
-    gestationTurns: 88,
+    gestationTurns: 22,
     offspringCountFormula: {
       weightReference: 5000,
       weightDivisor: 5000,
@@ -115,15 +117,15 @@ export const AFRICAN_ELEPHANT_CONFIG: SpeciesConfig = {
     offspringLabelSingle: 'a single calf',
     offspringLabelTwin: 'twin calves',
     offspringLabelTriple: 'twin calves',
-    dependenceTurns: 144,
-    maturationTurns: 480,
-    offspringBaseSurvival: 0.992,
-    offspringSurvivalWinterPenalty: 0.002,
-    offspringSurvivalSummerBonus: 0.001,
-    offspringSurvivalYoungPenalty: 0.003,
-    offspringSurvivalYoungThreshold: 48,
-    offspringSurvivalMin: 0.95,
-    offspringSurvivalMax: 0.998,
+    dependenceTurns: 36,
+    maturationTurns: 120,
+    offspringBaseSurvival: 0.968,    // Scaled for monthly turns (0.992^4)
+    offspringSurvivalWinterPenalty: 0.008,
+    offspringSurvivalSummerBonus: 0.004,
+    offspringSurvivalYoungPenalty: 0.012,
+    offspringSurvivalYoungThreshold: 12,
+    offspringSurvivalMin: 0.815,    // Scaled for monthly turns (0.95^4)
+    offspringSurvivalMax: 0.992,    // Scaled for monthly turns (0.998^4)
     offspringDeathCauses: [
       'Killed by lions',
       'Died of drought',

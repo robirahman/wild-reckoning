@@ -246,10 +246,13 @@ export const useGameStore = create<GameState>((set, get) => {
           break;
         }
         case 'add_injury': {
+          const injuryDef = state.speciesBundle.injuries[consequence.injuryId];
+          const severity = consequence.severity ?? 0;
+          const baseHealingTime = injuryDef?.severityLevels[severity]?.baseHealingTime ?? 8;
           const newInjury: ActiveInjury = {
             definitionId: consequence.injuryId,
-            currentSeverity: consequence.severity ?? 0,
-            turnsRemaining: 8,
+            currentSeverity: severity,
+            turnsRemaining: baseHealingTime,
             bodyPartDetail: consequence.bodyPart ?? 'unspecified',
             isResting: false,
             acquiredOnTurn: state.time.turn,
@@ -396,7 +399,8 @@ export const useGameStore = create<GameState>((set, get) => {
       const config = state.speciesBundle.config;
       const difficultyMult = DIFFICULTY_PRESETS[state.difficulty];
 
-      const newTime = advanceTime(state.time);
+      const turnUnit = config.turnUnit ?? 'week';
+      const newTime = advanceTime(state.time, turnUnit);
       let tickedStats = tickModifiers(state.animal.stats);
 
       // Tick cooldowns
@@ -407,8 +411,8 @@ export const useGameStore = create<GameState>((set, get) => {
         }
       }
 
-      // Age the animal (1 month per 4 turns)
-      const newAge = state.animal.age + (newTime.week === 1 ? 1 : 0);
+      // Age the animal: monthly species age every turn, weekly species age every 4 turns
+      const newAge = state.animal.age + (turnUnit === 'month' ? 1 : (newTime.week === 1 ? 1 : 0));
 
       // Starvation debuffs: approaching starvation weakens the animal
       tickedStats = removeModifiersBySource(tickedStats, 'starvation-debuff');

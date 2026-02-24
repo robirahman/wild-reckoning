@@ -83,7 +83,8 @@ export function tickHealth(
   // ── Injury Healing ──
   const updatedInjuries: ActiveInjury[] = [];
   for (const injury of updatedAnimal.injuries) {
-    const newTurns = injury.turnsRemaining - (injury.isResting ? 1 : 0);
+    const healRate = injury.isResting ? 2 : 1;
+    const newTurns = injury.turnsRemaining - healRate;
 
     if (newTurns <= 0) {
       narratives.push(`Your ${injury.bodyPartDetail} has healed.`);

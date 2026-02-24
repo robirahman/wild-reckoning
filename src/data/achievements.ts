@@ -7,6 +7,8 @@ export interface AchievementDefinition {
   description: string;
   /** Check at end of turn or on death */
   checkOn: 'turn' | 'death' | 'both';
+  /** If set, only check/show for these species IDs */
+  species?: string | string[];
   check: (state: GameState) => boolean;
 }
 
@@ -84,12 +86,13 @@ export const ACHIEVEMENTS: AchievementDefinition[] = [
     check: (s) => computeEffectiveValue(s.animal.stats[StatId.WIS]) >= 80,
   },
 
-  // Weight achievements
+  // Weight achievements (deer-specific)
   {
     id: 'heavy-weight',
     name: 'Heavy Weight',
     description: 'Reach 200+ lbs body weight.',
     checkOn: 'turn',
+    species: 'white-tailed-deer',
     check: (s) => s.animal.weight >= 200,
   },
   {
@@ -97,7 +100,44 @@ export const ACHIEVEMENTS: AchievementDefinition[] = [
     name: 'Skin and Bones',
     description: 'Survive a turn at under 80 lbs.',
     checkOn: 'turn',
+    species: 'white-tailed-deer',
     check: (s) => s.animal.weight < 80 && s.animal.alive,
+  },
+
+  // Elephant-specific
+  {
+    id: 'elephant-titan',
+    name: 'Titan',
+    description: 'Reach 14,000+ lbs as an elephant.',
+    checkOn: 'turn',
+    species: 'african-elephant',
+    check: (s) => s.animal.weight >= 14000,
+  },
+  {
+    id: 'elephant-drought',
+    name: 'Drought Survivor',
+    description: 'Survive while dangerously underweight as an elephant.',
+    checkOn: 'turn',
+    species: 'african-elephant',
+    check: (s) => s.animal.weight < 3500 && s.animal.alive,
+  },
+
+  // Salmon-specific
+  {
+    id: 'salmon-upstream',
+    name: 'Against the Current',
+    description: 'Reach the spawning grounds.',
+    checkOn: 'turn',
+    species: 'chinook-salmon',
+    check: (s) => s.animal.flags.has('reached-spawning-grounds'),
+  },
+  {
+    id: 'salmon-spawn',
+    name: 'Circle of Life',
+    description: 'Successfully spawn.',
+    checkOn: 'both',
+    species: 'chinook-salmon',
+    check: (s) => s.reproduction.type === 'semelparous' && s.reproduction.spawned,
   },
 
   // Species-specific

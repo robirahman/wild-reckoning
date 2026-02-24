@@ -184,6 +184,9 @@ export interface SpeciesConfig {
 
   phases?: LifecyclePhase[];
 
+  /** Time unit per turn. 'week' = 4 turns/month (default). 'month' = 1 turn/month. */
+  turnUnit?: 'week' | 'month';
+
   templateVars: {
     speciesName: string;
     regionName: string;

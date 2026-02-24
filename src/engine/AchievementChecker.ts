@@ -11,9 +11,17 @@ export function checkAchievements(state: GameState, trigger: 'turn' | 'death'): 
   const store = useAchievementStore.getState();
   const newlyUnlocked: string[] = [];
 
+  const currentSpecies = state.animal.speciesId;
+
   for (const ach of ACHIEVEMENTS) {
     if (store.unlockedIds.has(ach.id)) continue;
     if (ach.checkOn !== trigger && ach.checkOn !== 'both') continue;
+
+    // Skip species-specific achievements for non-matching species
+    if (ach.species) {
+      const allowed = Array.isArray(ach.species) ? ach.species : [ach.species];
+      if (!allowed.includes(currentSpecies)) continue;
+    }
 
     // Special case: biodiversity achievement
     if (ach.id === 'play-all-species') {

@@ -13,8 +13,27 @@ export function createInitialTime(startMonth: number = 5, startYear: number = 1)
   };
 }
 
-export function advanceTime(time: TimeState): TimeState {
+export function advanceTime(time: TimeState, turnUnit: 'week' | 'month' = 'week'): TimeState {
   const newTurn = time.turn + 1;
+
+  if (turnUnit === 'month') {
+    // Each turn = 1 month
+    const newMonthIndex = (time.monthIndex + 1) % 12;
+    const newYear = newMonthIndex === 0 ? time.year + 1 : time.year;
+    const newMonth: Month = MONTHS[newMonthIndex];
+    const newSeason = MONTH_TO_SEASON[newMonth];
+
+    return {
+      turn: newTurn,
+      week: 1,
+      month: newMonth,
+      monthIndex: newMonthIndex,
+      year: newYear,
+      season: newSeason,
+    };
+  }
+
+  // Default: each turn = 1 week
   let newWeek = (time.week + 1) as 1 | 2 | 3 | 4;
   let newMonthIndex = time.monthIndex;
   let newYear = time.year;
