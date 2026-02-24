@@ -9,6 +9,7 @@ import { DIFFICULTY_PRESETS } from '../types/difficulty';
 interface HealthTickResult {
   animal: AnimalState;
   narratives: string[]; // Health-related narrative snippets for the turn
+  flagsToSet: string[]; // Flags to set on the animal after ticking
 }
 
 /** Process one turn of health effects: parasite progression, injury healing */
@@ -19,6 +20,7 @@ export function tickHealth(
   difficulty?: Difficulty,
 ): HealthTickResult {
   const narratives: string[] = [];
+  const flagsToSet: string[] = [];
   let updatedAnimal = { ...animal };
 
   // ── Parasite Progression ──
@@ -56,6 +58,9 @@ export function tickHealth(
         narratives.push(
           `Your ${def.name} infection has improved to ${def.stages[newStage].severity}.`
         );
+        if (newStage === 0) {
+          flagsToSet.push('parasite-cleared-naturally');
+        }
       }
     }
 
@@ -117,5 +122,5 @@ export function tickHealth(
     injuries: updatedInjuries,
   };
 
-  return { animal: updatedAnimal, narratives };
+  return { animal: updatedAnimal, narratives, flagsToSet };
 }

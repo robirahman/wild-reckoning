@@ -1,4 +1,5 @@
 import { useGameStore } from '../../store/gameStore';
+import { WeatherBadge } from './WeatherBadge';
 import styles from '../../styles/header.module.css';
 
 interface Props {
@@ -26,6 +27,7 @@ export function TurnHeader({ onToggleHistory }: Props) {
             — {currentPhase.label}
           </span>
         )}
+        <WeatherBadge />
       </span>
       <span className={styles.turn}>
         {onToggleHistory && (

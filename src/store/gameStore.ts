@@ -23,6 +23,10 @@ import { computeEffectiveValue } from '../types/stats';
 import { tickReproduction, determineFawnCount, createFawns } from '../engine/ReproductionSystem';
 import { getSpeciesBundle } from '../data/species';
 import { loadGame, deleteSaveGame } from './persistence';
+import { getRegionDefinition } from '../data/regions';
+import { generateWeather, advanceWeather } from '../engine/WeatherSystem';
+import type { WeatherState } from '../engine/WeatherSystem';
+import { introduceNPC } from '../engine/NPCSystem';
 
 export type GamePhase = 'menu' | 'playing' | 'dead';
 
@@ -68,6 +72,9 @@ export interface GameState {
 
   // Tutorial
   tutorialStep: number | null;
+
+  // Weather
+  currentWeather: WeatherState | null;
 
   // History
   turnHistory: TurnRecord[];
@@ -146,6 +153,7 @@ export const useGameStore = create<GameState>((set, get) => {
     npcs: [],
     activeStorylines: [],
     tutorialStep: null,
+    currentWeather: null,
     turnResult: null,
     showingResults: false,
     turnHistory: [],
@@ -171,6 +179,7 @@ export const useGameStore = create<GameState>((set, get) => {
         npcs: [],
         activeStorylines: [],
         tutorialStep: tutorialSeen ? null : 0,
+        currentWeather: null,
         turnResult: null,
         showingResults: false,
         turnHistory: [],
@@ -358,6 +367,13 @@ export const useGameStore = create<GameState>((set, get) => {
           }
           break;
         }
+        case 'introduce_npc': {
+          const npc = introduceNPC(state.animal.speciesId, consequence.npcType, state.time.turn, state.npcs, state.rng);
+          if (npc) {
+            set({ npcs: [...state.npcs, npc] });
+          }
+          break;
+        }
         case 'spawn': {
           if (state.reproduction.type === 'semelparous' && !state.reproduction.spawned) {
             const reproConfig = config.reproduction;
@@ -431,9 +447,24 @@ export const useGameStore = create<GameState>((set, get) => {
         tickedStats = addModifier(tickedStats, debuffModifier);
       }
 
+      // Advance weather
+      const regionDef = getRegionDefinition(state.animal.region);
+      const climate = regionDef?.climate;
+      const newWeather = state.currentWeather
+        ? advanceWeather(state.currentWeather, climate, newTime.season, newTime.monthIndex, state.rng)
+        : generateWeather(climate, newTime.season, newTime.monthIndex, state.rng);
+
       // Seasonal weight: passive gain/loss based on season and foraging behavior
       let seasonalWeightChange = config.seasonalWeight[newTime.season]
         + config.seasonalWeight.foragingBonus * state.behavioralSettings.foraging;
+
+      // Region climate modulation: extreme cold increases energy expenditure
+      if (climate) {
+        const temp = climate.temperatureByMonth[newTime.monthIndex];
+        if (temp < 20) {
+          seasonalWeightChange -= (20 - temp) * 0.05;
+        }
+      }
 
       // Apply difficulty multipliers to seasonal weight change
       if (seasonalWeightChange < 0) {
@@ -536,6 +567,7 @@ export const useGameStore = create<GameState>((set, get) => {
           flags: newFlags,
         },
         reproduction: updatedReproduction,
+        currentWeather: newWeather,
         currentEvents: [],
         pendingChoices: [],
         turnHistory: [...state.turnHistory, record],
@@ -614,6 +646,25 @@ export const useGameStore = create<GameState>((set, get) => {
 
     killAnimal(cause) {
       const state = get();
+      const config = state.speciesBundle.config;
+
+      // Lineage mode: if the species supports it and the animal has spawned,
+      // continue as the next generation instead of ending the game
+      if (config.lineageMode && state.reproduction.type === 'semelparous' && state.reproduction.spawned) {
+        const backstory = state.animal.backstory;
+        const sex = state.rng.chance(0.5) ? 'male' as const : 'female' as const;
+        const newAnimal = createInitialAnimal(config, backstory, sex);
+
+        set({
+          animal: newAnimal,
+          reproduction: { ...INITIAL_SEMELPAROUS_STATE },
+          currentEvents: [],
+          pendingChoices: [],
+          revocableChoices: {},
+        });
+        return;
+      }
+
       deleteSaveGame();
 
       if (state.reproduction.type === 'iteroparous') {

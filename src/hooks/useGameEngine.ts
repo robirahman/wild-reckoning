@@ -5,7 +5,7 @@ import { StatId, computeEffectiveValue } from '../types/stats';
 import { saveGame } from '../store/persistence';
 import { checkAchievements } from '../engine/AchievementChecker';
 import { useAchievementStore } from '../store/achievementStore';
-import { introduceNPC } from '../engine/NPCSystem';
+import { introduceNPC, incrementEncounter } from '../engine/NPCSystem';
 import { tickStorylines } from '../engine/StorylineSystem';
 
 export function useGameEngine() {
@@ -25,6 +25,24 @@ export function useGameEngine() {
       }
       if (npcs.length > 0) {
         store.setNPCs(npcs);
+      }
+    }
+
+    // Introduce mate NPC at mating season onset if no mate exists yet
+    const stateForMate = useGameStore.getState();
+    const hasMate = stateForMate.npcs.some((n) => n.type === 'mate' && n.alive);
+    if (!hasMate && stateForMate.time.turn >= 3) {
+      const reproConfig = stateForMate.speciesBundle.config.reproduction;
+      const isMating =
+        (reproConfig.type === 'iteroparous' &&
+          (reproConfig.matingSeasons === 'any' || reproConfig.matingSeasons.includes(stateForMate.time.season))) ||
+        (reproConfig.type === 'semelparous' &&
+          stateForMate.animal.flags.has(reproConfig.spawningMigrationFlag));
+      if (isMating) {
+        const mateNPC = introduceNPC(stateForMate.animal.speciesId, 'mate', stateForMate.time.turn, stateForMate.npcs, stateForMate.rng);
+        if (mateNPC) {
+          store.setNPCs([...stateForMate.npcs, mateNPC]);
+        }
       }
     }
 
@@ -97,6 +115,27 @@ export function useGameEngine() {
 
     // Also compute actual weight change including seasonal
     result.turnResult.weightChange = result.turnResult.weightChange;
+
+    // Track NPC encounters based on event tags
+    const encounterState = useGameStore.getState();
+    let updatedNPCs = encounterState.npcs;
+    for (const event of state.currentEvents) {
+      const tags = event.definition.tags;
+      const npcType = tags.includes('predator') ? 'predator'
+        : tags.includes('rival') ? 'rival'
+        : tags.includes('ally') ? 'ally'
+        : tags.includes('mate') ? 'mate'
+        : null;
+      if (npcType) {
+        const npc = updatedNPCs.find((n) => n.type === npcType && n.alive);
+        if (npc) {
+          updatedNPCs = incrementEncounter(updatedNPCs, npc.id, encounterState.time.turn);
+        }
+      }
+    }
+    if (updatedNPCs !== encounterState.npcs) {
+      store.setNPCs(updatedNPCs);
+    }
 
     // Show the turn results screen
     store.setTurnResult(result.turnResult);

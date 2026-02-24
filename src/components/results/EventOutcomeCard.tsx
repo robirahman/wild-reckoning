@@ -1,5 +1,6 @@
 import type { EventOutcome } from '../../types/turnResult';
 import { useGameStore } from '../../store/gameStore';
+import { formatWeightDelta } from '../../utils/formatWeight';
 import styles from '../../styles/results.module.css';
 
 interface EventOutcomeCardProps {
@@ -59,7 +60,7 @@ export function EventOutcomeCard({ outcome, index }: EventOutcomeCardProps) {
                 key={`w-${i}`}
                 className={`${styles.badge} ${amount > 0 ? styles.badgePositive : styles.badgeNegative}`}
               >
-                {amount > 0 ? '+' : ''}{amount} lbs
+                {formatWeightDelta(amount, useGameStore.getState().speciesBundle.config)}
               </span>
             );
           })}

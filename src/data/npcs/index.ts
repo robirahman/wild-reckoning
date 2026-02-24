@@ -18,6 +18,11 @@ export const NPC_TEMPLATES: Record<string, NPCTemplate[]> = {
       speciesLabel: 'wolf',
       namePool: ['The Gray Ghost', 'Black Fang', 'The Lone Hunter', 'One-Eye', 'Silvermane'],
     },
+    {
+      type: 'mate',
+      speciesLabel: 'doe',
+      namePool: ['Clover', 'Hazel', 'Birch', 'Fern', 'Cedar', 'Maple'],
+    },
   ],
   'african-elephant': [
     {
@@ -35,6 +40,11 @@ export const NPC_TEMPLATES: Record<string, NPCTemplate[]> = {
       speciesLabel: 'lion',
       namePool: ['The Dark-Maned One', 'Pride Leader', 'The Stalker', 'Dusk Hunter'],
     },
+    {
+      type: 'mate',
+      speciesLabel: 'bull',
+      namePool: ['Kibo', 'Kilimanjaro', 'Ol Tukai', 'Amboseli', 'Tsavo'],
+    },
   ],
   'chinook-salmon': [
     {
@@ -51,6 +61,99 @@ export const NPC_TEMPLATES: Record<string, NPCTemplate[]> = {
       type: 'predator',
       speciesLabel: 'bear',
       namePool: ['The Brown Shadow', 'Fishhook', 'River King', 'The Patient One'],
+    },
+    {
+      type: 'mate',
+      speciesLabel: 'salmon',
+      namePool: ['Silver Current', 'The Red Hen', 'Deep Gravel', 'Swift Run'],
+    },
+  ],
+  'gray-wolf': [
+    {
+      type: 'rival',
+      speciesLabel: 'alpha',
+      namePool: ['Ironjaw', 'The Gray Shadow', 'Scar', 'Old Blood', 'Midnight'],
+    },
+    {
+      type: 'ally',
+      speciesLabel: 'packmate',
+      namePool: ['Swift Runner', 'Ember', 'The Quiet One', 'Frost', 'Birchbark'],
+    },
+    {
+      type: 'predator',
+      speciesLabel: 'bear',
+      namePool: ['The Grizzled One', 'Honey Paws', 'Ridge Back', 'The Lumber'],
+    },
+    {
+      type: 'mate',
+      speciesLabel: 'she-wolf',
+      namePool: ['Silver', 'Luna', 'Aspen', 'Storm', 'Willow', 'Mist'],
+    },
+  ],
+  'polar-bear': [
+    {
+      type: 'rival',
+      speciesLabel: 'boar',
+      namePool: ['The Scarred Boar', 'Ice Breaker', 'Yellowfang', 'The Old One', 'Tundra King'],
+    },
+    {
+      type: 'ally',
+      speciesLabel: 'young bear',
+      namePool: ['Snowdrift', 'The Curious One', 'Pale Shadow', 'Frost Walker'],
+    },
+    {
+      type: 'predator',
+      speciesLabel: 'human',
+      namePool: ['The Hunter', 'The Helicopter', 'The Trapper', 'The Researcher'],
+    },
+    {
+      type: 'mate',
+      speciesLabel: 'sow',
+      namePool: ['Aurora', 'Blizzard', 'Ice Crystal', 'The White Sow', 'Polar Star'],
+    },
+  ],
+  'green-sea-turtle': [
+    {
+      type: 'rival',
+      speciesLabel: 'bull',
+      namePool: ['Mosscap', 'The Old Bull', 'Coral Scar', 'Barnacle Back', 'Deep Current'],
+    },
+    {
+      type: 'ally',
+      speciesLabel: 'cow',
+      namePool: ['Gentle Tide', 'Shell Sister', 'Seagrass', 'The Ancient One', 'Reef Walker'],
+    },
+    {
+      type: 'predator',
+      speciesLabel: 'tiger shark',
+      namePool: ['The Shadow Below', 'Stripe', 'The Circler', 'Deep Jaws'],
+    },
+    {
+      type: 'mate',
+      speciesLabel: 'bull',
+      namePool: ['Driftwood', 'Blue Lagoon', 'The Gentle Giant', 'Tide Rider', 'Coral King'],
+    },
+  ],
+  'monarch-butterfly': [
+    {
+      type: 'rival',
+      speciesLabel: 'male',
+      namePool: ['The Bright One', 'Orange Flash', 'Sun Wing', 'The Drifter'],
+    },
+    {
+      type: 'ally',
+      speciesLabel: 'female',
+      namePool: ['Painted Lady', 'Milkweed Dancer', 'The Quiet Wing', 'Pollen Dust'],
+    },
+    {
+      type: 'predator',
+      speciesLabel: 'bird',
+      namePool: ['The Oriole', 'Sharp Beak', 'The Grosbeak', 'Sky Stalker'],
+    },
+    {
+      type: 'mate',
+      speciesLabel: 'female',
+      namePool: ['Amber Wing', 'The Dancer', 'Sunset', 'Golden Dust', 'Meadow'],
     },
   ],
 };

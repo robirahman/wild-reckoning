@@ -6,6 +6,7 @@ import { DIFFICULTY_PRESETS } from '../types/difficulty';
 import { generateEvents } from './EventGenerator';
 import { tickHealth } from './HealthSystem';
 import { computeBuckWinProbability, determineFawnCount } from './ReproductionSystem';
+import { getRegionDefinition } from '../data/regions';
 
 export function generateTurnEvents(state: GameState): ResolvedEvent[] {
   return generateEvents({
@@ -18,6 +19,8 @@ export function generateTurnEvents(state: GameState): ResolvedEvent[] {
     config: state.speciesBundle.config,
     difficulty: state.difficulty,
     npcs: state.npcs,
+    regionDef: getRegionDefinition(state.animal.region),
+    currentWeather: state.currentWeather ?? undefined,
   });
 }
 
@@ -168,6 +171,11 @@ export function resolveTurn(state: GameState): {
 
   // Tick health system
   const healthResult = tickHealth(state.animal, state.rng, state.speciesBundle.parasites, state.difficulty);
+
+  // Propagate health system flags as set_flag consequences
+  for (const flag of healthResult.flagsToSet) {
+    allConsequences.push({ type: 'set_flag', flag });
+  }
 
   // Build TurnResult for display
   const newParasites: string[] = [];

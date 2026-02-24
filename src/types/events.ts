@@ -40,7 +40,8 @@ export type EventCondition =
   | { type: 'no_flag'; flag: string }
   | { type: 'weight_above'; threshold: number }
   | { type: 'weight_below'; threshold: number }
-  | { type: 'sex'; sex: 'male' | 'female' };
+  | { type: 'sex'; sex: 'male' | 'female' }
+  | { type: 'weather'; weatherTypes: string[] };
 
 // ── Consequences ──
 
@@ -57,7 +58,8 @@ export type Consequence =
   | { type: 'trigger_event'; eventId: string }
   | { type: 'start_pregnancy'; offspringCount: number }
   | { type: 'sire_offspring'; offspringCount: number }
-  | { type: 'spawn' };
+  | { type: 'spawn' }
+  | { type: 'introduce_npc'; npcType: 'rival' | 'ally' | 'mate' | 'predator' | 'offspring' };
 
 // ── Sub-Events ──
 

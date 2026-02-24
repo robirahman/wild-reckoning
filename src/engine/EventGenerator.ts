@@ -7,7 +7,10 @@ import { StatId, computeEffectiveValue } from '../types/stats';
 import type { Rng } from './RandomUtils';
 import type { Difficulty } from '../types/difficulty';
 import type { NPC } from '../types/npc';
+import type { RegionDefinition } from '../types/world';
+import type { WeatherState } from './WeatherSystem';
 import { DIFFICULTY_PRESETS } from '../types/difficulty';
+import { weatherContextMultiplier } from './WeatherSystem';
 import { pickIllustration } from './IllustrationPicker';
 
 interface GenerationContext {
@@ -20,6 +23,8 @@ interface GenerationContext {
   config: SpeciesConfig;
   difficulty?: Difficulty;
   npcs?: NPC[];
+  regionDef?: RegionDefinition;
+  currentWeather?: WeatherState;
 }
 
 /** Check if a single condition is met */
@@ -62,6 +67,8 @@ function checkCondition(cond: EventCondition, ctx: GenerationContext): boolean {
       return ctx.animal.weight < cond.threshold;
     case 'sex':
       return ctx.animal.sex === cond.sex;
+    case 'weather':
+      return !!ctx.currentWeather && cond.weatherTypes.includes(ctx.currentWeather.type);
     default:
       return true;
   }
@@ -136,6 +143,11 @@ function contextMultiplier(event: GameEvent, ctx: GenerationContext): number {
     mult *= 0.7 + (adv / 100) * 0.8;  // 0.7 to 1.5x
   }
 
+  // Weather influence on event probability
+  if (ctx.currentWeather) {
+    mult *= weatherContextMultiplier(event.category, ctx.currentWeather);
+  }
+
   return mult;
 }
 
@@ -163,7 +175,16 @@ export function resolveTemplate(text: string, ctx: GenerationContext): string {
     .replace(/\{\{npc\.ally\.encounters\}\}/g, String(ctx.npcs?.find((n) => n.type === 'ally' && n.alive)?.encounters ?? 0))
     .replace(/\{\{npc\.predator\.name\}\}/g, ctx.npcs?.find((n) => n.type === 'predator' && n.alive)?.name ?? 'a predator')
     .replace(/\{\{npc\.predator\.encounters\}\}/g, String(ctx.npcs?.find((n) => n.type === 'predator' && n.alive)?.encounters ?? 0))
-    .replace(/\{\{npc\.mate\.name\}\}/g, ctx.npcs?.find((n) => n.type === 'mate' && n.alive)?.name ?? 'a mate');
+    .replace(/\{\{npc\.mate\.name\}\}/g, ctx.npcs?.find((n) => n.type === 'mate' && n.alive)?.name ?? 'a mate')
+    .replace(/\{\{npc\.mate\.encounters\}\}/g, String(ctx.npcs?.find((n) => n.type === 'mate' && n.alive)?.encounters ?? 0))
+    .replace(/\{\{weather\.type\}\}/g, ctx.currentWeather?.type ?? 'clear')
+    .replace(/\{\{weather\.description\}\}/g, ctx.currentWeather?.description ?? '')
+    .replace(/\{\{region\.flora\}\}/g, () => {
+      const flora = ctx.regionDef?.flora.filter((f) =>
+        f.availableSeasons.includes(ctx.time.season) && f.abundanceByMonth[ctx.time.monthIndex] > 0.3
+      );
+      return flora && flora.length > 0 ? ctx.rng.pick(flora).name : 'browse';
+    });
 }
 
 /** Generate events for a single turn */

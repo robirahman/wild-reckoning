@@ -1,6 +1,7 @@
 import { useGameStore } from '../store/gameStore';
 import { deleteSaveGame } from '../store/persistence';
 import { AchievementList } from './achievements/AchievementList';
+import { formatWeight } from '../utils/formatWeight';
 import type { Offspring } from '../types/reproduction';
 
 function getIteroparousFitnessRating(fitness: number): { label: string; color: string } {
@@ -202,7 +203,7 @@ export function DeathScreen() {
         <div><strong>Species:</strong> {config.name}</div>
         <div><strong>Sex:</strong> {animal.sex === 'female' ? 'Female' : 'Male'}</div>
         <div><strong>Age at death:</strong> {animal.age} months ({Math.floor(animal.age / 12)} years)</div>
-        <div><strong>Final weight:</strong> {animal.weight} lbs</div>
+        <div><strong>Final weight:</strong> {formatWeight(animal.weight, config)}</div>
         <div><strong>Survived:</strong> {time.turn} turns ({time.month}, Year {time.year})</div>
         <div><strong>Parasites contracted:</strong> {animal.parasites.length}</div>
         <div><strong>Injuries sustained:</strong> {animal.injuries.length}</div>

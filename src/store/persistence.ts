@@ -23,6 +23,7 @@ interface SerializedState {
   revocableChoices: GameState['revocableChoices'];
   npcs: GameState['npcs'];
   activeStorylines: GameState['activeStorylines'];
+  currentWeather: GameState['currentWeather'];
   turnHistory: GameState['turnHistory'];
   eventCooldowns: GameState['eventCooldowns'];
 }
@@ -46,6 +47,7 @@ export function serializeState(state: GameState): SerializedState {
     revocableChoices: state.revocableChoices,
     npcs: state.npcs,
     activeStorylines: state.activeStorylines,
+    currentWeather: state.currentWeather,
     turnHistory: state.turnHistory,
     eventCooldowns: state.eventCooldowns,
   };
@@ -76,6 +78,7 @@ export function deserializeState(data: SerializedState): Partial<GameState> {
     revocableChoices: data.revocableChoices,
     npcs: data.npcs ?? [],
     activeStorylines: data.activeStorylines ?? [],
+    currentWeather: data.currentWeather ?? null,
     turnResult: null,
     showingResults: false,
     turnHistory: data.turnHistory,

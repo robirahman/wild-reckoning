@@ -1,4 +1,5 @@
 import { useGameStore } from '../../store/gameStore';
+import { formatWeight } from '../../utils/formatWeight';
 import styles from '../../styles/stats.module.css';
 
 export function AnimalIdentity() {
@@ -34,7 +35,7 @@ export function AnimalIdentity() {
       <div className={styles.identityDetails}>
         <span>{animal.age} months old</span>
         <span className={styles.separator}>|</span>
-        <span>{animal.weight} lbs</span>
+        <span>{formatWeight(animal.weight, config)}</span>
         <span className={styles.separator}>|</span>
         <span className={styles.sexSymbol}>{sexSymbol}</span>
         {agePhase && (

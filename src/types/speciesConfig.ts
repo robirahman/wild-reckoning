@@ -187,6 +187,15 @@ export interface SpeciesConfig {
   /** Time unit per turn. 'week' = 4 turns/month (default). 'month' = 1 turn/month. */
   turnUnit?: 'week' | 'month';
 
+  /** If true, when the animal dies after spawning, continue as next generation instead of game over */
+  lineageMode?: boolean;
+
+  /** Display unit for weight (default: 'lbs'). Used for UI display only. */
+  weightUnit?: string;
+
+  /** Multiplier to convert internal weight (lbs) to display unit. E.g., 453592 converts lbs to mg. */
+  weightDisplayMultiplier?: number;
+
   templateVars: {
     speciesName: string;
     regionName: string;
