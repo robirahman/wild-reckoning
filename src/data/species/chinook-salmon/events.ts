@@ -596,4 +596,524 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     cooldown: 8,
     tags: ['environmental', 'health', 'human'],
   },
+
+  // ══════════════════════════════════════════════
+  //  OCEAN / FORAGING EVENTS (continued)
+  // ══════════════════════════════════════════════
+
+  {
+    id: 'salmon-squid-hunt',
+    type: 'active',
+    category: 'foraging',
+    narrativeText: "Night in the open ocean. Far below, bioluminescent squid pulse with cold blue light, their tentacles trailing like lanterns in the abyss. The glow draws you downward — each flash a signal, each signal a meal. The question is how deep you are willing to go.",
+    statEffects: [],
+    choices: [
+      {
+        id: 'chase-deep',
+        label: 'Chase into the deep water',
+        description: 'Richer hunting, but the cold is punishing',
+        statEffects: [
+          { stat: StatId.CLI, amount: 6, label: '+CLI' },
+        ],
+        consequences: [
+          { type: 'modify_weight', amount: 2 },
+        ],
+        revocable: false,
+        style: 'danger',
+      },
+      {
+        id: 'stay-shallow',
+        label: 'Stay in the shallows',
+        description: 'Less reward, but no risk',
+        statEffects: [],
+        consequences: [
+          { type: 'modify_weight', amount: 1 },
+        ],
+        revocable: false,
+        style: 'default',
+      },
+    ],
+    conditions: [],
+    weight: 10,
+    cooldown: 4,
+    tags: ['foraging', 'food'],
+  },
+
+  {
+    id: 'salmon-plankton-bloom',
+    type: 'passive',
+    category: 'foraging',
+    narrativeText: "The sea has turned to soup. A massive plankton bloom has erupted across the surface, and every creature in the water column is gorging — herring, anchovies, jellyfish, you. The abundance is staggering, almost violent in its profusion. You eat until your belly aches, carried along in a frenzy that has no leader and no end.",
+    statEffects: [
+      { stat: StatId.HOM, amount: -6, label: '-HOM' },
+    ],
+    consequences: [
+      { type: 'modify_weight', amount: 2 },
+    ],
+    conditions: [
+      { type: 'season', seasons: ['spring', 'summer'] },
+    ],
+    weight: 10,
+    cooldown: 5,
+    tags: ['foraging', 'food', 'seasonal'],
+  },
+
+  {
+    id: 'salmon-current-ride',
+    type: 'passive',
+    category: 'foraging',
+    narrativeText: "You find the edge of a great ocean current — a river within the sea, flowing steady and strong in the direction you need to go. You ease into it and let it carry you, your muscles unwinding for the first time in days. Small prey tumbles past in the flow, and you snap at it lazily, barely needing to move. The ocean, for once, is doing the work.",
+    statEffects: [
+      { stat: StatId.HOM, amount: -5, label: '-HOM' },
+      { stat: StatId.ADV, amount: -4, label: '-ADV' },
+    ],
+    consequences: [
+      { type: 'modify_weight', amount: 1 },
+    ],
+    conditions: [],
+    weight: 8,
+    cooldown: 5,
+    tags: ['foraging', 'environmental'],
+  },
+
+  // ══════════════════════════════════════════════
+  //  PREDATOR EVENTS (continued)
+  // ══════════════════════════════════════════════
+
+  {
+    id: 'salmon-sea-lion-chase',
+    type: 'active',
+    category: 'predator',
+    narrativeText: "A California sea lion explodes out of the kelp — sleek, enormous, far faster than anything that size should be. It twists through the amber fronds with terrifying agility, its whiskered snout locked on you. The kelp forest is a maze of stalks and shadows, but open water lies just beyond.",
+    statEffects: [
+      { stat: StatId.TRA, amount: 10, label: '+TRA' },
+      { stat: StatId.ADV, amount: 10, label: '+ADV' },
+    ],
+    choices: [
+      {
+        id: 'weave-kelp',
+        label: 'Weave through the kelp',
+        description: 'Use the forest to lose the predator',
+        statEffects: [
+          { stat: StatId.HOM, amount: 5, label: '+HOM' },
+        ],
+        consequences: [],
+        revocable: false,
+        style: 'default',
+        deathChance: {
+          probability: 0.06,
+          cause: 'The sea lion cornered you in the kelp. There was nowhere left to turn.',
+          statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
+        },
+      },
+      {
+        id: 'burst-open-water',
+        label: 'Burst into open water',
+        description: 'Outrun it — or die trying',
+        statEffects: [
+          { stat: StatId.HOM, amount: 10, label: '+HOM' },
+        ],
+        consequences: [],
+        revocable: false,
+        style: 'danger',
+        deathChance: {
+          probability: 0.10,
+          cause: 'In open water, the sea lion was faster. It caught you from below.',
+          statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
+        },
+      },
+    ],
+    conditions: [],
+    weight: 7,
+    cooldown: 6,
+    tags: ['predator', 'danger'],
+  },
+
+  {
+    id: 'salmon-osprey-strike',
+    type: 'passive',
+    category: 'predator',
+    narrativeText: "A sharp whistle of wind is the only warning. An osprey plunges from the sky feet-first, talons spread wide, punching through the surface in an explosion of spray. The impact sends a shockwave through the shallows. You feel the rake of claws across your flank as you twist away, your heart hammering against your ribs.",
+    statEffects: [
+      { stat: StatId.TRA, amount: 8, label: '+TRA' },
+      { stat: StatId.ADV, amount: 6, label: '+ADV' },
+    ],
+    subEvents: [
+      {
+        eventId: 'osprey-talon-wound',
+        chance: 0.15,
+        conditions: [],
+        narrativeText: 'The osprey\'s talons have left shallow furrows along your side. Scales are torn loose, and thin threads of blood trail behind you in the current.',
+        footnote: '(Raked by osprey talons)',
+        statEffects: [],
+        consequences: [
+          { type: 'add_injury', injuryId: 'scale-damage', severity: 0 },
+        ],
+      },
+    ],
+    conditions: [
+      { type: 'has_flag', flag: 'spawning-migration-begun' },
+    ],
+    weight: 8,
+    cooldown: 5,
+    tags: ['predator', 'danger', 'migration'],
+  },
+
+  {
+    id: 'salmon-lamprey-attach',
+    type: 'active',
+    category: 'predator',
+    narrativeText: "Something latches onto your side with a wet, sucking grip. You feel the rasp of keratin teeth grinding through your scales, boring toward the flesh beneath. A Pacific lamprey — eyeless, jawless, ancient — has chosen you as its host. Its eel-like body trails behind you like a grotesque pennant.",
+    statEffects: [
+      { stat: StatId.TRA, amount: 6, label: '+TRA' },
+      { stat: StatId.ADV, amount: 4, label: '+ADV' },
+    ],
+    choices: [
+      {
+        id: 'thrash-rocks',
+        label: 'Thrash against the rocks to scrape it off',
+        description: 'Violent, but it should work',
+        statEffects: [
+          { stat: StatId.HOM, amount: 5, label: '+HOM' },
+        ],
+        consequences: [
+          { type: 'add_injury', injuryId: 'scale-damage', severity: 0 },
+        ],
+        revocable: false,
+        style: 'danger',
+      },
+      {
+        id: 'endure-lamprey',
+        label: 'Endure it',
+        description: 'Let it feed — conserve your energy',
+        statEffects: [
+          { stat: StatId.HEA, amount: -5, label: '-HEA' },
+        ],
+        consequences: [
+          { type: 'modify_weight', amount: -2 },
+        ],
+        revocable: false,
+        style: 'default',
+      },
+    ],
+    conditions: [],
+    weight: 7,
+    cooldown: 8,
+    tags: ['predator', 'health'],
+  },
+
+  // ══════════════════════════════════════════════
+  //  MIGRATION EVENTS (continued)
+  // ══════════════════════════════════════════════
+
+  {
+    id: 'salmon-warm-tributary',
+    type: 'active',
+    category: 'migration',
+    narrativeText: "A side tributary spills into the river, and the water coming from it is warm — bathwater warm, dangerously warm. The plume spreads across the main channel like a fever, and you can feel your gills laboring in the oxygen-depleted flow. Upstream, through the heat shimmer, the water looks clearer. But there is a cool pocket in the rocks to your left where a spring seeps in.",
+    statEffects: [],
+    choices: [
+      {
+        id: 'push-through-warm',
+        label: 'Push through the warm zone',
+        description: 'Faster, but the heat could kill you',
+        statEffects: [
+          { stat: StatId.CLI, amount: 8, label: '+CLI' },
+        ],
+        consequences: [],
+        revocable: false,
+        style: 'danger',
+        deathChance: {
+          probability: 0.04,
+          cause: 'The warm water overwhelmed your body. Your heart stopped in the heat.',
+          statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
+        },
+      },
+      {
+        id: 'rest-cool-pocket',
+        label: 'Rest in the cool pocket and wait',
+        description: 'Safe, but you burn precious reserves',
+        statEffects: [],
+        consequences: [
+          { type: 'modify_weight', amount: -1 },
+        ],
+        revocable: false,
+        style: 'default',
+      },
+    ],
+    conditions: [
+      { type: 'has_flag', flag: 'spawning-migration-begun' },
+    ],
+    weight: 10,
+    cooldown: 5,
+    tags: ['migration', 'environmental'],
+  },
+
+  {
+    id: 'salmon-shallow-gravel-bar',
+    type: 'active',
+    category: 'migration',
+    narrativeText: "The river braids and spreads across a wide gravel bar, and suddenly the water is ankle-deep — too shallow to swim, barely deep enough to cover your dorsal fin. You are stranded, flopping on your side, gasping as the current trickles past. The deeper channel is ten body-lengths away. Above you, the sky is open and enormous, and somewhere an eagle is circling.",
+    statEffects: [
+      { stat: StatId.ADV, amount: 8, label: '+ADV' },
+    ],
+    choices: [
+      {
+        id: 'thrash-to-channel',
+        label: 'Thrash toward the deeper channel',
+        description: 'Desperate, exhausting, but your only real option',
+        statEffects: [
+          { stat: StatId.HOM, amount: 8, label: '+HOM' },
+        ],
+        consequences: [],
+        revocable: false,
+        style: 'danger',
+        deathChance: {
+          probability: 0.05,
+          cause: 'You could not reach deep water. The sun and the air took you.',
+          statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
+        },
+      },
+      {
+        id: 'wait-for-water',
+        label: 'Wait for the water level to rise',
+        description: 'Patience — but you are exposed to everything',
+        statEffects: [
+          { stat: StatId.TRA, amount: 8, label: '+TRA' },
+          { stat: StatId.ADV, amount: 6, label: '+ADV' },
+        ],
+        consequences: [],
+        revocable: false,
+        style: 'default',
+        deathChance: {
+          probability: 0.04,
+          cause: 'An eagle took you from the gravel bar while you waited.',
+          statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
+        },
+      },
+    ],
+    conditions: [
+      { type: 'has_flag', flag: 'spawning-migration-begun' },
+    ],
+    weight: 8,
+    cooldown: 5,
+    tags: ['migration', 'environmental', 'danger'],
+  },
+
+  {
+    id: 'salmon-log-jam',
+    type: 'active',
+    category: 'migration',
+    narrativeText: "The river is choked. A massive tangle of fallen timber spans the channel — logs stacked and interlocked, bark stripped white by the current, branches reaching into the water like skeletal fingers. The river pours through gaps in the debris, but the openings are narrow and dark, barely wider than your body. You can hear the water thundering on the other side.",
+    statEffects: [],
+    choices: [
+      {
+        id: 'push-through-gaps',
+        label: 'Push through the gaps',
+        description: 'Tight, rough, and your scales will pay the price',
+        statEffects: [
+          { stat: StatId.TRA, amount: 5, label: '+TRA' },
+        ],
+        consequences: [
+          { type: 'add_injury', injuryId: 'scale-damage', severity: 0 },
+        ],
+        revocable: false,
+        style: 'danger',
+      },
+      {
+        id: 'go-around',
+        label: 'Go around the long way',
+        description: 'Safe, but exhausting and slow',
+        statEffects: [
+          { stat: StatId.HOM, amount: 8, label: '+HOM' },
+        ],
+        consequences: [
+          { type: 'modify_weight', amount: -2 },
+        ],
+        revocable: false,
+        style: 'default',
+      },
+    ],
+    conditions: [
+      { type: 'has_flag', flag: 'spawning-migration-begun' },
+    ],
+    weight: 10,
+    cooldown: 5,
+    tags: ['migration', 'environmental'],
+  },
+
+  {
+    id: 'salmon-other-salmon-dying',
+    type: 'passive',
+    category: 'migration',
+    narrativeText: "The stench reaches you before the sight does. Along both banks, the bodies of salmon lie in various states of decay — white fungus blooming on their flanks, jaws still hooked open in death, eye sockets hollow. These are the ones who came before you, who made this same journey weeks ago and finished what they were built to finish. The river runs thick with the smell of spent flesh. You swim through their legacy, through the nutrients they have become, and something ancient in you understands that this is not tragedy. This is the plan.",
+    statEffects: [
+      { stat: StatId.TRA, amount: 8, label: '+TRA' },
+      { stat: StatId.NOV, amount: 6, label: '+NOV' },
+    ],
+    conditions: [
+      { type: 'has_flag', flag: 'spawning-migration-begun' },
+    ],
+    weight: 10,
+    cooldown: 6,
+    tags: ['migration', 'psychological'],
+  },
+
+  // ══════════════════════════════════════════════
+  //  AGE-GATED EVENTS
+  // ══════════════════════════════════════════════
+
+  {
+    id: 'salmon-smolt-transformation',
+    type: 'passive',
+    category: 'health',
+    narrativeText: "Your body is betraying its origins. The dark parr marks along your flanks — the camouflage of a river fish — are fading, replaced by a bright silver sheen that catches the light like hammered metal. Inside, deeper changes are underway: your kidneys are rewriting themselves, learning to filter salt instead of freshwater. The river that raised you is becoming chemically hostile. You belong to the ocean now, whether you are ready or not.",
+    statEffects: [
+      { stat: StatId.NOV, amount: 8, label: '+NOV' },
+      { stat: StatId.HOM, amount: 6, label: '+HOM' },
+    ],
+    consequences: [
+      { type: 'set_flag', flag: 'smolt-transformed' },
+    ],
+    conditions: [
+      { type: 'age_range', max: 12 },
+      { type: 'no_flag', flag: 'smolt-transformed' },
+    ],
+    weight: 20,
+    tags: ['health', 'environmental'],
+  },
+
+  {
+    id: 'salmon-ocean-growth-spurt',
+    type: 'passive',
+    category: 'health',
+    narrativeText: "The open ocean is generous, and your body is taking full advantage. You can feel yourself growing — not just heavier, but longer, stronger, faster. Your muscles thicken along your spine. Your jaws widen. Every meal translates directly into mass, and there are so many meals out here that the growing never stops. You are becoming something formidable, a silver missile built for speed and endurance.",
+    statEffects: [
+      { stat: StatId.HOM, amount: -5, label: '-HOM' },
+      { stat: StatId.HEA, amount: 5, label: '+HEA' },
+    ],
+    consequences: [
+      { type: 'modify_weight', amount: 3 },
+    ],
+    conditions: [
+      { type: 'age_range', min: 12, max: 36 },
+    ],
+    weight: 12,
+    cooldown: 6,
+    tags: ['health', 'foraging'],
+  },
+
+  {
+    id: 'salmon-spawning-readiness',
+    type: 'passive',
+    category: 'health',
+    narrativeText: "Something is happening to your body that you cannot stop. Your jaw is elongating, curving into a vicious hook. Your skin is thickening, darkening from silver to a deep, bruised crimson. Teeth are growing where there were none. You are being unmade and remade — not into something stronger, but into something singular, something designed for one final act. The ocean no longer feels like home. A river is calling, and your body is already answering.",
+    statEffects: [
+      { stat: StatId.NOV, amount: 10, label: '+NOV' },
+      { stat: StatId.HEA, amount: -6, label: '-HEA' },
+    ],
+    conditions: [
+      { type: 'age_range', min: 36 },
+      { type: 'no_flag', flag: 'spawning-migration-begun' },
+    ],
+    weight: 15,
+    cooldown: 8,
+    tags: ['health', 'migration'],
+  },
+
+  // ══════════════════════════════════════════════
+  //  ENVIRONMENTAL / HEALTH EVENTS (continued)
+  // ══════════════════════════════════════════════
+
+  {
+    id: 'salmon-hatchery-runoff',
+    type: 'passive',
+    category: 'environmental',
+    narrativeText: "The water tastes wrong — metallic, synthetic, laced with compounds your gills were never meant to process. Upstream, a fish hatchery is discharging chemical runoff into the current: antibiotics, hormones, disinfectants. The water looks clear but it burns faintly, a slow corrosion working at your mucus membranes. You swim through it because there is no other way, your immune system straining against an enemy it cannot see.",
+    statEffects: [
+      { stat: StatId.IMM, amount: 6, label: '+IMM' },
+      { stat: StatId.CLI, amount: 4, label: '+CLI' },
+    ],
+    consequences: [
+      { type: 'modify_weight', amount: -1 },
+    ],
+    conditions: [],
+    weight: 7,
+    cooldown: 8,
+    tags: ['environmental', 'health', 'human'],
+  },
+
+  {
+    id: 'salmon-thermal-refuge',
+    type: 'passive',
+    category: 'environmental',
+    narrativeText: "You feel it before you see it — a seam of cold, clean water threading into the river from a hidden spring. The temperature drops several degrees in the space of a body-length, and your gills open wide with relief. Other salmon are gathered here too, holding in the current, their bodies visibly calmer. For a few precious hours, the river is kind. The cool water washes the stress from your cells like rain after drought.",
+    statEffects: [
+      { stat: StatId.CLI, amount: -6, label: '-CLI' },
+      { stat: StatId.HOM, amount: -5, label: '-HOM' },
+      { stat: StatId.ADV, amount: -4, label: '-ADV' },
+    ],
+    conditions: [
+      { type: 'has_flag', flag: 'spawning-migration-begun' },
+    ],
+    weight: 8,
+    cooldown: 6,
+    tags: ['environmental', 'health', 'migration'],
+  },
+
+  // ══════════════════════════════════════════════
+  //  EVENT CHAINING
+  // ══════════════════════════════════════════════
+
+  {
+    id: 'salmon-net-scar',
+    type: 'passive',
+    category: 'health',
+    narrativeText: "The monofilament scars from the fishing net have not healed cleanly. The raised welts of damaged tissue stand out against your scales like pale roads on a dark map, and the parasites have noticed. Sea lice cluster along the wound margins where your protective mucus is thinnest, finding easy purchase on the roughened flesh. What the net started, the ocean is finishing.",
+    statEffects: [
+      { stat: StatId.IMM, amount: 6, label: '+IMM' },
+    ],
+    subEvents: [
+      {
+        eventId: 'net-scar-lice',
+        chance: 0.3,
+        conditions: [
+          { type: 'no_parasite', parasiteId: 'sea-lice' },
+        ],
+        narrativeText: 'The damaged tissue along your net scars has become a breeding ground. Sea lice have colonized the wound margins, their tiny bodies clustered in the grooves where your scales once lay smooth.',
+        footnote: '(Sea lice attracted to net scars)',
+        statEffects: [],
+        consequences: [
+          { type: 'add_parasite', parasiteId: 'sea-lice', startStage: 0 },
+        ],
+      },
+    ],
+    conditions: [
+      { type: 'has_injury' },
+    ],
+    weight: 8,
+    cooldown: 6,
+    tags: ['health', 'environmental'],
+  },
+
+  {
+    id: 'salmon-migration-exhaustion',
+    type: 'passive',
+    category: 'migration',
+    narrativeText: "You have not eaten since you entered the river. Your body is consuming itself — burning through fat reserves, then glycogen, then muscle. Your flanks are concave where they were once rounded. Every stroke costs more than the last, and the current never relents. The river is stripping you down to bone and will, and you can feel the margin between survival and collapse growing thinner with each mile.",
+    statEffects: [
+      { stat: StatId.HOM, amount: 10, label: '+HOM' },
+      { stat: StatId.ADV, amount: 8, label: '+ADV' },
+    ],
+    consequences: [
+      { type: 'modify_weight', amount: -3 },
+    ],
+    conditions: [
+      { type: 'has_flag', flag: 'spawning-migration-begun' },
+      { type: 'weight_below', threshold: 20 },
+    ],
+    weight: 12,
+    cooldown: 4,
+    tags: ['migration', 'health'],
+  },
 ];

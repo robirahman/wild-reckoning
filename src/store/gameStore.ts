@@ -381,6 +381,32 @@ export const useGameStore = create<GameState>((set, get) => {
         tickedStats = addModifier(tickedStats, debuffModifier);
       }
 
+      // Seasonal weight: passive gain/loss based on season and foraging behavior
+      const seasonalWeightChange = config.seasonalWeight[newTime.season]
+        + config.seasonalWeight.foragingBonus * state.behavioralSettings.foraging;
+      const newWeight = Math.max(
+        config.weight.minFloor,
+        state.animal.weight + seasonalWeightChange
+      );
+
+      // Age phase modifiers: apply/remove based on current age phase
+      tickedStats = removeModifiersBySource(tickedStats, 'age-phase');
+      const currentAgePhase = config.agePhases.find(
+        (p) => newAge >= p.minAge && (p.maxAge === undefined || newAge < p.maxAge)
+      );
+      if (currentAgePhase?.statModifiers) {
+        for (const mod of currentAgePhase.statModifiers) {
+          const modifier: StatModifier = {
+            id: `age-phase-${mod.stat}`,
+            source: 'age-phase',
+            sourceType: 'condition',
+            stat: mod.stat,
+            amount: mod.amount,
+          };
+          tickedStats = addModifier(tickedStats, modifier);
+        }
+      }
+
       // Tick reproduction (iteroparous only — semelparous handled via events)
       const newFlags = new Set(state.animal.flags);
       let updatedReproduction = state.reproduction;
@@ -397,6 +423,36 @@ export const useGameStore = create<GameState>((set, get) => {
         updatedReproduction = reproResult.reproduction;
       }
 
+      // Auto-trigger migration: if will-migrate flag is set and season matches
+      if (config.migration) {
+        const mig = config.migration;
+        if (newTime.season === mig.migrationSeason && state.animal.flags.has(mig.migrationFlag) && !state.animal.flags.has(mig.migratedFlag)) {
+          newFlags.add(mig.migratedFlag);
+          newFlags.delete(mig.migrationFlag);
+          // Region change happens here — set animal region to winter yard
+          // We'll apply it in the set() call below
+        }
+        // Auto-return in spring
+        if (newTime.season === mig.returnSeason && state.animal.flags.has(mig.migratedFlag)) {
+          newFlags.delete(mig.migratedFlag);
+          newFlags.add(mig.returnFlag);
+        }
+        // Clear return flag after one turn
+        if (state.animal.flags.has(mig.returnFlag)) {
+          newFlags.delete(mig.returnFlag);
+        }
+      }
+
+      // Determine region based on migration state
+      let newRegion = state.animal.region;
+      if (config.migration) {
+        if (newFlags.has(config.migration.migratedFlag)) {
+          newRegion = config.migration.winterRegionId;
+        } else if (!newFlags.has(config.migration.migratedFlag)) {
+          newRegion = config.defaultRegion;
+        }
+      }
+
       // Save turn to history
       const record: TurnRecord = {
         turn: state.time.turn,
@@ -410,6 +466,8 @@ export const useGameStore = create<GameState>((set, get) => {
           ...state.animal,
           stats: tickedStats,
           age: newAge,
+          weight: newWeight,
+          region: newRegion,
           flags: newFlags,
         },
         reproduction: updatedReproduction,

@@ -55,6 +55,31 @@ export const WHITE_TAILED_DEER_CONFIG: SpeciesConfig = {
     deathChanceMax: 0.80,
   },
 
+  seasonalWeight: {
+    spring: 0.5,    // Moderate gain — new growth
+    summer: 1.0,    // Good gain — abundant food
+    autumn: 0.8,    // Good gain — acorn mast
+    winter: -1.5,   // Significant loss — food scarcity
+    foragingBonus: 0.3,  // +0.3 to +1.5 based on foraging setting
+  },
+
+  agePhases: [
+    { id: 'fawn', label: 'Fawn', minAge: 0, maxAge: 12 },
+    { id: 'yearling', label: 'Yearling', minAge: 12, maxAge: 24, statModifiers: [{ stat: StatId.ADV, amount: 5 }, { stat: StatId.WIS, amount: -5 }] },
+    { id: 'prime', label: 'Prime Adult', minAge: 24, maxAge: 96 },
+    { id: 'elderly', label: 'Elderly', minAge: 96, statModifiers: [{ stat: StatId.HEA, amount: -8 }, { stat: StatId.WIS, amount: 10 }] },
+  ],
+
+  migration: {
+    winterRegionId: 'minnesota-winter-yard',
+    winterRegionName: 'Winter Yard',
+    migrationFlag: 'will-migrate',
+    migratedFlag: 'has-migrated',
+    returnFlag: 'returned-from-migration',
+    migrationSeason: 'winter',
+    returnSeason: 'spring',
+  },
+
   reproduction: {
     type: 'iteroparous',
     matingMinAge: 16,

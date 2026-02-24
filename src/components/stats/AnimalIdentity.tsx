@@ -21,6 +21,10 @@ export function AnimalIdentity() {
     (p) => !p.entryFlag || animal.flags.has(p.entryFlag)
   );
 
+  const agePhase = config.agePhases.find(
+    (p) => animal.age >= p.minAge && (p.maxAge === undefined || animal.age < p.maxAge)
+  );
+
   return (
     <div className={styles.identity}>
       <div className={styles.identityMain}>
@@ -33,6 +37,12 @@ export function AnimalIdentity() {
         <span>{animal.weight} lbs</span>
         <span className={styles.separator}>|</span>
         <span className={styles.sexSymbol}>{sexSymbol}</span>
+        {agePhase && (
+          <>
+            <span className={styles.separator}>|</span>
+            <span>{agePhase.label}</span>
+          </>
+        )}
       </div>
       {animal.backstory.monthsSinceEvent > 0 && (
         <div className={styles.backstoryNote}>

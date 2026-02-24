@@ -96,6 +96,32 @@ export interface LifecyclePhase {
 }
 
 // ════════════════════════════════════════════════
+//  AGE PHASES
+// ════════════════════════════════════════════════
+
+export interface AgePhase {
+  id: string;
+  label: string;
+  minAge: number;          // In months (inclusive)
+  maxAge?: number;         // In months (exclusive); undefined = no upper bound
+  statModifiers?: { stat: StatId; amount: number }[];
+}
+
+// ════════════════════════════════════════════════
+//  MIGRATION CONFIG
+// ════════════════════════════════════════════════
+
+export interface MigrationConfig {
+  winterRegionId: string;
+  winterRegionName: string;
+  migrationFlag: string;        // 'will-migrate'
+  migratedFlag: string;         // 'has-migrated'
+  returnFlag: string;           // 'returned-from-migration'
+  migrationSeason: Season;      // When migration happens
+  returnSeason: Season;         // When return happens
+}
+
+// ════════════════════════════════════════════════
 //  MAIN SPECIES CONFIG
 // ════════════════════════════════════════════════
 
@@ -137,6 +163,22 @@ export interface SpeciesConfig {
     deathChanceMin: number;
     deathChanceMax: number;
   };
+
+  /** Per-turn passive weight change by season. Positive = gain, negative = loss. */
+  seasonalWeight: {
+    spring: number;
+    summer: number;
+    autumn: number;
+    winter: number;
+    /** Multiplier applied to foraging behavioral setting (1-5). E.g., 0.3 means +0.3 to +1.5 lbs/turn. */
+    foragingBonus: number;
+  };
+
+  /** Age phase thresholds (in months) and stat modifiers */
+  agePhases: AgePhase[];
+
+  /** Migration config (deer only for now; undefined means no migration) */
+  migration?: MigrationConfig;
 
   reproduction: ReproductionConfig;
 

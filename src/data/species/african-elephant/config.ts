@@ -55,6 +55,21 @@ export const AFRICAN_ELEPHANT_CONFIG: SpeciesConfig = {
     deathChanceMax: 0.60,
   },
 
+  seasonalWeight: {
+    spring: 1.5,    // Wet season start — good grazing
+    summer: 1.0,    // Wet season — moderate
+    autumn: 0.0,    // Dry season approach — neutral
+    winter: -2.0,   // Dry season — significant scarcity
+    foragingBonus: 0.4,
+  },
+
+  agePhases: [
+    { id: 'calf', label: 'Calf', minAge: 0, maxAge: 48 },
+    { id: 'juvenile', label: 'Juvenile', minAge: 48, maxAge: 144, statModifiers: [{ stat: StatId.ADV, amount: 5 }, { stat: StatId.WIS, amount: -3 }] },
+    { id: 'prime', label: 'Prime Adult', minAge: 144, maxAge: 540 },
+    { id: 'elderly', label: 'Elder', minAge: 540, statModifiers: [{ stat: StatId.HEA, amount: -5 }, { stat: StatId.WIS, amount: 15 }] },
+  ],
+
   reproduction: {
     type: 'iteroparous',
     matingMinAge: 120,

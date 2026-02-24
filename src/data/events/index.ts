@@ -805,4 +805,521 @@ export const allEvents: GameEvent[] = [
     cooldown: 4,
     tags: ['mating', 'social'],
   },
+
+  // ══════════════════════════════════════════════
+  //  MIGRATION / WINTER YARD EVENTS
+  // ══════════════════════════════════════════════
+
+  {
+    id: 'migration-winter-yard-browse',
+    type: 'passive',
+    category: 'foraging',
+    narrativeText: "The cedar canopy closes overhead like a dark cathedral, blocking the worst of the wind but also the light. You nose through the trampled snow alongside dozens of other deer, all of you searching the same exhausted ground for anything edible. The bark has been stripped from every reachable branch, and what browse remains is thin, fibrous, bitter — food only in the loosest sense of the word.",
+    statEffects: [
+      { stat: StatId.HOM, amount: -3, label: '-HOM' },
+      { stat: StatId.CLI, amount: -4, label: '-CLI' },
+    ],
+    conditions: [
+      { type: 'region', regionIds: ['minnesota-winter-yard'] },
+      { type: 'season', seasons: ['winter'] },
+    ],
+    weight: 18,
+    cooldown: 3,
+    tags: ['foraging', 'food', 'winter', 'migration'],
+  },
+
+  {
+    id: 'migration-winter-yard-disease',
+    type: 'active',
+    category: 'health',
+    narrativeText: "A doe near the center of the yard is coughing — a wet, rattling sound that carries through the still air. Her ribs show through her dull coat, and a thick mucus drips from her nose. Several other deer are keeping their distance, but in quarters this close, distance is an illusion. You can smell the sickness on her breath.",
+    statEffects: [
+      { stat: StatId.ADV, amount: 4, label: '+ADV' },
+      { stat: StatId.NOV, amount: 3, label: '+NOV' },
+    ],
+    choices: [
+      {
+        id: 'stay-close-herd',
+        label: 'Stay close to the herd center',
+        description: 'Warmth and safety in numbers, but disease exposure',
+        statEffects: [
+          { stat: StatId.CLI, amount: -3, label: '-CLI' },
+        ],
+        consequences: [],
+        revocable: false,
+        style: 'danger',
+      },
+      {
+        id: 'move-periphery',
+        label: 'Move to the yard periphery',
+        description: 'Less disease risk, but more exposed to cold and predators',
+        statEffects: [
+          { stat: StatId.HOM, amount: 5, label: '+HOM' },
+          { stat: StatId.CLI, amount: 4, label: '+CLI' },
+        ],
+        consequences: [
+          { type: 'modify_weight', amount: -2 },
+        ],
+        revocable: false,
+        style: 'default',
+      },
+    ],
+    subEvents: [
+      {
+        eventId: 'winter-yard-liver-fluke',
+        chance: 0.18,
+        conditions: [
+          { type: 'no_parasite', parasiteId: 'liver-fluke' },
+        ],
+        narrativeText: 'The close quarters have done their work. Within days, you develop a persistent cough and a heaviness in your abdomen — liver flukes, passed through contaminated browse.',
+        footnote: '(Infected with liver flukes)',
+        statEffects: [
+          { stat: StatId.HEA, amount: -5, label: '-HEA' },
+        ],
+        consequences: [
+          { type: 'add_parasite', parasiteId: 'liver-fluke', startStage: 0 },
+        ],
+      },
+    ],
+    conditions: [
+      { type: 'region', regionIds: ['minnesota-winter-yard'] },
+    ],
+    weight: 12,
+    cooldown: 6,
+    tags: ['health', 'social', 'winter', 'migration'],
+  },
+
+  {
+    id: 'migration-winter-yard-predator',
+    type: 'active',
+    category: 'predator',
+    narrativeText: "Wolves. You can hear them before you see them — low howls drifting through the frozen twilight, coordinating their approach. They circle the edges of the winter yard like shadows, testing, probing, looking for the weak link. The herd presses tighter together, a hundred heartbeats quickening as one. There is safety in the center, but the browse there is already gone.",
+    statEffects: [
+      { stat: StatId.TRA, amount: 6, label: '+TRA' },
+      { stat: StatId.ADV, amount: 8, label: '+ADV' },
+    ],
+    choices: [
+      {
+        id: 'stay-center',
+        label: 'Stay in the center of the group',
+        description: 'Safe from wolves, but no food',
+        statEffects: [
+          { stat: StatId.ADV, amount: 3, label: '+ADV' },
+          { stat: StatId.HOM, amount: 3, label: '+HOM' },
+        ],
+        consequences: [],
+        revocable: false,
+        style: 'default',
+      },
+      {
+        id: 'venture-edge-browse',
+        label: 'Venture to the edge for better browse',
+        description: 'Food, but exposed to the wolves',
+        statEffects: [
+          { stat: StatId.HOM, amount: -4, label: '-HOM' },
+        ],
+        consequences: [
+          { type: 'modify_weight', amount: 1 },
+        ],
+        revocable: false,
+        style: 'danger',
+        deathChance: {
+          probability: 0.04,
+          cause: 'Killed by wolves at the edge of the winter yard.',
+          statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
+        },
+      },
+    ],
+    conditions: [
+      { type: 'region', regionIds: ['minnesota-winter-yard'] },
+    ],
+    weight: 10,
+    cooldown: 5,
+    tags: ['predator', 'danger', 'wolf', 'winter', 'migration'],
+  },
+
+  {
+    id: 'migration-spring-return',
+    type: 'passive',
+    category: 'migration',
+    narrativeText: "Something shifts in the air — a softness, a wetness, a promise. The snow in the winter yard is thinning, and one morning you simply begin to walk. North. Toward the place you came from, following trails carved by a thousand generations of deer before you. The journey back is easier than the journey out; your body is thinner, weaker, but the lengthening days fill you with a strange, wordless hope.",
+    statEffects: [
+      { stat: StatId.CLI, amount: -8, label: '-CLI' },
+      { stat: StatId.TRA, amount: -5, label: '-TRA' },
+      { stat: StatId.HOM, amount: -5, label: '-HOM' },
+    ],
+    consequences: [
+      { type: 'modify_weight', amount: 1 },
+      { type: 'remove_flag', flag: 'returned-from-migration' },
+    ],
+    conditions: [
+      { type: 'has_flag', flag: 'returned-from-migration' },
+    ],
+    weight: 25,
+    cooldown: 20,
+    tags: ['migration', 'seasonal', 'spring'],
+  },
+
+  // ══════════════════════════════════════════════
+  //  AGE-GATED EVENTS
+  // ══════════════════════════════════════════════
+
+  {
+    id: 'age-fawn-first-steps',
+    type: 'passive',
+    category: 'environmental',
+    narrativeText: "The world is enormous and incomprehensible. You stumble over roots that seem as tall as fallen trees, your thin legs folding beneath you on the uneven ground. Everything is new — the taste of clover, the sound of wind through birch leaves, the terrifying vastness of a sky you cannot yet understand. You fall, and you rise, and you fall again, and each time the rising comes a little easier.",
+    statEffects: [
+      { stat: StatId.WIS, amount: -3, label: '-WIS' },
+      { stat: StatId.NOV, amount: 8, label: '+NOV' },
+    ],
+    conditions: [
+      { type: 'age_range', max: 6 },
+    ],
+    weight: 15,
+    cooldown: 4,
+    tags: ['age', 'fawn', 'learning'],
+  },
+
+  {
+    id: 'age-fawn-mother-lesson',
+    type: 'passive',
+    category: 'social',
+    narrativeText: "Your mother freezes mid-step, one foreleg suspended in the air, her ears locked forward like twin radar dishes. You freeze too — not because you understand the danger, but because her stillness is a language older than thought. For a long, breathless minute, nothing moves. Then she relaxes, lowers her head, and resumes grazing. You have just learned something you will carry for the rest of your life: when the world goes quiet, you go quieter.",
+    statEffects: [
+      { stat: StatId.WIS, amount: 5, label: '+WIS' },
+      { stat: StatId.TRA, amount: -3, label: '-TRA' },
+      { stat: StatId.ADV, amount: -3, label: '-ADV' },
+    ],
+    conditions: [
+      { type: 'age_range', max: 12 },
+    ],
+    weight: 12,
+    cooldown: 6,
+    tags: ['age', 'fawn', 'learning', 'social'],
+  },
+
+  {
+    id: 'age-yearling-first-antlers',
+    type: 'passive',
+    category: 'health',
+    narrativeText: "Something is happening on your skull. Two hard, hot knobs of bone are pushing through the skin above your eyes, sheathed in velvet that itches maddeningly. You rub them against every tree you pass, leaving smears of blood and fuzz on the bark. They are small — barely more than spikes — but they are yours, and when you lower your head and catch your reflection in a still pool, you see someone different staring back. Someone dangerous.",
+    statEffects: [
+      { stat: StatId.NOV, amount: -5, label: '-NOV' },
+      { stat: StatId.STR, amount: -3, label: '-STR' },
+    ],
+    conditions: [
+      { type: 'age_range', min: 12, max: 24 },
+      { type: 'sex', sex: 'male' },
+    ],
+    weight: 15,
+    cooldown: 12,
+    tags: ['age', 'yearling', 'antlers', 'growth'],
+  },
+
+  {
+    id: 'age-elderly-slowing-down',
+    type: 'passive',
+    category: 'health',
+    narrativeText: "You used to clear that fallen oak in a single bound. Today, you walk around it. Your joints grind like stones in a dry riverbed, and the cold settles into your bones with a permanence that no amount of sun can cure. The younger deer flow past you like water around a rock — effortless, thoughtless, alive in a way you recognize as something you once were. But your eyes are sharper than theirs. You see things they cannot. You know which shadows hold wolves.",
+    statEffects: [
+      { stat: StatId.HOM, amount: 5, label: '+HOM' },
+      { stat: StatId.WIS, amount: 4, label: '+WIS' },
+      { stat: StatId.HEA, amount: -5, label: '-HEA' },
+      { stat: StatId.TRA, amount: 3, label: '+TRA' },
+    ],
+    conditions: [
+      { type: 'age_range', min: 96 },
+    ],
+    weight: 12,
+    cooldown: 8,
+    tags: ['age', 'elderly', 'health'],
+  },
+
+  // ══════════════════════════════════════════════
+  //  EVENT CHAINING EVENTS
+  // ══════════════════════════════════════════════
+
+  {
+    id: 'chain-crop-field-return',
+    type: 'active',
+    category: 'foraging',
+    narrativeText: "The memory of those soybeans has been gnawing at you for days — the sweetness, the easy abundance, the way your stomach felt full for once. Your hooves carry you back to the field's edge almost without your consent. But something is different tonight. A small blinking light sits mounted on a post near the fence line, its red eye winking in the darkness. The crops are still there. So is the trap.",
+    statEffects: [
+      { stat: StatId.NOV, amount: 5, label: '+NOV' },
+      { stat: StatId.ADV, amount: 4, label: '+ADV' },
+    ],
+    choices: [
+      {
+        id: 'raid-again',
+        label: 'Raid the field again',
+        description: 'The farmer may be watching now',
+        statEffects: [
+          { stat: StatId.HOM, amount: -8, label: '-HOM' },
+        ],
+        consequences: [
+          { type: 'modify_weight', amount: 3 },
+          { type: 'set_flag', flag: 'crop-field-targeted' },
+        ],
+        revocable: false,
+        style: 'danger',
+        deathChance: {
+          probability: 0.06,
+          cause: 'Shot by a farmer defending his crops. The trail camera told him you were coming.',
+          statModifiers: [{ stat: StatId.HEA, factor: -0.001 }],
+        },
+      },
+      {
+        id: 'resist-temptation',
+        label: 'Resist and walk away',
+        statEffects: [
+          { stat: StatId.WIS, amount: 4, label: '+WIS' },
+          { stat: StatId.TRA, amount: -2, label: '-TRA' },
+        ],
+        consequences: [
+          { type: 'remove_flag', flag: 'visited-crop-field' },
+        ],
+        revocable: false,
+        style: 'default',
+      },
+    ],
+    conditions: [
+      { type: 'has_flag', flag: 'visited-crop-field' },
+    ],
+    weight: 14,
+    cooldown: 8,
+    tags: ['foraging', 'food', 'danger', 'human', 'chain'],
+  },
+
+  {
+    id: 'chain-deep-forest-discovery',
+    type: 'passive',
+    category: 'foraging',
+    narrativeText: "Your flight from the hunters carried you deeper into the forest than you've ever been — past the old-growth hemlocks, past the mossy boulders where the light turns green and strange, into a hollow you didn't know existed. A spring bubbles up from between two rocks, clear and cold, and around it grows a carpet of wild mushrooms and fiddlehead ferns. It is a hidden larder, untouched by any other browser. For a moment, the terror of the hunt fades, replaced by something close to wonder.",
+    statEffects: [
+      { stat: StatId.HOM, amount: -8, label: '-HOM' },
+      { stat: StatId.ADV, amount: -6, label: '-ADV' },
+      { stat: StatId.WIS, amount: 3, label: '+WIS' },
+    ],
+    consequences: [
+      { type: 'modify_weight', amount: 3 },
+      { type: 'remove_flag', flag: 'deep-forest-refuge' },
+    ],
+    conditions: [
+      { type: 'has_flag', flag: 'deep-forest-refuge' },
+    ],
+    weight: 16,
+    cooldown: 10,
+    tags: ['foraging', 'food', 'exploration', 'chain'],
+  },
+
+  {
+    id: 'chain-wolf-territory-marked',
+    type: 'passive',
+    category: 'psychological',
+    narrativeText: "You pause at a spruce trunk and inhale — and there it is, the acrid reek of wolf urine, sharp as a knife against the cold air. Once, this smell would have paralyzed you. But something has changed. You have survived them before, and the surviving has left marks deeper than scars. Now you read the scent like a map: how old, how many, which direction they were traveling. You turn calmly and choose a different path. Fear has become knowledge.",
+    statEffects: [
+      { stat: StatId.WIS, amount: 5, label: '+WIS' },
+      { stat: StatId.TRA, amount: -6, label: '-TRA' },
+    ],
+    conditions: [
+      { type: 'stat_above', stat: StatId.TRA, threshold: 60 },
+      { type: 'stat_above', stat: StatId.WIS, threshold: 30 },
+    ],
+    weight: 10,
+    cooldown: 10,
+    tags: ['psychological', 'wolf', 'learning', 'chain'],
+  },
+
+  {
+    id: 'chain-injury-adaptation',
+    type: 'passive',
+    category: 'health',
+    narrativeText: "You barely notice the limp anymore. What was once a searing lance of pain with every step has become a dull, familiar ache — part of you now, like your heartbeat or the rhythm of your breathing. Your body has quietly reorganized itself around the damage, shifting weight to your stronger legs, compensating with a grace born of necessity. You are not the deer you were before the injury. You are something harder, something more careful, something that has learned the cost of each step and spends them wisely.",
+    statEffects: [
+      { stat: StatId.HOM, amount: -5, label: '-HOM' },
+      { stat: StatId.WIS, amount: 4, label: '+WIS' },
+    ],
+    conditions: [
+      { type: 'has_injury' },
+      { type: 'stat_above', stat: StatId.WIS, threshold: 40 },
+    ],
+    weight: 10,
+    cooldown: 12,
+    tags: ['health', 'learning', 'chain'],
+  },
+
+  // ══════════════════════════════════════════════
+  //  GENERAL NEW EVENTS
+  // ══════════════════════════════════════════════
+
+  {
+    id: 'environmental-road-crossing',
+    type: 'active',
+    category: 'environmental',
+    narrativeText: "The forest ends abruptly at a strip of black asphalt. A two-lane road cuts through your range like a wound, reeking of tar and exhaust. You can see the trees continuing on the other side — your destination, your food, your safety — but between here and there is a gauntlet of hurtling metal and blinding light. You watch a car pass, then another. The gap between them feels both infinite and impossibly short.",
+    statEffects: [
+      { stat: StatId.ADV, amount: 5, label: '+ADV' },
+      { stat: StatId.NOV, amount: 4, label: '+NOV' },
+    ],
+    choices: [
+      {
+        id: 'cross-road',
+        label: 'Cross quickly',
+        description: 'Sprint across during a gap in traffic',
+        statEffects: [
+          { stat: StatId.HOM, amount: 3, label: '+HOM' },
+        ],
+        consequences: [],
+        revocable: false,
+        style: 'danger',
+        deathChance: {
+          probability: 0.03,
+          cause: 'Struck by a car while crossing the road. The driver never even slowed down.',
+          statModifiers: [{ stat: StatId.HEA, factor: -0.001 }],
+        },
+      },
+      {
+        id: 'go-around-road',
+        label: 'Find a way around',
+        description: 'Follow the tree line — longer, but safer',
+        statEffects: [
+          { stat: StatId.HOM, amount: 5, label: '+HOM' },
+          { stat: StatId.WIS, amount: 2, label: '+WIS' },
+        ],
+        consequences: [
+          { type: 'modify_weight', amount: -1 },
+        ],
+        revocable: false,
+        style: 'default',
+      },
+    ],
+    conditions: [],
+    weight: 8,
+    cooldown: 8,
+    tags: ['environmental', 'danger', 'human'],
+  },
+
+  {
+    id: 'seasonal-summer-storm',
+    type: 'passive',
+    category: 'seasonal',
+    narrativeText: "The sky turns the color of a bruise. The wind shifts, and suddenly the trees are bending sideways, their leaves flashing silver undersides in a desperate semaphore. Then the rain hits — not drops but sheets, a wall of water that blinds and deafens. Lightning splits a birch tree two hundred yards away with a crack so loud it registers in your chest, not your ears. You press yourself against the lee of a boulder and wait, trembling, for the world to stop trying to tear itself apart.",
+    statEffects: [
+      { stat: StatId.CLI, amount: 6, label: '+CLI' },
+      { stat: StatId.ADV, amount: 7, label: '+ADV' },
+      { stat: StatId.NOV, amount: 5, label: '+NOV' },
+    ],
+    subEvents: [
+      {
+        eventId: 'lightning-near-miss',
+        chance: 0.08,
+        narrativeText: 'A bolt of lightning strikes a tree so close that you feel the heat on your flank and the static lifts the hair along your spine. The crack of splitting wood is indistinguishable from the thunder. You are alive only because you chose this boulder and not that tree.',
+        statEffects: [
+          { stat: StatId.TRA, amount: 12, label: '+TRA' },
+          { stat: StatId.ADV, amount: 8, label: '+ADV' },
+        ],
+        consequences: [],
+      },
+    ],
+    conditions: [
+      { type: 'season', seasons: ['spring', 'summer'] },
+    ],
+    weight: 10,
+    cooldown: 6,
+    tags: ['seasonal', 'weather', 'environmental'],
+  },
+
+  {
+    id: 'social-territorial-dispute',
+    type: 'active',
+    category: 'social',
+    narrativeText: "Another deer is already at the best browse patch — the one with the tender young growth and the sheltering overhang. It sees you approach and lowers its head, ears flattened back, one forehoof stamping the ground in unmistakable warning. This food source isn't large enough for both of you, and the other deer has no intention of sharing. The air between you crackles with a tension that is older than language.",
+    statEffects: [
+      { stat: StatId.ADV, amount: 5, label: '+ADV' },
+    ],
+    choices: [
+      {
+        id: 'stand-ground-dispute',
+        label: 'Stand your ground',
+        description: 'Fight for access to the food',
+        statEffects: [
+          { stat: StatId.ADV, amount: 4, label: '+ADV' },
+          { stat: StatId.STR, amount: -2, label: '-STR' },
+        ],
+        consequences: [
+          { type: 'modify_weight', amount: 2 },
+        ],
+        revocable: false,
+        style: 'danger',
+      },
+      {
+        id: 'yield-dispute',
+        label: 'Yield and move on',
+        description: 'Avoid conflict — find food elsewhere',
+        statEffects: [
+          { stat: StatId.ADV, amount: -4, label: '-ADV' },
+          { stat: StatId.WIS, amount: 3, label: '+WIS' },
+        ],
+        consequences: [],
+        revocable: false,
+        style: 'default',
+      },
+    ],
+    conditions: [],
+    weight: 10,
+    cooldown: 5,
+    tags: ['social', 'foraging'],
+  },
+
+  {
+    id: 'foraging-mushroom-patch',
+    type: 'active',
+    category: 'foraging',
+    narrativeText: "A cluster of mushrooms erupts from the base of a rotting stump — pale caps fanning out in overlapping shelves, their undersides lined with delicate gills. The smell is earthy, rich, intoxicating. Some mushrooms are nourishing, dense with minerals your body craves. Others will shut down your liver in forty-eight hours. You have no way to tell them apart except instinct, and instinct is a coin flip in a game with mortal stakes.",
+    statEffects: [],
+    choices: [
+      {
+        id: 'eat-mushrooms',
+        label: 'Eat the mushrooms',
+        description: 'Could be nourishing — or fatal',
+        statEffects: [
+          { stat: StatId.HOM, amount: -3, label: '-HOM' },
+        ],
+        consequences: [
+          { type: 'modify_weight', amount: 2 },
+        ],
+        revocable: false,
+        style: 'danger',
+      },
+      {
+        id: 'pass-mushrooms',
+        label: 'Leave them alone',
+        statEffects: [
+          { stat: StatId.WIS, amount: 2, label: '+WIS' },
+        ],
+        consequences: [],
+        revocable: false,
+        style: 'default',
+      },
+    ],
+    subEvents: [
+      {
+        eventId: 'mushroom-toxicity',
+        chance: 0.25,
+        narrativeText: 'Within hours, your stomach clenches into a fist of pain. The mushrooms were toxic — not enough to kill you outright, but enough to leave you shaking and weak for days, your liver struggling to process the poison.',
+        statEffects: [
+          { stat: StatId.HOM, amount: 12, label: '+HOM' },
+          { stat: StatId.HEA, amount: -8, label: '-HEA' },
+        ],
+        consequences: [],
+      },
+    ],
+    conditions: [
+      { type: 'season', seasons: ['summer', 'autumn'] },
+    ],
+    weight: 8,
+    cooldown: 8,
+    tags: ['foraging', 'food', 'danger'],
+  },
 ];

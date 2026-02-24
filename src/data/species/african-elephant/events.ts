@@ -590,4 +590,496 @@ export const AFRICAN_ELEPHANT_EVENTS: GameEvent[] = [
     cooldown: 5,
     tags: ['health', 'water'],
   },
+
+  // ══════════════════════════════════════════════
+  //  FORAGING EVENTS (continued)
+  // ══════════════════════════════════════════════
+
+  {
+    id: 'elephant-marula-fruit',
+    type: 'active',
+    category: 'foraging',
+    narrativeText:
+      "The smell reaches you before the sight \u2014 sweet, cloying, almost alcoholic. A marula tree stands heavy with overripe fruit, its branches sagging, the ground beneath it littered with split yellow globes fermenting in the heat. The juice runs sticky down your trunk as you gather them, and the taste is intoxicating in every sense of the word. The world softens at the edges.",
+    statEffects: [
+      { stat: StatId.NOV, amount: 3, label: '+NOV' },
+    ],
+    choices: [
+      {
+        id: 'gorge-marula',
+        label: 'Gorge on the fermented fruit',
+        description: 'Eat until you are swaying \u2014 rich calories, but you may stumble',
+        statEffects: [
+          { stat: StatId.NOV, amount: 5, label: '+NOV' },
+        ],
+        consequences: [
+          { type: 'modify_weight', amount: 5 },
+        ],
+        revocable: false,
+        style: 'danger',
+      },
+      {
+        id: 'eat-moderately',
+        label: 'Eat moderately and move on',
+        description: 'Take what you need and keep your wits about you',
+        statEffects: [],
+        consequences: [
+          { type: 'modify_weight', amount: 2 },
+        ],
+        revocable: false,
+        style: 'default',
+      },
+    ],
+    subEvents: [
+      {
+        eventId: 'drunk-stumble',
+        chance: 0.2,
+        narrativeText:
+          'Your legs tangle beneath you as the fermented juice takes hold. You lurch sideways into a termite mound, scraping your flank raw against the hardened earth.',
+        footnote: '(Minor injury from drunken stumble)',
+        statEffects: [
+          { stat: StatId.TRA, amount: 3, label: '+TRA' },
+        ],
+        consequences: [
+          { type: 'add_injury', injuryId: 'scrape-wound', severity: 0, bodyPart: 'right flank' },
+        ],
+      },
+    ],
+    conditions: [
+      { type: 'season', seasons: ['autumn'] },
+    ],
+    weight: 10,
+    cooldown: 6,
+    tags: ['foraging', 'food'],
+  },
+
+  {
+    id: 'elephant-salt-lick',
+    type: 'passive',
+    category: 'foraging',
+    narrativeText:
+      "Deep inside a cave eroded into the hillside, your trunk finds what your body has been craving \u2014 mineral-rich salt deposits streaking the rock face like pale veins. You scrape at the wall with your tusks, prying loose chunks of sodium and calcium that dissolve on your tongue with a sharp, electric tang. Generations of elephants have carved these walls smooth. You will remember this place for the rest of your life.",
+    statEffects: [
+      { stat: StatId.HOM, amount: -5, label: '-HOM' },
+      { stat: StatId.CLI, amount: -3, label: '-CLI' },
+      { stat: StatId.WIS, amount: 5, label: '+WIS' },
+    ],
+    conditions: [],
+    weight: 8,
+    cooldown: 8,
+    tags: ['foraging', 'food', 'mineral'],
+  },
+
+  {
+    id: 'elephant-grass-fire-aftermath',
+    type: 'passive',
+    category: 'foraging',
+    narrativeText:
+      "The blackened earth still radiates warmth beneath your feet, and the air carries the acrid ghost of smoke. But already, impossibly, the first green shoots are pushing through the ash \u2014 tender, mineral-rich blades that taste of renewal. The herd fans out across the burn scar, feeding with quiet urgency on the freshest grass the savanna has offered in months.",
+    statEffects: [
+      { stat: StatId.HOM, amount: -6, label: '-HOM' },
+    ],
+    consequences: [
+      { type: 'modify_weight', amount: 3 },
+    ],
+    conditions: [
+      { type: 'season', seasons: ['winter', 'spring'] },
+    ],
+    weight: 10,
+    cooldown: 6,
+    tags: ['foraging', 'food', 'fire'],
+  },
+
+  {
+    id: 'elephant-termite-mound',
+    type: 'passive',
+    category: 'foraging',
+    narrativeText:
+      "You drive your tusks into the cathedral spire of a termite mound, cracking it open like an egg. Inside, the soil is packed with kaolin and calcium \u2014 minerals your gut has been demanding for weeks. You scoop the pale, chalky earth into your mouth with your trunk, chewing slowly as the grit coats your teeth. The termites boil furiously across the wreckage, but they cannot sting through your hide. This is geophagy, older than memory \u2014 the earth itself as medicine.",
+    statEffects: [
+      { stat: StatId.IMM, amount: -4, label: '-IMM' },
+      { stat: StatId.HOM, amount: -4, label: '-HOM' },
+    ],
+    conditions: [],
+    weight: 9,
+    cooldown: 6,
+    tags: ['foraging', 'food', 'mineral'],
+  },
+
+  // ══════════════════════════════════════════════
+  //  PREDATOR EVENTS (continued)
+  // ══════════════════════════════════════════════
+
+  {
+    id: 'elephant-hyena-pack',
+    type: 'active',
+    category: 'predator',
+    narrativeText:
+      "The hyenas have been circling since dawn \u2014 a pack of eight or nine, their whooping calls weaving through the herd like a taunt. They are not interested in you. They are watching a cow at the back of the group, her gait slow and labored, her ribs showing through her skin. Every few minutes one darts in, snapping at her heels, testing her resolve. The matriarch watches. The herd watches. You watch.",
+    statEffects: [
+      { stat: StatId.TRA, amount: 5, label: '+TRA' },
+    ],
+    choices: [
+      {
+        id: 'intervene-hyenas',
+        label: 'Charge the hyenas and drive them off',
+        description: 'Expend precious energy to protect a weakened herd member',
+        statEffects: [
+          { stat: StatId.TRA, amount: 3, label: '+TRA' },
+          { stat: StatId.ADV, amount: -5, label: '-ADV' },
+        ],
+        consequences: [
+          { type: 'modify_weight', amount: -2 },
+        ],
+        revocable: false,
+        style: 'danger',
+      },
+      {
+        id: 'let-nature-decide',
+        label: 'Let nature take its course',
+        description: 'Conserve your strength \u2014 the herd must survive',
+        statEffects: [
+          { stat: StatId.TRA, amount: 5, label: '+TRA' },
+          { stat: StatId.WIS, amount: 3, label: '+WIS' },
+        ],
+        consequences: [],
+        revocable: false,
+        style: 'default',
+      },
+    ],
+    conditions: [],
+    weight: 7,
+    cooldown: 8,
+    tags: ['predator', 'danger'],
+  },
+
+  {
+    id: 'elephant-snare-trap',
+    type: 'active',
+    category: 'predator',
+    narrativeText:
+      "Something bites into your ankle with cold, unrelenting pressure. You look down and see a loop of braided wire cinched tight around your leg, the other end anchored to a heavy log half-buried in the earth. This is not a predator \u2014 it is a human thing, deliberate and cruel. The wire digs deeper with every step, and already you can feel blood running warm over your foot.",
+    statEffects: [
+      { stat: StatId.TRA, amount: 10, label: '+TRA' },
+      { stat: StatId.ADV, amount: 8, label: '+ADV' },
+    ],
+    choices: [
+      {
+        id: 'pull-free-snare',
+        label: 'Wrench your leg free with brute force',
+        description: 'The wire will tear flesh, but you will be free',
+        statEffects: [
+          { stat: StatId.HEA, amount: -5, label: '-HEA' },
+        ],
+        consequences: [
+          { type: 'add_injury', injuryId: 'snare-laceration', severity: 0, bodyPart: 'left front ankle' },
+          { type: 'set_flag', flag: 'snare-survivor' },
+        ],
+        revocable: false,
+        style: 'danger',
+      },
+      {
+        id: 'wait-snare-weaken',
+        label: 'Wait and work the wire loose slowly',
+        description: 'Less injury, but you cannot feed or move while trapped',
+        statEffects: [
+          { stat: StatId.TRA, amount: 5, label: '+TRA' },
+        ],
+        consequences: [
+          { type: 'modify_weight', amount: -4 },
+          { type: 'set_flag', flag: 'snare-survivor' },
+        ],
+        revocable: false,
+        style: 'default',
+      },
+    ],
+    conditions: [],
+    weight: 5,
+    cooldown: 12,
+    tags: ['predator', 'danger', 'human'],
+  },
+
+  // ══════════════════════════════════════════════
+  //  SOCIAL EVENTS (continued)
+  // ══════════════════════════════════════════════
+
+  {
+    id: 'elephant-infrasound-call',
+    type: 'passive',
+    category: 'social',
+    narrativeText:
+      "It comes not through your ears but through the soles of your feet \u2014 a low, rolling vibration that travels through the earth itself. An infrasound call from a family group miles away, carrying information older than language: water to the east, danger to the north, a greeting from kin you have not seen in months. You stand motionless, one foot lifted slightly, listening with your whole body.",
+    statEffects: [
+      { stat: StatId.TRA, amount: -5, label: '-TRA' },
+      { stat: StatId.ADV, amount: -4, label: '-ADV' },
+      { stat: StatId.WIS, amount: 5, label: '+WIS' },
+    ],
+    conditions: [],
+    weight: 10,
+    cooldown: 5,
+    tags: ['social', 'herd', 'communication'],
+  },
+
+  {
+    id: 'elephant-play-behavior',
+    type: 'passive',
+    category: 'social',
+    narrativeText:
+      "The calves have found a mud slide on the riverbank, and the whole herd has descended into joyful chaos. Young elephants toboggan down the slick clay on their bellies, trumpeting with something that can only be called delight. You join in, spraying great arcs of muddy water with your trunk, shouldering into the shallows until you are coated head to tail. For a few hours, there is no drought, no predator, no hunger \u2014 only play.",
+    statEffects: [
+      { stat: StatId.TRA, amount: -6, label: '-TRA' },
+      { stat: StatId.NOV, amount: -4, label: '-NOV' },
+      { stat: StatId.ADV, amount: -5, label: '-ADV' },
+    ],
+    conditions: [
+      { type: 'no_flag', flag: 'dry-season-seen' },
+    ],
+    weight: 10,
+    cooldown: 5,
+    tags: ['social', 'psychological'],
+  },
+
+  {
+    id: 'elephant-orphan-adoption',
+    type: 'passive',
+    category: 'social',
+    narrativeText:
+      "You find the calf standing alone beside the carcass of its mother, trunk hanging limp, eyes glazed with a grief it cannot name. It is thin and dehydrated, its skin loose and papery. When you approach, it presses against your leg with a desperate, trembling urgency, and something shifts inside your chest \u2014 a recognition, a decision that is not really a decision at all. The herd parts to let you bring it in.",
+    statEffects: [
+      { stat: StatId.WIS, amount: 5, label: '+WIS' },
+      { stat: StatId.TRA, amount: 5, label: '+TRA' },
+      { stat: StatId.NOV, amount: -3, label: '-NOV' },
+    ],
+    consequences: [
+      { type: 'set_flag', flag: 'adopted-orphan' },
+    ],
+    conditions: [
+      { type: 'sex', sex: 'female' },
+    ],
+    weight: 5,
+    cooldown: 20,
+    tags: ['social', 'herd'],
+  },
+
+  {
+    id: 'elephant-bull-greeting',
+    type: 'passive',
+    category: 'social',
+    narrativeText:
+      "Another bull approaches from the east, and you turn to face him with your ears spread wide. He is known to you \u2014 you have sparred before, years ago, when you were both young and reckless. Now you meet trunk-to-mouth, each tasting the other's breath, reading a chemical autobiography of where he has been, what he has eaten, whether he is in musth. The greeting is brief and formal, two old warriors acknowledging each other's continued existence.",
+    statEffects: [
+      { stat: StatId.ADV, amount: -4, label: '-ADV' },
+      { stat: StatId.WIS, amount: 3, label: '+WIS' },
+    ],
+    conditions: [
+      { type: 'sex', sex: 'male' },
+      { type: 'age_range', min: 120 },
+    ],
+    weight: 8,
+    cooldown: 6,
+    tags: ['social', 'herd'],
+  },
+
+  // ══════════════════════════════════════════════
+  //  ENVIRONMENTAL EVENTS
+  // ══════════════════════════════════════════════
+
+  {
+    id: 'elephant-dust-bath',
+    type: 'passive',
+    category: 'environmental',
+    narrativeText:
+      "You find a depression of fine, powdery earth \u2014 sifted by wind and sun into a consistency like flour. You scoop trunkfuls over your back and flanks, working the dust into every fold and crease of your skin until you are coated in a pale, ghostly layer. The dust will block the sun's worst heat and suffocate the ticks and biting flies that torment you. For a moment you stand in your own cloud, eyes half-closed, utterly content.",
+    statEffects: [
+      { stat: StatId.CLI, amount: -4, label: '-CLI' },
+      { stat: StatId.IMM, amount: -3, label: '-IMM' },
+    ],
+    conditions: [],
+    weight: 12,
+    cooldown: 4,
+    tags: ['environmental', 'health'],
+  },
+
+  {
+    id: 'elephant-river-crossing',
+    type: 'active',
+    category: 'environmental',
+    narrativeText:
+      "The river is swollen and brown, running fast with the season's rains, carrying uprooted trees and debris in its churning current. The herd needs to cross \u2014 the best grazing lies on the far bank, and the matriarch's memory says this is the way. But the water is deep, the current is strong, and the youngest calves can barely keep their trunks above the surface.",
+    statEffects: [
+      { stat: StatId.ADV, amount: 5, label: '+ADV' },
+    ],
+    choices: [
+      {
+        id: 'swim-across',
+        label: 'Enter the river and swim across',
+        description: 'The current is treacherous, but waiting means hunger',
+        statEffects: [
+          { stat: StatId.TRA, amount: 3, label: '+TRA' },
+        ],
+        consequences: [],
+        revocable: false,
+        style: 'danger',
+        deathChance: {
+          probability: 0.02,
+          cause: 'Swept away by the river current and drowned',
+          statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
+        },
+      },
+      {
+        id: 'wait-for-water-drop',
+        label: 'Wait for the water level to drop',
+        description: 'Safer, but food is scarce on this bank',
+        statEffects: [
+          { stat: StatId.HOM, amount: 6, label: '+HOM' },
+        ],
+        consequences: [
+          { type: 'modify_weight', amount: -3 },
+        ],
+        revocable: false,
+        style: 'default',
+      },
+    ],
+    conditions: [],
+    weight: 7,
+    cooldown: 8,
+    tags: ['environmental', 'water', 'danger'],
+  },
+
+  {
+    id: 'elephant-thunderstorm',
+    type: 'passive',
+    category: 'environmental',
+    narrativeText:
+      "The sky turns the color of a bruise \u2014 purple-black and swollen, pressing down on the savanna like a lid. Then the storm breaks. Lightning splits the horizon in jagged white forks, and thunder rolls across the plain with a force you feel in your ribs. Rain lashes sideways, stinging your eyes. The herd huddles together, calves pressed against their mothers' flanks, trunks curled inward against the wind.",
+    statEffects: [
+      { stat: StatId.CLI, amount: 5, label: '+CLI' },
+      { stat: StatId.ADV, amount: 5, label: '+ADV' },
+    ],
+    subEvents: [
+      {
+        eventId: 'lightning-strike-nearby',
+        chance: 0.08,
+        narrativeText:
+          'A bolt of lightning strikes a fever tree not thirty yards from where you stand. The trunk explodes in a shower of white splinters and the air fills with the smell of ozone and burning sap. The shock reverberates through the ground and into your bones.',
+        footnote: '(Lightning struck nearby)',
+        statEffects: [
+          { stat: StatId.TRA, amount: 8, label: '+TRA' },
+          { stat: StatId.NOV, amount: 6, label: '+NOV' },
+        ],
+        consequences: [],
+      },
+    ],
+    conditions: [],
+    weight: 10,
+    cooldown: 6,
+    tags: ['environmental', 'weather'],
+  },
+
+  // ══════════════════════════════════════════════
+  //  AGE-GATED EVENTS
+  // ══════════════════════════════════════════════
+
+  {
+    id: 'elephant-calf-learning',
+    type: 'passive',
+    category: 'social',
+    narrativeText:
+      "Your trunk is a magnificent, bewildering appendage \u2014 forty thousand muscles and not one of them doing what you want. You try to pick up a seed pod and fling it over your shoulder instead. You attempt to drink from the river and spray water directly into your own eye. The older elephants watch with what you suspect is amusement. But each fumble teaches you something, and today, for the first time, you manage to pluck a single blade of grass and bring it to your mouth.",
+    statEffects: [
+      { stat: StatId.WIS, amount: 5, label: '+WIS' },
+      { stat: StatId.NOV, amount: -3, label: '-NOV' },
+    ],
+    conditions: [
+      { type: 'age_range', max: 60 },
+    ],
+    weight: 15,
+    cooldown: 4,
+    tags: ['social', 'learning'],
+  },
+
+  {
+    id: 'elephant-adolescent-test',
+    type: 'passive',
+    category: 'social',
+    narrativeText:
+      "Something restless and electric is building inside you. You mock-charge a warthog and send it squealing into its burrow. You shove a young acacia until it bends double. You spar with another adolescent, clashing your half-grown tusks together with a sound like stones striking. The older bulls tolerate your posturing with weary indifference \u2014 they have all been where you are, testing the boundaries of a body that is growing faster than your judgment.",
+    statEffects: [
+      { stat: StatId.ADV, amount: 4, label: '+ADV' },
+      { stat: StatId.STR, amount: -3, label: '-STR' },
+      { stat: StatId.WIS, amount: 3, label: '+WIS' },
+    ],
+    conditions: [
+      { type: 'age_range', min: 60, max: 180 },
+    ],
+    weight: 12,
+    cooldown: 5,
+    tags: ['social', 'learning'],
+  },
+
+  {
+    id: 'elephant-elder-memory',
+    type: 'passive',
+    category: 'social',
+    narrativeText:
+      "The drought is in its third month and the herd is desperate, ribs showing, calves stumbling. But you remember. Decades ago, when you were barely more than a calf yourself, the old matriarch led your family on a forced march across the plateau to a spring hidden in a rocky gorge \u2014 a place no living elephant but you has ever seen. You turn east, and the herd follows without question, trusting the map etched into your ancient, extraordinary mind.",
+    statEffects: [
+      { stat: StatId.WIS, amount: 10, label: '+WIS' },
+      { stat: StatId.TRA, amount: -6, label: '-TRA' },
+      { stat: StatId.HOM, amount: -8, label: '-HOM' },
+    ],
+    conditions: [
+      { type: 'age_range', min: 420 },
+    ],
+    weight: 12,
+    cooldown: 10,
+    tags: ['social', 'herd', 'wisdom'],
+  },
+
+  // ══════════════════════════════════════════════
+  //  EVENT CHAINING
+  // ══════════════════════════════════════════════
+
+  {
+    id: 'elephant-snare-trauma',
+    type: 'passive',
+    category: 'psychological',
+    narrativeText:
+      "A hanging vine brushes your ankle and you explode sideways, heart hammering, trunk raised in alarm. It was nothing \u2014 just a vine. But your body remembers the wire, the cold bite of the snare, the hours of pain and terror. Every rope-like shape, every dangling tendril, sends a jolt of adrenaline through your veins. The wound on your leg has healed, but the wound in your mind is still raw and open.",
+    statEffects: [
+      { stat: StatId.TRA, amount: 8, label: '+TRA' },
+      { stat: StatId.ADV, amount: 6, label: '+ADV' },
+    ],
+    consequences: [
+      { type: 'remove_flag', flag: 'snare-survivor' },
+    ],
+    conditions: [
+      { type: 'has_flag', flag: 'snare-survivor' },
+    ],
+    weight: 25,
+    cooldown: 8,
+    tags: ['psychological', 'trauma'],
+  },
+
+  {
+    id: 'elephant-orphan-bond',
+    type: 'passive',
+    category: 'social',
+    narrativeText:
+      "The orphan walks beside you now with the quiet confidence of a calf who knows it belongs. It has learned your routes, your rumbles, the particular way you strip bark from a baobab. When the herd moves, it stays close to your flank, its small trunk sometimes reaching up to touch your cheek in a gesture that needs no translation. You did not birth this calf, but it is yours in every way that matters.",
+    statEffects: [
+      { stat: StatId.TRA, amount: -6, label: '-TRA' },
+      { stat: StatId.WIS, amount: 5, label: '+WIS' },
+    ],
+    consequences: [
+      { type: 'remove_flag', flag: 'adopted-orphan' },
+    ],
+    conditions: [
+      { type: 'sex', sex: 'female' },
+      { type: 'has_flag', flag: 'adopted-orphan' },
+    ],
+    weight: 25,
+    cooldown: 8,
+    tags: ['social', 'herd'],
+  },
 ];

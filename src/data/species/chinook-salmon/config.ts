@@ -55,6 +55,20 @@ export const CHINOOK_SALMON_CONFIG: SpeciesConfig = {
     deathChanceMax: 0.85,
   },
 
+  seasonalWeight: {
+    spring: 0.8,    // Good ocean feeding
+    summer: 1.0,    // Peak ocean feeding
+    autumn: -0.5,   // Migration drain (if migrating)
+    winter: -0.3,   // Reduced ocean food
+    foragingBonus: 0.2,
+  },
+
+  agePhases: [
+    { id: 'smolt', label: 'Smolt', minAge: 0, maxAge: 12, statModifiers: [{ stat: StatId.ADV, amount: 10 }] },
+    { id: 'ocean-juvenile', label: 'Ocean Juvenile', minAge: 12, maxAge: 36, statModifiers: [{ stat: StatId.ADV, amount: 3 }] },
+    { id: 'adult', label: 'Adult', minAge: 36 },
+  ],
+
   reproduction: {
     type: 'semelparous',
     spawningMinAge: 36,
