@@ -1,7 +1,11 @@
 import { useGameStore } from '../../store/gameStore';
 import styles from '../../styles/header.module.css';
 
-export function TurnHeader() {
+interface Props {
+  onToggleHistory?: () => void;
+}
+
+export function TurnHeader({ onToggleHistory }: Props) {
   const time = useGameStore((s) => s.time);
   const config = useGameStore((s) => s.speciesBundle.config);
   const animal = useGameStore((s) => s.animal);
@@ -21,7 +25,26 @@ export function TurnHeader() {
           </span>
         )}
       </span>
-      <span className={styles.turn}>Turn {time.turn}</span>
+      <span className={styles.turn}>
+        {onToggleHistory && (
+          <button
+            onClick={onToggleHistory}
+            style={{
+              background: 'none',
+              border: '1px solid var(--color-border)',
+              borderRadius: 4,
+              padding: '2px 8px',
+              cursor: 'pointer',
+              fontFamily: 'var(--font-ui)',
+              fontSize: '0.75rem',
+              marginRight: 10,
+            }}
+          >
+            History
+          </button>
+        )}
+        Turn {time.turn}
+      </span>
     </div>
   );
 }

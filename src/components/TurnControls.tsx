@@ -1,7 +1,7 @@
 import { useGameEngine } from '../hooks/useGameEngine';
 
 export function TurnControls() {
-  const { startTurn, confirmChoices, hasPendingChoices } = useGameEngine();
+  const { confirmChoices, hasPendingChoices } = useGameEngine();
 
   return (
     <div style={{
@@ -23,7 +23,6 @@ export function TurnControls() {
       <button
         onClick={() => {
           confirmChoices();
-          startTurn();
         }}
         style={{
           padding: '10px 24px',

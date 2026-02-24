@@ -1,6 +1,12 @@
 import { useCallback } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { generateTurnEvents, resolveTurn } from '../engine/TurnProcessor';
+import { StatId, computeEffectiveValue } from '../types/stats';
+import { saveGame } from '../store/persistence';
+import { checkAchievements } from '../engine/AchievementChecker';
+import { useAchievementStore } from '../store/achievementStore';
+import { introduceNPC } from '../engine/NPCSystem';
+import { tickStorylines } from '../engine/StorylineSystem';
 
 export function useGameEngine() {
   const store = useGameStore();
@@ -9,12 +15,55 @@ export function useGameEngine() {
     store.advanceTurn();
 
     const state = useGameStore.getState();
-    const events = generateTurnEvents(state);
-    store.setEvents(events);
+
+    // Introduce NPCs on early turns if none exist yet
+    if (state.npcs.length === 0 && state.time.turn >= 3) {
+      const npcs = [...state.npcs];
+      for (const type of ['rival', 'ally', 'predator'] as const) {
+        const npc = introduceNPC(state.animal.speciesId, type, state.time.turn, npcs, state.rng);
+        if (npc) npcs.push(npc);
+      }
+      if (npcs.length > 0) {
+        store.setNPCs(npcs);
+      }
+    }
+
+    const currentState = useGameStore.getState();
+    const events = generateTurnEvents(currentState);
+
+    // Tick storylines and inject storyline events
+    const storylineResult = tickStorylines({
+      animal: currentState.animal,
+      time: currentState.time,
+      behavior: currentState.behavioralSettings,
+      config: currentState.speciesBundle.config,
+      rng: currentState.rng,
+      npcs: currentState.npcs,
+      activeStorylines: currentState.activeStorylines,
+    });
+
+    const allStorylines = [...storylineResult.updatedStorylines, ...storylineResult.newStorylines];
+    store.setActiveStorylines(allStorylines);
+
+    // Merge storyline events with generated events
+    const allEvents = [...events, ...storylineResult.injectedEvents];
+    store.setEvents(allEvents);
+
+    // Record species played for achievements
+    useAchievementStore.getState().recordSpeciesPlayed(useGameStore.getState().animal.speciesId);
+
+    // Auto-save after events are generated (state is complete)
+    saveGame(useGameStore.getState());
   }, [store]);
 
   const confirmChoices = useCallback(() => {
     const state = useGameStore.getState();
+
+    // Capture pre-resolution stat snapshot
+    const preStats: Record<StatId, number> = {} as Record<StatId, number>;
+    for (const id of Object.values(StatId)) {
+      preStats[id] = computeEffectiveValue(state.animal.stats[id]);
+    }
 
     // Resolve all event effects
     const result = resolveTurn(state);
@@ -29,9 +78,31 @@ export function useGameEngine() {
       store.applyConsequence(consequence);
     }
 
+    // Compute stat deltas after effects are applied
+    const postState = useGameStore.getState();
+    const statDelta: Record<StatId, number> = {} as Record<StatId, number>;
+    for (const id of Object.values(StatId)) {
+      statDelta[id] = computeEffectiveValue(postState.animal.stats[id]) - preStats[id];
+    }
+    result.turnResult.statDelta = statDelta;
+
+    // Also compute actual weight change including seasonal
+    result.turnResult.weightChange = result.turnResult.weightChange;
+
+    // Show the turn results screen
+    store.setTurnResult(result.turnResult);
+
     // Check for death conditions
     checkDeathConditions();
+
+    // Check achievements after turn
+    checkAchievements(useGameStore.getState(), 'turn');
   }, [store]);
+
+  const dismissResults = useCallback(() => {
+    store.dismissResults();
+    startTurn();
+  }, [store, startTurn]);
 
   const checkDeathConditions = useCallback(() => {
     const state = useGameStore.getState();
@@ -42,6 +113,7 @@ export function useGameEngine() {
     // Already dead from a death consequence (predator, etc.)
     if (!animal.alive) {
       store.killAnimal(animal.causeOfDeath || 'Unknown cause');
+      checkAchievements(useGameStore.getState(), 'death');
       return;
     }
 
@@ -93,7 +165,9 @@ export function useGameEngine() {
   return {
     startTurn,
     confirmChoices,
+    dismissResults,
     phase: store.phase,
     hasPendingChoices: store.pendingChoices.length > 0,
+    showingResults: store.showingResults,
   };
 }

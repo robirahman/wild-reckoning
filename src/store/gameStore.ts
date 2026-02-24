@@ -5,9 +5,14 @@ import type { BehavioralSettings } from '../types/behavior';
 import type { ResolvedEvent, StatEffect, Consequence } from '../types/events';
 import type { StatModifier } from '../types/stats';
 import type { ActiveParasite, ActiveInjury } from '../types/health';
+import type { NPC } from '../types/npc';
+import type { ActiveStoryline } from '../types/storyline';
 import type { ReproductionState } from '../types/reproduction';
 import type { SpeciesDataBundle } from '../types/speciesConfig';
 import type { SpeciesConfig } from '../types/speciesConfig';
+import type { TurnResult } from '../types/turnResult';
+import type { Difficulty } from '../types/difficulty';
+import { DIFFICULTY_PRESETS } from '../types/difficulty';
 import { StatId } from '../types/stats';
 import { DEFAULT_BEHAVIORAL_SETTINGS } from '../types/behavior';
 import { INITIAL_ITEROPAROUS_STATE, INITIAL_SEMELPAROUS_STATE } from '../types/reproduction';
@@ -17,11 +22,15 @@ import { createRng, type Rng } from '../engine/RandomUtils';
 import { computeEffectiveValue } from '../types/stats';
 import { tickReproduction, determineFawnCount, createFawns } from '../engine/ReproductionSystem';
 import { getSpeciesBundle } from '../data/species';
+import { loadGame, deleteSaveGame } from './persistence';
 
 export type GamePhase = 'menu' | 'playing' | 'dead';
 
 export interface TurnRecord {
   turn: number;
+  month: string;
+  year: number;
+  season: string;
   events: ResolvedEvent[];
   statSnapshot: Record<StatId, number>;
 }
@@ -31,6 +40,7 @@ export interface GameState {
   phase: GamePhase;
   rng: Rng;
   seed: number;
+  difficulty: Difficulty;
 
   // Species
   speciesBundle: SpeciesDataBundle;
@@ -46,12 +56,25 @@ export interface GameState {
   pendingChoices: string[];
   revocableChoices: Record<string, string>;
 
+  // NPCs
+  npcs: NPC[];
+
+  // Storylines
+  activeStorylines: ActiveStoryline[];
+
+  // Turn results (shown between turns)
+  turnResult: TurnResult | null;
+  showingResults: boolean;
+
+  // Tutorial
+  tutorialStep: number | null;
+
   // History
   turnHistory: TurnRecord[];
   eventCooldowns: Record<string, number>;
 
   // Actions
-  startGame: (speciesId: string, backstory: Backstory, sex: 'male' | 'female') => void;
+  startGame: (speciesId: string, backstory: Backstory, sex: 'male' | 'female', difficulty?: Difficulty) => void;
   setEvents: (events: ResolvedEvent[]) => void;
   makeChoice: (eventId: string, choiceId: string) => void;
   applyStatEffects: (effects: StatEffect[]) => void;
@@ -59,6 +82,14 @@ export interface GameState {
   advanceTurn: () => void;
   updateBehavioralSetting: (key: keyof BehavioralSettings, value: 1 | 2 | 3 | 4 | 5) => void;
   killAnimal: (cause: string) => void;
+  setTurnResult: (result: TurnResult) => void;
+  dismissResults: () => void;
+  resumeGame: () => boolean;
+  returnToMenu: () => void;
+  setNPCs: (npcs: NPC[]) => void;
+  setActiveStorylines: (storylines: ActiveStoryline[]) => void;
+  advanceTutorial: () => void;
+  skipTutorial: () => void;
 }
 
 function createInitialAnimal(config: SpeciesConfig, backstory: Backstory, sex: 'male' | 'female'): AnimalState {
@@ -110,16 +141,24 @@ export const useGameStore = create<GameState>((set, get) => {
     currentEvents: [],
     pendingChoices: [],
     revocableChoices: {},
+    difficulty: 'normal' as Difficulty,
+    npcs: [],
+    activeStorylines: [],
+    tutorialStep: null,
+    turnResult: null,
+    showingResults: false,
     turnHistory: [],
     eventCooldowns: {},
 
-    startGame(speciesId, backstory, sex) {
+    startGame(speciesId, backstory, sex, difficulty) {
       const newSeed = Date.now();
       const bundle = getSpeciesBundle(speciesId);
+      const tutorialSeen = localStorage.getItem('wild-reckoning-tutorial-seen') === 'true';
       set({
         phase: 'playing',
         seed: newSeed,
         rng: createRng(newSeed),
+        difficulty: difficulty ?? 'normal',
         speciesBundle: bundle,
         animal: createInitialAnimal(bundle.config, backstory, sex),
         time: createInitialTime(5, 1),
@@ -128,6 +167,11 @@ export const useGameStore = create<GameState>((set, get) => {
         currentEvents: [],
         pendingChoices: [],
         revocableChoices: {},
+        npcs: [],
+        activeStorylines: [],
+        tutorialStep: tutorialSeen ? null : 0,
+        turnResult: null,
+        showingResults: false,
         turnHistory: [],
         eventCooldowns: {},
       });
@@ -350,6 +394,7 @@ export const useGameStore = create<GameState>((set, get) => {
     advanceTurn() {
       const state = get();
       const config = state.speciesBundle.config;
+      const difficultyMult = DIFFICULTY_PRESETS[state.difficulty];
 
       const newTime = advanceTime(state.time);
       let tickedStats = tickModifiers(state.animal.stats);
@@ -382,8 +427,16 @@ export const useGameStore = create<GameState>((set, get) => {
       }
 
       // Seasonal weight: passive gain/loss based on season and foraging behavior
-      const seasonalWeightChange = config.seasonalWeight[newTime.season]
+      let seasonalWeightChange = config.seasonalWeight[newTime.season]
         + config.seasonalWeight.foragingBonus * state.behavioralSettings.foraging;
+
+      // Apply difficulty multipliers to seasonal weight change
+      if (seasonalWeightChange < 0) {
+        seasonalWeightChange *= difficultyMult.weightLossFactor;
+      } else {
+        seasonalWeightChange *= difficultyMult.weightGainFactor;
+      }
+
       const newWeight = Math.max(
         config.weight.minFloor,
         state.animal.weight + seasonalWeightChange
@@ -453,11 +506,18 @@ export const useGameStore = create<GameState>((set, get) => {
         }
       }
 
-      // Save turn to history
+      // Save turn to history with actual stat snapshot
+      const statSnapshot = {} as Record<StatId, number>;
+      for (const id of Object.values(StatId)) {
+        statSnapshot[id] = computeEffectiveValue(state.animal.stats[id]);
+      }
       const record: TurnRecord = {
         turn: state.time.turn,
+        month: state.time.month,
+        year: state.time.year,
+        season: state.time.season,
         events: state.currentEvents,
-        statSnapshot: {} as Record<StatId, number>,
+        statSnapshot,
       };
 
       set({
@@ -476,6 +536,7 @@ export const useGameStore = create<GameState>((set, get) => {
         turnHistory: [...state.turnHistory, record],
         eventCooldowns: newCooldowns,
       });
+
     },
 
     updateBehavioralSetting(key, value) {
@@ -488,8 +549,62 @@ export const useGameStore = create<GameState>((set, get) => {
       });
     },
 
+    setTurnResult(result) {
+      set({ turnResult: result, showingResults: true });
+    },
+
+    dismissResults() {
+      set({ turnResult: null, showingResults: false });
+    },
+
+    setNPCs(npcs) {
+      set({ npcs });
+    },
+
+    setActiveStorylines(storylines) {
+      set({ activeStorylines: storylines });
+    },
+
+    advanceTutorial() {
+      const state = get();
+      if (state.tutorialStep === null) return;
+      const next = state.tutorialStep + 1;
+      if (next >= 4) {
+        // Tutorial complete
+        localStorage.setItem('wild-reckoning-tutorial-seen', 'true');
+        set({ tutorialStep: null });
+      } else {
+        set({ tutorialStep: next });
+      }
+    },
+
+    skipTutorial() {
+      localStorage.setItem('wild-reckoning-tutorial-seen', 'true');
+      set({ tutorialStep: null });
+    },
+
+    resumeGame() {
+      const saved = loadGame();
+      if (!saved || saved.phase !== 'playing') return false;
+      set(saved);
+      return true;
+    },
+
+    returnToMenu() {
+      deleteSaveGame();
+      const newSeed = Date.now();
+      set({
+        phase: 'menu',
+        seed: newSeed,
+        rng: createRng(newSeed),
+        turnResult: null,
+        showingResults: false,
+      });
+    },
+
     killAnimal(cause) {
       const state = get();
+      deleteSaveGame();
 
       if (state.reproduction.type === 'iteroparous') {
         // Kill dependent offspring if the mother dies

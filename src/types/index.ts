@@ -6,3 +6,6 @@ export * from './world';
 export * from './behavior';
 export * from './reproduction';
 export * from './speciesConfig';
+export * from './difficulty';
+export * from './npc';
+export * from './storyline';

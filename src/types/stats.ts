@@ -48,6 +48,19 @@ export const STAT_NAMES: Record<StatId, string> = {
   [StatId.STR]: 'STResses',
 };
 
+/** Descriptions for each stat, shown in tooltips */
+export const STAT_DESCRIPTIONS: Record<StatId, string> = {
+  [StatId.IMM]: 'Pressure on your immune system from parasites, disease, and environmental pathogens. Higher means more vulnerable to illness.',
+  [StatId.CLI]: 'Sensitivity to weather and temperature extremes. Higher means more affected by harsh conditions.',
+  [StatId.HOM]: 'Disruption to your body\'s internal balance from exertion, starvation, and physical strain. Higher means more physically stressed.',
+  [StatId.TRA]: 'Accumulated psychological trauma from predator encounters, injury, and loss. Higher means more fear and anxiety.',
+  [StatId.ADV]: 'General adversity and hardship pressure. Higher means life has been harder recently.',
+  [StatId.NOV]: 'Stress from unfamiliar situations and changes. Higher means more disoriented by new experiences.',
+  [StatId.WIS]: 'Learned survival knowledge from experience. Higher means better instincts and decision-making.',
+  [StatId.HEA]: 'Overall physical vitality and resilience. Higher means a stronger, healthier body.',
+  [StatId.STR]: 'Aggregate stress level across all systems. Higher means more total stress on your body and mind.',
+};
+
 /** Display level derived from numeric value (0-100) */
 export type StatLevel = 'Low' | '- Medium' | 'Medium' | '+ Medium' | 'High' | '+ High';
 

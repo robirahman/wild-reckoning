@@ -1,6 +1,8 @@
 import type { GameState } from '../store/gameStore';
 import type { ResolvedEvent, StatEffect, Consequence } from '../types/events';
+import type { EventOutcome, TurnResult } from '../types/turnResult';
 import { StatId, computeEffectiveValue } from '../types/stats';
+import { DIFFICULTY_PRESETS } from '../types/difficulty';
 import { generateEvents } from './EventGenerator';
 import { tickHealth } from './HealthSystem';
 import { computeBuckWinProbability, determineFawnCount } from './ReproductionSystem';
@@ -14,50 +16,71 @@ export function generateTurnEvents(state: GameState): ResolvedEvent[] {
     rng: state.rng,
     events: state.speciesBundle.events,
     config: state.speciesBundle.config,
+    difficulty: state.difficulty,
+    npcs: state.npcs,
   });
 }
 
 /**
  * Called after player has made all choices for the turn.
  * Resolves all event effects, processes death chances, buck competition, and ticks health.
+ * Returns both the flat effect arrays (for store application) and a TurnResult (for display).
  */
 export function resolveTurn(state: GameState): {
   statEffects: StatEffect[];
   consequences: Consequence[];
   healthNarratives: string[];
   animal: typeof state.animal;
+  turnResult: TurnResult;
 } {
   const config = state.speciesBundle.config;
   const predVuln = config.predationVulnerability;
   const allStatEffects: StatEffect[] = [];
   const allConsequences: Consequence[] = [];
+  const eventOutcomes: EventOutcome[] = [];
+
+  // Capture pre-resolution stat snapshot for delta computation
+  const preStats: Record<StatId, number> = {} as Record<StatId, number>;
+  for (const id of Object.values(StatId)) {
+    preStats[id] = computeEffectiveValue(state.animal.stats[id]);
+  }
 
   for (const event of state.currentEvents) {
+    const eventEffects: StatEffect[] = [];
+    const eventConsequences: Consequence[] = [];
+    let deathRollSurvived: boolean | undefined;
+    let deathRollProbability: number | undefined;
+    let choiceLabel: string | undefined;
+    let choiceId: string | undefined;
+    let narrativeResult: string | undefined;
+
     // Apply event's own stat effects and consequences
-    allStatEffects.push(...event.definition.statEffects);
+    eventEffects.push(...event.definition.statEffects);
     if (event.definition.consequences) {
-      allConsequences.push(...event.definition.consequences);
+      eventConsequences.push(...event.definition.consequences);
     }
 
     // Apply sub-event effects
     for (const sub of event.triggeredSubEvents) {
-      allStatEffects.push(...sub.statEffects);
-      allConsequences.push(...sub.consequences);
+      eventEffects.push(...sub.statEffects);
+      eventConsequences.push(...sub.consequences);
     }
 
     // Apply chosen choice effects
     if (event.choiceMade && event.definition.choices) {
       const choice = event.definition.choices.find((c) => c.id === event.choiceMade);
       if (choice) {
-        allStatEffects.push(...choice.statEffects);
-        allConsequences.push(...choice.consequences);
+        choiceLabel = choice.label;
+        choiceId = choice.id;
+        narrativeResult = choice.narrativeResult;
+        eventEffects.push(...choice.statEffects);
+        eventConsequences.push(...choice.consequences);
 
-        // ── Death chance from predator choices ──
+        // Death chance from predator choices
         if (choice.deathChance) {
           const dc = choice.deathChance;
           let prob = dc.probability;
 
-          // Adjust by stat modifiers
           if (dc.statModifiers) {
             for (const mod of dc.statModifiers) {
               const statVal = computeEffectiveValue(state.animal.stats[mod.stat]);
@@ -65,26 +88,46 @@ export function resolveTurn(state: GameState): {
             }
           }
 
-          // Adjust by injuries and parasites
           prob += state.animal.injuries.length * predVuln.injuryProbIncrease;
           prob += state.animal.parasites.length * predVuln.parasiteProbIncrease;
 
-          // Underweight = more vulnerable
           if (state.animal.weight < predVuln.underweightThreshold) {
             prob += (predVuln.underweightThreshold - state.animal.weight) * predVuln.underweightFactor;
           }
 
+          // Apply difficulty multiplier to death chance
+          prob *= DIFFICULTY_PRESETS[state.difficulty ?? 'normal'].deathChanceFactor;
+
           prob = Math.max(predVuln.deathChanceMin, Math.min(predVuln.deathChanceMax, prob));
+          deathRollProbability = prob;
 
           if (state.rng.chance(prob)) {
-            allConsequences.push({ type: 'death', cause: dc.cause });
+            eventConsequences.push({ type: 'death', cause: dc.cause });
+            deathRollSurvived = false;
+          } else {
+            deathRollSurvived = true;
           }
         }
       }
     }
+
+    allStatEffects.push(...eventEffects);
+    allConsequences.push(...eventConsequences);
+
+    eventOutcomes.push({
+      eventId: event.definition.id,
+      eventNarrative: event.resolvedNarrative,
+      choiceLabel,
+      choiceId,
+      narrativeResult,
+      statEffects: eventEffects,
+      consequences: eventConsequences,
+      deathRollSurvived,
+      deathRollProbability,
+    });
   }
 
-  // ── Buck competition resolution (iteroparous species with male competition) ──
+  // Buck competition resolution
   if (config.reproduction.type === 'iteroparous' && config.reproduction.maleCompetition.enabled) {
     const maleComp = config.reproduction.maleCompetition;
 
@@ -100,12 +143,10 @@ export function resolveTurn(state: GameState): {
       );
 
       if (state.rng.chance(winProb)) {
-        // Won the competition — sire offspring
         const offspringCount = determineFawnCount(state.animal.weight, hea, state.rng);
         allConsequences.push({ type: 'sire_offspring', offspringCount });
         allConsequences.push({ type: 'set_flag', flag: maleComp.matedFlag });
       } else {
-        // Lost — may be injured
         if (state.rng.chance(maleComp.lossInjuryChance)) {
           const bodyPart = state.rng.pick(maleComp.lossInjuryBodyParts);
           allConsequences.push({
@@ -117,18 +158,55 @@ export function resolveTurn(state: GameState): {
         }
       }
 
-      // Always remove the challenge flag
       allConsequences.push({ type: 'remove_flag', flag: maleComp.challengeFlag });
     }
   }
 
   // Tick health system
-  const healthResult = tickHealth(state.animal, state.rng, state.speciesBundle.parasites);
+  const healthResult = tickHealth(state.animal, state.rng, state.speciesBundle.parasites, state.difficulty);
+
+  // Build TurnResult for display
+  const newParasites: string[] = [];
+  const newInjuries: string[] = [];
+  for (const c of allConsequences) {
+    if (c.type === 'add_parasite') {
+      const def = state.speciesBundle.parasites[c.parasiteId];
+      newParasites.push(def?.name ?? c.parasiteId);
+    } else if (c.type === 'add_injury') {
+      const def = state.speciesBundle.injuries[c.injuryId];
+      newInjuries.push(def?.name ?? c.injuryId);
+    }
+  }
+
+  // Compute weight change from consequences
+  let weightChange = 0;
+  for (const c of allConsequences) {
+    if (c.type === 'modify_weight') {
+      weightChange += c.amount;
+    }
+  }
+
+  // Stat delta will be computed after effects are applied (placeholder zeros here,
+  // the caller will compute the real delta after applying effects)
+  const statDelta: Record<StatId, number> = {} as Record<StatId, number>;
+  for (const id of Object.values(StatId)) {
+    statDelta[id] = 0;
+  }
+
+  const turnResult: TurnResult = {
+    eventOutcomes,
+    healthNarratives: healthResult.narratives,
+    weightChange,
+    newParasites,
+    newInjuries,
+    statDelta,
+  };
 
   return {
     statEffects: allStatEffects,
     consequences: allConsequences,
     healthNarratives: healthResult.narratives,
     animal: healthResult.animal,
+    turnResult,
   };
 }

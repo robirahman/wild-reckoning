@@ -38,3 +38,34 @@
   padding: var(--space-sm) var(--space-lg);
   border-top: 1px solid var(--color-border);
 }
+
+/* Mobile: stack vertically */
+@media (max-width: 768px) {
+  .gameLayout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto auto;
+    grid-template-areas:
+      "header"
+      "events"
+      "sidebar"
+      "behavior";
+  }
+
+  .events {
+    border-right: none;
+    border-bottom: 1px solid var(--color-border);
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .sidebar {
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .header {
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .behavior {
+    padding: var(--space-sm) var(--space-md);
+  }
+}

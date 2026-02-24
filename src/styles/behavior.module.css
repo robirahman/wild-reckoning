@@ -86,3 +86,21 @@
   color: var(--color-panel-bg);
   border-color: var(--color-text);
 }
+
+@media (max-width: 768px) {
+  .behaviorBar {
+    justify-content: center;
+  }
+
+  .settingButton {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  .sliderDot {
+    width: 36px;
+    height: 36px;
+    font-size: 0.9rem;
+  }
+}

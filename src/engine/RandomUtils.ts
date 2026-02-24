@@ -14,6 +14,16 @@ export function createRng(seed: number) {
   }
 
   return {
+    /** Returns the internal PRNG state for serialization */
+    getState(): number {
+      return state;
+    },
+
+    /** Restores the internal PRNG state from a previous save */
+    setState(s: number) {
+      state = s;
+    },
+
     /** Returns a float in [0, 1) */
     random: next,
 

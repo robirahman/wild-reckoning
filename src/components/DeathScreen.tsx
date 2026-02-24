@@ -1,4 +1,6 @@
 import { useGameStore } from '../store/gameStore';
+import { deleteSaveGame } from '../store/persistence';
+import { AchievementList } from './achievements/AchievementList';
 import type { Offspring } from '../types/reproduction';
 
 function getIteroparousFitnessRating(fitness: number): { label: string; color: string } {
@@ -207,8 +209,13 @@ export function DeathScreen() {
         <div><strong>Events experienced:</strong> {turnHistory.length} turns</div>
       </div>
 
+      <AchievementList />
+
       <button
-        onClick={() => window.location.reload()}
+        onClick={() => {
+          deleteSaveGame();
+          window.location.reload();
+        }}
         style={{
           padding: '12px 32px',
           fontSize: '1rem',

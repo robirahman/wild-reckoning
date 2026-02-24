@@ -1,0 +1,204 @@
+.resultsScreen {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: var(--space-lg);
+}
+
+.resultsTitle {
+  font-family: var(--font-ui);
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: var(--space-lg);
+  text-align: center;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Event outcome cards */
+.outcomeCard {
+  margin-bottom: var(--space-lg);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.outcomeCard:last-child {
+  border-bottom: none;
+}
+
+.outcomeNarrative {
+  font-family: var(--font-narrative);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-sm);
+}
+
+.outcomeChoice {
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: var(--space-sm);
+}
+
+.outcomeResult {
+  font-family: var(--font-narrative);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: var(--space-sm);
+}
+
+.outcomeBadges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin-top: var(--space-xs);
+}
+
+.badge {
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+.badgePositive {
+  background: var(--color-positive-light);
+  color: var(--color-positive);
+}
+
+.badgeNegative {
+  background: var(--color-negative-light);
+  color: var(--color-negative);
+}
+
+.badgeNeutral {
+  background: #e8e8e8;
+  color: var(--color-text-muted);
+}
+
+.badgeSurvived {
+  background: var(--color-positive-light);
+  color: var(--color-positive);
+  border: 1px solid var(--color-positive);
+}
+
+.badgeDeath {
+  background: var(--color-negative-light);
+  color: var(--color-danger);
+  border: 1px solid var(--color-danger);
+}
+
+/* Health narratives section */
+.healthSection {
+  margin-top: var(--space-lg);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-border);
+}
+
+.healthTitle {
+  font-family: var(--font-ui);
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-bottom: var(--space-sm);
+}
+
+.healthNarrative {
+  font-family: var(--font-narrative);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-xs);
+}
+
+/* Stat summary section */
+.statSummary {
+  margin-top: var(--space-lg);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-border);
+}
+
+.statSummaryTitle {
+  font-family: var(--font-ui);
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-bottom: var(--space-sm);
+}
+
+.statDeltaGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-xs) var(--space-md);
+}
+
+.statDeltaItem {
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.statDeltaName {
+  font-weight: 600;
+}
+
+.statDeltaUp {
+  color: var(--color-positive);
+  font-weight: 700;
+}
+
+.statDeltaDown {
+  color: var(--color-negative);
+  font-weight: 700;
+}
+
+.statDeltaFlat {
+  color: var(--color-text-muted);
+}
+
+/* Continue button */
+.continueWrapper {
+  margin-top: var(--space-xl);
+  display: flex;
+  justify-content: center;
+}
+
+.continueButton {
+  padding: 10px 32px;
+  font-size: 0.95rem;
+  font-family: var(--font-ui);
+  font-weight: 600;
+  border: 2px solid var(--color-text);
+  border-radius: 4px;
+  background: var(--color-text);
+  color: var(--color-panel-bg);
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.continueButton:hover {
+  opacity: 0.85;
+}
+
+@media (max-width: 768px) {
+  .resultsScreen {
+    padding: var(--space-md);
+  }
+
+  .statDeltaGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .continueButton {
+    min-height: 44px;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .statDeltaGrid {
+    grid-template-columns: 1fr;
+  }
+}

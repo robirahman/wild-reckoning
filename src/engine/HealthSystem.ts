@@ -3,6 +3,8 @@ import type { ActiveParasite, ActiveInjury, ParasiteDefinition } from '../types/
 import type { StatModifier } from '../types/stats';
 import type { Rng } from './RandomUtils';
 import { addModifier, removeModifiersBySource } from './StatCalculator';
+import type { Difficulty } from '../types/difficulty';
+import { DIFFICULTY_PRESETS } from '../types/difficulty';
 
 interface HealthTickResult {
   animal: AnimalState;
@@ -14,6 +16,7 @@ export function tickHealth(
   animal: AnimalState,
   rng: Rng,
   parasiteDefs: Record<string, ParasiteDefinition>,
+  difficulty?: Difficulty,
 ): HealthTickResult {
   const narratives: string[] = [];
   let updatedAnimal = { ...animal };
@@ -40,7 +43,8 @@ export function tickHealth(
 
     // Check for stage progression
     if (turnsAtStage >= stage.turnDuration.min) {
-      if (rng.chance(stage.progressionChance) && newStage < def.stages.length - 1) {
+      const parasiteFactor = DIFFICULTY_PRESETS[difficulty ?? 'normal'].parasiteProgressionFactor;
+      if (rng.chance(stage.progressionChance * parasiteFactor) && newStage < def.stages.length - 1) {
         newStage += 1;
         turnsAtStage = 0;
         narratives.push(

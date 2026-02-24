@@ -9,21 +9,22 @@
 
 ## Narrative & Atmosphere
 
-- [ ] **Persistent NPCs** — Track named herd members, a recurring rival buck, a specific wolf pack. Store NPC state in the game store. Reference NPCs by name in events. NPC deaths trigger grief/social events.
-- [ ] **Multi-turn storylines** — Create event chains that span 4-6 turns: drought arcs, poacher camp arcs, relationship arcs with a specific mate. Use flags to track arc progress and fire sequential events.
-- [ ] **Illustrations** — Add images to events by category. Generate or source illustrations for foraging, predator, seasonal, social, health, and reproduction event types. Display in the event card UI.
+- [x] **Persistent NPCs** — Track named herd members, a recurring rival buck, a specific wolf pack. Store NPC state in the game store. Reference NPCs by name in events via template variables. NPC names auto-introduced after turn 3.
+- [x] **Multi-turn storylines** — Event chains that span multiple turns: drought arcs, poacher camp arcs, herd leadership arcs, upstream migration challenges. Flag-based progression with configurable delays between steps.
+- [x] **Illustrations** — Infrastructure for event illustrations by category and tags. Image picker integrated into event resolution. Drop images into `public/images/events/{category}/` and register in `src/data/illustrations.ts`.
 
 ## UI/UX
 
-- [ ] **Stat trend indicators** — Show arrows or sparklines next to each stat showing the trend over the last 3-5 turns. Store stat snapshots in turn history and compute deltas.
-- [ ] **Event history log** — Add a scrollable timeline panel showing past turns with their events, choices made, and stat changes. Accessible from the main game screen.
-- [ ] **Tooltips on stats** — Hovering over a stat shows: full name, description, current modifiers contributing to it (parasites, injuries, events), and whether higher is good or bad.
-- [ ] **Tutorial / first-turn guidance** — Add an optional tutorial overlay for the first 3 turns explaining: what stats mean, how choices work, what behavioral settings do, and what the goal is.
-- [ ] **Mobile layout** — Make the game responsive for phone screens. Stack panels vertically, adjust font sizes, make buttons touch-friendly.
+- [x] **Choice outcome clarity** — Turn results screen between turns showing per-event outcomes, narrative results, stat effect badges, consequence summaries, death roll survival info, and health narratives.
+- [x] **Stat trend indicators** — Trend arrows next to each stat showing whether it's rising, falling, or stable over the last 4 turns. Respects stat polarity (stress stats show reversed colors).
+- [x] **Event history log** — Slide-out panel (toggled via "History" button in header) showing past turns in reverse chronological order. Each entry expandable to show events and choices made.
+- [x] **Tooltips on stats** — Hover tooltip showing full name, description, polarity, and all active modifiers with sources and amounts.
+- [x] **Tutorial / first-turn guidance** — 4-step tutorial overlay on first game explaining core mechanics. Skippable, with "Don't show again" persistence via localStorage.
+- [x] **Mobile layout** — Responsive at 768px and 480px breakpoints. Vertical stack, larger touch targets, compact stats and headers.
 
 ## Systems
 
-- [ ] **Save/load** — Persist game state to localStorage. Auto-save each turn. Resume button on start screen if a save exists. Zustand persist middleware.
-- [ ] **Difficulty modes** — Easy (lower death chances, slower stat decay, more foraging), Normal (current), Hard (more predators, harsher winters, faster parasite progression). Difficulty multipliers in the species config.
-- [ ] **Achievement/unlock system** — Track milestones: "Survive 5 winters," "Reach fitness 3+," "Complete salmon migration without injury," "Survive to old age." Show on start/death screens. Persist to localStorage.
-- [ ] **Sound design** — Ambient seasonal sounds, music shifts, audio stings on predator events and death. Use Web Audio API or Howler.js.
+- [x] **Save/load** — Auto-save to localStorage after each turn (with events populated). Resume button on start screen. Save deleted on death. Handles Set<string> serialization and Rng state preservation.
+- [x] **Difficulty modes** — Easy/Normal/Hard with multipliers for death chance, weight loss/gain, parasite progression, and predator encounter rate. Selector on start screen.
+- [x] **Achievement/unlock system** — 15 achievements tracked persistently across sessions. Toast popup on unlock. Achievement list on start and death screens. Includes survival milestones, fitness goals, species diversity, and difficulty challenges.
+- [x] **Sound design** — AudioManager singleton using Web Audio API. Ambient loops per season, SFX stings per event category/tag. Volume controls and mute persistence. Drop audio files into `public/audio/` and register in `src/audio/AudioAssets.ts`.

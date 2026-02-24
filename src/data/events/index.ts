@@ -104,6 +104,7 @@ export const allEvents: GameEvent[] = [
       {
         id: 'eat-crops',
         label: 'Feed on the crops',
+        narrativeResult: 'You gorge yourself on the soybeans, gaining valuable weight. The risk gnaws at you — but the food is too good to pass up.',
         statEffects: [
           { stat: StatId.ADV, amount: 5, label: '+ADV' },
         ],
@@ -117,6 +118,7 @@ export const allEvents: GameEvent[] = [
       {
         id: 'avoid-crops',
         label: 'Stay in the forest',
+        narrativeResult: 'You turn away from the field and melt back into the trees. Safer, but hungrier.',
         statEffects: [
           { stat: StatId.TRA, amount: -2, label: '-TRA' },
         ],
@@ -169,6 +171,7 @@ export const allEvents: GameEvent[] = [
       {
         id: 'flee-wolves',
         label: 'Run immediately',
+        narrativeResult: 'You explode into motion, crashing through the underbrush. Branches whip your face as you run. The sounds of pursuit fade behind you — you outran them, but the sprint cost you dearly.',
         statEffects: [
           { stat: StatId.HOM, amount: 8, label: '+HOM' },
         ],
@@ -187,6 +190,7 @@ export const allEvents: GameEvent[] = [
         id: 'freeze-wolves',
         label: 'Freeze and hope they pass',
         description: 'Risky if they catch your scent',
+        narrativeResult: 'You lock every muscle in your body and stop breathing. The wolves pass within yards of you, their noses working the air. After what feels like an eternity, they move on. Your heart hammers so loudly you wonder how they missed it.',
         statEffects: [
           { stat: StatId.TRA, amount: 5, label: '+TRA' },
         ],
@@ -237,6 +241,7 @@ export const allEvents: GameEvent[] = [
       {
         id: 'flee-deep-forest',
         label: 'Flee deeper into the forest',
+        narrativeResult: 'You bolt into the dense timber, putting as much distance as you can between yourself and the gunfire. The shots grow fainter. You find a thicket of cedar and collapse, sides heaving.',
         statEffects: [
           { stat: StatId.HOM, amount: 5, label: '+HOM' },
         ],
@@ -254,6 +259,7 @@ export const allEvents: GameEvent[] = [
       {
         id: 'hunker-down',
         label: 'Hide where you are',
+        narrativeResult: 'You press yourself flat against the ground behind a fallen log, every sense straining. Boots crunch through leaves nearby. You do not breathe. Eventually, the sounds move on.',
         statEffects: [
           { stat: StatId.TRA, amount: 5, label: '+TRA' },
         ],
@@ -288,6 +294,7 @@ export const allEvents: GameEvent[] = [
       {
         id: 'bolt-cougar',
         label: 'Bolt — run as fast as you can',
+        narrativeResult: 'You launch yourself away in a burst of speed, zigzagging through the trees. You hear it give chase — but cougars are sprinters, not distance runners. After a terrifying minute, you realize you\'ve lost it.',
         statEffects: [
           { stat: StatId.HOM, amount: 12, label: '+HOM' },
         ],
@@ -306,6 +313,7 @@ export const allEvents: GameEvent[] = [
         id: 'stand-ground-cougar',
         label: 'Stand tall and stomp',
         description: 'Intimidation display — may or may not work',
+        narrativeResult: 'You rear up, making yourself as large as possible, and bring your hooves crashing down. The cougar flinches — and after a long, tense standoff, it slinks away into the underbrush. You learned something about yourself today.',
         statEffects: [
           { stat: StatId.WIS, amount: 3, label: '+WIS' },
         ],
@@ -339,6 +347,7 @@ export const allEvents: GameEvent[] = [
       {
         id: 'follow-migration',
         label: 'Follow migrating deer',
+        narrativeResult: 'You decide you\'ll join the migration when it begins. When the herd moves south toward the winter yards, you\'ll go with them.',
         statEffects: [],
         consequences: [
           { type: 'set_flag', flag: 'will-migrate' },
@@ -349,6 +358,7 @@ export const allEvents: GameEvent[] = [
       {
         id: 'stay-put',
         label: "Don't follow",
+        narrativeResult: 'You decide to stay put and tough out the winter in familiar territory. Riskier, but you know these woods.',
         statEffects: [],
         consequences: [
           { type: 'remove_flag', flag: 'will-migrate' },
@@ -430,6 +440,7 @@ export const allEvents: GameEvent[] = [
       {
         id: 'drink-stagnant',
         label: 'Drink anyway',
+        narrativeResult: 'You drink deeply, your body grateful for the moisture despite the foul taste. Your thirst is quenched — but at what cost?',
         statEffects: [
           { stat: StatId.HOM, amount: -5, label: '-HOM' },
         ],
@@ -440,6 +451,7 @@ export const allEvents: GameEvent[] = [
       {
         id: 'search-clean-water',
         label: 'Search for cleaner water',
+        narrativeResult: 'You leave the stagnant pool behind and search for a flowing stream. You find one eventually, but the extra travel leaves you a little leaner.',
         statEffects: [
           { stat: StatId.HOM, amount: 3, label: '+HOM' },
         ],
@@ -676,6 +688,7 @@ export const allEvents: GameEvent[] = [
         id: 'accept-mating',
         label: 'Accept the buck',
         description: 'Mate and conceive offspring — pregnancy lasts ~7 months',
+        narrativeResult: 'You stand still and let him approach. The mating is brief and rough. Afterward, he wanders off without a backward glance. You are now carrying new life — and the long burden of winter pregnancy has begun.',
         statEffects: [
           { stat: StatId.WIS, amount: 3, label: '+WIS' },
         ],
@@ -689,6 +702,7 @@ export const allEvents: GameEvent[] = [
         id: 'evade-mating',
         label: 'Evade the buck',
         description: 'Flee — costs energy but preserves your body for winter',
+        narrativeResult: 'You dodge his advances and sprint away through the trees. He pursues briefly but gives up — there are other does. You\'ll enter winter without the burden of pregnancy.',
         statEffects: [
           { stat: StatId.HOM, amount: 5, label: '+HOM' },
           { stat: StatId.ADV, amount: 3, label: '+ADV' },
@@ -727,6 +741,7 @@ export const allEvents: GameEvent[] = [
         id: 'challenge-buck',
         label: 'Lock antlers and fight',
         description: 'Risk injury and defeat, but victory means mating rights',
+        narrativeResult: 'You lower your head and charge. Antlers crash together with a sound like breaking branches. The fight is brutal and exhausting — a test of everything you are.',
         statEffects: [
           { stat: StatId.HOM, amount: 10, label: '+HOM' },
           { stat: StatId.STR, amount: -3, label: '-STR' },
@@ -742,6 +757,7 @@ export const allEvents: GameEvent[] = [
         id: 'retreat-buck',
         label: 'Lower your antlers and retreat',
         description: 'Survive to fight another day, but no mating this season',
+        narrativeResult: 'You turn away, the taste of defeat bitter in your mouth. He snorts triumphantly. The doe is his. Perhaps next year, you\'ll be stronger.',
         statEffects: [
           { stat: StatId.TRA, amount: 5, label: '+TRA' },
           { stat: StatId.WIS, amount: 3, label: '+WIS' },
@@ -842,6 +858,7 @@ export const allEvents: GameEvent[] = [
         id: 'stay-close-herd',
         label: 'Stay close to the herd center',
         description: 'Warmth and safety in numbers, but disease exposure',
+        narrativeResult: 'You push deeper into the herd, sheltering from the wind among dozens of warm bodies. The sick doe coughs nearby. You try not to breathe too deeply.',
         statEffects: [
           { stat: StatId.CLI, amount: -3, label: '-CLI' },
         ],
@@ -853,6 +870,7 @@ export const allEvents: GameEvent[] = [
         id: 'move-periphery',
         label: 'Move to the yard periphery',
         description: 'Less disease risk, but more exposed to cold and predators',
+        narrativeResult: 'You drift to the outer edge of the yard, away from the sick animals. The wind cuts harder here, and you can feel the cold draining your reserves. But at least the air is clean.',
         statEffects: [
           { stat: StatId.HOM, amount: 5, label: '+HOM' },
           { stat: StatId.CLI, amount: 4, label: '+CLI' },
@@ -903,6 +921,7 @@ export const allEvents: GameEvent[] = [
         id: 'stay-center',
         label: 'Stay in the center of the group',
         description: 'Safe from wolves, but no food',
+        narrativeResult: 'You huddle in the center of the herd, your stomach empty but your body safe. The wolves circle and probe, but the wall of antlers and hooves holds them at bay.',
         statEffects: [
           { stat: StatId.ADV, amount: 3, label: '+ADV' },
           { stat: StatId.HOM, amount: 3, label: '+HOM' },
@@ -915,6 +934,7 @@ export const allEvents: GameEvent[] = [
         id: 'venture-edge-browse',
         label: 'Venture to the edge for better browse',
         description: 'Food, but exposed to the wolves',
+        narrativeResult: 'You slip toward the edge of the yard, finding scraps of browse the others missed. You eat quickly, one eye on the gray shapes pacing in the tree line.',
         statEffects: [
           { stat: StatId.HOM, amount: -4, label: '-HOM' },
         ],
@@ -1054,6 +1074,7 @@ export const allEvents: GameEvent[] = [
         id: 'raid-again',
         label: 'Raid the field again',
         description: 'The farmer may be watching now',
+        narrativeResult: 'You slip past the blinking camera and into the rows. The soybeans are as good as you remember. But as you eat, you feel eyes on you — and the click of something mechanical.',
         statEffects: [
           { stat: StatId.HOM, amount: -8, label: '-HOM' },
         ],
@@ -1072,6 +1093,7 @@ export const allEvents: GameEvent[] = [
       {
         id: 'resist-temptation',
         label: 'Resist and walk away',
+        narrativeResult: 'You stare at the field for a long moment, then turn and disappear into the trees. The memory of easy food fades, replaced by a hard-won caution.',
         statEffects: [
           { stat: StatId.WIS, amount: 4, label: '+WIS' },
           { stat: StatId.TRA, amount: -2, label: '-TRA' },
@@ -1167,6 +1189,7 @@ export const allEvents: GameEvent[] = [
         id: 'cross-road',
         label: 'Cross quickly',
         description: 'Sprint across during a gap in traffic',
+        narrativeResult: 'You wait for a gap and bolt across the asphalt, hooves clattering on the hard surface. Headlights swing around a curve behind you as you plunge back into the safety of the trees.',
         statEffects: [
           { stat: StatId.HOM, amount: 3, label: '+HOM' },
         ],
@@ -1183,6 +1206,7 @@ export const allEvents: GameEvent[] = [
         id: 'go-around-road',
         label: 'Find a way around',
         description: 'Follow the tree line — longer, but safer',
+        narrativeResult: 'You turn and follow the tree line, searching for a safer way across. Eventually you find a culvert under the road — dark and cramped, but no cars.',
         statEffects: [
           { stat: StatId.HOM, amount: 5, label: '+HOM' },
           { stat: StatId.WIS, amount: 2, label: '+WIS' },
@@ -1243,6 +1267,7 @@ export const allEvents: GameEvent[] = [
         id: 'stand-ground-dispute',
         label: 'Stand your ground',
         description: 'Fight for access to the food',
+        narrativeResult: 'You meet the challenge head-on. After a tense confrontation of stamping hooves and lowered heads, the other deer gives way. The food is yours — but the encounter leaves your nerves frayed.',
         statEffects: [
           { stat: StatId.ADV, amount: 4, label: '+ADV' },
           { stat: StatId.STR, amount: -2, label: '-STR' },
@@ -1257,6 +1282,7 @@ export const allEvents: GameEvent[] = [
         id: 'yield-dispute',
         label: 'Yield and move on',
         description: 'Avoid conflict — find food elsewhere',
+        narrativeResult: 'You turn away, choosing peace over food. There are other patches, other places. The wisdom of knowing when not to fight is its own kind of strength.',
         statEffects: [
           { stat: StatId.ADV, amount: -4, label: '-ADV' },
           { stat: StatId.WIS, amount: 3, label: '+WIS' },
@@ -1283,6 +1309,7 @@ export const allEvents: GameEvent[] = [
         id: 'eat-mushrooms',
         label: 'Eat the mushrooms',
         description: 'Could be nourishing — or fatal',
+        narrativeResult: 'You bite into the pale flesh. The taste is nutty, rich, and satisfying. Only time will tell if that satisfaction was worth the gamble.',
         statEffects: [
           { stat: StatId.HOM, amount: -3, label: '-HOM' },
         ],
@@ -1295,6 +1322,7 @@ export const allEvents: GameEvent[] = [
       {
         id: 'pass-mushrooms',
         label: 'Leave them alone',
+        narrativeResult: 'You sniff once more and move on. Better hungry than dead. The forest will provide — it always does, eventually.',
         statEffects: [
           { stat: StatId.WIS, amount: 2, label: '+WIS' },
         ],

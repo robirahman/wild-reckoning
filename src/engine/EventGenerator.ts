@@ -5,6 +5,10 @@ import type { BehavioralSettings } from '../types/behavior';
 import type { SpeciesConfig } from '../types/speciesConfig';
 import { StatId, computeEffectiveValue } from '../types/stats';
 import type { Rng } from './RandomUtils';
+import type { Difficulty } from '../types/difficulty';
+import type { NPC } from '../types/npc';
+import { DIFFICULTY_PRESETS } from '../types/difficulty';
+import { pickIllustration } from './IllustrationPicker';
 
 interface GenerationContext {
   animal: AnimalState;
@@ -14,6 +18,8 @@ interface GenerationContext {
   rng: Rng;
   events: GameEvent[];
   config: SpeciesConfig;
+  difficulty?: Difficulty;
+  npcs?: NPC[];
 }
 
 /** Check if a single condition is met */
@@ -129,7 +135,11 @@ export function resolveTemplate(text: string, ctx: GenerationContext): string {
     .replace(/\{\{species\.maleNoun\}\}/g, tv.maleNoun)
     .replace(/\{\{species\.femaleNoun\}\}/g, tv.femaleNoun)
     .replace(/\{\{species\.groupNoun\}\}/g, tv.groupNoun)
-    .replace(/\{\{species\.habitat\}\}/g, tv.habitat);
+    .replace(/\{\{species\.habitat\}\}/g, tv.habitat)
+    .replace(/\{\{npc\.rival\.name\}\}/g, ctx.npcs?.find((n) => n.type === 'rival' && n.alive)?.name ?? 'a rival')
+    .replace(/\{\{npc\.ally\.name\}\}/g, ctx.npcs?.find((n) => n.type === 'ally' && n.alive)?.name ?? 'a companion')
+    .replace(/\{\{npc\.predator\.name\}\}/g, ctx.npcs?.find((n) => n.type === 'predator' && n.alive)?.name ?? 'a predator')
+    .replace(/\{\{npc\.mate\.name\}\}/g, ctx.npcs?.find((n) => n.type === 'mate' && n.alive)?.name ?? 'a mate');
 }
 
 /** Generate events for a single turn */
@@ -150,8 +160,15 @@ export function generateEvents(ctx: GenerationContext): ResolvedEvent[] {
   const passivePool = eligible.filter((e) => e.type === 'passive');
 
   // Compute weights for active events
+  const predatorFactor = DIFFICULTY_PRESETS[ctx.difficulty ?? 'normal'].predatorEncounterFactor;
   const activeWeights = activePool.map(
-    (e) => e.weight * behaviorMultiplier(e, ctx.behavior) * contextMultiplier(e, ctx)
+    (e) => {
+      let w = e.weight * behaviorMultiplier(e, ctx.behavior) * contextMultiplier(e, ctx);
+      if (e.tags.includes('predator') || e.tags.includes('danger')) {
+        w *= predatorFactor;
+      }
+      return w;
+    }
   );
 
   // Select 1-3 active events
@@ -219,8 +236,11 @@ function resolveEvent(event: GameEvent, ctx: GenerationContext): ResolvedEvent {
     }
   }
 
+  // Pick an illustration if the event doesn't already have one
+  const image = event.image ?? pickIllustration(event, ctx.rng);
+
   return {
-    definition: event,
+    definition: image ? { ...event, image } : event,
     resolvedNarrative,
     triggeredSubEvents,
   };

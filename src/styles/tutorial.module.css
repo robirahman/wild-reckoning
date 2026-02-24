@@ -1,0 +1,75 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card {
+  max-width: 460px;
+  width: 90%;
+  background: var(--color-panel-bg);
+  border: 2px solid var(--color-border);
+  border-radius: 6px;
+  padding: 28px 32px;
+  text-align: center;
+}
+
+.stepIndicator {
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+  margin-bottom: 12px;
+}
+
+.title {
+  font-family: var(--font-ui);
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.description {
+  font-family: var(--font-narrative);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--color-text);
+  margin-bottom: 24px;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.continueButton {
+  padding: 8px 24px;
+  font-family: var(--font-ui);
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: 2px solid var(--color-text);
+  border-radius: 4px;
+  background: var(--color-text);
+  color: var(--color-panel-bg);
+  cursor: pointer;
+}
+
+.skipButton {
+  padding: 8px 16px;
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  background: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+}

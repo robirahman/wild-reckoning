@@ -1,18 +1,25 @@
 import { useState } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { getAllSpeciesBundles } from '../data/species';
+import { hasSaveGame } from '../store/persistence';
 import type { SpeciesDataBundle } from '../types/speciesConfig';
 import type { Backstory } from '../types/species';
+import type { Difficulty } from '../types/difficulty';
+import { DIFFICULTY_DESCRIPTIONS } from '../types/difficulty';
+import { AchievementList } from './achievements/AchievementList';
 
 export function StartScreen() {
   const startGame = useGameStore((s) => s.startGame);
+  const resumeGame = useGameStore((s) => s.resumeGame);
   const allBundles = getAllSpeciesBundles();
+  const [saveExists] = useState(() => hasSaveGame());
 
   const [selectedSpeciesId, setSelectedSpeciesId] = useState(allBundles[0].config.id);
   const selectedBundle = allBundles.find((b) => b.config.id === selectedSpeciesId)!;
 
   const [selectedBackstoryType, setSelectedBackstoryType] = useState(selectedBundle.backstories[0].type);
   const [selectedSex, setSelectedSex] = useState<'male' | 'female'>('female');
+  const [selectedDifficulty, setSelectedDifficulty] = useState<Difficulty>('normal');
 
   // Reset backstory when species changes
   const handleSpeciesChange = (bundle: SpeciesDataBundle) => {
@@ -46,6 +53,27 @@ export function StartScreen() {
       }}>
         A wildlife survival simulator
       </p>
+
+      {saveExists && (
+        <button
+          onClick={() => resumeGame()}
+          style={{
+            width: '100%',
+            padding: '14px 24px',
+            fontSize: '1.1rem',
+            fontFamily: 'var(--font-ui)',
+            fontWeight: 700,
+            border: '2px solid var(--color-text)',
+            borderRadius: 4,
+            background: 'var(--color-text)',
+            color: 'var(--color-panel-bg)',
+            cursor: 'pointer',
+            marginBottom: 40,
+          }}
+        >
+          Resume Game
+        </button>
+      )}
 
       {/* ── Species Selector ── */}
       <div style={{ marginBottom: 32 }}>
@@ -140,8 +168,39 @@ export function StartScreen() {
         </div>
       </div>
 
+      {/* ── Difficulty Selector ── */}
+      <div style={{ marginBottom: 32 }}>
+        <h3 style={{ fontFamily: 'var(--font-ui)', marginBottom: 12 }}>Difficulty</h3>
+        <div style={{ display: 'flex', gap: 12 }}>
+          {(['easy', 'normal', 'hard'] as const).map((diff) => (
+            <button
+              key={diff}
+              onClick={() => setSelectedDifficulty(diff)}
+              style={{
+                flex: 1,
+                padding: '10px 16px',
+                border: `2px solid ${selectedDifficulty === diff ? 'var(--color-text)' : 'var(--color-border)'}`,
+                borderRadius: 4,
+                background: selectedDifficulty === diff ? 'var(--color-bar-bg)' : 'var(--color-panel-bg)',
+                textAlign: 'left',
+                cursor: 'pointer',
+              }}
+            >
+              <div style={{ fontFamily: 'var(--font-ui)', fontSize: '0.95rem', fontWeight: selectedDifficulty === diff ? 700 : 400, marginBottom: 4 }}>
+                {diff.charAt(0).toUpperCase() + diff.slice(1)}
+              </div>
+              <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
+                {DIFFICULTY_DESCRIPTIONS[diff]}
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <AchievementList />
+
       <button
-        onClick={() => startGame(selectedSpeciesId, backstory, selectedSex)}
+        onClick={() => startGame(selectedSpeciesId, backstory, selectedSex, selectedDifficulty)}
         style={{
           width: '100%',
           padding: '14px 24px',

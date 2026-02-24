@@ -84,15 +84,39 @@
 .statBar {
   margin-bottom: var(--space-sm);
   font-family: var(--font-ui);
+  position: relative;
+  cursor: help;
+}
+
+.statNameRow {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 2px;
 }
 
 .statName {
-  display: block;
   font-size: 0.7rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.02em;
-  margin-bottom: 2px;
+}
+
+.trendArrow {
+  font-size: 0.55rem;
+  line-height: 1;
+}
+
+.trendGood {
+  color: var(--color-positive);
+}
+
+.trendBad {
+  color: var(--color-negative);
+}
+
+.trendStable {
+  color: var(--color-text-muted);
 }
 
 .barContainer {
@@ -123,4 +147,93 @@
   font-size: 0.65rem;
   color: var(--color-text-muted);
   text-align: center;
+}
+
+/* Tooltips */
+.tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 220px;
+  background: var(--color-panel-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  padding: var(--space-sm);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  z-index: 20;
+  pointer-events: none;
+}
+
+.tooltipDesc {
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--color-text);
+  margin-bottom: var(--space-xs);
+}
+
+.tooltipPolarity {
+  font-size: 0.7rem;
+  font-style: italic;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-xs);
+}
+
+.tooltipModifiers {
+  border-top: 1px solid var(--color-border-light);
+  padding-top: var(--space-xs);
+}
+
+.tooltipModTitle {
+  font-size: 0.7rem;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.tooltipMod {
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  margin-bottom: 1px;
+}
+
+.tooltipModPos {
+  color: var(--color-positive);
+  font-weight: 600;
+}
+
+.tooltipModNeg {
+  color: var(--color-negative);
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .categories {
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: var(--space-sm);
+  }
+
+  .statName {
+    font-size: 0.65rem;
+  }
+
+  .barContainer {
+    height: 10px;
+  }
+
+  .statLevel {
+    font-size: 0.6rem;
+  }
+
+  .tooltip {
+    width: 200px;
+    left: 0;
+    transform: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .categories {
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: var(--space-xs);
+  }
 }
