@@ -34,7 +34,8 @@ export type EventCondition =
   | { type: 'stat_below'; stat: StatId; threshold: number }
   | { type: 'has_parasite'; parasiteId: string }
   | { type: 'no_parasite'; parasiteId: string }
-  | { type: 'has_injury' }
+  | { type: 'has_injury'; injuryId?: string }
+  | { type: 'no_injury'; injuryId: string }
   | { type: 'age_range'; min?: number; max?: number }
   | { type: 'has_flag'; flag: string }
   | { type: 'no_flag'; flag: string }

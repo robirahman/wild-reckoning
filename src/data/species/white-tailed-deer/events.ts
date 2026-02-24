@@ -679,6 +679,32 @@ const deerEvents: GameEvent[] = [
     tags: ['seasonal', 'weather', 'herd'],
   },
 
+  // Rut ends — clears rut flags so the cycle resets each year
+  {
+    id: 'deer-rut-ends',
+    type: 'passive',
+    category: 'seasonal',
+    narrativeText:
+      'The frenzy is over. The swelling in your neck is subsiding, the obsessive energy draining away like water from a cracked vessel. You are gaunt — ribs visible beneath loose hide, haunches wasted from weeks of fighting and pacing and refusing to eat. The does have scattered back to their matrilineal groups, carrying whatever will come of this season inside them. Your antlers feel heavy and purposeless now, the bone already beginning the slow chemical dissolution that will drop them into the snow by February. The rut took everything you had. Now winter will decide if it was enough.',
+    statEffects: [
+      { stat: StatId.NOV, amount: -5, label: '-NOV' },
+      { stat: StatId.ADV, amount: -8, label: '-ADV' },
+      { stat: StatId.HOM, amount: -3, label: '-HOM' },
+    ],
+    consequences: [
+      { type: 'remove_flag', flag: 'rut-active' },
+      { type: 'remove_flag', flag: 'fought-rut-rival' },
+      { type: 'remove_flag', flag: 'lost-rut-contest' },
+    ],
+    conditions: [
+      { type: 'sex', sex: 'male' },
+      { type: 'season', seasons: ['winter'] },
+      { type: 'has_flag', flag: 'rut-active' },
+    ],
+    weight: 25,
+    tags: ['seasonal', 'rut'],
+  },
+
   // ══════════════════════════════════════════════
   //  ENVIRONMENTAL EVENTS
   // ══════════════════════════════════════════════
@@ -934,6 +960,7 @@ const deerEvents: GameEvent[] = [
   //  REPRODUCTION EVENTS
   // ══════════════════════════════════════════════
 
+  // Rut competition — healthy antlers
   {
     id: 'deer-rut-competition',
     type: 'active',
@@ -996,15 +1023,205 @@ const deerEvents: GameEvent[] = [
           { type: 'add_injury', injuryId: 'antler-break', severity: 0, bodyPart: 'right antler' },
         ],
       },
+      {
+        eventId: 'deer-rut-puncture',
+        chance: 0.25,
+        conditions: [
+          { type: 'has_flag', flag: 'fought-rut-rival' },
+        ],
+        narrativeText:
+          'You did not feel it during the fight — adrenaline is a powerful anesthetic — but now, as the rival retreats and the fury drains away, you become aware of a deep, hot pain in your shoulder. Looking down, you see a neat round hole in the hide, dark with blood, where one of his tines punched clean through. The wound is narrow but deep, and already the edges are swelling shut, sealing whatever was carried in on the antler tip — dirt, bark, bacteria — inside the muscle.',
+        footnote: '(Puncture wound from antler tine)',
+        statEffects: [
+          { stat: StatId.HEA, amount: -5, label: '-HEA' },
+          { stat: StatId.HOM, amount: 4, label: '+HOM' },
+        ],
+        consequences: [
+          { type: 'add_injury', injuryId: 'rut-puncture-wound', severity: 0, bodyPart: 'right shoulder' },
+        ],
+      },
+      {
+        eventId: 'deer-rut-eye-gouge',
+        chance: 0.08,
+        conditions: [
+          { type: 'has_flag', flag: 'fought-rut-rival' },
+        ],
+        narrativeText:
+          'In the final, twisting disengage, a brow tine raked across your face and caught the edge of your eye. The pain is immediate and blinding — a white flash followed by a flood of blood and tears that closes the eye completely. You stagger sideways, disoriented, the world suddenly halved. The rival is gone but the damage is done. When the swelling subsides enough to try opening the eye, what you see through it is a smeared, reddish blur where there used to be the sharp autumn forest.',
+        footnote: '(Eye injured by antler tine — a common rut injury in mature bucks)',
+        statEffects: [
+          { stat: StatId.HEA, amount: -8, label: '-HEA' },
+          { stat: StatId.TRA, amount: 8, label: '+TRA' },
+        ],
+        consequences: [
+          { type: 'add_injury', injuryId: 'rut-eye-injury', severity: 0, bodyPart: 'right eye' },
+        ],
+      },
+      {
+        eventId: 'deer-rut-laceration',
+        chance: 0.15,
+        conditions: [
+          { type: 'has_flag', flag: 'fought-rut-rival' },
+        ],
+        narrativeText:
+          'As you broke apart, his tines dragged across your flank like a rake through soft earth, peeling back a long strip of hide. The wound is ugly — a raw, weeping furrow that runs from shoulder to hip — but shallow. It will stiffen and scab within a day, though you will carry the scar through winter as a record of what the rut cost you.',
+        footnote: '(Laceration from antler tines)',
+        statEffects: [
+          { stat: StatId.HEA, amount: -2, label: '-HEA' },
+        ],
+        consequences: [
+          { type: 'add_injury', injuryId: 'rut-laceration', severity: 0, bodyPart: 'right flank' },
+        ],
+      },
     ],
     conditions: [
       { type: 'sex', sex: 'male' },
       { type: 'season', seasons: ['autumn'] },
       { type: 'has_flag', flag: 'rut-active' },
-      { type: 'no_flag', flag: 'fought-rut-rival' },
+      { type: 'no_injury', injuryId: 'antler-break' },
     ],
     weight: 15,
-    cooldown: 8,
+    cooldown: 2,
+    tags: ['mating', 'social', 'danger', 'rut'],
+  },
+
+  // Rut competition — fighting with a broken antler (higher risk, worse odds)
+  {
+    id: 'deer-rut-competition-injured',
+    type: 'active',
+    category: 'reproduction',
+    narrativeText:
+      'Another buck emerges from the treeline, grunting and raking the ground with his hooves. {{npc.rival.name}} sees your damaged rack immediately — the broken tine, the asymmetry — and reads it for what it is: weakness. He advances without hesitation, head low, presenting a full spread of intact antlers against your compromised ones. The does watch from the ridge. You know what they see. You know the arithmetic of bone and leverage is no longer in your favor.',
+    statEffects: [
+      { stat: StatId.ADV, amount: 14, label: '+ADV' },
+      { stat: StatId.NOV, amount: 5, label: '+NOV' },
+    ],
+    choices: [
+      {
+        id: 'fight-rival-buck-injured',
+        label: 'Fight anyway — lopsided rack and all',
+        description: 'Your broken antler gives him the leverage advantage. Much higher risk of a locked-antler death.',
+        statEffects: [
+          { stat: StatId.HOM, amount: 15, label: '+HOM' },
+        ],
+        consequences: [
+          { type: 'modify_weight', amount: -4 },
+          { type: 'set_flag', flag: 'fought-rut-rival' },
+        ],
+        revocable: false,
+        style: 'danger',
+        deathChance: {
+          probability: 0.12,
+          cause: 'Your broken antler could not hold against his full rack. The tines slipped past your guard and punctured your chest.',
+          statModifiers: [{ stat: StatId.HEA, factor: -0.004 }],
+        },
+      },
+      {
+        id: 'bluff-rival-buck-injured',
+        label: 'Bluff — angle your good side toward him',
+        description: 'Present your intact antler and posture aggressively. He might not notice the damage.',
+        statEffects: [
+          { stat: StatId.WIS, amount: 5, label: '+WIS' },
+          { stat: StatId.TRA, amount: 4, label: '+TRA' },
+        ],
+        consequences: [
+          { type: 'set_flag', flag: 'fought-rut-rival' },
+        ],
+        revocable: false,
+        style: 'default',
+      },
+      {
+        id: 'retreat-rival-buck-injured',
+        label: 'Turn and retreat',
+        description: 'You are outgunned and you know it. Live to grow a better rack next year.',
+        statEffects: [
+          { stat: StatId.TRA, amount: 8, label: '+TRA' },
+          { stat: StatId.WIS, amount: 5, label: '+WIS' },
+        ],
+        consequences: [
+          { type: 'set_flag', flag: 'lost-rut-contest' },
+        ],
+        revocable: false,
+        style: 'default',
+      },
+    ],
+    subEvents: [
+      {
+        eventId: 'deer-rut-antler-worsen',
+        chance: 0.35,
+        conditions: [
+          { type: 'has_flag', flag: 'fought-rut-rival' },
+        ],
+        narrativeText:
+          'The collision drove the crack in your main beam deeper. You can feel the antler shifting on the pedicle, grinding bone against bone with every step. What was a broken tine is now a structural failure.',
+        footnote: '(Antler damage worsened in combat)',
+        statEffects: [
+          { stat: StatId.HEA, amount: -5, label: '-HEA' },
+          { stat: StatId.HOM, amount: 8, label: '+HOM' },
+        ],
+        consequences: [
+          { type: 'add_injury', injuryId: 'antler-break', severity: 1, bodyPart: 'right antler' },
+        ],
+      },
+      {
+        eventId: 'deer-rut-injured-puncture',
+        chance: 0.35,
+        conditions: [
+          { type: 'has_flag', flag: 'fought-rut-rival' },
+        ],
+        narrativeText:
+          'Your compromised guard left your off-side wide open, and he knew it. A tine drove into the muscle of your neck with the full force of his charge behind it. You wrenched free, but the hole is deep and already hot with the first signs of infection. Fighting with a broken rack means absorbing hits you should have been able to deflect.',
+        footnote: '(Puncture wound — broken antler left an opening)',
+        statEffects: [
+          { stat: StatId.HEA, amount: -7, label: '-HEA' },
+          { stat: StatId.HOM, amount: 6, label: '+HOM' },
+        ],
+        consequences: [
+          { type: 'add_injury', injuryId: 'rut-puncture-wound', severity: 0, bodyPart: 'neck' },
+        ],
+      },
+      {
+        eventId: 'deer-rut-injured-eye-gouge',
+        chance: 0.12,
+        conditions: [
+          { type: 'has_flag', flag: 'fought-rut-rival' },
+        ],
+        narrativeText:
+          'Without a full rack to catch and redirect his tines, one slipped past and raked directly across your eye. The pain is instant and total — a white-hot line drawn across your vision that dissolves into darkness on that side. You stumble away, half-blind, blood sheeting down your face. The asymmetry of your broken antler gave him an angle of attack that a healthy rack would never have allowed.',
+        footnote: '(Eye gouged — the broken antler could not protect your face)',
+        statEffects: [
+          { stat: StatId.HEA, amount: -10, label: '-HEA' },
+          { stat: StatId.TRA, amount: 10, label: '+TRA' },
+        ],
+        consequences: [
+          { type: 'add_injury', injuryId: 'rut-eye-injury', severity: 0, bodyPart: 'left eye' },
+        ],
+      },
+      {
+        eventId: 'deer-rut-injured-laceration',
+        chance: 0.20,
+        conditions: [
+          { type: 'has_flag', flag: 'fought-rut-rival' },
+        ],
+        narrativeText:
+          'His tines scored a long, ragged line down your side as you tried to disengage. The gash is deeper than a normal sparring wound — he had the leverage to press the attack, and your broken rack could not push him off-line.',
+        footnote: '(Laceration from uneven engagement)',
+        statEffects: [
+          { stat: StatId.HEA, amount: -3, label: '-HEA' },
+        ],
+        consequences: [
+          { type: 'add_injury', injuryId: 'rut-laceration', severity: 0, bodyPart: 'left flank' },
+        ],
+      },
+    ],
+    conditions: [
+      { type: 'sex', sex: 'male' },
+      { type: 'season', seasons: ['autumn'] },
+      { type: 'has_flag', flag: 'rut-active' },
+      { type: 'has_injury', injuryId: 'antler-break' },
+    ],
+    weight: 15,
+    cooldown: 2,
     tags: ['mating', 'social', 'danger', 'rut'],
   },
 

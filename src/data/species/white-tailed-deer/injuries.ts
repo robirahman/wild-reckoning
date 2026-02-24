@@ -111,6 +111,115 @@ const deerInjuries: Record<string, InjuryDefinition> = {
     ],
   },
 
+  'rut-puncture-wound': {
+    id: 'rut-puncture-wound',
+    name: 'Antler Puncture Wound',
+    bodyParts: ['right shoulder', 'left shoulder', 'right flank', 'left flank', 'neck'],
+    severityLevels: [
+      {
+        severity: 'minor',
+        description: 'A tine punched through the hide and into the muscle beneath, leaving a deep, narrow wound that bleeds freely but missed anything vital. The puncture will close over quickly — too quickly, trapping bacteria inside.',
+        statEffects: [
+          { stat: StatId.HEA, amount: -5 },
+          { stat: StatId.HOM, amount: 6 },
+        ],
+        baseHealingTime: 6,
+        worseningChance: 0.18,
+        permanentDebuffChance: 0.03,
+      },
+      {
+        severity: 'moderate',
+        description: 'A deep antler puncture that has abscessed beneath the skin, forming a hot, swollen pocket of infection. The surrounding tissue is inflamed and rigid with fever. Each movement pulls at the wound and sends pain radiating across the shoulder.',
+        statEffects: [
+          { stat: StatId.HEA, amount: -10 },
+          { stat: StatId.HOM, amount: 12 },
+          { stat: StatId.IMM, amount: 8 },
+        ],
+        baseHealingTime: 12,
+        worseningChance: 0.15,
+        permanentDebuffChance: 0.08,
+      },
+      {
+        severity: 'severe',
+        description: 'The puncture wound has become a deep abscess that ruptured inward, spreading sepsis into the surrounding tissue. The flesh is necrotic, the smell is foul, and systemic infection is setting in. Fever and lethargy are constant.',
+        statEffects: [
+          { stat: StatId.HEA, amount: -18 },
+          { stat: StatId.HOM, amount: 16 },
+          { stat: StatId.IMM, amount: 14 },
+          { stat: StatId.ADV, amount: 8 },
+        ],
+        baseHealingTime: 20,
+        worseningChance: 0.20,
+        permanentDebuffChance: 0.15,
+      },
+    ],
+  },
+
+  'rut-eye-injury': {
+    id: 'rut-eye-injury',
+    name: 'Eye Injury',
+    bodyParts: ['right eye', 'left eye'],
+    severityLevels: [
+      {
+        severity: 'moderate',
+        description: 'An antler tine raked across the eye, tearing the cornea and flooding the socket with blood. Vision on that side is blurred and painful, reduced to smears of light and shadow. The eyelid is swollen shut most of the time.',
+        statEffects: [
+          { stat: StatId.HEA, amount: -8 },
+          { stat: StatId.TRA, amount: 10 },
+          { stat: StatId.ADV, amount: 10 },
+          { stat: StatId.HOM, amount: 8 },
+        ],
+        baseHealingTime: 14,
+        worseningChance: 0.12,
+        permanentDebuffChance: 0.35,
+      },
+      {
+        severity: 'severe',
+        description: 'The tine punctured the eyeball directly, destroying it. The orbit is a ruin of blood and vitreous fluid. That eye will never see again. Depth perception is gone, and the entire blind side is now a vulnerability that every predator will eventually learn to exploit.',
+        statEffects: [
+          { stat: StatId.HEA, amount: -14 },
+          { stat: StatId.TRA, amount: 18 },
+          { stat: StatId.ADV, amount: 16 },
+          { stat: StatId.HOM, amount: 12 },
+        ],
+        baseHealingTime: 24,
+        worseningChance: 0.08,
+        permanentDebuffChance: 0.85,
+      },
+    ],
+  },
+
+  'rut-laceration': {
+    id: 'rut-laceration',
+    name: 'Rut Laceration',
+    bodyParts: ['right flank', 'left flank', 'right shoulder', 'left shoulder', 'chest'],
+    severityLevels: [
+      {
+        severity: 'minor',
+        description: 'Long, shallow scrapes where antler tines dragged across the hide during the grappling. The cuts are raw and weeping but superficial — more painful than dangerous.',
+        statEffects: [
+          { stat: StatId.HEA, amount: -2 },
+          { stat: StatId.HOM, amount: 3 },
+        ],
+        baseHealingTime: 3,
+        worseningChance: 0.06,
+        permanentDebuffChance: 0.01,
+      },
+      {
+        severity: 'moderate',
+        description: 'A tine caught in the hide and tore a long flap of skin loose, exposing the red muscle beneath. The wound is too wide to close on its own and will attract flies if the weather is warm.',
+        statEffects: [
+          { stat: StatId.HEA, amount: -6 },
+          { stat: StatId.HOM, amount: 8 },
+          { stat: StatId.IMM, amount: 5 },
+        ],
+        baseHealingTime: 8,
+        worseningChance: 0.12,
+        permanentDebuffChance: 0.04,
+      },
+    ],
+  },
+
   'coyote-bite': {
     id: 'coyote-bite',
     name: 'Coyote Bite',

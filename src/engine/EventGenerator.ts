@@ -51,7 +51,10 @@ function checkCondition(cond: EventCondition, ctx: GenerationContext): boolean {
     case 'no_parasite':
       return !ctx.animal.parasites.some((p) => p.definitionId === cond.parasiteId);
     case 'has_injury':
+      if (cond.injuryId) return ctx.animal.injuries.some((i) => i.definitionId === cond.injuryId);
       return ctx.animal.injuries.length > 0;
+    case 'no_injury':
+      return !ctx.animal.injuries.some((i) => i.definitionId === cond.injuryId);
     case 'age_range': {
       if (cond.min !== undefined && ctx.animal.age < cond.min) return false;
       if (cond.max !== undefined && ctx.animal.age > cond.max) return false;
