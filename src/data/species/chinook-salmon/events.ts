@@ -1232,6 +1232,165 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
   },
 
   // ══════════════════════════════════════════════
+  //  MALE SPAWNING COMBAT EVENTS
+  // ══════════════════════════════════════════════
+
+  {
+    id: 'salmon-redd-fight',
+    type: 'active',
+    category: 'reproduction',
+    narrativeText: "Another male is holding position beside the hen — a broad-shouldered fish whose crimson flanks are already scarred from previous fights. His hooked kype opens and closes in a slow, deliberate threat display, and his body is angled to block the current lane that leads to the redd. Your own jaw aches with the spawning transformation that warped it into a weapon, the cartilage thickened and curved into a hook designed for exactly this moment. Your skin is sloughing in patches, your immune system collapsing, your organs consuming themselves for energy you stopped replenishing the day you left the ocean. You are dying. He is dying. But the eggs in that gravel will outlive you both, and every cell in your disintegrating body is screaming that they should carry your genes, not his.",
+    statEffects: [
+      { stat: StatId.ADV, amount: 6, label: '+ADV' },
+      { stat: StatId.TRA, amount: 4, label: '+TRA' },
+    ],
+    choices: [
+      {
+        id: 'charge-and-jawlock',
+        label: 'Charge and jaw-lock',
+        description: 'Drive into him, lock kypes, and try to wrench him off the redd',
+        narrativeResult: "You explode forward, driving your hooked jaw into his flank. He turns to meet you and your kypes lock together with a grinding, cartilaginous crack — two dying fish clenched jaw-to-jaw in the shallows, thrashing in a cloud of silt and blood. The water churns white around you. You twist your body, using what remains of your muscle mass to lever him sideways, and for a terrible, suspended moment neither of you yields. Then something gives — his grip slips, or yours tightens — and you wrench him off balance. He peels away downstream, his jaw trailing a thread of blood, his flanks heaving. You hold the redd. The hen watches from the gravel, unmoved by the violence, waiting only for the victor.",
+        statEffects: [
+          { stat: StatId.HOM, amount: 12, label: '+HOM' },
+          { stat: StatId.ADV, amount: 4, label: '+ADV' },
+        ],
+        consequences: [
+          { type: 'modify_weight', amount: -2 },
+          { type: 'set_flag', flag: 'fought-for-redd' },
+        ],
+        revocable: false,
+        style: 'danger',
+        deathChance: {
+          probability: 0.04,
+          cause: 'The jaw-lock lasted too long. Your body, already cannibalizing itself for energy, could not sustain the effort. Your heart gave out in the shallows, your kype still hooked into your rival.',
+          statModifiers: [{ stat: StatId.HEA, factor: -0.003 }],
+        },
+      },
+      {
+        id: 'display-and-posture',
+        label: 'Display and posture',
+        description: 'Show your size — flare fins, arch your body, try to intimidate without contact',
+        narrativeResult: "You swing broadside to the current, flaring every fin you have left, arching your body to present the maximum silhouette. Your kype gapes open. Your gill plates flare wide, exposing the blood-red tissue beneath. It is a bluff built on the memory of the ocean-fed muscle that once filled your frame — and sometimes memory is enough. The rival holds for a long, trembling moment, reading your display with the lateral line that runs the length of his body. Then, slowly, he backs downstream, yielding the position without contact. It does not always work. But today, it did.",
+        statEffects: [
+          { stat: StatId.WIS, amount: 3, label: '+WIS' },
+          { stat: StatId.HOM, amount: 4, label: '+HOM' },
+        ],
+        consequences: [
+          { type: 'modify_weight', amount: -1 },
+        ],
+        revocable: false,
+        style: 'default',
+      },
+      {
+        id: 'jack-strategy',
+        label: 'Use the jack strategy — wait and dart in',
+        description: 'Let them fight. When the winner is spent, dart in and release milt over the eggs.',
+        narrativeResult: "You drift back into the shadow of a submerged root wad, making yourself small, suppressing every instinct that demands you charge. The two larger males crash together over the redd — jaw-locked, thrashing, burning through the last of their reserves in a contest of brute force. You wait. You watch. And when the victor finally breaks free, gasping and spent, his body sagging in the current as the hen begins to deposit her eggs — you move. A single, precise dart from the shadows. Your milt clouds the water over the freshly laid eggs before the exhausted champion can react. He turns, too late, his ruined jaw snapping at empty current. You are already gone. It is not glorious. But your genes are in the gravel, and that is the only currency that matters.",
+        statEffects: [
+          { stat: StatId.WIS, amount: 5, label: '+WIS' },
+          { stat: StatId.TRA, amount: -3, label: '-TRA' },
+        ],
+        consequences: [
+          { type: 'set_flag', flag: 'fought-for-redd' },
+        ],
+        revocable: false,
+        style: 'default',
+      },
+    ],
+    subEvents: [
+      {
+        eventId: 'redd-fight-jaw-wound',
+        chance: 0.30,
+        conditions: [
+          { type: 'has_flag', flag: 'fought-for-redd' },
+        ],
+        narrativeText: 'The jaw-lock left its mark. Your kype is cracked along its leading edge, the cartilage splintered where his hooked jaw wrenched against yours. Each time you open your mouth to breathe, a dull, grinding pain radiates through your skull. On a healthy body this would heal in weeks. On yours, it will only worsen.',
+        footnote: '(Jaw wounded in spawning combat)',
+        statEffects: [
+          { stat: StatId.HOM, amount: 3, label: '+HOM' },
+        ],
+        consequences: [
+          { type: 'add_injury', injuryId: 'spawning-jaw-wound', severity: 0 },
+        ],
+      },
+      {
+        eventId: 'redd-fight-fin-tear',
+        chance: 0.25,
+        conditions: [
+          { type: 'has_flag', flag: 'fought-for-redd' },
+        ],
+        narrativeText: 'The body-slam tore your dorsal fin along its base. The membrane hangs in ragged strips, fluttering uselessly in the current like a tattered flag. You can feel the drag it creates — an asymmetry in every stroke, a constant reminder that your body is a tool being used past its breaking point.',
+        footnote: '(Fin torn in spawning combat)',
+        statEffects: [
+          { stat: StatId.HOM, amount: 2, label: '+HOM' },
+        ],
+        consequences: [
+          { type: 'add_injury', injuryId: 'spawning-fin-tear', severity: 0 },
+        ],
+      },
+      {
+        eventId: 'redd-fight-flank-laceration',
+        chance: 0.20,
+        conditions: [
+          { type: 'has_flag', flag: 'fought-for-redd' },
+        ],
+        narrativeText: 'His teeth raked your flank as you broke apart — a long, ragged furrow torn through darkening skin and the pale muscle beneath. Blood ribbons downstream from the wound, a thin red pennant in the current. The exposed flesh is already whitening at the edges where fungal spores are finding purchase on tissue that has no defenses left to offer.',
+        footnote: '(Flank lacerated in spawning combat)',
+        statEffects: [
+          { stat: StatId.HOM, amount: 3, label: '+HOM' },
+        ],
+        consequences: [
+          { type: 'add_injury', injuryId: 'spawning-flank-laceration', severity: 0 },
+        ],
+      },
+    ],
+    conditions: [
+      { type: 'has_flag', flag: 'reached-spawning-grounds' },
+      { type: 'sex', sex: 'male' },
+    ],
+    weight: 14,
+    cooldown: 2,
+    tags: ['mating', 'social', 'danger', 'combat'],
+  },
+
+  {
+    id: 'salmon-redd-defense',
+    type: 'passive',
+    category: 'reproduction',
+    narrativeText: "You hold the redd. The hen is beneath you, her tail sweeping gravel in slow, rhythmic arcs, and the current carries the scent of her readiness like a signal flare to every male in the stream. You have fought for this position — jaw-locked, body-slammed, bled for it — and now you hover above the nest with your fins splayed and your kype open, scanning every shadow for the next challenger. They come constantly. A dark shape materializes upstream, finning against the current with that unmistakable lateral quiver of aggression. He is testing your perimeter, reading your posture, calculating whether your battered body has one more fight left in it. You hold your ground, because holding ground is all you have left. Your body is consuming its own organs for fuel. Your skin is a patchwork of fungus and open sores. But the eggs are not yet laid, and until they are, you are a wall of dying muscle between this redd and every rival male in the river.",
+    statEffects: [
+      { stat: StatId.ADV, amount: 5, label: '+ADV' },
+      { stat: StatId.HOM, amount: 6, label: '+HOM' },
+    ],
+    consequences: [
+      { type: 'modify_weight', amount: -1 },
+      { type: 'set_flag', flag: 'fought-for-redd' },
+    ],
+    subEvents: [
+      {
+        eventId: 'redd-defense-flank-hit',
+        chance: 0.15,
+        narrativeText: 'The challenger makes his run. He comes in fast and low, driving his shoulder into your flank before you can turn to meet him. The impact shudders through your body, and you feel scales shear away from the point of contact, leaving a raw streak along your side. You drive him off with a snap of your kype, but the damage is done — another wound on a body that has forgotten how to heal.',
+        footnote: '(Wounded defending redd)',
+        statEffects: [
+          { stat: StatId.HOM, amount: 3, label: '+HOM' },
+        ],
+        consequences: [
+          { type: 'add_injury', injuryId: 'spawning-flank-laceration', severity: 0 },
+        ],
+      },
+    ],
+    conditions: [
+      { type: 'has_flag', flag: 'reached-spawning-grounds' },
+      { type: 'has_flag', flag: 'fought-for-redd' },
+      { type: 'sex', sex: 'male' },
+    ],
+    weight: 12,
+    cooldown: 3,
+    tags: ['mating', 'social', 'danger', 'combat'],
+  },
+
+  // ══════════════════════════════════════════════
   //  RIVER HAZARD EVENTS
   // ══════════════════════════════════════════════
 

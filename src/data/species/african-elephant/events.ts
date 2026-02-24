@@ -493,6 +493,48 @@ export const AFRICAN_ELEPHANT_EVENTS: GameEvent[] = [
         style: 'default',
       },
     ],
+    subEvents: [
+      {
+        eventId: 'elephant-musth-tusk-gore-sub',
+        chance: 0.25,
+        narrativeText:
+          'In the grinding collision of skulls and ivory, his tusk finds the gap between your shoulder and your neck. The point drives in with the momentum of his full charge behind it — six tons of bone, muscle, and hormonal fury compressed into a single ivory tip. You feel the tusk slide through your hide and into the meat beneath, and the pain is vast and hot and wrong. You wrench yourself sideways and the tusk pulls free with a wet, sucking sound. Blood sheets down your flank.',
+        footnote: '(Tusk gore wound)',
+        statEffects: [
+          { stat: StatId.HEA, amount: -6, label: '-HEA' },
+        ],
+        consequences: [
+          { type: 'add_injury', injuryId: 'tusk-gore-wound', severity: 0 },
+        ],
+      },
+      {
+        eventId: 'elephant-musth-tusk-break-sub',
+        chance: 0.10,
+        narrativeText:
+          'Your tusks lock together and you both twist with all your strength, each trying to wrench the other off balance. The pressure is immense — thousands of pounds of torque concentrated along the grain of the ivory. Then the sound comes: a sharp, percussive crack that travels through your skull and into your spine. Your tusk has fractured. The broken end drops into the churned earth and you stagger backward, the exposed nerve shrieking.',
+        footnote: '(Tusk breakage — tusks do not regrow)',
+        statEffects: [
+          { stat: StatId.HEA, amount: -5, label: '-HEA' },
+          { stat: StatId.TRA, amount: 5, label: '+TRA' },
+        ],
+        consequences: [
+          { type: 'add_injury', injuryId: 'tusk-break', severity: 0 },
+        ],
+      },
+      {
+        eventId: 'elephant-musth-torn-ear-sub',
+        chance: 0.15,
+        narrativeText:
+          'He reaches past your tusks with his trunk, coils it around the edge of your ear, and rips sideways. The cartilage tears like wet paper — a sound you hear more than feel, at first, before the pain blooms hot and electric across the side of your head. Blood pours from the ragged edge in a thin curtain. It is not a mortal wound, but it is a humiliation written permanently into your silhouette.',
+        footnote: '(Torn ear)',
+        statEffects: [
+          { stat: StatId.HEA, amount: -2, label: '-HEA' },
+        ],
+        consequences: [
+          { type: 'add_injury', injuryId: 'torn-ear', severity: 0 },
+        ],
+      },
+    ],
     conditions: [
       { type: 'sex', sex: 'male' },
       { type: 'age_range', min: 144 },
@@ -1418,6 +1460,48 @@ export const AFRICAN_ELEPHANT_EVENTS: GameEvent[] = [
         consequences: [],
         revocable: false,
         style: 'default',
+      },
+    ],
+    subEvents: [
+      {
+        eventId: 'elephant-rival-tusk-gore-sub',
+        chance: 0.25,
+        narrativeText:
+          '{{npc.rival.name}} drops his head and charges with a guttural scream that shakes the air. His tusk catches you below the ear and plunges inward, parting hide and muscle with the obscene ease of sharpened ivory driven by twelve thousand pounds of enraged bull. You feel the point grate against bone before you manage to twist free. Blood runs in a thick sheet down your side, soaking the dust beneath your feet into dark mud.',
+        footnote: '(Tusk gore wound)',
+        statEffects: [
+          { stat: StatId.HEA, amount: -6, label: '-HEA' },
+        ],
+        consequences: [
+          { type: 'add_injury', injuryId: 'tusk-gore-wound', severity: 1 },
+        ],
+      },
+      {
+        eventId: 'elephant-rival-tusk-break-sub',
+        chance: 0.10,
+        narrativeText:
+          'Your tusks slam together with a sound like a gunshot. You push and he pushes and neither of you yields. Then the angle shifts and the force concentrates along a fault line in the ivory — a hairline imperfection that has been waiting your whole life for this exact moment of pressure. The crack propagates in a millisecond. Half your tusk shears away and tumbles to the ground, trailing a thread of blood from the exposed pulp cavity. The pain is blinding and absolute.',
+        footnote: '(Tusk breakage — tusks do not regrow)',
+        statEffects: [
+          { stat: StatId.HEA, amount: -5, label: '-HEA' },
+          { stat: StatId.TRA, amount: 5, label: '+TRA' },
+        ],
+        consequences: [
+          { type: 'add_injury', injuryId: 'tusk-break', severity: 1 },
+        ],
+      },
+      {
+        eventId: 'elephant-rival-torn-ear-sub',
+        chance: 0.15,
+        narrativeText:
+          'In the chaos of the clinch, {{npc.rival.name}} snakes his trunk around your ear and yanks with vicious force. The thin cartilage splits with a wet tearing sound, and a flap of ear hangs loose, streaming blood. You flap the damaged ear reflexively, spraying red across both of you. The wound is not life-threatening, but the torn edge will never mend smooth — a permanent testament to this day.',
+        footnote: '(Torn ear)',
+        statEffects: [
+          { stat: StatId.HEA, amount: -2, label: '-HEA' },
+        ],
+        consequences: [
+          { type: 'add_injury', injuryId: 'torn-ear', severity: 0 },
+        ],
       },
     ],
     conditions: [

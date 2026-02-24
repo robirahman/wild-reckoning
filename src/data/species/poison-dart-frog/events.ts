@@ -233,6 +233,36 @@ export const POISON_DART_FROG_EVENTS: GameEvent[] = [
         style: 'default',
       },
     ],
+    subEvents: [
+      {
+        eventId: 'wrestling-exhaustion',
+        chance: 0.20,
+        conditions: [],
+        narrativeText: 'The fight has taken everything from you. Twenty minutes of grappling on a wet leaf — twenty minutes of your tiny body straining against another body exactly your size, every muscle firing, every calorie burning. You won, or you lost — it barely matters now. You sit on the leaf afterward, sides heaving, your bright skin dull with fatigue. You have burned through energy reserves that took days of foraging to build. Your body feels hollow, spent, as if someone reached inside you and scraped out the marrow. You will need to eat voraciously just to return to where you started.',
+        footnote: 'Dart frog wrestling bouts can last 10-30 minutes and are among the most energetically costly behaviors in their repertoire. Males may lose significant body mass from a single prolonged contest.',
+        statEffects: [
+          { stat: StatId.HOM, amount: 10, label: '+HOM' },
+          { stat: StatId.STR, amount: -5, label: '-STR' },
+        ],
+        consequences: [
+          { type: 'modify_weight', amount: -0.0000005 },
+        ],
+      },
+      {
+        eventId: 'vocal-sac-strain-sub',
+        chance: 0.10,
+        conditions: [],
+        narrativeText: 'The aggressive calling you sustained during the territorial dispute has strained your vocal sac. The thin membrane is inflamed, swollen with fluid, and each attempt to call produces a thin, reedy sound instead of the full-throated buzz that once rang clear across the understory. You can feel the tissue pulsing with your heartbeat, hot and tender. Calling is how you hold territory. Calling is how you attract mates. Without your voice, you are a bright red ornament on a leaf — visible to every predator, audible to no female.',
+        footnote: 'Prolonged aggressive calling can damage the delicate vocal sac membrane in dart frogs, temporarily reducing call quality and volume — directly impacting both territorial defense and mate attraction.',
+        statEffects: [
+          { stat: StatId.HEA, amount: -3, label: '-HEA' },
+          { stat: StatId.HOM, amount: 5, label: '+HOM' },
+        ],
+        consequences: [
+          { type: 'add_injury', injuryId: 'vocal-sac-strain', severity: 0 },
+        ],
+      },
+    ],
     conditions: [
       { type: 'sex', sex: 'male' },
       { type: 'age_range', min: 6 },

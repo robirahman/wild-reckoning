@@ -344,6 +344,80 @@ const wolfEvents: GameEvent[] = [
   },
 
   {
+    id: 'wolf-dominance-challenge',
+    type: 'active',
+    category: 'social',
+    narrativeText:
+      'The tension has been building for weeks — in the way the beta holds your gaze a beat too long at the kill site, in the stiffness of his legs when you pass, in the low rumble that lives permanently in his chest now like a second heartbeat. Today he does not look away. He approaches you stiff-legged across the clearing, his hackles raised in a dark ridge from skull to tail, his ears pinned forward, his amber eyes locked on yours with an intensity that admits no ambiguity. He stops three body-lengths away and stands tall, every muscle rigid, every tooth visible behind curled lips. The rest of the pack has gone silent. They form a loose circle, ears pricked, tails tucked, watching the geometry of power rearrange itself. This is not about food. This is about who leads, who breeds, who eats first for the rest of your lives. The next move belongs to you.',
+    statEffects: [
+      { stat: StatId.ADV, amount: 10, label: '+ADV' },
+      { stat: StatId.NOV, amount: 5, label: '+NOV' },
+    ],
+    choices: [
+      {
+        id: 'assert-dominance',
+        label: 'Assert dominance — pin them',
+        description: 'Meet the challenge head-on. Stiff-legged advance, direct stare, and if it comes to it, teeth. Win this and you eat first, breed first, lead the pack.',
+        narrativeResult: 'You rise to your full height and advance, every step deliberate, every muscle telegraphing controlled violence. He does not back down. The two of you collide in a blur of fur and teeth — muzzle bites, shoulder slams, a desperate scramble for the throat grip that will end it. You feel his jaws clamp on your foreleg and you twist, driving your weight onto his shoulders, forcing him down. For a terrible, straining moment he resists, his body rigid beneath yours, and then something breaks in him — not bone, but will. He goes limp. He rolls. His throat is exposed, his belly offered to the sky. You stand over him, breathing hard, blood on your muzzle, and the pack watches you with new eyes.',
+        statEffects: [
+          { stat: StatId.HOM, amount: 10, label: '+HOM' },
+          { stat: StatId.TRA, amount: 5, label: '+TRA' },
+        ],
+        consequences: [
+          { type: 'set_flag', flag: 'pack-dominant' },
+          { type: 'modify_weight', amount: -1 },
+        ],
+        revocable: false,
+        style: 'danger',
+        deathChance: {
+          probability: 0.02,
+          cause: 'His jaws found your throat and did not let go. The grip crushed your trachea. You drowned in your own blood while the pack watched in silence.',
+          statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
+        },
+      },
+      {
+        id: 'submit-expose-throat',
+        label: 'Submit — roll over and expose throat',
+        description: 'Drop your gaze, lower your body, roll onto your back. Accept subordinate status. You will eat last and will not breed this season — but you will live.',
+        narrativeResult: 'You break eye contact first. Your ears flatten, your tail tucks, and you lower your body until your belly nearly touches the ground. Then you roll, offering your throat and your belly to the sky — the most vulnerable parts of you, presented without defense. The challenger stands over you, his breath hot on your exposed neck, and for one long moment the decision is his. Then he steps back. The ritual is complete. You are subordinate now. Last to eat, last to drink, no breeding rights. But the pack still needs you, and you are still alive.',
+        statEffects: [
+          { stat: StatId.TRA, amount: 8, label: '+TRA' },
+          { stat: StatId.WIS, amount: 3, label: '+WIS' },
+        ],
+        consequences: [
+          { type: 'set_flag', flag: 'pack-subordinate' },
+        ],
+        revocable: false,
+        style: 'default',
+      },
+    ],
+    subEvents: [
+      {
+        eventId: 'dominance-bite-sub',
+        chance: 0.20,
+        conditions: [],
+        narrativeText: 'In the chaos of the fight, jaws found flesh. A bite landed hard — the kind that splits skin and grinds against bone. You feel the wound throbbing now, hot and wet beneath your fur, a souvenir of the challenge that will take days to close.',
+        footnote: 'Dominance fights in wolf packs are usually ritualized and resolved through posturing, but approximately 10-20% escalate to physical contact resulting in bite wounds, most commonly to the muzzle, throat, and forelegs.',
+        statEffects: [
+          { stat: StatId.HEA, amount: -4, label: '-HEA' },
+        ],
+        consequences: [
+          { type: 'add_injury', injuryId: 'dominance-bite', severity: 0 },
+        ],
+      },
+    ],
+    conditions: [
+      { type: 'species', speciesIds: ['gray-wolf'] },
+      { type: 'sex', sex: 'male' },
+      { type: 'age_range', min: 24 },
+    ],
+    weight: 8,
+    cooldown: 6,
+    tags: ['social', 'pack', 'hierarchy', 'danger', 'rival'],
+    footnote: 'Wolf pack dominance hierarchies are maintained through ritualized challenges — stiff-legged approaches, direct stares, standing over, and pinning. Most challenges are resolved without serious injury, but escalation to biting (especially throat holds) occurs in roughly one in five encounters and can occasionally prove fatal.',
+  },
+
+  {
     id: 'wolf-pack-howl',
     type: 'passive',
     category: 'social',

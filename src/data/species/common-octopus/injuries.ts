@@ -54,6 +54,42 @@ export const COMMON_OCTOPUS_INJURIES: Record<string, InjuryDefinition> = {
     ],
   },
 
+  'arm-damage': {
+    id: 'arm-damage',
+    name: 'Arm Damage',
+    bodyParts: [
+      'first right arm',
+      'first left arm',
+      'second right arm',
+      'second left arm',
+    ],
+    severityLevels: [
+      {
+        severity: 'minor',
+        description: 'The distal third of one arm is torn and ragged — bitten during a grappling contest with another male. The suckers at the tip are gone, ripped away along with a strip of pale muscle. You can still taste and grip with the remaining length, but the precision is reduced. The arm will regenerate in time. Your kind has that luxury. But for now, every hunt is slightly clumsier, every grip slightly weaker.',
+        statEffects: [
+          { stat: StatId.HEA, amount: -3 },
+          { stat: StatId.HOM, amount: 4 },
+        ],
+        baseHealingTime: 10,
+        worseningChance: 0.06,
+        permanentDebuffChance: 0.04,
+      },
+      {
+        severity: 'moderate',
+        description: 'Half the arm is gone — severed by the beak of a rival male during a vicious territorial grapple. The wound sealed itself within seconds, the muscles clamping shut with the same reflex that allows a severed arm to keep crawling on its own. But the loss is significant. Dozens of chemoreceptive suckers are gone, and with them a substantial portion of your ability to taste the water, manipulate objects, and anchor yourself during a jet escape. Regeneration will take weeks, and the replacement tissue is never quite as sensitive as the original.',
+        statEffects: [
+          { stat: StatId.HEA, amount: -7 },
+          { stat: StatId.WIS, amount: -4 },
+          { stat: StatId.HOM, amount: 8 },
+        ],
+        baseHealingTime: 16,
+        worseningChance: 0.08,
+        permanentDebuffChance: 0.10,
+      },
+    ],
+  },
+
   'beak-damage': {
     id: 'beak-damage',
     name: 'Beak Damage',

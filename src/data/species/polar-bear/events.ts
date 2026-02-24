@@ -503,6 +503,115 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
   },
 
   {
+    id: 'pb-breeding-fight',
+    type: 'active',
+    category: 'social',
+    narrativeText:
+      'The female is close — you can smell her trail woven through the pressure ridges, warm and urgent against the sterile cold of the ice. But you are not the only male who has followed it. Another bear steps out from behind a hummock, massive and deliberate, his breath pluming in the frozen air. He is heavy with spring seal fat, his shoulders rolling with muscle beneath scarred hide. His muzzle is a map of old fights — torn lip, notched ear, a canine-width groove across the bridge of his nose. He sees you and stops. Lowers his head. Opens his mouth to show the yellowed canines. The female watches from fifty meters away, indifferent to which of you survives this.',
+    statEffects: [
+      { stat: StatId.TRA, amount: 8, label: '+TRA' },
+      { stat: StatId.ADV, amount: 6, label: '+ADV' },
+    ],
+    choices: [
+      {
+        id: 'grapple-rival',
+        label: 'Rise up and grapple',
+        description: 'Rear onto your hind legs, lock forepaws with him, and fight with everything you have',
+        narrativeResult:
+          'You rise onto your hind legs and he mirrors you — two half-ton animals standing upright on the ice like grotesque dancers. You slam together chest to chest, forepaws grappling for purchase on each other\'s shoulders and neck. The ice groans beneath your combined weight. You bite at his face; he rakes your shoulder with claws the length of a man\'s finger. You shove and twist, trying to throw him down where you can pin him. The sound is terrible — the wet crack of teeth on bone, the tearing of hide, grunts of exertion that fog the air between you. Minutes pass. Your muscles burn with lactic acid. Finally, one of you falters, and the other presses the advantage with savage, single-minded fury.',
+        statEffects: [
+          { stat: StatId.HOM, amount: 15, label: '+HOM' },
+          { stat: StatId.STR, amount: -3, label: '-STR' },
+        ],
+        consequences: [
+          { type: 'modify_weight', amount: -4 },
+          { type: 'set_flag', flag: 'mated-this-season' },
+        ],
+        revocable: false,
+        style: 'danger',
+        deathChance: {
+          probability: 0.03,
+          cause: 'Killed in a breeding fight with a rival male polar bear. His canines found your throat.',
+          statModifiers: [{ stat: StatId.HEA, factor: -0.003 }],
+        },
+      },
+      {
+        id: 'circle-and-test',
+        label: 'Circle and test his resolve',
+        description: 'Pace around him, jaw-gape, assess whether he will back down without a full fight',
+        narrativeResult:
+          'You do not charge. Instead you begin to circle, head low, mouth open to display your canines. He turns to face you, mirroring your arc. You are reading each other — every scar, every pound of body mass, every subtle signal of confidence or hesitation. You lunge forward and snap the air near his face; he flinches but holds his ground. You repeat the display, each feint a question: are you sure? How much are you willing to pay for this? The negotiation is silent and brutal in its honesty.',
+        statEffects: [
+          { stat: StatId.WIS, amount: 3, label: '+WIS' },
+          { stat: StatId.HOM, amount: 6, label: '+HOM' },
+        ],
+        consequences: [
+          { type: 'modify_weight', amount: -2 },
+        ],
+        revocable: false,
+        style: 'default',
+        deathChance: {
+          probability: 0.005,
+          cause: 'The rival male charged without warning during a circling display and delivered a fatal bite to the neck.',
+          statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
+        },
+      },
+      {
+        id: 'back-away-breeding',
+        label: 'Back away',
+        description: 'Yield the female — there will be other springs, other chances',
+        narrativeResult:
+          'You lower your head and turn your body sideways — the universal signal of submission among bears. He watches you go with flat, expressionless eyes, his breath still heavy with adrenaline. You walk away across the ice, and with each step the urgency drains from your body and is replaced by something quieter: the knowledge that discretion has kept you alive and whole for another breeding season. The scars you do not carry are worth more than the ones you would have earned.',
+        statEffects: [
+          { stat: StatId.TRA, amount: 3, label: '+TRA' },
+          { stat: StatId.WIS, amount: 4, label: '+WIS' },
+        ],
+        consequences: [],
+        revocable: false,
+        style: 'default',
+      },
+    ],
+    subEvents: [
+      {
+        eventId: 'pb-breeding-claw-rake-sub',
+        chance: 0.30,
+        narrativeText:
+          'In the grapple, his forepaw rakes across you with terrible force — claws tearing through fur and hide in four parallel lines. Blood wells up instantly, hot against the cold air, and the pain arrives a half-second later like fire drawn across your skin.',
+        footnote: '(Bear claw rake injury)',
+        statEffects: [
+          { stat: StatId.HEA, amount: -4, label: '-HEA' },
+        ],
+        consequences: [
+          { type: 'add_injury', injuryId: 'bear-claw-rake', severity: 0 },
+        ],
+      },
+      {
+        eventId: 'pb-breeding-bite-wound-sub',
+        chance: 0.20,
+        narrativeText:
+          'He lunges for your neck and his jaws clamp down — you feel the canines punch through your hide and into the muscle beneath. You wrench sideways and tear free, leaving skin and fur in his teeth. The puncture wounds are deep and already swelling.',
+        footnote: '(Bear bite wound)',
+        statEffects: [
+          { stat: StatId.HEA, amount: -6, label: '-HEA' },
+        ],
+        consequences: [
+          { type: 'add_injury', injuryId: 'bear-bite-wound', severity: 1 },
+        ],
+      },
+    ],
+    conditions: [
+      { type: 'species', speciesIds: ['polar-bear'] },
+      { type: 'sex', sex: 'male' },
+      { type: 'season', seasons: ['spring'] },
+      { type: 'age_range', min: 60 },
+    ],
+    weight: 12,
+    cooldown: 3,
+    tags: ['social', 'conflict', 'breeding', 'danger'],
+    footnote: 'Male polar bears fight intensely during the spring breeding season (March-May) over access to receptive females. Fights involve standing on hind legs and grappling, biting at the face, neck, and shoulders. Scars on a male\'s muzzle and neck are reliable indicators of breeding experience and dominance status.',
+  },
+
+  {
     id: 'pb-mother-cub-teaching',
     type: 'passive',
     category: 'social',

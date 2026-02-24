@@ -82,6 +82,39 @@ const wolfInjuries: Record<string, InjuryDefinition> = {
     ],
   },
 
+  'dominance-bite': {
+    id: 'dominance-bite',
+    name: 'Dominance Bite',
+    bodyParts: ['muzzle', 'throat', 'right foreleg', 'left foreleg'],
+    severityLevels: [
+      {
+        severity: 'minor',
+        description: 'A hard bite across the muzzle from a pack dominance challenge. The skin is split along the lip line and two teeth are cracked at the root. Your face aches when you eat, when you drink, when the cold air touches the exposed nerves. The wound will heal, but for now every snarl costs you.',
+        statEffects: [
+          { stat: StatId.HEA, amount: -4 },
+          { stat: StatId.HOM, amount: 5 },
+          { stat: StatId.ADV, amount: 3 },
+        ],
+        baseHealingTime: 5,
+        worseningChance: 0.10,
+        permanentDebuffChance: 0.03,
+      },
+      {
+        severity: 'moderate',
+        description: 'A deep throat grip from a dominance fight that tore through muscle and compressed the trachea. You cough blood for hours afterward. Breathing is labored, especially at a run, and swallowing food sends pain radiating through your neck. The bruising is hidden beneath your fur but the damage runs deep — crushed cartilage, torn fascia, a windpipe that whistles faintly with every breath.',
+        statEffects: [
+          { stat: StatId.HEA, amount: -10 },
+          { stat: StatId.HOM, amount: 10 },
+          { stat: StatId.ADV, amount: 7 },
+          { stat: StatId.TRA, amount: 5 },
+        ],
+        baseHealingTime: 14,
+        worseningChance: 0.16,
+        permanentDebuffChance: 0.08,
+      },
+    ],
+  },
+
   'rival-bite': {
     id: 'rival-bite',
     name: 'Rival Bite',

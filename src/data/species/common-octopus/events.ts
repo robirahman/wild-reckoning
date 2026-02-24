@@ -685,6 +685,84 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
     tags: ['social'],
   },
 
+  {
+    id: 'octopus-male-contest',
+    type: 'active',
+    category: 'social',
+    narrativeText: 'Another male has settled at the mouth of a prime den — a deep crevice beneath a flat rock, the kind of shelter a female would choose for egg-laying. He is large, his mantle swollen with muscle, his skin cycling through dark aggressive patterns: bars, stripes, and the deep mahogany flush that means he is ready to fight. He has seen you. His arms are spread wide across the rock face, suckers gripping, claiming every inch. The den behind him is worth fighting for. The female whose chemical trace led you both here is worth more.',
+    statEffects: [
+      { stat: StatId.ADV, amount: 6, label: '+ADV' },
+      { stat: StatId.NOV, amount: 3, label: '+NOV' },
+    ],
+    choices: [
+      {
+        id: 'grapple-rival',
+        label: 'Flash dark patterns and grapple',
+        description: 'Darken your skin, spread your arms, and engage. Arm wrestling between male octopuses is a test of raw strength — intertwine arms, pull, and overpower.',
+        narrativeResult: 'You flush dark — the deepest red-brown your chromatophores can produce — and jet forward. Your arms meet his in a tangle of suckers and muscle. The grappling is silent and brutal, an alien calculus of leverage and grip strength played out across eight arms apiece. You twist one of his arms backward, your suckers popping free and reattaching in rapid sequence, seeking purchase, seeking advantage. He pulls back with tremendous force and you feel your own arm stretch to its limit. Minutes pass. The reef around you is forgotten. There is only this: two soft bodies locked in a geometry of force, each trying to peel the other from the rock. At last his grip fails on three arms simultaneously and you wrench him free. He jets backward in a cloud of silt, his skin flashing pale — submission. The den is yours.',
+        statEffects: [
+          { stat: StatId.HOM, amount: 8, label: '+HOM' },
+          { stat: StatId.ADV, amount: -5, label: '-ADV' },
+        ],
+        consequences: [
+          { type: 'modify_weight', amount: -1 },
+        ],
+        revocable: false,
+        style: 'danger',
+      },
+      {
+        id: 'ink-retreat',
+        label: 'Jet ink and retreat',
+        description: 'Release a cloud of ink and jet away. Live to find another den, another day.',
+        narrativeResult: 'You contract your mantle and release a burst of ink — a dark, mucus-bound cloud that holds its shape in the water like a phantom octopus. The rival strikes at the decoy while you jet backward, your siphon pulsing, your skin blanching to white for maximum contrast against the dark ink. Within seconds you are twenty meters away, tucked into a crack in the reef, your hearts hammering. The den is lost. But you are whole.',
+        statEffects: [
+          { stat: StatId.TRA, amount: 5, label: '+TRA' },
+        ],
+        consequences: [],
+        revocable: false,
+        style: 'default',
+      },
+      {
+        id: 'sneaker-coloring',
+        label: 'Hold small — use sneaker coloring',
+        description: 'Adopt female coloration and body posture. Flatten your mantle, tuck your arms, display the mottled pattern of a non-threatening female. Slip past the guard and into the den.',
+        narrativeResult: 'You suppress every aggressive impulse and reshape yourself. Your skin shifts to the pale, mottled pattern of a female — the spots, the smooth texture, the passive posture. You tuck your hectocotylus out of sight and flatten your mantle. Then you drift forward, unhurried, unthreatening. The rival male glances at you and dismisses you — another female, no concern of his. You slip past him and into the den. By the time he realizes the deception, you are already inside, your suckers gripping the walls, your skin flushing triumphant dark. Intelligence over brute force.',
+        statEffects: [
+          { stat: StatId.WIS, amount: 6, label: '+WIS' },
+          { stat: StatId.NOV, amount: 3, label: '+NOV' },
+        ],
+        consequences: [],
+        revocable: false,
+        style: 'default',
+      },
+    ],
+    subEvents: [
+      {
+        eventId: 'arm-damage-sub',
+        chance: 0.15,
+        conditions: [],
+        narrativeText: 'During the grapple, his beak found the base of one of your arms. You felt the chitin slice through muscle — a clean, cold cut that barely registered until you pulled free and saw the arm trailing a ribbon of pale tissue. The wound has already sealed itself, the muscles clamping shut with involuntary precision. But the damage is done. Suckers are missing. Sensation is dulled. The arm will regenerate, given time. Your kind has that grace. But time, for an octopus, is the one thing always in short supply.',
+        footnote: 'Male octopuses frequently sustain arm damage during territorial grappling. Unlike most animals, octopuses can regenerate lost arm tissue, though the process takes weeks to months and the regenerated tissue may be less sensitive than the original.',
+        statEffects: [
+          { stat: StatId.HEA, amount: -3, label: '-HEA' },
+        ],
+        consequences: [
+          { type: 'add_injury', injuryId: 'arm-damage', severity: 0 },
+        ],
+      },
+    ],
+    conditions: [
+      { type: 'species', speciesIds: ['common-octopus'] },
+      { type: 'sex', sex: 'male' },
+      { type: 'season', seasons: ['spring', 'summer'] },
+      { type: 'age_range', min: 8 },
+    ],
+    weight: 10,
+    cooldown: 3,
+    tags: ['social', 'rival', 'territory'],
+    footnote: 'Male common octopuses (Octopus vulgaris) engage in ritualized arm-wrestling contests over dens and mating access. Fights involve intertwining arms and attempting to overpower the opponent through grip strength. Smaller males frequently adopt a "sneaker" strategy, mimicking female coloration to bypass aggressive guarder males — a tactic documented across many cephalopod and fish species.',
+  },
+
   // ════════════════════════════════════════════════
   //  REPRODUCTION & MATING
   // ════════════════════════════════════════════════

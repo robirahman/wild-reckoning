@@ -52,6 +52,25 @@ export const POISON_DART_FROG_INJURIES: Record<string, InjuryDefinition> = {
     ],
   },
 
+  'vocal-sac-strain': {
+    id: 'vocal-sac-strain',
+    name: 'Vocal Sac Strain',
+    bodyParts: ['throat'],
+    severityLevels: [
+      {
+        severity: 'minor',
+        description: 'The thin membrane of your vocal sac is inflamed and swollen from hours of aggressive calling during a territorial dispute. Each attempt to call produces a strained, reedy buzz instead of your usual resonant tone. The tissue needs rest, but silence means losing your territory to any male bold enough to call from your perch. You sit on your leaf with your throat pulsing weakly, broadcasting a diminished version of yourself into the forest.',
+        statEffects: [
+          { stat: StatId.HEA, amount: -3 },
+          { stat: StatId.HOM, amount: 5 },
+        ],
+        baseHealingTime: 4,
+        worseningChance: 0.08,
+        permanentDebuffChance: 0.03,
+      },
+    ],
+  },
+
   'skin-abrasion': {
     id: 'skin-abrasion',
     name: 'Skin Abrasion',

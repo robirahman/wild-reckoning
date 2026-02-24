@@ -117,4 +117,86 @@ export const POLAR_BEAR_INJURIES: Record<string, InjuryDefinition> = {
       },
     ],
   },
+
+  'bear-claw-rake': {
+    id: 'bear-claw-rake',
+    name: 'Bear Claw Rake',
+    bodyParts: ['face', 'right shoulder', 'left shoulder', 'neck'],
+    severityLevels: [
+      {
+        severity: 'minor',
+        description:
+          'A rival male raked his claws across you during a grapple, leaving shallow parallel scratches through your fur and into the skin beneath. The cuts sting in the cold air and weep thin lines of blood that freeze against your pelt. They will heal cleanly, but the scars will mark you as a bear who has fought for breeding rights.',
+        statEffects: [
+          { stat: StatId.HEA, amount: -3 },
+          { stat: StatId.TRA, amount: 3 },
+        ],
+        baseHealingTime: 2,
+        worseningChance: 0.06,
+        permanentDebuffChance: 0.02,
+      },
+      {
+        severity: 'moderate',
+        description:
+          'His claws caught you full across the hide and tore deep — four parallel gashes that part the skin and expose the dark red muscle beneath. Blood streams freely down your fur, steaming in the Arctic air. The wounds are ragged and will take weeks to close. Each time you move, the torn edges pull apart and fresh pain lances through the muscle.',
+        statEffects: [
+          { stat: StatId.HEA, amount: -10 },
+          { stat: StatId.HOM, amount: 8 },
+          { stat: StatId.TRA, amount: 6 },
+        ],
+        baseHealingTime: 4,
+        worseningChance: 0.14,
+        permanentDebuffChance: 0.06,
+      },
+    ],
+  },
+
+  'bear-bite-wound': {
+    id: 'bear-bite-wound',
+    name: 'Bear Bite Wound',
+    bodyParts: ['right forelimb', 'left forelimb', 'neck', 'muzzle'],
+    severityLevels: [
+      {
+        severity: 'minor',
+        description:
+          'A rival clamped his jaws on you during a clinch but could not hold the grip. His canines left a pair of shallow punctures surrounded by a deep, throbbing bruise. The tissue around the bite is swollen and hot to the touch, but no muscle was torn. You carry the mark of a fight that could have been worse.',
+        statEffects: [
+          { stat: StatId.HEA, amount: -4 },
+          { stat: StatId.TRA, amount: 4 },
+        ],
+        baseHealingTime: 2,
+        worseningChance: 0.08,
+        permanentDebuffChance: 0.02,
+      },
+      {
+        severity: 'moderate',
+        description:
+          'His canines sank deep into your flesh and held. You felt the teeth grind against muscle fiber before you wrenched free, tearing the wound wider in the process. The punctures are deep and ragged, weeping blood and serum. Infection is a near certainty in wounds this deep — the bacteria from a bear\'s mouth are vicious colonizers of torn tissue.',
+        statEffects: [
+          { stat: StatId.HEA, amount: -12 },
+          { stat: StatId.HOM, amount: 10 },
+          { stat: StatId.TRA, amount: 8 },
+          { stat: StatId.IMM, amount: 5 },
+        ],
+        baseHealingTime: 4,
+        worseningChance: 0.18,
+        permanentDebuffChance: 0.08,
+      },
+      {
+        severity: 'severe',
+        description:
+          'He locked his jaws around your limb and bore down with the full crushing force of a polar bear\'s bite — over eight hundred pounds per square inch. You heard the bone crack before you felt it. The pain was white and absolute. The limb is swollen grotesquely, the skin purpled and split where the canines drove through to the bone. Walking is agony. Healing will be slow, incomplete, and haunted by the memory of that sound.',
+        statEffects: [
+          { stat: StatId.HEA, amount: -22 },
+          { stat: StatId.HOM, amount: 18 },
+          { stat: StatId.TRA, amount: 15 },
+          { stat: StatId.ADV, amount: 10 },
+          { stat: StatId.IMM, amount: 8 },
+        ],
+        baseHealingTime: 7,
+        worseningChance: 0.24,
+        permanentDebuffChance: 0.18,
+      },
+    ],
+  },
 };
