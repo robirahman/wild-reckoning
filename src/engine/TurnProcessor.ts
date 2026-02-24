@@ -1,6 +1,6 @@
 import type { GameState } from '../store/gameStore';
 import type { ResolvedEvent, StatEffect, Consequence } from '../types/events';
-import type { EventOutcome, TurnResult } from '../types/turnResult';
+import type { EventOutcome, TurnResult, PendingDeathRoll } from '../types/turnResult';
 import { StatId, computeEffectiveValue } from '../types/stats';
 import { DIFFICULTY_PRESETS } from '../types/difficulty';
 import { generateEvents } from './EventGenerator';
@@ -8,6 +8,10 @@ import { tickHealth } from './HealthSystem';
 import { computeBuckWinProbability, determineFawnCount } from './ReproductionSystem';
 import { getRegionDefinition } from '../data/regions';
 
+/**
+ * Build the event generation context from game state and delegate to
+ * the EventGenerator. Returns the resolved events for this turn.
+ */
 export function generateTurnEvents(state: GameState): ResolvedEvent[] {
   return generateEvents({
     animal: state.animal,
@@ -41,6 +45,7 @@ export function resolveTurn(state: GameState): {
   const allStatEffects: StatEffect[] = [];
   const allConsequences: Consequence[] = [];
   const eventOutcomes: EventOutcome[] = [];
+  const pendingDeathRolls: PendingDeathRoll[] = [];
 
   // Capture pre-resolution stat snapshot for delta computation
   const preStats: Record<StatId, number> = {} as Record<StatId, number>;
@@ -108,11 +113,23 @@ export function resolveTurn(state: GameState): {
           prob = Math.max(predVuln.deathChanceMin, Math.min(predVuln.deathChanceMax, prob));
           deathRollProbability = prob;
 
-          if (state.rng.chance(prob)) {
-            eventConsequences.push({ type: 'death', cause: dc.cause });
-            deathRollSurvived = false;
+          // If escape options exist, defer the death roll for player choice
+          if (dc.escapeOptions && dc.escapeOptions.length > 0) {
+            pendingDeathRolls.push({
+              eventId: event.definition.id,
+              choiceId: choice.id,
+              baseProbability: prob,
+              cause: dc.cause,
+              escapeOptions: dc.escapeOptions,
+            });
           } else {
-            deathRollSurvived = true;
+            // No escape options: resolve immediately with pure RNG
+            if (state.rng.chance(prob)) {
+              eventConsequences.push({ type: 'death', cause: dc.cause });
+              deathRollSurvived = false;
+            } else {
+              deathRollSurvived = true;
+            }
           }
         }
       }
@@ -212,6 +229,7 @@ export function resolveTurn(state: GameState): {
     newParasites,
     newInjuries,
     statDelta,
+    pendingDeathRolls: pendingDeathRolls.length > 0 ? pendingDeathRolls : undefined,
   };
 
   return {

@@ -38,6 +38,7 @@ export const allEvents: GameEvent[] = [
       },
     ],
     conditions: [
+      { type: 'species', speciesIds: ['white-tailed-deer'] },
       { type: 'season', seasons: ['summer', 'autumn'] },
     ],
     weight: 12,
@@ -484,6 +485,7 @@ export const allEvents: GameEvent[] = [
       },
     ],
     conditions: [
+      { type: 'species', speciesIds: ['white-tailed-deer'] },
       { type: 'season', seasons: ['summer', 'autumn'] },
     ],
     weight: 10,
@@ -515,6 +517,7 @@ export const allEvents: GameEvent[] = [
       },
     ],
     conditions: [
+      { type: 'species', speciesIds: ['white-tailed-deer'] },
       { type: 'season', seasons: ['spring', 'summer'] },
     ],
     weight: 12,
@@ -906,6 +909,7 @@ export const allEvents: GameEvent[] = [
       },
     ],
     conditions: [
+      { type: 'species', speciesIds: ['white-tailed-deer'] },
       { type: 'region', regionIds: ['minnesota-winter-yard'] },
     ],
     weight: 12,

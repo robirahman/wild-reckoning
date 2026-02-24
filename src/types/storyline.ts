@@ -1,4 +1,4 @@
-import type { EventCondition, StatEffect, Consequence } from './events';
+import type { EventCondition, StatEffect, Consequence, EventChoice } from './events';
 
 export interface StorylineStep {
   id: string;
@@ -15,6 +15,10 @@ export interface StorylineStep {
   consequences: Consequence[];
   /** Flag set when this step triggers (used to track progression) */
   completionFlag: string;
+  /** If present, this step shows as an active event with choices */
+  choices?: EventChoice[];
+  /** If a choice leads to a specific next step ID instead of sequential advancement */
+  branchMap?: Record<string, number>;  // choiceId -> step index to jump to
 }
 
 export interface StorylineDefinition {
@@ -37,4 +41,6 @@ export interface ActiveStoryline {
   currentStepIndex: number;
   turnsAtCurrentStep: number;
   startedOnTurn: number;
+  /** Tracks which choices were made at each step (stepIndex -> choiceId) */
+  choicesMade?: Record<number, string>;
 }

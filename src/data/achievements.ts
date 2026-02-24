@@ -10,6 +10,8 @@ export interface AchievementDefinition {
   /** If set, only check/show for these species IDs */
   species?: string | string[];
   check: (state: GameState) => boolean;
+  /** Returns partial progress for display. Undefined = binary unlock. */
+  progress?: (state: any) => { current: number; target: number } | null;
 }
 
 export const ACHIEVEMENTS: AchievementDefinition[] = [
@@ -20,6 +22,7 @@ export const ACHIEVEMENTS: AchievementDefinition[] = [
     description: 'Survive 10 turns.',
     checkOn: 'turn',
     check: (s) => s.time.turn >= 10,
+    progress: (s) => ({ current: Math.min(s.time.turn, 10), target: 10 }),
   },
   {
     id: 'survivor-50',
@@ -27,6 +30,7 @@ export const ACHIEVEMENTS: AchievementDefinition[] = [
     description: 'Survive 50 turns.',
     checkOn: 'turn',
     check: (s) => s.time.turn >= 50,
+    progress: (s) => ({ current: Math.min(s.time.turn, 50), target: 50 }),
   },
   {
     id: 'survivor-100',
@@ -34,6 +38,7 @@ export const ACHIEVEMENTS: AchievementDefinition[] = [
     description: 'Survive 100 turns.',
     checkOn: 'turn',
     check: (s) => s.time.turn >= 100,
+    progress: (s) => ({ current: Math.min(s.time.turn, 100), target: 100 }),
   },
 
   // Fitness achievements
@@ -52,6 +57,7 @@ export const ACHIEVEMENTS: AchievementDefinition[] = [
     description: 'Reach a fitness score of 5 or more.',
     checkOn: 'both',
     check: (s) => s.reproduction.totalFitness >= 5,
+    progress: (s) => ({ current: Math.min(Math.floor(s.reproduction.totalFitness), 5), target: 5 }),
   },
 
   // Health challenges
@@ -77,6 +83,7 @@ export const ACHIEVEMENTS: AchievementDefinition[] = [
     description: 'Reach 90+ Health.',
     checkOn: 'turn',
     check: (s) => computeEffectiveValue(s.animal.stats[StatId.HEA]) >= 90,
+    progress: (s) => ({ current: Math.min(Math.round(computeEffectiveValue(s.animal.stats[StatId.HEA])), 90), target: 90 }),
   },
   {
     id: 'wise-elder',
@@ -84,6 +91,7 @@ export const ACHIEVEMENTS: AchievementDefinition[] = [
     description: 'Reach 80+ Wisdom.',
     checkOn: 'turn',
     check: (s) => computeEffectiveValue(s.animal.stats[StatId.WIS]) >= 80,
+    progress: (s) => ({ current: Math.min(Math.round(computeEffectiveValue(s.animal.stats[StatId.WIS])), 80), target: 80 }),
   },
 
   // Weight achievements (deer-specific)
@@ -157,6 +165,7 @@ export const ACHIEVEMENTS: AchievementDefinition[] = [
     description: 'Survive 50 turns on Hard difficulty.',
     checkOn: 'turn',
     check: (s) => s.difficulty === 'hard' && s.time.turn >= 50,
+    progress: (s) => s.difficulty === 'hard' ? { current: Math.min(s.time.turn, 50), target: 50 } : null,
   },
 
   // Death achievements
@@ -182,6 +191,10 @@ export const ACHIEVEMENTS: AchievementDefinition[] = [
     description: 'Survive 5 encounters with your predator NPC.',
     checkOn: 'turn',
     check: (s) => s.npcs.some((n) => n.type === 'predator' && n.encounters >= 5),
+    progress: (s) => {
+      const pred = s.npcs.find((n: any) => n.type === 'predator');
+      return pred ? { current: Math.min(pred.encounters, 5), target: 5 } : { current: 0, target: 5 };
+    },
   },
   {
     id: 'predator-champion',
@@ -189,6 +202,10 @@ export const ACHIEVEMENTS: AchievementDefinition[] = [
     description: 'Survive 10 encounters with your predator NPC.',
     checkOn: 'turn',
     check: (s) => s.npcs.some((n) => n.type === 'predator' && n.encounters >= 10),
+    progress: (s) => {
+      const pred = s.npcs.find((n: any) => n.type === 'predator');
+      return pred ? { current: Math.min(pred.encounters, 10), target: 10 } : { current: 0, target: 10 };
+    },
   },
   {
     id: 'rival-outlasted',
@@ -196,6 +213,10 @@ export const ACHIEVEMENTS: AchievementDefinition[] = [
     description: 'Survive 8 encounters with your rival.',
     checkOn: 'turn',
     check: (s) => s.npcs.some((n) => n.type === 'rival' && n.encounters >= 8),
+    progress: (s) => {
+      const rival = s.npcs.find((n: any) => n.type === 'rival');
+      return rival ? { current: Math.min(rival.encounters, 8), target: 8 } : { current: 0, target: 8 };
+    },
   },
   {
     id: 'found-mate',
@@ -277,6 +298,7 @@ export const ACHIEVEMENTS: AchievementDefinition[] = [
     checkOn: 'turn',
     species: 'african-elephant',
     check: (s) => s.time.year >= 10,
+    progress: (s) => ({ current: Math.min(s.time.year, 10), target: 10 }),
   },
   {
     id: 'salmon-ocean-prime',
@@ -367,6 +389,7 @@ export const ACHIEVEMENTS: AchievementDefinition[] = [
     checkOn: 'turn',
     species: 'polar-bear',
     check: (s) => s.animal.age >= 180,
+    progress: (s) => ({ current: Math.min(s.animal.age, 180), target: 180 }),
   },
 
   // Green Sea Turtle achievements
@@ -385,6 +408,7 @@ export const ACHIEVEMENTS: AchievementDefinition[] = [
     checkOn: 'turn',
     species: 'green-sea-turtle',
     check: (s) => s.animal.age >= 480,
+    progress: (s) => ({ current: Math.min(s.animal.age, 480), target: 480 }),
   },
   {
     id: 'turtle-nesting',
@@ -429,6 +453,7 @@ export const ACHIEVEMENTS: AchievementDefinition[] = [
     checkOn: 'turn',
     species: 'monarch-butterfly',
     check: (s) => s.time.turn >= 100,
+    progress: (s) => ({ current: Math.min(s.time.turn, 100), target: 100 }),
   },
   {
     id: 'monarch-clean-wings',
@@ -484,6 +509,7 @@ export const ACHIEVEMENTS: AchievementDefinition[] = [
     checkOn: 'turn',
     species: 'fig-wasp',
     check: (s) => s.time.turn >= 48,
+    progress: (s) => ({ current: Math.min(s.time.turn, 48), target: 48 }),
   },
   {
     id: 'figwasp-male-combat-victor',
@@ -581,6 +607,7 @@ export const ACHIEVEMENTS: AchievementDefinition[] = [
     checkOn: 'turn',
     species: 'arctic-tern',
     check: (s) => s.animal.age >= 120,
+    progress: (s) => ({ current: Math.min(s.animal.age, 120), target: 120 }),
   },
   {
     id: 'tern-raise-chicks',
@@ -649,5 +676,7 @@ export const ACHIEVEMENTS: AchievementDefinition[] = [
       void s;
       return false; // Handled by achievementStore.speciesPlayed.size >= 4
     },
+    // Progress is computed in AchievementList using achievementStore.speciesPlayed
+    progress: () => null,
   },
 ];

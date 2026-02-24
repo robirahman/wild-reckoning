@@ -1,7 +1,10 @@
 import { StatId, computeEffectiveValue } from '../types/stats';
 import type { StatBlock, StatValue, StatModifier } from '../types/stats';
 
-/** Tick all stat modifiers: decrease durations, remove expired ones */
+/**
+ * Tick all stat modifiers: decrements each modifier's remaining duration
+ * by one and removes any that have expired. Permanent modifiers are kept.
+ */
 export function tickModifiers(stats: StatBlock): StatBlock {
   const result = { ...stats };
 
@@ -20,7 +23,10 @@ export function tickModifiers(stats: StatBlock): StatBlock {
   return result;
 }
 
-/** Add a modifier to the appropriate stat in the stat block */
+/**
+ * Immutably append a modifier to the appropriate stat in the block.
+ * Returns a new StatBlock with the modifier added.
+ */
 export function addModifier(stats: StatBlock, modifier: StatModifier): StatBlock {
   const statId = modifier.stat;
   const stat = stats[statId];

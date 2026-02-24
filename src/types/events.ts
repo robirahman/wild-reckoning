@@ -75,12 +75,28 @@ export interface SubEventTrigger {
   consequences: Consequence[];
 }
 
+// ── Escape Options (predator escape choice system) ──
+
+export interface EscapeOption {
+  id: string;
+  label: string;
+  description: string;
+  /** Added to survival probability (positive = better survival). E.g., 0.1 = +10% survival */
+  survivalModifier: number;
+  /** Stat cost for choosing this option (applied regardless of survival) */
+  statCost?: StatEffect[];
+  /** Optional flag that must be set to use this option */
+  requiredFlag?: string;
+}
+
 // ── Choices ──
 
 export interface DeathChance {
   probability: number;
   cause: string;
   statModifiers?: { stat: StatId; factor: number }[];
+  /** If present, show escape choices instead of pure RNG */
+  escapeOptions?: EscapeOption[];
 }
 
 export interface EventChoice {

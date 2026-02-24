@@ -1,5 +1,5 @@
 import type { StatId } from './stats';
-import type { StatEffect, Consequence } from './events';
+import type { StatEffect, Consequence, EscapeOption } from './events';
 
 export interface EventOutcome {
   eventId: string;
@@ -13,6 +13,14 @@ export interface EventOutcome {
   deathRollProbability?: number;
 }
 
+export interface PendingDeathRoll {
+  eventId: string;
+  choiceId: string;
+  baseProbability: number;
+  cause: string;
+  escapeOptions: EscapeOption[];
+}
+
 export interface TurnResult {
   eventOutcomes: EventOutcome[];
   healthNarratives: string[];
@@ -20,4 +28,5 @@ export interface TurnResult {
   newParasites: string[];
   newInjuries: string[];
   statDelta: Record<StatId, number>;
+  pendingDeathRolls?: PendingDeathRoll[];
 }

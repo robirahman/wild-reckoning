@@ -9,9 +9,12 @@ import { DIFFICULTY_DESCRIPTIONS } from '../types/difficulty';
 import { AchievementList } from './achievements/AchievementList';
 import { ScenarioSelect } from './ScenarioSelect';
 import { Encyclopedia } from './Encyclopedia';
+import { SpeciesComparison } from './SpeciesComparison';
 import { SPECIES_UNLOCKS } from '../data/speciesUnlocks';
 import { useAchievementStore } from '../store/achievementStore';
 import { SCENARIOS } from '../data/scenarios';
+import { ThemeToggle } from './ThemeToggle';
+import styles from '../styles/startscreen.module.css';
 
 function isSpeciesUnlocked(speciesId: string, unlockedAchievements: Set<string>, speciesPlayed: Set<string>): boolean {
   const unlock = SPECIES_UNLOCKS.find((u) => u.speciesId === speciesId);
@@ -33,7 +36,7 @@ export function StartScreen() {
   const resumeGame = useGameStore((s) => s.resumeGame);
   const allBundles = getAllSpeciesBundles();
   const [saveExists] = useState(() => hasSaveGame());
-  const [subScreen, setSubScreen] = useState<'none' | 'scenarios' | 'encyclopedia'>('none');
+  const [subScreen, setSubScreen] = useState<'none' | 'scenarios' | 'encyclopedia' | 'comparison'>('none');
   const unlockedAchievements = useAchievementStore((s) => s.unlockedIds);
   const speciesPlayed = useAchievementStore((s) => s.speciesPlayed);
 
@@ -71,95 +74,67 @@ export function StartScreen() {
   if (subScreen === 'encyclopedia') {
     return <Encyclopedia onBack={() => setSubScreen('none')} />;
   }
+  if (subScreen === 'comparison') {
+    return <SpeciesComparison onBack={() => setSubScreen('none')} />;
+  }
 
   return (
-    <div style={{
-      maxWidth: 640,
-      margin: '0 auto',
-      padding: '48px 32px',
-      fontFamily: 'var(--font-narrative)',
-    }}>
-      <h1 style={{
-        fontFamily: 'var(--font-ui)',
-        fontSize: '2rem',
-        marginBottom: 8,
-        textAlign: 'center',
-      }}>
+    <div className={styles.container}>
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 8 }}>
+        <ThemeToggle />
+      </div>
+      <h1 className={styles.title}>
         Wild Reckoning
       </h1>
-      <p style={{
-        textAlign: 'center',
-        color: 'var(--color-text-muted)',
-        marginBottom: 40,
-        fontStyle: 'italic',
-      }}>
+      <p className={styles.subtitle}>
         A wildlife survival simulator
       </p>
 
       {saveExists && (
         <button
           onClick={() => resumeGame()}
-          style={{
-            width: '100%',
-            padding: '14px 24px',
-            fontSize: '1.1rem',
-            fontFamily: 'var(--font-ui)',
-            fontWeight: 700,
-            border: '2px solid var(--color-text)',
-            borderRadius: 4,
-            background: 'var(--color-text)',
-            color: 'var(--color-panel-bg)',
-            cursor: 'pointer',
-            marginBottom: 40,
-          }}
+          className={styles.resumeButton}
         >
           Resume Game
         </button>
       )}
 
       {/* ── Species Selector ── */}
-      <div style={{ marginBottom: 32 }}>
-        <h3 style={{ fontFamily: 'var(--font-ui)', marginBottom: 12 }}>Species</h3>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+      <div className={styles.section}>
+        <h3 className={styles.sectionTitle}>Species</h3>
+        <div className={styles.columnGroup}>
           {allBundles.map((bundle) => {
             const unlocked = isSpeciesUnlocked(bundle.config.id, unlockedAchievements, speciesPlayed);
             const hint = getUnlockHint(bundle.config.id);
+            const isSelected = selectedSpeciesId === bundle.config.id && unlocked;
 
             return (
               <button
                 key={bundle.config.id}
                 onClick={() => unlocked && handleSpeciesChange(bundle)}
                 disabled={!unlocked}
-                style={{
-                  padding: '12px 16px',
-                  border: `2px solid ${selectedSpeciesId === bundle.config.id && unlocked ? 'var(--color-text)' : 'var(--color-border)'}`,
-                  borderRadius: 4,
-                  background: selectedSpeciesId === bundle.config.id && unlocked ? 'var(--color-bar-bg)' : 'var(--color-panel-bg)',
-                  textAlign: 'left',
-                  cursor: unlocked ? 'pointer' : 'default',
-                  opacity: unlocked ? 1 : 0.45,
-                }}
+                className={`${styles.speciesButton} ${isSelected ? styles.selected : ''}`}
               >
-                <div style={{ fontFamily: 'var(--font-ui)', fontSize: '0.95rem', fontWeight: selectedSpeciesId === bundle.config.id && unlocked ? 700 : 400 }}>
+                <div className={`${styles.speciesName} ${isSelected ? styles.selected : ''}`}>
                   {unlocked ? bundle.config.name : '???'}
                   {unlocked && (
-                    <span style={{ color: 'var(--color-text-muted)', fontWeight: 400, marginLeft: 8, fontSize: '0.85rem' }}>
+                    <span className={styles.scientificName}>
                       ({bundle.config.scientificName})
                     </span>
                   )}
                 </div>
                 {unlocked ? (
                   <>
-                    <div style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', marginTop: 4 }}>
+                    <div className={styles.speciesDescription}>
                       {bundle.config.description}
                     </div>
-                    <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginTop: 4, fontFamily: 'var(--font-ui)' }}>
+                    <div className={styles.speciesRegion}>
                       {bundle.config.defaultRegionDisplayName}
                       {bundle.config.reproduction.type === 'semelparous' && ' — Semelparous lifecycle'}
                     </div>
                   </>
                 ) : (
-                  <div style={{ fontSize: '0.8rem', fontStyle: 'italic', color: 'var(--color-text-muted)', marginTop: 4 }}>
+                  <div className={styles.lockedHint}>
                     Locked — {hint}
                   </div>
                 )}
@@ -170,24 +145,14 @@ export function StartScreen() {
       </div>
 
       {/* ── Sex Selector ── */}
-      <div style={{ marginBottom: 32 }}>
-        <h3 style={{ fontFamily: 'var(--font-ui)', marginBottom: 12 }}>Sex</h3>
-        <div style={{ display: 'flex', gap: 12 }}>
+      <div className={styles.section}>
+        <h3 className={styles.sectionTitle}>Sex</h3>
+        <div className={styles.rowGroup}>
           {(['female', 'male'] as const).map((sex) => (
             <button
               key={sex}
               onClick={() => setSelectedSex(sex)}
-              style={{
-                flex: 1,
-                padding: '10px 16px',
-                border: `2px solid ${selectedSex === sex ? 'var(--color-text)' : 'var(--color-border)'}`,
-                borderRadius: 4,
-                background: selectedSex === sex ? 'var(--color-bar-bg)' : 'var(--color-panel-bg)',
-                fontFamily: 'var(--font-ui)',
-                fontSize: '0.95rem',
-                cursor: 'pointer',
-                fontWeight: selectedSex === sex ? 700 : 400,
-              }}
+              className={`${styles.toggleButton} ${selectedSex === sex ? styles.selected : ''}`}
             >
               {sex === 'female'
                 ? `\u2640 ${selectedBundle.config.templateVars.femaleNoun.charAt(0).toUpperCase() + selectedBundle.config.templateVars.femaleNoun.slice(1)}`
@@ -199,27 +164,19 @@ export function StartScreen() {
       </div>
 
       {/* ── Backstory Selector ── */}
-      <div style={{ marginBottom: 32 }}>
-        <h3 style={{ fontFamily: 'var(--font-ui)', marginBottom: 12 }}>Backstory</h3>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+      <div className={styles.section}>
+        <h3 className={styles.sectionTitle}>Backstory</h3>
+        <div className={styles.columnGroup}>
           {selectedBundle.backstories.map((option) => (
             <button
               key={option.type}
               onClick={() => setSelectedBackstoryType(option.type)}
-              style={{
-                padding: '12px 16px',
-                border: `2px solid ${selectedBackstoryType === option.type ? 'var(--color-text)' : 'var(--color-border)'}`,
-                borderRadius: 4,
-                background: selectedBackstoryType === option.type ? 'var(--color-bar-bg)' : 'var(--color-panel-bg)',
-                textAlign: 'left',
-                cursor: 'pointer',
-                fontWeight: selectedBackstoryType === option.type ? 600 : 400,
-              }}
+              className={`${styles.backstoryButton} ${selectedBackstoryType === option.type ? styles.selected : ''}`}
             >
-              <div style={{ fontFamily: 'var(--font-ui)', fontSize: '0.95rem', marginBottom: 4 }}>
+              <div className={styles.backstoryLabel}>
                 {option.label}
               </div>
-              <div style={{ fontFamily: 'var(--font-narrative)', fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
+              <div className={styles.backstoryDescription}>
                 {option.description}
               </div>
             </button>
@@ -228,27 +185,19 @@ export function StartScreen() {
       </div>
 
       {/* ── Difficulty Selector ── */}
-      <div style={{ marginBottom: 32 }}>
-        <h3 style={{ fontFamily: 'var(--font-ui)', marginBottom: 12 }}>Difficulty</h3>
-        <div style={{ display: 'flex', gap: 12 }}>
+      <div className={styles.section}>
+        <h3 className={styles.sectionTitle}>Difficulty</h3>
+        <div className={styles.rowGroup}>
           {(['easy', 'normal', 'hard'] as const).map((diff) => (
             <button
               key={diff}
               onClick={() => setSelectedDifficulty(diff)}
-              style={{
-                flex: 1,
-                padding: '10px 16px',
-                border: `2px solid ${selectedDifficulty === diff ? 'var(--color-text)' : 'var(--color-border)'}`,
-                borderRadius: 4,
-                background: selectedDifficulty === diff ? 'var(--color-bar-bg)' : 'var(--color-panel-bg)',
-                textAlign: 'left',
-                cursor: 'pointer',
-              }}
+              className={`${styles.difficultyButton} ${selectedDifficulty === diff ? styles.selected : ''}`}
             >
-              <div style={{ fontFamily: 'var(--font-ui)', fontSize: '0.95rem', fontWeight: selectedDifficulty === diff ? 700 : 400, marginBottom: 4 }}>
+              <div className={`${styles.difficultyLabel} ${selectedDifficulty === diff ? styles.selected : ''}`}>
                 {diff.charAt(0).toUpperCase() + diff.slice(1)}
               </div>
-              <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
+              <div className={styles.difficultyDescription}>
                 {DIFFICULTY_DESCRIPTIONS[diff]}
               </div>
             </button>
@@ -260,55 +209,29 @@ export function StartScreen() {
 
       <button
         onClick={() => startGame(selectedSpeciesId, backstory, selectedSex, selectedDifficulty)}
-        style={{
-          width: '100%',
-          padding: '14px 24px',
-          fontSize: '1.1rem',
-          fontFamily: 'var(--font-ui)',
-          fontWeight: 700,
-          border: '2px solid var(--color-text)',
-          borderRadius: 4,
-          background: 'var(--color-text)',
-          color: 'var(--color-panel-bg)',
-          cursor: 'pointer',
-          marginBottom: 12,
-        }}
+        className={styles.beginButton}
       >
         Begin
       </button>
 
-      <div style={{ display: 'flex', gap: 12, marginBottom: 16 }}>
+      <div className={styles.navRow}>
         <button
           onClick={() => setSubScreen('scenarios')}
-          style={{
-            flex: 1,
-            padding: '10px 16px',
-            fontSize: '0.95rem',
-            fontFamily: 'var(--font-ui)',
-            fontWeight: 600,
-            border: '2px solid var(--color-border)',
-            borderRadius: 4,
-            background: 'var(--color-panel-bg)',
-            cursor: 'pointer',
-          }}
+          className={styles.navButton}
         >
           Challenge Mode
         </button>
         <button
           onClick={() => setSubScreen('encyclopedia')}
-          style={{
-            flex: 1,
-            padding: '10px 16px',
-            fontSize: '0.95rem',
-            fontFamily: 'var(--font-ui)',
-            fontWeight: 600,
-            border: '2px solid var(--color-border)',
-            borderRadius: 4,
-            background: 'var(--color-panel-bg)',
-            cursor: 'pointer',
-          }}
+          className={styles.navButton}
         >
           Encyclopedia
+        </button>
+        <button
+          onClick={() => setSubScreen('comparison')}
+          className={styles.navButton}
+        >
+          Compare Species
         </button>
       </div>
     </div>

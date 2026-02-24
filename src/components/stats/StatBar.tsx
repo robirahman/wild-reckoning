@@ -45,6 +45,11 @@ export function StatBar({ statId, value, trend, modifiers }: StatBarProps) {
       className={styles.statBar}
       onMouseEnter={() => setShowTooltip(true)}
       onMouseLeave={() => setShowTooltip(false)}
+      role="meter"
+      aria-label={`${name}: ${value}`}
+      aria-valuenow={value}
+      aria-valuemin={0}
+      aria-valuemax={100}
     >
       <div className={styles.statNameRow}>
         <span className={styles.statName}>{name}</span>

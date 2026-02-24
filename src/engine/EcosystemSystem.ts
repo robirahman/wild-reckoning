@@ -3,6 +3,13 @@
 import type { EcosystemState, PopulationState } from '../types/ecosystem';
 import { ECOSYSTEM_LINKS, ECOSYSTEM_EVENTS } from '../data/ecosystem';
 import type { Rng } from './RandomUtils';
+import {
+  ECOSYSTEM_REGRESSION_CHANCE,
+  ECOSYSTEM_REGRESSION_AMOUNT,
+  ECOSYSTEM_EVENT_COOLDOWN_TURNS,
+  ECOSYSTEM_MAX_POPULATION_LEVEL,
+  ECOSYSTEM_MIN_POPULATION_LEVEL,
+} from './constants';
 
 export function initializeEcosystem(): EcosystemState {
   const populations: Record<string, PopulationState> = {};
@@ -39,7 +46,7 @@ export function tickEcosystem(
 
     if (prey.level <= -1) {
       // Low prey population pressures predators
-      const newLevel = Math.max(-2, predator.level - link.strength * 0.3);
+      const newLevel = Math.max(ECOSYSTEM_MIN_POPULATION_LEVEL, predator.level - link.strength * 0.3);
       populations[link.predator] = {
         ...predator,
         level: Math.round(newLevel * 10) / 10,
@@ -47,7 +54,7 @@ export function tickEcosystem(
       };
     } else if (prey.level >= 1) {
       // Abundant prey benefits predators
-      const newLevel = Math.min(2, predator.level + link.strength * 0.2);
+      const newLevel = Math.min(ECOSYSTEM_MAX_POPULATION_LEVEL, predator.level + link.strength * 0.2);
       populations[link.predator] = {
         ...predator,
         level: Math.round(newLevel * 10) / 10,
@@ -59,8 +66,8 @@ export function tickEcosystem(
   // Natural regression toward baseline
   for (const name of Object.keys(populations)) {
     const pop = populations[name];
-    if (pop.level !== 0 && rng.chance(0.15)) {
-      const regression = pop.level > 0 ? -0.1 : 0.1;
+    if (pop.level !== 0 && rng.chance(ECOSYSTEM_REGRESSION_CHANCE)) {
+      const regression = pop.level > 0 ? -ECOSYSTEM_REGRESSION_AMOUNT : ECOSYSTEM_REGRESSION_AMOUNT;
       populations[name] = {
         ...pop,
         level: Math.round((pop.level + regression) * 10) / 10,
@@ -69,8 +76,8 @@ export function tickEcosystem(
     }
   }
 
-  // Check for ecosystem narrative events (max one per 5 turns)
-  if (turn - eco.lastEventTurn >= 5) {
+  // Check for ecosystem narrative events (max one per cooldown period)
+  if (turn - eco.lastEventTurn >= ECOSYSTEM_EVENT_COOLDOWN_TURNS) {
     for (const event of ECOSYSTEM_EVENTS) {
       const pop = populations[event.speciesName];
       if (!pop) continue;
@@ -99,7 +106,7 @@ export function modifyPopulation(
   const pop = populations[speciesName];
   if (!pop) return eco;
 
-  const newLevel = Math.max(-2, Math.min(2, pop.level + amount));
+  const newLevel = Math.max(ECOSYSTEM_MIN_POPULATION_LEVEL, Math.min(ECOSYSTEM_MAX_POPULATION_LEVEL, pop.level + amount));
   populations[speciesName] = {
     ...pop,
     level: Math.round(newLevel * 10) / 10,

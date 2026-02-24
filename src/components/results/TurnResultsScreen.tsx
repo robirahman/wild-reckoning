@@ -1,15 +1,29 @@
 import { useGameStore } from '../../store/gameStore';
 import { useGameEngine } from '../../hooks/useGameEngine';
 import { EventOutcomeCard } from './EventOutcomeCard';
+import { DeathChoiceModal } from '../DeathChoiceModal';
 import { StatId, STAT_NAMES, STAT_POLARITY } from '../../types/stats';
 import styles from '../../styles/results.module.css';
 
 export function TurnResultsScreen() {
   const turnResult = useGameStore((s) => s.turnResult);
   const phase = useGameStore((s) => s.phase);
+  const resolveDeathRoll = useGameStore((s) => s.resolveDeathRoll);
   const { dismissResults } = useGameEngine();
 
   if (!turnResult) return null;
+
+  // If there are pending death rolls, show the escape choice modal first
+  const pendingRolls = turnResult.pendingDeathRolls;
+  if (pendingRolls && pendingRolls.length > 0) {
+    const currentRoll = pendingRolls[0];
+    return (
+      <DeathChoiceModal
+        deathRoll={currentRoll}
+        onChoose={(escapeOptionId) => resolveDeathRoll(currentRoll.eventId, escapeOptionId)}
+      />
+    );
+  }
 
   const hasStatChanges = Object.values(turnResult.statDelta).some((d) => d !== 0);
   const hasHealthNarratives = turnResult.healthNarratives.length > 0;

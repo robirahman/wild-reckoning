@@ -80,6 +80,37 @@ const deerInjuries: Record<string, InjuryDefinition> = {
     ],
   },
 
+  'antler-break': {
+    id: 'antler-break',
+    name: 'Broken Antler Tine',
+    bodyParts: ['right antler', 'left antler'],
+    severityLevels: [
+      {
+        severity: 'minor',
+        description: 'A brow tine snapped off cleanly during rut combat, leaving a jagged stump. The exposed pedicle bone aches but is not bleeding heavily.',
+        statEffects: [
+          { stat: StatId.HEA, amount: -3 },
+          { stat: StatId.HOM, amount: 5 },
+        ],
+        baseHealingTime: 8,
+        worseningChance: 0.06,
+        permanentDebuffChance: 0.02,
+      },
+      {
+        severity: 'moderate',
+        description: 'A main beam cracked and partially separated, with splintered bone exposing the vascular core. Blood streams down the face and the remaining antler hangs at an angle, throwing off balance.',
+        statEffects: [
+          { stat: StatId.HEA, amount: -8 },
+          { stat: StatId.HOM, amount: 10 },
+          { stat: StatId.ADV, amount: 6 },
+        ],
+        baseHealingTime: 16,
+        worseningChance: 0.12,
+        permanentDebuffChance: 0.05,
+      },
+    ],
+  },
+
   'coyote-bite': {
     id: 'coyote-bite',
     name: 'Coyote Bite',

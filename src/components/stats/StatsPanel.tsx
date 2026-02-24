@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { AnimalIdentity } from './AnimalIdentity';
 import { StatCategory } from './StatCategory';
 import { useGameStore } from '../../store/gameStore';
@@ -71,7 +72,10 @@ export function StatsPanel() {
     allModifiers.push(...stats[statId].modifiers);
   }
 
-  const trends = computeTrends(effectiveValues, turnHistory);
+  const trends = useMemo(
+    () => computeTrends(effectiveValues, turnHistory),
+    [effectiveValues, turnHistory],
+  );
 
   return (
     <div className={styles.statsPanel}>

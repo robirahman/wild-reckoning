@@ -16,7 +16,12 @@ export function EventChoice({ label, description, style, selected, onClick }: Ev
   ].join(' ');
 
   return (
-    <button className={className} onClick={onClick}>
+    <button
+      className={className}
+      onClick={onClick}
+      aria-pressed={selected}
+      aria-label={`${label}${description ? ': ' + description : ''}`}
+    >
       {label}
       {description && (
         <span className={styles.choiceDescription}>{description}</span>

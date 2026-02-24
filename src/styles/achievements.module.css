@@ -96,3 +96,28 @@
   font-size: 0.8rem;
   color: var(--color-text-muted);
 }
+
+.progressBar {
+  height: 4px;
+  background: var(--color-bar-bg);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--color-bar-positive);
+  transition: width 0.3s ease;
+}
+
+.progressText {
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  margin-top: 2px;
+}
+
+.lockedItem {
+  opacity: 0.5;
+}

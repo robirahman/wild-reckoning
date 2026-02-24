@@ -540,6 +540,110 @@ const turtleEvents: GameEvent[] = [
   },
 
   // ══════════════════════════════════════════════
+  //  HEALTH / PARASITE EVENTS
+  // ══════════════════════════════════════════════
+
+  {
+    id: 'turtle-seagrass-fluke-exposure',
+    type: 'passive',
+    category: 'health',
+    narrativeText:
+      'As you graze on a dense seagrass bed, tiny snails cling to the blades — barely visible, no larger than grains of rice. You swallow several with each mouthful. Unbeknownst to you, these snails are shedding microscopic cercariae into the water around them, and the free-swimming larvae are penetrating your skin even as you feed.',
+    statEffects: [
+      { stat: StatId.HOM, amount: -3, label: '-HOM' },
+    ],
+    subEvents: [
+      {
+        eventId: 'turtle-spirorchid-fluke-infection',
+        chance: 0.15,
+        conditions: [
+          { type: 'no_parasite', parasiteId: 'spirorchid-fluke' },
+        ],
+        narrativeText: 'The cercariae have entered your bloodstream and are migrating toward your heart and brain. Spirorchid blood flukes — they will colonize your blood vessels and begin laying eggs in your vascular walls.',
+        footnote: '(Infected with spirorchid blood flukes)',
+        statEffects: [],
+        consequences: [
+          { type: 'add_parasite', parasiteId: 'spirorchid-fluke', startStage: 0 },
+        ],
+      },
+    ],
+    conditions: [
+      { type: 'species', speciesIds: ['green-sea-turtle'] },
+      { type: 'season', seasons: ['summer', 'autumn'] },
+    ],
+    weight: 10,
+    cooldown: 8,
+    tags: ['health', 'parasite', 'foraging'],
+    footnote: 'Spirorchid blood flukes (family Spirorchiidae) are among the most common parasites of sea turtles worldwide. Their complex life cycle involves marine snails as intermediate hosts.',
+  },
+
+  {
+    id: 'turtle-contaminated-seagrass-grazing',
+    type: 'passive',
+    category: 'health',
+    narrativeText:
+      'The seagrass bed you are grazing has a slimy, unhealthy look. A brownish film coats the blades, and small invertebrates are unusually abundant — tiny crustaceans and worms wriggling among the roots. The grass still tastes adequate, so you continue to feed, but your gut feels unsettled afterward.',
+    statEffects: [
+      { stat: StatId.HOM, amount: 2, label: '+HOM' },
+    ],
+    subEvents: [
+      {
+        eventId: 'turtle-gut-fluke-infection',
+        chance: 0.18,
+        conditions: [
+          { type: 'no_parasite', parasiteId: 'gut-fluke' },
+        ],
+        narrativeText: 'Among the contaminated vegetation, you ingested encysted metacercariae of intestinal flukes. Within days, they hatch in your gut and begin attaching to the intestinal wall, feeding on your blood and tissue.',
+        footnote: '(Infected with intestinal flukes)',
+        statEffects: [],
+        consequences: [
+          { type: 'add_parasite', parasiteId: 'gut-fluke', startStage: 0 },
+        ],
+      },
+    ],
+    conditions: [
+      { type: 'species', speciesIds: ['green-sea-turtle'] },
+    ],
+    weight: 10,
+    cooldown: 8,
+    tags: ['health', 'parasite', 'foraging'],
+    footnote: 'Intestinal trematodes are common in green sea turtles, acquired through contaminated seagrass and algae. Heavy burdens can significantly impair nutrient absorption.',
+  },
+
+  {
+    id: 'turtle-shallow-water-leeches',
+    type: 'passive',
+    category: 'health',
+    narrativeText:
+      'You settle into a warm, shallow lagoon to rest — the kind of sheltered water where you often sleep, wedged beneath a coral ledge with your head tucked against the rock. As you doze, something attaches to the soft skin behind your rear flippers. Then another, and another. When you rouse and swim into clearer water, you can see them — small, dark, worm-like creatures clinging to your skin and pulsing as they feed.',
+    statEffects: [
+      { stat: StatId.ADV, amount: 3, label: '+ADV' },
+    ],
+    subEvents: [
+      {
+        eventId: 'turtle-leech-infestation',
+        chance: 0.25,
+        conditions: [
+          { type: 'no_parasite', parasiteId: 'turtle-leech' },
+        ],
+        narrativeText: 'Several marine leeches have embedded themselves firmly in the soft tissue around your neck and cloaca. They are Ozobranchus — turtle-specialist leeches that will cling to you for weeks, feeding on your blood and potentially transmitting disease.',
+        footnote: '(Infested with marine turtle leeches)',
+        statEffects: [],
+        consequences: [
+          { type: 'add_parasite', parasiteId: 'turtle-leech', startStage: 0 },
+        ],
+      },
+    ],
+    conditions: [
+      { type: 'species', speciesIds: ['green-sea-turtle'] },
+    ],
+    weight: 10,
+    cooldown: 6,
+    tags: ['health', 'parasite', 'rest'],
+    footnote: 'Ozobranchus branchiatus is a marine leech that feeds exclusively on sea turtles. It is strongly suspected as a vector for the fibropapillomatosis virus that devastates green sea turtle populations.',
+  },
+
+  // ══════════════════════════════════════════════
   //  ENVIRONMENTAL EVENTS
   // ══════════════════════════════════════════════
 
@@ -722,4 +826,16 @@ const turtleEvents: GameEvent[] = [
   },
 ];
 
-export const GREEN_SEA_TURTLE_EVENTS: GameEvent[] = [...sharedEvents, ...turtleEvents];
+// Exclude shared events that reference terrestrial parasites not applicable to sea turtles
+const EXCLUDED_SHARED_EVENT_IDS = new Set([
+  'foraging-blueberry-shrub',    // references meningeal-worm (deer parasite)
+  'health-stagnant-water',       // references liver-fluke (deer parasite)
+  'health-tick-brush',           // references lone-star-tick (deer parasite)
+  'migration-winter-yard-disease', // references liver-fluke (deer parasite)
+]);
+
+const filteredSharedEvents = sharedEvents.filter(
+  (event) => !EXCLUDED_SHARED_EVENT_IDS.has(event.id),
+);
+
+export const GREEN_SEA_TURTLE_EVENTS: GameEvent[] = [...filteredSharedEvents, ...turtleEvents];

@@ -1,0 +1,37 @@
+// Territory
+export const TERRITORY_AUTO_ESTABLISH_TURN = 5;
+export const TERRITORY_INITIAL_SIZE = 50;
+export const TERRITORY_INITIAL_QUALITY = 50;
+export const TERRITORY_UNMARKED_THRESHOLD = 4;
+export const TERRITORY_QUALITY_DECAY = 3;
+export const TERRITORY_INTRUDER_CHANCE = 0.15;
+export const TERRITORY_QUALITY_DRIFT_CHANCE = 0.1;
+export const TERRITORY_QUALITY_DRIFT_RANGE = 2;
+export const TERRITORY_CONTESTED_QUALITY_LOSS = 2;
+export const TERRITORY_INTRUDER_LEAVE_CHANCE = 0.2;
+
+// NPC
+export const NPC_INTRODUCTION_MIN_TURN = 3;
+
+// Ecosystem
+export const ECOSYSTEM_REGRESSION_CHANCE = 0.15;
+export const ECOSYSTEM_REGRESSION_AMOUNT = 0.1;
+export const ECOSYSTEM_EVENT_COOLDOWN_TURNS = 5;
+export const ECOSYSTEM_MAX_POPULATION_LEVEL = 2;
+export const ECOSYSTEM_MIN_POPULATION_LEVEL = -2;
+
+// Health
+export const INJURY_WORSEN_CHANCE = 0.1;
+export const INJURY_WORSEN_EXTRA_TURNS = 4;
+export const INJURY_RESTING_HEAL_RATE = 2;
+export const INJURY_NORMAL_HEAL_RATE = 1;
+
+// Storyline
+export const STORYLINE_ADVANCE_CHANCE = 0.3;
+
+// Achievement popup
+export const ACHIEVEMENT_TOAST_DURATION_MS = 4000;
+
+// Stats
+export const STAT_TREND_LOOKBACK = 4;
+export const STAT_TREND_THRESHOLD = 3;

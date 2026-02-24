@@ -7,13 +7,17 @@ import { ParasiticInfections } from '../health/ParasiticInfections';
 import { HealthComplications } from '../health/HealthComplications';
 import { BehavioralSettings } from '../behavior/BehavioralSettings';
 import { TurnControls } from '../TurnControls';
+import { ActionPanel } from '../ActionPanel';
 import { TurnResultsScreen } from '../results/TurnResultsScreen';
 import { EventHistoryPanel } from '../history/EventHistoryPanel';
+import { JournalView } from '../JournalView';
 import { TutorialOverlay } from '../tutorial/TutorialOverlay';
 import { AchievementPopup } from '../achievements/AchievementPopup';
 import { useGameEngine } from '../../hooks/useGameEngine';
 import { useAudio } from '../../hooks/useAudio';
 import { useGameStore } from '../../store/gameStore';
+import { ThemeToggle } from '../ThemeToggle';
+import { AudioControls } from '../AudioControls';
 import styles from '../../styles/layout.module.css';
 
 export function GameLayout() {
@@ -23,6 +27,7 @@ export function GameLayout() {
   const advanceTutorial = useGameStore((s) => s.advanceTutorial);
   const skipTutorial = useGameStore((s) => s.skipTutorial);
   const [showHistory, setShowHistory] = useState(false);
+  const [showJournal, setShowJournal] = useState(false);
   useAudio();
 
   // Generate first turn's events on mount
@@ -35,10 +40,31 @@ export function GameLayout() {
   return (
     <div className={styles.gameLayout}>
       <header className={styles.header}>
-        <TurnHeader onToggleHistory={() => setShowHistory((h) => !h)} />
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+          <TurnHeader onToggleHistory={() => setShowHistory((h) => !h)} />
+          <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+            <button
+              onClick={() => setShowJournal((j) => !j)}
+              style={{
+                background: 'none',
+                border: '1px solid var(--color-border)',
+                borderRadius: 4,
+                padding: '2px 8px',
+                cursor: 'pointer',
+                fontFamily: 'var(--font-ui)',
+                fontSize: '0.75rem',
+              }}
+            >
+              Journal
+            </button>
+            <AudioControls />
+            <ThemeToggle />
+          </div>
+        </div>
       </header>
 
       {showHistory && <EventHistoryPanel onClose={() => setShowHistory(false)} />}
+      {showJournal && <JournalView onClose={() => setShowJournal(false)} />}
 
       {tutorialStep !== null && (
         <TutorialOverlay
@@ -48,25 +74,26 @@ export function GameLayout() {
         />
       )}
 
-      <main className={styles.events}>
+      <main className={styles.events} role="region" aria-label="Events area">
         {showingResults ? (
           <TurnResultsScreen />
         ) : (
           <>
             <ActiveEvents />
             <PassiveEvents />
+            <ActionPanel />
             <TurnControls />
           </>
         )}
       </main>
 
-      <aside className={styles.sidebar}>
+      <aside className={styles.sidebar} role="complementary" aria-label="Stats and health sidebar">
         <StatsPanel />
         <ParasiticInfections />
         <HealthComplications />
       </aside>
 
-      <footer className={styles.behavior}>
+      <footer className={styles.behavior} role="region" aria-label="Behavioral settings bar">
         <BehavioralSettings />
       </footer>
 

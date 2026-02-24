@@ -5,13 +5,14 @@ import { StatId, computeEffectiveValue } from '../types/stats';
 import { saveGame } from '../store/persistence';
 import { checkAchievements } from '../engine/AchievementChecker';
 import { useAchievementStore } from '../store/achievementStore';
-import { introduceNPC, incrementEncounter } from '../engine/NPCSystem';
+import { introduceNPC, incrementEncounter, progressRelationship } from '../engine/NPCSystem';
 import { tickStorylines } from '../engine/StorylineSystem';
 import { generateAmbientText } from '../engine/AmbientTextGenerator';
 import { tickEcosystem } from '../engine/EcosystemSystem';
 import { tickTerritory, TERRITORIAL_SPECIES } from '../engine/TerritorySystem';
 import { ENCYCLOPEDIA_ENTRIES } from '../data/encyclopedia';
 import { useEncyclopediaStore } from '../store/encyclopediaStore';
+import { NPC_INTRODUCTION_MIN_TURN, TERRITORY_AUTO_ESTABLISH_TURN, TERRITORY_INITIAL_SIZE, TERRITORY_INITIAL_QUALITY } from '../engine/constants';
 
 export function useGameEngine() {
   const store = useGameStore();
@@ -22,7 +23,7 @@ export function useGameEngine() {
     const state = useGameStore.getState();
 
     // Introduce NPCs on early turns if none exist yet
-    if (state.npcs.length === 0 && state.time.turn >= 3) {
+    if (state.npcs.length === 0 && state.time.turn >= NPC_INTRODUCTION_MIN_TURN) {
       const npcs = [...state.npcs];
       for (const type of ['rival', 'ally', 'predator'] as const) {
         const npc = introduceNPC(state.animal.speciesId, type, state.time.turn, npcs, state.rng);
@@ -36,7 +37,7 @@ export function useGameEngine() {
     // Introduce mate NPC at mating season onset if no mate exists yet
     const stateForMate = useGameStore.getState();
     const hasMate = stateForMate.npcs.some((n) => n.type === 'mate' && n.alive);
-    if (!hasMate && stateForMate.time.turn >= 3) {
+    if (!hasMate && stateForMate.time.turn >= NPC_INTRODUCTION_MIN_TURN) {
       const reproConfig = stateForMate.speciesBundle.config.reproduction;
       const isMating =
         (reproConfig.type === 'iteroparous' &&
@@ -74,12 +75,25 @@ export function useGameEngine() {
 
     // Tick territory for territorial species
     if (TERRITORIAL_SPECIES.has(currentState.animal.speciesId)) {
-      const newTerritory = tickTerritory(
-        currentState.territory,
-        currentState.animal.speciesId,
-        currentState.rng,
-      );
-      useGameStore.setState({ territory: newTerritory });
+      // Auto-establish territory after a few turns
+      if (!currentState.territory.established && currentState.time.turn >= TERRITORY_AUTO_ESTABLISH_TURN) {
+        const flags = new Set(currentState.animal.flags);
+        flags.add('territory-established');
+        useGameStore.setState({
+          territory: { ...currentState.territory, established: true, size: TERRITORY_INITIAL_SIZE, quality: TERRITORY_INITIAL_QUALITY, markedTurns: 0 },
+          animal: { ...currentState.animal, flags },
+        });
+      }
+
+      const freshState = useGameStore.getState();
+      if (freshState.territory.established) {
+        const newTerritory = tickTerritory(
+          freshState.territory,
+          freshState.animal.speciesId,
+          freshState.rng,
+        );
+        useGameStore.setState({ territory: newTerritory });
+      }
     }
 
     const events = generateTurnEvents(useGameStore.getState());
@@ -93,6 +107,7 @@ export function useGameEngine() {
       rng: currentState.rng,
       npcs: currentState.npcs,
       activeStorylines: currentState.activeStorylines,
+      currentEvents: currentState.currentEvents,
     });
 
     const allStorylines = [...storylineResult.updatedStorylines, ...storylineResult.newStorylines];
@@ -168,6 +183,8 @@ export function useGameEngine() {
         }
       }
     }
+    // Progress NPC relationships based on encounter counts
+    updatedNPCs = progressRelationship(updatedNPCs);
     if (updatedNPCs !== encounterState.npcs) {
       store.setNPCs(updatedNPCs);
     }

@@ -74,6 +74,115 @@ export const AFRICAN_ELEPHANT_INJURIES: Record<string, InjuryDefinition> = {
     ],
   },
 
+  'leg-fracture': {
+    id: 'leg-fracture',
+    name: 'Leg Fracture',
+    bodyParts: [
+      'hind left tibia',
+      'hind right tibia',
+      'front left radius',
+      'front right radius',
+    ],
+    severityLevels: [
+      {
+        severity: 'moderate',
+        description: 'A crocodile\'s jaws have cracked the bone in your leg. You can put weight on it, but each step sends a sickening jolt of pain through your body. The herd slows for you, but they will not wait forever.',
+        statEffects: [
+          { stat: StatId.HEA, amount: -8 },
+          { stat: StatId.HOM, amount: 8 },
+          { stat: StatId.ADV, amount: 6 },
+        ],
+        baseHealingTime: 5,
+        worseningChance: 0.15,
+        permanentDebuffChance: 0.08,
+      },
+      {
+        severity: 'severe',
+        description: 'The crocodile\'s death-roll has shattered the bone. Your leg buckles with every step, and the swelling is grotesque. Without rest you cannot heal, but standing still on the savanna makes you vulnerable to everything.',
+        statEffects: [
+          { stat: StatId.HEA, amount: -18 },
+          { stat: StatId.HOM, amount: 15 },
+          { stat: StatId.ADV, amount: 12 },
+        ],
+        baseHealingTime: 8,
+        worseningChance: 0.22,
+        permanentDebuffChance: 0.20,
+      },
+    ],
+  },
+
+  'scrape-wound': {
+    id: 'scrape-wound',
+    name: 'Scrape Wound',
+    bodyParts: [
+      'right flank',
+      'left flank',
+      'right shoulder',
+      'left shoulder',
+    ],
+    severityLevels: [
+      {
+        severity: 'minor',
+        description: 'A raw patch of scraped hide where you stumbled against rough ground. It stings in the heat and attracts flies, but it is little more than an indignity.',
+        statEffects: [
+          { stat: StatId.HEA, amount: -2 },
+        ],
+        baseHealingTime: 1,
+        worseningChance: 0.05,
+        permanentDebuffChance: 0.0,
+      },
+      {
+        severity: 'moderate',
+        description: 'The scrape has torn away a wide section of skin, exposing raw flesh underneath. Dust and dirt have ground into the wound, and it weeps a thin, clear fluid that draws insects.',
+        statEffects: [
+          { stat: StatId.HEA, amount: -5 },
+          { stat: StatId.HOM, amount: 4 },
+        ],
+        baseHealingTime: 2,
+        worseningChance: 0.10,
+        permanentDebuffChance: 0.02,
+      },
+    ],
+  },
+
+  'snare-laceration': {
+    id: 'snare-laceration',
+    name: 'Snare Laceration',
+    bodyParts: [
+      'left front ankle',
+      'right front ankle',
+      'left hind ankle',
+      'right hind ankle',
+    ],
+    severityLevels: [
+      {
+        severity: 'moderate',
+        description: 'The braided wire has cut a deep ring around your ankle, slicing through hide and into the flesh beneath. Every step reopens the wound, and the wire has left fragments of rust and grit embedded in the laceration.',
+        statEffects: [
+          { stat: StatId.HEA, amount: -7 },
+          { stat: StatId.TRA, amount: 8 },
+          { stat: StatId.HOM, amount: 6 },
+        ],
+        baseHealingTime: 4,
+        worseningChance: 0.15,
+        permanentDebuffChance: 0.10,
+      },
+      {
+        severity: 'severe',
+        description: 'The snare wire has cut nearly to the bone. The wound is angry and inflamed, the flesh around it hot to the touch. Infection has set in, and the ankle is swollen to twice its normal size. Walking is agony.',
+        statEffects: [
+          { stat: StatId.HEA, amount: -15 },
+          { stat: StatId.TRA, amount: 15 },
+          { stat: StatId.HOM, amount: 12 },
+          { stat: StatId.ADV, amount: 8 },
+        ],
+        baseHealingTime: 6,
+        worseningChance: 0.20,
+        permanentDebuffChance: 0.18,
+      },
+    ],
+  },
+
   'gunshot-wound': {
     id: 'gunshot-wound',
     name: 'Gunshot Wound',

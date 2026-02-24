@@ -187,7 +187,10 @@ export function resolveTemplate(text: string, ctx: GenerationContext): string {
     });
 }
 
-/** Generate events for a single turn */
+/**
+ * Generate events for a single turn. Filters eligible events by cooldown
+ * and conditions, then weighted-selects 1-3 active and 0-2 passive events.
+ */
 export function generateEvents(ctx: GenerationContext): ResolvedEvent[] {
   const events = ctx.events;
   const results: ResolvedEvent[] = [];

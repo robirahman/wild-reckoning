@@ -3,11 +3,13 @@ import { StatId } from '../../types/stats';
 import { HUMAN_STORYLINES } from './human-storylines';
 import { SEASONAL_STORYLINES } from './seasonal-arcs';
 import { SPECIES_STORYLINES } from './species-arcs';
+import { DECISION_ARC_STORYLINES } from './decision-arcs';
 
 export const STORYLINES: StorylineDefinition[] = [
   ...HUMAN_STORYLINES,
   ...SEASONAL_STORYLINES,
   ...SPECIES_STORYLINES,
+  ...DECISION_ARC_STORYLINES,
   // ── Drought Arc (white-tailed deer) ──
   {
     id: 'drought-arc',

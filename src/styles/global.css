@@ -20,7 +20,7 @@
   --color-severity-severe: #c0392b;
   --color-severity-critical: #8e0000;
 
-  /* Typography */
+  /* Typography (shared across themes) */
   --font-narrative: Georgia, 'Times New Roman', serif;
   --font-ui: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 
@@ -30,6 +30,28 @@
   --space-md: 16px;
   --space-lg: 24px;
   --space-xl: 32px;
+}
+
+[data-theme="dark"] {
+  --color-bg: #1a1a1e;
+  --color-text: #d8d8d8;
+  --color-text-muted: #999;
+  --color-border: #444;
+  --color-border-light: #333;
+  --color-danger: #e74c3c;
+  --color-danger-light: #c0392b;
+  --color-positive: #6dbf6d;
+  --color-positive-light: #2d4a2d;
+  --color-negative: #e74c3c;
+  --color-negative-light: #4a2020;
+  --color-bar-positive: #4a8a4a;
+  --color-bar-negative: #8a4040;
+  --color-bar-bg: #2a2a2e;
+  --color-panel-bg: #222226;
+  --color-severity-minor: #888;
+  --color-severity-moderate: #d4940b;
+  --color-severity-severe: #e74c3c;
+  --color-severity-critical: #ff4444;
 }
 
 *,

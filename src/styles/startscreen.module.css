@@ -1,0 +1,230 @@
+/* StartScreen styles — extracted from inline styles */
+
+.container {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 48px 32px;
+  font-family: var(--font-narrative);
+}
+
+.title {
+  font-family: var(--font-ui);
+  font-size: 2rem;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.subtitle {
+  text-align: center;
+  color: var(--color-text-muted);
+  margin-bottom: 40px;
+  font-style: italic;
+}
+
+/* ── Primary action buttons (Resume, Begin) ── */
+
+.primaryButton {
+  width: 100%;
+  padding: 14px 24px;
+  font-size: 1.1rem;
+  font-family: var(--font-ui);
+  font-weight: 700;
+  border: 2px solid var(--color-text);
+  border-radius: 4px;
+  background: var(--color-text);
+  color: var(--color-panel-bg);
+  cursor: pointer;
+}
+
+.resumeButton {
+  composes: primaryButton;
+  margin-bottom: 40px;
+}
+
+.beginButton {
+  composes: primaryButton;
+  margin-bottom: 12px;
+}
+
+/* ── Section layout ── */
+
+.section {
+  margin-bottom: 32px;
+}
+
+.sectionTitle {
+  font-family: var(--font-ui);
+  margin-bottom: 12px;
+}
+
+.columnGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.rowGroup {
+  display: flex;
+  gap: 12px;
+}
+
+/* ── Species card button ── */
+
+.speciesButton {
+  padding: 12px 16px;
+  border: 2px solid var(--color-border);
+  border-radius: 4px;
+  background: var(--color-panel-bg);
+  text-align: left;
+  cursor: pointer;
+}
+
+.speciesButton.selected {
+  border-color: var(--color-text);
+  background: var(--color-bar-bg);
+}
+
+.speciesButton:disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+
+.speciesName {
+  font-family: var(--font-ui);
+  font-size: 0.95rem;
+  font-weight: 400;
+}
+
+.speciesName.selected {
+  font-weight: 700;
+}
+
+.scientificName {
+  color: var(--color-text-muted);
+  font-weight: 400;
+  margin-left: 8px;
+  font-size: 0.85rem;
+}
+
+.speciesDescription {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin-top: 4px;
+}
+
+.speciesRegion {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin-top: 4px;
+  font-family: var(--font-ui);
+}
+
+.lockedHint {
+  font-size: 0.8rem;
+  font-style: italic;
+  color: var(--color-text-muted);
+  margin-top: 4px;
+}
+
+/* ── Toggle button (Sex, Difficulty) ── */
+
+.toggleButton {
+  flex: 1;
+  padding: 10px 16px;
+  border: 2px solid var(--color-border);
+  border-radius: 4px;
+  background: var(--color-panel-bg);
+  font-family: var(--font-ui);
+  font-size: 0.95rem;
+  cursor: pointer;
+  font-weight: 400;
+}
+
+.toggleButton.selected {
+  border-color: var(--color-text);
+  background: var(--color-bar-bg);
+  font-weight: 700;
+}
+
+/* ── Backstory card button ── */
+
+.backstoryButton {
+  padding: 12px 16px;
+  border: 2px solid var(--color-border);
+  border-radius: 4px;
+  background: var(--color-panel-bg);
+  text-align: left;
+  cursor: pointer;
+  font-weight: 400;
+}
+
+.backstoryButton.selected {
+  border-color: var(--color-text);
+  background: var(--color-bar-bg);
+  font-weight: 600;
+}
+
+.backstoryLabel {
+  font-family: var(--font-ui);
+  font-size: 0.95rem;
+  margin-bottom: 4px;
+}
+
+.backstoryDescription {
+  font-family: var(--font-narrative);
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+/* ── Difficulty card button ── */
+
+.difficultyButton {
+  flex: 1;
+  padding: 10px 16px;
+  border: 2px solid var(--color-border);
+  border-radius: 4px;
+  background: var(--color-panel-bg);
+  text-align: left;
+  cursor: pointer;
+}
+
+.difficultyButton.selected {
+  border-color: var(--color-text);
+  background: var(--color-bar-bg);
+}
+
+.difficultyLabel {
+  font-family: var(--font-ui);
+  font-size: 0.95rem;
+  font-weight: 400;
+  margin-bottom: 4px;
+}
+
+.difficultyLabel.selected {
+  font-weight: 700;
+}
+
+.difficultyDescription {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+/* ── Bottom nav row ── */
+
+.navRow {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.navButton {
+  flex: 1;
+  padding: 10px 16px;
+  font-size: 0.95rem;
+  font-family: var(--font-ui);
+  font-weight: 600;
+  border: 2px solid var(--color-border);
+  border-radius: 4px;
+  background: var(--color-panel-bg);
+  cursor: pointer;
+}

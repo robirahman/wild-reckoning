@@ -71,6 +71,62 @@ const deerParasites: Record<string, ParasiteDefinition> = {
     ],
   },
 
+  'deer-tick': {
+    id: 'deer-tick',
+    name: 'Deer Tick',
+    scientificName: 'Ixodes scapularis',
+    description:
+      'The black-legged tick, commonly called the deer tick, is a three-host tick that feeds on white-tailed deer as its preferred adult host. Its bite is nearly painless, but the pathogens it carries — Borrelia burgdorferi (Lyme disease), Anaplasma phagocytophilum, and Babesia microti — can cause debilitating systemic illness. Heavy infestations weaken the host through chronic blood loss and immune suppression.',
+    transmissionMethod: 'Contact with questing ticks on vegetation during warm months',
+    affectedSpecies: ['white-tailed-deer'],
+    stages: [
+      {
+        severity: 'minor',
+        description:
+          'A few ticks embedded in thin-skinned areas behind the ears and between the legs. Mild irritation.',
+        statEffects: [
+          { stat: StatId.IMM, amount: 3 },
+          { stat: StatId.HOM, amount: 2 },
+        ],
+        secondaryEffects: [],
+        turnDuration: { min: 3, max: 7 },
+        progressionChance: 0.18,
+        remissionChance: 0.30,
+      },
+      {
+        severity: 'moderate',
+        description:
+          'Dozens of engorged ticks feeding simultaneously. Chronic blood loss and early signs of tick-borne illness — lethargy, joint stiffness, mild fever.',
+        statEffects: [
+          { stat: StatId.HEA, amount: -6 },
+          { stat: StatId.IMM, amount: 8 },
+          { stat: StatId.HOM, amount: 6 },
+          { stat: StatId.ADV, amount: 3 },
+        ],
+        secondaryEffects: ['joint stiffness', 'mild anemia'],
+        turnDuration: { min: 4, max: 10 },
+        progressionChance: 0.12,
+        remissionChance: 0.20,
+      },
+      {
+        severity: 'severe',
+        description:
+          'Massive tick burden with systemic tick-borne disease. Swollen joints, persistent fever, neurological symptoms from Borrelia infection.',
+        statEffects: [
+          { stat: StatId.HEA, amount: -14 },
+          { stat: StatId.IMM, amount: 16 },
+          { stat: StatId.HOM, amount: 12 },
+          { stat: StatId.ADV, amount: 8 },
+          { stat: StatId.WIS, amount: -4 },
+        ],
+        secondaryEffects: ['severe anemia', 'Lyme arthritis', 'neurological impairment'],
+        turnDuration: { min: 3, max: 8 },
+        progressionChance: 0,
+        remissionChance: 0.10,
+      },
+    ],
+  },
+
   'winter-tick': {
     id: 'winter-tick',
     name: 'Winter Tick',

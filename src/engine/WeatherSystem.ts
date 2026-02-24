@@ -1,5 +1,6 @@
 import type { ClimateProfile, Season } from '../types/world';
 import type { Rng } from './RandomUtils';
+import { StatId } from '../types/stats';
 
 export type WeatherType =
   | 'clear'
@@ -176,7 +177,7 @@ export function generateWeather(
   };
 }
 
-export function advanceWeather(
+export function tickWeather(
   current: WeatherState,
   climate: ClimateProfile | undefined,
   season: Season,
@@ -231,6 +232,34 @@ export function weatherContextMultiplier(
   }
 
   return mult;
+}
+
+/** Compute direct survival penalties from extreme weather */
+export interface WeatherPenalty {
+  weightChange: number;
+  statModifiers: { stat: StatId; amount: number; duration: number }[];
+}
+
+export function computeWeatherPenalty(weather: WeatherState): WeatherPenalty {
+  const result: WeatherPenalty = { weightChange: 0, statModifiers: [] };
+  const { type, intensity } = weather;
+
+  if (type === 'blizzard') {
+    result.weightChange = -2 * intensity;
+    result.statModifiers.push({ stat: StatId.CLI, amount: Math.round(10 * intensity), duration: 1 });
+  } else if (type === 'heat_wave') {
+    result.weightChange = -1.5 * intensity;
+    result.statModifiers.push({ stat: StatId.CLI, amount: Math.round(8 * intensity), duration: 1 });
+  } else if (type === 'drought_conditions') {
+    result.weightChange = -1 * intensity;
+    result.statModifiers.push({ stat: StatId.HOM, amount: Math.round(5 * intensity), duration: 1 });
+  } else if (type === 'heavy_rain') {
+    result.statModifiers.push({ stat: StatId.CLI, amount: Math.round(4 * intensity), duration: 1 });
+  } else if (type === 'frost') {
+    result.weightChange = -0.5 * intensity;
+  }
+
+  return result;
 }
 
 export function weatherLabel(type: WeatherType): string {

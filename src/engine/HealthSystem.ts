@@ -5,6 +5,12 @@ import type { Rng } from './RandomUtils';
 import { addModifier, removeModifiersBySource } from './StatCalculator';
 import type { Difficulty } from '../types/difficulty';
 import { DIFFICULTY_PRESETS } from '../types/difficulty';
+import {
+  INJURY_WORSEN_CHANCE,
+  INJURY_WORSEN_EXTRA_TURNS,
+  INJURY_RESTING_HEAL_RATE,
+  INJURY_NORMAL_HEAL_RATE,
+} from './constants';
 
 interface HealthTickResult {
   animal: AnimalState;
@@ -12,7 +18,10 @@ interface HealthTickResult {
   flagsToSet: string[]; // Flags to set on the animal after ticking
 }
 
-/** Process one turn of health effects: parasite progression, injury healing */
+/**
+ * Process one turn of health effects: advances parasite stage progression
+ * and heals or worsens injuries based on resting state and RNG.
+ */
 export function tickHealth(
   animal: AnimalState,
   rng: Rng,
@@ -88,7 +97,7 @@ export function tickHealth(
   // ── Injury Healing ──
   const updatedInjuries: ActiveInjury[] = [];
   for (const injury of updatedAnimal.injuries) {
-    const healRate = injury.isResting ? 2 : 1;
+    const healRate = injury.isResting ? INJURY_RESTING_HEAL_RATE : INJURY_NORMAL_HEAL_RATE;
     const newTurns = injury.turnsRemaining - healRate;
 
     if (newTurns <= 0) {
@@ -98,13 +107,13 @@ export function tickHealth(
     }
 
     // Check for worsening if not resting
-    if (!injury.isResting && rng.chance(0.1)) {
+    if (!injury.isResting && rng.chance(INJURY_WORSEN_CHANCE)) {
       narratives.push(
         `Your ${injury.bodyPartDetail} injury has worsened from lack of rest.`
       );
       updatedInjuries.push({
         ...injury,
-        turnsRemaining: newTurns + 4, // Worsening adds healing time
+        turnsRemaining: newTurns + INJURY_WORSEN_EXTRA_TURNS,
         currentSeverity: Math.min(injury.currentSeverity + 1, 3),
       });
     } else {

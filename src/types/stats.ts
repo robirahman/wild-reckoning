@@ -127,7 +127,10 @@ export function getStatSign(stat: StatId, value: number): '+' | '-' {
   return '+';
 }
 
-/** Compute the effective value of a stat: base + sum of all modifiers, clamped 0-100 */
+/**
+ * Compute the effective value of a stat: base + sum of all active modifiers,
+ * clamped to the [0, 100] range.
+ */
 export function computeEffectiveValue(stat: StatValue): number {
   const total = stat.base + stat.modifiers.reduce((sum, m) => sum + m.amount, 0);
   return Math.max(0, Math.min(100, total));

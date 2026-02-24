@@ -22,6 +22,7 @@ import { DEFAULT_BEHAVIORAL_SETTINGS } from '../types/behavior';
 import { INITIAL_ITEROPAROUS_STATE, INITIAL_SEMELPAROUS_STATE } from '../types/reproduction';
 import { INITIAL_TERRITORY } from '../types/territory';
 import { initializeEcosystem, modifyPopulation } from '../engine/EcosystemSystem';
+import { territoryWeightModifier, TERRITORIAL_SPECIES } from '../engine/TerritorySystem';
 import { computeInheritedTraits, applyLineageBiases } from '../engine/LineageSystem';
 import { createStatBlock, addModifier, tickModifiers, removeModifiersBySource } from '../engine/StatCalculator';
 import { createInitialTime, advanceTime } from '../engine/TimeSystem';
@@ -31,9 +32,10 @@ import { tickReproduction, determineFawnCount, createFawns } from '../engine/Rep
 import { getSpeciesBundle } from '../data/species';
 import { loadGame, deleteSaveGame } from './persistence';
 import { getRegionDefinition } from '../data/regions';
-import { generateWeather, advanceWeather } from '../engine/WeatherSystem';
+import { generateWeather, tickWeather, computeWeatherPenalty, weatherLabel } from '../engine/WeatherSystem';
 import type { WeatherState } from '../engine/WeatherSystem';
 import { introduceNPC } from '../engine/NPCSystem';
+import { VOLUNTARY_ACTIONS, type ActionContext } from '../engine/ActionSystem';
 
 export type GamePhase = 'menu' | 'playing' | 'dead';
 
@@ -102,6 +104,9 @@ export interface GameState {
   // Lineage
   lineage: LineageTraits | null;
 
+  // Player-initiated actions
+  actionsPerformed: string[];
+
   // Actions
   startGame: (speciesId: string, backstory: Backstory, sex: 'male' | 'female', difficulty?: Difficulty) => void;
   setEvents: (events: ResolvedEvent[]) => void;
@@ -120,6 +125,8 @@ export interface GameState {
   setActiveStorylines: (storylines: ActiveStoryline[]) => void;
   advanceTutorial: () => void;
   skipTutorial: () => void;
+  performAction: (actionId: string) => void;
+  resolveDeathRoll: (eventId: string, escapeOptionId: string) => void;
 }
 
 function createInitialAnimal(config: SpeciesConfig, backstory: Backstory, sex: 'male' | 'female'): AnimalState {
@@ -185,6 +192,7 @@ export const useGameStore = create<GameState>((set, get) => {
     territory: { ...INITIAL_TERRITORY },
     scenario: null,
     lineage: null,
+    actionsPerformed: [],
 
     startGame(speciesId, backstory, sex, difficulty) {
       const newSeed = Date.now();
@@ -216,6 +224,7 @@ export const useGameStore = create<GameState>((set, get) => {
         territory: { ...INITIAL_TERRITORY },
         scenario: null,
         lineage: null,
+        actionsPerformed: [],
       });
     },
 
@@ -495,12 +504,29 @@ export const useGameStore = create<GameState>((set, get) => {
       const regionDef = getRegionDefinition(state.animal.region);
       const climate = regionDef?.climate;
       const newWeather = state.currentWeather
-        ? advanceWeather(state.currentWeather, climate, newTime.season, newTime.monthIndex, state.rng)
+        ? tickWeather(state.currentWeather, climate, newTime.season, newTime.monthIndex, state.rng)
         : generateWeather(climate, newTime.season, newTime.monthIndex, state.rng);
+
+      // Apply weather survival penalties (extreme weather causes direct harm)
+      if (newWeather) {
+        const weatherPenalty = computeWeatherPenalty(newWeather);
+        for (const mod of weatherPenalty.statModifiers) {
+          tickedStats = addModifier(tickedStats, {
+            id: `weather-${mod.stat}-${newTime.turn}`,
+            source: weatherLabel(newWeather.type),
+            sourceType: 'condition',
+            stat: mod.stat,
+            amount: mod.amount,
+            duration: mod.duration,
+          });
+        }
+        // Weather weight penalty applied below with seasonal weight
+      }
 
       // Seasonal weight: passive gain/loss based on season and foraging behavior
       let seasonalWeightChange = config.seasonalWeight[newTime.season]
-        + config.seasonalWeight.foragingBonus * state.behavioralSettings.foraging;
+        + config.seasonalWeight.foragingBonus * state.behavioralSettings.foraging
+        + (newWeather ? computeWeatherPenalty(newWeather).weightChange : 0);
 
       // Region climate modulation: extreme cold increases energy expenditure
       if (climate) {
@@ -508,6 +534,11 @@ export const useGameStore = create<GameState>((set, get) => {
         if (temp < 20) {
           seasonalWeightChange -= (20 - temp) * 0.05;
         }
+      }
+
+      // Apply territory quality modifier for territorial species
+      if (TERRITORIAL_SPECIES.has(state.animal.speciesId) && state.territory.established) {
+        seasonalWeightChange *= territoryWeightModifier(state.territory);
       }
 
       // Apply difficulty multipliers to seasonal weight change
@@ -616,6 +647,7 @@ export const useGameStore = create<GameState>((set, get) => {
         pendingChoices: [],
         turnHistory: [...state.turnHistory, record],
         eventCooldowns: newCooldowns,
+        actionsPerformed: [],
       });
 
     },
@@ -686,6 +718,102 @@ export const useGameStore = create<GameState>((set, get) => {
         turnResult: null,
         showingResults: false,
       });
+    },
+
+    performAction(actionId: string) {
+      const state = get();
+      const action = VOLUNTARY_ACTIONS.find((a) => a.id === actionId);
+      if (!action || state.actionsPerformed.includes(actionId)) return;
+
+      const ctx: ActionContext = {
+        speciesId: state.animal.speciesId,
+        territory: state.territory,
+        reproductionType: state.speciesBundle.config.reproduction.type,
+        season: state.time.season,
+        matingSeasons:
+          state.speciesBundle.config.reproduction.type === 'iteroparous'
+            ? (state.speciesBundle.config.reproduction as any).matingSeasons ?? 'any'
+            : [],
+        rng: state.rng,
+      };
+
+      const result = action.execute(ctx);
+
+      // Apply stat effects
+      if (result.statEffects.length > 0) {
+        get().applyStatEffects(result.statEffects);
+      }
+
+      // Apply consequences
+      for (const c of result.consequences) {
+        get().applyConsequence(c);
+      }
+
+      // Add action as a passive event so it appears in the event feed
+      const actionEvent: ResolvedEvent = {
+        definition: {
+          id: `action-${actionId}`,
+          type: 'passive',
+          category: 'environmental',
+          narrativeText: result.narrative,
+          statEffects: result.statEffects,
+          consequences: result.consequences,
+          conditions: [],
+          weight: 0,
+          tags: ['action'],
+        },
+        resolvedNarrative: result.narrative,
+        triggeredSubEvents: [],
+      };
+
+      set({
+        actionsPerformed: [...state.actionsPerformed, actionId],
+        currentEvents: [...get().currentEvents, actionEvent],
+      });
+    },
+
+    resolveDeathRoll(eventId: string, escapeOptionId: string) {
+      const state = get();
+      if (!state.turnResult?.pendingDeathRolls) return;
+
+      const rollIndex = state.turnResult.pendingDeathRolls.findIndex((r) => r.eventId === eventId);
+      if (rollIndex === -1) return;
+
+      const roll = state.turnResult.pendingDeathRolls[rollIndex];
+      const option = roll.escapeOptions.find((o) => o.id === escapeOptionId);
+      if (!option) return;
+
+      // Calculate modified death probability: subtract survival modifier
+      let modifiedProb = roll.baseProbability - option.survivalModifier;
+      modifiedProb = Math.max(0.01, Math.min(0.95, modifiedProb));
+
+      // Roll the dice
+      const died = state.rng.chance(modifiedProb);
+
+      if (died) {
+        // Remove the pending roll and kill the animal
+        const remaining = state.turnResult.pendingDeathRolls.filter((_, i) => i !== rollIndex);
+        set({
+          turnResult: {
+            ...state.turnResult,
+            pendingDeathRolls: remaining.length > 0 ? remaining : undefined,
+          },
+        });
+        get().killAnimal(roll.cause);
+      } else {
+        // Survived: apply stat cost if any, then remove the pending roll
+        if (option.statCost && option.statCost.length > 0) {
+          get().applyStatEffects(option.statCost);
+        }
+
+        const remaining = state.turnResult.pendingDeathRolls.filter((_, i) => i !== rollIndex);
+        set({
+          turnResult: {
+            ...get().turnResult!,
+            pendingDeathRolls: remaining.length > 0 ? remaining : undefined,
+          },
+        });
+      }
     },
 
     killAnimal(cause) {

@@ -1,0 +1,80 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 250;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card {
+  max-width: 480px;
+  width: 90%;
+  background: var(--color-panel-bg);
+  border: 2px solid var(--color-danger);
+  border-radius: 6px;
+  padding: 24px 28px;
+}
+
+.title {
+  font-family: var(--font-ui);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-danger);
+  margin-bottom: 12px;
+}
+
+.description {
+  font-family: var(--font-narrative);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.optionButton {
+  text-align: left;
+  padding: 12px 16px;
+  border: 2px solid var(--color-border);
+  border-radius: 4px;
+  background: var(--color-panel-bg);
+  cursor: pointer;
+}
+
+.optionButton:hover {
+  border-color: var(--color-text);
+}
+
+.optionButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.optionLabel {
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.optionDesc {
+  font-family: var(--font-narrative);
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+  margin-top: 2px;
+}
+
+.optionModifier {
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  color: var(--color-positive);
+  margin-top: 4px;
+}
