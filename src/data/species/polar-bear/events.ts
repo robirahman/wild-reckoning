@@ -1185,4 +1185,49 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
     cooldown: 4,
     tags: ['environmental'],
   },
+  {
+    id: 'pb-arctic-tern-colony-raid',
+    type: 'active',
+    category: 'foraging',
+    narrativeText: "The ground ahead is white with the wings of thousands of Arctic Terns. Their high-pitched screams fill the air as they dive-bomb anything that approaches. The ground is littered with nests containing eggs and small, downy chicks. It is a bounty of protein, but the birds are relentless in their defense.",
+    statEffects: [
+      { stat: StatId.ADV, amount: 8, label: '+ADV (mobbing birds)' },
+    ],
+    choices: [
+      {
+        id: 'raid-nests',
+        label: 'Raid the colony for eggs and chicks',
+        description: 'High weight gain, but risk of injury from sharp beaks.',
+        narrativeResult: 'You lumber into the colony, ignoring the cloud of screaming birds. You systematically raid the nests, gulping down eggs and chicks. The terns strike at your eyes and nose, their sharp beaks drawing blood, but you gorge yourself until you are full.',
+        statEffects: [
+          { stat: StatId.HOM, amount: -15, label: '-HOM' },
+          { stat: StatId.HEA, amount: -5, label: '-HEA (pecks)' },
+        ],
+        consequences: [
+          { type: 'modify_weight', amount: 8 },
+          { type: 'modify_population', speciesName: 'Arctic Tern', amount: -0.2 },
+        ],
+        revocable: false,
+        style: 'danger',
+      },
+      {
+        id: 'bypass-colony',
+        label: 'Bypass the colony',
+        narrativeResult: 'The noise and the constant pecking are not worth the effort. You skirt the edge of the colony, leaving the birds to their frantic defense.',
+        statEffects: [
+          { stat: StatId.TRA, amount: -3, label: '-TRA' },
+        ],
+        consequences: [],
+        revocable: false,
+        style: 'default',
+      },
+    ],
+    conditions: [
+      { type: 'region', regionIds: ['arctic-breeding-colony'] },
+      { type: 'season', seasons: ['summer'] },
+    ],
+    weight: 12,
+    cooldown: 8,
+    tags: ['foraging', 'food', 'danger'],
+  },
 ];

@@ -209,6 +209,22 @@
   color: var(--color-text-muted);
 }
 
+.seedInput {
+  flex: 1;
+  padding: 10px 16px;
+  border: 2px solid var(--color-border);
+  border-radius: 4px;
+  background: var(--color-panel-bg);
+  color: var(--color-text);
+  font-family: var(--font-ui);
+  font-size: 0.95rem;
+}
+
+.seedInput:focus {
+  outline: none;
+  border-color: var(--color-text);
+}
+
 /* ── Bottom nav row ── */
 
 .navRow {

@@ -968,4 +968,105 @@ export const ARCTIC_TERN_EVENTS: GameEvent[] = [
     cooldown: 6,
     tags: ['foraging', 'social'],
   },
+  {
+    id: 'tern-polar-bear-colony-raid',
+    type: 'active',
+    category: 'predator',
+    narrativeText: "A massive, cream-colored shape is moving through the colony — a Polar Bear. It is systematically raiding the nests, its huge paws crushing eggs and its jaws snapping up chicks. The air is thick with thousands of terns screaming and diving in a collective attempt to drive the giant away.",
+    statEffects: [
+      { stat: StatId.TRA, amount: 15, label: '+TRA (colony panic)' },
+      { stat: StatId.ADV, amount: 10, label: '+ADV' },
+    ],
+    choices: [
+      {
+        id: 'mob-bear',
+        label: 'Join the mobbing attack',
+        description: 'Dive-bomb the bear to protect the colony. Risky, but can save many nests.',
+        narrativeResult: 'You fold your wings and scream, diving at the bear\'s sensitive nose. You strike again and again, joining a cloud of hundreds of other birds. The bear snarls and swathes at the air, eventually deciding the feast isn\'t worth the constant stings. It retreats toward the shoreline.',
+        statEffects: [
+          { stat: StatId.WIS, amount: 5, label: '+WIS' },
+          { stat: StatId.STR, amount: -5, label: '-STR' },
+        ],
+        consequences: [
+          { type: 'modify_population', speciesName: 'Polar Bear', amount: -0.05 }, // Discourages the bear
+        ],
+        revocable: false,
+        style: 'danger',
+        deathChance: {
+          probability: 0.02,
+          cause: 'The bear caught you with a lucky swat during a low dive.',
+        },
+      },
+      {
+        id: 'flee-sea',
+        label: 'Flee to the sea',
+        description: 'Save yourself and wait for the bear to leave.',
+        narrativeResult: 'You take to the air and head for the open water, circling at a distance until the bear has finished its grim work and left the colony behind. Many nests are destroyed, but you are safe.',
+        statEffects: [
+          { stat: StatId.TRA, amount: 5, label: '+TRA (loss of brood)' },
+        ],
+        consequences: [
+          { type: 'modify_population', speciesName: 'Arctic Tern', amount: -0.1 },
+        ],
+        revocable: false,
+        style: 'default',
+      },
+    ],
+    conditions: [
+      { type: 'region', regionIds: ['arctic-breeding-colony'] },
+      { type: 'season', seasons: ['summer'] },
+      { type: 'population_above', speciesName: 'Polar Bear', threshold: 0 },
+    ],
+    weight: 8,
+    cooldown: 12,
+    tags: ['predator', 'danger', 'social'],
+  },
+  {
+    id: 'tern-salmon-smolt-forage',
+    type: 'active',
+    category: 'foraging',
+    narrativeText: "The river mouth is boiling with activity. Thousands of young Chinook Salmon — smolts — are making their way from the freshwater into the sea. This bottleneck provides an incredible opportunity for a skilled diver. Other terns and gulls are already screaming and plunging into the brackish water, each emerging with a silver flash in its beak.",
+    statEffects: [
+      { stat: StatId.NOV, amount: 5, label: '+NOV' },
+    ],
+    choices: [
+      {
+        id: 'plunge-dive-smolts',
+        label: 'Plunge-dive for smolts',
+        description: 'High energy cost, but high weight gain.',
+        narrativeResult: 'You hover twenty feet above the surface, eyes locked on the silver schools below. You tuck your wings and dive, hitting the water with a sharp splash. You emerge with a wriggling smolt and gulp it down before a nearby gull can steal it. You repeat the process until your belly is full.',
+        statEffects: [
+          { stat: StatId.STR, amount: -4, label: '-STR' },
+          { stat: StatId.HOM, amount: -12, label: '-HOM' },
+        ],
+        consequences: [
+          { type: 'modify_weight', amount: 0.1 }, // Significant for a bird
+          { type: 'modify_population', speciesName: 'Chinook Salmon', amount: -0.05 },
+        ],
+        revocable: false,
+        style: 'default',
+      },
+      {
+        id: 'hover-and-wait',
+        label: 'Wait for easier pickings',
+        description: 'Less exhausting, but less food.',
+        narrativeResult: 'You wait for the tide to push the smolts closer to the surface. It takes longer, but you manage to snag several smaller fish with minimal effort. Your energy remains high, though you are not as full as you could be.',
+        statEffects: [
+          { stat: StatId.HOM, amount: -5, label: '-HOM' },
+        ],
+        consequences: [
+          { type: 'modify_weight', amount: 0.04 },
+        ],
+        revocable: false,
+        style: 'default',
+      },
+    ],
+    conditions: [
+      { type: 'region', regionIds: ['pacific-northwest-river'] },
+      { type: 'population_above', speciesName: 'Chinook Salmon', threshold: 0 },
+    ],
+    weight: 15,
+    cooldown: 10,
+    tags: ['foraging', 'food'],
+  },
 ];

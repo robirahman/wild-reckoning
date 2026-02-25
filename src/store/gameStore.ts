@@ -124,7 +124,7 @@ export interface GameState {
   fastForward: boolean;
 
   // Actions
-  startGame: (speciesId: string, backstory: Backstory, sex: 'male' | 'female', difficulty?: Difficulty) => void;
+  startGame: (speciesId: string, backstory: Backstory, sex: 'male' | 'female', difficulty?: Difficulty, seed?: number) => void;
   setEvents: (events: ResolvedEvent[]) => void;
   makeChoice: (eventId: string, choiceId: string) => void;
   applyStatEffects: (effects: StatEffect[]) => void;
@@ -225,8 +225,8 @@ export const useGameStore = create<GameState>((set, get) => {
     evolution: { activeMutations: [], availableChoices: [], generationCount: 0, lineageHistory: [] },
     fastForward: false,
 
-    startGame(speciesId, backstory, sex, difficulty) {
-      const newSeed = Date.now();
+    startGame(speciesId, backstory, sex, difficulty, seed) {
+      const newSeed = seed ?? Date.now();
       const bundle = getSpeciesBundle(speciesId);
       const tutorialSeen = localStorage.getItem('wild-reckoning-tutorial-seen') === 'true';
       set({

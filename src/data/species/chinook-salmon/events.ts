@@ -1705,4 +1705,51 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     tags: ['environmental', 'health'],
     footnote: 'Water temperatures above 21°C (70°F) are stressful for Chinook salmon, and sustained temperatures above 25°C (77°F) are often lethal. Climate change is making warm-water die-offs increasingly common in Pacific Northwest rivers.',
   },
+  {
+    id: 'salmon-tern-threat-estuary',
+    type: 'active',
+    category: 'predator',
+    narrativeText: "The water here is shallow and clear as you approach the river mouth. Above, the air is alive with the sharp, staccato cries of Arctic Terns. They hover and plunge with terrifying precision, each dive sending a shockwave through the school. To reach the open sea, you must run this gauntlet of white wings and sharp beaks.",
+    statEffects: [
+      { stat: StatId.ADV, amount: 10, label: '+ADV' },
+      { stat: StatId.TRA, amount: 5, label: '+TRA' },
+    ],
+    choices: [
+      {
+        id: 'stay-deep-estuary',
+        label: 'Stay in the deepest channels',
+        description: 'Harder for birds to spot you, but more crowded with other fish.',
+        narrativeResult: 'You hug the murky bottom of the main channel, staying below the reach of the diving birds. You see several of your schoolmates snatched away, but you remain hidden in the gloom until the tide carries you past the river mouth.',
+        statEffects: [
+          { stat: StatId.HOM, amount: 3, label: '+HOM' },
+        ],
+        consequences: [],
+        revocable: false,
+        style: 'default',
+      },
+      {
+        id: 'bolt-for-sea',
+        label: 'Bolt for the open water',
+        description: 'Get through the danger as fast as possible. Risky.',
+        narrativeResult: 'You put on a burst of speed, darting through the shallows toward the deep blue. A tern strikes the water inches behind you, its beak snapping shut on empty water. You feel the sharp sting of a near-miss, but you reach the safety of the deeper shelf.',
+        statEffects: [
+          { stat: StatId.STR, amount: -5, label: '-STR' },
+        ],
+        consequences: [],
+        revocable: false,
+        style: 'danger',
+        deathChance: {
+          probability: 0.05,
+          cause: 'An Arctic Tern snatched you from the water during your sprint.',
+        },
+      },
+    ],
+    conditions: [
+      { type: 'region', regionIds: ['pacific-northwest-river'] },
+      { type: 'population_above', speciesName: 'Arctic Tern', threshold: 0 },
+    ],
+    weight: 12,
+    cooldown: 8,
+    tags: ['predator', 'danger'],
+  },
 ];

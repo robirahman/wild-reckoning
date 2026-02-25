@@ -46,6 +46,7 @@ export function StartScreen() {
   const [selectedBackstoryType, setSelectedBackstoryType] = useState(selectedBundle.backstories[0].type);
   const [selectedSex, setSelectedSex] = useState<'male' | 'female'>('female');
   const [selectedDifficulty, setSelectedDifficulty] = useState<Difficulty>('normal');
+  const [seedInput, setSeedInput] = useState<string>('');
 
   // Reset backstory when species changes
   const handleSpeciesChange = (bundle: SpeciesDataBundle) => {
@@ -55,6 +56,11 @@ export function StartScreen() {
 
   const backstory: Backstory = selectedBundle.backstories.find((b) => b.type === selectedBackstoryType)
     ?? selectedBundle.backstories[0];
+
+  const handleStartGame = () => {
+    const seed = seedInput.trim() !== '' ? parseInt(seedInput, 10) : undefined;
+    startGame(selectedSpeciesId, backstory, selectedSex, selectedDifficulty, isNaN(seed as any) ? undefined : seed);
+  };
 
   const handleScenarioSelect = (scenarioId: string) => {
     const scenario = SCENARIOS.find((s) => s.id === scenarioId);
@@ -205,10 +211,24 @@ export function StartScreen() {
         </div>
       </div>
 
+      {/* ── Seed Input ── */}
+      <div className={styles.section}>
+        <h3 className={styles.sectionTitle}>World Seed (Optional)</h3>
+        <div className={styles.rowGroup}>
+          <input
+            type="text"
+            placeholder="Random"
+            value={seedInput}
+            onChange={(e) => setSeedInput(e.target.value)}
+            className={styles.seedInput}
+          />
+        </div>
+      </div>
+
       <AchievementList />
 
       <button
-        onClick={() => startGame(selectedSpeciesId, backstory, selectedSex, selectedDifficulty)}
+        onClick={handleStartGame}
         className={styles.beginButton}
       >
         Begin
