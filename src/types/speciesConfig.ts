@@ -172,6 +172,9 @@ export interface SpeciesConfig {
     coldBenefit: number;
   };
 
+  /** Classification of body size for mathematical scaling. */
+  massType?: 'micro' | 'macro' | 'mega';
+
   /** Per-turn passive weight change by season. Positive = gain, negative = loss. */
   seasonalWeight: {
     spring: number;
@@ -193,7 +196,10 @@ export interface SpeciesConfig {
   phases?: LifecyclePhase[];
 
   /** Time unit per turn. 'week' = 4 turns/month (default). 'month' = 1 turn/month. */
-  turnUnit?: 'week' | 'month';
+  turnUnit?: 'week' | 'month' | 'day';
+
+  /** Natural activity pattern */
+  diurnalType?: 'diurnal' | 'nocturnal' | 'crepuscular';
 
   /** If true, when the animal dies after spawning, continue as next generation instead of game over */
   lineageMode?: boolean;
@@ -203,6 +209,16 @@ export interface SpeciesConfig {
 
   /** Multiplier to convert internal weight (lbs) to display unit. E.g., 453592 converts lbs to mg. */
   weightDisplayMultiplier?: number;
+
+  /** Species-specific overrides for voluntary actions */
+  actions?: {
+    overrides?: Record<string, {
+      label?: string;
+      description?: string;
+      narrative?: string;
+      weightGain?: number;
+    }>;
+  };
 
   templateVars: {
     speciesName: string;

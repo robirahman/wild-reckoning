@@ -20,6 +20,8 @@ import { ThemeToggle } from '../ThemeToggle';
 import { AudioControls } from '../AudioControls';
 import styles from '../../styles/layout.module.css';
 
+import { MapPanel } from '../MapPanel';
+
 export function GameLayout() {
   const { startTurn, showingResults } = useGameEngine();
   const currentEvents = useGameStore((s) => s.currentEvents);
@@ -88,6 +90,7 @@ export function GameLayout() {
       </main>
 
       <aside className={styles.sidebar} role="complementary" aria-label="Stats and health sidebar">
+        <MapPanel />
         <StatsPanel />
         <ParasiticInfections />
         <HealthComplications />

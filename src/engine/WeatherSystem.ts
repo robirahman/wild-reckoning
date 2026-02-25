@@ -14,12 +14,18 @@ export type WeatherType =
   | 'frost'
   | 'drought_conditions';
 
+export type WindDirection = 'N' | 'NE' | 'E' | 'SE' | 'S' | 'SW' | 'W' | 'NW';
+
 export interface WeatherState {
   type: WeatherType;
   description: string;
   persistenceTurnsLeft: number;
   intensity: number; // 0.0–1.0
+  windDirection: WindDirection;
+  windSpeed: number; // 0-100
 }
+
+const WIND_DIRECTIONS: WindDirection[] = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
 
 interface WeatherWeights {
   clear: number;
@@ -51,6 +57,7 @@ function getWeatherWeights(
   climate: ClimateProfile | undefined,
   monthIndex: number,
   season: Season,
+  tempOffset: number = 0,
 ): WeatherWeights {
   const weights: WeatherWeights = {
     clear: 30,
@@ -67,7 +74,7 @@ function getWeatherWeights(
 
   if (!climate) return weights;
 
-  const temp = climate.temperatureByMonth[monthIndex];
+  const temp = climate.temperatureByMonth[monthIndex] + tempOffset;
   const precip = climate.precipitationByMonth[monthIndex];
 
   // Temperature-driven adjustments
@@ -164,8 +171,9 @@ export function generateWeather(
   season: Season,
   monthIndex: number,
   rng: Rng,
+  tempOffset: number = 0,
 ): WeatherState {
-  const weights = getWeatherWeights(climate, monthIndex, season);
+  const weights = getWeatherWeights(climate, monthIndex, season, tempOffset);
   const type = selectWeather(weights, rng);
   const descriptions = WEATHER_DESCRIPTIONS[type];
 
@@ -174,6 +182,8 @@ export function generateWeather(
     description: rng.pick(descriptions),
     persistenceTurnsLeft: getPersistence(type, rng),
     intensity: getIntensity(type, rng),
+    windDirection: rng.pick(WIND_DIRECTIONS),
+    windSpeed: type === 'blizzard' ? 80 + rng.int(0, 20) : rng.int(5, 40),
   };
 }
 
@@ -183,14 +193,26 @@ export function tickWeather(
   season: Season,
   monthIndex: number,
   rng: Rng,
+  tempOffset: number = 0,
 ): WeatherState {
   if (current.persistenceTurnsLeft > 1) {
+    // Wind can shift even if weather stays
+    const shift = rng.chance(0.2);
+    let newDir = current.windDirection;
+    if (shift) {
+      const idx = WIND_DIRECTIONS.indexOf(current.windDirection);
+      const move = rng.pick([-1, 1]);
+      newDir = WIND_DIRECTIONS[(idx + move + WIND_DIRECTIONS.length) % WIND_DIRECTIONS.length];
+    }
+
     return {
       ...current,
       persistenceTurnsLeft: current.persistenceTurnsLeft - 1,
+      windDirection: newDir,
+      windSpeed: Math.max(0, Math.min(100, current.windSpeed + rng.int(-5, 5))),
     };
   }
-  return generateWeather(climate, season, monthIndex, rng);
+  return generateWeather(climate, season, monthIndex, rng, tempOffset);
 }
 
 /** Compute event weight multiplier based on current weather */

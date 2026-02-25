@@ -2,6 +2,8 @@ import type { StatBlock } from './stats';
 import type { BehavioralSettings } from './behavior';
 import type { ActiveParasite, ActiveInjury, ActiveCondition } from './health';
 import type { Season } from './world';
+import type { Mutation } from './evolution';
+import type { SocialState } from './social';
 
 export type Diet = 'herbivore' | 'carnivore' | 'omnivore';
 
@@ -109,4 +111,21 @@ export interface AnimalState {
   flags: Set<string>; // Persistent flags set by events
   alive: boolean;
   causeOfDeath?: string;
+  
+  // New Systems
+  activeMutations: Mutation[];
+  social: SocialState;
+  perceptionRange: number; // 1 = adjacent, 2 = 2 nodes away
+  energy: number; // 0-100
+  
+  // New Visceral Systems
+  nutrients: {
+    minerals: number; // 0-100
+    vitamins: number; // 0-100
+  };
+  physiologicalStress: {
+    hypothermia: number; // 0-100
+    starvation: number; // 0-100
+    panic: number; // 0-100
+  };
 }

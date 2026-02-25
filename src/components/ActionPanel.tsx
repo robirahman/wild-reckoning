@@ -3,20 +3,22 @@ import { getAvailableActions, type ActionContext } from '../engine/ActionSystem'
 import styles from '../styles/actions.module.css';
 
 export function ActionPanel() {
-  const speciesId = useGameStore((s) => s.animal.speciesId);
+  const config = useGameStore((s) => s.speciesBundle.config);
   const territory = useGameStore((s) => s.territory);
-  const reproduction = useGameStore((s) => s.speciesBundle.config.reproduction);
+  const reproduction = config.reproduction;
   const season = useGameStore((s) => s.time.season);
   const phase = useGameStore((s) => s.phase);
   const showingResults = useGameStore((s) => s.showingResults);
   const actionsPerformed = useGameStore((s) => s.actionsPerformed);
   const performAction = useGameStore((s) => s.performAction);
   const rng = useGameStore((s) => s.rng);
+  const nutrients = useGameStore((s) => s.animal.nutrients);
 
   if (phase !== 'playing' || showingResults) return null;
 
   const ctx: ActionContext = {
-    speciesId,
+    speciesId: config.id,
+    config,
     territory,
     reproductionType: reproduction.type,
     season,
@@ -25,6 +27,7 @@ export function ActionPanel() {
         ? (reproduction as any).matingSeasons ?? 'any'
         : [],
     rng,
+    nutrients,
   };
 
   const available = getAvailableActions(ctx);

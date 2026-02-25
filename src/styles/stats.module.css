@@ -60,6 +60,24 @@
   margin-top: var(--space-xs);
 }
 
+.mutationsList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  margin-top: var(--space-sm);
+}
+
+.mutationBadge {
+  font-size: 0.7rem;
+  background: var(--color-panel-bg);
+  border: 1px solid var(--color-border);
+  padding: 2px 8px;
+  border-radius: 12px;
+  color: var(--color-text);
+  cursor: help;
+}
+
 /* Stat Categories */
 .categories {
   display: grid;

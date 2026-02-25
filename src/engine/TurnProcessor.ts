@@ -26,6 +26,8 @@ export function generateTurnEvents(state: GameState): ResolvedEvent[] {
     regionDef: getRegionDefinition(state.animal.region),
     currentWeather: state.currentWeather ?? undefined,
     ecosystem: state.ecosystem,
+    currentNodeType: state.map?.nodes.find(n => n.id === state.map!.currentLocationId)?.type,
+    fastForward: state.fastForward,
   });
 }
 
@@ -47,6 +49,8 @@ export function resolveTurn(state: GameState): {
   const allConsequences: Consequence[] = [];
   const eventOutcomes: EventOutcome[] = [];
   const pendingDeathRolls: PendingDeathRoll[] = [];
+  
+  const ffMult = state.fastForward ? 4 : 1;
 
   // Capture pre-resolution stat snapshot for delta computation
   const preStats: Record<StatId, number> = {} as Record<StatId, number>;
@@ -63,29 +67,55 @@ export function resolveTurn(state: GameState): {
     let choiceId: string | undefined;
     let narrativeResult: string | undefined;
 
-    // Apply event's own stat effects and consequences
-    eventEffects.push(...event.definition.statEffects);
+    // Apply event's own stat effects and consequences (SCALED if FF)
+    for (const eff of event.definition.statEffects) {
+      eventEffects.push({ ...eff, amount: eff.amount * ffMult });
+    }
+    
     if (event.definition.consequences) {
-      eventConsequences.push(...event.definition.consequences);
+      for (const cons of event.definition.consequences) {
+        if (cons.type === 'modify_weight') {
+          eventConsequences.push({ ...cons, amount: cons.amount * ffMult });
+        } else {
+          eventConsequences.push(cons);
+        }
+      }
     }
 
-    // Apply sub-event effects
+    // Apply sub-event effects (SCALED)
     for (const sub of event.triggeredSubEvents) {
-      eventEffects.push(...sub.statEffects);
-      eventConsequences.push(...sub.consequences);
+      for (const eff of sub.statEffects) {
+        eventEffects.push({ ...eff, amount: eff.amount * ffMult });
+      }
+      for (const cons of sub.consequences) {
+        if (cons.type === 'modify_weight') {
+          eventConsequences.push({ ...cons, amount: cons.amount * ffMult });
+        } else {
+          eventConsequences.push(cons);
+        }
+      }
     }
 
-    // Apply chosen choice effects
+    // Apply chosen choice effects (SCALED)
     if (event.choiceMade && event.definition.choices) {
       const choice = event.definition.choices.find((c) => c.id === event.choiceMade);
       if (choice) {
         choiceLabel = choice.label;
         choiceId = choice.id;
         narrativeResult = choice.narrativeResult;
-        eventEffects.push(...choice.statEffects);
-        eventConsequences.push(...choice.consequences);
+        
+        for (const eff of choice.statEffects) {
+          eventEffects.push({ ...eff, amount: eff.amount * ffMult });
+        }
+        for (const cons of choice.consequences) {
+          if (cons.type === 'modify_weight') {
+            eventConsequences.push({ ...cons, amount: cons.amount * ffMult });
+          } else {
+            eventConsequences.push(cons);
+          }
+        }
 
-        // Death chance from predator choices
+        // Death chance from predator choices (SCALED)
         if (choice.deathChance) {
           const dc = choice.deathChance;
           let prob = dc.probability;
@@ -110,6 +140,9 @@ export function resolveTurn(state: GameState): {
 
           // Apply difficulty multiplier to death chance
           prob *= DIFFICULTY_PRESETS[state.difficulty ?? 'normal'].deathChanceFactor;
+          
+          // Apply Fast-Forward multiplier
+          prob *= ffMult;
 
           prob = Math.max(predVuln.deathChanceMin, Math.min(predVuln.deathChanceMax, prob));
           deathRollProbability = prob;
@@ -187,8 +220,10 @@ export function resolveTurn(state: GameState): {
     }
   }
 
-  // Tick health system
-  const healthResult = tickHealth(state.animal, state.rng, state.speciesBundle.parasites, state.difficulty);
+  // Tick health system (SCALED in FF)
+  // Scaling tickHealth is hard because it's multiple parts.
+  // We'll pass the multiplier to tickHealth if we can.
+  const healthResult = tickHealth(state.animal, state.rng, state.speciesBundle.parasites, state.difficulty, ffMult);
 
   // Propagate health system flags as set_flag consequences
   for (const flag of healthResult.flagsToSet) {
@@ -241,3 +276,4 @@ export function resolveTurn(state: GameState): {
     turnResult,
   };
 }
+

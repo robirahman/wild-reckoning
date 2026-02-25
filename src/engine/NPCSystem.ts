@@ -69,6 +69,7 @@ export function introduceNPC(
     id: `npc-${type}-${turn}-${rng.int(1000, 9999)}`,
     name,
     type,
+    speciesId,
     speciesLabel: template.speciesLabel,
     relationship: type === 'predator' ? 'hostile' : type === 'rival' ? 'hostile' : 'neutral',
     alive: true,

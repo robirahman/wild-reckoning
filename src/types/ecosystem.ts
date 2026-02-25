@@ -1,4 +1,5 @@
 /** Phase 5: Ecosystem Web types */
+import type { NPC } from './npc';
 
 export interface PopulationState {
   speciesName: string;
@@ -23,4 +24,6 @@ export interface EcosystemEvent {
 export interface EcosystemState {
   populations: Record<string, PopulationState>;
   lastEventTurn: number;
+  resourcePressure: number; // 0-100, affects recovery and cascade triggers
+  regionNPCs: Record<string, NPC[]>; // Tracking individuals globally
 }

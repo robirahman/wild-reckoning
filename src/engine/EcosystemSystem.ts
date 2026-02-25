@@ -24,7 +24,7 @@ export function initializeEcosystem(): EcosystemState {
     populations[name] = { speciesName: name, level: 0, trend: 'stable' };
   }
 
-  return { populations, lastEventTurn: 0 };
+  return { populations, lastEventTurn: 0, resourcePressure: 0, regionNPCs: {} };
 }
 
 export function tickEcosystem(
@@ -35,6 +35,21 @@ export function tickEcosystem(
 ): { ecosystem: EcosystemState; narratives: string[] } {
   const populations = { ...eco.populations };
   const narratives: string[] = [];
+  let resourcePressure = eco.resourcePressure;
+
+  // Trophic Cascade: High pressure causes prey populations to crash
+  if (resourcePressure > 70) {
+    for (const name of Object.keys(populations)) {
+      if (rng.chance(0.2)) {
+        populations[name].level = Math.max(ECOSYSTEM_MIN_POPULATION_LEVEL, populations[name].level - 0.2);
+        populations[name].trend = 'declining';
+      }
+    }
+    if (rng.chance(0.1)) narratives.push("Extreme resource pressure is causing a local ecosystem collapse.");
+  }
+
+  // Pressure naturally dissipates if populations are stable
+  resourcePressure = Math.max(0, resourcePressure - 1);
 
   // Cascade predator-prey effects: low prey hurts predators
   for (const link of ECOSYSTEM_LINKS) {
@@ -87,14 +102,14 @@ export function tickEcosystem(
       if (matches && rng.chance(0.4)) {
         narratives.push(event.narrativeText);
         return {
-          ecosystem: { populations, lastEventTurn: turn },
+          ecosystem: { populations, lastEventTurn: turn, resourcePressure, regionNPCs: eco.regionNPCs },
           narratives,
         };
       }
     }
   }
 
-  return { ecosystem: { ...eco, populations }, narratives };
+  return { ecosystem: { ...eco, populations, resourcePressure, regionNPCs: eco.regionNPCs }, narratives };
 }
 
 export function modifyPopulation(

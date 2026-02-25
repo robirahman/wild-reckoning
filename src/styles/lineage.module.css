@@ -1,0 +1,44 @@
+.historyContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+}
+
+.ancestorCard {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  padding: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.genBadge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  text-transform: uppercase;
+}
+
+.ancestorInfo {
+  flex-grow: 1;
+  margin-left: 16px;
+}
+
+.name {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.details {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.mutation {
+  font-size: 0.75rem;
+  color: #4a9eff;
+  margin-top: 4px;
+}

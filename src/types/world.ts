@@ -18,13 +18,19 @@ export const MONTH_TO_SEASON: Record<Month, Season> = {
   October: 'autumn', November: 'autumn', December: 'winter',
 };
 
+export type TimeOfDay = 'dawn' | 'day' | 'dusk' | 'night';
+export type LunarPhase = 'new' | 'waxing' | 'full' | 'waning';
+
 export interface TimeState {
   turn: number;
   week: 1 | 2 | 3 | 4;
+  dayInMonth?: number; // 1-28
   month: Month;
   monthIndex: number; // 0-11
   year: number;
   season: Season;
+  timeOfDay: TimeOfDay;
+  lunarPhase: LunarPhase;
 }
 
 export interface ClimateProfile {

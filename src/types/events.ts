@@ -46,7 +46,10 @@ export type EventCondition =
   | { type: 'population_above'; speciesName: string; threshold: number }
   | { type: 'population_below'; speciesName: string; threshold: number }
   | { type: 'has_npc'; npcType: 'rival' | 'ally' | 'mate' | 'predator' | 'offspring' }
-  | { type: 'no_npc'; npcType: 'rival' | 'ally' | 'mate' | 'predator' | 'offspring' };
+  | { type: 'no_npc'; npcType: 'rival' | 'ally' | 'mate' | 'predator' | 'offspring' }
+  | { type: 'node_type'; nodeTypes: ('forest' | 'water' | 'mountain' | 'plain' | 'den')[] }
+  | { type: 'social_rank'; ranks: ('alpha' | 'beta' | 'subordinate' | 'omega' | 'lone')[] }
+  | { type: 'mutation_active'; mutationId: string };
 
 // ── Consequences ──
 
@@ -59,6 +62,7 @@ export type Consequence =
   | { type: 'remove_flag'; flag: string }
   | { type: 'modify_weight'; amount: number }
   | { type: 'modify_age'; amount: number }
+  | { type: 'modify_nutrients'; nutrient: 'minerals' | 'vitamins'; amount: number }
   | { type: 'death'; cause: string }
   | { type: 'trigger_event'; eventId: string }
   | { type: 'start_pregnancy'; offspringCount: number }
@@ -66,6 +70,7 @@ export type Consequence =
   | { type: 'spawn' }
   | { type: 'introduce_npc'; npcType: 'rival' | 'ally' | 'mate' | 'predator' | 'offspring' }
   | { type: 'modify_population'; speciesName: string; amount: number }
+  | { type: 'establish_den'; nodeId?: string }
   | { type: 'modify_territory'; sizeChange?: number; qualityChange?: number };
 
 // ── Sub-Events ──

@@ -124,101 +124,6 @@ export function useGameEngine() {
     saveGame(useGameStore.getState());
   }, [store]);
 
-  const confirmChoices = useCallback(() => {
-    const state = useGameStore.getState();
-
-    // Capture pre-resolution stat snapshot
-    const preStats: Record<StatId, number> = {} as Record<StatId, number>;
-    for (const id of Object.values(StatId)) {
-      preStats[id] = computeEffectiveValue(state.animal.stats[id]);
-    }
-
-    // Set cooldowns for all fired events
-    const cooldownUpdates: Record<string, number> = {};
-    for (const event of state.currentEvents) {
-      if (event.definition.cooldown) {
-        cooldownUpdates[event.definition.id] = event.definition.cooldown;
-      }
-    }
-    store.setEventCooldowns(cooldownUpdates);
-
-    // Resolve all event effects
-    const result = resolveTurn(state);
-
-    // Apply stat effects
-    if (result.statEffects.length > 0) {
-      store.applyStatEffects(result.statEffects);
-    }
-
-    // Apply consequences
-    for (const consequence of result.consequences) {
-      store.applyConsequence(consequence);
-    }
-
-    // Compute stat deltas after effects are applied
-    const postState = useGameStore.getState();
-    const statDelta: Record<StatId, number> = {} as Record<StatId, number>;
-    for (const id of Object.values(StatId)) {
-      statDelta[id] = computeEffectiveValue(postState.animal.stats[id]) - preStats[id];
-    }
-    result.turnResult.statDelta = statDelta;
-
-    // Also compute actual weight change including seasonal
-    result.turnResult.weightChange = result.turnResult.weightChange;
-
-    // Track NPC encounters based on event tags
-    const encounterState = useGameStore.getState();
-    let updatedNPCs = encounterState.npcs;
-    for (const event of state.currentEvents) {
-      const tags = event.definition.tags;
-      const npcType = tags.includes('predator') ? 'predator'
-        : tags.includes('rival') ? 'rival'
-        : tags.includes('ally') ? 'ally'
-        : tags.includes('mate') ? 'mate'
-        : null;
-      if (npcType) {
-        const npc = updatedNPCs.find((n) => n.type === npcType && n.alive);
-        if (npc) {
-          updatedNPCs = incrementEncounter(updatedNPCs, npc.id, encounterState.time.turn);
-        }
-      }
-    }
-    // Progress NPC relationships based on encounter counts
-    updatedNPCs = progressRelationship(updatedNPCs);
-    if (updatedNPCs !== encounterState.npcs) {
-      store.setNPCs(updatedNPCs);
-    }
-
-    // Show the turn results screen
-    store.setTurnResult(result.turnResult);
-
-    // Check for death conditions
-    checkDeathConditions();
-
-    // Check achievements after turn
-    checkAchievements(useGameStore.getState(), 'turn');
-
-    // Check encyclopedia unlocks
-    const encStore = useEncyclopediaStore.getState();
-    const achStore = useAchievementStore.getState();
-    for (const entry of ENCYCLOPEDIA_ENTRIES) {
-      if (encStore.unlockedEntryIds.has(entry.id)) continue;
-      const cond = entry.unlockCondition;
-      if (cond.type === 'default') {
-        encStore.unlock(entry.id);
-      } else if (cond.type === 'species_played' && achStore.speciesPlayed.has(cond.speciesId)) {
-        encStore.unlock(entry.id);
-      } else if (cond.type === 'achievement' && achStore.unlockedIds.has(cond.achievementId)) {
-        encStore.unlock(entry.id);
-      }
-    }
-  }, [store]);
-
-  const dismissResults = useCallback(() => {
-    store.dismissResults();
-    startTurn();
-  }, [store, startTurn]);
-
   const checkDeathConditions = useCallback(() => {
     const state = useGameStore.getState();
     const animal = state.animal;
@@ -278,6 +183,101 @@ export function useGameEngine() {
       return;
     }
   }, [store]);
+
+  const confirmChoices = useCallback(() => {
+    const state = useGameStore.getState();
+
+    // Capture pre-resolution stat snapshot
+    const preStats: Record<StatId, number> = {} as Record<StatId, number>;
+    for (const id of Object.values(StatId)) {
+      preStats[id] = computeEffectiveValue(state.animal.stats[id]);
+    }
+
+    // Set cooldowns for all fired events
+    const cooldownUpdates: Record<string, number> = {};
+    for (const event of state.currentEvents) {
+      if (event.definition.cooldown) {
+        cooldownUpdates[event.definition.id] = event.definition.cooldown;
+      }
+    }
+    store.setEventCooldowns(cooldownUpdates);
+
+    // Resolve all event effects
+    const result = resolveTurn(state);
+
+    // Apply health and other resolution changes to animal state
+    useGameStore.setState({ animal: result.animal });
+
+    // Apply stat effects
+    if (result.statEffects.length > 0) {
+      store.applyStatEffects(result.statEffects);
+    }
+
+    // Apply consequences
+    for (const consequence of result.consequences) {
+      store.applyConsequence(consequence);
+    }
+
+    // Compute stat deltas after effects are applied
+    const postState = useGameStore.getState();
+    const statDelta: Record<StatId, number> = {} as Record<StatId, number>;
+    for (const id of Object.values(StatId)) {
+      statDelta[id] = computeEffectiveValue(postState.animal.stats[id]) - preStats[id];
+    }
+    result.turnResult.statDelta = statDelta;
+
+    // Track NPC encounters based on event tags
+    const encounterState = useGameStore.getState();
+    let updatedNPCs = encounterState.npcs;
+    for (const event of state.currentEvents) {
+      const tags = event.definition.tags;
+      const npcType = tags.includes('predator') ? 'predator'
+        : tags.includes('rival') ? 'rival'
+        : tags.includes('ally') ? 'ally'
+        : tags.includes('mate') ? 'mate'
+        : null;
+      if (npcType) {
+        const npc = updatedNPCs.find((n) => n.type === npcType && n.alive);
+        if (npc) {
+          updatedNPCs = incrementEncounter(updatedNPCs, npc.id, encounterState.time.turn);
+        }
+      }
+    }
+    // Progress NPC relationships based on encounter counts
+    updatedNPCs = progressRelationship(updatedNPCs);
+    if (updatedNPCs !== encounterState.npcs) {
+      store.setNPCs(updatedNPCs);
+    }
+
+    // Show the turn results screen
+    store.setTurnResult(result.turnResult);
+
+    // Check for death conditions
+    checkDeathConditions();
+
+    // Check achievements after turn
+    checkAchievements(useGameStore.getState(), 'turn');
+
+    // Check encyclopedia unlocks
+    const encStore = useEncyclopediaStore.getState();
+    const achStore = useAchievementStore.getState();
+    for (const entry of ENCYCLOPEDIA_ENTRIES) {
+      if (encStore.unlockedEntryIds.has(entry.id)) continue;
+      const cond = entry.unlockCondition;
+      if (cond.type === 'default') {
+        encStore.unlock(entry.id);
+      } else if (cond.type === 'species_played' && achStore.speciesPlayed.has(cond.speciesId)) {
+        encStore.unlock(entry.id);
+      } else if (cond.type === 'achievement' && achStore.unlockedIds.has(cond.achievementId)) {
+        encStore.unlock(entry.id);
+      }
+    }
+  }, [store, checkDeathConditions]);
+
+  const dismissResults = useCallback(() => {
+    store.dismissResults();
+    startTurn();
+  }, [store, startTurn]);
 
   return {
     startTurn,

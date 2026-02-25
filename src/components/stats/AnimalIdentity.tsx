@@ -65,6 +65,15 @@ export function AnimalIdentity() {
           Caring for {dependentYoung} dependent {dependentYoung > 1 ? tv.youngNounPlural : tv.youngNoun}
         </div>
       )}
+      {animal.activeMutations.length > 0 && (
+        <div className={styles.mutationsList}>
+          {animal.activeMutations.map((m) => (
+            <span key={m.id} className={styles.mutationBadge} title={m.description}>
+              🧬 {m.name}
+            </span>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

@@ -8,6 +8,7 @@ export const FIG_WASP_CONFIG: SpeciesConfig = {
   description:
     'A creature so small it is invisible to most of the world, performing one of nature\'s most ancient partnerships. You are half of an obligate mutualism 80 million years old — without you, the strangler fig cannot reproduce. Without the fig, you cannot exist. Your entire adult life lasts less than 48 hours. In that time, you must find a fig, enter it, pollinate it, lay your eggs, and die. You are not just an insect. You are a key that fits exactly one lock in the living world.',
   diet: 'herbivore',
+  massType: 'micro',
   defaultRegion: 'florida-fig-hammock',
   defaultRegionDisplayName: 'Florida Tropical Hammock',
 
@@ -38,10 +39,10 @@ export const FIG_WASP_CONFIG: SpeciesConfig = {
   },
 
   age: {
-    oldAgeOnsetMonths: 3,
-    oldAgeBaseChance: 0.15,
-    oldAgeEscalation: 3.0,
-    maxOldAgeChance: 0.98,
+    oldAgeOnsetMonths: 1.1, // About 3 days after becoming adult (1.0)
+    oldAgeBaseChance: 0.35,
+    oldAgeEscalation: 5.0,
+    maxOldAgeChance: 0.99,
   },
 
   diseaseDeathChanceAtCritical: 0.20,
@@ -68,13 +69,13 @@ export const FIG_WASP_CONFIG: SpeciesConfig = {
       id: 'gall-larva',
       label: 'Gall Larva',
       minAge: 0,
-      maxAge: 1,
+      maxAge: 0.75, // ~21 days
     },
     {
       id: 'pupa',
       label: 'Pupa',
-      minAge: 1,
-      maxAge: 2,
+      minAge: 0.75,
+      maxAge: 1.0, // ~7 days
       statModifiers: [
         { stat: StatId.ADV, amount: 15 },
         { stat: StatId.NOV, amount: 10 },
@@ -83,13 +84,13 @@ export const FIG_WASP_CONFIG: SpeciesConfig = {
     {
       id: 'adult-in-fig',
       label: 'Adult (Inside Fig)',
-      minAge: 2,
-      maxAge: 3,
+      minAge: 1.0,
+      maxAge: 1.05, // ~1.4 days
     },
     {
       id: 'free-flying-adult',
       label: 'Free-Flying Adult',
-      minAge: 3,
+      minAge: 1.05,
       statModifiers: [
         { stat: StatId.HOM, amount: 10 },
         { stat: StatId.CLI, amount: 5 },
@@ -99,7 +100,7 @@ export const FIG_WASP_CONFIG: SpeciesConfig = {
 
   reproduction: {
     type: 'semelparous',
-    spawningMinAge: 2,
+    spawningMinAge: 1.0, // Adult
     spawningSeasons: ['spring', 'summer', 'autumn', 'winter'],
     baseEggCount: 300,
     eggCountHeaFactor: 2,
@@ -138,8 +139,24 @@ export const FIG_WASP_CONFIG: SpeciesConfig = {
 
   lineageMode: true,
 
+  turnUnit: 'day',
+
   weightUnit: 'μg',
   weightDisplayMultiplier: 453592000,
+
+  actions: {
+    overrides: {
+      explore: {
+        label: 'Search for Fig',
+        description: 'Fly in search of a receptive fig syconium.',
+        narrative: 'You emerge from the fig and take flight, your tiny wings beating furiously as you track the chemical signals of a receptive fig.',
+        weightGain: 0.000000001,
+      },
+      rest: {
+        narrative: 'You conserve your limited energy within the humid protection of the fig.',
+      }
+    }
+  },
 
   templateVars: {
     speciesName: 'Fig Wasp',

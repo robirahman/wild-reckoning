@@ -1,0 +1,63 @@
+.visceralContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  transition: all 1s ease;
+}
+
+/* ── Hypothermia (Frost) ── */
+.frost {
+  box-shadow: inset 0 0 100px rgba(135, 206, 235, 0.5);
+  border: 20px solid transparent;
+  border-image: radial-gradient(circle, transparent 70%, rgba(255,255,255,0.8) 100%) 1;
+}
+
+.jitter {
+  animation: jitter 0.2s infinite;
+}
+
+@keyframes jitter {
+  0% { transform: translate(0,0); }
+  25% { transform: translate(1px, 1px); }
+  50% { transform: translate(-1px, 0); }
+  75% { transform: translate(0, -1px); }
+  100% { transform: translate(1px, 0); }
+}
+
+/* ── Starvation (Desaturation) ── */
+.starvation {
+  background: radial-gradient(circle, transparent 40%, rgba(0,0,0,0.8) 100%);
+}
+
+.desaturated {
+  filter: grayscale(0.8) contrast(1.2);
+}
+
+/* ── Panic (Heartbeat) ── */
+.panic {
+  box-shadow: inset 0 0 150px rgba(255, 0, 0, 0.6);
+  animation: pulse 0.8s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.4; }
+  50% { opacity: 1; }
+  100% { opacity: 0.4; }
+}
+
+.shake {
+  animation: shake 0.5s infinite;
+}
+
+@keyframes shake {
+  0% { transform: translate(0,0); }
+  20% { transform: translate(-5px, 5px); }
+  40% { transform: translate(5px, -5px); }
+  60% { transform: translate(-5px, -5px); }
+  80% { transform: translate(5px, 5px); }
+  100% { transform: translate(0,0); }
+}

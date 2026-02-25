@@ -2,6 +2,7 @@
 
 export interface TerritoryState {
   established: boolean;
+  denNodeId?: string; // Node ID where den/nest is built
   size: number; // 0-100 relative scale
   quality: number; // 0-100, affects foraging weight gain
   contested: boolean;

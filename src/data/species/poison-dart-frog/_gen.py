@@ -1,0 +1,7 @@
+# Auto-generated script to create events.ts
+import os
+target = "C:/Users/robir/Documents/Wild reckoning/src/data/species/poison-dart-frog/events.ts"
+parts = []
+import base64
+encoded = "aW1wb3J0IHR5cGUgeyBHYW1lRXZlbnQgfSBmcm9tICcuLi8uLi8uLi90eXBlcy9ldmVudHMnOwppbXBvcnQgeyBTdGF0SWQgfSBmcm9tICcuLi8uLi8uLi90eXBlcy9zdGF0cyc7CgpleHBvcnQgY29uc3QgUE9JU09OX0RBUlRfRlJPR19FVkVOVFM6IEdhbWVFdmVudFtdID0gWwogIC8vIFRBRFBPTEUgLyBNRVRBTU9SUEggUEhBU0UgKGFnZSAwLTYpCgogIHsKICAgIGlkOiAnZnJvZy1icm9tZWxpYWQtcG9vbC1saWZlJywKICAgIHR5cGU6ICdwYXNzaXZlJywKICAgIGNhdGVnb3J5OiAnZW52aXJvbm1lbnRhbCcs"
+# This is just a test chunk

@@ -27,6 +27,7 @@ export function tickHealth(
   rng: Rng,
   parasiteDefs: Record<string, ParasiteDefinition>,
   difficulty?: Difficulty,
+  ffMult: number = 1,
 ): HealthTickResult {
   const narratives: string[] = [];
   const flagsToSet: string[] = [];
@@ -50,18 +51,22 @@ export function tickHealth(
     }
 
     let newStage = parasite.currentStage;
-    let turnsAtStage = parasite.turnsAtCurrentStage + 1;
+    let turnsAtStage = parasite.turnsAtCurrentStage + ffMult;
 
     // Check for stage progression
     if (turnsAtStage >= stage.turnDuration.min) {
       const parasiteFactor = DIFFICULTY_PRESETS[difficulty ?? 'normal'].parasiteProgressionFactor;
-      if (rng.chance(stage.progressionChance * parasiteFactor) && newStage < def.stages.length - 1) {
+      // Scale progression chance by ffMult (simplified approximation)
+      const progChance = Math.min(0.95, stage.progressionChance * parasiteFactor * ffMult);
+      const remiChance = Math.min(0.95, stage.remissionChance * ffMult);
+
+      if (rng.chance(progChance) && newStage < def.stages.length - 1) {
         newStage += 1;
         turnsAtStage = 0;
         narratives.push(
           `Your ${def.name} infection has worsened to ${def.stages[newStage].severity}.`
         );
-      } else if (rng.chance(stage.remissionChance) && newStage > 0) {
+      } else if (rng.chance(remiChance) && newStage > 0) {
         newStage -= 1;
         turnsAtStage = 0;
         narratives.push(
@@ -97,7 +102,7 @@ export function tickHealth(
   // ── Injury Healing ──
   const updatedInjuries: ActiveInjury[] = [];
   for (const injury of updatedAnimal.injuries) {
-    const healRate = injury.isResting ? INJURY_RESTING_HEAL_RATE : INJURY_NORMAL_HEAL_RATE;
+    const healRate = (injury.isResting ? INJURY_RESTING_HEAL_RATE : INJURY_NORMAL_HEAL_RATE) * ffMult;
     const newTurns = injury.turnsRemaining - healRate;
 
     if (newTurns <= 0) {
@@ -106,14 +111,14 @@ export function tickHealth(
       continue; // Injury healed, remove it
     }
 
-    // Check for worsening if not resting
-    if (!injury.isResting && rng.chance(INJURY_WORSEN_CHANCE)) {
+    // Check for worsening if not resting (scaled by ffMult)
+    if (!injury.isResting && rng.chance(Math.min(0.9, INJURY_WORSEN_CHANCE * ffMult))) {
       narratives.push(
         `Your ${injury.bodyPartDetail} injury has worsened from lack of rest.`
       );
       updatedInjuries.push({
         ...injury,
-        turnsRemaining: newTurns + INJURY_WORSEN_EXTRA_TURNS,
+        turnsRemaining: newTurns + INJURY_WORSEN_EXTRA_TURNS * ffMult,
         currentSeverity: Math.min(injury.currentSeverity + 1, 3),
       });
     } else {

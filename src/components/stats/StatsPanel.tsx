@@ -77,10 +77,27 @@ export function StatsPanel() {
     [effectiveValues, turnHistory],
   );
 
+  const social = useGameStore((s) => s.animal.social);
+
   return (
     <div className={styles.statsPanel}>
       <h2 className={styles.title}>Your Stats</h2>
       <AnimalIdentity />
+      {social.rank !== 'lone' && (
+        <div style={{ 
+          marginBottom: 16, 
+          padding: '8px 12px', 
+          background: 'rgba(255,255,255,0.05)', 
+          borderRadius: 4,
+          fontFamily: 'var(--font-ui)',
+          fontSize: '0.9rem',
+          textAlign: 'center'
+        }}>
+          <span style={{ color: 'var(--color-text-muted)' }}>Pack Rank: </span>
+          <span style={{ fontWeight: 'bold', textTransform: 'capitalize' }}>{social.rank}</span>
+          <span style={{ marginLeft: 8, fontSize: '0.8rem' }}>(Dominance: {social.dominance})</span>
+        </div>
+      )}
       <div className={styles.categories}>
         {CATEGORIES.map((cat) => (
           <StatCategory

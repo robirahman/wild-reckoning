@@ -114,6 +114,18 @@ export const CHINOOK_SALMON_CONFIG: SpeciesConfig = {
     { id: 'spawning', label: 'Spawning', entryFlag: 'reached-spawning-grounds', regionId: 'spawning-stream', description: 'Final spawning and death' },
   ],
 
+  actions: {
+    overrides: {
+      explore: {
+        narrative: 'You range through the water column and discover a rich pocket of krill and small squid.',
+        weightGain: 0.5,
+      },
+      rest: {
+        narrative: 'You find a pocket of calm water behind a submerged reef and conserve your energy.',
+      }
+    }
+  },
+
   templateVars: {
     speciesName: 'Chinook Salmon',
     regionName: 'Pacific Northwest',

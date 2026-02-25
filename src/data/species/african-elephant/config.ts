@@ -8,6 +8,7 @@ export const AFRICAN_ELEPHANT_CONFIG: SpeciesConfig = {
   description:
     'The largest living land animal, roaming the savannas and forests of sub-Saharan Africa. Highly intelligent and deeply social, elephants live in matriarchal herds and face threats from poaching, habitat loss, and human-wildlife conflict.',
   diet: 'herbivore',
+  massType: 'mega',
   defaultRegion: 'east-african-savanna',
   defaultRegionDisplayName: 'East African Savanna',
 

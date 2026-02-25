@@ -27,6 +27,8 @@ interface GenerationContext {
   regionDef?: RegionDefinition;
   currentWeather?: WeatherState;
   ecosystem?: EcosystemState;
+  currentNodeType?: string;
+  fastForward?: boolean;
 }
 
 /** Check if a single condition is met */
@@ -86,6 +88,14 @@ function checkCondition(cond: EventCondition, ctx: GenerationContext): boolean {
       return !!ctx.npcs?.some((n) => n.type === cond.npcType && n.alive);
     case 'no_npc':
       return !ctx.npcs?.some((n) => n.type === cond.npcType && n.alive);
+    case 'node_type': {
+      if (!ctx.currentNodeType) return true;
+      return cond.nodeTypes.includes(ctx.currentNodeType as any);
+    }
+    case 'social_rank':
+      return cond.ranks.includes(ctx.animal.social.rank);
+    case 'mutation_active':
+      return ctx.animal.activeMutations.some(m => m.id === cond.mutationId);
     default:
       return true;
   }
@@ -237,7 +247,8 @@ export function generateEvents(ctx: GenerationContext): ResolvedEvent[] {
   );
 
   // Select 1-3 active events
-  const activeCount = ctx.rng.int(1, Math.min(3, activePool.length));
+  const baseActiveCount = ctx.rng.int(1, Math.min(3, activePool.length));
+  const activeCount = ctx.fastForward ? Math.min(baseActiveCount * 3, activePool.length) : baseActiveCount;
   const selectedActiveIndices = new Set<number>();
 
   for (let i = 0; i < activeCount && selectedActiveIndices.size < activePool.length; i++) {
@@ -259,7 +270,8 @@ export function generateEvents(ctx: GenerationContext): ResolvedEvent[] {
     const passiveWeights = passivePool.map(
       (e) => e.weight * contextMultiplier(e, ctx)
     );
-    const passiveCount = ctx.rng.int(0, Math.min(2, passivePool.length));
+    const basePassiveCount = ctx.rng.int(0, Math.min(2, passivePool.length));
+    const passiveCount = ctx.fastForward ? Math.min(basePassiveCount * 3, passivePool.length) : basePassiveCount;
     const selectedPassiveIndices = new Set<number>();
 
     for (let i = 0; i < passiveCount && selectedPassiveIndices.size < passivePool.length; i++) {

@@ -23,7 +23,6 @@ import { INITIAL_ITEROPAROUS_STATE, INITIAL_SEMELPAROUS_STATE } from '../types/r
 import { INITIAL_TERRITORY } from '../types/territory';
 import { initializeEcosystem, modifyPopulation } from '../engine/EcosystemSystem';
 import { territoryWeightModifier, TERRITORIAL_SPECIES } from '../engine/TerritorySystem';
-import { computeInheritedTraits, applyLineageBiases } from '../engine/LineageSystem';
 import { createStatBlock, addModifier, tickModifiers, removeModifiersBySource } from '../engine/StatCalculator';
 import { createInitialTime, advanceTime } from '../engine/TimeSystem';
 import { createRng, type Rng } from '../engine/RandomUtils';
@@ -36,8 +35,15 @@ import { generateWeather, tickWeather, computeWeatherPenalty, weatherLabel } fro
 import type { WeatherState } from '../engine/WeatherSystem';
 import { introduceNPC } from '../engine/NPCSystem';
 import { VOLUNTARY_ACTIONS, type ActionContext } from '../engine/ActionSystem';
+import type { RegionMap } from '../types/map';
+import { generateRegionMap } from '../engine/MapSystem';
+import { INITIAL_SOCIAL_STATE } from '../types/social';
+import { tickSocial } from '../engine/SocialSystem';
+import type { EvolutionState, AncestorRecord } from '../types/evolution';
+import { getAvailableMutations } from '../engine/EvolutionSystem';
+import { getScaling } from '../engine/SpeciesScale';
 
-export type GamePhase = 'menu' | 'playing' | 'dead';
+export type GamePhase = 'menu' | 'playing' | 'dead' | 'evolving';
 
 export interface TurnRecord {
   turn: number;
@@ -97,15 +103,25 @@ export interface GameState {
 
   // Territory
   territory: TerritoryState;
+  map: RegionMap | null;
 
   // Scenario
   scenario: ScenarioDefinition | null;
+
+  // Climate
+  climateShift: number; // Global temperature offset
 
   // Lineage
   lineage: LineageTraits | null;
 
   // Player-initiated actions
   actionsPerformed: string[];
+
+  // Evolution
+  evolution: EvolutionState;
+
+  // Fast forward
+  fastForward: boolean;
 
   // Actions
   startGame: (speciesId: string, backstory: Backstory, sex: 'male' | 'female', difficulty?: Difficulty) => void;
@@ -127,6 +143,11 @@ export interface GameState {
   skipTutorial: () => void;
   performAction: (actionId: string) => void;
   resolveDeathRoll: (eventId: string, escapeOptionId: string) => void;
+  toggleFastForward: () => void;
+  moveLocation: (nodeId: string) => void;
+  selectMutation: (mutationId: string) => void;
+  sniff: () => void;
+  tickNPCMovement: () => void;
 }
 
 function createInitialAnimal(config: SpeciesConfig, backstory: Backstory, sex: 'male' | 'female'): AnimalState {
@@ -152,6 +173,12 @@ function createInitialAnimal(config: SpeciesConfig, backstory: Backstory, sex: '
     backstory,
     flags: new Set<string>(),
     alive: true,
+    activeMutations: [],
+    social: { ...INITIAL_SOCIAL_STATE },
+    energy: 100,
+    perceptionRange: 1,
+    nutrients: { minerals: 80, vitamins: 80 },
+    physiologicalStress: { hypothermia: 0, starvation: 0, panic: 0 },
   };
 }
 
@@ -190,9 +217,13 @@ export const useGameStore = create<GameState>((set, get) => {
     ambientText: null,
     ecosystem: initializeEcosystem(),
     territory: { ...INITIAL_TERRITORY },
+    map: null,
     scenario: null,
+    climateShift: 0,
     lineage: null,
     actionsPerformed: [],
+    evolution: { activeMutations: [], availableChoices: [], generationCount: 0, lineageHistory: [] },
+    fastForward: false,
 
     startGame(speciesId, backstory, sex, difficulty) {
       const newSeed = Date.now();
@@ -222,9 +253,137 @@ export const useGameStore = create<GameState>((set, get) => {
         ambientText: null,
         ecosystem: initializeEcosystem(),
         territory: { ...INITIAL_TERRITORY },
+        map: generateRegionMap(createRng(newSeed)),
         scenario: null,
+        climateShift: 0,
         lineage: null,
         actionsPerformed: [],
+        evolution: { activeMutations: [], availableChoices: [], generationCount: 0, lineageHistory: [] },
+        fastForward: false,
+      });
+    },
+
+    toggleFastForward() {
+      set({ fastForward: !get().fastForward });
+    },
+
+    moveLocation(nodeId) {
+      const state = get();
+      if (!state.map) return;
+      
+      const currentNode = state.map.nodes.find(n => n.id === state.map!.currentLocationId);
+      if (!currentNode?.connections.includes(nodeId)) return;
+      
+      const scaling = getScaling(state.speciesBundle.config.massType);
+      
+      const newMap = { ...state.map };
+      newMap.currentLocationId = nodeId;
+      newMap.nodes = newMap.nodes.map(n => n.id === nodeId ? { ...n, visited: true, discovered: true } : n);
+      
+      const newFlags = new Set(state.animal.flags);
+      newFlags.add('just-moved');
+      
+      set({ 
+        map: newMap, 
+        animal: { 
+          ...state.animal, 
+          flags: newFlags,
+          energy: Math.max(0, state.animal.energy - scaling.movementCost) 
+        } 
+      });
+    },
+
+    sniff() {
+      const state = get();
+      if (!state.map) return;
+      
+      const range = state.animal.perceptionRange;
+      const currentNode = state.map.nodes.find(n => n.id === state.map!.currentLocationId);
+      if (!currentNode) return;
+
+      const discoveredIds = new Set<string>([currentNode.id]);
+      let currentLevel = [currentNode.id];
+
+      for (let i = 0; i < range; i++) {
+        const nextLevel: string[] = [];
+        for (const id of currentLevel) {
+          const node = state.map.nodes.find(n => n.id === id);
+          node?.connections.forEach(connId => {
+            if (!discoveredIds.has(connId)) {
+              discoveredIds.add(connId);
+              nextLevel.push(connId);
+            }
+          });
+        }
+        currentLevel = nextLevel;
+      }
+
+      set({
+        map: {
+          ...state.map,
+          nodes: state.map.nodes.map(n => discoveredIds.has(n.id) ? { ...n, discovered: true } : n)
+        },
+        animal: { ...state.animal, energy: Math.max(0, state.animal.energy - 5) }
+      });
+    },
+
+    tickNPCMovement() {
+      const state = get();
+      if (!state.map) return;
+
+      const updatedNPCs = state.npcs.map(npc => {
+        if (!npc.alive || !npc.currentNodeId) return npc;
+        if (state.rng.chance(0.3)) {
+          const currentNode = state.map!.nodes.find(n => n.id === npc.currentNodeId);
+          if (currentNode && currentNode.connections.length > 0) {
+            const nextNodeId = state.rng.pick(currentNode.connections);
+            return { ...npc, currentNodeId: nextNodeId };
+          }
+        }
+        return npc;
+      });
+
+      set({ npcs: updatedNPCs });
+    },
+
+    selectMutation(mutationId) {
+      const state = get();
+      const choice = state.evolution.availableChoices.find(m => m.id === mutationId);
+      if (!choice) return;
+
+      const config = state.speciesBundle.config;
+      const backstory = state.animal.backstory;
+      const sex = state.rng.chance(0.5) ? 'male' as const : 'female' as const;
+
+      const newAnimal = createInitialAnimal(config, backstory, sex);
+      newAnimal.activeMutations = [...state.evolution.activeMutations, choice];
+      
+      if (choice.statModifiers) {
+        for (const mod of choice.statModifiers) {
+          newAnimal.stats = addModifier(newAnimal.stats, {
+            id: `mutation-${choice.id}`,
+            source: choice.name,
+            sourceType: 'condition',
+            stat: mod.stat,
+            amount: mod.amount,
+          });
+        }
+      }
+
+      set({
+        phase: 'playing',
+        animal: newAnimal,
+        reproduction: initialReproduction(config),
+        evolution: {
+          ...state.evolution,
+          activeMutations: newAnimal.activeMutations,
+          availableChoices: [],
+          generationCount: state.evolution.generationCount + 1,
+        },
+        currentEvents: [],
+        pendingChoices: [],
+        revocableChoices: {},
+        map: generateRegionMap(state.rng),
       });
     },
 
@@ -300,11 +459,17 @@ export const useGameStore = create<GameState>((set, get) => {
           const injuryDef = state.speciesBundle.injuries[consequence.injuryId];
           const severity = consequence.severity ?? 0;
           const baseHealingTime = injuryDef?.severityLevels[severity]?.baseHealingTime ?? 8;
+
+          let bodyPart = consequence.bodyPart;
+          if (!bodyPart && injuryDef?.bodyParts && injuryDef.bodyParts.length > 0) {
+            bodyPart = state.rng.pick(injuryDef.bodyParts);
+          }
+
           const newInjury: ActiveInjury = {
             definitionId: consequence.injuryId,
             currentSeverity: severity,
             turnsRemaining: baseHealingTime,
-            bodyPartDetail: consequence.bodyPart ?? 'unspecified',
+            bodyPartDetail: bodyPart ?? 'unspecified',
             isResting: false,
             acquiredOnTurn: state.time.turn,
           };
@@ -322,6 +487,11 @@ export const useGameStore = create<GameState>((set, get) => {
         }
         case 'modify_weight': {
           animal.weight = Math.max(config.weight.minFloor, animal.weight + consequence.amount);
+          set({ animal });
+          break;
+        }
+        case 'modify_nutrients': {
+          animal.nutrients[consequence.nutrient] = Math.max(0, Math.min(100, animal.nutrients[consequence.nutrient] + consequence.amount));
           set({ animal });
           break;
         }
@@ -461,6 +631,19 @@ export const useGameStore = create<GameState>((set, get) => {
           set({ territory: t });
           break;
         }
+        case 'establish_den': {
+          const nodeId = consequence.nodeId || state.map?.currentLocationId;
+          if (!nodeId || !state.map) break;
+          
+          const newTerritory = { ...state.territory, denNodeId: nodeId };
+          const newMap = {
+            ...state.map,
+            nodes: state.map.nodes.map(n => n.id === nodeId ? { ...n, type: 'den' as const } : n)
+          };
+          
+          set({ territory: newTerritory, map: newMap });
+          break;
+        }
         default:
           break;
       }
@@ -470,201 +653,359 @@ export const useGameStore = create<GameState>((set, get) => {
       const state = get();
       const config = state.speciesBundle.config;
       const difficultyMult = DIFFICULTY_PRESETS[state.difficulty];
-
       const turnUnit = config.turnUnit ?? 'week';
-      const newTime = advanceTime(state.time, turnUnit);
-      let tickedStats = tickModifiers(state.animal.stats);
+      const iterations = state.fastForward ? 12 : 1;
+      const scaling = getScaling(config.massType);
+      const massScale = config.massType === 'micro' ? 0.000001 : (config.massType === 'mega' ? 5 : 1);
 
-      // Tick cooldowns
-      const newCooldowns: Record<string, number> = {};
-      for (const [eventId, turns] of Object.entries(state.eventCooldowns)) {
-        if (turns > 1) {
-          newCooldowns[eventId] = turns - 1;
+      let currentAnimal = { ...state.animal };
+      let currentTime = { ...state.time };
+      let currentReproduction = { ...state.reproduction };
+      let currentWeather = state.currentWeather;
+      let currentCooldowns = { ...state.eventCooldowns };
+      let currentClimateShift = state.climateShift;
+      let currentMap = state.map;
+      const currentHistory = [...state.turnHistory];
+
+      for (let i = 0; i < iterations; i++) {
+        const newTime = advanceTime(currentTime, turnUnit);
+        let tickedStats = tickModifiers(currentAnimal.stats);
+        
+        // Advance weather
+        const regionDef = getRegionDefinition(currentAnimal.region);
+        const climate = regionDef?.climate;
+        const newWeather = currentWeather
+          ? tickWeather(currentWeather, climate, newTime.season, newTime.monthIndex, state.rng, currentClimateShift)
+          : generateWeather(climate, newTime.season, newTime.monthIndex, state.rng, currentClimateShift);
+
+        // Climate Shift (Hardcore Mode)
+        if (newTime.year > currentTime.year) {
+           currentClimateShift += 0.1;
         }
-      }
-
-      // Age the animal: monthly species age every turn, weekly species age every 4 turns
-      const newAge = state.animal.age + (turnUnit === 'month' ? 1 : (newTime.week === 1 ? 1 : 0));
-
-      // Starvation debuffs: approaching starvation weakens the animal
-      tickedStats = removeModifiersBySource(tickedStats, 'starvation-debuff');
-      if (state.animal.weight < config.weight.starvationDebuff && state.animal.weight >= config.weight.starvationDeath) {
-        const severity = (config.weight.starvationDebuff - state.animal.weight) /
-          (config.weight.starvationDebuff - config.weight.starvationDeath);
-        const debuffModifier: StatModifier = {
-          id: 'starvation-debuff',
-          source: 'Near-starvation',
-          sourceType: 'condition',
-          stat: StatId.HEA,
-          amount: -Math.round(severity * config.weight.debuffMaxPenalty),
-          duration: 1,
-        };
-        tickedStats = addModifier(tickedStats, debuffModifier);
-      }
-
-      // Advance weather
-      const regionDef = getRegionDefinition(state.animal.region);
-      const climate = regionDef?.climate;
-      const newWeather = state.currentWeather
-        ? tickWeather(state.currentWeather, climate, newTime.season, newTime.monthIndex, state.rng)
-        : generateWeather(climate, newTime.season, newTime.monthIndex, state.rng);
-
-      // Apply weather survival penalties (extreme weather causes direct harm)
-      if (newWeather) {
-        const weatherPenalty = computeWeatherPenalty(newWeather);
-        for (const mod of weatherPenalty.statModifiers) {
+        
+        // Tick Social
+        currentAnimal.social = tickSocial(currentAnimal.social, state.rng);
+        
+        // Circadian & Lunar Bonuses/Penalties
+        const isActivePeriod = 
+          (config.diurnalType === 'diurnal' && (newTime.timeOfDay === 'day' || newTime.timeOfDay === 'dawn')) ||
+          (config.diurnalType === 'nocturnal' && (newTime.timeOfDay === 'night' || newTime.timeOfDay === 'dusk')) ||
+          (config.diurnalType === 'crepuscular' && (newTime.timeOfDay === 'dawn' || newTime.timeOfDay === 'dusk'));
+        
+        if (!isActivePeriod && !currentAnimal.flags.has('territory-established')) {
+          // Stress if inactive and exposed
           tickedStats = addModifier(tickedStats, {
-            id: `weather-${mod.stat}-${newTime.turn}`,
-            source: weatherLabel(newWeather.type),
+            id: 'circadian-stress',
+            source: 'Exposed during rest',
             sourceType: 'condition',
-            stat: mod.stat,
-            amount: mod.amount,
-            duration: mod.duration,
+            stat: StatId.TRA,
+            amount: 5,
+            duration: 1
           });
         }
-        // Weather weight penalty applied below with seasonal weight
-      }
 
-      // Seasonal weight: passive gain/loss based on season and foraging behavior
-      let seasonalWeightChange = config.seasonalWeight[newTime.season]
-        + config.seasonalWeight.foragingBonus * state.behavioralSettings.foraging
-        + (newWeather ? computeWeatherPenalty(newWeather).weightChange : 0);
-
-      // Region climate modulation: extreme cold increases energy expenditure
-      if (climate) {
-        const temp = climate.temperatureByMonth[newTime.monthIndex];
-        if (temp < 20) {
-          seasonalWeightChange -= (20 - temp) * 0.05;
-        }
-      }
-
-      // Apply territory quality modifier for territorial species
-      if (TERRITORIAL_SPECIES.has(state.animal.speciesId) && state.territory.established) {
-        seasonalWeightChange *= territoryWeightModifier(state.territory);
-      }
-
-      // Thermal stress: ectotherms/endotherms respond differently to extreme weather
-      if (config.thermalProfile && newWeather) {
-        const tp = config.thermalProfile;
-        const intensity = newWeather.intensity;
-        if (tp.type === 'ectotherm') {
-          if (newWeather.type === 'heat_wave') seasonalWeightChange -= tp.heatPenalty * intensity;
-          if (newWeather.type === 'frost' || newWeather.type === 'blizzard') seasonalWeightChange += tp.coldBenefit * intensity;
+        // Energy Drain (Metabolic Engine)
+        currentAnimal.energy = Math.max(0, currentAnimal.energy - scaling.metabolicRate);
+        
+        // Physiological Stress
+        // 1. Hypothermia (linked to CLI and weather)
+        const cliStress = computeEffectiveValue(currentAnimal.stats[StatId.CLI]);
+        const coldWeather = newWeather?.type === 'blizzard' || newWeather?.type === 'frost' || newWeather?.type === 'snow';
+        if (cliStress > 60 || (coldWeather && cliStress > 40)) {
+          currentAnimal.physiologicalStress.hypothermia = Math.min(100, currentAnimal.physiologicalStress.hypothermia + 10);
         } else {
-          if (newWeather.type === 'blizzard' || newWeather.type === 'frost') seasonalWeightChange -= tp.coldPenalty * intensity;
-          if (newWeather.type === 'heat_wave') seasonalWeightChange -= tp.heatPenalty * intensity;
+          currentAnimal.physiologicalStress.hypothermia = Math.max(0, currentAnimal.physiologicalStress.hypothermia - 15);
         }
-      }
 
-      // Apply difficulty multipliers to seasonal weight change
-      if (seasonalWeightChange < 0) {
-        seasonalWeightChange *= difficultyMult.weightLossFactor;
-      } else {
-        seasonalWeightChange *= difficultyMult.weightGainFactor;
-      }
+        // 2. Starvation (linked to weight and nutrients)
+        if (currentAnimal.weight < config.weight.starvationDebuff) {
+          currentAnimal.physiologicalStress.starvation = Math.min(100, currentAnimal.physiologicalStress.starvation + 8);
+        } else {
+          currentAnimal.physiologicalStress.starvation = Math.max(0, currentAnimal.physiologicalStress.starvation - 10);
+        }
 
-      const newWeight = Math.max(
-        config.weight.minFloor,
-        state.animal.weight + seasonalWeightChange
-      );
+        // 3. Panic (decays slowly)
+        currentAnimal.physiologicalStress.panic = Math.max(0, currentAnimal.physiologicalStress.panic - 20);
 
-      // Age phase modifiers: apply/remove based on current age phase
-      tickedStats = removeModifiersBySource(tickedStats, 'age-phase');
-      const currentAgePhase = config.agePhases.find(
-        (p) => newAge >= p.minAge && (p.maxAge === undefined || newAge < p.maxAge)
-      );
-      if (currentAgePhase?.statModifiers) {
-        for (const mod of currentAgePhase.statModifiers) {
-          const modifier: StatModifier = {
-            id: `age-phase-${mod.stat}`,
-            source: 'age-phase',
+        // Nutrient Decay
+        currentAnimal.nutrients.minerals = Math.max(0, currentAnimal.nutrients.minerals - 2);
+        currentAnimal.nutrients.vitamins = Math.max(0, currentAnimal.nutrients.vitamins - 3);
+        
+        if (currentAnimal.nutrients.minerals < 20) {
+          // Brittle bones / weakness
+          tickedStats = addModifier(tickedStats, {
+            id: 'mineral-deficiency',
+            source: 'Mineral Deficiency',
             sourceType: 'condition',
-            stat: mod.stat,
-            amount: mod.amount,
+            stat: StatId.STR,
+            amount: -15,
+            duration: 1
+          });
+        }
+
+        if (currentAnimal.energy === 0) {
+          tickedStats = addModifier(tickedStats, {
+            id: 'exhaustion',
+            source: 'Exhaustion',
+            sourceType: 'condition',
+            stat: StatId.HOM,
+            amount: 10,
+            duration: 1
+          });
+        }
+
+        // Tick NPC Movement
+        get().tickNPCMovement();
+
+        // Tick cooldowns
+        const newCooldowns: Record<string, number> = {};
+        for (const [eventId, turns] of Object.entries(currentCooldowns)) {
+          if (turns > 1) {
+            newCooldowns[eventId] = turns - 1;
+          }
+        }
+        currentCooldowns = newCooldowns;
+
+        // Age the animal
+        let ageIncrement = 0;
+        if (turnUnit === 'month') {
+          ageIncrement = 1;
+        } else if (turnUnit === 'week') {
+          if (newTime.week === 1) ageIncrement = 1;
+        } else if (turnUnit === 'day') {
+          if (newTime.dayInMonth === 1) ageIncrement = 1;
+        }
+        const newAge = currentAnimal.age + ageIncrement;
+
+        // Starvation debuffs
+        tickedStats = removeModifiersBySource(tickedStats, 'starvation-debuff');
+        if (currentAnimal.weight < config.weight.starvationDebuff && currentAnimal.weight >= config.weight.starvationDeath) {
+          const severity = (config.weight.starvationDebuff - currentAnimal.weight) /
+            (config.weight.starvationDebuff - config.weight.starvationDeath);
+          const debuffModifier: StatModifier = {
+            id: 'starvation-debuff',
+            source: 'Near-starvation',
+            sourceType: 'condition',
+            stat: StatId.HEA,
+            amount: -Math.round(severity * config.weight.debuffMaxPenalty),
+            duration: 1,
           };
-          tickedStats = addModifier(tickedStats, modifier);
+          tickedStats = addModifier(tickedStats, debuffModifier);
         }
-      }
 
-      // Tick reproduction (iteroparous only — semelparous handled via events)
-      const newFlags = new Set(state.animal.flags);
-      let updatedReproduction = state.reproduction;
+        // Apply weather survival penalties
+        if (newWeather) {
+          const weatherPenalty = computeWeatherPenalty(newWeather);
+          for (const mod of weatherPenalty.statModifiers) {
+            tickedStats = addModifier(tickedStats, {
+              id: `weather-${mod.stat}-${newTime.turn}`,
+              source: weatherLabel(newWeather.type),
+              sourceType: 'condition',
+              stat: mod.stat,
+              amount: mod.amount,
+              duration: mod.duration,
+            });
+          }
+        }
 
-      if (state.reproduction.type === 'iteroparous') {
-        const reproResult = tickReproduction(
-          state.reproduction,
-          state.animal,
-          newTime,
-          state.rng,
+        // Seasonal weight
+        let seasonalWeightChange = config.seasonalWeight[newTime.season]
+          + config.seasonalWeight.foragingBonus * state.behavioralSettings.foraging
+          + (newWeather ? computeWeatherPenalty(newWeather).weightChange : 0);
+
+        // Map Node Integration
+        if (currentMap) {
+          // Sensory Dispersion logic
+          currentMap = {
+            ...currentMap,
+            nodes: currentMap.nodes.map(n => {
+              let scent = Math.max(0, n.scentLevel - 15); // Natural decay
+              let noise = Math.max(0, n.noiseLevel - 10); // Noise dissipation
+              
+              // Wind-driven scent dispersion (simplified)
+              if (newWeather && newWeather.windSpeed > 30) {
+                // High winds clear scent faster
+                scent = Math.max(0, scent - (newWeather.windSpeed / 5));
+              }
+
+              // Periodic random spikes (carcasses, human activity)
+              if (state.rng.chance(0.05)) scent += 40;
+              if (n.type === 'plain' && state.rng.chance(0.02)) noise += 60; // road/human activity
+
+              return { ...n, scentLevel: scent, noiseLevel: noise };
+            })
+          };
+
+          const node = currentMap.nodes.find(n => n.id === currentMap!.currentLocationId);
+          if (node) {
+            // Apply Noise Stress
+            if (node.noiseLevel > 50) {
+              tickedStats = addModifier(tickedStats, {
+                id: 'noise-stress',
+                source: 'Anthropogenic Noise',
+                sourceType: 'condition',
+                stat: StatId.TRA,
+                amount: 8,
+                duration: 1
+              });
+            }
+
+            const foodModifier = (node.resources.food - 50) / 50 * 0.5 * massScale;
+            seasonalWeightChange += foodModifier;
+            const coverModifier = (node.resources.cover - 50) / 100 * 0.2 * massScale;
+            seasonalWeightChange += coverModifier;
+            
+            const depletion = state.behavioralSettings.foraging * 0.5;
+            currentMap = {
+              ...currentMap,
+              nodes: currentMap.nodes.map(n => 
+                n.id === currentMap!.currentLocationId 
+                  ? { ...n, resources: { ...n.resources, food: Math.max(0, n.resources.food - depletion) } }
+                  : n
+              )
+            };
+          }
+
+          if (newTime.dayInMonth === 1 || (turnUnit === 'week' && newTime.week === 1) || turnUnit === 'month') {
+            currentMap = {
+              ...currentMap,
+              nodes: currentMap.nodes.map(n => {
+                let type = n.type;
+                let resources = { ...n.resources };
+                if (newTime.season === 'winter' && type === 'water' && state.rng.chance(0.7)) {
+                  type = 'plain';
+                } else if (newTime.season !== 'winter' && type === 'plain' && n.id.includes('water')) {
+                  type = 'water';
+                }
+                if (newTime.season === 'summer' && newWeather?.type === 'heat_wave') {
+                  resources.food = Math.max(0, resources.food - 10);
+                }
+                if (newTime.season === 'spring') resources.food = Math.min(100, resources.food + 15);
+                else resources.food = Math.min(100, resources.food + 5);
+                return { ...n, type, resources };
+              })
+            };
+          }
+        }
+
+        if (climate) {
+          const temp = climate.temperatureByMonth[newTime.monthIndex];
+          if (temp < 20) {
+            seasonalWeightChange -= (20 - temp) * 0.05;
+          }
+        }
+
+        if (TERRITORIAL_SPECIES.has(currentAnimal.speciesId) && state.territory.established) {
+          seasonalWeightChange *= territoryWeightModifier(state.territory);
+        }
+
+        if (config.thermalProfile && newWeather) {
+          const tp = config.thermalProfile;
+          const intensity = newWeather.intensity;
+          if (tp.type === 'ectotherm') {
+            if (newWeather.type === 'heat_wave') seasonalWeightChange -= tp.heatPenalty * intensity;
+            if (newWeather.type === 'frost' || newWeather.type === 'blizzard') seasonalWeightChange += tp.coldBenefit * intensity;
+          } else {
+            if (newWeather.type === 'blizzard' || newWeather.type === 'frost') seasonalWeightChange -= tp.coldPenalty * intensity;
+            if (newWeather.type === 'heat_wave') seasonalWeightChange -= tp.heatPenalty * intensity;
+          }
+        }
+
+        if (seasonalWeightChange < 0) {
+          seasonalWeightChange *= difficultyMult.weightLossFactor;
+        } else {
+          seasonalWeightChange *= difficultyMult.weightGainFactor;
+        }
+
+        const newWeight = Math.max(config.weight.minFloor, currentAnimal.weight + seasonalWeightChange);
+
+        tickedStats = removeModifiersBySource(tickedStats, 'age-phase');
+        const currentAgePhase = config.agePhases.find(
+          (p) => newAge >= p.minAge && (p.maxAge === undefined || newAge < p.maxAge)
         );
-        for (const f of reproResult.flagsToAdd) newFlags.add(f);
-        for (const f of reproResult.flagsToRemove) newFlags.delete(f);
-        updatedReproduction = reproResult.reproduction;
-      }
-
-      // Auto-trigger migration: if will-migrate flag is set and season matches
-      if (config.migration) {
-        const mig = config.migration;
-        if (newTime.season === mig.migrationSeason && state.animal.flags.has(mig.migrationFlag) && !state.animal.flags.has(mig.migratedFlag)) {
-          newFlags.add(mig.migratedFlag);
-          newFlags.delete(mig.migrationFlag);
-          // Region change happens here — set animal region to winter yard
-          // We'll apply it in the set() call below
+        if (currentAgePhase?.statModifiers) {
+          for (const mod of currentAgePhase.statModifiers) {
+            tickedStats = addModifier(tickedStats, {
+              id: `age-phase-${mod.stat}`,
+              source: 'age-phase',
+              sourceType: 'condition',
+              stat: mod.stat,
+              amount: mod.amount,
+            });
+          }
         }
-        // Auto-return in spring
-        if (newTime.season === mig.returnSeason && state.animal.flags.has(mig.migratedFlag)) {
-          newFlags.delete(mig.migratedFlag);
-          newFlags.add(mig.returnFlag);
-        }
-        // Clear return flag after one turn
-        if (state.animal.flags.has(mig.returnFlag)) {
-          newFlags.delete(mig.returnFlag);
-        }
-      }
 
-      // Determine region based on migration state
-      let newRegion = state.animal.region;
-      if (config.migration) {
-        if (newFlags.has(config.migration.migratedFlag)) {
-          newRegion = config.migration.winterRegionId;
-        } else if (!newFlags.has(config.migration.migratedFlag)) {
-          newRegion = config.defaultRegion;
+        const newFlags = new Set(currentAnimal.flags);
+        if (currentReproduction.type === 'iteroparous') {
+          const reproResult = tickReproduction(currentReproduction, currentAnimal, newTime, state.rng);
+          for (const f of reproResult.flagsToAdd) newFlags.add(f);
+          for (const f of reproResult.flagsToRemove) newFlags.delete(f);
+          currentReproduction = reproResult.reproduction;
         }
-      }
 
-      // Save turn to history with actual stat snapshot
-      const statSnapshot = {} as Record<StatId, number>;
-      for (const id of Object.values(StatId)) {
-        statSnapshot[id] = computeEffectiveValue(state.animal.stats[id]);
-      }
-      const record: TurnRecord = {
-        turn: state.time.turn,
-        month: state.time.month,
-        year: state.time.year,
-        season: state.time.season,
-        events: state.currentEvents,
-        statSnapshot,
-      };
+        if (config.migration) {
+          const mig = config.migration;
+          if (newTime.season === mig.migrationSeason && newFlags.has(mig.migrationFlag) && !newFlags.has(mig.migratedFlag)) {
+            newFlags.add(mig.migratedFlag);
+            newFlags.delete(mig.migrationFlag);
+          }
+          if (newTime.season === mig.returnSeason && newFlags.has(mig.migratedFlag)) {
+            newFlags.delete(mig.migratedFlag);
+            newFlags.add(mig.returnFlag);
+          } else if (newFlags.has(mig.returnFlag)) {
+            newFlags.delete(mig.returnFlag);
+          }
+        }
 
-      set({
-        time: newTime,
-        animal: {
-          ...state.animal,
+        let newRegion = currentAnimal.region;
+        if (config.migration) {
+          if (newFlags.has(config.migration.migratedFlag)) {
+            newRegion = config.migration.winterRegionId;
+          } else {
+            newRegion = config.defaultRegion;
+          }
+        }
+
+        currentAnimal = {
+          ...currentAnimal,
           stats: tickedStats,
           age: newAge,
           weight: newWeight,
           region: newRegion,
           flags: newFlags,
-        },
-        reproduction: updatedReproduction,
-        currentWeather: newWeather,
+        };
+        currentTime = newTime;
+        currentWeather = newWeather;
+
+        if (i === iterations - 1) {
+          const statSnapshot = {} as Record<StatId, number>;
+          for (const id of Object.values(StatId)) {
+            statSnapshot[id] = computeEffectiveValue(currentAnimal.stats[id]);
+          }
+          currentHistory.push({
+            turn: currentTime.turn,
+            month: currentTime.month,
+            year: currentTime.year,
+            season: currentTime.season,
+            events: state.currentEvents,
+            statSnapshot,
+          });
+        }
+      }
+
+      set({
+        time: currentTime,
+        animal: currentAnimal,
+        reproduction: currentReproduction,
+        currentWeather,
+        map: currentMap,
         currentEvents: [],
         pendingChoices: [],
-        turnHistory: [...state.turnHistory, record],
-        eventCooldowns: newCooldowns,
+        turnHistory: currentHistory,
+        eventCooldowns: currentCooldowns,
         actionsPerformed: [],
+        climateShift: currentClimateShift,
       });
-
     },
 
     updateBehavioralSetting(key, value) {
@@ -683,6 +1024,7 @@ export const useGameStore = create<GameState>((set, get) => {
 
     dismissResults() {
       set({ turnResult: null, showingResults: false });
+      get().advanceTurn();
     },
 
     setEventCooldowns(cooldowns) {
@@ -703,7 +1045,6 @@ export const useGameStore = create<GameState>((set, get) => {
       if (state.tutorialStep === null) return;
       const next = state.tutorialStep + 1;
       if (next >= 4) {
-        // Tutorial complete
         localStorage.setItem('wild-reckoning-tutorial-seen', 'true');
         set({ tutorialStep: null });
       } else {
@@ -742,6 +1083,7 @@ export const useGameStore = create<GameState>((set, get) => {
 
       const ctx: ActionContext = {
         speciesId: state.animal.speciesId,
+        config: state.speciesBundle.config,
         territory: state.territory,
         reproductionType: state.speciesBundle.config.reproduction.type,
         season: state.time.season,
@@ -750,21 +1092,19 @@ export const useGameStore = create<GameState>((set, get) => {
             ? (state.speciesBundle.config.reproduction as any).matingSeasons ?? 'any'
             : [],
         rng: state.rng,
+        nutrients: state.animal.nutrients,
       };
 
       const result = action.execute(ctx);
 
-      // Apply stat effects
       if (result.statEffects.length > 0) {
         get().applyStatEffects(result.statEffects);
       }
 
-      // Apply consequences
       for (const c of result.consequences) {
         get().applyConsequence(c);
       }
 
-      // Add action as a passive event so it appears in the event feed
       const actionEvent: ResolvedEvent = {
         definition: {
           id: `action-${actionId}`,
@@ -798,15 +1138,12 @@ export const useGameStore = create<GameState>((set, get) => {
       const option = roll.escapeOptions.find((o) => o.id === escapeOptionId);
       if (!option) return;
 
-      // Calculate modified death probability: subtract survival modifier
       let modifiedProb = roll.baseProbability - option.survivalModifier;
       modifiedProb = Math.max(0.01, Math.min(0.95, modifiedProb));
 
-      // Roll the dice
       const died = state.rng.chance(modifiedProb);
 
       if (died) {
-        // Remove the pending roll and kill the animal
         const remaining = state.turnResult.pendingDeathRolls.filter((_, i) => i !== rollIndex);
         set({
           turnResult: {
@@ -816,7 +1153,6 @@ export const useGameStore = create<GameState>((set, get) => {
         });
         get().killAnimal(roll.cause);
       } else {
-        // Survived: apply stat cost if any, then remove the pending roll
         if (option.statCost && option.statCost.length > 0) {
           get().applyStatEffects(option.statCost);
         }
@@ -835,34 +1171,23 @@ export const useGameStore = create<GameState>((set, get) => {
       const state = get();
       const config = state.speciesBundle.config;
 
-      // Lineage mode: if the species supports it and the animal has spawned,
-      // continue as the next generation instead of ending the game
       if (config.lineageMode && state.reproduction.type === 'semelparous' && state.reproduction.spawned) {
-        const backstory = state.animal.backstory;
-        const sex = state.rng.chance(0.5) ? 'male' as const : 'female' as const;
-
-        // Compute inherited traits for next generation
-        const parentStats: Record<StatId, number> = {} as Record<StatId, number>;
-        for (const id of Object.values(StatId)) {
-          parentStats[id] = computeEffectiveValue(state.animal.stats[id]);
-        }
-        const newLineage = computeInheritedTraits(parentStats, state.lineage, config, state.rng);
-
-        // Create new animal with inherited biases
-        const newAnimal = createInitialAnimal(config, backstory, sex);
-        const biasedBases = applyLineageBiases(
-          Object.fromEntries(Object.values(StatId).map((id) => [id, config.baseStats[id]])) as Record<StatId, number>,
-          newLineage,
-        );
-        newAnimal.stats = createStatBlock(biasedBases);
+        const availableChoices = getAvailableMutations(state.rng, 3);
+        const ancestor: AncestorRecord = {
+          generation: state.evolution.generationCount,
+          speciesId: state.animal.speciesId,
+          name: state.animal.name,
+          causeOfDeath: cause,
+          mutationChosen: state.evolution.activeMutations[state.evolution.activeMutations.length - 1],
+        };
 
         set({
-          animal: newAnimal,
-          reproduction: { ...INITIAL_SEMELPAROUS_STATE },
-          currentEvents: [],
-          pendingChoices: [],
-          revocableChoices: {},
-          lineage: newLineage,
+          phase: 'evolving',
+          evolution: {
+            ...state.evolution,
+            availableChoices,
+            lineageHistory: [...state.evolution.lineageHistory, ancestor],
+          }
         });
         return;
       }
@@ -870,7 +1195,6 @@ export const useGameStore = create<GameState>((set, get) => {
       deleteSaveGame();
 
       if (state.reproduction.type === 'iteroparous') {
-        // Kill dependent offspring if the mother dies
         let updatedOffspring = state.reproduction.offspring;
         if (state.animal.sex === 'female') {
           updatedOffspring = updatedOffspring.map((o) => {
