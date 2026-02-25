@@ -55,6 +55,13 @@ export const WHITE_TAILED_DEER_CONFIG: SpeciesConfig = {
     deathChanceMax: 0.80,
   },
 
+  thermalProfile: {
+    type: 'endotherm',
+    heatPenalty: 0.4,
+    coldPenalty: 0.5,
+    coldBenefit: 0,
+  },
+
   seasonalWeight: {
     spring: 0.5,    // Moderate gain — new growth
     summer: 1.0,    // Good gain — abundant food

@@ -167,6 +167,59 @@ const wolfParasites: Record<string, ParasiteDefinition> = {
       },
     ],
   },
+
+  'parvovirus': {
+    id: 'parvovirus',
+    name: 'Canine Parvovirus',
+    scientificName: 'Canine parvovirus type 2 (CPV-2)',
+    description:
+      'A highly contagious virus that attacks rapidly dividing cells in the intestinal lining and bone marrow. Pups are most vulnerable, but adults can also be infected. Causes severe vomiting, bloody diarrhea, and rapid dehydration. The virus persists in the environment for months.',
+    transmissionMethod: 'Contact with infected feces or contaminated den sites',
+    affectedSpecies: ['gray-wolf'],
+    stages: [
+      {
+        severity: 'minor',
+        description:
+          'Loss of appetite and mild lethargy. Your gut feels unsettled and you avoid food.',
+        statEffects: [
+          { stat: StatId.IMM, amount: 8 },
+          { stat: StatId.HOM, amount: 6 },
+        ],
+        secondaryEffects: [],
+        turnDuration: { min: 2, max: 5 },
+        progressionChance: 0.28,
+        remissionChance: 0.15,
+      },
+      {
+        severity: 'moderate',
+        description:
+          'Severe vomiting and bloody diarrhea. You are dehydrating rapidly and cannot keep food down. The pack moves on without you.',
+        statEffects: [
+          { stat: StatId.HEA, amount: -14 },
+          { stat: StatId.IMM, amount: 16 },
+          { stat: StatId.HOM, amount: 14 },
+        ],
+        secondaryEffects: ['severe dehydration', 'isolation from pack'],
+        turnDuration: { min: 2, max: 5 },
+        progressionChance: 0.22,
+        remissionChance: 0.12,
+      },
+      {
+        severity: 'severe',
+        description:
+          'Your intestinal lining is destroyed and your bone marrow is failing. Sepsis from gut bacteria entering the bloodstream. Without the fluid replacement that only a veterinary clinic could provide, this is almost certainly fatal.',
+        statEffects: [
+          { stat: StatId.HEA, amount: -25 },
+          { stat: StatId.IMM, amount: 24 },
+          { stat: StatId.HOM, amount: 20 },
+        ],
+        secondaryEffects: ['septicemia', 'bone marrow suppression', 'death likely'],
+        turnDuration: { min: 1, max: 3 },
+        progressionChance: 0,
+        remissionChance: 0.05,
+      },
+    ],
+  },
 };
 
 export const GRAY_WOLF_PARASITES: Record<string, ParasiteDefinition> = {

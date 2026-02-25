@@ -42,7 +42,11 @@ export type EventCondition =
   | { type: 'weight_above'; threshold: number }
   | { type: 'weight_below'; threshold: number }
   | { type: 'sex'; sex: 'male' | 'female' }
-  | { type: 'weather'; weatherTypes: string[] };
+  | { type: 'weather'; weatherTypes: string[] }
+  | { type: 'population_above'; speciesName: string; threshold: number }
+  | { type: 'population_below'; speciesName: string; threshold: number }
+  | { type: 'has_npc'; npcType: 'rival' | 'ally' | 'mate' | 'predator' | 'offspring' }
+  | { type: 'no_npc'; npcType: 'rival' | 'ally' | 'mate' | 'predator' | 'offspring' };
 
 // ── Consequences ──
 

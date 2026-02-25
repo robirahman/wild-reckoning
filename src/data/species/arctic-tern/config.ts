@@ -55,6 +55,13 @@ export const ARCTIC_TERN_CONFIG: SpeciesConfig = {
     deathChanceMax: 0.65,
   },
 
+  thermalProfile: {
+    type: 'endotherm',
+    heatPenalty: 0.003,
+    coldPenalty: 0.002,
+    coldBenefit: 0,
+  },
+
   seasonalWeight: {
     spring: 0.005,
     summer: 0.008,

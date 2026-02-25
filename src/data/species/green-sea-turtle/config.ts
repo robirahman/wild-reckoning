@@ -57,6 +57,13 @@ export const GREEN_SEA_TURTLE_CONFIG: SpeciesConfig = {
 
   turnUnit: 'month',
 
+  thermalProfile: {
+    type: 'ectotherm',
+    heatPenalty: 3.0,
+    coldPenalty: 0,
+    coldBenefit: 1.0,
+  },
+
   seasonalWeight: {
     spring: 2.0,
     summer: 1.0,

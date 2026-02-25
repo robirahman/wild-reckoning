@@ -9,6 +9,7 @@ import type { Difficulty } from '../types/difficulty';
 import type { NPC } from '../types/npc';
 import type { RegionDefinition } from '../types/world';
 import type { WeatherState } from './WeatherSystem';
+import type { EcosystemState } from '../types/ecosystem';
 import { DIFFICULTY_PRESETS } from '../types/difficulty';
 import { weatherContextMultiplier } from './WeatherSystem';
 import { pickIllustration } from './IllustrationPicker';
@@ -25,6 +26,7 @@ interface GenerationContext {
   npcs?: NPC[];
   regionDef?: RegionDefinition;
   currentWeather?: WeatherState;
+  ecosystem?: EcosystemState;
 }
 
 /** Check if a single condition is met */
@@ -72,6 +74,18 @@ function checkCondition(cond: EventCondition, ctx: GenerationContext): boolean {
       return ctx.animal.sex === cond.sex;
     case 'weather':
       return !!ctx.currentWeather && cond.weatherTypes.includes(ctx.currentWeather.type);
+    case 'population_above': {
+      const pop = ctx.ecosystem?.populations[cond.speciesName];
+      return pop ? pop.level > cond.threshold : false;
+    }
+    case 'population_below': {
+      const pop = ctx.ecosystem?.populations[cond.speciesName];
+      return pop ? pop.level < cond.threshold : false;
+    }
+    case 'has_npc':
+      return !!ctx.npcs?.some((n) => n.type === cond.npcType && n.alive);
+    case 'no_npc':
+      return !ctx.npcs?.some((n) => n.type === cond.npcType && n.alive);
     default:
       return true;
   }

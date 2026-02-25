@@ -55,6 +55,13 @@ export const COMMON_OCTOPUS_CONFIG: SpeciesConfig = {
     deathChanceMax: 0.88,
   },
 
+  thermalProfile: {
+    type: 'ectotherm',
+    heatPenalty: 0.8,
+    coldPenalty: 0,
+    coldBenefit: 0.3,
+  },
+
   seasonalWeight: {
     spring: 0.4,
     summer: 0.5,

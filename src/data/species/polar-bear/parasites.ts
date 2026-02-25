@@ -92,4 +92,71 @@ export const POLAR_BEAR_PARASITES: Record<string, ParasiteDefinition> = {
       },
     ],
   },
+
+  'morbillivirus': {
+    id: 'morbillivirus',
+    name: 'Phocine Distemper',
+    scientificName: 'Phocine distemper virus (PDV)',
+    description:
+      'A morbillivirus closely related to canine distemper that circulates in Arctic seal populations. Polar bears acquire the virus by consuming infected seals. As sea ice melts and bears spend more time near seal haul-outs, exposure rates are increasing. Causes respiratory distress, neurological symptoms, and immune suppression.',
+    transmissionMethod: 'Consumption of infected seal tissue or close contact with infected marine mammals',
+    affectedSpecies: ['polar-bear'],
+    stages: [
+      {
+        severity: 'minor',
+        description:
+          'Mild respiratory symptoms. A persistent cough and watery eyes. You feel sluggish after feeding on seal.',
+        statEffects: [
+          { stat: StatId.IMM, amount: 6 },
+          { stat: StatId.HEA, amount: -3 },
+        ],
+        secondaryEffects: [],
+        turnDuration: { min: 3, max: 8 },
+        progressionChance: 0.15,
+        remissionChance: 0.12,
+      },
+      {
+        severity: 'moderate',
+        description:
+          'The cough has deepened and breathing is labored. Nasal discharge is thick and constant. Your immune system is weakening, making you susceptible to secondary bacterial infections.',
+        statEffects: [
+          { stat: StatId.HEA, amount: -10 },
+          { stat: StatId.IMM, amount: 14 },
+          { stat: StatId.HOM, amount: 8 },
+        ],
+        secondaryEffects: ['respiratory distress', 'immune suppression'],
+        turnDuration: { min: 3, max: 8 },
+        progressionChance: 0.12,
+        remissionChance: 0.08,
+      },
+      {
+        severity: 'severe',
+        description:
+          'Neurological symptoms have appeared: muscle twitching, uncoordinated movements, and episodes of disorientation on the sea ice. Swimming is dangerous — you struggle to coordinate your strokes.',
+        statEffects: [
+          { stat: StatId.HEA, amount: -18 },
+          { stat: StatId.IMM, amount: 20 },
+          { stat: StatId.WIS, amount: -10 },
+        ],
+        secondaryEffects: ['neurological impairment', 'swimming impairment'],
+        turnDuration: { min: 2, max: 6 },
+        progressionChance: 0.10,
+        remissionChance: 0.04,
+      },
+      {
+        severity: 'critical',
+        description:
+          'Severe encephalitis. You are barely conscious, lying on the ice unable to hunt. Pneumonia has set in. The virus has overwhelmed your immune defenses.',
+        statEffects: [
+          { stat: StatId.HEA, amount: -28 },
+          { stat: StatId.IMM, amount: 25 },
+          { stat: StatId.WIS, amount: -18 },
+        ],
+        secondaryEffects: ['encephalitis', 'pneumonia', 'organ failure imminent'],
+        turnDuration: { min: 1, max: 4 },
+        progressionChance: 0,
+        remissionChance: 0.02,
+      },
+    ],
+  },
 };

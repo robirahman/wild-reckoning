@@ -57,6 +57,13 @@ export const POLAR_BEAR_CONFIG: SpeciesConfig = {
 
   turnUnit: 'month',
 
+  thermalProfile: {
+    type: 'endotherm',
+    heatPenalty: 8.0,
+    coldPenalty: 0,
+    coldBenefit: 0,
+  },
+
   seasonalWeight: {
     spring: 2.5,    // Sea ice still holds — prime seal hunting
     summer: -3.5,   // Ice breakup — forced ashore, fasting begins

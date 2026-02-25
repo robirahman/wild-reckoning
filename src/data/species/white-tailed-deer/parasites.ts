@@ -182,6 +182,59 @@ const deerParasites: Record<string, ParasiteDefinition> = {
       },
     ],
   },
+
+  'epizootic-hemorrhagic-disease': {
+    id: 'epizootic-hemorrhagic-disease',
+    name: 'Epizootic Hemorrhagic Disease',
+    scientificName: 'Orbivirus (EHDV)',
+    description:
+      'A viral hemorrhagic disease transmitted by biting midges (Culicoides). Causes fever, tissue swelling, and hemorrhaging. Outbreaks occur in late summer and autumn when midge populations peak. Can kill quickly or resolve within weeks — outcome is unpredictable.',
+    transmissionMethod: 'Bite from infected Culicoides midges during warm months',
+    affectedSpecies: ['white-tailed-deer'],
+    stages: [
+      {
+        severity: 'minor',
+        description:
+          'Fever and mild lethargy. You move slowly and your appetite has dropped. The virus is multiplying in your blood.',
+        statEffects: [
+          { stat: StatId.IMM, amount: 10 },
+          { stat: StatId.HEA, amount: -5 },
+        ],
+        secondaryEffects: [],
+        turnDuration: { min: 2, max: 5 },
+        progressionChance: 0.25,
+        remissionChance: 0.20,
+      },
+      {
+        severity: 'moderate',
+        description:
+          'Hemorrhaging has begun. Your mouth and hooves are swollen and bloody. You stand in water to cool the fever, unable to flee if a predator appears.',
+        statEffects: [
+          { stat: StatId.HEA, amount: -15 },
+          { stat: StatId.IMM, amount: 18 },
+          { stat: StatId.ADV, amount: 10 },
+        ],
+        secondaryEffects: ['hemorrhaging', 'high predation vulnerability'],
+        turnDuration: { min: 2, max: 5 },
+        progressionChance: 0.20,
+        remissionChance: 0.15,
+      },
+      {
+        severity: 'severe',
+        description:
+          'Massive internal hemorrhaging and organ failure. You are found dead or dying near water — the classic presentation of EHD. The body temperature is so high the meat will spoil within hours.',
+        statEffects: [
+          { stat: StatId.HEA, amount: -28 },
+          { stat: StatId.IMM, amount: 25 },
+          { stat: StatId.ADV, amount: 15 },
+        ],
+        secondaryEffects: ['organ failure imminent', 'rapid death likely'],
+        turnDuration: { min: 1, max: 3 },
+        progressionChance: 0,
+        remissionChance: 0.05,
+      },
+    ],
+  },
 };
 
 export const WHITE_TAILED_DEER_PARASITES: Record<string, ParasiteDefinition> = {

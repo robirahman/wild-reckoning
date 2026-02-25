@@ -25,6 +25,7 @@ export function generateTurnEvents(state: GameState): ResolvedEvent[] {
     npcs: state.npcs,
     regionDef: getRegionDefinition(state.animal.region),
     currentWeather: state.currentWeather ?? undefined,
+    ecosystem: state.ecosystem,
   });
 }
 

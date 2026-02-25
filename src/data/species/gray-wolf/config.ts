@@ -55,6 +55,13 @@ export const GRAY_WOLF_CONFIG: SpeciesConfig = {
     deathChanceMax: 0.60,
   },
 
+  thermalProfile: {
+    type: 'endotherm',
+    heatPenalty: 0.5,
+    coldPenalty: 0.3,
+    coldBenefit: 0,
+  },
+
   seasonalWeight: {
     spring: 0.8,     // Good gain — prey abundant after winter die-off
     summer: 0.4,     // Moderate gain — pup rearing demands energy

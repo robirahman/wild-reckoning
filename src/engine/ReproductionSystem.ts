@@ -198,6 +198,26 @@ export function tickReproduction(
 
   updated = { ...updated, offspring: updatedOffspring };
 
+  // Infanticide: if the flag is set, kill all dependent offspring
+  if (animal.flags.has('infanticide-occurred')) {
+    const afterInfanticide = updated.offspring.map((o) => {
+      if (o.alive && !o.independent) {
+        return { ...o, alive: false, causeOfDeath: 'Killed by infanticidal male' };
+      }
+      return o;
+    });
+    const hadDependents = updated.offspring.some((o) => o.alive && !o.independent);
+    updated = { ...updated, offspring: afterInfanticide };
+    if (hadDependents) {
+      narratives.push(
+        'Your offspring did not survive. The loss is absolute — there is nothing to protect anymore.',
+      );
+    }
+    flagsToRemove.push('infanticide-occurred');
+    // Also remove the dependent flag since there are no more dependents
+    anyDependent = false;
+  }
+
   // Update dependent flag
   if (!anyDependent && animal.flags.has('fawns-dependent')) {
     flagsToRemove.push('fawns-dependent');

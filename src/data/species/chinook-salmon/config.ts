@@ -55,6 +55,13 @@ export const CHINOOK_SALMON_CONFIG: SpeciesConfig = {
     deathChanceMax: 0.85,
   },
 
+  thermalProfile: {
+    type: 'ectotherm',
+    heatPenalty: 0.5,
+    coldPenalty: 0,
+    coldBenefit: 0.2,
+  },
+
   seasonalWeight: {
     spring: 0.8,    // Good ocean feeding
     summer: 1.0,    // Peak ocean feeding

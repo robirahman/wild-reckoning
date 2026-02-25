@@ -1555,4 +1555,104 @@ export const AFRICAN_ELEPHANT_EVENTS: GameEvent[] = [
     cooldown: 8,
     tags: ['predator', 'danger'],
   },
+
+  // ══════════════════════════════════════════════
+  //  COOPERATIVE DEFENSE EVENTS
+  // ══════════════════════════════════════════════
+
+  {
+    id: 'elephant-cooperative-lion-defense',
+    type: 'active',
+    category: 'predator',
+    narrativeText: 'Lions have been shadowing the herd since dusk — you can see their amber eyes in the darkness at the tree line. They are targeting the calves. {{npc.ally.name}} moves to stand beside you, and the two of you form a wall between the lions and the young. Elephants working together can face down any predator. Alone, even an elephant is vulnerable to a coordinated lion pride.',
+    statEffects: [{ stat: StatId.TRA, amount: 3, label: '+TRA' }],
+    consequences: [],
+    choices: [
+      {
+        id: 'elephant-lion-charge',
+        label: 'Charge the lions together',
+        description: 'A coordinated charge will scatter them.',
+        narrativeResult: 'You and {{npc.ally.name}} trumpet and charge. The lions scatter — even a pride of six cannot face two enraged elephants. The calves are safe tonight.',
+        statEffects: [{ stat: StatId.ADV, amount: 2, label: '+ADV' }],
+        consequences: [],
+        revocable: false,
+        style: 'danger',
+      },
+      {
+        id: 'elephant-lion-wall',
+        label: 'Hold the defensive line',
+        description: 'Stand together. Do not let them through.',
+        narrativeResult: 'You stand shoulder to shoulder through the long night, rumbling warnings. The lions probe but never commit. By dawn, they slink away. The vigil cost you sleep and energy, but the calves survived.',
+        statEffects: [{ stat: StatId.HOM, amount: 4, label: '+HOM' }],
+        consequences: [{ type: 'modify_weight', amount: -1 }],
+        revocable: false,
+        style: 'default',
+      },
+    ],
+    subEvents: [],
+    conditions: [
+      { type: 'species', speciesIds: ['african-elephant'] },
+      { type: 'has_npc', npcType: 'ally' },
+      { type: 'has_flag', flag: 'calves-dependent' },
+    ],
+    weight: 7,
+    cooldown: 8,
+    tags: ['predator', 'social'],
+  },
+
+  // ══════════════════════════════════════════════
+  //  INFANTICIDE EVENTS
+  // ══════════════════════════════════════════════
+
+  {
+    id: 'elephant-musth-male-calf-threat',
+    type: 'active',
+    category: 'predator',
+    narrativeText: 'A bull elephant in musth — temporal glands streaming, eyes wild with hormonal rage — has been following the herd for days. Today he charges a calf, swinging his tusks. Bulls in musth are unpredictable and extremely dangerous. Even other elephants avoid them. Your calf screams as the bull approaches.',
+    statEffects: [{ stat: StatId.TRA, amount: 6, label: '+TRA' }],
+    consequences: [],
+    choices: [
+      {
+        id: 'elephant-musth-herd-defense',
+        label: 'Rally the herd',
+        description: 'Trumpet for help. Several females can drive off even a musth bull.',
+        narrativeResult: 'Your distress call brings {{npc.ally.name}} and two other cows running. Together, you form a wall of ivory and fury. The musth bull, outnumbered, backs away with a rumbling threat. The calf is safe — trembling, but alive.',
+        statEffects: [{ stat: StatId.ADV, amount: 3, label: '+ADV' }],
+        consequences: [],
+        revocable: false,
+        style: 'default',
+        deathChance: undefined,
+      },
+      {
+        id: 'elephant-musth-flee',
+        label: 'Flee with the calf',
+        description: 'Run. A musth bull is too dangerous to confront alone.',
+        narrativeResult: 'You push the calf ahead of you and run. The bull gives chase briefly, then turns back to the herd. You are separated from the group and must find your way back — a dangerous journey for a cow and calf alone.',
+        statEffects: [{ stat: StatId.TRA, amount: 5, label: '+TRA' }],
+        consequences: [{ type: 'modify_weight', amount: -2 }],
+        revocable: false,
+        style: 'danger',
+      },
+      {
+        id: 'elephant-musth-stand-alone',
+        label: 'Stand alone against the bull',
+        description: 'You are half his size, but your calf is behind you.',
+        narrativeResult: 'You lower your head and charge. The bull\'s tusk catches your shoulder, opening a deep gash, but your countercharge surprises him. He circles, considering, then moves off to find easier targets.',
+        statEffects: [{ stat: StatId.ADV, amount: 6, label: '+ADV' }],
+        consequences: [{ type: 'add_injury', injuryId: 'tusk-wound', severity: 1 }],
+        revocable: false,
+        style: 'danger',
+      },
+    ],
+    subEvents: [],
+    conditions: [
+      { type: 'species', speciesIds: ['african-elephant'] },
+      { type: 'sex', sex: 'female' },
+      { type: 'has_flag', flag: 'calves-dependent' },
+    ],
+    weight: 4,
+    cooldown: 12,
+    tags: ['predator', 'social'],
+    footnote: 'Musth bulls have been observed killing calves, though this is relatively rare in wild populations. The behavior is more common in areas where bull age structure is disrupted by poaching, leaving younger, less socially experienced bulls to enter musth without the moderating presence of older males.',
+  },
 ];

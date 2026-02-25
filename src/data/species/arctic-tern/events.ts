@@ -945,4 +945,27 @@ export const ARCTIC_TERN_EVENTS: GameEvent[] = [
     weight: 25,
     tags: ['milestone'],
   },
+
+  // ══════════════════════════════════════════════
+  //  COOPERATIVE FORAGING EVENTS
+  // ══════════════════════════════════════════════
+
+  {
+    id: 'tern-colony-foraging-info',
+    type: 'passive',
+    category: 'foraging',
+    narrativeText: 'You watch {{npc.ally.name}} return to the colony from the south, beak full of sand eels. Other terns notice the direction of arrival and one by one, they launch and fly south. Colonial nesting is not just about safety in numbers — it is an information network. By watching which birds return with full beaks and from what direction, the colony shares real-time intelligence about fish locations. You follow the signal south and find a dense school of sand eels just below the surface.',
+    statEffects: [{ stat: StatId.WIS, amount: 2, label: '+WIS' }],
+    consequences: [{ type: 'modify_weight', amount: 1 }],
+    choices: [],
+    subEvents: [],
+    conditions: [
+      { type: 'species', speciesIds: ['arctic-tern'] },
+      { type: 'has_npc', npcType: 'ally' },
+      { type: 'season', seasons: ['summer'] },
+    ],
+    weight: 8,
+    cooldown: 6,
+    tags: ['foraging', 'social'],
+  },
 ];

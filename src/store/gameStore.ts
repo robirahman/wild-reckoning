@@ -543,6 +543,19 @@ export const useGameStore = create<GameState>((set, get) => {
         seasonalWeightChange *= territoryWeightModifier(state.territory);
       }
 
+      // Thermal stress: ectotherms/endotherms respond differently to extreme weather
+      if (config.thermalProfile && newWeather) {
+        const tp = config.thermalProfile;
+        const intensity = newWeather.intensity;
+        if (tp.type === 'ectotherm') {
+          if (newWeather.type === 'heat_wave') seasonalWeightChange -= tp.heatPenalty * intensity;
+          if (newWeather.type === 'frost' || newWeather.type === 'blizzard') seasonalWeightChange += tp.coldBenefit * intensity;
+        } else {
+          if (newWeather.type === 'blizzard' || newWeather.type === 'frost') seasonalWeightChange -= tp.coldPenalty * intensity;
+          if (newWeather.type === 'heat_wave') seasonalWeightChange -= tp.heatPenalty * intensity;
+        }
+      }
+
       // Apply difficulty multipliers to seasonal weight change
       if (seasonalWeightChange < 0) {
         seasonalWeightChange *= difficultyMult.weightLossFactor;

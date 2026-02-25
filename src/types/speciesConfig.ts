@@ -164,6 +164,14 @@ export interface SpeciesConfig {
     deathChanceMax: number;
   };
 
+  /** Thermal stress profile. Ectotherms lose weight in heat (higher metabolism), endotherms lose weight in cold (thermoregulation cost). */
+  thermalProfile?: {
+    type: 'ectotherm' | 'endotherm';
+    heatPenalty: number;
+    coldPenalty: number;
+    coldBenefit: number;
+  };
+
   /** Per-turn passive weight change by season. Positive = gain, negative = loss. */
   seasonalWeight: {
     spring: number;

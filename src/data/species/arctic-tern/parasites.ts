@@ -148,4 +148,56 @@ export const ARCTIC_TERN_PARASITES: Record<string, ParasiteDefinition> = {
       },
     ],
   },
+
+  'avian-cholera': {
+    id: 'avian-cholera',
+    name: 'Avian Cholera',
+    scientificName: 'Pasteurella multocida',
+    description:
+      'A fast-moving bacterial disease that devastates colonial seabird nesting sites. Transmitted through contaminated water, nasal discharge, or contact with carcasses. In dense tern colonies, a single infected bird can trigger an epidemic that kills thousands within days.',
+    transmissionMethod: 'Contact with infected birds or contaminated water at colonial nesting sites',
+    affectedSpecies: ['arctic-tern'],
+    stages: [
+      {
+        severity: 'minor',
+        description:
+          'Mild lethargy and ruffled feathers. You sit on your nest with your head tucked, less responsive than usual.',
+        statEffects: [
+          { stat: StatId.IMM, amount: 10 },
+          { stat: StatId.HEA, amount: -5 },
+        ],
+        secondaryEffects: [],
+        turnDuration: { min: 1, max: 3 },
+        progressionChance: 0.30,
+        remissionChance: 0.15,
+      },
+      {
+        severity: 'moderate',
+        description:
+          'Green, watery diarrhea and labored breathing. You have stopped feeding and sit motionless on the colony periphery. Other terns avoid you.',
+        statEffects: [
+          { stat: StatId.HEA, amount: -16 },
+          { stat: StatId.IMM, amount: 20 },
+          { stat: StatId.HOM, amount: 12 },
+        ],
+        secondaryEffects: ['rapid dehydration', 'isolation from colony'],
+        turnDuration: { min: 1, max: 3 },
+        progressionChance: 0.25,
+        remissionChance: 0.08,
+      },
+      {
+        severity: 'severe',
+        description:
+          'Convulsions and collapse. Avian cholera kills fast — most birds are dead within 24 hours of severe onset. The colony ground is littered with carcasses.',
+        statEffects: [
+          { stat: StatId.HEA, amount: -30 },
+          { stat: StatId.IMM, amount: 28 },
+        ],
+        secondaryEffects: ['septicemia', 'death within hours'],
+        turnDuration: { min: 1, max: 2 },
+        progressionChance: 0,
+        remissionChance: 0.03,
+      },
+    ],
+  },
 };
