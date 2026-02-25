@@ -1,6 +1,5 @@
 import type { GameEvent } from '../../../types/events';
 import { StatId } from '../../../types/stats';
-import { allEvents as sharedEvents } from '../../events/index';
 
 const turtleEvents: GameEvent[] = [
   // ══════════════════════════════════════════════
@@ -1000,16 +999,4 @@ const turtleEvents: GameEvent[] = [
   },
 ];
 
-// Exclude shared events that reference terrestrial parasites not applicable to sea turtles
-const EXCLUDED_SHARED_EVENT_IDS = new Set([
-  'foraging-blueberry-shrub',    // references meningeal-worm (deer parasite)
-  'health-stagnant-water',       // references liver-fluke (deer parasite)
-  'health-tick-brush',           // references lone-star-tick (deer parasite)
-  'migration-winter-yard-disease', // references liver-fluke (deer parasite)
-]);
-
-const filteredSharedEvents = sharedEvents.filter(
-  (event) => !EXCLUDED_SHARED_EVENT_IDS.has(event.id),
-);
-
-export const GREEN_SEA_TURTLE_EVENTS: GameEvent[] = [...filteredSharedEvents, ...turtleEvents];
+export const GREEN_SEA_TURTLE_EVENTS: GameEvent[] = [...turtleEvents];

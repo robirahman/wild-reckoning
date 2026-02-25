@@ -18,7 +18,7 @@ export const SPECIES_UNLOCKS: SpeciesUnlockRequirement[] = [
     speciesId: 'african-elephant',
     requirement: {
       type: 'achievement',
-      achievementId: 'survive-50-turns',
+      achievementId: 'survivor-50',
       description: 'Survive 50 turns with any species',
     },
   },

@@ -1,6 +1,5 @@
 import type { GameEvent } from '../../../types/events';
 import { StatId } from '../../../types/stats';
-import { allEvents as sharedEvents } from '../../events/index';
 
 const wolfEvents: GameEvent[] = [
   // ══════════════════════════════════════════════
@@ -1691,6 +1690,5 @@ const wolfEvents: GameEvent[] = [
 ];
 
 export const GRAY_WOLF_EVENTS: GameEvent[] = [
-  ...sharedEvents,
   ...wolfEvents,
 ];

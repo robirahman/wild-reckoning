@@ -57,6 +57,7 @@ export const allEvents: GameEvent[] = [
     ],
     consequences: [],
     conditions: [
+      { type: 'species', speciesIds: ['white-tailed-deer'] },
       { type: 'season', seasons: ['autumn'] },
     ],
     weight: 15,
@@ -72,7 +73,9 @@ export const allEvents: GameEvent[] = [
     statEffects: [
       { stat: StatId.HOM, amount: -4, label: '-HOM' },
     ],
-    conditions: [],
+    conditions: [
+      { type: 'species', speciesIds: ['white-tailed-deer'] },
+    ],
     weight: 20,
     cooldown: 2,
     tags: ['foraging', 'food'],
@@ -91,6 +94,7 @@ export const allEvents: GameEvent[] = [
       { type: 'modify_weight', amount: -3 },
     ],
     conditions: [
+      { type: 'species', speciesIds: ['white-tailed-deer'] },
       { type: 'season', seasons: ['winter'] },
     ],
     weight: 18,
@@ -135,6 +139,7 @@ export const allEvents: GameEvent[] = [
       },
     ],
     conditions: [
+      { type: 'species', speciesIds: ['white-tailed-deer'] },
       { type: 'season', seasons: ['summer', 'autumn'] },
     ],
     weight: 8,
@@ -153,6 +158,7 @@ export const allEvents: GameEvent[] = [
       { stat: StatId.ADV, amount: 8, label: '+ADV' },
     ],
     conditions: [
+      { type: 'species', speciesIds: ['white-tailed-deer'] },
       { type: 'season', seasons: ['spring', 'summer'] },
       { type: 'stat_below', stat: StatId.WIS, threshold: 40 },
     ],
@@ -228,7 +234,9 @@ export const allEvents: GameEvent[] = [
       { stat: StatId.ADV, amount: 6, label: '+ADV' },
       { stat: StatId.NOV, amount: 3, label: '+NOV' },
     ],
-    conditions: [],
+    conditions: [
+      { type: 'species', speciesIds: ['white-tailed-deer'] },
+    ],
     weight: 10,
     cooldown: 4,
     tags: ['predator', 'danger'],
@@ -281,6 +289,7 @@ export const allEvents: GameEvent[] = [
       },
     ],
     conditions: [
+      { type: 'species', speciesIds: ['white-tailed-deer'] },
       { type: 'season', seasons: ['autumn'] },
     ],
     weight: 12,
@@ -334,7 +343,9 @@ export const allEvents: GameEvent[] = [
         },
       },
     ],
-    conditions: [],
+    conditions: [
+      { type: 'species', speciesIds: ['white-tailed-deer'] },
+    ],
     weight: 5,
     cooldown: 10,
     tags: ['predator', 'danger'],
@@ -375,6 +386,7 @@ export const allEvents: GameEvent[] = [
       },
     ],
     conditions: [
+      { type: 'species', speciesIds: ['white-tailed-deer'] },
       { type: 'season', seasons: ['autumn'] },
       { type: 'no_flag', flag: 'migration-decided' },
     ],
@@ -423,6 +435,7 @@ export const allEvents: GameEvent[] = [
       { type: 'set_flag', flag: 'rut-seen' },
     ],
     conditions: [
+      { type: 'species', speciesIds: ['white-tailed-deer'] },
       { type: 'season', seasons: ['autumn'] },
       { type: 'sex', sex: 'female' },
       { type: 'age_range', min: 16 },
@@ -556,6 +569,7 @@ export const allEvents: GameEvent[] = [
       { stat: StatId.HOM, amount: 5, label: '+HOM' },
     ],
     conditions: [
+      { type: 'species', speciesIds: ['white-tailed-deer'] },
       { type: 'stat_above', stat: StatId.TRA, threshold: 50 },
     ],
     weight: 12,
@@ -592,6 +606,7 @@ export const allEvents: GameEvent[] = [
       { stat: StatId.HOM, amount: -3, label: '-HOM' },
     ],
     conditions: [
+      { type: 'diet', diets: ['herbivore', 'omnivore'] },
       { type: 'season', seasons: ['spring', 'summer'] },
       { type: 'stat_below', stat: StatId.TRA, threshold: 60 },
     ],
@@ -610,7 +625,9 @@ export const allEvents: GameEvent[] = [
       { stat: StatId.TRA, amount: -3, label: '-TRA' },
       { stat: StatId.NOV, amount: -3, label: '-NOV' },
     ],
-    conditions: [],
+    conditions: [
+      { type: 'species', speciesIds: ['white-tailed-deer'] },
+    ],
     weight: 10,
     cooldown: 5,
     tags: ['social', 'herd'],
@@ -630,6 +647,7 @@ export const allEvents: GameEvent[] = [
       { type: 'modify_weight', amount: -4 },
     ],
     conditions: [
+      { type: 'species', speciesIds: ['white-tailed-deer'] },
       { type: 'season', seasons: ['winter'] },
     ],
     weight: 15,
@@ -674,6 +692,7 @@ export const allEvents: GameEvent[] = [
       { type: 'set_flag', flag: 'rut-seen' },
     ],
     conditions: [
+      { type: 'species', speciesIds: ['white-tailed-deer'] },
       { type: 'season', seasons: ['autumn'] },
       { type: 'sex', sex: 'male' },
       { type: 'age_range', min: 16 },
@@ -725,6 +744,7 @@ export const allEvents: GameEvent[] = [
       },
     ],
     conditions: [
+      { type: 'species', speciesIds: ['white-tailed-deer'] },
       { type: 'season', seasons: ['autumn'] },
       { type: 'sex', sex: 'female' },
       { type: 'age_range', min: 18 },
@@ -779,6 +799,7 @@ export const allEvents: GameEvent[] = [
       },
     ],
     conditions: [
+      { type: 'species', speciesIds: ['white-tailed-deer'] },
       { type: 'season', seasons: ['autumn'] },
       { type: 'sex', sex: 'male' },
       { type: 'age_range', min: 18 },
@@ -802,6 +823,7 @@ export const allEvents: GameEvent[] = [
       { type: 'modify_weight', amount: -2 },
     ],
     conditions: [
+      { type: 'species', speciesIds: ['white-tailed-deer'] },
       { type: 'sex', sex: 'female' },
       { type: 'has_flag', flag: 'pregnant' },
     ],
@@ -823,6 +845,7 @@ export const allEvents: GameEvent[] = [
       { type: 'remove_flag', flag: 'fawns-just-independent' },
     ],
     conditions: [
+      { type: 'species', speciesIds: ['white-tailed-deer'] },
       { type: 'sex', sex: 'female' },
       { type: 'has_flag', flag: 'fawns-just-independent' },
     ],
@@ -1228,7 +1251,9 @@ export const allEvents: GameEvent[] = [
         style: 'default',
       },
     ],
-    conditions: [],
+    conditions: [
+      { type: 'species', speciesIds: ['white-tailed-deer', 'gray-wolf', 'african-elephant'] },
+    ],
     weight: 8,
     cooldown: 8,
     tags: ['environmental', 'danger', 'human'],
@@ -1302,7 +1327,9 @@ export const allEvents: GameEvent[] = [
         style: 'default',
       },
     ],
-    conditions: [],
+    conditions: [
+      { type: 'species', speciesIds: ['white-tailed-deer'] },
+    ],
     weight: 10,
     cooldown: 5,
     tags: ['social', 'foraging'],
@@ -1354,6 +1381,7 @@ export const allEvents: GameEvent[] = [
       },
     ],
     conditions: [
+      { type: 'species', speciesIds: ['white-tailed-deer'] },
       { type: 'season', seasons: ['summer', 'autumn'] },
     ],
     weight: 8,

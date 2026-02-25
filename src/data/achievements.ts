@@ -20,7 +20,7 @@ export const ACHIEVEMENTS: AchievementDefinition[] = [
     id: 'survivor-10',
     name: 'First Steps',
     description: 'Survive 10 turns.',
-    checkOn: 'turn',
+    checkOn: 'both',
     check: (s) => s.time.turn >= 10,
     progress: (s) => ({ current: Math.min(s.time.turn, 10), target: 10 }),
   },
@@ -28,7 +28,7 @@ export const ACHIEVEMENTS: AchievementDefinition[] = [
     id: 'survivor-50',
     name: 'Seasoned Survivor',
     description: 'Survive 50 turns.',
-    checkOn: 'turn',
+    checkOn: 'both',
     check: (s) => s.time.turn >= 50,
     progress: (s) => ({ current: Math.min(s.time.turn, 50), target: 50 }),
   },
@@ -36,9 +36,27 @@ export const ACHIEVEMENTS: AchievementDefinition[] = [
     id: 'survivor-100',
     name: 'Enduring Spirit',
     description: 'Survive 100 turns.',
-    checkOn: 'turn',
+    checkOn: 'both',
     check: (s) => s.time.turn >= 100,
     progress: (s) => ({ current: Math.min(s.time.turn, 100), target: 100 }),
+  },
+  {
+    id: 'survive-winter',
+    name: 'Winter Survivor',
+    description: 'Survive until Spring.',
+    checkOn: 'turn',
+    check: (s) => s.time.season === 'spring' && s.time.turn > 0,
+  },
+  {
+    id: 'first-migration',
+    name: 'Wanderer',
+    description: 'Complete a migration.',
+    checkOn: 'turn',
+    check: (s) =>
+      s.animal.flags.has('has-migrated') ||
+      s.animal.flags.has('reached-spawning-grounds') ||
+      s.animal.flags.has('arrived-antarctic') ||
+      s.animal.region === 'oyamel-fir-forest-mexico',
   },
 
   // Fitness achievements

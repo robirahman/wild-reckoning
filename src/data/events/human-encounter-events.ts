@@ -46,7 +46,7 @@ export const HUMAN_ENCOUNTER_EVENTS: GameEvent[] = [
       },
     ],
     conditions: [
-      { type: 'diet', diets: ['herbivore', 'carnivore', 'omnivore'] },
+      { type: 'species', speciesIds: ['white-tailed-deer', 'gray-wolf', 'african-elephant'] },
     ],
     weight: 6,
     cooldown: 8,
@@ -66,7 +66,9 @@ export const HUMAN_ENCOUNTER_EVENTS: GameEvent[] = [
     consequences: [
       { type: 'modify_weight', amount: -2 },
     ],
-    conditions: [],
+    conditions: [
+      { type: 'species', speciesIds: ['white-tailed-deer', 'gray-wolf', 'african-elephant'] },
+    ],
     weight: 5,
     cooldown: 12,
     tags: ['human', 'environmental'],
@@ -111,6 +113,7 @@ export const HUMAN_ENCOUNTER_EVENTS: GameEvent[] = [
       },
     ],
     conditions: [
+      { type: 'species', speciesIds: ['white-tailed-deer', 'gray-wolf', 'african-elephant'] },
       { type: 'age_range', min: 6 },
     ],
     weight: 4,
@@ -127,7 +130,9 @@ export const HUMAN_ENCOUNTER_EVENTS: GameEvent[] = [
     statEffects: [
       { stat: StatId.NOV, amount: 3, label: '+NOV' },
     ],
-    conditions: [],
+    conditions: [
+      { type: 'species', speciesIds: ['white-tailed-deer', 'gray-wolf', 'african-elephant'] },
+    ],
     weight: 5,
     cooldown: 10,
     tags: ['human', 'environmental'],
@@ -146,7 +151,9 @@ export const HUMAN_ENCOUNTER_EVENTS: GameEvent[] = [
     consequences: [
       { type: 'modify_weight', amount: -1 },
     ],
-    conditions: [],
+    conditions: [
+      { type: 'species', speciesIds: ['white-tailed-deer', 'gray-wolf', 'african-elephant', 'monarch-butterfly', 'honeybee-worker'] },
+    ],
     weight: 5,
     cooldown: 10,
     tags: ['human', 'health', 'pollution'],
@@ -188,7 +195,7 @@ export const HUMAN_ENCOUNTER_EVENTS: GameEvent[] = [
       },
     ],
     conditions: [
-      { type: 'diet', diets: ['herbivore', 'carnivore', 'omnivore'] },
+      { type: 'species', speciesIds: ['white-tailed-deer', 'gray-wolf', 'african-elephant'] },
     ],
     weight: 5,
     cooldown: 10,
@@ -205,7 +212,9 @@ export const HUMAN_ENCOUNTER_EVENTS: GameEvent[] = [
       { stat: StatId.ADV, amount: 8, duration: 3, label: '+ADV (noise stress)' },
       { stat: StatId.TRA, amount: 5, duration: 3, label: '+TRA (anxiety)' },
     ],
-    conditions: [],
+    conditions: [
+      { type: 'species', speciesIds: ['white-tailed-deer', 'gray-wolf', 'african-elephant'] },
+    ],
     weight: 5,
     cooldown: 8,
     tags: ['human', 'environmental'],
@@ -221,7 +230,9 @@ export const HUMAN_ENCOUNTER_EVENTS: GameEvent[] = [
       { stat: StatId.NOV, amount: 5, duration: 3, label: '+NOV (disorientation)' },
       { stat: StatId.WIS, amount: -3, duration: 3, label: '-WIS (navigation confused)' },
     ],
-    conditions: [],
+    conditions: [
+      { type: 'species', speciesIds: ['white-tailed-deer', 'gray-wolf', 'african-elephant', 'monarch-butterfly', 'honeybee-worker'] },
+    ],
     weight: 4,
     cooldown: 10,
     tags: ['human', 'environmental'],
