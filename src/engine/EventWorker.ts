@@ -1,7 +1,7 @@
 
 import { StatId } from '../types/stats';
 import { createRng } from './RandomUtils';
-import { DIFFICULTY_PRESETS } from '../types/difficulty';
+import { DIFFICULTY_PRESETS, type Difficulty } from '../types/difficulty';
 
 /** 
  * Minimized copy of engine logic for the worker.
@@ -111,7 +111,9 @@ self.onmessage = (e) => {
 
   const activePool = eligible.filter((e: any) => e.type === 'active');
   const passivePool = eligible.filter((e: any) => e.type === 'passive');
-  const predatorFactor = DIFFICULTY_PRESETS[ctx.difficulty ?? 'normal'].predatorEncounterFactor;
+  
+  const difficulty: Difficulty = ctx.difficulty ?? 'normal';
+  const predatorFactor = DIFFICULTY_PRESETS[difficulty].predatorEncounterFactor;
 
   const activeWeights = activePool.map((e: any) => {
     let w = e.weight * behaviorMultiplier(e, ctx.behavior) * contextMultiplier(e, ctx);
