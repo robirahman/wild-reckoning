@@ -1,4 +1,12 @@
-# Wild Reckoning — Feature Roadmap
+## Recently Completed (Phases 11-15)
+
+- [x] **Evolution System** — Implemented genetic mutations and selection UI.
+- [x] **Map & Navigation** — Regional maps with nodes, resources, and hazard tracking.
+- [x] **Multi-generational Lineage** — Inheritance system for traits and stat biases.
+- [x] **Ecosystem Web** — Dynamic population tracking and trophic cascades.
+- [x] **Social Dynamics** — Hierarchy challenges and eusocial hive mechanics.
+- [x] **Advanced Biological Mechanics** — Interspecific competition, acute diseases, dispersal chains, and thermal stress.
+- [x] **Expanded Biodiversity** — Added 7 new species (Turtle, Bear, Monarch, Bee, Wasp, Octopus, Tern) with unique logic.
 
 ## Gameplay Depth
 

@@ -6,26 +6,73 @@ This document describes the full game mechanics and their biological justificati
 
 ## 1. Overview
 
-Wild Reckoning simulates the life of a wild animal. Three species are playable:
-- **White-Tailed Deer** (*Odocoileus virginianus*) — Northern Minnesota, iteroparous
-- **African Elephant** (*Loxodonta africana*) — East African Savanna, iteroparous
-- **Chinook Salmon** (*Oncorhynchus tshawytscha*) — Pacific Northwest, semelparous
+Wild Reckoning simulates the life of a wild animal. Ten species are currently playable:
+- **White-Tailed Deer** (*Odocoileus virginianus*) — Iteroparous, Northern Minnesota
+- **African Elephant** (*Loxodonta africana*) — Iteroparous, East African Savanna
+- **Chinook Salmon** (*Oncorhynchus tshawytscha*) — Semelparous, Pacific Northwest
+- **Green Sea Turtle** (*Chelonia mydas*) — Iteroparous, Caribbean Sea
+- **Polar Bear** (*Ursus maritimus*) — Iteroparous, Arctic Circle
+- **Monarch Butterfly** (*Danaus plexippus*) — Multigenerational Lineage, North America
+- **Fig Wasp** (*Agaonidae*) — Semelparous, Tropical Rainforest
+- **Honeybee Worker** (*Apis mellifera*) — Eusocial, Temperate Meadow
+- **Common Octopus** (*Octopus vulgaris*) — Semelparous, Mediterranean Sea
+- **Arctic Tern** (*Sterna paradisaea*) — Migratory, Pole-to-Pole
 
-The game is turn-based, with each turn representing one week. The player makes behavioral decisions and responds to events while the game simulates physiology, parasitology, weather, reproduction, and predation.
+The game is turn-based, with each turn representing one week (adjustable by species). The player makes behavioral decisions and responds to events while the game simulates physiology, parasitology, weather, reproduction, predation, and ecosystem dynamics.
+
+### Score and Genetic Fitness
 
 The game ends when the animal dies. The player's score is their **inclusive genetic fitness**:
-- **Iteroparous species** (deer, elephant): Number of offspring that survive to reproductive age
-- **Semelparous species** (salmon): Estimated surviving adults from eggs spawned
+- **Iteroparous species** (deer, elephant, turtle, etc.): Number of offspring that survive to reproductive age.
+- **Semelparous species** (salmon, octopus, wasp): Estimated surviving adults from eggs spawned.
+- **Lineage species** (monarch): Total generations completed and cumulative fitness.
 
-**Time scale:** 1 turn = 1 week. 4 turns = 1 month. 48 turns = 1 year. Age increments by 1 month when `week === 1` in a new month.
+### Core Systems
 
-### Multi-Species Architecture
+- **Evolution System:** Accumulated novelty and experience allow for genetic mutations between generations or major life stages.
+- **Map System:** Spatial navigation between resource nodes (food, water, cover) with varying hazards.
+- **Lineage System:** Traits and stat biases are inherited by offspring in `lineageMode`.
+- **Ecosystem Web:** Predator-prey populations fluctuate based on environmental pressure and player actions.
+- **Social System:** Hierarchy (alpha/beta/omega) and eusocial (hive) dynamics.
 
-All species-specific values are stored in a `SpeciesConfig` and `SpeciesDataBundle`. The engine reads from these at runtime. Each bundle contains: config (all numerical constants), events, parasites, injuries, and backstories. The species registry (`src/data/species/index.ts`) maps species IDs to bundles.
+**Time scale:** Default 1 turn = 1 week. Some species use 1 turn = 1 day (wasp, bee). Age increments monthly.
 
 ---
 
-## 2. Stat System
+## 2. Advanced Systems
+
+### Evolution and Mutations
+
+The Evolution System allows animals to adapt through genetic mutations.
+- **Acquisition:** Mutations are offered upon reaching major lifecycle milestones or when transitioning between generations in `lineageMode`.
+- **Mechanics:** Players choose from 3 randomly selected mutations (e.g., "Thick Fur", "Efficient Metabolism").
+- **Effects:** Permanent stat modifiers (e.g., +10 CLI, -5 HOM) or new abilities (flags).
+
+### Map Navigation
+
+The Map System adds a spatial dimension to survival.
+- **Nodes:** Regions are comprised of connected nodes (Forest, Water, Plain, etc.).
+- **Resources:** Each node has varying levels of food, water, and cover.
+- **Hazards:** Scent and noise levels accumulate at nodes, increasing predator encounter weights.
+- **Movement:** Moving between nodes costs energy and may trigger travel events.
+
+### Lineage and Inheritance
+
+`LineageMode` enables multi-generational play (crucial for Monarch Butterflies).
+- **Inheritance:** Offspring inherit ±5% of their parent's stat deviations from the species baseline.
+- **Biases:** These "trait biases" accumulate or dilute over generations, allowing for selective breeding of survivor lineages.
+- **Carry-over:** Key flags and "genetic memory" (WIS bonuses) can persist across generations.
+
+### Ecosystem Dynamics
+
+The Ecosystem System simulates a simplified trophic web.
+- **Populations:** Predator and prey populations (e.g., "Wolves", "Deer", "Grass") fluctuate.
+- **Trophic Cascades:** A crash in prey populations eventually pressures predator stats and increases hunger events.
+- **Resource Pressure:** Overgrazing or high population density increases resource pressure, making foraging events more difficult.
+
+---
+
+## 3. Stat System
 
 ### The Nine Stats
 
@@ -88,7 +135,7 @@ Backstory selection adjusts these bases before game start.
 
 ---
 
-## 3. Behavioral Settings
+## 4. Behavioral Settings
 
 Six behavioral sliders (1–5 scale) influence which events are more likely to occur. They do not directly affect stats — they modify event selection weights.
 
@@ -101,17 +148,15 @@ Six behavioral sliders (1–5 scale) influence which events are more likely to o
 | Sociability | 3 | Multiplies `social`/`herd` events by `0.5 + level × 0.3` (range: 0.8–2.0) |
 | Caution | 3 | Multiplies `predator`/`danger` events by `1.5 - level × 0.2` (range: 0.5–1.3) — higher caution *reduces* predator encounters |
 
-**Biological justification:** Based on *animal personality* / *behavioral syndromes* research (Réale et al., 2007). Individual animals consistently differ along axes like boldness-shyness, exploration-avoidance, and aggressiveness. These are not "choices" in the human sense — they are persistent behavioral phenotypes shaped by genetics and early experience.
-
 ---
 
-## 4. Event System
+## 5. Event System
 
 ### Event Selection
 
 Each turn generates **1–3 active events** and **0–2 passive events**.
 
-1. Filter all events by **conditions** (season, sex, age, flags, stats, parasites, injuries, weight, region)
+1. Filter all events by **conditions** (season, sex, age, flags, stats, parasites, injuries, weight, region, movement type)
 2. Filter by **cooldown** (each event has a minimum turns-between-fires)
 3. Compute **weight** for each eligible event: `base_weight × behaviorMultiplier × contextMultiplier`
 4. Select via **weighted random** sampling without replacement
@@ -120,6 +165,12 @@ Each turn generates **1–3 active events** and **0–2 passive events**.
 
 - **Psychological events:** Weight multiplied by `0.5 + (TRA / 100) × 1.5` — high trauma triggers more psychological events
 - **Health events:** Weight multiplied by `1.5 - (HEA / 100)` — low health triggers more health events
+
+### Visceral Systems (New)
+
+Beyond the 9 core stats, the animal tracks physiological states:
+- **Nutrients:** Mineral and Vitamin levels (0-100) influenced by diet variety.
+- **Physiological Stress:** Hypothermia, Starvation, and Panic meters that trigger visceral UI effects and rapid HEA/HOM/TRA degradation.
 
 ### Event Structure
 
@@ -627,6 +678,79 @@ estimatedSurvivors = round(eggCount × survivalRate)
 - **Scale Damage** — From rapids/nets, 2 severities
 - **Bear Claw Wound** — From predation, 2 severities
 
-### Events (19)
+---
 
-4 ocean foraging (krill, baitfish, deep dive, jellyfish), 5 predator (seal, orca, fishing net, seabird, bear), 5 migration (trigger, rapids, waterfall, dam, eagle), 2 spawning (finding redd, spawning event), 3 environmental (temperature, sea lice, pollution).
+## 13. Green Sea Turtle (*Chelonia mydas*)
+
+### Species Overview
+Long-lived marine reptile. Migrates between Caribbean foraging grounds and natal nesting beaches. Vulnerable to plastic ingestion, boat strikes, and shark predation.
+
+### Key Mechanics
+- **Nesting Gauntlet:** Females must survive terrestrial predators and light pollution to lay eggs.
+- **Ectothermic:** Metabolism and behavior are heavily driven by water temperature (risk of "Cold Stun").
+
+---
+
+## 14. Polar Bear (*Ursus maritimus*)
+
+### Species Overview
+The Arctic's apex predator. Relies on sea ice for hunting seals. Threatened by climate change and disappearing ice.
+
+### Key Mechanics
+- **Ice-Dependent Hunting:** Hunting success is gated by the presence of sea ice (seasonal).
+- **Hyperphagia:** Must gain massive weight in spring/summer to survive ice-free autumns.
+
+---
+
+## 15. Monarch Butterfly (*Danaus plexippus*)
+
+### Species Overview
+A migratory insect with a unique multigenerational lifecycle. Requires milkweed for reproduction and nectar for fuel.
+
+### Key Mechanics
+- **Multigenerational Migration:** The player plays through 4 generations to complete the round-trip from Mexico to Canada and back.
+- **Metamorphosis:** Transitions from larva to pupa to adult, with drastic stat resets and evolution opportunities.
+
+---
+
+## 16. Fig Wasp (*Agaonidae*)
+
+### Species Overview
+Tiny, short-lived insects with a dedicated symbiotic relationship with fig trees.
+
+### Key Mechanics
+- **Fast-Paced Survival:** Turns represent days or hours.
+- **Pollination Mission:** Success is determined by successful entry into a fig syconium and egg-laying before death.
+
+---
+
+## 17. Honeybee Worker (*Apis mellifera*)
+
+### Species Overview
+A eusocial insect focused on the survival of the colony (the Hive).
+
+### Key Mechanics
+- **Eusociality:** The "individual" is less important than the Hive's food stores.
+- **Caste/Role Shifts:** Transition from nurse bee to forager based on age.
+
+---
+
+## 18. Common Octopus (*Octopus vulgaris*)
+
+### Species Overview
+Highly intelligent, short-lived Mediterranean cephalopod. Master of camouflage.
+
+### Key Mechanics
+- **Intelligence (WIS) Focus:** Higher wisdom enables advanced camouflage and tool-use events.
+- **Semelparous Death:** Always dies shortly after protecting the egg clutch.
+
+---
+
+## 19. Arctic Tern (*Sterna paradisaea*)
+
+### Species Overview
+The champion of migration, traveling from the Arctic to the Antarctic and back annually.
+
+### Key Mechanics
+- **Endless Summer:** Lives in near-constant daylight, avoiding winter entirely by moving between poles.
+- **Navigation Hazard:** Vulnerable to storms and exhaustion over open ocean.
