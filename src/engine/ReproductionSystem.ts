@@ -49,7 +49,7 @@ export function createFawns(
 }
 
 /** Per-turn survival roll for an independent, non-matured fawn */
-export function rollFawnSurvival(fawn: Offspring, season: Season, rng: Rng): boolean {
+export function rollFawnSurvival(fawn: Offspring, season: Season, rng: Rng, motherFlags?: ReadonlySet<string>): boolean {
   // Base weekly survival ~98.5% → ~34% survive 72 weeks to 18 months
   let survivalProb = 0.985;
 
@@ -62,6 +62,10 @@ export function rollFawnSurvival(fawn: Offspring, season: Season, rng: Rng): boo
 
   // Young independent fawns (just became independent, <8 months) are more vulnerable
   if (fawn.ageTurns < 32) survivalProb -= 0.005;
+
+  // Nest/den site quality from female competition
+  if (motherFlags?.has('nest-quality-prime')) survivalProb += 0.006;
+  if (motherFlags?.has('nest-quality-poor')) survivalProb -= 0.008;
 
   survivalProb = Math.max(0.90, Math.min(0.998, survivalProb));
   return rng.chance(survivalProb);
@@ -167,7 +171,7 @@ export function tickReproduction(
 
     // Survival roll for independent, non-matured fawns
     if (f.independent && !f.matured) {
-      if (!rollFawnSurvival(f, time.season, rng)) {
+      if (!rollFawnSurvival(f, time.season, rng, animal.flags)) {
         f.alive = false;
         f.causeOfDeath = rng.pick(FAWN_DEATH_CAUSES);
         narratives.push(
@@ -205,7 +209,7 @@ export function tickReproduction(
   // Season reset: first week of September → reset mating flags for new rut season
   if (time.month === 'September' && time.week === 1) {
     updated = { ...updated, matedThisSeason: false };
-    flagsToRemove.push('mated-this-season', 'rut-seen');
+    flagsToRemove.push('mated-this-season', 'rut-seen', 'nest-quality-prime', 'nest-quality-poor');
   }
 
   // Remove temporary flags

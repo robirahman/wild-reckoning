@@ -539,6 +539,71 @@ export const ARCTIC_TERN_EVENTS: GameEvent[] = [
   },
 
   {
+    id: 'tern-colony-nest-fight',
+    type: 'active',
+    category: 'reproduction',
+    narrativeText: 'A rival pair has occupied the central nest scrape you used last season — the prime spot, deep in the colony where the density of neighbors provides the best protection against skuas. The rival female mantles over the scrape, wings spread, beak raised, while her mate dive-bombs you from above. Central nests lose fewer eggs to predation; edge nests are raided three times as often. Your eggs — your entire breeding season — depend on where you nest.',
+    statEffects: [
+      { stat: StatId.ADV, amount: 6, label: '+ADV' },
+    ],
+    choices: [
+      {
+        id: 'dive-bomb-defend',
+        label: 'Dive-bomb the rivals and reclaim the scrape',
+        description: 'Central colony position means 3x fewer eggs lost to skuas',
+        narrativeResult: 'You scream in fury and dive at the rival female, striking her with your wing in a sharp, snapping blow. She retaliates, and the air fills with feathers and shrieking as you batter each other above the contested scrape. Your mate joins the assault from the other side, and the rival pair breaks — retreating to the colony edge, their display of ownership shattered. The central scrape is yours. Your eggs will be surrounded by vigilant neighbors.',
+        statEffects: [
+          { stat: StatId.HOM, amount: 6, label: '+HOM' },
+          { stat: StatId.ADV, amount: -6, label: '-ADV' },
+        ],
+        consequences: [
+          { type: 'set_flag', flag: 'nest-quality-prime' },
+        ],
+        revocable: false,
+        style: 'danger',
+      },
+      {
+        id: 'accept-edge',
+        label: 'Accept a position on the colony edge',
+        description: 'No fight, but 3x higher skua predation on your eggs',
+        narrativeResult: 'You bank away and settle on the colony periphery, where unclaimed scrapes dot the sparse gravel. There are fewer neighbors here — the defensive mob is thinner, the skuas bolder. Last year, the edge nests lost two out of three clutches. You begin to scrape a shallow depression in the gravel, knowing that when the skuas come, you will be the first line of defense and the last.',
+        statEffects: [
+          { stat: StatId.TRA, amount: 5, label: '+TRA' },
+        ],
+        consequences: [
+          { type: 'set_flag', flag: 'nest-quality-poor' },
+        ],
+        revocable: false,
+        style: 'default',
+      },
+    ],
+    subEvents: [
+      {
+        eventId: 'tern-nest-fight-wing-strike-sub',
+        chance: 0.12,
+        narrativeText: 'The rival female\'s wing catches you across the body in a sharp, cracking blow that sends you tumbling sideways in the air. The impact jars your flight muscles and you feel something strain in the wing joint.',
+        footnote: '(Wing strike from nest fight)',
+        statEffects: [
+          { stat: StatId.HEA, amount: -3, label: '-HEA' },
+        ],
+        consequences: [
+          { type: 'add_injury', injuryId: 'wing-strike', severity: 0 },
+        ],
+      },
+    ],
+    conditions: [
+      { type: 'season', seasons: ['summer'] },
+      { type: 'age_range', min: 24 },
+      { type: 'no_flag', flag: 'nest-quality-prime' },
+      { type: 'no_flag', flag: 'nest-quality-poor' },
+    ],
+    weight: 12,
+    cooldown: 6,
+    tags: ['reproduction', 'colony', 'female-competition'],
+    footnote: 'Nest position within a tern colony strongly predicts breeding success. Central nests benefit from the "selfish herd" effect — surrounded by vigilant neighbors who collectively mob predators. Edge nests suffer 2-3 times higher predation from skuas and gulls.',
+  },
+
+  {
     id: 'tern-courtship-fish',
     type: 'active',
     category: 'reproduction',

@@ -1067,6 +1067,84 @@ const wolfEvents: GameEvent[] = [
   },
 
   // ══════════════════════════════════════════════
+  //  FEMALE COMPETITION EVENTS
+  // ══════════════════════════════════════════════
+
+  {
+    id: 'wolf-breeding-suppression',
+    type: 'active',
+    category: 'social',
+    narrativeText:
+      'The alpha female stands over you, her lips curled back, her body rigid with dominance. She has been increasingly aggressive as the breeding season approaches — pinning you, standing over you, snarling when you show any sign of hormonal readiness. In wolf packs, only the alpha female breeds. Subordinate females are suppressed through constant psychological and physical intimidation until their very hormones obey the hierarchy. Your body wants to breed. Her body says you will not. You can challenge her for breeding rights — but if you lose, you may be driven from the pack entirely.',
+    statEffects: [
+      { stat: StatId.ADV, amount: 8, label: '+ADV' },
+      { stat: StatId.TRA, amount: 4, label: '+TRA' },
+    ],
+    choices: [
+      {
+        id: 'challenge-alpha-female',
+        label: 'Challenge the alpha female',
+        description: 'Win breeding rights and the best den site for your pups',
+        narrativeResult:
+          'You stare directly into her eyes — the ultimate challenge. She lunges and you meet her, jaws snapping, bodies twisting in a violent, snarling tangle of fur and teeth. You fight with the desperate intensity of an animal whose bloodline depends on this moment. She is experienced, but you are younger and stronger, and when you finally pin her — your jaws locked around her muzzle, your body pressing hers into the snow — she goes still. She submits. The pack watches in silence. You are the breeding female now, and the best den site is yours.',
+        statEffects: [
+          { stat: StatId.HOM, amount: 8, label: '+HOM' },
+          { stat: StatId.ADV, amount: -8, label: '-ADV' },
+        ],
+        consequences: [
+          { type: 'set_flag', flag: 'nest-quality-prime' },
+        ],
+        revocable: false,
+        style: 'danger',
+      },
+      {
+        id: 'submit-to-alpha',
+        label: 'Submit and accept suppression',
+        description: 'Stay in the pack but accept subordinate breeding status',
+        narrativeResult:
+          'You roll onto your back, exposing your throat and belly. She stands over you, teeth bared, and you feel her breath hot on your neck. The submission is total. Your hormones will dampen, your body will not cycle properly, and if you do manage to breed, your pups will be raised in the worst den site — the shallow, exposed scrape at the pack territory\'s edge where rival packs and predators are most likely to find them.',
+        statEffects: [
+          { stat: StatId.TRA, amount: 5, label: '+TRA' },
+          { stat: StatId.WIS, amount: 3, label: '+WIS' },
+        ],
+        consequences: [
+          { type: 'set_flag', flag: 'nest-quality-poor' },
+          { type: 'set_flag', flag: 'pack-subordinate' },
+        ],
+        revocable: false,
+        style: 'default',
+      },
+    ],
+    subEvents: [
+      {
+        eventId: 'wolf-breeding-suppression-bite-sub',
+        chance: 0.15,
+        narrativeText:
+          'The alpha female\'s jaws clamp down on your muzzle during the challenge — a dominance bite that leaves deep punctures across the bridge of your nose. Blood runs into your mouth.',
+        footnote: '(Dominance bite from alpha challenge)',
+        statEffects: [
+          { stat: StatId.HEA, amount: -4, label: '-HEA' },
+        ],
+        consequences: [
+          { type: 'add_injury', injuryId: 'dominance-bite', severity: 0 },
+        ],
+      },
+    ],
+    conditions: [
+      { type: 'species', speciesIds: ['gray-wolf'] },
+      { type: 'sex', sex: 'female' },
+      { type: 'season', seasons: ['winter', 'spring'] },
+      { type: 'age_range', min: 24 },
+      { type: 'no_flag', flag: 'nest-quality-prime' },
+      { type: 'no_flag', flag: 'nest-quality-poor' },
+    ],
+    weight: 10,
+    cooldown: 12,
+    tags: ['social', 'hierarchy', 'female-competition'],
+    footnote: 'In wolf packs, the alpha female actively suppresses reproduction in subordinate females through hormonal stress and physical intimidation. Only 20-40% of subordinate females successfully breed in any given year.',
+  },
+
+  // ══════════════════════════════════════════════
   //  REPRODUCTION EVENTS
   // ══════════════════════════════════════════════
 

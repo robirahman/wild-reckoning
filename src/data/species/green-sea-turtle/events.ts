@@ -540,6 +540,94 @@ const turtleEvents: GameEvent[] = [
   },
 
   // ══════════════════════════════════════════════
+  //  FEMALE COMPETITION EVENTS
+  // ══════════════════════════════════════════════
+
+  {
+    id: 'turtle-nest-competition',
+    type: 'active',
+    category: 'reproduction',
+    narrativeText:
+      'You haul yourself up the beach toward the prime nesting zone — the band of soft, well-drained sand above the high-tide line where the temperature is ideal for incubation. But another female is already there, her massive body settled into the sand, her rear flippers scooping methodically at a nest chamber. The prime zone is narrow tonight, and her bulk blocks the best stretch. Below her, closer to the tide line, the sand is wetter and cooler — eggs laid there risk flooding at high tide and temperature-skewed sex ratios. You could challenge her for the spot, digging alongside her and body-checking her away from the prime sand. Or you could accept the marginal site and lay your eggs where the ocean may reclaim them.',
+    statEffects: [
+      { stat: StatId.ADV, amount: 5, label: '+ADV' },
+    ],
+    choices: [
+      {
+        id: 'contest-nest-site',
+        label: 'Body-check her away from the prime sand',
+        description: 'Better incubation temperature, but she will bite',
+        narrativeResult:
+          'You drag yourself alongside her and shove — two hundred kilograms of shell and muscle pressing against her flank. She turns her head and bites at your front flipper, her serrated beak tearing through the tough skin. You shove again, harder, using the slope of the beach for leverage. She resists for long minutes, but you are fresher, more determined, and finally she abandons the site and drags herself further down the beach. The prime sand is yours. Your eggs will incubate at the perfect temperature.',
+        statEffects: [
+          { stat: StatId.HOM, amount: 8, label: '+HOM' },
+          { stat: StatId.ADV, amount: -5, label: '-ADV' },
+        ],
+        consequences: [
+          { type: 'set_flag', flag: 'nest-quality-prime' },
+        ],
+        revocable: false,
+        style: 'danger',
+      },
+      {
+        id: 'dig-nearby',
+        label: 'Dig alongside her in the same zone',
+        description: 'Adequate sand, no conflict',
+        narrativeResult:
+          'You settle a few body-lengths away and begin to dig. The sand here is acceptable — not the best, but serviceable. Your nests will be close enough that hatchlings from both may emerge on the same night, confusing predators with sheer numbers.',
+        statEffects: [
+          { stat: StatId.WIS, amount: 2, label: '+WIS' },
+        ],
+        consequences: [],
+        revocable: false,
+        style: 'default',
+      },
+      {
+        id: 'take-marginal-site',
+        label: 'Move down to the tide-line sand',
+        description: 'No fight, but eggs risk flooding and poor incubation',
+        narrativeResult:
+          'You turn and drag yourself toward the lower beach, where the sand is damp and cool beneath your plastron. You dig here, but the chamber fills with seawater before you finish, and you must start again higher up on a narrow strip of marginal sand. Your eggs will be cooler, wetter, and closer to the waves than they should be. Some will not survive.',
+        statEffects: [
+          { stat: StatId.TRA, amount: 4, label: '+TRA' },
+        ],
+        consequences: [
+          { type: 'set_flag', flag: 'nest-quality-poor' },
+        ],
+        revocable: false,
+        style: 'default',
+      },
+    ],
+    subEvents: [
+      {
+        eventId: 'turtle-nest-flipper-wound-sub',
+        chance: 0.18,
+        narrativeText:
+          'Her beak caught your front flipper during the shoving match, tearing a crescent of tough skin away from the leading edge. Blood wells dark against the sand. The wound will heal slowly in the salt water.',
+        footnote: '(Flipper wound from nest competition)',
+        statEffects: [
+          { stat: StatId.HEA, amount: -4, label: '-HEA' },
+        ],
+        consequences: [
+          { type: 'add_injury', injuryId: 'flipper-wound', severity: 0 },
+        ],
+      },
+    ],
+    conditions: [
+      { type: 'species', speciesIds: ['green-sea-turtle'] },
+      { type: 'sex', sex: 'female' },
+      { type: 'has_flag', flag: 'reached-nesting-beach' },
+      { type: 'no_flag', flag: 'carrying-eggs' },
+      { type: 'no_flag', flag: 'nest-quality-prime' },
+      { type: 'no_flag', flag: 'nest-quality-poor' },
+    ],
+    weight: 14,
+    cooldown: 6,
+    tags: ['nesting', 'reproduction', 'female-competition'],
+    footnote: 'Female sea turtles compete for prime nesting sites. Nest position on the beach significantly affects incubation temperature, which determines hatchling sex ratios and survival rates.',
+  },
+
+  // ══════════════════════════════════════════════
   //  HEALTH / PARASITE EVENTS
   // ══════════════════════════════════════════════
 

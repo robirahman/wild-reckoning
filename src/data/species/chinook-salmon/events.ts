@@ -1125,38 +1125,62 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     id: 'salmon-nest-site-selection',
     type: 'active',
     category: 'reproduction',
-    narrativeText: "The gravel bed spreads before you in a mosaic of possibility. Your body reads each patch like a text \u2014 the size of the stones, the speed of the current threading between them, the oxygen content of the water welling up from below. Two sites hold your attention. The first is prime territory: clean, loose gravel in the main current where the water runs fastest and coldest, but another hen is already circling it, her tail working the substrate in slow, proprietary sweeps. The second is tucked against a fallen hemlock, sheltered from the worst of the flow, its gravel finer and less exposed. No one has claimed it. The eggs you carry are the sum of everything you have survived. Where you place them will decide whether that survival meant anything at all.",
+    narrativeText: "The gravel bed spreads before you in a mosaic of possibility. Your body reads each patch like a text \u2014 the size of the stones, the speed of the current threading between them, the oxygen content of the water welling up from below. Two sites hold your attention. The first is prime territory: clean, loose gravel in the main current where the water runs fastest and coldest, rich with dissolved oxygen that your eggs will need to survive. But another hen is already circling it, her tail working the substrate in slow, proprietary sweeps. She is large \u2014 her kype-scarred jaw and battered flanks speak of fights already won. The second site is tucked against a fallen hemlock, sheltered from the worst of the flow, its gravel finer and less exposed. The water here is slower, warmer, carrying less oxygen. Eggs laid here will survive \u2014 but fewer of them. The eggs you carry are the sum of everything you have survived. Where you place them will decide whether that survival meant anything at all.",
     statEffects: [],
     choices: [
       {
         id: 'prime-spot',
         label: 'Contest the prime gravel bed',
-        description: 'Better oxygenation, but you will have to fight for it',
+        description: 'Better oxygenation means more fry survive, but you must fight the other hen',
+        narrativeResult: 'You drive toward her flank-first, your body slamming into hers with a force that sends gravel swirling. She turns and bites \u2014 her jaw raking across your flank \u2014 but you hold your ground, pressing into the current, refusing to yield. Minutes of thrashing, biting, body-checking in water barely deep enough to cover you. Finally she peels away downstream, her tail beating weakly. The prime redd is yours. Your eggs will have the best water the river offers.',
         statEffects: [
           { stat: StatId.ADV, amount: 8, label: '+ADV' },
+          { stat: StatId.HOM, amount: 6, label: '+HOM' },
         ],
-        consequences: [],
+        consequences: [
+          { type: 'set_flag', flag: 'nest-quality-prime' },
+        ],
         revocable: false,
         style: 'danger',
       },
       {
         id: 'sheltered-spot',
         label: 'Take the sheltered site by the hemlock',
-        description: 'Quieter, safer \u2014 good enough for a careful mother',
+        description: 'Less oxygen, fewer surviving fry \u2014 but no fight',
+        narrativeResult: 'You drift to the quieter water and begin to dig. The gravel here is adequate but the current is sluggish, the oxygen levels marginal. Some of your eggs will suffocate in their redds before they ever hatch. But your body is intact, and you will live long enough to guard the nest.',
         statEffects: [
           { stat: StatId.HOM, amount: 5, label: '+HOM' },
         ],
-        consequences: [],
+        consequences: [
+          { type: 'set_flag', flag: 'nest-quality-poor' },
+        ],
         revocable: false,
         style: 'default',
       },
     ],
-    conditions: [
-      { type: 'has_flag', flag: 'reached-spawning-grounds' },
+    subEvents: [
+      {
+        eventId: 'salmon-nest-fight-laceration',
+        chance: 0.20,
+        narrativeText: 'The other hen\u2019s jaw caught you hard across the flank during the struggle, tearing a ragged line through your already-deteriorating skin. The wound clouds the water pink around you.',
+        footnote: '(Flank laceration from nest fight)',
+        statEffects: [
+          { stat: StatId.HEA, amount: -4, label: '-HEA' },
+        ],
+        consequences: [
+          { type: 'add_injury', injuryId: 'spawning-flank-laceration', severity: 0 },
+        ],
+      },
     ],
-    weight: 12,
+    conditions: [
+      { type: 'sex', sex: 'female' },
+      { type: 'has_flag', flag: 'reached-spawning-grounds' },
+      { type: 'no_flag', flag: 'nest-quality-prime' },
+      { type: 'no_flag', flag: 'nest-quality-poor' },
+    ],
+    weight: 14,
     cooldown: 8,
-    tags: ['mating', 'migration'],
+    tags: ['mating', 'migration', 'female-competition'],
   },
 
   {

@@ -656,6 +656,92 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
   },
 
   {
+    id: 'pb-den-competition',
+    type: 'active',
+    category: 'social',
+    narrativeText:
+      'You have found the perfect denning site — a deep, south-facing snowdrift on a sheltered slope, the kind that will hold its shape through the worst blizzards and warm to near freezing from your body heat alone. But another pregnant female has found it too. She stands at the entrance to the drift, her breath pluming, her body heavy with the fat reserves that will sustain her through months of fasting and nursing. She is your size, perhaps slightly larger, and she has no intention of leaving. There is only one south-facing drift on this slope. The north-facing drifts are shallow, poorly insulated, and exposed to the prevailing wind — a den dug there will cost more energy to heat and offer less protection for newborn cubs.',
+    statEffects: [
+      { stat: StatId.ADV, amount: 6, label: '+ADV' },
+    ],
+    choices: [
+      {
+        id: 'fight-for-den',
+        label: 'Fight for the south-facing den',
+        description: 'Warmer den means healthier cubs, but she will not yield easily',
+        narrativeResult:
+          'You charge. The two of you collide with a force that shakes snow from the overhanging drift — half a ton of pregnant bear slamming into half a ton of pregnant bear. You grapple with forepaws, biting at face and neck, your claws raking through thick fur. She is strong but you are desperate, and desperation has its own kind of strength. You drive her backward, away from the drift entrance, pressing every advantage of angle and footing. She breaks off and retreats across the slope, huffing with exertion. The south-facing drift is yours. Your cubs will be born in warmth.',
+        statEffects: [
+          { stat: StatId.HOM, amount: 8, label: '+HOM' },
+          { stat: StatId.ADV, amount: -6, label: '-ADV' },
+        ],
+        consequences: [
+          { type: 'set_flag', flag: 'nest-quality-prime' },
+          { type: 'modify_weight', amount: -3 },
+        ],
+        revocable: false,
+        style: 'danger',
+      },
+      {
+        id: 'search-elsewhere',
+        label: 'Search for another drift',
+        description: 'Avoid the fight, but the north-facing slopes are poor denning sites',
+        narrativeResult:
+          'You turn away and circle the slope, searching for alternatives. The only viable drift faces north — shallow, wind-scoured, the snow packed hard rather than soft. You dig anyway, carving a tunnel that angles upward into a chamber that feels too small, too cold, too exposed. When the blizzards come, the wind will find every crack. Your cubs will be born in a den that costs you more calories to heat and offers less insulation than the one you walked away from.',
+        statEffects: [
+          { stat: StatId.TRA, amount: 4, label: '+TRA' },
+          { stat: StatId.WIS, amount: 2, label: '+WIS' },
+        ],
+        consequences: [
+          { type: 'set_flag', flag: 'nest-quality-poor' },
+        ],
+        revocable: false,
+        style: 'default',
+      },
+    ],
+    subEvents: [
+      {
+        eventId: 'pb-den-fight-claw-rake-sub',
+        chance: 0.25,
+        narrativeText:
+          'Her forepaw catches you across the shoulder during the grapple, four claws tearing through your thick fur and into the fat beneath. Blood mats your fur in dark streaks.',
+        footnote: '(Claw rake from den fight)',
+        statEffects: [
+          { stat: StatId.HEA, amount: -4, label: '-HEA' },
+        ],
+        consequences: [
+          { type: 'add_injury', injuryId: 'bear-claw-rake', severity: 0 },
+        ],
+      },
+      {
+        eventId: 'pb-den-fight-bite-wound-sub',
+        chance: 0.15,
+        narrativeText:
+          'She lunges for your neck and her jaws close on the thick scruff, canines punching through hide into muscle. You wrench free but the punctures are deep and already swelling.',
+        footnote: '(Bite wound from den fight)',
+        statEffects: [
+          { stat: StatId.HEA, amount: -5, label: '-HEA' },
+        ],
+        consequences: [
+          { type: 'add_injury', injuryId: 'bear-bite-wound', severity: 0 },
+        ],
+      },
+    ],
+    conditions: [
+      { type: 'species', speciesIds: ['polar-bear'] },
+      { type: 'sex', sex: 'female' },
+      { type: 'season', seasons: ['autumn'] },
+      { type: 'has_flag', flag: 'has-den' },
+      { type: 'no_flag', flag: 'nest-quality-prime' },
+      { type: 'no_flag', flag: 'nest-quality-poor' },
+    ],
+    weight: 12,
+    cooldown: 12,
+    tags: ['social', 'denning', 'female-competition'],
+    footnote: 'Pregnant female polar bears compete for prime denning sites. South-facing snowdrifts with deep, stable snow provide the best insulation and are strongly preferred. Den quality directly affects cub survival rates.',
+  },
+
+  {
     id: 'pb-territorial-marking',
     type: 'active',
     category: 'social',

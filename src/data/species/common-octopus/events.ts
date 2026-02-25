@@ -868,6 +868,73 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
   },
 
   {
+    id: 'octopus-den-competition',
+    type: 'active',
+    category: 'reproduction',
+    narrativeText: 'You have found the perfect brooding crevice — deep, narrow-mouthed, with a steady current of oxygen-rich water flowing through from a crack in the rock behind. But another female is already wedged inside, her arms pressed against the walls, her chromatophores flashing a warning pattern of dark red and white. She has not laid her eggs yet either. This is the best den on the reef — the water flow will keep your egg strings oxygenated and free of fungus. The exposed crevice thirty meters away has sluggish flow and poor water circulation; eggs laid there will suffocate in patches, fungus spreading from strand to strand.',
+    statEffects: [
+      { stat: StatId.ADV, amount: 5, label: '+ADV' },
+    ],
+    choices: [
+      {
+        id: 'arm-wrestle-den',
+        label: 'Arm-wrestle her out of the crevice',
+        description: 'Better oxygen flow means more eggs hatch, but she will fight',
+        narrativeResult: 'You drive your arms into the crevice mouth, grappling with hers in a writhing tangle of suckers and muscle. The fight is silent and savage — arms intertwining, pulling, tearing at each other\'s grip on the rock. Your suckers rip free and re-attach, over and over, as you try to pry her loose. She is strong but you are relentless, and after long minutes of struggle you drag her from the crevice inch by inch. She jets away across the reef in a cloud of ink. The den is yours — and your eggs will breathe.',
+        statEffects: [
+          { stat: StatId.HOM, amount: 6, label: '+HOM' },
+          { stat: StatId.ADV, amount: -5, label: '-ADV' },
+        ],
+        consequences: [
+          { type: 'set_flag', flag: 'nest-quality-prime' },
+        ],
+        revocable: false,
+        style: 'danger',
+      },
+      {
+        id: 'take-exposed-crevice',
+        label: 'Take the exposed crevice',
+        description: 'Poor water flow means fewer eggs survive, but no fight',
+        narrativeResult: 'You retreat to the exposed crevice, a shallow depression in the reef wall with no back opening for water circulation. You wedge yourself inside, but the space feels wrong — too open, too still. The water here barely moves. When you lay your eggs, you will have to aerate them constantly with your siphon, exhausting yourself faster, and even then some strands will suffocate in the dead water.',
+        statEffects: [
+          { stat: StatId.TRA, amount: 4, label: '+TRA' },
+        ],
+        consequences: [
+          { type: 'set_flag', flag: 'nest-quality-poor' },
+        ],
+        revocable: false,
+        style: 'default',
+      },
+    ],
+    subEvents: [
+      {
+        eventId: 'octopus-den-arm-damage-sub',
+        chance: 0.15,
+        narrativeText: 'During the grapple, she locked her suckers around one of your arms and twisted with her full body weight. You felt the muscle tear — a sharp, searing pain that weakened your grip. The arm still functions but the damaged section moves sluggishly.',
+        footnote: '(Arm damage from den fight)',
+        statEffects: [
+          { stat: StatId.HEA, amount: -3, label: '-HEA' },
+        ],
+        consequences: [
+          { type: 'add_injury', injuryId: 'arm-damage', severity: 0 },
+        ],
+      },
+    ],
+    conditions: [
+      { type: 'species', speciesIds: ['common-octopus'] },
+      { type: 'sex', sex: 'female' },
+      { type: 'has_flag', flag: 'mating-complete' },
+      { type: 'no_flag', flag: 'eggs-laid' },
+      { type: 'no_flag', flag: 'nest-quality-prime' },
+      { type: 'no_flag', flag: 'nest-quality-poor' },
+    ],
+    weight: 16,
+    cooldown: 8,
+    tags: ['reproduction', 'female-competition'],
+    footnote: 'Female octopuses compete for optimal brooding dens. Water flow through the den is critical — it delivers oxygen to the developing eggs and prevents fungal growth. Poorly ventilated dens can lose 50% or more of eggs to suffocation.',
+  },
+
+  {
     id: 'octopus-brooding-den',
     type: 'active',
     category: 'reproduction',

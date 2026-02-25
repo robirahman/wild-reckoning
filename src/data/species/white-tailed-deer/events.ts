@@ -452,7 +452,7 @@ const deerEvents: GameEvent[] = [
     type: 'active',
     category: 'social',
     narrativeText:
-      'The doe steps into your feeding area with deliberate confidence, her ears pinned flat, her front hoof raised in the universal gesture of dominance among your kind. She is older than you, heavier, and she has wintered here longer. The hierarchy among does is matrilineal and absolute — your mother\'s rank determines your starting position, and everything after that must be earned with confrontation. She strikes at you with her foreleg, a sharp, downward blow aimed at your shoulder.',
+      'The doe steps into your feeding area with deliberate confidence, her ears pinned flat, her front hoof raised in the universal gesture of dominance among your kind. She is older than you, heavier, and she has wintered here longer. The hierarchy among does is matrilineal and absolute — your mother\'s rank determines your starting position, and everything after that must be earned with confrontation. She strikes at you with her foreleg, a sharp, downward blow aimed at your shoulder. The stakes are higher than food: dominant does claim the densest thickets for fawning — the cover that hides newborns from coyotes and bobcats. Subordinate does are pushed to open fields and forest edges where fawns are found and killed within days.',
     statEffects: [
       { stat: StatId.ADV, amount: 6, label: '+ADV' },
     ],
@@ -460,36 +460,60 @@ const deerEvents: GameEvent[] = [
       {
         id: 'submit-doe',
         label: 'Lower your head and yield',
-        description: 'Accept subordinate status — you will eat after she finishes',
+        description: 'Accept subordinate status — marginal fawning cover, lower fawn survival',
+        narrativeResult:
+          'You drop your ears and turn away, accepting the blow across your shoulder without retaliation. She watches you go with flat, dominant eyes. You will eat after she finishes, bed where she does not want to bed, and when spring comes, your fawns will be born in the open margins where predators patrol. The best cover belongs to her and her daughters.',
         statEffects: [
           { stat: StatId.TRA, amount: 3, label: '+TRA' },
           { stat: StatId.WIS, amount: 3, label: '+WIS' },
         ],
-        consequences: [],
+        consequences: [
+          { type: 'set_flag', flag: 'nest-quality-poor' },
+        ],
         revocable: false,
         style: 'default',
       },
       {
         id: 'challenge-doe',
         label: 'Rear up and strike back',
-        description: 'Contest the hierarchy — you may win better feeding access',
+        description: 'Win dominant status — best fawning thickets, higher fawn survival',
+        narrativeResult:
+          'You rear onto your hind legs and strike back, your forelegs hammering down at her head and shoulders. She rears to meet you and you clash — hooves cracking against bone and hide, ears flat, teeth bared. The fight is brutal and graceless, two does battering each other with foreleg strikes and body slams. You land a blow squarely on her shoulder that staggers her, and press the advantage with another, and another, until she breaks and trots away with her head low. The hierarchy has shifted. The best fawning cover is yours.',
         statEffects: [
           { stat: StatId.HOM, amount: 5, label: '+HOM' },
           { stat: StatId.ADV, amount: -5, label: '-ADV' },
         ],
         consequences: [
           { type: 'set_flag', flag: 'challenged-doe-hierarchy' },
+          { type: 'set_flag', flag: 'nest-quality-prime' },
         ],
         revocable: false,
         style: 'danger',
       },
     ],
+    subEvents: [
+      {
+        eventId: 'deer-doe-foreleg-strike-sub',
+        chance: 0.15,
+        narrativeText:
+          'Her foreleg comes down hard on your ribs — a sharp, cracking impact that drives the air from your lungs. You feel something give beneath the blow, cartilage or bone flexing past its limit.',
+        footnote: '(Foreleg strike injury)',
+        statEffects: [
+          { stat: StatId.HEA, amount: -3, label: '-HEA' },
+        ],
+        consequences: [
+          { type: 'add_injury', injuryId: 'doe-foreleg-strike', severity: 0 },
+        ],
+      },
+    ],
     conditions: [
       { type: 'sex', sex: 'female' },
+      { type: 'no_flag', flag: 'nest-quality-prime' },
+      { type: 'no_flag', flag: 'nest-quality-poor' },
     ],
     weight: 9,
     cooldown: 8,
-    tags: ['social', 'herd', 'hierarchy'],
+    tags: ['social', 'herd', 'hierarchy', 'female-competition'],
   },
 
   {

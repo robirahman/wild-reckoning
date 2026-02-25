@@ -427,7 +427,9 @@ export const useGameStore = create<GameState>((set, get) => {
               hea * reproConfig.eggCountHeaFactor +
               animal.weight * reproConfig.eggCountWeightFactor
             );
-            const survivalRate = reproConfig.eggSurvivalBase + wis * reproConfig.eggSurvivalWisFactor;
+            let survivalRate = reproConfig.eggSurvivalBase + wis * reproConfig.eggSurvivalWisFactor;
+            if (animal.flags.has('nest-quality-prime')) survivalRate *= 1.5;
+            if (animal.flags.has('nest-quality-poor')) survivalRate *= 0.5;
             const estimatedSurvivors = Math.round(eggCount * survivalRate);
 
             const newFlags = new Set(animal.flags);

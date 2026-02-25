@@ -97,6 +97,41 @@ export const ARCTIC_TERN_INJURIES: Record<string, InjuryDefinition> = {
     ],
   },
 
+  'wing-strike': {
+    id: 'wing-strike',
+    name: 'Wing Strike Bruise',
+    bodyParts: [
+      'left wing',
+      'right wing',
+      'back',
+    ],
+    severityLevels: [
+      {
+        severity: 'minor',
+        description: 'A sharp blow from a rival tern\'s wing during a nest dispute. The impact bruised the flight muscles and the wing aches during sustained flight.',
+        statEffects: [
+          { stat: StatId.HEA, amount: -3 },
+          { stat: StatId.HOM, amount: 3 },
+        ],
+        baseHealingTime: 3,
+        worseningChance: 0.08,
+        permanentDebuffChance: 0.03,
+      },
+      {
+        severity: 'moderate',
+        description: 'A hard wing blow that strained the joint and bruised the pectoral muscle. The wing does not fold cleanly and each wingbeat sends a dull ache through your chest. Long flights are significantly more tiring.',
+        statEffects: [
+          { stat: StatId.HEA, amount: -7 },
+          { stat: StatId.HOM, amount: 7 },
+          { stat: StatId.ADV, amount: 4 },
+        ],
+        baseHealingTime: 6,
+        worseningChance: 0.10,
+        permanentDebuffChance: 0.08,
+      },
+    ],
+  },
+
   'beak-damage': {
     id: 'beak-damage',
     name: 'Beak Damage',

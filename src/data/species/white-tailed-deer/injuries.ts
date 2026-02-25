@@ -220,6 +220,37 @@ const deerInjuries: Record<string, InjuryDefinition> = {
     ],
   },
 
+  'doe-foreleg-strike': {
+    id: 'doe-foreleg-strike',
+    name: 'Foreleg Strike Bruise',
+    bodyParts: ['right shoulder', 'left shoulder', 'right flank', 'left flank', 'ribs'],
+    severityLevels: [
+      {
+        severity: 'minor',
+        description: 'A deep bruise from a dominant doe\'s foreleg blow. The impact site is swollen and tender, and you flinch when it brushes against brush or branches.',
+        statEffects: [
+          { stat: StatId.HEA, amount: -3 },
+          { stat: StatId.HOM, amount: 4 },
+        ],
+        baseHealingTime: 4,
+        worseningChance: 0.06,
+        permanentDebuffChance: 0.01,
+      },
+      {
+        severity: 'moderate',
+        description: 'The foreleg strike cracked cartilage along your ribs. Every breath is a dull ache, and running sends sharp pain radiating through your chest. The bruise has spread into a dark, swollen mass beneath the hide.',
+        statEffects: [
+          { stat: StatId.HEA, amount: -7 },
+          { stat: StatId.HOM, amount: 8 },
+          { stat: StatId.ADV, amount: 4 },
+        ],
+        baseHealingTime: 10,
+        worseningChance: 0.10,
+        permanentDebuffChance: 0.04,
+      },
+    ],
+  },
+
   'coyote-bite': {
     id: 'coyote-bite',
     name: 'Coyote Bite',

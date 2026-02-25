@@ -105,6 +105,40 @@ export const GREEN_SEA_TURTLE_INJURIES: Record<string, InjuryDefinition> = {
     ],
   },
 
+  'flipper-wound': {
+    id: 'flipper-wound',
+    name: 'Flipper Wound',
+    bodyParts: [
+      'left flipper',
+      'right flipper',
+    ],
+    severityLevels: [
+      {
+        severity: 'minor',
+        description: 'A shallow bite mark on the leading edge of your flipper from a rival female during a nesting dispute. The wound stings in salt water but does not impede swimming.',
+        statEffects: [
+          { stat: StatId.HEA, amount: -3 },
+          { stat: StatId.HOM, amount: 4 },
+        ],
+        baseHealingTime: 3,
+        worseningChance: 0.08,
+        permanentDebuffChance: 0.02,
+      },
+      {
+        severity: 'moderate',
+        description: 'A deep, crescent-shaped tear in the flipper where a rival female\'s serrated beak ripped through skin and into the underlying tissue. The wound trails blood in the water and each stroke is painful.',
+        statEffects: [
+          { stat: StatId.HEA, amount: -8 },
+          { stat: StatId.HOM, amount: 8 },
+          { stat: StatId.ADV, amount: 4 },
+        ],
+        baseHealingTime: 5,
+        worseningChance: 0.12,
+        permanentDebuffChance: 0.06,
+      },
+    ],
+  },
+
   'fishing-line-entanglement': {
     id: 'fishing-line-entanglement',
     name: 'Fishing Line Entanglement',
