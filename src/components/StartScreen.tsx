@@ -16,27 +16,6 @@ import { SCENARIOS } from '../data/scenarios';
 import { ThemeToggle } from './ThemeToggle';
 import styles from '../styles/startscreen.module.css';
 
-function isSpeciesUnlocked(
-  speciesId: string, 
-  unlockedAchievements: Set<string>, 
-  speciesPlayed: Set<string>,
-  debugAllUnlocked: boolean
-): boolean {
-  if (debugAllUnlocked) return true;
-  const unlock = SPECIES_UNLOCKS.find((u) => u.speciesId === speciesId);
-  if (!unlock) return true; // No unlock requirement = always available
-  if (unlock.requirement.type === 'default') return true;
-  if (unlock.requirement.type === 'achievement') return unlockedAchievements.has(unlock.requirement.achievementId);
-  if (unlock.requirement.type === 'species_played') return speciesPlayed.has(unlock.requirement.speciesId);
-  return true;
-}
-
-function getUnlockHint(speciesId: string): string | null {
-  const unlock = SPECIES_UNLOCKS.find((u) => u.speciesId === speciesId);
-  if (!unlock || unlock.requirement.type === 'default') return null;
-  return unlock.requirement.description;
-}
-
 export function StartScreen() {
   const startGame = useGameStore((s) => s.startGame);
   const resumeGame = useGameStore((s) => s.resumeGame);
@@ -47,6 +26,22 @@ export function StartScreen() {
   const speciesPlayed = useAchievementStore((s) => s.speciesPlayed);
   const debugAllUnlocked = useAchievementStore((s) => s.debugAllUnlocked);
   const toggleDebugAllUnlocked = useAchievementStore((s) => s.toggleDebugAllUnlocked);
+
+  const isSpeciesUnlocked = (speciesId: string): boolean => {
+    if (debugAllUnlocked) return true;
+    const unlock = SPECIES_UNLOCKS.find((u) => u.speciesId === speciesId);
+    if (!unlock) return true;
+    if (unlock.requirement.type === 'default') return true;
+    if (unlock.requirement.type === 'achievement') return unlockedAchievements.has(unlock.requirement.achievementId);
+    if (unlock.requirement.type === 'species_played') return speciesPlayed.has(unlock.requirement.speciesId);
+    return true;
+  };
+
+  const getUnlockHint = (speciesId: string): string | null => {
+    const unlock = SPECIES_UNLOCKS.find((u) => u.speciesId === speciesId);
+    if (!unlock || unlock.requirement.type === 'default') return null;
+    return unlock.requirement.description;
+  };
 
   const [selectedSpeciesId, setSelectedSpeciesId] = useState(allBundles[0].config.id);
   const selectedBundle = allBundles.find((b) => b.config.id === selectedSpeciesId)!;
@@ -101,8 +96,10 @@ export function StartScreen() {
         className={styles.title}
         onClick={(e) => {
           if (e.detail === 3) {
+            const nextState = !debugAllUnlocked;
             toggleDebugAllUnlocked();
-            alert(`Debug Mode: ${!debugAllUnlocked ? 'All Species Unlocked' : 'Standard Progression'}`);
+            console.log('Debug mode set to:', nextState);
+            alert(`Debug Mode: ${nextState ? 'All Species Unlocked' : 'Standard Progression'}`);
           }
         }}
         style={{ cursor: 'default', userSelect: 'none' }}
@@ -127,7 +124,7 @@ export function StartScreen() {
         <h3 className={styles.sectionTitle}>Species</h3>
         <div className={styles.columnGroup}>
           {allBundles.map((bundle) => {
-            const unlocked = isSpeciesUnlocked(bundle.config.id, unlockedAchievements, speciesPlayed, debugAllUnlocked);
+            const unlocked = isSpeciesUnlocked(bundle.config.id);
             const hint = getUnlockHint(bundle.config.id);
             const isSelected = selectedSpeciesId === bundle.config.id && unlocked;
 
