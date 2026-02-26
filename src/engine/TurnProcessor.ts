@@ -27,6 +27,10 @@ export function generateTurnEvents(state: GameState): ResolvedEvent[] {
     currentWeather: state.currentWeather ?? undefined,
     ecosystem: state.ecosystem,
     currentNodeType: state.map?.nodes.find(n => n.id === state.map!.currentLocationId)?.type,
+    currentNodeResources: (() => {
+      const node = state.map?.nodes.find(n => n.id === state.map!.currentLocationId);
+      return node?.resources;
+    })(),
     fastForward: state.fastForward,
   });
 }

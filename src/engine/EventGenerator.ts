@@ -34,6 +34,7 @@ interface GenerationContext {
   currentWeather?: WeatherState;
   ecosystem?: EcosystemState;
   currentNodeType?: string;
+  currentNodeResources?: { food: number; water: number; cover: number };
   fastForward?: boolean;
   calibratedRates?: CalibratedRates;
 }
@@ -262,6 +263,7 @@ export function generateEvents(ctx: GenerationContext): ResolvedEvent[] {
       currentWeather: ctx.currentWeather,
       ecosystem: ctx.ecosystem,
       currentNodeType: ctx.currentNodeType,
+      currentNodeResources: ctx.currentNodeResources,
       calibratedRates: getCalibratedRates(ctx.config.id),
       fastForward: ctx.fastForward,
     };

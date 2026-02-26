@@ -28,6 +28,8 @@ export interface SimulationContext {
   currentWeather?: WeatherState;
   ecosystem?: EcosystemState;
   currentNodeType?: string;
+  /** Map node resources (food/cover) at the animal's current location */
+  currentNodeResources?: { food: number; water: number; cover: number };
   calibratedRates?: CalibratedRates;
   fastForward?: boolean;
 }

@@ -1,7 +1,7 @@
 import type { SimulationTrigger } from '../types';
-import type { HarmEvent } from '../../harm/types';
-import { StatId, computeEffectiveValue } from '../../../types/stats';
+import { StatId } from '../../../types/stats';
 import { getEncounterRate } from '../../calibration/calibrator';
+import { resolveFight } from '../../interactions/fight';
 
 // ══════════════════════════════════════════════════
 //  RUT COMBAT (Male deer territorial/mating fight)
@@ -14,10 +14,9 @@ export const rutCombatTrigger: SimulationTrigger = {
   calibrationCauseId: 'intraspecific',
 
   isPlausible(ctx) {
-    // Rut combat only for male deer during autumn (rut season)
     if (ctx.animal.sex !== 'male') return false;
     if (ctx.time.season !== 'autumn') return false;
-    if (ctx.animal.age < 18) return false; // too young to spar
+    if (ctx.animal.age < 18) return false;
     return true;
   },
 
@@ -25,10 +24,8 @@ export const rutCombatTrigger: SimulationTrigger = {
     if (!ctx.calibratedRates) return 0.015;
     let base = getEncounterRate(ctx.calibratedRates, 'intraspecific', ctx.time.season);
 
-    // Higher belligerence increases encounter rate
     base *= 0.5 + ctx.behavior.belligerence * 0.3;
 
-    // Having a rival NPC increases chances
     const hasRival = ctx.npcs?.some((n) => n.type === 'rival' && n.alive);
     if (hasRival) base *= 2;
 
@@ -50,56 +47,60 @@ export const rutCombatTrigger: SimulationTrigger = {
   },
 
   getChoices(ctx) {
-    const hea = computeEffectiveValue(ctx.animal.stats[StatId.HEA]);
+    // Rival buck parameters: estimated from deer population averages
+    const rivalWeight = ctx.rng.int(100, 180);
+    const rivalStrength = 40 + rivalWeight * 0.1 + ctx.rng.int(-5, 5);
 
-    // Antler strike targeting head/neck/front-legs
-    const antlerStrike: HarmEvent = {
-      id: `antler-strike-${ctx.time.turn}`,
-      sourceLabel: 'antler strike',
-      magnitude: ctx.rng.int(35, 65),
-      targetZone: ctx.rng.pick(['head', 'neck', 'front-legs']),
-      spread: 0.2,
-      harmType: 'blunt',
+    // Rut combat fight parameters: antler vs antler, charge engagement
+    const rutFightParams = {
+      opponentStrength: rivalStrength,
+      opponentWeight: rivalWeight,
+      opponentWeaponType: 'blunt' as const,
+      opponentTargetZone: ctx.rng.pick(['head', 'neck', 'front-legs'] as const),
+      opponentDamageRange: [35, 65] as [number, number],
+      opponentStrikeLabel: 'antler strike',
+      engagementType: 'charge' as const,
+      canDisengage: false,
+      mutual: true,  // both use antlers
     };
-
-    // Win probability based on health, weight, existing damage
-    const winChance = Math.min(0.6, Math.max(0.1,
-      0.25 + (hea - 50) * 0.003 + (ctx.animal.weight - 120) * 0.001 - ctx.animal.injuries.length * 0.05
-    ));
 
     return [
       {
         id: 'engage',
         label: 'Lower your antlers and charge',
-        description: `Meet the challenge. ${winChance > 0.35 ? 'You feel strong.' : 'You are not at your best.'}`,
-        style: winChance < 0.2 ? 'danger' : 'default',
+        description: `Meet the challenge. ${ctx.animal.weight > rivalWeight ? 'You outweigh the rival.' : 'The rival looks formidable.'}`,
+        style: ctx.animal.weight < rivalWeight * 0.8 ? 'danger' : 'default',
         narrativeResult: 'You lower your rack and drive forward. The impact is tremendous — a crack like a breaking branch as antler meets antler, tines interlocking, muscles straining. You shove with everything you have, hooves tearing at the ground for purchase, necks twisting as you try to throw the other buck off balance.',
         modifyOutcome(base, innerCtx) {
-          const won = innerCtx.rng.chance(winChance);
-          if (won) {
+          const fight = resolveFight(innerCtx, rutFightParams);
+
+          if (fight.won) {
             return {
               ...base,
-              harmEvents: innerCtx.rng.chance(0.3) ? [antlerStrike] : [],
+              harmEvents: fight.harmToPlayer,
               statEffects: [
                 { stat: StatId.WIS, amount: 3, label: '+WIS' },
                 { stat: StatId.HOM, amount: 6, duration: 2, label: '+HOM' },
               ],
               consequences: [
                 { type: 'set_flag', flag: 'rut-challenge-won' as any },
+                ...(fight.caloriesCost > 0 ? [{ type: 'add_calories' as const, amount: -fight.caloriesCost, source: 'rut combat' }] : []),
+                ...(fight.deathCause ? [{ type: 'death' as const, cause: fight.deathCause }] : []),
               ],
               footnote: '(Won the fight)',
             };
           } else {
             return {
               ...base,
-              harmEvents: [antlerStrike],
+              harmEvents: fight.harmToPlayer,
               statEffects: [
                 { stat: StatId.TRA, amount: 5, duration: 3, label: '+TRA' },
                 { stat: StatId.HOM, amount: 10, duration: 3, label: '+HOM' },
               ],
-              consequences: innerCtx.rng.chance(0.02)
-                ? [{ type: 'death', cause: 'Killed in rut combat — antlers locked, unable to break free' }]
-                : [],
+              consequences: [
+                ...(fight.caloriesCost > 0 ? [{ type: 'add_calories' as const, amount: -fight.caloriesCost, source: 'rut combat' }] : []),
+                ...(fight.deathCause ? [{ type: 'death' as const, cause: fight.deathCause }] : []),
+              ],
               footnote: '(Lost the fight)',
             };
           }
@@ -112,8 +113,16 @@ export const rutCombatTrigger: SimulationTrigger = {
         style: 'default',
         narrativeResult: 'You turn broadside, making yourself as large as possible, neck arched, muscles taut. You rake the ground with a hoof and snort — a challenge that says "look how big I am." The other buck hesitates, measures you, and after a tense moment either accepts the display or presses forward.',
         modifyOutcome(base, innerCtx) {
-          const backsDown = innerCtx.rng.chance(0.4 + (ctx.animal.weight - 100) * 0.003);
-          if (backsDown) {
+          // Intimidation: fight resolver with lower intensity
+          const postureResult = resolveFight(innerCtx, {
+            ...rutFightParams,
+            engagementType: 'strike',
+            // Posturing is less intense — damage is lower if rival presses
+            opponentDamageRange: [20, 45],
+          });
+
+          if (postureResult.won) {
+            // Rival backed down
             return {
               ...base,
               harmEvents: [],
@@ -125,14 +134,16 @@ export const rutCombatTrigger: SimulationTrigger = {
               footnote: '(Rival backed down)',
             };
           } else {
-            // They didn't buy it — you take a hit as they charge
+            // Rival didn't buy it — takes a swing
             return {
               ...base,
-              harmEvents: [antlerStrike],
+              harmEvents: postureResult.harmToPlayer,
               statEffects: [
                 { stat: StatId.TRA, amount: 6, duration: 3, label: '+TRA' },
               ],
-              consequences: [],
+              consequences: postureResult.deathCause
+                ? [{ type: 'death', cause: postureResult.deathCause }]
+                : [],
               footnote: '(Rival called your bluff)',
             };
           }
