@@ -9,91 +9,93 @@ export interface SpeciesUnlockRequirement {
 }
 
 export const SPECIES_UNLOCKS: SpeciesUnlockRequirement[] = [
-  // Always available
+  // --- Starter Species ---
   { speciesId: 'white-tailed-deer', requirement: { type: 'default' } },
   { speciesId: 'gray-wolf', requirement: { type: 'default' } },
 
-  // Unlock by playing deer or wolf
+  // --- Tier 1: Specialized Mammals & Fish ---
   {
     speciesId: 'african-elephant',
     requirement: {
       type: 'achievement',
-      achievementId: 'survivor-50',
-      description: 'Survive 50 turns with any species',
-    },
-  },
-  {
-    speciesId: 'chinook-salmon',
-    requirement: {
-      type: 'species_played',
-      speciesId: 'white-tailed-deer',
-      description: 'Play as White-tailed Deer',
+      achievementId: 'deer-raised-twins',
+      description: 'Raise twin fawns to independence as a White-Tailed Deer',
     },
   },
   {
     speciesId: 'polar-bear',
     requirement: {
       type: 'achievement',
-      achievementId: 'survive-winter',
-      description: 'Survive a full winter',
+      achievementId: 'wolf-alpha',
+      description: 'Win a hierarchy challenge as a Gray Wolf',
     },
   },
   {
+    speciesId: 'chinook-salmon',
+    requirement: {
+      type: 'achievement',
+      achievementId: 'deer-migrated',
+      description: 'Complete a winter migration as a White-Tailed Deer',
+    },
+  },
+
+  // --- Tier 2: Marine Life ---
+  {
     speciesId: 'green-sea-turtle',
     requirement: {
-      type: 'species_played',
-      speciesId: 'chinook-salmon',
-      description: 'Play as Chinook Salmon',
+      type: 'achievement',
+      achievementId: 'salmon-spawn',
+      description: 'Successfully spawn as a Chinook Salmon',
+    },
+  },
+  {
+    speciesId: 'common-octopus',
+    requirement: {
+      type: 'achievement',
+      achievementId: 'turtle-nesting',
+      description: 'Successfully nest and lay eggs as a Green Sea Turtle',
+    },
+  },
+
+  // --- Tier 3: Amphibians & Insects ---
+  {
+    speciesId: 'poison-dart-frog',
+    requirement: {
+      type: 'achievement',
+      achievementId: 'octopus-full-cycle',
+      description: 'Complete the full lifecycle as a Common Octopus',
     },
   },
   {
     speciesId: 'monarch-butterfly',
     requirement: {
       type: 'achievement',
-      achievementId: 'first-migration',
-      description: 'Complete a migration',
+      achievementId: 'frog-metamorphosis',
+      description: 'Complete metamorphosis as a Poison Dart Frog',
+    },
+  },
+  {
+    speciesId: 'arctic-tern',
+    requirement: {
+      type: 'achievement',
+      achievementId: 'monarch-reach-mexico',
+      description: 'Reach the overwintering grounds in Mexico as a Monarch Butterfly',
+    },
+  },
+  {
+    speciesId: 'honeybee-worker',
+    requirement: {
+      type: 'achievement',
+      achievementId: 'tern-first-migration',
+      description: 'Complete a southward migration as an Arctic Tern',
     },
   },
   {
     speciesId: 'fig-wasp',
     requirement: {
       type: 'achievement',
-      achievementId: 'first-offspring',
-      description: 'Produce offspring',
-    },
-  },
-
-  // New species — gated by achievements from earlier species
-  {
-    speciesId: 'common-octopus',
-    requirement: {
-      type: 'species_played',
-      speciesId: 'green-sea-turtle',
-      description: 'Play as Green Sea Turtle',
-    },
-  },
-  {
-    speciesId: 'honeybee-worker',
-    requirement: {
-      type: 'species_played',
-      speciesId: 'fig-wasp',
-      description: 'Play as Fig Wasp',
-    },
-  },
-  {
-    speciesId: 'arctic-tern',
-    requirement: {
-      type: 'species_played',
-      speciesId: 'monarch-butterfly',
-      description: 'Play as Monarch Butterfly',
-    },
-  },
-  {
-    speciesId: 'poison-dart-frog',
-    requirement: {
-      type: 'species_played',
-      speciesId: 'common-octopus',
-      description: 'Play as Common Octopus',
+      achievementId: 'bee-waggle-dancer',
+      description: 'Perform a waggle dance as a Honeybee Worker',
     },
   },
 ];
