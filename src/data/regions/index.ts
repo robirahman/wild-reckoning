@@ -363,6 +363,27 @@ export const REGION_DEFINITIONS: Record<string, RegionDefinition> = {
       { parasiteId: 'frog-nematode', baseChance: 0.05, seasonalModifier: { spring: 1.0, summer: 1.4, autumn: 1.1, winter: 0.7 } },
     ],
   },
+
+  'farmstead': {
+    id: 'farmstead',
+    name: 'The Old Farmstead',
+    climate: {
+      temperatureByMonth: [25, 30, 42, 55, 65, 75, 80, 78, 68, 55, 42, 30],
+      precipitationByMonth: [1.5, 1.2, 2.5, 3.5, 4.0, 4.2, 3.5, 3.2, 3.0, 2.5, 2.0, 1.5],
+      firstFrostMonth: 9,
+      lastFrostMonth: 4,
+    },
+    flora: [
+      { id: 'corn-spillage', name: 'Spilled Corn', availableSeasons: ['autumn', 'winter'], nutritiveValue: 90, abundanceByMonth: [0, 0, 0, 0, 0, 0, 0, 0.2, 0.8, 1.0, 0.8, 0.5] },
+      { id: 'pasture-grass', name: 'Pasture Grass', availableSeasons: ['spring', 'summer', 'autumn'], nutritiveValue: 50, abundanceByMonth: [0, 0, 0.2, 0.6, 0.8, 1.0, 0.9, 0.8, 0.6, 0.3, 0, 0] },
+      { id: 'kitchen-scraps', name: 'Kitchen Scraps', availableSeasons: ['spring', 'summer', 'autumn', 'winter'], nutritiveValue: 70, abundanceByMonth: [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5] },
+    ],
+    fauna: ['chicken', 'pig', 'barn-cat', 'rat'],
+    predators: ['fox', 'coyote', 'hawk', 'raccoon'],
+    parasitePrevalence: [
+      { parasiteId: 'gi-roundworm', baseChance: 0.05, seasonalModifier: { spring: 1.2, summer: 1.5, autumn: 1.0, winter: 0.5 } },
+    ],
+  },
 };
 
 export function getRegionDefinition(id: string): RegionDefinition | undefined {

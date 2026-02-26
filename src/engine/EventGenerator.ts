@@ -72,6 +72,8 @@ function checkCondition(cond: EventCondition, ctx: GenerationContext): boolean {
       return ctx.animal.weight > cond.threshold;
     case 'weight_below':
       return ctx.animal.weight < cond.threshold;
+    case 'turn_above':
+      return ctx.time.turn > cond.threshold;
     case 'sex':
       return ctx.animal.sex === cond.sex;
     case 'weather':

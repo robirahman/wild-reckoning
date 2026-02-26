@@ -11,7 +11,8 @@ interface Props {
 export function SpeciesComparison({ onBack }: Props) {
   const unlockedIds = useAchievementStore((s) => s.unlockedIds);
   const speciesPlayed = useAchievementStore((s) => s.speciesPlayed);
-  const bundles = getAllSpeciesBundles();
+  const FARM_SPECIES = ['chicken', 'pig'];
+  const bundles = getAllSpeciesBundles().filter((b) => !FARM_SPECIES.includes(b.config.id));
 
   function isUnlocked(speciesId: string): boolean {
     const req = SPECIES_UNLOCKS.find((u) => u.speciesId === speciesId);

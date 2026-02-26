@@ -10,6 +10,8 @@ import { commonOctopusBundle } from './common-octopus';
 import { honeybeeWorkerBundle } from './honeybee-worker';
 import { arcticTernBundle } from './arctic-tern';
 import { poisonDartFrogBundle } from './poison-dart-frog';
+import { chickenBundle } from './farm-animals/chicken';
+import { pigBundle } from './farm-animals/pig';
 
 const speciesRegistry: Record<string, SpeciesDataBundle> = {
   'white-tailed-deer': whiteTailedDeerBundle,
@@ -23,6 +25,8 @@ const speciesRegistry: Record<string, SpeciesDataBundle> = {
   'honeybee-worker': honeybeeWorkerBundle,
   'arctic-tern': arcticTernBundle,
   'poison-dart-frog': poisonDartFrogBundle,
+  'chicken': chickenBundle,
+  'pig': pigBundle,
 };
 
 export function getSpeciesBundle(id: string): SpeciesDataBundle {

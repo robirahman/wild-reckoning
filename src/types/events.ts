@@ -42,6 +42,7 @@ export type EventCondition =
   | { type: 'no_flag'; flag: GameFlag }
   | { type: 'weight_above'; threshold: number }
   | { type: 'weight_below'; threshold: number }
+  | { type: 'turn_above'; threshold: number }
   | { type: 'sex'; sex: 'male' | 'female' }
   | { type: 'weather'; weatherTypes: string[] }
   | { type: 'population_above'; speciesName: string; threshold: number }

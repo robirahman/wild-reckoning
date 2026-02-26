@@ -98,4 +98,7 @@ export const SPECIES_UNLOCKS: SpeciesUnlockRequirement[] = [
       description: 'Perform a waggle dance as a Honeybee Worker',
     },
   },
+  // --- Easter Eggs: Farm Animals ---
+  { speciesId: 'chicken', requirement: { type: 'default' } },
+  { speciesId: 'pig', requirement: { type: 'default' } },
 ];

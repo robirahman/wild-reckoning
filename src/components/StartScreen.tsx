@@ -27,6 +27,14 @@ export function StartScreen() {
   const debugAllUnlocked = useAchievementStore((s) => s.debugAllUnlocked);
   const toggleDebugAllUnlocked = useAchievementStore((s) => s.toggleDebugAllUnlocked);
 
+  const [mode, setMode] = useState<'wild' | 'farm'>('wild');
+
+  const FARM_SPECIES = ['chicken', 'pig'];
+
+  const filteredBundles = allBundles.filter((b) => 
+    mode === 'farm' ? FARM_SPECIES.includes(b.config.id) : !FARM_SPECIES.includes(b.config.id)
+  );
+
   const isSpeciesUnlocked = (speciesId: string): boolean => {
     if (debugAllUnlocked) return true;
     const unlock = SPECIES_UNLOCKS.find((u) => u.speciesId === speciesId);
@@ -43,13 +51,24 @@ export function StartScreen() {
     return unlock.requirement.description;
   };
 
-  const [selectedSpeciesId, setSelectedSpeciesId] = useState(allBundles[0].config.id);
+  const [selectedSpeciesId, setSelectedSpeciesId] = useState(filteredBundles[0].config.id);
   const selectedBundle = allBundles.find((b) => b.config.id === selectedSpeciesId)!;
 
   const [selectedBackstoryType, setSelectedBackstoryType] = useState(selectedBundle.backstories[0].type);
   const [selectedSex, setSelectedSex] = useState<'male' | 'female'>('female');
   const [selectedDifficulty, setSelectedDifficulty] = useState<Difficulty>('normal');
   const [seedInput, setSeedInput] = useState<string>('');
+
+  const toggleMode = () => {
+    const newMode = mode === 'wild' ? 'farm' : 'wild';
+    setMode(newMode);
+    const firstOfNewMode = allBundles.find((b) => 
+      newMode === 'farm' ? FARM_SPECIES.includes(b.config.id) : !FARM_SPECIES.includes(b.config.id)
+    );
+    if (firstOfNewMode) {
+      handleSpeciesChange(firstOfNewMode);
+    }
+  };
 
   // Reset backstory when species changes
   const handleSpeciesChange = (bundle: SpeciesDataBundle) => {
@@ -122,9 +141,9 @@ export function StartScreen() {
 
       {/* ── Species Selector ── */}
       <div className={styles.section}>
-        <h3 className={styles.sectionTitle}>Species</h3>
+        <h3 className={styles.sectionTitle}>{mode === 'farm' ? 'Farm Animals' : 'Wild Species'}</h3>
         <div className={styles.columnGroup}>
-          {allBundles.map((bundle) => {
+          {filteredBundles.map((bundle) => {
             const unlocked = isSpeciesUnlocked(bundle.config.id);
             const hint = getUnlockHint(bundle.config.id);
             const isSelected = selectedSpeciesId === bundle.config.id && unlocked;
@@ -250,6 +269,13 @@ export function StartScreen() {
       </button>
 
       <div className={styles.navRow}>
+        <button
+          onClick={toggleMode}
+          className={styles.navButton}
+          style={{ backgroundColor: mode === 'farm' ? 'var(--accent-color)' : undefined }}
+        >
+          {mode === 'farm' ? 'Switch to Wild Life' : 'Farm Animal Mode \uD83D\uDC16'}
+        </button>
         <button
           onClick={() => setSubScreen('scenarios')}
           className={styles.navButton}
