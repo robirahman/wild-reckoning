@@ -19,6 +19,7 @@ import type { EvolutionState } from '../../types/evolution';
 import type { Rng } from '../../engine/RandomUtils';
 import type { LineageTraits } from '../../types/lineage';
 import { StatId, type LifetimeStats } from '../../types/stats';
+import type { InstinctNudge } from '../../simulation/instinct/types';
 
 export type GameSlice<T> = StateCreator<GameState, [['zustand/devtools', never]], [], T>;
 
@@ -38,13 +39,16 @@ export interface UISlice {
   ambientText: string | null;
   fastForward: boolean;
   turnResult: TurnResult | null;
-  
+  /** Active instinct nudges for the current turn (transient, advisory only) */
+  instinctNudges: InstinctNudge[];
+
   toggleFastForward: () => void;
   advanceTutorial: () => void;
   skipTutorial: () => void;
   dismissResults: () => void;
   returnToMenu: () => void;
   setTurnResult: (result: TurnResult) => void;
+  setInstinctNudges: (nudges: InstinctNudge[]) => void;
 }
 
 export interface GameSystemSlice {

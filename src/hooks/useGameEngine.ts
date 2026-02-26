@@ -20,6 +20,7 @@ import { generateSimulationEvents, drainDebriefingEntries } from '../simulation/
 import { calibrate } from '../simulation/calibration/calibrator';
 import { DEER_MORTALITY } from '../simulation/calibration/data/deer';
 import { getRegionDefinition } from '../data/regions';
+import { computeInstincts } from '../simulation/instinct/engine';
 import type { SimulationContext } from '../simulation/events/types';
 import type { CalibratedRates } from '../simulation/calibration/types';
 
@@ -147,6 +148,10 @@ export function useGameEngine() {
       };
       simEvents = generateSimulationEvents(simCtx);
 
+      // Compute instinct nudges from current state
+      const nudges = computeInstincts(simCtx);
+      store.setInstinctNudges(nudges);
+
       // Collect debriefing entries and store them
       const newEntries = drainDebriefingEntries();
       if (newEntries.length > 0) {
@@ -162,6 +167,9 @@ export function useGameEngine() {
         : generatedEvents;
       generatedEvents.length = 0;
       generatedEvents.push(...filteredHardcoded);
+    } else {
+      // Non-simulation species: clear any stale nudges
+      store.setInstinctNudges([]);
     }
 
     // Pick illustrations for generated events (main thread)

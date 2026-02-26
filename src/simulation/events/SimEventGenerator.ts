@@ -12,6 +12,10 @@ import { fallHazardTrigger, blizzardExposureTrigger, vehicleStrikeTrigger } from
 import { seasonalBrowseTrigger, riskyForagingTrigger, toxicPlantTrigger } from './triggers/foraging';
 import { parasiteExposureTrigger, woundInfectionTrigger, diseaseOutbreakTrigger } from './triggers/disease';
 import { rehabilitationIntroTrigger } from './triggers/rehabilitationIntro';
+import { starvationPressureTrigger } from './triggers/starvationPressure';
+import { hypothermiaPressureTrigger } from './triggers/hypothermiaPressure';
+import { injuryImpactTrigger } from './triggers/injuryImpact';
+import { immunePressureTrigger } from './triggers/immunePressure';
 
 const ALL_TRIGGERS: SimulationTrigger[] = [
   rehabilitationIntroTrigger,
@@ -29,6 +33,11 @@ const ALL_TRIGGERS: SimulationTrigger[] = [
   parasiteExposureTrigger,
   woundInfectionTrigger,
   diseaseOutbreakTrigger,
+  // Physiology-driven triggers (fire based on physiological state)
+  starvationPressureTrigger,
+  hypothermiaPressureTrigger,
+  injuryImpactTrigger,
+  immunePressureTrigger,
 ];
 
 // ── Behavioral Multiplier (mirrors EventGenerator logic) ──

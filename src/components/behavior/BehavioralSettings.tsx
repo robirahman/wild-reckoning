@@ -4,6 +4,7 @@ import { usePresetStore } from '../../store/presetStore';
 import { BEHAVIOR_LABELS, BEHAVIOR_DESCRIPTIONS, type BehavioralSettings as BehaviorType } from '../../types';
 import type { BehaviorLevel } from '../../types/behavior';
 import styles from '../../styles/behavior.module.css';
+import { InstinctBadges } from './InstinctBadges';
 
 const DISPLAYED_SETTINGS: (keyof BehaviorType)[] = [
   'foraging', 'belligerence', 'mating', 'caution', 'exploration', 'sociability',
@@ -41,6 +42,7 @@ export function BehavioralSettings() {
   return (
     <div className={styles.behaviorBar}>
       <span className={styles.label}>Behavioral Settings:</span>
+      <InstinctBadges />
       {DISPLAYED_SETTINGS.map((key) => (
         <div key={key} style={{ position: 'relative' }}>
           <button

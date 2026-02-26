@@ -1,10 +1,11 @@
 import { describe, it, expect } from 'vitest';
 import { resolveChase } from '../interactions/chase';
 import { resolveFight } from '../interactions/fight';
+import { resolveForage } from '../interactions/forage';
+import { resolveExposure } from '../interactions/exposure';
 import { getTerrainProfile } from '../interactions/types';
 import type { SimulationContext } from '../events/types';
-import type { ChaseParams } from '../interactions/types';
-import type { FightParams } from '../interactions/types';
+import type { ChaseParams, FightParams, ForageParams, ExposureParams } from '../interactions/types';
 import { createRng } from '../../engine/RandomUtils';
 import { StatId } from '../../types/stats';
 
@@ -13,6 +14,7 @@ import { StatId } from '../../types/stats';
 function makeCtx(overrides: Partial<{
   locomotion: number;
   vision: number;
+  digestion: number;
   weight: number;
   hea: number;
   bodyConditionScore: number;
@@ -21,10 +23,12 @@ function makeCtx(overrides: Partial<{
   weatherType: string;
   injuries: number;
   seed: number;
+  timeOfDay: string;
 }>): SimulationContext {
   const opts = {
     locomotion: 100,
     vision: 100,
+    digestion: 100,
     weight: 150,
     hea: 60,
     bodyConditionScore: 3,
@@ -33,6 +37,7 @@ function makeCtx(overrides: Partial<{
     weatherType: 'clear',
     injuries: 0,
     seed: 42,
+    timeOfDay: 'day',
     ...overrides,
   };
 
@@ -43,7 +48,7 @@ function makeCtx(overrides: Partial<{
           locomotion: opts.locomotion,
           vision: opts.vision,
           breathing: 100,
-          digestion: 100,
+          digestion: opts.digestion,
         },
         parts: {},
         conditions: [],
@@ -70,7 +75,7 @@ function makeCtx(overrides: Partial<{
     },
     time: {
       season: opts.season,
-      timeOfDay: 'day',
+      timeOfDay: opts.timeOfDay,
       turn: 10,
       monthIndex: 6,
     },
@@ -347,5 +352,269 @@ describe('resolveFight', () => {
     }
 
     expect(healthyWins).toBeGreaterThan(injuredWins);
+  });
+});
+
+// ══════════════════════════════════════════════════
+//  FORAGE RESOLVER TESTS
+// ══════════════════════════════════════════════════
+
+const browseParams: ForageParams = {
+  foodType: 'browse',
+  baseCalories: 100,
+  toxicityRisk: 0,
+  predationExposure: 0.05,
+  humanProximity: 0,
+};
+
+const toxicFungiParams: ForageParams = {
+  foodType: 'fungi',
+  baseCalories: 40,
+  toxicityRisk: 0.5,
+  predationExposure: 0.02,
+  humanProximity: 0,
+  toxinMagnitudeRange: [20, 50],
+};
+
+const cropRaidParams: ForageParams = {
+  foodType: 'crop',
+  baseCalories: 150,
+  toxicityRisk: 0,
+  predationExposure: 0.08,
+  humanProximity: 0.3,
+};
+
+describe('resolveForage', () => {
+  it('returns a valid ForageResult', () => {
+    const ctx = makeCtx({});
+    const result = resolveForage(ctx, browseParams);
+    expect(result).toHaveProperty('caloriesGained');
+    expect(result).toHaveProperty('toxicHarm');
+    expect(result).toHaveProperty('detectedByPredator');
+    expect(result).toHaveProperty('detectedByHuman');
+    expect(typeof result.caloriesGained).toBe('number');
+    expect(Array.isArray(result.toxicHarm)).toBe('true' ? true : true);
+  });
+
+  it('gut injury reduces caloric extraction', () => {
+    let healthyCalories = 0;
+    let impairedCalories = 0;
+    const runs = 100;
+
+    for (let i = 0; i < runs; i++) {
+      const healthy = makeCtx({ digestion: 100, seed: i });
+      healthyCalories += resolveForage(healthy, browseParams).caloriesGained;
+
+      const impaired = makeCtx({ digestion: 40, seed: i });
+      impairedCalories += resolveForage(impaired, browseParams).caloriesGained;
+    }
+
+    expect(healthyCalories).toBeGreaterThan(impairedCalories);
+  });
+
+  it('locomotion impairment reduces foraging reach', () => {
+    let mobileCalories = 0;
+    let immobileCalories = 0;
+    const runs = 100;
+
+    for (let i = 0; i < runs; i++) {
+      const mobile = makeCtx({ locomotion: 100, seed: i });
+      mobileCalories += resolveForage(mobile, browseParams).caloriesGained;
+
+      const immobile = makeCtx({ locomotion: 30, seed: i });
+      immobileCalories += resolveForage(immobile, browseParams).caloriesGained;
+    }
+
+    expect(mobileCalories).toBeGreaterThan(immobileCalories);
+  });
+
+  it('high toxicity risk produces toxic harm events', () => {
+    let poisoned = 0;
+    const runs = 200;
+
+    for (let i = 0; i < runs; i++) {
+      const ctx = makeCtx({ seed: i });
+      const result = resolveForage(ctx, toxicFungiParams);
+      if (result.toxicHarm.length > 0) poisoned++;
+    }
+
+    // 50% toxicity risk should poison roughly half the time
+    expect(poisoned).toBeGreaterThan(60);
+    expect(poisoned).toBeLessThan(140);
+  });
+
+  it('poisoning returns negative calories', () => {
+    let negativeCals = 0;
+    const runs = 200;
+
+    for (let i = 0; i < runs; i++) {
+      const ctx = makeCtx({ seed: i });
+      const result = resolveForage(ctx, toxicFungiParams);
+      if (result.toxicHarm.length > 0 && result.caloriesGained < 0) negativeCals++;
+    }
+
+    expect(negativeCals).toBeGreaterThan(0);
+  });
+
+  it('nighttime foraging near humans reduces detection', () => {
+    let dayDetections = 0;
+    let nightDetections = 0;
+    const runs = 500;
+
+    for (let i = 0; i < runs; i++) {
+      const day = makeCtx({ timeOfDay: 'day', seed: i });
+      if (resolveForage(day, cropRaidParams).detectedByHuman) dayDetections++;
+
+      const night = makeCtx({ timeOfDay: 'night', seed: i });
+      if (resolveForage(night, cropRaidParams).detectedByHuman) nightDetections++;
+    }
+
+    expect(dayDetections).toBeGreaterThan(nightDetections);
+  });
+
+  it('forest cover reduces predator detection', () => {
+    let forestDetections = 0;
+    let plainDetections = 0;
+    const runs = 500;
+
+    const highExposureParams: ForageParams = {
+      ...browseParams,
+      predationExposure: 0.3,
+    };
+
+    for (let i = 0; i < runs; i++) {
+      const forest = makeCtx({ nodeType: 'forest', seed: i });
+      if (resolveForage(forest, highExposureParams).detectedByPredator) forestDetections++;
+
+      const plain = makeCtx({ nodeType: 'plain', seed: i });
+      if (resolveForage(plain, highExposureParams).detectedByPredator) plainDetections++;
+    }
+
+    expect(plainDetections).toBeGreaterThan(forestDetections);
+  });
+});
+
+// ══════════════════════════════════════════════════
+//  EXPOSURE RESOLVER TESTS
+// ══════════════════════════════════════════════════
+
+describe('resolveExposure', () => {
+  it('returns a valid ExposureResult', () => {
+    const ctx = makeCtx({});
+    const result = resolveExposure(ctx, {
+      type: 'cold',
+      intensity: 0.5,
+      shelterAvailable: false,
+      shelterQuality: 0,
+    });
+    expect(result).toHaveProperty('harmEvents');
+    expect(result).toHaveProperty('coreTemperatureShift');
+    expect(result).toHaveProperty('caloriesCost');
+    expect(result).toHaveProperty('shelterFound');
+    expect(Array.isArray(result.harmEvents)).toBe(true);
+  });
+
+  it('higher intensity produces more harm', () => {
+    let mildHarm = 0;
+    let severeHarm = 0;
+    const runs = 200;
+
+    for (let i = 0; i < runs; i++) {
+      const mild = makeCtx({ seed: i });
+      const mildResult = resolveExposure(mild, {
+        type: 'cold',
+        intensity: 0.3,
+        shelterAvailable: false,
+        shelterQuality: 0,
+      });
+      mildHarm += mildResult.harmEvents.reduce((acc, h) => acc + h.magnitude, 0);
+
+      const severe = makeCtx({ seed: i });
+      const severeResult = resolveExposure(severe, {
+        type: 'cold',
+        intensity: 0.9,
+        shelterAvailable: false,
+        shelterQuality: 0,
+      });
+      severeHarm += severeResult.harmEvents.reduce((acc, h) => acc + h.magnitude, 0);
+    }
+
+    expect(severeHarm).toBeGreaterThan(mildHarm);
+  });
+
+  it('shelter reduces harm', () => {
+    let unsheltered = 0;
+    let sheltered = 0;
+    const runs = 200;
+
+    for (let i = 0; i < runs; i++) {
+      const noShelter = makeCtx({ seed: i });
+      const noResult = resolveExposure(noShelter, {
+        type: 'cold',
+        intensity: 0.7,
+        shelterAvailable: false,
+        shelterQuality: 0,
+      });
+      unsheltered += noResult.caloriesCost;
+
+      const withShelter = makeCtx({ seed: i });
+      const sResult = resolveExposure(withShelter, {
+        type: 'cold',
+        intensity: 0.7,
+        shelterAvailable: true,
+        shelterQuality: 0.8,
+      });
+      sheltered += sResult.caloriesCost;
+    }
+
+    expect(unsheltered).toBeGreaterThan(sheltered);
+  });
+
+  it('cold exposure produces negative temperature shift', () => {
+    const ctx = makeCtx({});
+    const result = resolveExposure(ctx, {
+      type: 'cold',
+      intensity: 0.6,
+      shelterAvailable: false,
+      shelterQuality: 0,
+    });
+    expect(result.coreTemperatureShift).toBeLessThan(0);
+  });
+
+  it('heat exposure produces positive temperature shift', () => {
+    const ctx = makeCtx({});
+    const result = resolveExposure(ctx, {
+      type: 'heat',
+      intensity: 0.6,
+      shelterAvailable: false,
+      shelterQuality: 0,
+    });
+    expect(result.coreTemperatureShift).toBeGreaterThan(0);
+  });
+
+  it('poor body condition increases cold vulnerability', () => {
+    let wellFedCost = 0;
+    let emacCost = 0;
+    const runs = 200;
+
+    for (let i = 0; i < runs; i++) {
+      const wellFed = makeCtx({ bodyConditionScore: 5, seed: i });
+      wellFedCost += resolveExposure(wellFed, {
+        type: 'cold',
+        intensity: 0.6,
+        shelterAvailable: false,
+        shelterQuality: 0,
+      }).caloriesCost;
+
+      const emaciated = makeCtx({ bodyConditionScore: 1, seed: i });
+      emacCost += resolveExposure(emaciated, {
+        type: 'cold',
+        intensity: 0.6,
+        shelterAvailable: false,
+        shelterQuality: 0,
+      }).caloriesCost;
+    }
+
+    expect(emacCost).toBeGreaterThan(wellFedCost);
   });
 });

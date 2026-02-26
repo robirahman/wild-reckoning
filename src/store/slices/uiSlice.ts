@@ -7,6 +7,7 @@ export const createUISlice: GameSlice<UISlice> = (set, get) => ({
   ambientText: null,
   fastForward: false,
   turnResult: null,
+  instinctNudges: [],
 
   toggleFastForward: () => set({ fastForward: !get().fastForward }),
   
@@ -33,6 +34,7 @@ export const createUISlice: GameSlice<UISlice> = (set, get) => ({
   },
 
   setTurnResult: (result) => set({ turnResult: result, showingResults: true }),
+  setInstinctNudges: (nudges) => set({ instinctNudges: nudges }),
 
   returnToMenu: () => {
     // Note: deleteSaveGame is called in the main store or here if we import it

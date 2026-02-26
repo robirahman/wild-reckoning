@@ -1,0 +1,93 @@
+.nudgeRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  padding: var(--space-xs) 0;
+}
+
+.nudgeBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 2px var(--space-sm);
+  border: 1px solid var(--color-border);
+  border-radius: 3px;
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  color: var(--color-text);
+  cursor: default;
+  position: relative;
+  transition: border-color 0.15s;
+}
+
+.nudgeBadge:hover {
+  border-color: var(--color-text-muted);
+}
+
+.nudgeBadgeLow {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.nudgeBadgeMedium {
+  background: rgba(200, 170, 80, 0.08);
+  border-color: rgba(200, 170, 80, 0.3);
+}
+
+.nudgeBadgeHigh {
+  background: rgba(200, 100, 80, 0.1);
+  border-color: rgba(200, 100, 80, 0.35);
+}
+
+.nudgeLabel {
+  font-weight: 600;
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+}
+
+.nudgeArrow {
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  opacity: 0.7;
+}
+
+.nudgeTooltip {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 0;
+  width: 240px;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-panel-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  z-index: 20;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: var(--color-text-muted);
+}
+
+.nudgeBadge:hover .nudgeTooltip {
+  display: block;
+}
+
+.tooltipBehavior {
+  margin-top: var(--space-xs);
+  padding-top: var(--space-xs);
+  border-top: 1px solid var(--color-border);
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+  .nudgeBadge {
+    min-height: 36px;
+  }
+
+  .nudgeTooltip {
+    width: 200px;
+    left: -20px;
+  }
+}
