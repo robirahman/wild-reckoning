@@ -101,7 +101,7 @@ export function DeathScreen() {
       {/* ── Survival Grade ── */}
       <div className={styles.fitnessBox}>
         <div className={styles.fitnessLabel}>
-          Evolutionary Success Grade
+          Life Success Grade
         </div>
         <div className={styles.gradeLetter} style={{ color: grade.color }}>
           {grade.letter}
