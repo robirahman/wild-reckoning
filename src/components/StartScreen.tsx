@@ -35,7 +35,7 @@ export function StartScreen() {
   const startGame = useGameStore((s) => s.startGame);
   const resumeGame = useGameStore((s) => s.resumeGame);
   const allBundles = getAllSpeciesBundles();
-  const [saveExists] = useState(() => hasSaveGame());
+  const saveExists = hasSaveGame();
   const [subScreen, setSubScreen] = useState<'none' | 'scenarios' | 'encyclopedia' | 'comparison'>('none');
   const unlockedAchievements = useAchievementStore((s) => s.unlockedIds);
   const speciesPlayed = useAchievementStore((s) => s.speciesPlayed);

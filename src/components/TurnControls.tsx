@@ -1,10 +1,24 @@
 import { useGameEngine } from '../hooks/useGameEngine';
 import { useGameStore } from '../store/gameStore';
+import { saveGame } from '../store/persistence';
 
 export function TurnControls() {
   const { confirmChoices, hasPendingChoices } = useGameEngine();
   const fastForward = useGameStore((s) => s.fastForward);
   const toggleFastForward = useGameStore((s) => s.toggleFastForward);
+  const returnToMenu = useGameStore((s) => s.returnToMenu);
+
+  const handleQuit = () => {
+    if (confirm('Are you sure you want to quit? Your progress will be saved.')) {
+      saveGame(useGameStore.getState());
+      returnToMenu();
+    }
+  };
+
+  const handleSave = () => {
+    saveGame(useGameStore.getState());
+    alert('Game saved successfully.');
+  };
 
   return (
     <div style={{
@@ -30,6 +44,38 @@ export function TurnControls() {
           }}
         >
           {fastForward ? '▶▶ Fast Forward Active (12x)' : '▶ Normal Speed'}
+        </button>
+
+        <button
+          onClick={handleSave}
+          style={{
+            padding: '6px 12px',
+            fontSize: '0.8rem',
+            fontFamily: 'var(--font-ui)',
+            background: 'var(--color-panel-bg)',
+            border: '1px solid var(--color-border)',
+            borderRadius: 4,
+            cursor: 'pointer',
+            color: 'var(--color-text-muted)',
+          }}
+        >
+          Save Game
+        </button>
+
+        <button
+          onClick={handleQuit}
+          style={{
+            padding: '6px 12px',
+            fontSize: '0.8rem',
+            fontFamily: 'var(--font-ui)',
+            background: 'var(--color-panel-bg)',
+            border: '1px solid var(--color-border)',
+            borderRadius: 4,
+            cursor: 'pointer',
+            color: 'var(--color-danger)',
+          }}
+        >
+          Quit
         </button>
       </div>
 
