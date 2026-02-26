@@ -2,9 +2,17 @@ import type { SimulationTrigger, SimulationContext, SimulationOutcome, Simulatio
 import type { HarmEvent } from '../../harm/types';
 import { StatId, computeEffectiveValue } from '../../../types/stats';
 
+// Caloric density: kcal-units per lb of body weight (from DEER_METABOLISM)
+const KCAL_PER_LB = 35;
+
 // ══════════════════════════════════════════════════
 //  SEASONAL BROWSE — passive foraging based on season/terrain
 // ══════════════════════════════════════════════════
+//
+// With the physiology engine, baseline foraging happens automatically each turn.
+// This trigger provides BONUS or PENALTY calories on top of the baseline,
+// representing notably good or bad foraging conditions. It also carries
+// the narrative description of this turn's foraging experience.
 
 export const seasonalBrowseTrigger: SimulationTrigger = {
   id: 'sim-seasonal-browse',
@@ -36,47 +44,46 @@ export const seasonalBrowseTrigger: SimulationTrigger = {
     const isWinter = season === 'winter';
     const isSpring = season === 'spring';
     const isSummer = season === 'summer';
-    const isAutumn = season === 'autumn';
 
-    // Forage quality determines weight gain/loss
-    let weightChange: number;
+    // Bonus/penalty calories on top of baseline physiology engine foraging.
+    // Positive = found extra food. Negative = conditions worse than average.
+    let bonusCalories: number;
     let homChange: number;
     let narrative: string;
 
     if (isWinter) {
-      // Winter: scarce browse, weight loss
       const severity = terrain === 'mountain' ? 'harsh' : ctx.currentWeather?.type === 'snow' ? 'moderate' : 'mild';
 
       if (severity === 'harsh') {
-        weightChange = -3;
+        bonusCalories = -80; // Foraging conditions far below baseline
         homChange = 6;
         narrative = 'The browse is gone. Every twig within reach has been stripped, every bark surface gnawed to pale wood. You scrape at frozen lichen with your teeth, but the calories don\'t come close to what your body burns just staying warm. Your ribs are becoming visible beneath your winter coat.';
       } else if (severity === 'moderate') {
-        weightChange = -1;
+        bonusCalories = -30;
         homChange = 3;
         narrative = 'You paw through the snow to reach the dead grass beneath, nosing aside frozen leaves to find the withered remains of summer browse. It\'s enough to quiet the ache in your gut, but just barely. Each mouthful costs almost as many calories to dig up as it provides.';
       } else {
-        weightChange = 0;
+        bonusCalories = 0; // Baseline winter conditions (engine handles the scarcity)
         homChange = 2;
         narrative = 'The cedars and hemlock still carry their needles, and you strip the lower branches with methodical efficiency. The browse is resinous and bitter, nutritionally poor, but it fills your rumen and keeps the worst of the hunger at bay.';
       }
     } else if (isSpring) {
-      weightChange = 2;
+      bonusCalories = 50; // Rich spring growth exceeds baseline
       homChange = -5;
       narrative = 'The forest is waking. New buds swell on every branch, and the first green shoots push through the leaf litter with urgent vitality. You graze on tender spring growth — dandelion, fresh clover, young maple leaves — each mouthful a concentrated burst of the protein and minerals your winter-depleted body craves. You can feel the recovery beginning, weight returning to your frame.';
     } else if (isSummer) {
-      weightChange = 2;
+      bonusCalories = 40; // Abundant summer food
       homChange = -4;
       narrative = 'The forest is thick with food. Lush browse fills every layer — wildflowers in the clearings, succulent forbs along the creek, mushrooms pushing up through the damp leaf litter. You eat with the unhurried satisfaction of an animal surrounded by abundance, your rumen working steadily through the rich summer diet.';
     } else {
       // Autumn: mast crop, preparation for winter
       const hasMast = ctx.rng.chance(0.4);
       if (hasMast) {
-        weightChange = 4;
+        bonusCalories = 100; // Mast year = exceptional caloric windfall
         homChange = -6;
         narrative = 'Acorns blanket the forest floor in a dense, copper-brown carpet. The oaks have produced abundantly this year, and you crunch through them with steady, rhythmic feeding. The tannin-rich nuts are building fat reserves along your ribs and haunches — an invisible armor against the approaching winter.';
       } else {
-        weightChange = 1;
+        bonusCalories = 20;
         homChange = -2;
         narrative = 'The autumn browse is adequate but not abundant. You work through the available forage — dried grasses, fallen fruit, the last of the season\'s forbs — storing what calories you can before winter strips the forest bare.';
       }
@@ -87,9 +94,9 @@ export const seasonalBrowseTrigger: SimulationTrigger = {
       statEffects: [
         { stat: StatId.HOM, amount: homChange, label: homChange >= 0 ? '+HOM' : '-HOM' },
       ],
-      consequences: [
-        { type: 'modify_weight', amount: weightChange },
-      ],
+      consequences: bonusCalories !== 0
+        ? [{ type: 'add_calories' as const, amount: bonusCalories, source: 'seasonal-browse' }]
+        : [],
       narrativeText: narrative,
     };
   },
@@ -181,7 +188,7 @@ export const riskyForagingTrigger: SimulationTrigger = {
                 { stat: StatId.NOV, amount: 3, duration: 2, label: '+NOV' },
               ],
               consequences: [
-                { type: 'modify_weight', amount: 3 },
+                { type: 'add_calories' as const, amount: 3 * KCAL_PER_LB, source: 'orchard-raid' },
                 ...(caught ? [{ type: 'death' as const, cause: 'Shot by farmer while raiding orchard' }] : []),
               ],
             };
@@ -220,7 +227,7 @@ export const riskyForagingTrigger: SimulationTrigger = {
                 { stat: StatId.HOM, amount: 8, duration: 3, label: '+HOM' },
               ],
               consequences: [
-                { type: 'modify_weight', amount: 5 },
+                { type: 'add_calories' as const, amount: 5 * KCAL_PER_LB, source: 'cornfield-gorge' },
               ],
             };
           },
@@ -238,7 +245,7 @@ export const riskyForagingTrigger: SimulationTrigger = {
                 { stat: StatId.HOM, amount: -3, label: '-HOM' },
               ],
               consequences: [
-                { type: 'modify_weight', amount: 2 },
+                { type: 'add_calories' as const, amount: 2 * KCAL_PER_LB, source: 'cornfield-cautious' },
               ],
             };
           },
@@ -263,7 +270,7 @@ export const riskyForagingTrigger: SimulationTrigger = {
                   { stat: StatId.HEA, amount: -5, label: '-HEA' },
                 ],
                 consequences: [
-                  { type: 'modify_weight', amount: -2 },
+                  { type: 'add_calories' as const, amount: -2 * KCAL_PER_LB, source: 'toxic-mushroom' },
                 ],
                 footnote: '(Poisoned by toxic mushroom)',
               };
@@ -339,7 +346,8 @@ export const toxicPlantTrigger: SimulationTrigger = {
         { stat: StatId.HEA, amount: -6, label: '-HEA' },
       ],
       consequences: [
-        { type: 'modify_weight', amount: -3 },
+        // Poisoning causes caloric loss (vomiting, diarrhea, metabolic disruption)
+        { type: 'add_calories' as const, amount: -3 * KCAL_PER_LB, source: 'plant-poisoning' },
       ],
       narrativeText: 'The plant looked like everything else — green, leafy, unremarkable. You were already chewing before the taste turned wrong: bitter, astringent, with a chemical bite that made your tongue go numb. You spit it out, but some has already gone down. Within minutes your stomach cramps violently and the world tilts. Something in those leaves is fighting your body from the inside.',
     };

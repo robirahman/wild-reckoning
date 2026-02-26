@@ -14,6 +14,8 @@ import { tickPhysiology } from '../../engine/PhysiologySystem';
 import type { GameFlag } from '../../types/flags';
 import { resolveHarm } from '../../simulation/harm/resolver';
 import { convertHarmToLegacy } from '../../simulation/harm/converter';
+import { tickPhysiologyEngine } from '../../simulation/physiology/engine';
+import { getMetabolismConfig } from '../../simulation/physiology/configs';
 
 export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
   currentEvents: [],
@@ -147,6 +149,21 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
         newFlags.delete(consequence.flag as GameFlag);
         animal.flags = newFlags;
         set({ animal });
+        break;
+      }
+      case 'add_calories': {
+        if (animal.physiologyState) {
+          animal.physiologyState = {
+            ...animal.physiologyState,
+            caloricIntakeThisTurn: animal.physiologyState.caloricIntakeThisTurn + consequence.amount,
+          };
+          set({ animal });
+        } else {
+          // Fallback for non-simulation species: convert calories to weight
+          // using approximate density of 35 kcal-units per lb
+          animal.weight = Math.max(config.weight.minFloor, animal.weight + consequence.amount / 35);
+          set({ animal });
+        }
         break;
       }
       case 'apply_harm': {
@@ -418,12 +435,8 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
         }
       }
 
-      // Seasonal weight
-      let seasonalWeightChange = config.seasonalWeight[newTime.season]
-        + config.seasonalWeight.foragingBonus * state.behavioralSettings.foraging
-        + (newWeather ? computeWeatherPenalty(newWeather).weightChange * massScale : 0);
-
-      // Map Node Integration
+      // ── Map Node Integration (world state: scent, noise, resource depletion) ──
+      let currentNode: { type: string; resources: { food: number; cover: number } } | undefined;
       if (currentMap) {
         currentMap = {
           ...currentMap,
@@ -441,6 +454,7 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
 
         const node = currentMap.nodes.find(n => n.id === currentMap!.currentLocationId);
         if (node) {
+          currentNode = node;
           if (node.noiseLevel > 50) {
             tickedStats = addModifier(tickedStats, {
               id: 'noise-stress',
@@ -452,16 +466,11 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
             });
           }
 
-          const foodModifier = (node.resources.food - 50) / 50 * 0.5 * massScale;
-          seasonalWeightChange += foodModifier;
-          const coverModifier = (node.resources.cover - 50) / 100 * 0.2 * massScale;
-          seasonalWeightChange += coverModifier;
-          
           const depletion = state.behavioralSettings.foraging * 0.5;
           currentMap = {
             ...currentMap,
-            nodes: currentMap.nodes.map(n => 
-              n.id === currentMap!.currentLocationId 
+            nodes: currentMap.nodes.map(n =>
+              n.id === currentMap!.currentLocationId
                 ? { ...n, resources: { ...n.resources, food: Math.max(0, n.resources.food - depletion) } }
                 : n
             )
@@ -490,38 +499,94 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
         }
       }
 
-      if (climate) {
-        const temp = climate.temperatureByMonth[newTime.monthIndex];
-        if (temp < 20) {
-          seasonalWeightChange -= (20 - temp) * 0.05 * massScale;
+      // ── Weight Calculation ──
+      let seasonalWeightChange: number;
+      const metabolismConfig = config.metabolismId ? getMetabolismConfig(config.metabolismId) : undefined;
+
+      if (metabolismConfig && currentAnimal.physiologyState) {
+        // Simulation mode: physiology engine computes weight from caloric balance
+        const isPregnant = currentReproduction.type === 'iteroparous' && 'pregnancy' in currentReproduction && !!currentReproduction.pregnancy;
+        const isLactating = currentAnimal.flags.has('fawns-dependent' as GameFlag);
+
+        const physResult = tickPhysiologyEngine({
+          animal: currentAnimal,
+          time: newTime,
+          weather: newWeather,
+          config,
+          metabolismConfig,
+          behavior: state.behavioralSettings,
+          regionDef,
+          currentNodeType: currentNode?.type,
+          currentNodeResources: currentNode?.resources,
+          isPregnant,
+          isLactating,
+          rng: state.rng,
+          ffMult: state.fastForward ? 12 : 1,
+        });
+
+        seasonalWeightChange = physResult.weightChange;
+        currentAnimal.physiologyState = physResult.physiology;
+
+        // Apply physiology stat modifiers
+        for (const mod of physResult.modifiers) {
+          tickedStats = addModifier(tickedStats, mod);
         }
-      }
 
-      if (TERRITORIAL_SPECIES.has(currentAnimal.speciesId) && state.territory.established) {
-        seasonalWeightChange *= territoryWeightModifier(state.territory);
-      }
-
-      if (config.thermalProfile && newWeather) {
-        const tp = config.thermalProfile;
-        const intensity = newWeather.intensity;
-        if (tp.type === 'ectotherm') {
-          if (newWeather.type === 'heat_wave') seasonalWeightChange -= tp.heatPenalty * intensity;
-          if (newWeather.type === 'frost' || newWeather.type === 'blizzard') seasonalWeightChange += tp.coldBenefit * intensity;
-        } else {
-          if (newWeather.type === 'blizzard' || newWeather.type === 'frost') seasonalWeightChange -= tp.coldPenalty * intensity;
-          if (newWeather.type === 'heat_wave') seasonalWeightChange -= tp.heatPenalty * intensity;
+        // Physiology death check
+        if (physResult.deathCause && currentAnimal.alive) {
+          currentAnimal.alive = false;
+          currentAnimal.causeOfDeath = physResult.deathCause;
         }
-      }
 
-      if (seasonalWeightChange < 0) {
-        seasonalWeightChange *= difficultyMult.weightLossFactor;
+        // Physiology narratives are available on the last iteration for display
+        // (stored on physiologyState; TurnProcessor reads them for turn results)
       } else {
-        seasonalWeightChange *= difficultyMult.weightGainFactor;
-        
-        // Asymptotic Growth Mechanic:
-        // Dampen weight gain as the animal approaches its maximum biological limit.
-        const growthSaturation = Math.pow(currentAnimal.weight / config.weight.maximumBiologicalWeight, 2);
-        seasonalWeightChange *= Math.max(0, 1 - growthSaturation);
+        // Legacy mode: scattered weight formula
+        seasonalWeightChange = config.seasonalWeight[newTime.season]
+          + config.seasonalWeight.foragingBonus * state.behavioralSettings.foraging
+          + (newWeather ? computeWeatherPenalty(newWeather).weightChange * massScale : 0);
+
+        // Legacy node food/cover weight contributions
+        if (currentNode) {
+          const foodModifier = (currentNode.resources.food - 50) / 50 * 0.5 * massScale;
+          seasonalWeightChange += foodModifier;
+          const coverModifier = (currentNode.resources.cover - 50) / 100 * 0.2 * massScale;
+          seasonalWeightChange += coverModifier;
+        }
+
+        if (climate) {
+          const temp = climate.temperatureByMonth[newTime.monthIndex];
+          if (temp < 20) {
+            seasonalWeightChange -= (20 - temp) * 0.05 * massScale;
+          }
+        }
+
+        if (TERRITORIAL_SPECIES.has(currentAnimal.speciesId) && state.territory.established) {
+          seasonalWeightChange *= territoryWeightModifier(state.territory);
+        }
+
+        if (config.thermalProfile && newWeather) {
+          const tp = config.thermalProfile;
+          const intensity = newWeather.intensity;
+          if (tp.type === 'ectotherm') {
+            if (newWeather.type === 'heat_wave') seasonalWeightChange -= tp.heatPenalty * intensity;
+            if (newWeather.type === 'frost' || newWeather.type === 'blizzard') seasonalWeightChange += tp.coldBenefit * intensity;
+          } else {
+            if (newWeather.type === 'blizzard' || newWeather.type === 'frost') seasonalWeightChange -= tp.coldPenalty * intensity;
+            if (newWeather.type === 'heat_wave') seasonalWeightChange -= tp.heatPenalty * intensity;
+          }
+        }
+
+        if (seasonalWeightChange < 0) {
+          seasonalWeightChange *= difficultyMult.weightLossFactor;
+        } else {
+          seasonalWeightChange *= difficultyMult.weightGainFactor;
+
+          // Asymptotic Growth Mechanic:
+          // Dampen weight gain as the animal approaches its maximum biological limit.
+          const growthSaturation = Math.pow(currentAnimal.weight / config.weight.maximumBiologicalWeight, 2);
+          seasonalWeightChange *= Math.max(0, 1 - growthSaturation);
+        }
       }
 
       const newWeight = Math.max(config.weight.minFloor, currentAnimal.weight + seasonalWeightChange);

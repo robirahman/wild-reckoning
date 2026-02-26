@@ -180,6 +180,9 @@ export interface SpeciesConfig {
   /** Anatomy definition ID for the simulation layer. If set, body state tracking is enabled. */
   anatomyId?: string;
 
+  /** Metabolism config ID for the physiology engine. If set, continuous physiology ticking is enabled. */
+  metabolismId?: string;
+
   /** Per-turn passive weight change by season. Positive = gain, negative = loss. */
   seasonalWeight: {
     spring: number;

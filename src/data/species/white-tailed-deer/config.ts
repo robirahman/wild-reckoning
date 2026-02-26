@@ -9,6 +9,7 @@ export const WHITE_TAILED_DEER_CONFIG: SpeciesConfig = {
     'A medium-sized ungulate native to the Americas. Adaptable and widespread, but vulnerable to predation, parasites, and the brutal realities of a Minnesota winter.',
   diet: 'herbivore',
   anatomyId: 'white-tailed-deer',
+  metabolismId: 'white-tailed-deer',
   defaultRegion: 'northern-minnesota',
   defaultRegionDisplayName: 'Northern Minnesota',
 

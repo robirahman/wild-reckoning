@@ -8,6 +8,8 @@ import { INITIAL_SOCIAL_STATE } from '../../types/social';
 import { INITIAL_ITEROPAROUS_STATE, INITIAL_SEMELPAROUS_STATE } from '../../types/reproduction';
 import { getAnatomyDefinition } from '../../simulation/anatomy/definitions';
 import { initializeAnatomy } from '../../simulation/anatomy/bodyState';
+import { getMetabolismConfig } from '../../simulation/physiology/configs';
+import { initializePhysiology } from '../../simulation/physiology/initialize';
 
 export function createInitialAnimal(config: SpeciesConfig, backstory: Backstory, sex: 'male' | 'female'): AnimalState {
   const baseBases: Record<StatId, number> = { ...config.baseStats };
@@ -22,6 +24,11 @@ export function createInitialAnimal(config: SpeciesConfig, backstory: Backstory,
   // Initialize anatomy-based body state if species has an anatomy definition
   const anatomyDef = config.anatomyId ? getAnatomyDefinition(config.anatomyId) : undefined;
   const anatomy = anatomyDef ? initializeAnatomy(anatomyDef) : undefined;
+
+  // Initialize physiology state if species has a metabolism config
+  const startWeight = sex === 'female' ? config.startingWeight.female : config.startingWeight.male;
+  const hasMetabolism = config.metabolismId ? getMetabolismConfig(config.metabolismId) : undefined;
+  const physiology = hasMetabolism ? initializePhysiology(config, startWeight) : undefined;
 
   return {
     speciesId: config.id,
@@ -46,6 +53,7 @@ export function createInitialAnimal(config: SpeciesConfig, backstory: Backstory,
     bodyState: anatomy?.bodyState,
     anatomyIndex: anatomy?.index,
     debriefingLog: anatomy ? [] : undefined,
+    physiologyState: physiology,
   };
 }
 

@@ -9,6 +9,7 @@ import type { LifetimeStats } from './stats';
 import type { BodyState } from '../simulation/anatomy/bodyState';
 import type { AnatomyIndex } from '../simulation/anatomy/types';
 import type { DebriefingEntry } from '../simulation/narrative/types';
+import type { PhysiologyState } from '../simulation/physiology/types';
 
 export type Diet = 'herbivore' | 'carnivore' | 'omnivore';
 
@@ -142,4 +143,7 @@ export interface AnimalState {
   anatomyIndex?: AnatomyIndex;
   /** Debriefing log: clinical summaries of events, replayed at game over. */
   debriefingLog?: DebriefingEntry[];
+
+  /** Continuous physiology simulation state. Present only for species with metabolismId. */
+  physiologyState?: PhysiologyState;
 }
