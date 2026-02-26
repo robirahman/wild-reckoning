@@ -15,18 +15,18 @@ export interface AchievementDefinition {
 }
 
 const WEIGHT_THRESHOLDS: Record<string, { heavy: number; nearStarvation: number; unit: string }> = {
-  'white-tailed-deer': { heavy: 200, nearStarvation: 80, unit: 'lbs' },
-  'gray-wolf': { heavy: 120, nearStarvation: 40, unit: 'lbs' },
-  'african-elephant': { heavy: 14000, nearStarvation: 4000, unit: 'lbs' },
-  'polar-bear': { heavy: 1200, nearStarvation: 400, unit: 'lbs' },
-  'chinook-salmon': { heavy: 80, nearStarvation: 15, unit: 'lbs' },
-  'green-sea-turtle': { heavy: 500, nearStarvation: 100, unit: 'lbs' },
-  'common-octopus': { heavy: 100, nearStarvation: 20, unit: 'lbs' },
-  'poison-dart-frog': { heavy: 0.06, nearStarvation: 0.01, unit: 'lbs' },
-  'monarch-butterfly': { heavy: 0.001, nearStarvation: 0.0002, unit: 'lbs' },
-  'honeybee-worker': { heavy: 0.0003, nearStarvation: 0.00005, unit: 'lbs' },
-  'fig-wasp': { heavy: 0.00001, nearStarvation: 0.000002, unit: 'lbs' },
-  'arctic-tern': { heavy: 0.3, nearStarvation: 0.15, unit: 'lbs' },
+  'white-tailed-deer': { heavy: 220, nearStarvation: 85, unit: 'lbs' },
+  'gray-wolf': { heavy: 130, nearStarvation: 45, unit: 'lbs' },
+  'african-elephant': { heavy: 15500, nearStarvation: 4500, unit: 'lbs' },
+  'polar-bear': { heavy: 1400, nearStarvation: 450, unit: 'lbs' },
+  'chinook-salmon': { heavy: 90, nearStarvation: 18, unit: 'lbs' },
+  'green-sea-turtle': { heavy: 550, nearStarvation: 120, unit: 'lbs' },
+  'common-octopus': { heavy: 110, nearStarvation: 25, unit: 'lbs' },
+  'poison-dart-frog': { heavy: 0.008, nearStarvation: 0.002, unit: 'lbs' },
+  'monarch-butterfly': { heavy: 0.0012, nearStarvation: 0.0003, unit: 'lbs' },
+  'honeybee-worker': { heavy: 0.0004, nearStarvation: 0.00008, unit: 'lbs' },
+  'fig-wasp': { heavy: 0.00000006, nearStarvation: 0.00000001, unit: 'lbs' },
+  'arctic-tern': { heavy: 0.32, nearStarvation: 0.14, unit: 'lbs' },
 };
 
 export const ACHIEVEMENTS: AchievementDefinition[] = [
