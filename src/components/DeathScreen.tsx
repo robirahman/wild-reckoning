@@ -138,6 +138,51 @@ export function DeathScreen() {
         <div><strong>Injuries sustained:</strong> {animal.injuries.length}</div>
       </div>
 
+      {/* ── Lifetime Achievements ── */}
+      <div className={styles.lifetimeStatsPanel}>
+        <div className={styles.panelHeading}>
+          Lifetime Achievements
+        </div>
+        <div className={styles.statsGrid}>
+          {animal.lifetimeStats.friendsMade > 0 && (
+            <div className={styles.statItem}>
+              <span className={styles.statValue}>{animal.lifetimeStats.friendsMade}</span>
+              <span className={styles.statLabel}>Friends Made</span>
+            </div>
+          )}
+          {animal.lifetimeStats.rivalsDefeated > 0 && (
+            <div className={styles.statItem}>
+              <span className={styles.statValue}>{animal.lifetimeStats.rivalsDefeated}</span>
+              <span className={styles.statLabel}>Rivals Defeated</span>
+            </div>
+          )}
+          {animal.lifetimeStats.predatorsEvaded > 0 && (
+            <div className={styles.statItem}>
+              <span className={styles.statValue}>{animal.lifetimeStats.predatorsEvaded}</span>
+              <span className={styles.statLabel}>Predators Evaded</span>
+            </div>
+          )}
+          {animal.lifetimeStats.preyEaten > 0 && (
+            <div className={styles.statItem}>
+              <span className={styles.statValue}>{animal.lifetimeStats.preyEaten}</span>
+              <span className={styles.statLabel}>Prey Eaten</span>
+            </div>
+          )}
+          <div className={styles.statItem}>
+            <span className={styles.statValue}>{animal.lifetimeStats.distanceTraveled}</span>
+            <span className={styles.statLabel}>Map Nodes Traversed</span>
+          </div>
+          <div className={styles.statItem}>
+            <span className={styles.statValue}>{animal.lifetimeStats.weatherEventsSurvived}</span>
+            <span className={styles.statLabel}>Extreme Weather Turns</span>
+          </div>
+          <div className={styles.statItem}>
+            <span className={styles.statValue}>{animal.lifetimeStats.regionsVisited.length}</span>
+            <span className={styles.statLabel}>Regions Explored</span>
+          </div>
+        </div>
+      </div>
+
       {/* ── Semelparous Egg Breakdown ── */}
       {isSemelparous && reproduction.spawned && (
         <div className={styles.detailPanelEggs}>

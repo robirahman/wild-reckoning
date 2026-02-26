@@ -5,6 +5,7 @@ import type { Season } from './world';
 import type { Mutation } from './evolution';
 import type { SocialState } from './social';
 import type { GameFlag } from './flags';
+import type { LifetimeStats } from './stats';
 
 export type Diet = 'herbivore' | 'carnivore' | 'omnivore';
 
@@ -129,4 +130,5 @@ export interface AnimalState {
     starvation: number; // 0-100
     panic: number; // 0-100
   };
+  lifetimeStats: LifetimeStats;
 }

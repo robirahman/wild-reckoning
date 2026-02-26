@@ -547,6 +547,13 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
         weight: newWeight,
         region: newRegion,
         flags: newFlags,
+        lifetimeStats: {
+          ...currentAnimal.lifetimeStats,
+          maxWeight: Math.max(currentAnimal.lifetimeStats.maxWeight, newWeight),
+          weatherEventsSurvived: (newWeather && ['blizzard', 'heat_wave', 'drought_conditions', 'frost'].includes(newWeather.type))
+            ? currentAnimal.lifetimeStats.weatherEventsSurvived + 1
+            : currentAnimal.lifetimeStats.weatherEventsSurvived,
+        }
       };
       currentTime = newTime;
       currentWeather = newWeather;

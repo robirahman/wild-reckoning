@@ -8,6 +8,7 @@ import { deleteSaveGame } from '../persistence';
 import { createInitialAnimal, initialReproduction } from './helpers';
 import { generateRegionMap } from '../../engine/MapSystem';
 import { getSpeciesBundle } from '../../data/species';
+import { INITIAL_LIFETIME_STATS } from '../../types/stats';
 
 export const createAnimalSlice: GameSlice<AnimalSlice> = (set, get) => {
   const defaultBundle = getSpeciesBundle('white-tailed-deer');
@@ -19,6 +20,7 @@ export const createAnimalSlice: GameSlice<AnimalSlice> = (set, get) => {
     actionsPerformed: [],
     evolution: { activeMutations: [], availableChoices: [], generationCount: 0, lineageHistory: [] },
     lineage: null,
+    lifetimeStats: { ...INITIAL_LIFETIME_STATS, regionsVisited: [defaultBundle.config.defaultRegion] },
 
     updateBehavioralSetting: (key, value) => {
       set({
@@ -151,12 +153,20 @@ export const createAnimalSlice: GameSlice<AnimalSlice> = (set, get) => {
       const newFlags = new Set(state.animal.flags);
       newFlags.add('just-moved');
       
+      const regions = new Set(state.animal.lifetimeStats.regionsVisited);
+      regions.add(state.animal.region);
+
       set({ 
         map: newMap, 
         animal: { 
           ...state.animal, 
           flags: newFlags,
-          energy: Math.max(0, state.animal.energy - scaling.movementCost) 
+          energy: Math.max(0, state.animal.energy - scaling.movementCost),
+          lifetimeStats: {
+            ...state.animal.lifetimeStats,
+            distanceTraveled: state.animal.lifetimeStats.distanceTraveled + 1,
+            regionsVisited: Array.from(regions),
+          }
         } 
       });
     },

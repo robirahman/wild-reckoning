@@ -18,7 +18,7 @@ import type { WeatherState } from '../../engine/WeatherSystem';
 import type { EvolutionState } from '../../types/evolution';
 import type { Rng } from '../../engine/RandomUtils';
 import type { LineageTraits } from '../../types/lineage';
-import { StatId } from '../../types/stats';
+import { StatId, type LifetimeStats } from '../../types/stats';
 
 export type GameSlice<T> = StateCreator<GameState, [['zustand/devtools', never]], [], T>;
 
@@ -64,6 +64,7 @@ export interface AnimalSlice {
   actionsPerformed: string[];
   evolution: EvolutionState;
   lineage: LineageTraits | null;
+  lifetimeStats: LifetimeStats;
 
   updateBehavioralSetting: (key: keyof BehavioralSettings, value: 1 | 2 | 3 | 4 | 5) => void;
   performAction: (actionId: string) => void;

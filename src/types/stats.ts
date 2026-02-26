@@ -135,3 +135,27 @@ export function computeEffectiveValue(stat: StatValue): number {
   const total = stat.base + stat.modifiers.reduce((sum, m) => sum + m.amount, 0);
   return Math.max(0, Math.min(100, total));
 }
+
+// ── Lifetime Stats (for Game Over screen) ──
+
+export interface LifetimeStats {
+  friendsMade: number;
+  rivalsDefeated: number;
+  predatorsEvaded: number;
+  preyEaten: number;
+  distanceTraveled: number;
+  weatherEventsSurvived: number;
+  maxWeight: number;
+  regionsVisited: string[]; // Use array for easier serialization
+}
+
+export const INITIAL_LIFETIME_STATS: LifetimeStats = {
+  friendsMade: 0,
+  rivalsDefeated: 0,
+  predatorsEvaded: 0,
+  preyEaten: 0,
+  distanceTraveled: 0,
+  weatherEventsSurvived: 0,
+  maxWeight: 0,
+  regionsVisited: [],
+};

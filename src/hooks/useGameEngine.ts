@@ -262,11 +262,39 @@ export function useGameEngine() {
     }
     result.turnResult.statDelta = statDelta;
 
-    // Track NPC encounters based on event tags
+    // Track NPC encounters and lifetime stats based on event tags/results
     const encounterState = useGameStore.getState();
     let updatedNPCs = encounterState.npcs;
-    for (const event of state.currentEvents) {
+    let predatorsEvaded = 0;
+    let preyEaten = 0;
+    let rivalsDefeated = 0;
+
+    for (const outcome of result.turnResult.eventOutcomes) {
+      const event = state.currentEvents.find(e => e.definition.id === outcome.eventId);
+      if (!event) continue;
+
       const tags = event.definition.tags;
+      
+      // Predators evaded
+      if (tags.includes('predator') && outcome.deathRollSurvived === true) {
+        predatorsEvaded++;
+      }
+
+      // Prey eaten (if foraging result was positive weight and species is not pure herbivore)
+      if (tags.includes('foraging') && outcome.consequences.some(c => c.type === 'modify_weight' && c.amount > 0)) {
+        if (state.speciesBundle.config.diet !== 'herbivore') {
+          preyEaten++;
+        }
+      }
+
+      // Rivals defeated (if outcome tags or choices imply victory)
+      if (tags.includes('rival') && (outcome.choiceId?.includes('fight') || outcome.choiceId?.includes('challenge'))) {
+        // Assume success if no major injury consequences
+        if (!outcome.consequences.some(c => c.type === 'add_injury' && (c.severity ?? 0) > 0)) {
+          rivalsDefeated++;
+        }
+      }
+
       const npcType = tags.includes('predator') ? 'predator'
         : tags.includes('rival') ? 'rival'
         : tags.includes('ally') ? 'ally'
@@ -279,10 +307,31 @@ export function useGameEngine() {
         }
       }
     }
-    // Progress NPC relationships based on encounter counts
+
+    // Progress NPC relationships and count friends
+    const previousFriends = encounterState.npcs.filter(n => n.relationship === 'friendly' || n.relationship === 'bonded').length;
     updatedNPCs = progressRelationship(updatedNPCs);
+    const currentFriends = updatedNPCs.filter(n => n.relationship === 'friendly' || n.relationship === 'bonded').length;
+    const newFriendsMade = Math.max(0, currentFriends - previousFriends);
+
     if (updatedNPCs !== encounterState.npcs) {
       store.setNPCs(updatedNPCs);
+    }
+
+    // Apply accumulated lifetime stats
+    if (predatorsEvaded > 0 || preyEaten > 0 || rivalsDefeated > 0 || newFriendsMade > 0) {
+      useGameStore.setState({
+        animal: {
+          ...useGameStore.getState().animal,
+          lifetimeStats: {
+            ...useGameStore.getState().animal.lifetimeStats,
+            predatorsEvaded: useGameStore.getState().animal.lifetimeStats.predatorsEvaded + predatorsEvaded,
+            preyEaten: useGameStore.getState().animal.lifetimeStats.preyEaten + preyEaten,
+            rivalsDefeated: useGameStore.getState().animal.lifetimeStats.rivalsDefeated + rivalsDefeated,
+            friendsMade: useGameStore.getState().animal.lifetimeStats.friendsMade + newFriendsMade,
+          }
+        }
+      });
     }
 
     // Show the turn results screen

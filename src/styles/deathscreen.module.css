@@ -118,6 +118,48 @@
   line-height: 1.8;
 }
 
+.lifetimeStatsPanel {
+  padding: 20px 24px;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  background: var(--color-panel-bg);
+  text-align: left;
+  margin-bottom: 32px;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: 6px;
+}
+
+.statValue {
+  font-size: 1.5rem;
+  font-weight: 800;
+  font-family: var(--font-ui);
+  color: var(--color-accent);
+}
+
+.statLabel {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+  font-weight: 600;
+  margin-top: 4px;
+}
+
 .panelHeading {
   font-weight: 600;
   margin-bottom: 8px;

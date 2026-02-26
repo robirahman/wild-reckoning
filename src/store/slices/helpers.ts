@@ -2,7 +2,7 @@ import type { AnimalState, Backstory } from '../../types/species';
 import type { SpeciesConfig } from '../../types/speciesConfig';
 import type { ReproductionState } from '../../types/reproduction';
 import type { GameFlag } from '../../types/flags';
-import { StatId } from '../../types/stats';
+import { StatId, INITIAL_LIFETIME_STATS } from '../../types/stats';
 import { createStatBlock } from '../../engine/StatCalculator';
 import { INITIAL_SOCIAL_STATE } from '../../types/social';
 import { INITIAL_ITEROPAROUS_STATE, INITIAL_SEMELPAROUS_STATE } from '../../types/reproduction';
@@ -36,6 +36,7 @@ export function createInitialAnimal(config: SpeciesConfig, backstory: Backstory,
     perceptionRange: 1,
     nutrients: { minerals: 80, vitamins: 80 },
     physiologicalStress: { hypothermia: 0, starvation: 0, panic: 0 },
+    lifetimeStats: { ...INITIAL_LIFETIME_STATS, regionsVisited: [config.defaultRegion] },
   };
 }
 
