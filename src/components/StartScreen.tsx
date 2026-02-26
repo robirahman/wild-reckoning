@@ -16,7 +16,13 @@ import { SCENARIOS } from '../data/scenarios';
 import { ThemeToggle } from './ThemeToggle';
 import styles from '../styles/startscreen.module.css';
 
-function isSpeciesUnlocked(speciesId: string, unlockedAchievements: Set<string>, speciesPlayed: Set<string>): boolean {
+function isSpeciesUnlocked(
+  speciesId: string, 
+  unlockedAchievements: Set<string>, 
+  speciesPlayed: Set<string>,
+  debugAllUnlocked: boolean
+): boolean {
+  if (debugAllUnlocked) return true;
   const unlock = SPECIES_UNLOCKS.find((u) => u.speciesId === speciesId);
   if (!unlock) return true; // No unlock requirement = always available
   if (unlock.requirement.type === 'default') return true;
@@ -39,6 +45,8 @@ export function StartScreen() {
   const [subScreen, setSubScreen] = useState<'none' | 'scenarios' | 'encyclopedia' | 'comparison'>('none');
   const unlockedAchievements = useAchievementStore((s) => s.unlockedIds);
   const speciesPlayed = useAchievementStore((s) => s.speciesPlayed);
+  const debugAllUnlocked = useAchievementStore((s) => s.debugAllUnlocked);
+  const toggleDebugAllUnlocked = useAchievementStore((s) => s.toggleDebugAllUnlocked);
 
   const [selectedSpeciesId, setSelectedSpeciesId] = useState(allBundles[0].config.id);
   const selectedBundle = allBundles.find((b) => b.config.id === selectedSpeciesId)!;
@@ -89,7 +97,16 @@ export function StartScreen() {
       <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 8 }}>
         <ThemeToggle />
       </div>
-      <h1 className={styles.title}>
+      <h1 
+        className={styles.title}
+        onClick={(e) => {
+          if (e.detail === 3) {
+            toggleDebugAllUnlocked();
+            alert(`Debug Mode: ${!debugAllUnlocked ? 'All Species Unlocked' : 'Standard Progression'}`);
+          }
+        }}
+        style={{ cursor: 'default', userSelect: 'none' }}
+      >
         Wild Reckoning
       </h1>
       <p className={styles.subtitle}>
@@ -110,7 +127,7 @@ export function StartScreen() {
         <h3 className={styles.sectionTitle}>Species</h3>
         <div className={styles.columnGroup}>
           {allBundles.map((bundle) => {
-            const unlocked = isSpeciesUnlocked(bundle.config.id, unlockedAchievements, speciesPlayed);
+            const unlocked = isSpeciesUnlocked(bundle.config.id, unlockedAchievements, speciesPlayed, debugAllUnlocked);
             const hint = getUnlockHint(bundle.config.id);
             const isSelected = selectedSpeciesId === bundle.config.id && unlocked;
 

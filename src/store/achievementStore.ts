@@ -6,10 +6,12 @@ interface AchievementState {
   unlockedIds: Set<string>;
   speciesPlayed: Set<string>;
   recentUnlock: string | null; // For toast display
+  debugAllUnlocked: boolean;
 
   unlock: (id: string) => void;
   recordSpeciesPlayed: (speciesId: string) => void;
   dismissToast: () => void;
+  toggleDebugAllUnlocked: () => void;
 }
 
 function loadFromStorage(): { unlockedIds: string[]; speciesPlayed: string[] } {
@@ -39,6 +41,7 @@ export const useAchievementStore = create<AchievementState>((set, get) => ({
   unlockedIds: new Set(initial.unlockedIds),
   speciesPlayed: new Set(initial.speciesPlayed),
   recentUnlock: null,
+  debugAllUnlocked: false,
 
   unlock(id) {
     const state = get();
@@ -60,5 +63,9 @@ export const useAchievementStore = create<AchievementState>((set, get) => ({
 
   dismissToast() {
     set({ recentUnlock: null });
+  },
+
+  toggleDebugAllUnlocked() {
+    set({ debugAllUnlocked: !get().debugAllUnlocked });
   },
 }));
