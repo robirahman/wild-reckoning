@@ -439,6 +439,7 @@ const deerEvents: GameEvent[] = [
     id: 'deer-bachelor-group',
     type: 'passive',
     category: 'social',
+    simulated: true,
     narrativeText:
       'You fall in with a loose band of bucks moving through the summer hardwoods — five of them, antlers still sheathed in velvet, their movements languid and companionable. There is no aggression here, not yet. The rut is months away and testosterone levels are low, so the hierarchy is casual, maintained by nothing more than body language and the memory of last autumn. You spar lightly with a young fork-horn, antlers clacking with the hollow sound of bone on bone, neither of you pressing the advantage. This is practice, not war. The brotherhood will shatter when the does come into estrus, but for now it holds, warm and uncomplicated.',
     statEffects: [
@@ -460,6 +461,7 @@ const deerEvents: GameEvent[] = [
     id: 'deer-doe-hierarchy',
     type: 'active',
     category: 'social',
+    simulated: true,
     narrativeText:
       'The doe steps into your feeding area with deliberate confidence, her ears pinned flat, her front hoof raised in the universal gesture of dominance among your kind. She is older than you, heavier, and she has wintered here longer. The hierarchy among does is matrilineal and absolute — your mother\'s rank determines your starting position, and everything after that must be earned with confrontation. She strikes at you with her foreleg, a sharp, downward blow aimed at your shoulder. The stakes are higher than food: dominant does claim the densest thickets for fawning — the cover that hides newborns from coyotes and bobcats. Subordinate does are pushed to open fields and forest edges where fawns are found and killed within days.',
     statEffects: [
@@ -529,6 +531,7 @@ const deerEvents: GameEvent[] = [
     id: 'deer-fawn-play',
     type: 'passive',
     category: 'social',
+    simulated: true,
     narrativeText:
       'The fawns are playing. They sprint in wide, ecstatic circles through the meadow, their spotted coats flashing in the dappled light, legs splaying at improbable angles on every turn. One leaps straight into the air for no reason at all — a vertical explosion of joy that sends it tumbling into the tall grass. Another chases a butterfly with such single-minded intensity that it runs directly into your flank and bounces off, startled, before resuming the chase without pause. You watch them with something that is not quite thought but feels like recognition. The world is briefly, entirely good.',
     statEffects: [
@@ -549,6 +552,7 @@ const deerEvents: GameEvent[] = [
     id: 'deer-territorial-scrape',
     type: 'active',
     category: 'social',
+    simulated: true,
     narrativeText:
       'The urge is chemical and irresistible. You find a low-hanging branch at the edge of a trail and hook it with your antler tines, twisting until the bark peels away and the raw wood beneath is exposed. Then you lower your head and paw at the earth, scraping the leaves down to bare soil in a rough oval. You urinate into the scrape, letting the liquid run over the tarsal glands on your hind legs — dark, oily glands that broadcast your identity, your fitness, your intent — into the damp earth. This is your signature, written in chemistry. Every deer that passes will read it. {{npc.rival.name}} will know you were here.',
     statEffects: [
@@ -571,6 +575,7 @@ const deerEvents: GameEvent[] = [
     id: 'deer-herd-alarm',
     type: 'passive',
     category: 'social',
+    simulated: true,
     narrativeText:
       'The snort cuts through the evening stillness like a blade — a single, explosive exhalation from a doe at the far edge of the clearing. Her tail snaps upright, the white underside flashing like a semaphore flag, and instantly every deer in the group mirrors the signal. Tails up. Heads high. Bodies rigid with attention. You do not know what she detected — a scent, a sound, a shadow that moved wrong — but her alarm is your alarm now, passed through the herd at the speed of instinct. You stamp your front hoof once, twice, adding your voice to the warning, and then the group bolts as a single organism, white tails bouncing through the twilight like a string of lanterns retreating into the dark.',
     statEffects: [
@@ -1347,6 +1352,7 @@ const deerEvents: GameEvent[] = [
     id: 'deer-rival-returns',
     type: 'active',
     category: 'social',
+    simulated: true,
     narrativeText:
       '{{npc.rival.name}} stands at the far edge of the clearing, his rack silhouetted against the grey sky. You have crossed paths before — you recognize the scarred brow tine, the way he holds his head slightly cocked to one side. He stamps the ground once, twice, sending a spray of frozen earth into the air. This is no chance encounter. He has been looking for you.',
     statEffects: [
@@ -1444,6 +1450,7 @@ const deerEvents: GameEvent[] = [
     id: 'deer-ally-warns',
     type: 'passive',
     category: 'social',
+    simulated: true,
     narrativeText:
       '{{npc.ally.name}} appears at the tree line, her ears swiveling like radar dishes, her tail flagging in the sharp, rhythmic pattern that means danger. You have learned to trust her vigilance — she has warned you before, and every time she has been right. You freeze, scanning the shadows where she is staring, and there it is: movement, low and deliberate, through the underbrush. Without her, you would have walked straight into it.',
     statEffects: [
@@ -1528,6 +1535,7 @@ const deerEvents: GameEvent[] = [
     id: 'deer-yearling-restlessness',
     type: 'passive',
     category: 'social',
+    simulated: true,
     narrativeText: 'The urge is impossible to ignore. You are a yearling buck now, and the dominant bucks in this range have been increasingly aggressive — chasing you from feeding areas, threatening you when you linger too close. Your mother no longer recognizes you as her fawn. The home range that sheltered you as a spotted fawn feels confining, like a territory that belongs to someone else.',
     statEffects: [{ stat: StatId.NOV, amount: 5, label: '+NOV' }, { stat: StatId.ADV, amount: 3, label: '+ADV' }],
     consequences: [{ type: 'set_flag', flag: 'dispersal-pressure' }],
@@ -1549,6 +1557,7 @@ const deerEvents: GameEvent[] = [
     id: 'deer-dispersal-push',
     type: 'active',
     category: 'social',
+    simulated: true,
     narrativeText: 'The dominant buck in the area has had enough. He lowers his head and charges you — not a bluff, but a full run. His antlers catch you in the ribs and send you stumbling. The message is clear: leave, or the next charge will be worse. Every yearling buck faces this moment — the natal range expels you, and you must find your own.',
     statEffects: [{ stat: StatId.TRA, amount: 4, label: '+TRA' }],
     consequences: [],

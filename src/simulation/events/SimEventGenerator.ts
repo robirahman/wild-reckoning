@@ -16,6 +16,16 @@ import { starvationPressureTrigger } from './triggers/starvationPressure';
 import { hypothermiaPressureTrigger } from './triggers/hypothermiaPressure';
 import { injuryImpactTrigger } from './triggers/injuryImpact';
 import { immunePressureTrigger } from './triggers/immunePressure';
+import {
+  herdAlarmTrigger,
+  bachelorGroupTrigger,
+  doeHierarchyTrigger,
+  fawnPlayTrigger,
+  territorialScrapeTrigger,
+  rivalReturnsTrigger,
+  allyWarnsTrigger,
+  yearlingDispersalTrigger,
+} from './triggers/social';
 
 const ALL_TRIGGERS: SimulationTrigger[] = [
   rehabilitationIntroTrigger,
@@ -38,6 +48,15 @@ const ALL_TRIGGERS: SimulationTrigger[] = [
   hypothermiaPressureTrigger,
   injuryImpactTrigger,
   immunePressureTrigger,
+  // Social triggers
+  herdAlarmTrigger,
+  bachelorGroupTrigger,
+  doeHierarchyTrigger,
+  fawnPlayTrigger,
+  territorialScrapeTrigger,
+  rivalReturnsTrigger,
+  allyWarnsTrigger,
+  yearlingDispersalTrigger,
 ];
 
 // ── Behavioral Multiplier (mirrors EventGenerator logic) ──
