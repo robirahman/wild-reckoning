@@ -106,9 +106,6 @@ export function DeathScreen() {
         <div className={styles.gradeLetter} style={{ color: grade.color }}>
           {grade.letter}
         </div>
-        <div className={styles.fitnessCaption}>
-          Based on offspring survival and successful maturation
-        </div>
       </div>
 
       {/* ── Summary Stats ── */}
