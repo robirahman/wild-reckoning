@@ -20,7 +20,7 @@ export const createAnimalSlice: GameSlice<AnimalSlice> = (set, get) => {
     actionsPerformed: [],
     evolution: { activeMutations: [], availableChoices: [], generationCount: 0, lineageHistory: [] },
     lineage: null,
-    lifetimeStats: { ...INITIAL_LIFETIME_STATS, regionsVisited: [defaultBundle.config.defaultRegion] },
+    lifetimeStats: { ...INITIAL_LIFETIME_STATS, regionsVisited: [defaultBundle.config.defaultRegion], maxGeneration: 1 },
 
     updateBehavioralSetting: (key, value) => {
       set({
@@ -216,6 +216,12 @@ export const createAnimalSlice: GameSlice<AnimalSlice> = (set, get) => {
 
       const newAnimal = createInitialAnimal(config, backstory, sex);
       newAnimal.activeMutations = [...state.evolution.activeMutations, choice];
+      
+      const nextGen = state.evolution.generationCount + 1;
+      newAnimal.lifetimeStats = {
+        ...state.animal.lifetimeStats,
+        maxGeneration: Math.max(state.animal.lifetimeStats.maxGeneration, nextGen),
+      };
       
       if (choice.statModifiers) {
         for (const mod of choice.statModifiers) {

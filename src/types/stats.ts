@@ -147,6 +147,8 @@ export interface LifetimeStats {
   weatherEventsSurvived: number;
   maxWeight: number;
   regionsVisited: string[]; // Use array for easier serialization
+  maxGeneration: number;
+  foodSources: Record<string, number>; // Event ID -> Count
 }
 
 export const INITIAL_LIFETIME_STATS: LifetimeStats = {
@@ -158,4 +160,6 @@ export const INITIAL_LIFETIME_STATS: LifetimeStats = {
   weatherEventsSurvived: 0,
   maxWeight: 0,
   regionsVisited: [],
+  maxGeneration: 1,
+  foodSources: {},
 };

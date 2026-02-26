@@ -268,6 +268,7 @@ export function useGameEngine() {
     let predatorsEvaded = 0;
     let preyEaten = 0;
     let rivalsDefeated = 0;
+    const foodSourceHits: Record<string, number> = {};
 
     for (const outcome of result.turnResult.eventOutcomes) {
       const event = state.currentEvents.find(e => e.definition.id === outcome.eventId);
@@ -275,6 +276,12 @@ export function useGameEngine() {
 
       const tags = event.definition.tags;
       
+      // Track food sources
+      if (tags.includes('foraging') && outcome.consequences.some(c => c.type === 'modify_weight' && c.amount > 0)) {
+        const foodName = event.definition.id;
+        foodSourceHits[foodName] = (foodSourceHits[foodName] || 0) + 1;
+      }
+
       // Predators evaded
       if (tags.includes('predator') && outcome.deathRollSurvived === true) {
         predatorsEvaded++;
@@ -319,7 +326,12 @@ export function useGameEngine() {
     }
 
     // Apply accumulated lifetime stats
-    if (predatorsEvaded > 0 || preyEaten > 0 || rivalsDefeated > 0 || newFriendsMade > 0) {
+    const currentFoodSources = { ...useGameStore.getState().animal.lifetimeStats.foodSources };
+    for (const [id, count] of Object.entries(foodSourceHits)) {
+      currentFoodSources[id] = (currentFoodSources[id] || 0) + count;
+    }
+
+    if (predatorsEvaded > 0 || preyEaten > 0 || rivalsDefeated > 0 || newFriendsMade > 0 || Object.keys(foodSourceHits).length > 0) {
       useGameStore.setState({
         animal: {
           ...useGameStore.getState().animal,
@@ -329,6 +341,7 @@ export function useGameEngine() {
             preyEaten: useGameStore.getState().animal.lifetimeStats.preyEaten + preyEaten,
             rivalsDefeated: useGameStore.getState().animal.lifetimeStats.rivalsDefeated + rivalsDefeated,
             friendsMade: useGameStore.getState().animal.lifetimeStats.friendsMade + newFriendsMade,
+            foodSources: currentFoodSources,
           }
         }
       });

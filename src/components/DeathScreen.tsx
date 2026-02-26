@@ -82,17 +82,21 @@ export function DeathScreen() {
   const avgFitness = SPECIES_AVG_FITNESS[config.id] ?? 2;
   const fitnessColorClass = reproduction.totalFitness > avgFitness ? styles.goodPerformance : (reproduction.totalFitness < avgFitness * 0.5 ? styles.poorPerformance : '');
 
+  // Find top food source
+  const topFoodEntry = Object.entries(animal.lifetimeStats.foodSources).sort((a, b) => b[1] - a[1])[0];
+  const favoriteFood = topFoodEntry 
+    ? topFoodEntry[0].split('-').slice(1).map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
+    : null;
+
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>
         You Have Died
       </h1>
 
-      {lineage && lineage.generation > 1 && (
-        <div className={styles.generation}>
-          Generation {lineage.generation}
-        </div>
-      )}
+      <div className={styles.generation}>
+        Generation {lineage?.generation ?? 1} of {animal.lifetimeStats.maxGeneration}
+      </div>
 
       <p className={styles.causeOfDeath}>
         {animal.causeOfDeath || 'Your body could no longer sustain the burden of survival.'}
@@ -168,13 +172,19 @@ export function DeathScreen() {
               <span className={styles.statLabel}>Prey Eaten</span>
             </div>
           )}
+          {favoriteFood && (
+            <div className={styles.statItem}>
+              <span className={styles.statValue} style={{ fontSize: '1rem', lineHeight: 1.2 }}>{favoriteFood}</span>
+              <span className={styles.statLabel}>Top Food Source</span>
+            </div>
+          )}
           <div className={styles.statItem}>
             <span className={styles.statValue}>{animal.lifetimeStats.distanceTraveled}</span>
-            <span className={styles.statLabel}>Map Nodes Traversed</span>
+            <span className={styles.statLabel}>Nodes Traversed</span>
           </div>
           <div className={styles.statItem}>
             <span className={styles.statValue}>{animal.lifetimeStats.weatherEventsSurvived}</span>
-            <span className={styles.statLabel}>Extreme Weather Turns</span>
+            <span className={styles.statLabel}>Severe Weather Turns</span>
           </div>
           <div className={styles.statItem}>
             <span className={styles.statValue}>{animal.lifetimeStats.regionsVisited.length}</span>
@@ -182,6 +192,30 @@ export function DeathScreen() {
           </div>
         </div>
       </div>
+
+      {/* ── Genetic Legacy ── */}
+      {animal.activeMutations.length > 0 && (
+        <div className={styles.detailPanel}>
+          <div className={styles.panelHeading}>
+            Genetic Traits Acquired
+          </div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 8 }}>
+            {animal.activeMutations.map(m => (
+              <div key={m.id} style={{ 
+                background: 'rgba(142, 68, 173, 0.1)', 
+                color: 'var(--color-accent)',
+                padding: '4px 10px',
+                borderRadius: 16,
+                fontSize: '0.8rem',
+                fontWeight: 600,
+                border: '1px solid rgba(142, 68, 173, 0.2)'
+              }}>
+                {m.name}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* ── Semelparous Egg Breakdown ── */}
       {isSemelparous && reproduction.spawned && (
