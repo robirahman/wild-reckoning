@@ -222,9 +222,9 @@ export function resolveTurn(state: GameState): {
   }
 
   // Tick health system (SCALED in FF)
-  // Scaling tickHealth is hard because it's multiple parts.
-  // We'll pass the multiplier to tickHealth if we can.
-  const healthResult = tickHealth(state.animal, state.rng, state.speciesBundle.parasites, state.difficulty, ffMult);
+  // Injuries heal by 12 turns in 12x fast-forward mode
+  const healthFfMult = state.fastForward ? 12 : 1;
+  const healthResult = tickHealth(state.animal, state.rng, state.speciesBundle.parasites, state.difficulty, healthFfMult);
 
   // Propagate health system flags as set_flag consequences
   for (const flag of healthResult.flagsToSet) {
