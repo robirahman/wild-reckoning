@@ -12,6 +12,8 @@ import { modifyPopulation } from '../../engine/EcosystemSystem';
 import { introduceNPC } from '../../engine/NPCSystem';
 import { tickPhysiology } from '../../engine/PhysiologySystem';
 import type { GameFlag } from '../../types/flags';
+import { resolveHarm } from '../../simulation/harm/resolver';
+import { convertHarmToLegacy } from '../../simulation/harm/converter';
 
 export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
   currentEvents: [],
@@ -145,6 +147,37 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
         newFlags.delete(consequence.flag as GameFlag);
         animal.flags = newFlags;
         set({ animal });
+        break;
+      }
+      case 'apply_harm': {
+        if (animal.bodyState && animal.anatomyIndex) {
+          const harmResult = resolveHarm(
+            consequence.harm,
+            animal.anatomyIndex,
+            animal.bodyState,
+            state.rng,
+          );
+          // Convert harm result to legacy consequences and stat effects
+          const legacy = convertHarmToLegacy(harmResult);
+          // Apply the converted consequences recursively (but not apply_harm to avoid loops)
+          for (const legacyCons of legacy.consequences) {
+            get().applyConsequence(legacyCons);
+          }
+          // Apply stat effects
+          let stats = { ...get().animal.stats };
+          for (const effect of legacy.statEffects) {
+            const modifier = {
+              id: `harm-${consequence.harm.id}-${effect.stat}-${Math.random().toString(36).slice(2, 6)}`,
+              source: consequence.harm.sourceLabel,
+              sourceType: 'event' as const,
+              stat: effect.stat,
+              amount: effect.amount,
+              duration: effect.duration,
+            };
+            stats = addModifier(stats, modifier);
+          }
+          set({ animal: { ...get().animal, stats, bodyState: animal.bodyState } });
+        }
         break;
       }
       case 'death': {

@@ -11,6 +11,7 @@ const deerEvents: GameEvent[] = [
     id: 'deer-acorn-mast-year',
     type: 'active',
     category: 'foraging',
+    simulated: true,
     narrativeText:
       'The oaks have outdone themselves this autumn. Acorns blanket the forest floor in a dense, copper-brown carpet that crunches beneath your hooves with every step. You have never seen so many — the trees have synchronized their production in a mast year, overwhelming every squirrel, jay, and weevil that might consume them. You lower your head and eat with a steady, rhythmic crunching, the tannin-rich meat filling your gut with a warmth that will carry you deep into winter. Fat is building along your ribs and haunches, an invisible armor against the cold months ahead.',
     statEffects: [
@@ -32,6 +33,7 @@ const deerEvents: GameEvent[] = [
     id: 'deer-mushroom-patch',
     type: 'active',
     category: 'foraging',
+    simulated: true,
     narrativeText:
       'A cluster of mushrooms pushes up through the leaf litter at the base of a rotting stump — pale caps glistening with morning dew, their earthy scent cutting through the dampness of the forest floor. You nose at them cautiously. Fungi are a delicacy your body craves, rich in phosphorus and trace minerals that the browse cannot provide. You bite into the first cap and the flavor is clean and loamy, like eating the forest itself.',
     statEffects: [
@@ -67,6 +69,7 @@ const deerEvents: GameEvent[] = [
     id: 'deer-apple-orchard',
     type: 'active',
     category: 'foraging',
+    simulated: true,
     narrativeText:
       'The smell drifts to you on the evening breeze — sweet, fermenting, irresistible. Through the tree line you can see them: rows of apple trees heavy with fruit, some already fallen and splitting open in the grass. A farmhouse sits at the edge of the orchard, its windows lit with amber light, a dog chained near the porch. The apples are close, almost within reach. But this is human ground, and humans are unpredictable in their cruelty.',
     statEffects: [],
@@ -115,6 +118,7 @@ const deerEvents: GameEvent[] = [
     id: 'deer-corn-field-raid',
     type: 'active',
     category: 'foraging',
+    simulated: true,
     narrativeText:
       'The cornfield stretches out under the moonlight like a dark, rustling sea. The stalks are tall enough to hide you completely, and the ears are fat with ripe kernels — a concentration of calories that the forest cannot match. You can hear other deer already inside, the soft tearing of husks and the wet crunch of feeding. But corn in quantity can acidify your rumen and bloat your gut until it presses against your lungs.',
     statEffects: [],
@@ -159,6 +163,7 @@ const deerEvents: GameEvent[] = [
     id: 'deer-clover-meadow',
     type: 'passive',
     category: 'foraging',
+    simulated: true,
     narrativeText:
       'You step out of the tree line and into a meadow thick with white clover. The blossoms nod in the breeze like a thousand small bells, and the air hums with the industry of bees. You lower your head into the fragrant carpet and begin to graze. The clover is tender and sweet, each mouthful a small perfection — protein-rich, easily digestible, the ideal food for a ruminant in {{time.season}}. The tension in your flanks softens as your gut fills with something genuinely nourishing. For a while there is nothing in the world but sunlight and clover and the deep satisfaction of a body being fed exactly what it needs.',
     statEffects: [
@@ -181,6 +186,7 @@ const deerEvents: GameEvent[] = [
     id: 'deer-browse-line',
     type: 'passive',
     category: 'foraging',
+    simulated: true,
     narrativeText:
       'The forest tells a story of too many mouths. Every sapling within reach has been stripped of its leaves, every low-hanging branch gnawed to a pale, barkless nub. A sharp horizontal line divides the canopy — green abundance above, bare wood below — as precise as if drawn with a ruler. This is the browse line, and it marks the exact height a hungry deer can reach. You stretch your neck upward, lips working at a twig just beyond your reach, and come away with nothing. The easy food is gone. Competition is etched into the architecture of this forest.',
     statEffects: [
@@ -206,6 +212,7 @@ const deerEvents: GameEvent[] = [
     id: 'deer-coyote-pack',
     type: 'active',
     category: 'predator',
+    simulated: true,
     narrativeText:
       'The yipping starts at dusk — a ragged chorus threading through the trees from three directions at once. Coyotes. A pack of them, working in relay, their golden eyes catching the last light as they ghost through the understory. They are not after you. They are after the fawns, testing the edges of the group, probing for the young, the slow, the separated. One darts in and snaps at a fawn before melting back into the shadows. The doe beside you stamps her front hoof, a sharp crack of warning against the frozen ground.',
     statEffects: [
@@ -319,6 +326,7 @@ const deerEvents: GameEvent[] = [
     id: 'deer-hunter-season',
     type: 'active',
     category: 'predator',
+    simulated: true,
     narrativeText:
       'The forest has changed. Vehicles line the logging roads at dawn. Strange, acrid smells drift on the wind — gun oil, tobacco, synthetic urine meant to smell like yours. Blaze orange moves between the trees like slow fire. It is hunting season, and every instinct in your body is screaming. You hear a sharp crack echo through the hardwoods — a rifle shot, perhaps a half mile away. Then silence. Then another. The woods are a killing ground now, and you are the quarry.',
     statEffects: [
@@ -374,6 +382,7 @@ const deerEvents: GameEvent[] = [
     id: 'deer-feral-dog-pack',
     type: 'active',
     category: 'predator',
+    simulated: true,
     narrativeText:
       'They come out of the suburban fringe at a loping run — three feral dogs, lean and scarred, their domesticated heritage twisted into something lawless. They do not hunt with the calculated patience of coyotes or the ambush precision of a cat. They hunt with the chaotic enthusiasm of animals that kill for sport as much as hunger. One is a German shepherd mix, heavy-jawed and fast. The others flank wide, tongues lolling, eyes bright with predatory joy. They have your scent and they are closing.',
     statEffects: [
@@ -842,6 +851,7 @@ const deerEvents: GameEvent[] = [
     id: 'deer-ice-storm',
     type: 'passive',
     category: 'environmental',
+    simulated: true,
     narrativeText:
       'The freezing rain begins at nightfall and does not stop. By morning, every branch, twig, and blade of grass is sheathed in a crystal armor of ice that catches the pale winter light and throws it back in blinding fractals. The forest is beautiful and utterly inhospitable. The browse you depend on is locked beneath a glaze harder than your teeth can crack. You scrape at a frozen dogwood branch with your lower incisors and come away with nothing but chipped enamel and a mouthful of ice. Your hooves slip on the glazed ground with every step. Somewhere in the distance, a tree limb snaps under the weight of the ice and crashes to the forest floor with a sound like breaking glass.',
     statEffects: [
@@ -908,6 +918,7 @@ const deerEvents: GameEvent[] = [
     id: 'deer-travel-hazards',
     type: 'active',
     category: 'migration',
+    simulated: true,
     narrativeText:
       'The migration route crosses a two-lane highway at the bottom of a valley. You stand at the tree line, ears forward, watching the headlights sweep past in pairs. The road smells of tar and diesel and death — you can see the dark stain on the asphalt where another deer did not make it across. The gap between cars is narrow and unpredictable. The forest on the other side is dark and welcoming, barely fifty yards away. It might as well be fifty miles.',
     statEffects: [
@@ -989,6 +1000,7 @@ const deerEvents: GameEvent[] = [
     id: 'deer-rut-competition',
     type: 'active',
     category: 'reproduction',
+    simulated: true,
     narrativeText:
       'You hear him before you see him — the guttural grunt-wheeze of a rival buck, a sound that is part challenge, part threat, part involuntary expression of hormonal fury. He steps out of the timber and you see his rack: wide, heavy-beamed, with long tines that catch the autumn light like polished bone. He is as large as you, perhaps larger, and he is not going to back down. The does are watching from the ridge above, their dark eyes tracking both of you with the calm appraisal of animals who will mate with whichever one is left standing. {{npc.rival.name}} lowers his head and the antlers come forward like a crown of spears.',
     statEffects: [
@@ -1114,6 +1126,7 @@ const deerEvents: GameEvent[] = [
     id: 'deer-rut-competition-injured',
     type: 'active',
     category: 'reproduction',
+    simulated: true,
     narrativeText:
       'Another buck emerges from the treeline, grunting and raking the ground with his hooves. {{npc.rival.name}} sees your damaged rack immediately — the broken tine, the asymmetry — and reads it for what it is: weakness. He advances without hesitation, head low, presenting a full spread of intact antlers against your compromised ones. The does watch from the ridge. You know what they see. You know the arithmetic of bone and leverage is no longer in your favor.',
     statEffects: [
@@ -1447,6 +1460,7 @@ const deerEvents: GameEvent[] = [
     id: 'deer-ehd-midge-exposure',
     type: 'passive',
     category: 'health',
+    simulated: true,
     narrativeText: 'Clouds of tiny biting midges swarm around you at the water\'s edge as {{time.season}} heat lingers. The insects are too small to see clearly, but their bites raise welts on the thin skin inside your ears. These Culicoides midges carry epizootic hemorrhagic disease — a virus that kills deer by the thousands in late summer.',
     statEffects: [{ stat: StatId.IMM, amount: 2, label: '+IMM' }],
     consequences: [],
@@ -1579,6 +1593,7 @@ const deerEvents: GameEvent[] = [
     id: 'deer-dispersal-road-crossing',
     type: 'active',
     category: 'environmental',
+    simulated: true,
     narrativeText: 'A highway bisects the forest ahead. The blacktop shimmers with heat, and the roar of traffic is deafening. You can see better habitat on the other side — denser cover, a creek bottom. But the road is wide and the vehicles are fast. More deer are killed on roads than by any natural predator.',
     statEffects: [{ stat: StatId.TRA, amount: 4, label: '+TRA' }],
     consequences: [],

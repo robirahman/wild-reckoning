@@ -6,6 +6,9 @@ import type { Mutation } from './evolution';
 import type { SocialState } from './social';
 import type { GameFlag } from './flags';
 import type { LifetimeStats } from './stats';
+import type { BodyState } from '../simulation/anatomy/bodyState';
+import type { AnatomyIndex } from '../simulation/anatomy/types';
+import type { DebriefingEntry } from '../simulation/narrative/types';
 
 export type Diet = 'herbivore' | 'carnivore' | 'omnivore';
 
@@ -131,4 +134,12 @@ export interface AnimalState {
     panic: number; // 0-100
   };
   lifetimeStats: LifetimeStats;
+
+  // Simulation Layer (Phase 0+)
+  /** Anatomy-based body state. Present only for species with anatomy definitions. */
+  bodyState?: BodyState;
+  /** Indexed anatomy definition for fast lookups. Present only if bodyState is. */
+  anatomyIndex?: AnatomyIndex;
+  /** Debriefing log: clinical summaries of events, replayed at game over. */
+  debriefingLog?: DebriefingEntry[];
 }

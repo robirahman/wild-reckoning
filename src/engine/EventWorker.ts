@@ -146,8 +146,12 @@ self.onmessage = (e) => {
   const rng = createRng(ctx.rngState);
   ctx.rng = rng;
 
+  // In simulation mode, filter out events tagged as simulated (replaced by triggers)
+  const isSimMode = !!ctx.config?.anatomyId;
+
   const eligible = ctx.events.filter((event: any) => {
     if (ctx.cooldowns[event.id] && ctx.cooldowns[event.id] > 0) return false;
+    if (isSimMode && event.simulated) return false;
     return event.conditions.every((cond: any) => checkCondition(cond, ctx));
   });
 

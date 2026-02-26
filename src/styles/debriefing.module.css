@@ -1,0 +1,142 @@
+/* Debriefing Panel — game-over dual-view of animal vs. clinical narrative */
+
+.container {
+  text-align: left;
+  margin-bottom: 32px;
+}
+
+.toggleButton {
+  padding: 8px 20px;
+  font-size: 0.85rem;
+  font-family: var(--font-ui);
+  font-weight: 600;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  background: var(--color-panel-bg);
+  cursor: pointer;
+  margin-bottom: 16px;
+}
+
+.toggleButton:hover {
+  background: var(--color-bar-bg);
+}
+
+.intro {
+  font-family: var(--font-narrative);
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+  margin-bottom: 20px;
+  font-style: italic;
+}
+
+.entryList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.entry {
+  padding: 12px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  background: var(--color-panel-bg);
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  line-height: 1.6;
+}
+
+.entryFatal {
+  composes: entry;
+  border-color: var(--color-danger);
+  border-width: 2px;
+}
+
+.entryHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.turnLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.fatalBadge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-danger);
+  background: rgba(220, 53, 69, 0.1);
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.summaryLine {
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 10px;
+}
+
+.dualView {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.viewColumn {
+  padding: 8px 10px;
+  border-radius: 3px;
+}
+
+.animalView {
+  composes: viewColumn;
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.clinicalView {
+  composes: viewColumn;
+  background: rgba(76, 110, 89, 0.06);
+}
+
+.viewLabel {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+  margin-bottom: 4px;
+}
+
+.viewText {
+  font-family: var(--font-narrative);
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: var(--color-text);
+}
+
+.clinicalViewText {
+  composes: viewText;
+  color: var(--color-text-muted);
+}
+
+.choiceLabel {
+  margin-top: 6px;
+  font-size: 0.75rem;
+  color: var(--color-accent);
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .dualView {
+    grid-template-columns: 1fr;
+  }
+}

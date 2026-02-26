@@ -11,6 +11,8 @@ import {
   INJURY_RESTING_HEAL_RATE,
   INJURY_NORMAL_HEAL_RATE,
 } from './constants';
+import type { BodyState } from '../simulation/anatomy/bodyState';
+import { recomputeCapabilities, checkCapabilityDeath } from '../simulation/anatomy/capabilities';
 
 interface HealthTickResult {
   animal: AnimalState;
@@ -137,4 +139,110 @@ export function tickHealth(
   };
 
   return { animal: updatedAnimal, narratives, flagsToSet };
+}
+
+/**
+ * Tick the anatomy-based body state: heal tissue damage, progress/clear
+ * body conditions, recompute capabilities, and check for death.
+ *
+ * This runs alongside tickHealth and only activates if the animal has a bodyState.
+ */
+export function tickBodyState(
+  animal: AnimalState,
+  rng: Rng,
+  ffMult: number = 1,
+): { animal: AnimalState; narratives: string[]; modifiers: StatModifier[] } {
+  const narratives: string[] = [];
+  const modifiers: StatModifier[] = [];
+
+  if (!animal.bodyState || !animal.anatomyIndex) {
+    return { animal, narratives, modifiers };
+  }
+
+  const bodyState: BodyState = {
+    parts: { ...animal.bodyState.parts },
+    capabilities: { ...animal.bodyState.capabilities },
+    conditions: [...animal.bodyState.conditions],
+  };
+
+  // Deep-copy part states so we don't mutate the original
+  for (const [partId, partState] of Object.entries(bodyState.parts)) {
+    bodyState.parts[partId] = {
+      ...partState,
+      tissueDamage: { ...partState.tissueDamage },
+    };
+  }
+
+  // 1. Heal tissue damage over time
+  for (const part of animal.anatomyIndex.definition.bodyParts) {
+    const partState = bodyState.parts[part.id];
+    if (!partState || partState.destroyed) continue;
+
+    for (const tissueId of part.tissues) {
+      const tissue = animal.anatomyIndex.tissueById.get(tissueId);
+      if (!tissue) continue;
+
+      const currentDamage = partState.tissueDamage[tissueId] ?? 0;
+      if (currentDamage > 0) {
+        const healAmount = tissue.healingRate * 100 * ffMult;
+        const newDamage = Math.max(0, currentDamage - healAmount);
+        partState.tissueDamage[tissueId] = newDamage;
+
+        if (currentDamage > 20 && newDamage <= 0) {
+          narratives.push(`Your ${part.label} tissue has fully healed.`);
+        }
+      }
+    }
+  }
+
+  // 2. Progress body conditions
+  const remainingConditions = [];
+  for (const condition of bodyState.conditions) {
+    condition.turnsActive += ffMult;
+
+    // Check if the underlying tissue damage has healed enough to clear the condition
+    const partState = bodyState.parts[condition.bodyPartId];
+    if (partState) {
+      const maxDamage = Math.max(0, ...Object.values(partState.tissueDamage));
+      if (maxDamage < 5) {
+        narratives.push(`Your ${condition.type} on your ${animal.anatomyIndex.partById.get(condition.bodyPartId)?.label ?? condition.bodyPartId} has cleared.`);
+        continue; // Remove this condition
+      }
+    }
+
+    // Infection progression for open wounds
+    if (condition.type === 'laceration' || condition.type === 'puncture') {
+      if (!condition.healing && rng.chance(0.05 * ffMult)) {
+        condition.infectionLevel = Math.min(100, condition.infectionLevel + 10 * ffMult);
+        if (condition.infectionLevel > 30) {
+          narratives.push(`The wound on your ${animal.anatomyIndex.partById.get(condition.bodyPartId)?.label ?? condition.bodyPartId} is showing signs of infection.`);
+        }
+      }
+    }
+
+    // Conditions begin healing after enough time
+    if (!condition.healing && condition.turnsActive > 3) {
+      condition.healing = true;
+    }
+
+    remainingConditions.push(condition);
+  }
+  bodyState.conditions = remainingConditions;
+
+  // 3. Recompute capabilities and generate stat modifiers
+  const capResult = recomputeCapabilities(bodyState, animal.anatomyIndex);
+  bodyState.capabilities = capResult.capabilities;
+  modifiers.push(...capResult.modifiers);
+
+  // 4. Check for death from capability failure
+  const deathCause = checkCapabilityDeath(bodyState, animal.anatomyIndex);
+  if (deathCause) {
+    narratives.push(deathCause);
+  }
+
+  return {
+    animal: { ...animal, bodyState },
+    narratives,
+    modifiers,
+  };
 }

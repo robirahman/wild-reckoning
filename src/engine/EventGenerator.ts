@@ -13,6 +13,12 @@ import type { EcosystemState } from '../types/ecosystem';
 import { DIFFICULTY_PRESETS } from '../types/difficulty';
 import { weatherContextMultiplier } from './WeatherSystem';
 import { pickIllustration } from './IllustrationPicker';
+import { isSimulationMode } from '../simulation/mode';
+import { generateSimulationEvents, getSimulationCategories, drainDebriefingEntries } from '../simulation/events/SimEventGenerator';
+import type { SimulationContext } from '../simulation/events/types';
+import type { CalibratedRates } from '../simulation/calibration/types';
+import { calibrate } from '../simulation/calibration/calibrator';
+import { DEER_MORTALITY } from '../simulation/calibration/data/deer';
 
 interface GenerationContext {
   animal: AnimalState;
@@ -29,6 +35,17 @@ interface GenerationContext {
   ecosystem?: EcosystemState;
   currentNodeType?: string;
   fastForward?: boolean;
+  calibratedRates?: CalibratedRates;
+}
+
+// ── Calibration cache ──
+let cachedRates: CalibratedRates | undefined;
+function getCalibratedRates(speciesId: string): CalibratedRates | undefined {
+  if (speciesId === 'white-tailed-deer') {
+    if (!cachedRates) cachedRates = calibrate(DEER_MORTALITY);
+    return cachedRates;
+  }
+  return undefined;
 }
 
 /** Check if a single condition is met */
@@ -219,15 +236,54 @@ export function resolveTemplate(text: string, ctx: GenerationContext): string {
 /**
  * Generate events for a single turn. Filters eligible events by cooldown
  * and conditions, then weighted-selects 1-3 active and 0-2 passive events.
+ *
+ * In simulation mode (species with anatomyId), also generates events from
+ * simulation triggers. When a simulation event covers the same category as
+ * a hardcoded event, the hardcoded event is dropped in favor of the sim one.
  */
 export function generateEvents(ctx: GenerationContext): ResolvedEvent[] {
   const events = ctx.events;
   const results: ResolvedEvent[] = [];
 
+  // ── Simulation event generation (only for simulation-mode species) ──
+  let simEvents: ResolvedEvent[] = [];
+  let simCategories = new Set<string>();
+
+  if (isSimulationMode(ctx.config)) {
+    const simCtx: SimulationContext = {
+      animal: ctx.animal,
+      time: ctx.time,
+      behavior: ctx.behavior,
+      config: ctx.config,
+      rng: ctx.rng,
+      difficulty: ctx.difficulty,
+      npcs: ctx.npcs,
+      regionDef: ctx.regionDef,
+      currentWeather: ctx.currentWeather,
+      ecosystem: ctx.ecosystem,
+      currentNodeType: ctx.currentNodeType,
+      calibratedRates: getCalibratedRates(ctx.config.id),
+      fastForward: ctx.fastForward,
+    };
+
+    simEvents = generateSimulationEvents(simCtx);
+    // Track which categories the simulation covered (for deduplication)
+    for (const ev of simEvents) {
+      simCategories.add(ev.definition.category);
+    }
+  }
+
+  // ── Legacy hardcoded event generation ──
+
   // Filter eligible events
+  const simMode = isSimulationMode(ctx.config);
   const eligible = events.filter((event) => {
     // Check cooldown
     if (ctx.cooldowns[event.id] && ctx.cooldowns[event.id] > 0) return false;
+    // In simulation mode, skip events tagged as simulated (replaced by triggers)
+    if (simMode && event.simulated) return false;
+    // In simulation mode, skip hardcoded events in categories the simulation covered this turn
+    if (simCategories.has(event.category)) return false;
     // Check conditions
     return meetsConditions(event, ctx);
   });
@@ -290,7 +346,9 @@ export function generateEvents(ctx: GenerationContext): ResolvedEvent[] {
     }
   }
 
-  return results;
+  // ── Merge simulation events into the result ──
+  // Simulation events go first (they're more important/dynamic)
+  return [...simEvents, ...results];
 }
 
 /** Resolve a single event: fill templates, trigger sub-events */

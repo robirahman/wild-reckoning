@@ -6,6 +6,8 @@ import { StatId, INITIAL_LIFETIME_STATS } from '../../types/stats';
 import { createStatBlock } from '../../engine/StatCalculator';
 import { INITIAL_SOCIAL_STATE } from '../../types/social';
 import { INITIAL_ITEROPAROUS_STATE, INITIAL_SEMELPAROUS_STATE } from '../../types/reproduction';
+import { getAnatomyDefinition } from '../../simulation/anatomy/definitions';
+import { initializeAnatomy } from '../../simulation/anatomy/bodyState';
 
 export function createInitialAnimal(config: SpeciesConfig, backstory: Backstory, sex: 'male' | 'female'): AnimalState {
   const baseBases: Record<StatId, number> = { ...config.baseStats };
@@ -16,6 +18,10 @@ export function createInitialAnimal(config: SpeciesConfig, backstory: Backstory,
       baseBases[statId] = Math.max(0, Math.min(100, baseBases[statId] + adj.amount));
     }
   }
+
+  // Initialize anatomy-based body state if species has an anatomy definition
+  const anatomyDef = config.anatomyId ? getAnatomyDefinition(config.anatomyId) : undefined;
+  const anatomy = anatomyDef ? initializeAnatomy(anatomyDef) : undefined;
 
   return {
     speciesId: config.id,
@@ -37,6 +43,9 @@ export function createInitialAnimal(config: SpeciesConfig, backstory: Backstory,
     nutrients: { minerals: 80, vitamins: 80 },
     physiologicalStress: { hypothermia: 0, starvation: 0, panic: 0 },
     lifetimeStats: { ...INITIAL_LIFETIME_STATS, regionsVisited: [config.defaultRegion] },
+    bodyState: anatomy?.bodyState,
+    anatomyIndex: anatomy?.index,
+    debriefingLog: anatomy ? [] : undefined,
   };
 }
 

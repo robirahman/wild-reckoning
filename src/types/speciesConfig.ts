@@ -177,6 +177,9 @@ export interface SpeciesConfig {
   /** Classification of body size for mathematical scaling. */
   massType?: 'micro' | 'macro' | 'mega';
 
+  /** Anatomy definition ID for the simulation layer. If set, body state tracking is enabled. */
+  anatomyId?: string;
+
   /** Per-turn passive weight change by season. Positive = gain, negative = loss. */
   seasonalWeight: {
     spring: number;

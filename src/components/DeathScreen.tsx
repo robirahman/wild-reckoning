@@ -2,6 +2,7 @@ import { useGameStore } from '../store/gameStore';
 import { deleteSaveGame } from '../store/persistence';
 import { AchievementList } from './achievements/AchievementList';
 import { RunSummary } from './RunSummary';
+import { DebriefingPanel } from './DebriefingPanel';
 import { formatWeight } from '../utils/formatWeight';
 import type { Offspring } from '../types/reproduction';
 import styles from '../styles/deathscreen.module.css';
@@ -248,6 +249,8 @@ export function DeathScreen() {
           ))}
         </div>
       )}
+
+      <DebriefingPanel />
 
       <RunSummary />
 

@@ -4,7 +4,7 @@ import type { EventOutcome, TurnResult, PendingDeathRoll } from '../types/turnRe
 import { StatId, computeEffectiveValue } from '../types/stats';
 import { DIFFICULTY_PRESETS } from '../types/difficulty';
 import { generateEvents } from './EventGenerator';
-import { tickHealth } from './HealthSystem';
+import { tickHealth, tickBodyState } from './HealthSystem';
 import { computeBuckWinProbability, determineOffspringCount } from './ReproductionSystem';
 import { getRegionDefinition } from '../data/regions';
 
@@ -225,6 +225,19 @@ export function resolveTurn(state: GameState): {
   // Injuries heal by 12 turns in 12x fast-forward mode
   const healthFfMult = state.fastForward ? 12 : 1;
   const healthResult = tickHealth(state.animal, state.rng, state.speciesBundle.parasites, state.difficulty, healthFfMult);
+
+  // Tick anatomy-based body state (Phase 0+ simulation layer)
+  const bodyResult = tickBodyState(healthResult.animal, state.rng, healthFfMult);
+  healthResult.animal = bodyResult.animal;
+  healthResult.narratives.push(...bodyResult.narratives);
+  // Body state stat modifiers get added as stat effects
+  for (const mod of bodyResult.modifiers) {
+    allStatEffects.push({
+      stat: mod.stat,
+      amount: mod.amount,
+      label: mod.amount >= 0 ? `+${mod.stat}` : `-${mod.stat}`,
+    });
+  }
 
   // Propagate health system flags as set_flag consequences
   for (const flag of healthResult.flagsToSet) {

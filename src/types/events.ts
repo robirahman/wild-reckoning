@@ -1,6 +1,7 @@
 import type { Season } from './world';
 import { StatId } from './stats';
 import type { GameFlag } from './flags';
+import type { HarmEvent } from '../simulation/harm/types';
 
 export type EventType = 'active' | 'passive';
 
@@ -13,7 +14,8 @@ export type EventCategory =
   | 'health'
   | 'psychological'
   | 'migration'
-  | 'reproduction';
+  | 'reproduction'
+  | 'milestone';
 
 // ── Stat Effects ──
 
@@ -73,7 +75,8 @@ export type Consequence =
   | { type: 'introduce_npc'; npcType: 'rival' | 'ally' | 'mate' | 'predator' | 'offspring' }
   | { type: 'modify_population'; speciesName: string; amount: number }
   | { type: 'establish_den'; nodeId?: string }
-  | { type: 'modify_territory'; sizeChange?: number; qualityChange?: number };
+  | { type: 'modify_territory'; sizeChange?: number; qualityChange?: number }
+  | { type: 'apply_harm'; harm: HarmEvent };
 
 // ── Sub-Events ──
 
@@ -140,6 +143,9 @@ export interface GameEvent {
   cooldown?: number; // Minimum turns before this event can fire again
   tags: string[]; // For behavioral setting influence: ["foraging", "food"]
   footnote?: string;
+  /** When true, this event is superseded by a simulation trigger and will be
+   *  filtered out for species running in simulation mode. */
+  simulated?: boolean;
 }
 
 // ── Resolved Event (runtime, after generation) ──

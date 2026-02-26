@@ -15,6 +15,25 @@ import { useEncyclopediaStore } from '../store/encyclopediaStore';
 import { useEventWorker } from './useEventWorker';
 import { pickIllustration } from '../engine/IllustrationPicker';
 import { NPC_INTRODUCTION_MIN_TURN, TERRITORY_AUTO_ESTABLISH_TURN, TERRITORY_INITIAL_SIZE, TERRITORY_INITIAL_QUALITY } from '../engine/constants';
+import { isSimulationMode } from '../simulation/mode';
+import { generateSimulationEvents, drainDebriefingEntries } from '../simulation/events/SimEventGenerator';
+import { calibrate } from '../simulation/calibration/calibrator';
+import { DEER_MORTALITY } from '../simulation/calibration/data/deer';
+import { getRegionDefinition } from '../data/regions';
+import type { SimulationContext } from '../simulation/events/types';
+import type { CalibratedRates } from '../simulation/calibration/types';
+
+// Cached calibration rates per species (computed once)
+const calibrationCache = new Map<string, CalibratedRates>();
+function getCalibratedRates(speciesId: string): CalibratedRates | undefined {
+  if (calibrationCache.has(speciesId)) return calibrationCache.get(speciesId);
+  if (speciesId === 'white-tailed-deer') {
+    const rates = calibrate(DEER_MORTALITY);
+    calibrationCache.set(speciesId, rates);
+    return rates;
+  }
+  return undefined;
+}
 
 export function useGameEngine() {
   const store = useGameStore();
@@ -106,14 +125,54 @@ export function useGameEngine() {
     const { results: generatedEvents, rngState } = await generateEventsAsync(state);
     state.rng.setState(rngState);
 
+    // Generate simulation events on main thread (the worker only handles hardcoded events)
+    let simEvents: import('../types/events').ResolvedEvent[] = [];
+    const config = state.speciesBundle.config;
+    if (isSimulationMode(config)) {
+      const mapNode = state.map?.nodes.find(n => n.id === state.map!.currentLocationId);
+      const simCtx: SimulationContext = {
+        animal: state.animal,
+        time: state.time,
+        behavior: state.behavioralSettings,
+        config,
+        rng: state.rng,
+        difficulty: state.difficulty,
+        npcs: state.npcs,
+        regionDef: getRegionDefinition(state.animal.region),
+        currentWeather: state.currentWeather ?? undefined,
+        ecosystem: state.ecosystem,
+        currentNodeType: mapNode?.type,
+        calibratedRates: getCalibratedRates(config.id),
+        fastForward: state.fastForward,
+      };
+      simEvents = generateSimulationEvents(simCtx);
+
+      // Collect debriefing entries and store them
+      const newEntries = drainDebriefingEntries();
+      if (newEntries.length > 0) {
+        const animal = useGameStore.getState().animal;
+        const log = [...(animal.debriefingLog ?? []), ...newEntries];
+        useGameStore.setState({ animal: { ...animal, debriefingLog: log } });
+      }
+
+      // In simulation mode, filter out hardcoded events in categories covered by simulation
+      const simCategories = new Set(simEvents.map(e => e.definition.category));
+      const filteredHardcoded = simCategories.size > 0
+        ? generatedEvents.filter(e => !simCategories.has(e.definition.category))
+        : generatedEvents;
+      generatedEvents.length = 0;
+      generatedEvents.push(...filteredHardcoded);
+    }
+
     // Pick illustrations for generated events (main thread)
-    const events = generatedEvents.map(event => {
+    const workerEvents = generatedEvents.map(event => {
       const image = event.definition.image ?? pickIllustration(event.definition, state.rng);
       return {
         ...event,
         definition: image ? { ...event.definition, image } : event.definition
       };
     });
+    const events = [...simEvents, ...workerEvents];
 
     // Tick storylines and inject storyline events
     const storylineResult = tickStorylines({

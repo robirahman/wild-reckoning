@@ -16,6 +16,7 @@ export const allEvents: GameEvent[] = [
     id: 'foraging-blueberry-shrub',
     type: 'active',
     category: 'foraging',
+    simulated: true,
     narrativeText: "You come across a blueberry shrub! They're slightly overripe at this time of year, but you still find them a delightful treat compared to the usual leaves and lichen.",
     statEffects: [
       { stat: StatId.TRA, amount: -5, label: '-TRA' },
@@ -50,6 +51,7 @@ export const allEvents: GameEvent[] = [
     id: 'foraging-acorn-mast',
     type: 'active',
     category: 'foraging',
+    simulated: true,
     narrativeText: "The oaks have dropped their acorns in abundance this year. You spend the better part of the day nosing through the leaf litter, cracking open the hard shells to get at the rich, fatty nutmeat inside. It's the most satisfying meal you've had in weeks.",
     statEffects: [
       { stat: StatId.HOM, amount: -8, label: '-HOM' },
@@ -69,6 +71,7 @@ export const allEvents: GameEvent[] = [
     id: 'foraging-browse-saplings',
     type: 'active',
     category: 'foraging',
+    simulated: true,
     narrativeText: "You find a stand of young maple saplings at the forest edge. Their tender bark and buds provide decent nutrition, though stripping the bark leaves your teeth aching. The saplings won't survive your visit, but that's not your concern.",
     statEffects: [
       { stat: StatId.HOM, amount: -4, label: '-HOM' },
@@ -85,6 +88,7 @@ export const allEvents: GameEvent[] = [
     id: 'foraging-frozen-lichen',
     type: 'active',
     category: 'foraging',
+    simulated: true,
     narrativeText: "Food is desperately scarce. You scrape at the frozen lichen on the rocks, but it's barely enough to slow the gnawing emptiness in your stomach. Your body is burning through its fat reserves just to keep warm.",
     statEffects: [
       { stat: StatId.HOM, amount: 5, label: '+HOM' },
@@ -106,6 +110,7 @@ export const allEvents: GameEvent[] = [
     id: 'foraging-crop-field',
     type: 'active',
     category: 'foraging',
+    simulated: true,
     narrativeText: "You discover a farmer's soybean field at the edge of your range. The plants are lush and nutritious — far richer than anything the forest offers. But you can smell something metallic and sharp in the air. A fence. And beyond it, lights.",
     statEffects: [
       { stat: StatId.HOM, amount: -10, label: '-HOM' },
@@ -151,6 +156,7 @@ export const allEvents: GameEvent[] = [
     id: 'foraging-toxic-plant',
     type: 'active',
     category: 'foraging',
+    simulated: true,
     narrativeText: "Browsing through unfamiliar undergrowth, you munch on a patch of plants you don't recognize. The leaves taste slightly bitter — and within minutes, your stomach cramps violently. You've eaten water hemlock.",
     statEffects: [
       { stat: StatId.HOM, amount: 15, label: '+HOM' },
@@ -175,6 +181,7 @@ export const allEvents: GameEvent[] = [
     id: 'predator-wolf-pack',
     type: 'active',
     category: 'predator',
+    simulated: true,
     narrativeText: "You catch the scent before you see them — the unmistakable musk of wolves, carried on the wind from the northwest. Through the trees, you glimpse gray shapes moving in coordinated silence. They haven't spotted you yet, but they're heading your way.",
     statEffects: [
       { stat: StatId.TRA, amount: 10, label: '+TRA' },
@@ -229,6 +236,7 @@ export const allEvents: GameEvent[] = [
     id: 'predator-coyote-stalk',
     type: 'active',
     category: 'predator',
+    simulated: true,
     narrativeText: "A lone coyote has been shadowing you for the past hour, keeping its distance but never quite leaving. It's too small to threaten a deer your size head-on, but you've seen what they do to the sick and the injured — they wait.",
     statEffects: [
       { stat: StatId.ADV, amount: 6, label: '+ADV' },
@@ -246,6 +254,7 @@ export const allEvents: GameEvent[] = [
     id: 'predator-hunting-season',
     type: 'active',
     category: 'predator',
+    simulated: true,
     narrativeText: "The crack of a rifle echoes through the forest. Then another. The air fills with the acrid smell of gunpowder. Somewhere nearby, a deer screams — a sound you didn't know a deer could make. Hunting season has begun.",
     statEffects: [
       { stat: StatId.TRA, amount: 15, label: '+TRA' },
@@ -301,6 +310,7 @@ export const allEvents: GameEvent[] = [
     id: 'predator-cougar-ambush',
     type: 'active',
     category: 'predator',
+    simulated: true,
     narrativeText: "A twig snaps behind you. You spin — and there it is. A cougar, crouched in the underbrush less than thirty feet away, its amber eyes locked onto you with the flat, patient focus of a predator that has already decided you are food. Time stops.",
     statEffects: [
       { stat: StatId.TRA, amount: 18, label: '+TRA' },
@@ -454,6 +464,7 @@ export const allEvents: GameEvent[] = [
     id: 'health-stagnant-water',
     type: 'active',
     category: 'health',
+    simulated: true,
     narrativeText: "Thirst drives you to a stagnant pool at the edge of a wetland. The water is warm, brown, and smells of decay. Tiny wriggling things are visible just below the surface. But you're so thirsty.",
     statEffects: [],
     choices: [
@@ -510,6 +521,7 @@ export const allEvents: GameEvent[] = [
     id: 'health-tick-brush',
     type: 'active',
     category: 'health',
+    simulated: true,
     narrativeText: "Pushing through a dense thicket of tall grass and low shrubs, you feel the familiar tiny prickling of legs crawling up your body. Ticks — dozens of them, questing from the vegetation onto your warm hide.",
     statEffects: [
       { stat: StatId.ADV, amount: 3, label: '+ADV' },
@@ -542,6 +554,7 @@ export const allEvents: GameEvent[] = [
     id: 'health-wound-infection-risk',
     type: 'active',
     category: 'health',
+    simulated: true,
     narrativeText: "Your injured leg is throbbing more than usual today. The area around the wound feels hot and swollen. A fly keeps landing on it, no matter how many times you twitch it away.",
     statEffects: [
       { stat: StatId.HEA, amount: -5, label: '-HEA' },
@@ -637,6 +650,7 @@ export const allEvents: GameEvent[] = [
     id: 'passive-winter-cold-snap',
     type: 'passive',
     category: 'environmental',
+    simulated: true,
     narrativeText: "The temperature plummets overnight. By morning, the world is a brittle, hostile place — the kind of cold that makes the trees crack and pop like gunshots. Your winter coat isn't enough. You shiver violently, burning precious calories just to maintain body temperature. This is the killing cold.",
     statEffects: [
       { stat: StatId.CLI, amount: 12, label: '+CLI' },
@@ -760,6 +774,7 @@ export const allEvents: GameEvent[] = [
     id: 'reproduction-buck-competition',
     type: 'active',
     category: 'reproduction',
+    simulated: true,
     narrativeText: "A rival buck stands in your path, his antlers lowered, his breath steaming in the cold air. A doe watches from the tree line. This is the moment you've been building toward all autumn — the swollen neck, the sharpened antlers, the blind rage. He's bigger than you expected. His tines are long and sharp and his eyes are empty of everything except the intent to kill or be killed.",
     statEffects: [
       { stat: StatId.ADV, amount: 10, label: '+ADV' },
@@ -862,6 +877,7 @@ export const allEvents: GameEvent[] = [
     id: 'migration-winter-yard-browse',
     type: 'passive',
     category: 'foraging',
+    simulated: true,
     narrativeText: "The cedar canopy closes overhead like a dark cathedral, blocking the worst of the wind but also the light. You nose through the trampled snow alongside dozens of other deer, all of you searching the same exhausted ground for anything edible. The bark has been stripped from every reachable branch, and what browse remains is thin, fibrous, bitter — food only in the loosest sense of the word.",
     statEffects: [
       { stat: StatId.HOM, amount: -3, label: '-HOM' },
@@ -880,6 +896,7 @@ export const allEvents: GameEvent[] = [
     id: 'migration-winter-yard-disease',
     type: 'active',
     category: 'health',
+    simulated: true,
     narrativeText: "A doe near the center of the yard is coughing — a wet, rattling sound that carries through the still air. Her ribs show through her dull coat, and a thick mucus drips from her nose. Several other deer are keeping their distance, but in quarters this close, distance is an illusion. You can smell the sickness on her breath.",
     statEffects: [
       { stat: StatId.ADV, amount: 4, label: '+ADV' },
@@ -944,6 +961,7 @@ export const allEvents: GameEvent[] = [
     id: 'migration-winter-yard-predator',
     type: 'active',
     category: 'predator',
+    simulated: true,
     narrativeText: "Wolves. You can hear them before you see them — low howls drifting through the frozen twilight, coordinating their approach. They circle the edges of the winter yard like shadows, testing, probing, looking for the weak link. The herd presses tighter together, a hundred heartbeats quickening as one. There is safety in the center, but the browse there is already gone.",
     statEffects: [
       { stat: StatId.TRA, amount: 6, label: '+TRA' },
@@ -1097,6 +1115,7 @@ export const allEvents: GameEvent[] = [
     id: 'chain-crop-field-return',
     type: 'active',
     category: 'foraging',
+    simulated: true,
     narrativeText: "The memory of those soybeans has been gnawing at you for days — the sweetness, the easy abundance, the way your stomach felt full for once. Your hooves carry you back to the field's edge almost without your consent. But something is different tonight. A small blinking light sits mounted on a post near the fence line, its red eye winking in the darkness. The crops are still there. So is the trap.",
     statEffects: [
       { stat: StatId.NOV, amount: 5, label: '+NOV' },
@@ -1150,6 +1169,7 @@ export const allEvents: GameEvent[] = [
     id: 'chain-deep-forest-discovery',
     type: 'passive',
     category: 'foraging',
+    simulated: true,
     narrativeText: "Your flight from the hunters carried you deeper into the forest than you've ever been — past the old-growth hemlocks, past the mossy boulders where the light turns green and strange, into a hollow you didn't know existed. A spring bubbles up from between two rocks, clear and cold, and around it grows a carpet of wild mushrooms and fiddlehead ferns. It is a hidden larder, untouched by any other browser. For a moment, the terror of the hunt fades, replaced by something close to wonder.",
     statEffects: [
       { stat: StatId.HOM, amount: -8, label: '-HOM' },
@@ -1212,6 +1232,7 @@ export const allEvents: GameEvent[] = [
     id: 'environmental-road-crossing',
     type: 'active',
     category: 'environmental',
+    simulated: true,
     narrativeText: "The forest ends abruptly at a strip of black asphalt. A two-lane road cuts through your range like a wound, reeking of tar and exhaust. You can see the trees continuing on the other side — your destination, your food, your safety — but between here and there is a gauntlet of hurtling metal and blinding light. You watch a car pass, then another. The gap between them feels both infinite and impossibly short.",
     statEffects: [
       { stat: StatId.ADV, amount: 5, label: '+ADV' },
@@ -1339,6 +1360,7 @@ export const allEvents: GameEvent[] = [
     id: 'foraging-mushroom-patch',
     type: 'active',
     category: 'foraging',
+    simulated: true,
     narrativeText: "A cluster of mushrooms erupts from the base of a rotting stump — pale caps fanning out in overlapping shelves, their undersides lined with delicate gills. The smell is earthy, rich, intoxicating. Some mushrooms are nourishing, dense with minerals your body craves. Others will shut down your liver in forty-eight hours. You have no way to tell them apart except instinct, and instinct is a coin flip in a game with mortal stakes.",
     statEffects: [],
     choices: [
