@@ -2,7 +2,7 @@ import type { SimulationTrigger } from '../types';
 import { StatId } from '../../../types/stats';
 import { resolveSocial } from '../../interactions/social';
 import { resolveFight } from '../../interactions/fight';
-import { resolveChase } from '../../interactions/chase';
+// resolveChase reserved for yearling road crossing
 
 // ══════════════════════════════════════════════════
 //  1. HERD ALARM
@@ -163,7 +163,7 @@ export const doeHierarchyTrigger: SimulationTrigger = {
     };
   },
 
-  getChoices(ctx) {
+  getChoices() {
     return [
       {
         id: 'challenge-doe',

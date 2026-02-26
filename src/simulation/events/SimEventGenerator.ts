@@ -8,7 +8,7 @@ import { renderAnimalPerspective, toDebriefingEntry } from '../narrative/rendere
 
 import { wolfPackTrigger, coyoteStalkerTrigger, cougarAmbushTrigger, huntingSeasonTrigger } from './triggers/predatorEncounter';
 import { rutCombatTrigger } from './triggers/intraspecificFight';
-import { fallHazardTrigger, blizzardExposureTrigger, vehicleStrikeTrigger } from './triggers/environmentalHazard';
+import { fallHazardTrigger, blizzardExposureTrigger, vehicleStrikeTrigger, forestFireTrigger, floodingCreekTrigger, dispersalNewRangeTrigger } from './triggers/environmentalHazard';
 import { seasonalBrowseTrigger, riskyForagingTrigger, toxicPlantTrigger } from './triggers/foraging';
 import { parasiteExposureTrigger, woundInfectionTrigger, diseaseOutbreakTrigger } from './triggers/disease';
 import { rehabilitationIntroTrigger } from './triggers/rehabilitationIntro';
@@ -88,6 +88,10 @@ const ALL_TRIGGERS: SimulationTrigger[] = [
   fawnBirthTrigger,
   fawnDefenseTrigger,
   rutDisplayTrigger,
+  // Additional environmental hazards
+  forestFireTrigger,
+  floodingCreekTrigger,
+  dispersalNewRangeTrigger,
 ];
 
 // ── Behavioral Multiplier (mirrors EventGenerator logic) ──
@@ -153,8 +157,8 @@ export function generateSimulationEvents(ctx: SimulationContext): ResolvedEvent[
     const remainingTotal = remainingWeights.reduce((a, b) => a + b, 0);
 
     // Probability that ANY simulation trigger fires this turn
-    // Capped at 0.4 to avoid overwhelming the hardcoded events
-    const fireChance = Math.min(0.4, remainingTotal);
+    // With near-complete simulation coverage (39/41 deer events), cap raised to 0.7
+    const fireChance = Math.min(0.7, remainingTotal);
     if (!ctx.rng.chance(fireChance)) break;
 
     // Weighted selection among remaining triggers

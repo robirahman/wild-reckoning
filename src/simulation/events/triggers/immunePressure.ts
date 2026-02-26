@@ -36,7 +36,6 @@ export const immunePressureTrigger: SimulationTrigger = {
   },
 
   resolve(ctx) {
-    const physio = ctx.animal.physiologyState!;
     const conditions = ctx.animal.bodyState?.conditions ?? [];
     const hasInfection = conditions.some(c => c.infectionLevel > 0);
     const parasiteCount = ctx.animal.parasites.length;

@@ -5,7 +5,7 @@ import { resolveForage } from '../interactions/forage';
 import { resolveExposure } from '../interactions/exposure';
 import { getTerrainProfile } from '../interactions/types';
 import type { SimulationContext } from '../events/types';
-import type { ChaseParams, FightParams, ForageParams, ExposureParams } from '../interactions/types';
+import type { ChaseParams, FightParams, ForageParams } from '../interactions/types';
 import { createRng } from '../../engine/RandomUtils';
 import { StatId } from '../../types/stats';
 
@@ -295,7 +295,6 @@ describe('resolveFight', () => {
   });
 
   it('winner has positive dominance change', () => {
-    const ctx = makeCtx({ weight: 200, hea: 80, seed: 42 });
     let found = false;
     for (let i = 0; i < 100; i++) {
       const testCtx = makeCtx({ weight: 200, hea: 80, seed: i });
@@ -393,7 +392,7 @@ describe('resolveForage', () => {
     expect(result).toHaveProperty('detectedByPredator');
     expect(result).toHaveProperty('detectedByHuman');
     expect(typeof result.caloriesGained).toBe('number');
-    expect(Array.isArray(result.toxicHarm)).toBe('true' ? true : true);
+    expect(Array.isArray(result.toxicHarm)).toBe(true);
   });
 
   it('gut injury reduces caloric extraction', () => {

@@ -3,7 +3,7 @@ import type { HarmEvent } from '../harm/types';
 import type { SocialParams, SocialResult } from './types';
 import type { StatEffect } from '../../types/events';
 import type { GameFlag } from '../../types/flags';
-import { StatId, computeEffectiveValue } from '../../types/stats';
+import { StatId } from '../../types/stats';
 
 /**
  * Resolve a social interaction.
@@ -20,8 +20,6 @@ import { StatId, computeEffectiveValue } from '../../types/stats';
  * - interaction type (dominance-display, alarm-response, group-foraging, dispersal)
  */
 export function resolveSocial(ctx: SimulationContext, params: SocialParams): SocialResult {
-  const rng = ctx.rng;
-
   switch (params.interactionType) {
     case 'dominance-display':
       return resolveDominanceDisplay(ctx, params);
@@ -101,7 +99,6 @@ function resolveDominanceDisplay(ctx: SimulationContext, params: SocialParams): 
 }
 
 function resolveAlarmResponse(ctx: SimulationContext, params: SocialParams): SocialResult {
-  const rng = ctx.rng;
   const vision = ctx.animal.bodyState?.capabilities['vision'] ?? 100;
 
   // Alarm effectiveness scales with group size
@@ -133,9 +130,7 @@ function resolveAlarmResponse(ctx: SimulationContext, params: SocialParams): Soc
   };
 }
 
-function resolveGroupForaging(ctx: SimulationContext, params: SocialParams): SocialResult {
-  // Group foraging: safety in numbers, slight competition for food
-  const groupBonus = Math.min(0.3, params.groupSize * 0.06);
+function resolveGroupForaging(_ctx: SimulationContext, _params: SocialParams): SocialResult {
 
   const statEffects: StatEffect[] = [
     { stat: StatId.ADV, amount: -2, label: '-ADV' },
@@ -151,10 +146,8 @@ function resolveGroupForaging(ctx: SimulationContext, params: SocialParams): Soc
   };
 }
 
-function resolveDispersal(ctx: SimulationContext, params: SocialParams): SocialResult {
+function resolveDispersal(ctx: SimulationContext, _params: SocialParams): SocialResult {
   const rng = ctx.rng;
-  const age = ctx.animal.age;
-  const locomotion = ctx.animal.bodyState?.capabilities['locomotion'] ?? 100;
 
   // Dispersal risk: road crossings, unfamiliar territory, no social support
   const harmEvents: HarmEvent[] = [];

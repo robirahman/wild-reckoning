@@ -1,6 +1,5 @@
 import type { SimulationTrigger } from '../types';
 import { StatId } from '../../../types/stats';
-import { resolveChase } from '../../interactions/chase';
 import { resolveExposure } from '../../interactions/exposure';
 
 // ══════════════════════════════════════════════════
@@ -50,7 +49,7 @@ export const winterYardScoutTrigger: SimulationTrigger = {
     };
   },
 
-  getChoices(ctx) {
+  getChoices() {
     return [
       {
         id: 'follow-matriarch',

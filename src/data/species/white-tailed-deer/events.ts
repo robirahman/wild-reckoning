@@ -283,6 +283,7 @@ const deerEvents: GameEvent[] = [
     id: 'deer-eagle-fawn-threat',
     type: 'active',
     category: 'predator',
+    simulated: true,
     narrativeText:
       'A shadow slides across the clearing — vast, silent, and purposeful. You look up and your blood goes cold. A golden eagle is circling low, its wingspan wider than you are long, its talons the size of a grown man\'s hand. It is not looking at you. It is looking at your fawn, small and spotted and utterly exposed in the open grass. The eagle tilts, adjusts, begins its descent. You have seconds.',
     statEffects: [
@@ -756,6 +757,7 @@ const deerEvents: GameEvent[] = [
     id: 'deer-forest-fire',
     type: 'active',
     category: 'environmental',
+    simulated: true,
     narrativeText:
       'You smell it before the sky turns — smoke, acrid and thickening, rolling through the understory in low, grey waves that sting your eyes and coat the back of your throat. Then you see the glow. A line of orange fire is moving through the forest floor, consuming the leaf litter and dried brush with a sound like tearing fabric. Embers spiral upward on thermal drafts, seeding new fires in the canopy ahead. The heat is building fast, pressing against your face like an open furnace. Every animal in the forest is running. You must choose your direction.',
     statEffects: [
@@ -811,6 +813,7 @@ const deerEvents: GameEvent[] = [
     id: 'deer-flooding-creek',
     type: 'active',
     category: 'environmental',
+    simulated: true,
     narrativeText:
       'The creek that you crossed yesterday at ankle depth is unrecognizable. Three days of rain have turned it into a churning, brown torrent that has swallowed its banks and is clawing at the bases of the sycamores. Debris races past — branches, fence posts, a child\'s plastic bucket spinning in the foam. Your usual crossing is gone, submerged beneath four feet of fast water. The best browse is on the other side, and you can see the tips of the dogwood shoots swaying in the wind over there, tantalizingly close.',
     statEffects: [
@@ -1408,6 +1411,7 @@ const deerEvents: GameEvent[] = [
     id: 'deer-predator-stalks-again',
     type: 'active',
     category: 'predator',
+    simulated: true,
     narrativeText:
       'The scent hits you like a cold hand on the back of your neck — {{npc.predator.name}}. The same predator that has been shadowing your herd for weeks. You have smelled this particular hunter before, recognized the undertone of old blood and wet fur. It is learning your patterns, your trails, the times you come to water. Each encounter it gets a little bolder, a little closer.',
     statEffects: [
@@ -1503,6 +1507,7 @@ const deerEvents: GameEvent[] = [
     id: 'deer-coyote-fawn-threat',
     type: 'active',
     category: 'predator',
+    simulated: true,
     narrativeText: 'A pair of coyotes has been lingering at the edge of the meadow for hours, pacing and watching. They are not interested in you — they are looking for fawns. Their yipping calls carry across the grass, and you sense that they are coordinating, trying to flush any hidden young into the open.',
     statEffects: [{ stat: StatId.TRA, amount: 3, label: '+TRA' }],
     consequences: [],
@@ -1656,6 +1661,7 @@ const deerEvents: GameEvent[] = [
     id: 'deer-dispersal-new-range',
     type: 'active',
     category: 'environmental',
+    simulated: true,
     narrativeText: 'After days of wandering through unfamiliar woods, you find a creek bottom with thick cedar cover, a south-facing slope for winter warmth, and abundant browse. No other bucks have marked this area recently. It is small and isolated, but it could be yours.',
     statEffects: [],
     consequences: [],

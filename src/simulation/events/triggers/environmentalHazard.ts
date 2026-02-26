@@ -3,6 +3,8 @@ import type { HarmEvent } from '../../harm/types';
 import { StatId } from '../../../types/stats';
 import { getEncounterRate } from '../../calibration/calibrator';
 
+import { resolveExposure } from '../../interactions/exposure';
+
 function getLocomotion(ctx: SimulationContext): number {
   return ctx.animal.bodyState?.capabilities['locomotion'] ?? 100;
 }
@@ -306,6 +308,329 @@ export const vehicleStrikeTrigger: SimulationTrigger = {
             consequences: clipped && innerCtx.rng.chance(0.2)
               ? [{ type: 'death', cause: 'Struck by vehicle' }]
               : [],
+          };
+        },
+      },
+    ];
+  },
+};
+
+// ══════════════════════════════════════════════════
+//  FOREST FIRE
+// ══════════════════════════════════════════════════
+
+export const forestFireTrigger: SimulationTrigger = {
+  id: 'sim-forest-fire',
+  category: 'environmental',
+  tags: ['danger', 'fire', 'exploration'],
+
+  isPlausible(ctx) {
+    return ctx.time.season === 'summer' || ctx.time.season === 'autumn';
+  },
+
+  computeWeight(ctx) {
+    let base = 0.003;
+    if (ctx.currentWeather?.type === 'heat_wave') base *= 5;
+    if (ctx.currentNodeType === 'forest') base *= 2;
+    if (ctx.time.season === 'summer') base *= 1.5;
+    return base;
+  },
+
+  resolve() {
+    return {
+      harmEvents: [],
+      statEffects: [
+        { stat: StatId.TRA, amount: 15, duration: 4, label: '+TRA' },
+        { stat: StatId.ADV, amount: 10, duration: 3, label: '+ADV' },
+      ],
+      consequences: [],
+      narrativeText: 'You smell it before the sky turns — smoke, acrid and thickening, rolling through the understory in low, grey waves that sting your eyes and coat the back of your throat. Then the sound reaches you: a distant, continuous roar, like a river made of heat. Through the trees you see an orange glow that is not sunset — it is fire, and it is coming toward you at the speed of wind.',
+    };
+  },
+
+  getChoices(ctx) {
+    const locomotion = getLocomotion(ctx);
+
+    return [
+      {
+        id: 'downhill-creek',
+        label: 'Run downhill toward the creek',
+        description: 'Fire runs uphill. Water is safety.',
+        style: 'default',
+        narrativeResult: 'You plunge downhill, crashing through brush, leaping fallen logs. The smoke thickens but the air is cooler here, the ground damper. The creek appears — shallow, muddy, but wet — and you wade in, standing chest-deep as the fire roars overhead through the canopy above.',
+        modifyOutcome(base, innerCtx) {
+          const burnChance = 0.15;
+          const harmEvents: HarmEvent[] = [];
+
+          if (innerCtx.rng.chance(burnChance)) {
+            harmEvents.push({
+              id: `fire-burn-${innerCtx.time.turn}`,
+              sourceLabel: 'wildfire burns',
+              magnitude: innerCtx.rng.int(15, 35),
+              targetZone: innerCtx.rng.pick(['torso', 'hind-legs']),
+              spread: 0.5,
+              harmType: 'thermal-heat',
+            });
+          }
+
+          return {
+            ...base,
+            harmEvents,
+            statEffects: [
+              { stat: StatId.TRA, amount: 10, duration: 3, label: '+TRA' },
+              { stat: StatId.WIS, amount: 4, label: '+WIS' },
+            ],
+            consequences: [
+              { type: 'add_calories' as const, amount: -200, source: 'fire escape' },
+              { type: 'set_flag' as const, flag: 'displaced-by-fire' as any },
+            ],
+          };
+        },
+      },
+      {
+        id: 'crosswind-flank',
+        label: 'Run crosswind to flank the fire',
+        description: 'Outrun the fire\'s edge. Faster but riskier.',
+        style: locomotion < 70 ? 'danger' : 'default',
+        narrativeResult: 'You bolt perpendicular to the wind, legs pumping, lungs burning from the smoke. The fire\'s edge is a wall of heat to your left, embers swirling around you.',
+        modifyOutcome(base, innerCtx) {
+          const escapeChance = 0.4 + locomotion * 0.004;
+          const escaped = innerCtx.rng.chance(escapeChance);
+
+          if (escaped) {
+            return {
+              ...base,
+              statEffects: [
+                { stat: StatId.TRA, amount: 8, duration: 2, label: '+TRA' },
+                { stat: StatId.NOV, amount: 5, duration: 2, label: '+NOV' },
+              ],
+              consequences: [
+                { type: 'add_calories' as const, amount: -300, source: 'fire sprint' },
+                { type: 'set_flag' as const, flag: 'displaced-by-fire' as any },
+              ],
+            };
+          } else {
+            return {
+              ...base,
+              harmEvents: [{
+                id: `fire-caught-${innerCtx.time.turn}`,
+                sourceLabel: 'caught by wildfire',
+                magnitude: innerCtx.rng.int(40, 80),
+                targetZone: 'random',
+                spread: 0.7,
+                harmType: 'thermal-heat',
+              }],
+              statEffects: [
+                { stat: StatId.TRA, amount: 20, duration: 5, label: '+TRA' },
+              ],
+              consequences: [
+                { type: 'modify_weight' as const, amount: -5 },
+                { type: 'set_flag' as const, flag: 'displaced-by-fire' as any },
+              ],
+            };
+          }
+        },
+      },
+    ];
+  },
+};
+
+// ══════════════════════════════════════════════════
+//  FLOODING CREEK
+// ══════════════════════════════════════════════════
+
+export const floodingCreekTrigger: SimulationTrigger = {
+  id: 'sim-flooding-creek',
+  category: 'environmental',
+  tags: ['danger', 'water', 'exploration'],
+
+  isPlausible(ctx) {
+    return ctx.time.season === 'spring' || ctx.time.season === 'autumn';
+  },
+
+  computeWeight(ctx) {
+    let base = 0.02;
+    if (ctx.currentWeather?.type === 'rain') base *= 3;
+    if (ctx.currentNodeType === 'water') base *= 2;
+    if (ctx.time.season === 'spring') base *= 1.5;
+    return base;
+  },
+
+  resolve() {
+    return {
+      harmEvents: [],
+      statEffects: [
+        { stat: StatId.ADV, amount: 6, duration: 2, label: '+ADV' },
+        { stat: StatId.NOV, amount: 5, duration: 2, label: '+NOV' },
+      ],
+      consequences: [],
+      narrativeText: 'The creek that you crossed yesterday at ankle depth is unrecognizable. Muddy water surges bank to bank, carrying branches, leaves, and the occasional drowned rodent spinning in the current. The far side holds better browse — you can see the green from here — but the water between you and it is fast, cold, and deep enough to swallow you whole.',
+    };
+  },
+
+  getChoices(ctx) {
+    const locomotion = getLocomotion(ctx);
+    const weight = ctx.animal.weight;
+
+    return [
+      {
+        id: 'swim-across',
+        label: 'Swim across',
+        description: `The current is strong.${locomotion < 70 ? ' Your legs are compromised.' : ''}`,
+        style: locomotion < 60 ? 'danger' : 'default',
+        narrativeResult: 'You wade in and the current hits you like a moving wall. The water is shockingly cold — snowmelt, not rain — and it grabs your legs and pulls downstream. You swim with desperate, churning strokes, head barely above the surface.',
+        modifyOutcome(base, innerCtx) {
+          const swimStrength = locomotion * 0.6 + weight * 0.2;
+          const drownChance = Math.max(0.02, 0.15 - swimStrength * 0.001);
+
+          if (innerCtx.rng.chance(drownChance)) {
+            return {
+              ...base,
+              harmEvents: [{
+                id: `drowning-${innerCtx.time.turn}`,
+                sourceLabel: 'near-drowning in flood',
+                magnitude: innerCtx.rng.int(50, 90),
+                targetZone: 'torso',
+                spread: 0.8,
+                harmType: 'blunt',
+              }],
+              statEffects: [
+                { stat: StatId.TRA, amount: 15, duration: 4, label: '+TRA' },
+              ],
+              consequences: [
+                { type: 'add_calories' as const, amount: -250, source: 'near-drowning' },
+              ],
+            };
+          }
+
+          const coldExposure = resolveExposure(innerCtx, {
+            type: 'cold',
+            intensity: 0.5,
+            shelterAvailable: false,
+            shelterQuality: 0,
+          });
+
+          return {
+            ...base,
+            harmEvents: coldExposure.harmEvents,
+            statEffects: [
+              { stat: StatId.NOV, amount: 3, duration: 1, label: '+NOV' },
+              { stat: StatId.WIS, amount: 3, label: '+WIS' },
+            ],
+            consequences: [
+              { type: 'add_calories' as const, amount: -150, source: 'swimming flood' },
+              ...(coldExposure.caloriesCost > 0 ? [{ type: 'add_calories' as const, amount: -coldExposure.caloriesCost, source: 'cold water exposure' }] : []),
+            ],
+          };
+        },
+      },
+      {
+        id: 'wait-recede',
+        label: 'Wait for the water to recede',
+        description: 'Patience costs calories, not life.',
+        style: 'default',
+        narrativeResult: 'You bed down in the brush on this side, watching the water. By evening the flood has subsided to something manageable — still high, still fast, but no longer lethal.',
+        modifyOutcome(base) {
+          return {
+            ...base,
+            statEffects: [
+              { stat: StatId.ADV, amount: 4, duration: 2, label: '+ADV' },
+              { stat: StatId.WIS, amount: 2, label: '+WIS' },
+            ],
+            consequences: [
+              { type: 'add_calories' as const, amount: -100, source: 'waiting for flood' },
+            ],
+          };
+        },
+      },
+    ];
+  },
+};
+
+// ══════════════════════════════════════════════════
+//  DISPERSAL — FINDING NEW RANGE
+// ══════════════════════════════════════════════════
+
+export const dispersalNewRangeTrigger: SimulationTrigger = {
+  id: 'sim-dispersal-new-range',
+  category: 'environmental',
+  tags: ['exploration'],
+
+  isPlausible(ctx) {
+    return ctx.animal.flags.has('dispersal-begun');
+  },
+
+  computeWeight(ctx) {
+    let base = 0.08;
+    if (ctx.currentNodeType === 'forest') base *= 1.5;
+    if (ctx.currentNodeResources?.cover && ctx.currentNodeResources.cover >= 50) base *= 1.3;
+    return base;
+  },
+
+  resolve(ctx) {
+    const cover = ctx.currentNodeResources?.cover ?? 50;
+    const food = ctx.currentNodeResources?.food ?? 50;
+    const quality = (cover + food) / 2;
+
+    const qualityNarrative = quality >= 60
+      ? 'This is good ground — thick cedar cover along a south-facing slope, a creek with clean water, abundant browse in every direction.'
+      : quality >= 40
+        ? 'The territory is adequate — scattered cover, decent browse, water within reach. Not the richest ground, but livable.'
+        : 'The land here is marginal — thin cover, sparse browse, a seasonal creek that may run dry. But you are exhausted from traveling.';
+
+    return {
+      harmEvents: [],
+      statEffects: [
+        { stat: StatId.NOV, amount: -5, label: '-NOV' },
+        { stat: StatId.ADV, amount: -3, label: '-ADV' },
+        { stat: StatId.WIS, amount: 4, label: '+WIS' },
+      ],
+      consequences: [],
+      narrativeText: `After days of wandering through unfamiliar woods, crossing roads and fences and fields that smelled of humans, you find it — a creek bottom with potential. ${qualityNarrative}`,
+    };
+  },
+
+  getChoices() {
+    return [
+      {
+        id: 'claim-range',
+        label: 'Claim this range',
+        description: 'Make this your home territory.',
+        style: 'default',
+        narrativeResult: 'You begin to mark — rubbing your forehead glands on low branches, scraping the earth at trail junctions. The wandering is over. You are home.',
+        modifyOutcome(base) {
+          return {
+            ...base,
+            statEffects: [
+              { stat: StatId.NOV, amount: -8, label: '-NOV' },
+              { stat: StatId.ADV, amount: -5, label: '-ADV' },
+              { stat: StatId.TRA, amount: -4, label: '-TRA' },
+              { stat: StatId.WIS, amount: 5, label: '+WIS' },
+            ],
+            consequences: [
+              { type: 'remove_flag' as const, flag: 'dispersal-begun' as any },
+              { type: 'remove_flag' as const, flag: 'dispersal-pressure' as any },
+              { type: 'set_flag' as const, flag: 'territory-established' as any },
+            ],
+          };
+        },
+      },
+      {
+        id: 'keep-searching',
+        label: 'Keep searching',
+        description: 'There might be better ground ahead.',
+        style: 'default',
+        narrativeResult: 'Something about this place doesn\'t feel right. You push on, legs heavy but will unbroken, searching for ground that matches the image burned into your genes.',
+        modifyOutcome(base) {
+          return {
+            ...base,
+            statEffects: [
+              { stat: StatId.NOV, amount: 4, duration: 2, label: '+NOV' },
+              { stat: StatId.ADV, amount: 3, duration: 2, label: '+ADV' },
+            ],
+            consequences: [
+              { type: 'add_calories' as const, amount: -120, source: 'continued dispersal' },
+            ],
           };
         },
       },

@@ -1,7 +1,6 @@
 import type { SimulationTrigger } from '../types';
 import { StatId } from '../../../types/stats';
 import { resolveExposure } from '../../interactions/exposure';
-import type { HarmEvent } from '../../harm/types';
 
 // ══════════════════════════════════════════════════
 //  ANTLER VELVET — spring antler growth
@@ -19,13 +18,12 @@ export const antlerVelvetTrigger: SimulationTrigger = {
     return true;
   },
 
-  computeWeight(ctx) {
+  computeWeight() {
     // Guaranteed to happen once per spring for bucks
     return 0.15;
   },
 
   resolve(ctx) {
-    const age = ctx.animal.age;
     const bcs = ctx.animal.physiologyState?.bodyConditionScore ?? 3;
 
     // Antler size depends on age and body condition
@@ -156,13 +154,12 @@ export const autumnRutTrigger: SimulationTrigger = {
     return true;
   },
 
-  computeWeight(ctx) {
+  computeWeight() {
     // Guaranteed to fire once per autumn for eligible bucks
     return 0.2;
   },
 
   resolve(ctx) {
-    const weight = ctx.animal.weight;
     const bcs = ctx.animal.physiologyState?.bodyConditionScore ?? 3;
 
     const readyNarrative = bcs >= 3
@@ -219,9 +216,7 @@ export const winterYardTrigger: SimulationTrigger = {
     return base;
   },
 
-  resolve(ctx) {
-    const bcs = ctx.animal.physiologyState?.bodyConditionScore ?? 3;
-
+  resolve() {
     return {
       harmEvents: [],
       statEffects: [
@@ -234,7 +229,7 @@ export const winterYardTrigger: SimulationTrigger = {
     };
   },
 
-  getChoices(ctx) {
+  getChoices() {
     return [
       {
         id: 'join-yard',

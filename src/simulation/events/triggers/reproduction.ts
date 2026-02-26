@@ -2,7 +2,7 @@ import type { SimulationTrigger } from '../types';
 import { StatId } from '../../../types/stats';
 import { resolveChase } from '../../interactions/chase';
 import { resolveFight } from '../../interactions/fight';
-import { resolveSocial } from '../../interactions/social';
+// resolveSocial reserved for future mating social dynamics
 
 // ══════════════════════════════════════════════════
 //  FAWN BIRTH — spring birthing event
