@@ -29,10 +29,10 @@ export const PIG_CONFIG: SpeciesConfig = {
   },
 
   weight: {
-    starvationDeath: 60,
-    starvationDebuff: 100,
+    starvationDeath: 10,   // Below starting weight — piglets are small but not starving
+    starvationDebuff: 12,
     vulnerabilityThreshold: 120,
-    minFloor: 15,
+    minFloor: 5,
     debuffMaxPenalty: 20,
     maximumBiologicalWeight: 900,
   },
@@ -63,11 +63,13 @@ export const PIG_CONFIG: SpeciesConfig = {
   },
 
   seasonalWeight: {
-    spring: 2.0,
-    summer: 2.0,
-    autumn: 2.0,
-    winter: 2.0,
-    foragingBonus: 0,
+    // Industrial pigs gain ~1.5-2.0 lbs/day on high-energy feed
+    // Slightly reduced in summer (heat stress in sheds)
+    spring: 1.6,
+    summer: 1.3,  // Heat stress reduces feed conversion
+    autumn: 1.6,
+    winter: 1.5,
+    foragingBonus: 0,  // No foraging in confinement — all feed is delivered
   },
 
   agePhases: [

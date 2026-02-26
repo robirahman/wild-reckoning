@@ -29,10 +29,10 @@ export const CHICKEN_CONFIG: SpeciesConfig = {
   },
 
   weight: {
-    starvationDeath: 1.0,
-    starvationDebuff: 2.0,
+    starvationDeath: 0.05,  // Below starting weight — chicks are tiny but fed immediately
+    starvationDebuff: 0.08,
     vulnerabilityThreshold: 3.5,
-    minFloor: 0.1,
+    minFloor: 0.05,
     debuffMaxPenalty: 30,
     maximumBiologicalWeight: 12,
   },
@@ -63,11 +63,13 @@ export const CHICKEN_CONFIG: SpeciesConfig = {
   },
 
   seasonalWeight: {
-    spring: 0.5, // Rapid growth phase
-    summer: 0.5,
-    autumn: 0.5,
-    winter: 0.5,
-    foragingBonus: 0, // No foraging in cages/sheds
+    // Broilers gain ~0.12-0.15 lbs/day on growth-optimized feed
+    // Reaches 6+ lbs in 42 days — faster than skeletons can support
+    spring: 0.13,
+    summer: 0.11,  // Heat stress in packed sheds
+    autumn: 0.13,
+    winter: 0.12,
+    foragingBonus: 0,  // No foraging in confinement — all feed is delivered
   },
 
   agePhases: [

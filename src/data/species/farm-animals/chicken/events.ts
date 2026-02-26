@@ -2,6 +2,42 @@ import type { GameEvent } from '../../../../types/events';
 import { StatId } from '../../../../types/stats';
 
 export const CHICKEN_EVENTS: GameEvent[] = [
+  // ── Industrial Feeding Events ──
+  {
+    id: 'chicken-industrial-feeding',
+    type: 'passive',
+    category: 'foraging',
+    narrativeText: 'Feed flows continuously from overhead hoppers into long metal troughs. The pellets are formulated for maximum growth — corn, soybean meal, animal fat, antibiotics, coccidiostats. You eat because there is nothing else to do. The lights are kept on 23 hours a day to encourage constant feeding. Your body converts feed to flesh at a rate that would have been biologically impossible fifty years ago.',
+    statEffects: [
+      { stat: StatId.HOM, amount: -1, label: '-HOM' },
+    ],
+    consequences: [
+      { type: 'add_calories', amount: 4, source: 'growth-optimized feed' },
+    ],
+    conditions: [],
+    weight: 80,
+    tags: ['feeding', 'daily'],
+  },
+  {
+    id: 'chicken-rapid-growth-strain',
+    type: 'passive',
+    category: 'health',
+    narrativeText: 'Your body is gaining weight so fast that your heart and lungs cannot keep pace. You pant in the heated shed, your breast muscles so heavy that standing is an effort. Modern broilers have been bred to reach slaughter weight in six weeks — a growth rate that would be lethal if it continued. Your skeleton, your cardiovascular system, your organs are all running behind your muscles in a race none of them can win.',
+    statEffects: [
+      { stat: StatId.HEA, amount: -5, label: '-HEA' },
+      { stat: StatId.STR, amount: 4, label: '+STR' },
+    ],
+    consequences: [
+      { type: 'add_calories', amount: 3, source: 'forced growth' },
+    ],
+    conditions: [
+      { type: 'weight_above', threshold: 2.0 },
+    ],
+    cooldown: 5,
+    weight: 25,
+    tags: ['health', 'growth', 'feeding'],
+  },
+  // ── Culling and Stress Events ──
   {
     id: 'chicken-male-culling',
     type: 'active',
