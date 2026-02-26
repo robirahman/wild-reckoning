@@ -3,6 +3,7 @@ import type { Season } from './world';
 import type { Diet, Backstory } from './species';
 import type { GameEvent } from './events';
 import type { ParasiteDefinition, InjuryDefinition } from './health';
+import type { GameFlag } from './flags';
 
 // ════════════════════════════════════════════════
 //  REPRODUCTION CONFIGS
@@ -23,8 +24,8 @@ export interface MaleCompetitionConfig {
   lossInjuryChance: number;
   lossInjuryId: string;
   lossInjuryBodyParts: string[];
-  challengeFlag: string;
-  matedFlag: string;
+  challengeFlag: GameFlag;
+  matedFlag: GameFlag;
 }
 
 export interface OffspringCountFormula {
@@ -61,9 +62,9 @@ export interface IteroparousReproConfig {
   offspringSurvivalMin: number;
   offspringSurvivalMax: number;
   offspringDeathCauses: string[];
-  pregnantFlag: string;
-  dependentFlag: string;
-  independenceFlag: string;
+  pregnantFlag: GameFlag;
+  dependentFlag: GameFlag;
+  independenceFlag: GameFlag;
 }
 
 export interface SemelparousReproConfig {
@@ -75,9 +76,9 @@ export interface SemelparousReproConfig {
   eggCountWeightFactor: number;
   eggSurvivalBase: number;
   eggSurvivalWisFactor: number;
-  spawningMigrationFlag: string;
-  spawningGroundsFlag: string;
-  spawningCompleteFlag: string;
+  spawningMigrationFlag: GameFlag;
+  spawningGroundsFlag: GameFlag;
+  spawningCompleteFlag: GameFlag;
   maleCompetition: MaleCompetitionConfig;
 }
 
@@ -90,7 +91,7 @@ export type ReproductionConfig = IteroparousReproConfig | SemelparousReproConfig
 export interface LifecyclePhase {
   id: string;
   label: string;
-  entryFlag?: string;
+  entryFlag?: GameFlag;
   regionId: string;
   description: string;
 }
@@ -114,9 +115,9 @@ export interface AgePhase {
 export interface MigrationConfig {
   winterRegionId: string;
   winterRegionName: string;
-  migrationFlag: string;        // 'will-migrate'
-  migratedFlag: string;         // 'has-migrated'
-  returnFlag: string;           // 'returned-from-migration'
+  migrationFlag: GameFlag;        // 'will-migrate'
+  migratedFlag: GameFlag;         // 'has-migrated'
+  returnFlag: GameFlag;           // 'returned-from-migration'
   migrationSeason: Season;      // When migration happens
   returnSeason: Season;         // When return happens
 }

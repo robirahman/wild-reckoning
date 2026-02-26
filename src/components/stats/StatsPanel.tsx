@@ -61,16 +61,22 @@ export function StatsPanel() {
   const turnHistory = useGameStore((s) => s.turnHistory);
 
   // Compute effective values for display
-  const effectiveValues = {} as Record<StatId, number>;
-  for (const statId of Object.values(StatId)) {
-    effectiveValues[statId] = computeEffectiveValue(stats[statId]);
-  }
+  const effectiveValues = useMemo(() => {
+    const vals = {} as Record<StatId, number>;
+    for (const statId of Object.values(StatId)) {
+      vals[statId] = computeEffectiveValue(stats[statId]);
+    }
+    return vals;
+  }, [stats]);
 
   // Collect all modifiers for tooltips
-  const allModifiers: StatModifier[] = [];
-  for (const statId of Object.values(StatId)) {
-    allModifiers.push(...stats[statId].modifiers);
-  }
+  const allModifiers = useMemo(() => {
+    const mods: StatModifier[] = [];
+    for (const statId of Object.values(StatId)) {
+      mods.push(...stats[statId].modifiers);
+    }
+    return mods;
+  }, [stats]);
 
   const trends = useMemo(
     () => computeTrends(effectiveValues, turnHistory),

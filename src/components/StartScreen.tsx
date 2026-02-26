@@ -59,7 +59,7 @@ export function StartScreen() {
 
   const handleStartGame = () => {
     const seed = seedInput.trim() !== '' ? parseInt(seedInput, 10) : undefined;
-    startGame(selectedSpeciesId, backstory, selectedSex, selectedDifficulty, isNaN(seed as any) ? undefined : seed);
+    startGame(selectedSpeciesId, backstory, selectedSex, selectedDifficulty, isNaN(seed as number) ? undefined : seed);
   };
 
   const handleScenarioSelect = (scenarioId: string) => {

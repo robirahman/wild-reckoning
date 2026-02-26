@@ -1,10 +1,8 @@
 import { useGameStore } from '../store/gameStore';
-import { StatId } from '../types/stats';
 import styles from '../styles/stats.module.css';
 
 export function RegionalHealth() {
   const ecosystem = useGameStore((s) => s.ecosystem);
-  const animalRegion = useGameStore((s) => s.animal.region);
   
   if (!ecosystem) return null;
 

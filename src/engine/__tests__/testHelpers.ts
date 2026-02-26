@@ -9,9 +9,9 @@ export function createMockRng(overrides: {
   return {
     random: () => overrides.random ?? 0.5,
     chance: () => overrides.chance ?? false,
-    int: (min, _max) => overrides.int ?? min,
+    int: (min) => overrides.int ?? min,
     pick: (arr) => arr[0],
-    weightedSelect: (_weights) => 0,
+    weightedSelect: () => 0,
     getState: () => 0,
     setState: () => {},
   } as Rng;

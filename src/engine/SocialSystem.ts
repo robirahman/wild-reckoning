@@ -2,7 +2,7 @@ import type { SocialState } from '../types/social';
 import type { Rng } from './RandomUtils';
 
 export function tickSocial(state: SocialState, rng: Rng): SocialState {
-  let newState = { ...state };
+  const newState = { ...state };
   
   // Dominance drift
   if (state.rank !== 'lone') {
@@ -25,7 +25,7 @@ export function challengeAlpha(state: SocialState, rng: Rng, strength: number): 
   const winChance = strength / 100 * 0.6; // Base 60% at max strength
   const success = rng.chance(winChance);
   
-  let newState = { ...state };
+  const newState = { ...state };
   if (success) {
     newState.rank = 'alpha';
     newState.dominance = 80;

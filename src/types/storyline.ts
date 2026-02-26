@@ -1,4 +1,5 @@
 import type { EventCondition, StatEffect, Consequence, EventChoice } from './events';
+import type { GameFlag } from './flags';
 
 export interface StorylineStep {
   id: string;
@@ -14,7 +15,7 @@ export interface StorylineStep {
   statEffects: StatEffect[];
   consequences: Consequence[];
   /** Flag set when this step triggers (used to track progression) */
-  completionFlag: string;
+  completionFlag: GameFlag;
   /** If present, this step shows as an active event with choices */
   choices?: EventChoice[];
   /** If a choice leads to a specific next step ID instead of sequential advancement */

@@ -18,6 +18,7 @@ export const createAnimalSlice: GameSlice<AnimalSlice> = (set, get) => {
     reproduction: initialReproduction(defaultBundle.config),
     actionsPerformed: [],
     evolution: { activeMutations: [], availableChoices: [], generationCount: 0, lineageHistory: [] },
+    lineage: null,
 
     updateBehavioralSetting: (key, value) => {
       set({
@@ -41,7 +42,7 @@ export const createAnimalSlice: GameSlice<AnimalSlice> = (set, get) => {
         season: state.time.season,
         matingSeasons:
           state.speciesBundle.config.reproduction.type === 'iteroparous'
-            ? (state.speciesBundle.config.reproduction as any).matingSeasons ?? 'any'
+            ? (state.speciesBundle.config.reproduction as Extract<typeof state.speciesBundle.config.reproduction, { type: 'iteroparous' }>).matingSeasons ?? 'any'
             : [],
         rng: state.rng,
         nutrients: state.animal.nutrients,

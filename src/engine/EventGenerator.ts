@@ -90,7 +90,7 @@ function checkCondition(cond: EventCondition, ctx: GenerationContext): boolean {
       return !ctx.npcs?.some((n) => n.type === cond.npcType && n.alive);
     case 'node_type': {
       if (!ctx.currentNodeType) return true;
-      return cond.nodeTypes.includes(ctx.currentNodeType as any);
+      return (cond.nodeTypes as string[]).includes(ctx.currentNodeType);
     }
     case 'social_rank':
       return cond.ranks.includes(ctx.animal.social.rank);

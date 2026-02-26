@@ -1,7 +1,7 @@
 import type { StateCreator } from 'zustand';
 import type { GameState } from '../gameStore';
 import type { Difficulty } from '../../types/difficulty';
-import type { SpeciesConfig, SpeciesDataBundle } from '../../types/speciesConfig';
+import type { SpeciesDataBundle } from '../../types/speciesConfig';
 import type { AnimalState, Backstory } from '../../types/species';
 import type { TimeState } from '../../types/world';
 import type { BehavioralSettings } from '../../types/behavior';
@@ -17,6 +17,7 @@ import type { RegionMap } from '../../types/map';
 import type { WeatherState } from '../../engine/WeatherSystem';
 import type { EvolutionState } from '../../types/evolution';
 import type { Rng } from '../../engine/RandomUtils';
+import type { LineageTraits } from '../../types/lineage';
 import { StatId } from '../../types/stats';
 
 export type GameSlice<T> = StateCreator<GameState, [['zustand/devtools', never]], [], T>;
@@ -62,6 +63,7 @@ export interface AnimalSlice {
   reproduction: ReproductionState;
   actionsPerformed: string[];
   evolution: EvolutionState;
+  lineage: LineageTraits | null;
 
   updateBehavioralSetting: (key: keyof BehavioralSettings, value: 1 | 2 | 3 | 4 | 5) => void;
   performAction: (actionId: string) => void;

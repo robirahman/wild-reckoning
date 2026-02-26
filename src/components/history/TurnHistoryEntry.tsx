@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import type { TurnRecord } from '../../store/gameStore';
+import type { TurnRecord } from '../../store/slices/types';
+import type { ResolvedEvent, EventChoice } from '../../types/events';
 import styles from '../../styles/history.module.css';
 
 interface Props {
@@ -26,14 +27,14 @@ export function TurnHistoryEntry({ record }: Props) {
           {record.events.length === 0 ? (
             <div className={styles.emptyState}>No events this turn.</div>
           ) : (
-            record.events.map((event) => (
+            record.events.map((event: ResolvedEvent) => (
               <div key={event.definition.id} className={styles.eventEntry}>
                 <div className={styles.eventNarrative}>
                   {event.resolvedNarrative}
                 </div>
                 {event.choiceMade && event.definition.choices && (
                   <div className={styles.eventChoice}>
-                    Chose: {event.definition.choices.find((c) => c.id === event.choiceMade)?.label ?? event.choiceMade}
+                    Chose: {event.definition.choices.find((c: EventChoice) => c.id === event.choiceMade)?.label ?? event.choiceMade}
                   </div>
                 )}
               </div>

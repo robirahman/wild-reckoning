@@ -163,4 +163,6 @@ export type GameFlag =
   | 'cubs-just-independent'
   | 'dispersal-pressure'
   | 'dispersal-begun'
-  | 'dispersal-settled';
+  | 'dispersal-settled'
+  | (string & {}); // Fallback to allow gradual migration and data-driven flags
+

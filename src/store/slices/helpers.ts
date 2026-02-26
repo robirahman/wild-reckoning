@@ -1,6 +1,7 @@
 import type { AnimalState, Backstory } from '../../types/species';
 import type { SpeciesConfig } from '../../types/speciesConfig';
 import type { ReproductionState } from '../../types/reproduction';
+import type { GameFlag } from '../../types/flags';
 import { StatId } from '../../types/stats';
 import { createStatBlock } from '../../engine/StatCalculator';
 import { INITIAL_SOCIAL_STATE } from '../../types/social';
@@ -27,7 +28,7 @@ export function createInitialAnimal(config: SpeciesConfig, backstory: Backstory,
     injuries: [],
     conditions: [],
     backstory,
-    flags: new Set<string>(),
+    flags: new Set<GameFlag>(),
     alive: true,
     activeMutations: [],
     social: { ...INITIAL_SOCIAL_STATE },

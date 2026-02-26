@@ -5,13 +5,13 @@ import { generateWeather, tickWeather, computeWeatherPenalty, weatherLabel } fro
 import { tickSocial } from '../../engine/SocialSystem';
 import { StatId, computeEffectiveValue } from '../../types/stats';
 import { addModifier, tickModifiers, removeModifiersBySource } from '../../engine/StatCalculator';
-import { getScaling } from '../../engine/SpeciesScale';
 import { tickReproduction, determineOffspringCount, createOffspring } from '../../engine/ReproductionSystem';
 import { DIFFICULTY_PRESETS } from '../../types/difficulty';
 import { TERRITORIAL_SPECIES, territoryWeightModifier } from '../../engine/TerritorySystem';
 import { modifyPopulation } from '../../engine/EcosystemSystem';
 import { introduceNPC } from '../../engine/NPCSystem';
 import { tickPhysiology } from '../../engine/PhysiologySystem';
+import type { GameFlag } from '../../types/flags';
 
 export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
   currentEvents: [],
@@ -135,14 +135,14 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
       }
       case 'set_flag': {
         const newFlags = new Set(animal.flags);
-        newFlags.add(consequence.flag as any);
+        newFlags.add(consequence.flag as GameFlag);
         animal.flags = newFlags;
         set({ animal });
         break;
       }
       case 'remove_flag': {
         const newFlags = new Set(animal.flags);
-        newFlags.delete(consequence.flag as any);
+        newFlags.delete(consequence.flag as GameFlag);
         animal.flags = newFlags;
         set({ animal });
         break;
@@ -164,8 +164,8 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
             : determineOffspringCount(animal.weight, hea, config, state.rng);
 
           const newFlags = new Set(animal.flags);
-          newFlags.add(reproConfig.pregnantFlag as any);
-          newFlags.add(reproConfig.maleCompetition.matedFlag as any);
+          newFlags.add(reproConfig.pregnantFlag as GameFlag);
+          newFlags.add(reproConfig.maleCompetition.matedFlag as GameFlag);
           animal.flags = newFlags;
 
           set({
@@ -197,7 +197,7 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
           const fawns = createOffspring(count, state.time.turn, state.time.year, wis, true, config, state.rng);
 
           const newFlags = new Set(animal.flags);
-          newFlags.add(reproConfig.maleCompetition.matedFlag as any);
+          newFlags.add(reproConfig.maleCompetition.matedFlag as GameFlag);
           animal.flags = newFlags;
 
           set({
@@ -236,7 +236,7 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
           const estimatedSurvivors = Math.round(eggCount * survivalRate);
 
           const newFlags = new Set(animal.flags);
-          newFlags.add(reproConfig.spawningCompleteFlag as any);
+          newFlags.add(reproConfig.spawningCompleteFlag as GameFlag);
           animal.flags = newFlags;
 
           set({
@@ -440,7 +440,7 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
             ...currentMap,
             nodes: currentMap.nodes.map(n => {
               let type = n.type;
-              let resources = { ...n.resources };
+              const resources = { ...n.resources };
               if (newTime.season === 'winter' && type === 'water' && state.rng.chance(0.7)) {
                 type = 'plain';
               } else if (newTime.season !== 'winter' && type === 'plain' && n.id.includes('water')) {
@@ -507,28 +507,28 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
       const newFlags = new Set(currentAnimal.flags);
       if (currentReproduction.type === 'iteroparous') {
         const reproResult = tickReproduction(currentReproduction, currentAnimal, newTime, config, state.rng);
-        for (const f of reproResult.flagsToAdd) newFlags.add(f as any);
-        for (const f of reproResult.flagsToRemove) newFlags.delete(f as any);
+        for (const f of reproResult.flagsToAdd) newFlags.add(f as GameFlag);
+        for (const f of reproResult.flagsToRemove) newFlags.delete(f as GameFlag);
         currentReproduction = reproResult.reproduction;
       }
 
       if (config.migration) {
         const mig = config.migration;
-        if (newTime.season === mig.migrationSeason && newFlags.has(mig.migrationFlag as any) && !newFlags.has(mig.migratedFlag as any)) {
-          newFlags.add(mig.migratedFlag as any);
-          newFlags.delete(mig.migrationFlag as any);
+        if (newTime.season === mig.migrationSeason && newFlags.has(mig.migrationFlag as GameFlag) && !newFlags.has(mig.migratedFlag as GameFlag)) {
+          newFlags.add(mig.migratedFlag as GameFlag);
+          newFlags.delete(mig.migrationFlag as GameFlag);
         }
-        if (newTime.season === mig.returnSeason && newFlags.has(mig.migratedFlag as any)) {
-          newFlags.delete(mig.migratedFlag as any);
-          newFlags.add(mig.returnFlag as any);
-        } else if (newFlags.has(mig.returnFlag as any)) {
-          newFlags.delete(mig.returnFlag as any);
+        if (newTime.season === mig.returnSeason && newFlags.has(mig.migratedFlag as GameFlag)) {
+          newFlags.delete(mig.migratedFlag as GameFlag);
+          newFlags.add(mig.returnFlag as GameFlag);
+        } else if (newFlags.has(mig.returnFlag as GameFlag)) {
+          newFlags.delete(mig.returnFlag as GameFlag);
         }
       }
 
       let newRegion = currentAnimal.region;
       if (config.migration) {
-        if (newFlags.has(config.migration.migratedFlag as any)) {
+        if (newFlags.has(config.migration.migratedFlag as GameFlag)) {
           newRegion = config.migration.winterRegionId;
         } else {
           newRegion = config.defaultRegion;

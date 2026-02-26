@@ -11,7 +11,7 @@ export interface AchievementDefinition {
   species?: string | string[];
   check: (state: GameState) => boolean;
   /** Returns partial progress for display. Undefined = binary unlock. */
-  progress?: (state: any) => { current: number; target: number } | null;
+  progress?: (state: GameState) => { current: number; target: number } | null;
 }
 
 const WEIGHT_THRESHOLDS: Record<string, { heavy: number; nearStarvation: number; unit: string }> = {

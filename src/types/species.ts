@@ -4,6 +4,7 @@ import type { ActiveParasite, ActiveInjury, ActiveCondition } from './health';
 import type { Season } from './world';
 import type { Mutation } from './evolution';
 import type { SocialState } from './social';
+import type { GameFlag } from './flags';
 
 export type Diet = 'herbivore' | 'carnivore' | 'omnivore';
 
@@ -108,7 +109,7 @@ export interface AnimalState {
   injuries: ActiveInjury[];
   conditions: ActiveCondition[];
   backstory: Backstory;
-  flags: Set<string>; // Persistent flags set by events
+  flags: Set<GameFlag>; // Persistent flags set by events
   alive: boolean;
   causeOfDeath?: string;
   

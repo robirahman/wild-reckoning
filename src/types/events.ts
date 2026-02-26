@@ -1,5 +1,6 @@
 import type { Season } from './world';
 import { StatId } from './stats';
+import type { GameFlag } from './flags';
 
 export type EventType = 'active' | 'passive';
 
@@ -37,8 +38,8 @@ export type EventCondition =
   | { type: 'has_injury'; injuryId?: string }
   | { type: 'no_injury'; injuryId: string }
   | { type: 'age_range'; min?: number; max?: number }
-  | { type: 'has_flag'; flag: string }
-  | { type: 'no_flag'; flag: string }
+  | { type: 'has_flag'; flag: GameFlag }
+  | { type: 'no_flag'; flag: GameFlag }
   | { type: 'weight_above'; threshold: number }
   | { type: 'weight_below'; threshold: number }
   | { type: 'sex'; sex: 'male' | 'female' }
@@ -58,8 +59,8 @@ export type Consequence =
   | { type: 'add_injury'; injuryId: string; severity?: number; bodyPart?: string }
   | { type: 'remove_parasite'; parasiteId: string }
   | { type: 'change_region'; regionId: string }
-  | { type: 'set_flag'; flag: string }
-  | { type: 'remove_flag'; flag: string }
+  | { type: 'set_flag'; flag: GameFlag }
+  | { type: 'remove_flag'; flag: GameFlag }
   | { type: 'modify_weight'; amount: number }
   | { type: 'modify_age'; amount: number }
   | { type: 'modify_nutrients'; nutrient: 'minerals' | 'vitamins'; amount: number }
@@ -96,7 +97,7 @@ export interface EscapeOption {
   /** Stat cost for choosing this option (applied regardless of survival) */
   statCost?: StatEffect[];
   /** Optional flag that must be set to use this option */
-  requiredFlag?: string;
+  requiredFlag?: GameFlag;
 }
 
 // ── Choices ──

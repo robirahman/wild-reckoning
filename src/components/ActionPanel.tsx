@@ -24,7 +24,7 @@ export function ActionPanel() {
     season,
     matingSeasons:
       reproduction.type === 'iteroparous'
-        ? (reproduction as any).matingSeasons ?? 'any'
+        ? (reproduction as Extract<typeof reproduction, { type: 'iteroparous' }>).matingSeasons ?? 'any'
         : [],
     rng,
     nutrients,

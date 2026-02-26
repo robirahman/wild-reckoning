@@ -251,3 +251,26 @@ export function tickReproduction(
 
   return { reproduction: updated, narratives, flagsToAdd, flagsToRemove };
 }
+
+/** Compute probability of winning a male-male competition */
+export function computeBuckWinProbability(
+  heaStat: number,
+  weight: number,
+  strStat: number,
+  injuries: number,
+  parasites: number,
+  config: SpeciesConfig
+): number {
+  const comp = config.reproduction.type === 'iteroparous' ? config.reproduction.maleCompetition : null;
+  if (!comp || !comp.enabled) return 0;
+
+  let prob = comp.baseWinProb;
+  prob += heaStat * comp.heaFactor;
+  prob += (weight - comp.weightReferencePoint) * comp.weightFactor;
+  prob += (strStat - 50) * 0.002; 
+
+  prob -= injuries * comp.injuryPenalty;
+  prob -= parasites * comp.parasitePenalty;
+
+  return Math.max(comp.minWinProb, Math.min(comp.maxWinProb, prob));
+}

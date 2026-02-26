@@ -86,7 +86,7 @@ export function tickPhysiology(
   // Passive Mental Stress Accumulation/Decay
   let traChange = -2; // Base trauma decay
   let advChange = -4; // Base adversity decay
-  let novChange = -5; // Base novelty decay
+  const novChange = -5; // Base novelty decay
 
   // Behavioral Pressures
   // Caution: High caution prevents trauma but increases adversity (stress of alertness)

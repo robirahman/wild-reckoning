@@ -9,7 +9,7 @@ import { DEFAULT_BEHAVIORAL_SETTINGS } from '../../types/behavior';
 import { loadGame } from '../persistence';
 import { createInitialAnimal, initialReproduction } from './helpers';
 
-export const createGameSystemSlice: GameSlice<GameSystemSlice> = (set, get) => {
+export const createGameSystemSlice: GameSlice<GameSystemSlice> = (set) => {
   const seed = Date.now();
   const rng = createRng(seed);
   const defaultBundle = getSpeciesBundle('white-tailed-deer');

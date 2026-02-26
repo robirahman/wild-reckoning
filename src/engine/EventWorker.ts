@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { StatId } from '../types/stats';
 import { createRng } from './RandomUtils';
 import { DIFFICULTY_PRESETS, type Difficulty } from '../types/difficulty';

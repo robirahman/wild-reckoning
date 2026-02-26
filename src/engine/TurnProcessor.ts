@@ -198,6 +198,7 @@ export function resolveTurn(state: GameState): {
         str,
         state.animal.injuries.length,
         state.animal.parasites.length,
+        config,
       );
 
       if (state.rng.chance(winProb)) {
