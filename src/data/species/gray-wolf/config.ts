@@ -35,6 +35,7 @@ export const GRAY_WOLF_CONFIG: SpeciesConfig = {
     vulnerabilityThreshold: 60,
     minFloor: 20,
     debuffMaxPenalty: 15,
+    maximumBiologicalWeight: 175,
   },
 
   age: {

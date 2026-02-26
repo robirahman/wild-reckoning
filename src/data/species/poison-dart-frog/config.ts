@@ -35,6 +35,7 @@ export const POISON_DART_FROG_CONFIG: SpeciesConfig = {
     vulnerabilityThreshold: 0.000014,
     minFloor: 0.000004,
     debuffMaxPenalty: 18,
+    maximumBiologicalWeight: 0.00005,
   },
 
   age: {

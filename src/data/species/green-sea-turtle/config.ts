@@ -35,6 +35,7 @@ export const GREEN_SEA_TURTLE_CONFIG: SpeciesConfig = {
     vulnerabilityThreshold: 180,
     minFloor: 50,
     debuffMaxPenalty: 18,
+    maximumBiologicalWeight: 500,
   },
 
   age: {
@@ -130,13 +131,13 @@ export const GREEN_SEA_TURTLE_CONFIG: SpeciesConfig = {
     offspringLabelTriple: 'a massive clutch of eggs',
     dependenceTurns: 0,
     maturationTurns: 240,
-    offspringBaseSurvival: 0.994,
-    offspringSurvivalWinterPenalty: 0.05,
-    offspringSurvivalSummerBonus: 0.03,
-    offspringSurvivalYoungPenalty: 0.10,
+    offspringBaseSurvival: 0.996,
+    offspringSurvivalWinterPenalty: 0.005,
+    offspringSurvivalSummerBonus: 0.002,
+    offspringSurvivalYoungPenalty: 0.010,
     offspringSurvivalYoungThreshold: 6,
-    offspringSurvivalMin: 0.20,
-    offspringSurvivalMax: 0.65,
+    offspringSurvivalMin: 0.90,
+    offspringSurvivalMax: 0.998,
     offspringDeathCauses: [
       'Eaten by ghost crabs',
       'Taken by frigatebirds',

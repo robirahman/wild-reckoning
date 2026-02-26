@@ -35,6 +35,7 @@ export const COMMON_OCTOPUS_CONFIG: SpeciesConfig = {
     vulnerabilityThreshold: 3.0,
     minFloor: 0.5,
     debuffMaxPenalty: 20,
+    maximumBiologicalWeight: 20,
   },
 
   age: {

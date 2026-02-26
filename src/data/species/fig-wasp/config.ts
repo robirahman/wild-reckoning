@@ -36,6 +36,7 @@ export const FIG_WASP_CONFIG: SpeciesConfig = {
     vulnerabilityThreshold: 0.000000020,
     minFloor: 0.000000005,
     debuffMaxPenalty: 25,
+    maximumBiologicalWeight: 0.0000001,
   },
 
   age: {

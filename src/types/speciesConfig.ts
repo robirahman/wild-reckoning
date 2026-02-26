@@ -145,6 +145,7 @@ export interface SpeciesConfig {
     vulnerabilityThreshold: number;
     minFloor: number;
     debuffMaxPenalty: number;
+    maximumBiologicalWeight: number;
   };
 
   age: {

@@ -35,6 +35,7 @@ export const WHITE_TAILED_DEER_CONFIG: SpeciesConfig = {
     vulnerabilityThreshold: 80,
     minFloor: 20,
     debuffMaxPenalty: 15,
+    maximumBiologicalWeight: 300,
   },
 
   age: {

@@ -35,6 +35,7 @@ export const HONEYBEE_WORKER_CONFIG: SpeciesConfig = {
     vulnerabilityThreshold: 0.00014,
     minFloor: 0.00003,
     debuffMaxPenalty: 20,
+    maximumBiologicalWeight: 0.0004,
   },
 
   age: {

@@ -35,6 +35,7 @@ export const MONARCH_BUTTERFLY_CONFIG: SpeciesConfig = {
     vulnerabilityThreshold: 0.00055,
     minFloor: 0.00011,
     debuffMaxPenalty: 25,
+    maximumBiologicalWeight: 0.0015,
   },
 
   age: {

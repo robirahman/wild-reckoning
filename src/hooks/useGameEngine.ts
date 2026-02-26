@@ -154,6 +154,14 @@ export function useGameEngine() {
       return;
     }
 
+    // 0. Total Health Depletion
+    if (computeEffectiveValue(animal.stats[StatId.HEA]) <= 0) {
+      store.killAnimal(
+        'Systemic Failure — your health has been completely depleted, and your body can no longer maintain its vital functions.'
+      );
+      return;
+    }
+
     // 1. Starvation
     if (animal.weight < config.weight.starvationDeath) {
       store.killAnimal(

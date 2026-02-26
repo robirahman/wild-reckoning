@@ -36,6 +36,7 @@ export const AFRICAN_ELEPHANT_CONFIG: SpeciesConfig = {
     vulnerabilityThreshold: 3000,
     minFloor: 1000,
     debuffMaxPenalty: 15,
+    maximumBiologicalWeight: 15000,
   },
 
   age: {
@@ -120,13 +121,13 @@ export const AFRICAN_ELEPHANT_CONFIG: SpeciesConfig = {
     offspringLabelTriple: 'twin calves',
     dependenceTurns: 36,
     maturationTurns: 120,
-    offspringBaseSurvival: 0.996,
+    offspringBaseSurvival: 0.998,
     offspringSurvivalWinterPenalty: 0.008,
     offspringSurvivalSummerBonus: 0.004,
     offspringSurvivalYoungPenalty: 0.012,
     offspringSurvivalYoungThreshold: 12,
-    offspringSurvivalMin: 0.815,    // Scaled for monthly turns (0.95^4)
-    offspringSurvivalMax: 0.992,    // Scaled for monthly turns (0.998^4)
+    offspringSurvivalMin: 0.95,
+    offspringSurvivalMax: 0.999,
     offspringDeathCauses: [
       'Killed by lions',
       'Died of drought',

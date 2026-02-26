@@ -35,6 +35,7 @@ export const CHINOOK_SALMON_CONFIG: SpeciesConfig = {
     vulnerabilityThreshold: 12,
     minFloor: 2,
     debuffMaxPenalty: 15,
+    maximumBiologicalWeight: 130,
   },
 
   age: {

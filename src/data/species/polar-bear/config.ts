@@ -35,6 +35,7 @@ export const POLAR_BEAR_CONFIG: SpeciesConfig = {
     vulnerabilityThreshold: 300,
     minFloor: 100,
     debuffMaxPenalty: 20,
+    maximumBiologicalWeight: 1600,
   },
 
   age: {

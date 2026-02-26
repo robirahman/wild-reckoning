@@ -484,6 +484,11 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
         seasonalWeightChange *= difficultyMult.weightLossFactor;
       } else {
         seasonalWeightChange *= difficultyMult.weightGainFactor;
+        
+        // Asymptotic Growth Mechanic:
+        // Dampen weight gain as the animal approaches its maximum biological limit.
+        const growthSaturation = Math.pow(currentAnimal.weight / config.weight.maximumBiologicalWeight, 2);
+        seasonalWeightChange *= Math.max(0, 1 - growthSaturation);
       }
 
       const newWeight = Math.max(config.weight.minFloor, currentAnimal.weight + seasonalWeightChange);

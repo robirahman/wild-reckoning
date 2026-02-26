@@ -35,6 +35,7 @@ export const ARCTIC_TERN_CONFIG: SpeciesConfig = {
     vulnerabilityThreshold: 0.18,
     minFloor: 0.08,
     debuffMaxPenalty: 20,
+    maximumBiologicalWeight: 0.33,
   },
 
   age: {
@@ -165,13 +166,13 @@ export const ARCTIC_TERN_CONFIG: SpeciesConfig = {
     offspringLabelTriple: 'three chicks',
     dependenceTurns: 3,
     maturationTurns: 24,
-    offspringBaseSurvival: 0.99,
-    offspringSurvivalWinterPenalty: 0.08,
-    offspringSurvivalSummerBonus: 0.05,
-    offspringSurvivalYoungPenalty: 0.02,
+    offspringBaseSurvival: 0.995,
+    offspringSurvivalWinterPenalty: 0.02,
+    offspringSurvivalSummerBonus: 0.01,
+    offspringSurvivalYoungPenalty: 0.01,
     offspringSurvivalYoungThreshold: 6,
-    offspringSurvivalMin: 0.35,
-    offspringSurvivalMax: 0.85,
+    offspringSurvivalMin: 0.85,
+    offspringSurvivalMax: 0.998,
     offspringDeathCauses: [
       'Taken by a great skua',
       'Starved during a storm',
