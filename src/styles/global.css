@@ -19,6 +19,7 @@
   --color-severity-moderate: #e67e22;
   --color-severity-severe: #c0392b;
   --color-severity-critical: #8e0000;
+  --color-accent: #8e44ad;
 
   /* Typography (shared across themes) */
   --font-narrative: Georgia, 'Times New Roman', serif;
@@ -52,6 +53,7 @@
   --color-severity-moderate: #d4940b;
   --color-severity-severe: #e74c3c;
   --color-severity-critical: #ff4444;
+  --color-accent: #9b59b6;
 }
 
 *,

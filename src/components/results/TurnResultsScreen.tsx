@@ -33,6 +33,13 @@ export function TurnResultsScreen() {
     <div className={styles.resultsScreen}>
       <h3 className={styles.resultsTitle}>Turn Results</h3>
 
+      {/* Journal Synthesis (Ambient Text) */}
+      {turnResult.journalEntry && (
+        <div className={styles.journalSummary}>
+          <p className={styles.journalText}>"{turnResult.journalEntry}"</p>
+        </div>
+      )}
+
       {/* Event outcomes */}
       {hasOutcomes && turnResult.eventOutcomes.map((outcome, i) => (
         <EventOutcomeCard key={outcome.eventId} outcome={outcome} index={i + 1} />

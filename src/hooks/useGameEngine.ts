@@ -1,26 +1,29 @@
 import { useCallback } from 'react';
 import { useGameStore } from '../store/gameStore';
-import { generateTurnEvents, resolveTurn } from '../engine/TurnProcessor';
+import { resolveTurn } from '../engine/TurnProcessor';
 import { StatId, computeEffectiveValue } from '../types/stats';
 import { saveGame } from '../store/persistence';
 import { checkAchievements } from '../engine/AchievementChecker';
 import { useAchievementStore } from '../store/achievementStore';
 import { introduceNPC, incrementEncounter, progressRelationship } from '../engine/NPCSystem';
 import { tickStorylines } from '../engine/StorylineSystem';
-import { generateAmbientText } from '../engine/AmbientTextGenerator';
+import { generateAmbientText, synthesizeJournalEntry } from '../engine/AmbientTextGenerator';
 import { tickEcosystem } from '../engine/EcosystemSystem';
 import { tickTerritory, TERRITORIAL_SPECIES } from '../engine/TerritorySystem';
 import { ENCYCLOPEDIA_ENTRIES } from '../data/encyclopedia';
 import { useEncyclopediaStore } from '../store/encyclopediaStore';
+import { useEventWorker } from './useEventWorker';
+import { pickIllustration } from '../engine/IllustrationPicker';
 import { NPC_INTRODUCTION_MIN_TURN, TERRITORY_AUTO_ESTABLISH_TURN, TERRITORY_INITIAL_SIZE, TERRITORY_INITIAL_QUALITY } from '../engine/constants';
 
 export function useGameEngine() {
   const store = useGameStore();
+  const { generateEventsAsync } = useEventWorker();
 
-  const startTurn = useCallback(() => {
+  const startTurn = useCallback(async () => {
     store.advanceTurn();
 
-    const state = useGameStore.getState();
+    let state = useGameStore.getState();
 
     // Introduce NPCs on early turns if none exist yet
     if (state.npcs.length === 0 && state.time.turn >= NPC_INTRODUCTION_MIN_TURN) {
@@ -35,79 +38,93 @@ export function useGameEngine() {
     }
 
     // Introduce mate NPC at mating season onset if no mate exists yet
-    const stateForMate = useGameStore.getState();
-    const hasMate = stateForMate.npcs.some((n) => n.type === 'mate' && n.alive);
-    if (!hasMate && stateForMate.time.turn >= NPC_INTRODUCTION_MIN_TURN) {
-      const reproConfig = stateForMate.speciesBundle.config.reproduction;
+    state = useGameStore.getState();
+    const hasMate = state.npcs.some((n) => n.type === 'mate' && n.alive);
+    if (!hasMate && state.time.turn >= NPC_INTRODUCTION_MIN_TURN) {
+      const reproConfig = state.speciesBundle.config.reproduction;
       const isMating =
         (reproConfig.type === 'iteroparous' &&
-          (reproConfig.matingSeasons === 'any' || reproConfig.matingSeasons.includes(stateForMate.time.season))) ||
+          (reproConfig.matingSeasons === 'any' || reproConfig.matingSeasons.includes(state.time.season))) ||
         (reproConfig.type === 'semelparous' &&
-          stateForMate.animal.flags.has(reproConfig.spawningMigrationFlag));
+          state.animal.flags.has(reproConfig.spawningMigrationFlag));
       if (isMating) {
-        const mateNPC = introduceNPC(stateForMate.animal.speciesId, 'mate', stateForMate.time.turn, stateForMate.npcs, stateForMate.rng);
+        const mateNPC = introduceNPC(state.animal.speciesId, 'mate', state.time.turn, state.npcs, state.rng);
         if (mateNPC) {
-          store.setNPCs([...stateForMate.npcs, mateNPC]);
+          store.setNPCs([...state.npcs, mateNPC]);
         }
       }
     }
 
-    const currentState = useGameStore.getState();
+    state = useGameStore.getState();
 
     // Generate ambient text for this turn
     const ambientText = generateAmbientText({
-      season: currentState.time.season,
-      speciesId: currentState.animal.speciesId,
-      regionId: currentState.animal.region,
-      weatherType: currentState.currentWeather?.type,
-      rng: currentState.rng,
+      season: state.time.season,
+      speciesId: state.animal.speciesId,
+      regionId: state.animal.region,
+      weatherType: state.currentWeather?.type,
+      rng: state.rng,
+      animalSex: state.animal.sex
     });
     useGameStore.setState({ ambientText });
 
     // Tick ecosystem populations
     const ecoResult = tickEcosystem(
-      currentState.ecosystem,
-      currentState.animal.region,
-      currentState.time.turn,
-      currentState.rng,
+      state.ecosystem,
+      state.animal.region,
+      state.time.turn,
+      state.rng,
     );
     useGameStore.setState({ ecosystem: ecoResult.ecosystem });
 
     // Tick territory for territorial species
-    if (TERRITORIAL_SPECIES.has(currentState.animal.speciesId)) {
+    if (TERRITORIAL_SPECIES.has(state.animal.speciesId)) {
       // Auto-establish territory after a few turns
-      if (!currentState.territory.established && currentState.time.turn >= TERRITORY_AUTO_ESTABLISH_TURN) {
-        const flags = new Set(currentState.animal.flags);
+      if (!state.territory.established && state.time.turn >= TERRITORY_AUTO_ESTABLISH_TURN) {
+        const flags = new Set(state.animal.flags);
         flags.add('territory-established');
         useGameStore.setState({
-          territory: { ...currentState.territory, established: true, size: TERRITORY_INITIAL_SIZE, quality: TERRITORY_INITIAL_QUALITY, markedTurns: 0 },
-          animal: { ...currentState.animal, flags },
+          territory: { ...state.territory, established: true, size: TERRITORY_INITIAL_SIZE, quality: TERRITORY_INITIAL_QUALITY, markedTurns: 0 },
+          animal: { ...state.animal, flags },
         });
       }
 
-      const freshState = useGameStore.getState();
-      if (freshState.territory.established) {
+      state = useGameStore.getState();
+      if (state.territory.established) {
         const newTerritory = tickTerritory(
-          freshState.territory,
-          freshState.animal.speciesId,
-          freshState.rng,
+          state.territory,
+          state.animal.speciesId,
+          state.rng,
         );
         useGameStore.setState({ territory: newTerritory });
       }
     }
 
-    const events = generateTurnEvents(useGameStore.getState());
+    state = useGameStore.getState();
+
+    // Use Web Worker for event generation
+    const { results: generatedEvents, rngState } = await generateEventsAsync(state);
+    state.rng.setState(rngState);
+
+    // Pick illustrations for generated events (main thread)
+    const events = generatedEvents.map(event => {
+      const image = event.definition.image ?? pickIllustration(event.definition, state.rng);
+      return {
+        ...event,
+        definition: image ? { ...event.definition, image } : event.definition
+      };
+    });
 
     // Tick storylines and inject storyline events
     const storylineResult = tickStorylines({
-      animal: currentState.animal,
-      time: currentState.time,
-      behavior: currentState.behavioralSettings,
-      config: currentState.speciesBundle.config,
-      rng: currentState.rng,
-      npcs: currentState.npcs,
-      activeStorylines: currentState.activeStorylines,
-      currentEvents: currentState.currentEvents,
+      animal: state.animal,
+      time: state.time,
+      behavior: state.behavioralSettings,
+      config: state.speciesBundle.config,
+      rng: state.rng,
+      npcs: state.npcs,
+      activeStorylines: state.activeStorylines,
+      currentEvents: state.currentEvents,
     });
 
     const allStorylines = [...storylineResult.updatedStorylines, ...storylineResult.newStorylines];
@@ -122,7 +139,7 @@ export function useGameEngine() {
 
     // Auto-save after events are generated (state is complete)
     saveGame(useGameStore.getState());
-  }, [store]);
+  }, [store, generateEventsAsync]);
 
   const checkDeathConditions = useCallback(() => {
     const state = useGameStore.getState();
@@ -205,6 +222,17 @@ export function useGameEngine() {
     // Resolve all event effects
     const result = resolveTurn(state);
 
+    // Synthesize cohesive journal entry
+    const journalEntry = synthesizeJournalEntry(result.turnResult, {
+      season: state.time.season,
+      speciesId: state.animal.speciesId,
+      regionId: state.animal.region,
+      weatherType: state.currentWeather?.type,
+      rng: state.rng,
+      animalSex: state.animal.sex
+    });
+    result.turnResult.journalEntry = journalEntry;
+
     // Apply health and other resolution changes to animal state
     useGameStore.setState({ animal: result.animal });
 
@@ -274,9 +302,9 @@ export function useGameEngine() {
     }
   }, [store, checkDeathConditions]);
 
-  const dismissResults = useCallback(() => {
+  const dismissResults = useCallback(async () => {
     store.dismissResults();
-    startTurn();
+    await startTurn();
   }, [store, startTurn]);
 
   return {

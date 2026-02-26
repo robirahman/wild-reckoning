@@ -29,4 +29,5 @@ export interface TurnResult {
   newInjuries: string[];
   statDelta: Record<StatId, number>;
   pendingDeathRolls?: PendingDeathRoll[];
+  journalEntry?: string;
 }

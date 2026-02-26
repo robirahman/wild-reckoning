@@ -1,4 +1,5 @@
 import { useGameStore } from '../store/gameStore';
+import { RegionalHealth } from './RegionalHealth';
 import styles from '../styles/map.module.css';
 
 export function MapPanel() {
@@ -142,6 +143,10 @@ export function MapPanel() {
           Resources: Food {Math.round(currentNode.resources.food)}% | Cover {currentNode.resources.cover}%
         </div>
       )}
+      
+      <div style={{ marginTop: 16, borderTop: '1px solid var(--color-border)', paddingTop: 12 }}>
+        <RegionalHealth />
+      </div>
     </div>
   );
 }

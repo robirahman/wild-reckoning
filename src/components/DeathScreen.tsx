@@ -6,20 +6,36 @@ import { formatWeight } from '../utils/formatWeight';
 import type { Offspring } from '../types/reproduction';
 import styles from '../styles/deathscreen.module.css';
 
-function getIteroparousFitnessRating(fitness: number): { label: string; color: string } {
-  if (fitness === 0) return { label: 'No Surviving Offspring', color: 'var(--color-danger)' };
-  if (fitness === 1) return { label: 'Below Average', color: '#c87533' };
-  if (fitness === 2) return { label: 'Average — Replacement Rate', color: 'var(--color-text)' };
-  if (fitness <= 4) return { label: 'Above Average', color: '#5a9e5a' };
-  return { label: 'Exceptional', color: '#3a8a3a' };
-}
+const SPECIES_AVG_FITNESS: Record<string, number> = {
+  'white-tailed-deer': 2,
+  'gray-wolf': 2,
+  'polar-bear': 1.5,
+  'african-elephant': 1,
+  'arctic-tern': 1.5,
+  'chinook-salmon': 5,
+  'common-octopus': 5,
+  'poison-dart-frog': 4,
+  'green-sea-turtle': 2,
+  'monarch-butterfly': 2,
+  'fig-wasp': 2,
+  'honeybee-worker': 50,
+};
 
-function getSemelparousFitnessRating(fitness: number, spawned: boolean): { label: string; color: string } {
-  if (!spawned) return { label: 'Failed to Spawn', color: 'var(--color-danger)' };
-  if (fitness <= 3) return { label: 'Below Average', color: '#c87533' };
-  if (fitness <= 8) return { label: 'Average', color: 'var(--color-text)' };
-  if (fitness <= 15) return { label: 'Above Average', color: '#5a9e5a' };
-  return { label: 'Exceptional', color: '#3a8a3a' };
+function getGrade(fitness: number, type: 'iteroparous' | 'semelparous'): { letter: string; color: string } {
+  if (fitness === 0) return { letter: 'F', color: 'var(--color-danger)' };
+  
+  if (type === 'iteroparous') {
+    if (fitness === 1) return { letter: 'D', color: '#c87533' };
+    if (fitness === 2) return { letter: 'C', color: 'var(--color-text)' };
+    if (fitness <= 4) return { letter: 'B', color: '#5a9e5a' };
+    return { letter: 'A', color: '#3a8a3a' };
+  } else {
+    // Semelparous scale (estimated survivors)
+    if (fitness <= 2) return { letter: 'D', color: '#c87533' };
+    if (fitness <= 5) return { letter: 'C', color: 'var(--color-text)' };
+    if (fitness <= 12) return { letter: 'B', color: '#5a9e5a' };
+    return { letter: 'A', color: '#3a8a3a' };
+  }
 }
 
 function offspringFate(o: Offspring): string {
@@ -46,11 +62,25 @@ export function DeathScreen() {
   const isIteroparous = reproduction.type === 'iteroparous';
   const isSemelparous = reproduction.type === 'semelparous';
 
-  const rating = isIteroparous
-    ? getIteroparousFitnessRating(reproduction.totalFitness)
-    : getSemelparousFitnessRating(reproduction.totalFitness, reproduction.spawned);
-
+  const grade = getGrade(reproduction.totalFitness, reproduction.type);
   const hasOffspring = isIteroparous && reproduction.offspring.length > 0;
+
+  // Calculate broods/births
+  const broodCount = isIteroparous 
+    ? new Set(reproduction.offspring.map(o => o.bornOnTurn)).size
+    : (reproduction.spawned ? 1 : 0);
+    
+  const broodLabel = config.id === 'honeybee-worker' ? 'Major contributions' 
+    : (isSemelparous ? 'Spawning events' : (config.reproduction.type === 'iteroparous' && config.reproduction.offspringCountFormula.maxOffspring > 1 ? 'Litters produced' : 'Births given'));
+
+  // Performance highlighting logic
+  const lifeExpectancy = config.age.oldAgeOnsetMonths;
+  const isPrematureDeath = animal.age < lifeExpectancy * 0.5;
+  const isLongLife = animal.age >= lifeExpectancy;
+  const ageColorClass = isLongLife ? styles.goodPerformance : (isPrematureDeath ? styles.poorPerformance : '');
+
+  const avgFitness = SPECIES_AVG_FITNESS[config.id] ?? 2;
+  const fitnessColorClass = reproduction.totalFitness > avgFitness ? styles.goodPerformance : (reproduction.totalFitness < avgFitness * 0.5 ? styles.poorPerformance : '');
 
   return (
     <div className={styles.container}>
@@ -68,23 +98,47 @@ export function DeathScreen() {
         {animal.causeOfDeath || 'Your body could no longer sustain the burden of survival.'}
       </p>
 
-      {/* ── Fitness Score ── */}
+      {/* ── Survival Grade ── */}
       <div className={styles.fitnessBox}>
         <div className={styles.fitnessLabel}>
-          Inclusive Genetic Fitness
+          Evolutionary Success Grade
         </div>
-        <div className={styles.fitnessNumber} style={{ color: rating.color }}>
-          {reproduction.totalFitness}
+        <div className={styles.gradeLetter} style={{ color: grade.color }}>
+          {grade.letter}
         </div>
         <div className={styles.fitnessCaption}>
-          {isSemelparous
-            ? 'estimated surviving adults from eggs'
-            : 'offspring survived to reproductive age'
-          }
+          Based on inclusive genetic fitness and offspring survival
         </div>
-        <div className={styles.fitnessRating} style={{ color: rating.color }}>
-          {rating.label}
+      </div>
+
+      {/* ── Summary Stats ── */}
+      <div className={styles.detailPanelSummary}>
+        <div><strong>Species:</strong> {config.name}</div>
+        <div><strong>Sex:</strong> {animal.sex === 'female' ? 'Female' : 'Male'}</div>
+        <div>
+          <strong>Age at death:</strong>{' '}
+          <span className={ageColorClass}>
+            {animal.age} months ({Math.floor(animal.age / 12)} years)
+          </span>
+          {isLongLife && ' \u2014 Exceptional Longevity!'}
+          {isPrematureDeath && ' \u2014 Premature Death'}
         </div>
+        <div><strong>Final weight:</strong> {formatWeight(animal.weight, config)}</div>
+        <div><strong>Survived:</strong> {time.turn} turns ({time.month}, Year {time.year})</div>
+        <div style={{ marginTop: 8, borderTop: '1px solid var(--color-border-light)', paddingTop: 8 }}>
+          <strong>{broodLabel}:</strong> {broodCount}
+        </div>
+        <div>
+          <strong>Offspring survived to adulthood:</strong>{' '}
+          <span className={fitnessColorClass}>
+            {reproduction.totalFitness}
+          </span>
+        </div>
+        <div style={{ marginTop: 8, borderTop: '1px solid var(--color-border-light)', paddingTop: 8 }}>
+          <strong>Events experienced:</strong> {turnHistory.length} turns
+        </div>
+        <div><strong>Parasites contracted:</strong> {animal.parasites.length}</div>
+        <div><strong>Injuries sustained:</strong> {animal.injuries.length}</div>
       </div>
 
       {/* ── Semelparous Egg Breakdown ── */}
@@ -102,7 +156,7 @@ export function DeathScreen() {
       {hasOffspring && isIteroparous && (
         <div className={styles.detailPanel}>
           <div className={styles.panelHeading}>
-            Offspring
+            Offspring Records
           </div>
           {reproduction.offspring.map((o) => (
             <div key={o.id} className={styles.offspringRow}>
@@ -118,18 +172,6 @@ export function DeathScreen() {
           ))}
         </div>
       )}
-
-      {/* ── Summary Stats ── */}
-      <div className={styles.detailPanelSummary}>
-        <div><strong>Species:</strong> {config.name}</div>
-        <div><strong>Sex:</strong> {animal.sex === 'female' ? 'Female' : 'Male'}</div>
-        <div><strong>Age at death:</strong> {animal.age} months ({Math.floor(animal.age / 12)} years)</div>
-        <div><strong>Final weight:</strong> {formatWeight(animal.weight, config)}</div>
-        <div><strong>Survived:</strong> {time.turn} turns ({time.month}, Year {time.year})</div>
-        <div><strong>Parasites contracted:</strong> {animal.parasites.length}</div>
-        <div><strong>Injuries sustained:</strong> {animal.injuries.length}</div>
-        <div><strong>Events experienced:</strong> {turnHistory.length} turns</div>
-      </div>
 
       <RunSummary />
 

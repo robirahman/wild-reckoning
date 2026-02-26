@@ -1,4 +1,3 @@
-
 import { StatId } from '../types/stats';
 import { createRng } from './RandomUtils';
 import { DIFFICULTY_PRESETS, type Difficulty } from '../types/difficulty';
@@ -68,14 +67,22 @@ function behaviorMultiplier(event: any, behavior: any): number {
 
 function contextMultiplier(event: any, ctx: any): number {
   let mult = 1.0;
-  if (event.category === 'psychological') mult *= 0.5 + (computeEffectiveValue(ctx.animal.stats[StatId.TRA]) / 100) * 1.5;
+  if (event.category === 'psychological') {
+    mult *= 0.5 + (computeEffectiveValue(ctx.animal.stats[StatId.TRA]) / 100) * 1.5;
+  }
   if (event.category === 'health') {
     mult *= 1.5 - (computeEffectiveValue(ctx.animal.stats[StatId.HEA]) / 100);
     mult *= 0.8 + (computeEffectiveValue(ctx.animal.stats[StatId.IMM]) / 100) * 0.8;
   }
-  if (event.category === 'environmental' || event.category === 'seasonal') mult *= 0.7 + (computeEffectiveValue(ctx.animal.stats[StatId.CLI]) / 100) * 1.0;
-  if (event.category === 'migration') mult *= 0.6 + (computeEffectiveValue(ctx.animal.stats[StatId.NOV]) / 100) * 1.0;
-  if (event.category === 'predator') mult *= 0.7 + (computeEffectiveValue(ctx.animal.stats[StatId.ADV]) / 100) * 0.8;
+  if (event.category === 'environmental' || event.category === 'seasonal') {
+    mult *= 0.7 + (computeEffectiveValue(ctx.animal.stats[StatId.CLI]) / 100) * 1.0;
+  }
+  if (event.category === 'migration') {
+    mult *= 0.6 + (computeEffectiveValue(ctx.animal.stats[StatId.NOV]) / 100) * 1.0;
+  }
+  if (event.category === 'predator') {
+    mult *= 0.7 + (computeEffectiveValue(ctx.animal.stats[StatId.ADV]) / 100) * 0.8;
+  }
   return mult;
 }
 
@@ -95,12 +102,46 @@ function resolveTemplate(text: string, ctx: any): string {
     .replace(/\{\{species\.maleNoun\}\}/g, tv.maleNoun)
     .replace(/\{\{species\.femaleNoun\}\}/g, tv.femaleNoun)
     .replace(/\{\{species\.groupNoun\}\}/g, tv.groupNoun)
-    .replace(/\{\{species\.habitat\}\}/g, tv.habitat);
+    .replace(/\{\{species\.habitat\}\}/g, tv.habitat)
+    .replace(/\{\{npc\.rival\.name\}\}/g, ctx.npcs?.find((n: any) => n.type === 'rival' && n.alive)?.name ?? 'a rival')
+    .replace(/\{\{npc\.rival\.encounters\}\}/g, String(ctx.npcs?.find((n: any) => n.type === 'rival' && n.alive)?.encounters ?? 0))
+    .replace(/\{\{npc\.ally\.name\}\}/g, ctx.npcs?.find((n: any) => n.type === 'ally' && n.alive)?.name ?? 'a companion')
+    .replace(/\{\{npc\.ally\.encounters\}\}/g, String(ctx.npcs?.find((n: any) => n.type === 'ally' && n.alive)?.encounters ?? 0))
+    .replace(/\{\{npc\.predator\.name\}\}/g, ctx.npcs?.find((n: any) => n.type === 'predator' && n.alive)?.name ?? 'a predator')
+    .replace(/\{\{npc\.predator\.encounters\}\}/g, String(ctx.npcs?.find((n: any) => n.type === 'predator' && n.alive)?.encounters ?? 0))
+    .replace(/\{\{npc\.mate\.name\}\}/g, ctx.npcs?.find((n: any) => n.type === 'mate' && n.alive)?.name ?? 'a mate')
+    .replace(/\{\{npc\.mate\.encounters\}\}/g, String(ctx.npcs?.find((n: any) => n.type === 'mate' && n.alive)?.encounters ?? 0))
+    .replace(/\{\{weather\.type\}\}/g, ctx.currentWeather?.type ?? 'clear')
+    .replace(/\{\{weather\.description\}\}/g, ctx.currentWeather?.description ?? '');
+}
+
+function resolveEvent(event: any, ctx: any): any {
+  const resolvedNarrative = resolveTemplate(event.narrativeText, ctx);
+  const triggeredSubEvents: any[] = [];
+  if (event.subEvents) {
+    for (const sub of event.subEvents) {
+      const conditionsMet = !sub.conditions || sub.conditions.every((c: any) => checkCondition(c, ctx));
+      if (conditionsMet && ctx.rng.chance(sub.chance)) {
+        triggeredSubEvents.push({
+          eventId: sub.eventId,
+          narrativeText: resolveTemplate(sub.narrativeText, ctx),
+          footnote: sub.footnote,
+          statEffects: sub.statEffects,
+          consequences: sub.consequences,
+        });
+      }
+    }
+  }
+  return {
+    definition: event,
+    resolvedNarrative,
+    triggeredSubEvents,
+  };
 }
 
 self.onmessage = (e) => {
   const ctx = e.data;
-  ctx.animal.flags = new Set(ctx.animal.flags); // Convert back from array
+  ctx.animal.flags = new Set(ctx.animal.flags);
   const rng = createRng(ctx.rngState);
   ctx.rng = rng;
 
@@ -133,15 +174,9 @@ self.onmessage = (e) => {
   }
 
   for (const idx of selectedActiveIndices) {
-    const event = activePool[idx];
-    results.push({
-      definition: event,
-      resolvedNarrative: resolveTemplate(event.narrativeText, ctx),
-      triggeredSubEvents: [] // Sub-events omitted for worker simplicity or handled separately
-    });
+    results.push(resolveEvent(activePool[idx], ctx));
   }
 
-  // Similar logic for passivePool...
   const passiveWeights = passivePool.map((e: any) => e.weight * contextMultiplier(e, ctx));
   const basePassiveCount = rng.int(0, Math.min(2, passivePool.length));
   const passiveCount = ctx.fastForward ? Math.min(basePassiveCount * 3, passivePool.length) : basePassiveCount;
@@ -154,12 +189,7 @@ self.onmessage = (e) => {
   }
 
   for (const idx of selectedPassiveIndices) {
-    const event = passivePool[idx];
-    results.push({
-      definition: event,
-      resolvedNarrative: resolveTemplate(event.narrativeText, ctx),
-      triggeredSubEvents: []
-    });
+    results.push(resolveEvent(passivePool[idx], ctx));
   }
 
   self.postMessage({ results, rngState: rng.getState() });

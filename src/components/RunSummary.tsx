@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react';
-import { useGameStore, type TurnRecord } from '../store/gameStore';
+import { useGameStore } from '../store/gameStore';
+import type { TurnRecord } from '../store/slices/types';
 import styles from '../styles/runsummary.module.css';
 
 interface TimelineEntry {
