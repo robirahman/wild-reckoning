@@ -324,7 +324,7 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
         newTime,
         newWeather,
         config,
-        state.behavioralSettings.foraging
+        state.behavioralSettings
       );
       currentAnimal = physResult.animal;
       for (const mod of physResult.modifiers) {
