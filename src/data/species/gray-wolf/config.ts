@@ -118,7 +118,7 @@ export const GRAY_WOLF_CONFIG: SpeciesConfig = {
     offspringLabelTriple: 'a litter of pups',
     dependenceTurns: 24,
     maturationTurns: 48,
-    offspringBaseSurvival: 0.97,
+    offspringBaseSurvival: 0.992,
     offspringSurvivalWinterPenalty: 0.010,
     offspringSurvivalSummerBonus: 0.004,
     offspringSurvivalYoungPenalty: 0.006,

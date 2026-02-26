@@ -146,7 +146,7 @@ export const POISON_DART_FROG_CONFIG: SpeciesConfig = {
     offspringLabelTriple: 'three tadpoles',
     dependenceTurns: 12,
     maturationTurns: 48,
-    offspringBaseSurvival: 0.70,
+    offspringBaseSurvival: 0.985,
     offspringSurvivalWinterPenalty: 0.02,
     offspringSurvivalSummerBonus: 0.05,
     offspringSurvivalYoungPenalty: 0.01,

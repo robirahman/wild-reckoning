@@ -494,6 +494,58 @@ export const ARCTIC_TERN_EVENTS: GameEvent[] = [
   // ══════════════════════════════════════════════
 
   {
+    id: 'tern-mating-encounter',
+    type: 'active',
+    category: 'reproduction',
+    narrativeText:
+      'A male Arctic Tern approaches you at the colony edge, his wings vibrating, a small silver fish held carefully in his beak. He offers the fish to you — a courtship gift that proves his ability to provide for future chicks. Mating in the crowded colony is a loud, communal affair, but it is the prerequisite for the long summer of nesting ahead.',
+    statEffects: [
+      { stat: StatId.NOV, amount: 4, label: '+NOV' },
+    ],
+    choices: [
+      {
+        id: 'tern-accept-gift',
+        label: 'Accept the gift and mate',
+        description: 'Begin the nesting cycle. Gestation is ~3 weeks.',
+        narrativeResult: 'You take the fish and allow the male to mount. The bond is sealed. For the next three weeks, you will carry the developing eggs, preparing for the moment you must settle on your scrape.',
+        statEffects: [
+          { stat: StatId.WIS, amount: 2, label: '+WIS' },
+        ],
+        consequences: [
+          { type: 'start_pregnancy', offspringCount: 0 },
+        ],
+        revocable: false,
+        style: 'default',
+      },
+      {
+        id: 'tern-ignore-gift',
+        label: 'Ignore the gift',
+        description: 'Stay focused on your own fishing. Preserves your strength.',
+        narrativeResult: 'You turn your head away and take flight, leaving the hopeful male behind. You are free of the burden of eggs for now, but the breeding season is short in the Arctic.',
+        statEffects: [
+          { stat: StatId.TRA, amount: 2, label: '+TRA' },
+        ],
+        consequences: [
+          { type: 'set_flag', flag: 'mated-this-season' },
+        ],
+        revocable: false,
+        style: 'default',
+      },
+    ],
+    conditions: [
+      { type: 'species', speciesIds: ['arctic-tern'] },
+      { type: 'season', seasons: ['summer'] },
+      { type: 'sex', sex: 'female' },
+      { type: 'age_range', min: 24 },
+      { type: 'no_flag', flag: 'pregnant' },
+      { type: 'no_flag', flag: 'mated-this-season' },
+    ],
+    weight: 15,
+    cooldown: 8,
+    tags: ['reproduction', 'social'],
+  },
+
+  {
     id: 'tern-nest-scrape',
     type: 'active',
     category: 'reproduction',

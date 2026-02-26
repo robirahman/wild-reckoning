@@ -137,7 +137,7 @@ export const POLAR_BEAR_CONFIG: SpeciesConfig = {
     offspringLabelTriple: 'triplet cubs',
     dependenceTurns: 30,    // ~2.5 years in months
     maturationTurns: 60,    // ~5 years to full maturity
-    offspringBaseSurvival: 0.975,
+    offspringBaseSurvival: 0.994,
     offspringSurvivalWinterPenalty: 0.012,
     offspringSurvivalSummerBonus: 0.002,
     offspringSurvivalYoungPenalty: 0.015,

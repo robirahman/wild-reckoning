@@ -835,6 +835,58 @@ const turtleEvents: GameEvent[] = [
   // ══════════════════════════════════════════════
 
   {
+    id: 'turtle-mating-encounter',
+    type: 'active',
+    category: 'reproduction',
+    narrativeText:
+      'The water near the nesting beach is crowded with males. Several bulls approach you, their curved claws catching the light as they attempt to mount. Mating is a physical struggle that will last for hours, and once complete, you will carry the fertilized eggs for weeks until the sand is ready. It is the beginning of your nesting cycle.',
+    statEffects: [
+      { stat: StatId.NOV, amount: 5, label: '+NOV' },
+    ],
+    choices: [
+      {
+        id: 'turtle-accept-mate',
+        label: 'Accept a mate',
+        description: 'Initiate the egg-laying cycle. Gestation is ~4 weeks.',
+        narrativeResult: 'A large bull clamps onto your shell. The struggle is exhausting, but necessary. You are now carrying the fertilized seeds of the next generation. Soon, you must find a beach.',
+        statEffects: [
+          { stat: StatId.HOM, amount: 5, label: '+HOM' },
+        ],
+        consequences: [
+          { type: 'start_pregnancy', offspringCount: 0 },
+        ],
+        revocable: false,
+        style: 'default',
+      },
+      {
+        id: 'turtle-dive-to-avoid',
+        label: 'Dive to avoid the bulls',
+        description: 'Stay focused on grazing. Preserves your strength.',
+        narrativeResult: 'You dive into the deep seagrass, leaving the surface chaos behind. You remain unburdened, but the window for nesting this season is closing.',
+        statEffects: [
+          { stat: StatId.TRA, amount: 3, label: '+TRA' },
+        ],
+        consequences: [
+          { type: 'set_flag', flag: 'mated-this-season' },
+        ],
+        revocable: false,
+        style: 'default',
+      },
+    ],
+    conditions: [
+      { type: 'species', speciesIds: ['green-sea-turtle'] },
+      { type: 'season', seasons: ['spring', 'summer'] },
+      { type: 'sex', sex: 'female' },
+      { type: 'age_range', min: 240 },
+      { type: 'no_flag', flag: 'pregnant' },
+      { type: 'no_flag', flag: 'mated-this-season' },
+    ],
+    weight: 15,
+    cooldown: 8,
+    tags: ['reproduction', 'social'],
+  },
+
+  {
     id: 'turtle-mating-aggregation',
     type: 'passive',
     category: 'social',

@@ -130,7 +130,7 @@ export const GREEN_SEA_TURTLE_CONFIG: SpeciesConfig = {
     offspringLabelTriple: 'a massive clutch of eggs',
     dependenceTurns: 0,
     maturationTurns: 240,
-    offspringBaseSurvival: 0.50,
+    offspringBaseSurvival: 0.994,
     offspringSurvivalWinterPenalty: 0.05,
     offspringSurvivalSummerBonus: 0.03,
     offspringSurvivalYoungPenalty: 0.10,

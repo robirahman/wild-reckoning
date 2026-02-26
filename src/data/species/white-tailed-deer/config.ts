@@ -128,7 +128,7 @@ export const WHITE_TAILED_DEER_CONFIG: SpeciesConfig = {
     offspringLabelTriple: 'triplet fawns',
     dependenceTurns: 20,
     maturationTurns: 72,
-    offspringBaseSurvival: 0.985,
+    offspringBaseSurvival: 0.992,
     offspringSurvivalWinterPenalty: 0.008,
     offspringSurvivalSummerBonus: 0.003,
     offspringSurvivalYoungPenalty: 0.005,

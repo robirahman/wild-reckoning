@@ -3,114 +3,107 @@ import type { AnimalState } from '../types/species';
 import type { TimeState, Season } from '../types/world';
 import { StatId, computeEffectiveValue } from '../types/stats';
 import type { Rng } from './RandomUtils';
+import type { SpeciesConfig } from '../types/speciesConfig';
 
-/** Determine fawn count based on mother's condition */
-export function determineFawnCount(weight: number, heaStat: number, rng: Rng): number {
-  // Well-nourished does have higher chance of twins/triplets
-  // Base: ~40% single, ~50% twins, ~10% triplets
-  const conditionBonus =
-    ((weight - 80) / 80) * 0.15 + ((heaStat - 40) / 60) * 0.15;
-  const bonus = Math.max(-0.2, Math.min(0.3, conditionBonus));
+/** Determine offspring count based on condition and formula */
+export function determineOffspringCount(
+  weight: number, 
+  heaStat: number, 
+  config: SpeciesConfig, 
+  rng: Rng
+): number {
+  const repro = config.reproduction;
+  if (repro.type !== 'iteroparous') return 0;
+
+  const formula = repro.offspringCountFormula;
+  
+  // Calculate a condition score [0, 1]
+  const weightScore = (weight - formula.weightReference) / formula.weightDivisor;
+  const heaScore = (heaStat - formula.heaReference) / formula.heaDivisor;
+  const score = Math.max(0, Math.min(1, (weightScore + heaScore) / 2));
+
+  if (formula.maxOffspring === 1) return 1;
 
   const roll = rng.random();
-  const twinThreshold = 0.40 - bonus;
-  const tripletThreshold = 0.90 - bonus;
+  
+  // Adjust thresholds based on score
+  // High score reduces thresholds (making higher counts more likely)
+  const singleLimit = formula.singleThreshold - (score * 0.2);
+  const tripleLimit = formula.tripletThreshold - (score * 0.2);
 
-  if (roll < twinThreshold) return 1;
-  if (roll < tripletThreshold) return 2;
-  return 3;
+  if (roll < singleLimit) return 1;
+  if (roll < tripleLimit) return 2;
+  return Math.min(formula.maxOffspring, 3);
 }
 
-/** Create fawn records at birth */
-export function createFawns(
+/** Create offspring records at birth */
+export function createOffspring(
   count: number,
   turn: number,
   year: number,
   motherWis: number,
   siredByPlayer: boolean,
+  config: SpeciesConfig,
   rng: Rng,
 ): Offspring[] {
-  const fawns: Offspring[] = [];
+  const offspring: Offspring[] = [];
+  const speciesId = config.id;
   for (let i = 0; i < count; i++) {
-    fawns.push({
-      id: `fawn-${turn}-${i}`,
+    offspring.push({
+      id: `${speciesId}-offspring-${turn}-${i}`,
       sex: rng.chance(0.5) ? 'male' : 'female',
       bornOnTurn: turn,
       bornInYear: year,
       motherWisAtBirth: motherWis,
       alive: true,
-      independent: siredByPlayer, // Male player's fawns are immediately independent (no paternal care)
+      independent: siredByPlayer, // Male player's offspring are immediately independent
       matured: false,
       ageTurns: 0,
       siredByPlayer,
     });
   }
-  return fawns;
+  return offspring;
 }
 
-/** Per-turn survival roll for an independent, non-matured fawn */
-export function rollFawnSurvival(fawn: Offspring, season: Season, rng: Rng, motherFlags?: ReadonlySet<string>): boolean {
-  // Base weekly survival ~98.5% → ~34% survive 72 weeks to 18 months
-  let survivalProb = 0.985;
+/** Per-turn survival roll for an independent, non-matured offspring */
+export function rollOffspringSurvival(
+  offspring: Offspring, 
+  season: Season, 
+  config: SpeciesConfig,
+  rng: Rng, 
+  motherFlags?: ReadonlySet<string>
+): boolean {
+  const repro = config.reproduction;
+  if (repro.type !== 'iteroparous') return true;
+
+  let survivalProb = repro.offspringBaseSurvival;
 
   // Mother's WIS at birth: higher = slightly better survival
-  survivalProb += (fawn.motherWisAtBirth - 50) / 5000;
+  survivalProb += (offspring.motherWisAtBirth - 50) / 5000;
 
   // Seasonal pressure
-  if (season === 'winter') survivalProb -= 0.008;
-  if (season === 'summer') survivalProb += 0.003;
+  if (season === 'winter') survivalProb -= repro.offspringSurvivalWinterPenalty;
+  if (season === 'summer') survivalProb += repro.offspringSurvivalSummerBonus;
 
-  // Young independent fawns (just became independent, <8 months) are more vulnerable
-  if (fawn.ageTurns < 32) survivalProb -= 0.005;
+  // Young independent offspring are more vulnerable
+  if (offspring.ageTurns < repro.offspringSurvivalYoungThreshold) {
+    survivalProb -= repro.offspringSurvivalYoungPenalty;
+  }
 
-  // Nest/den site quality from female competition
+  // Nest/den site quality
   if (motherFlags?.has('nest-quality-prime')) survivalProb += 0.006;
   if (motherFlags?.has('nest-quality-poor')) survivalProb -= 0.008;
 
-  survivalProb = Math.max(0.90, Math.min(0.998, survivalProb));
+  survivalProb = Math.max(repro.offspringSurvivalMin, Math.min(repro.offspringSurvivalMax, survivalProb));
   return rng.chance(survivalProb);
 }
-
-/** Compute win probability for male buck competition */
-export function computeBuckWinProbability(
-  hea: number,
-  weight: number,
-  str: number,
-  injuryCount: number,
-  parasiteCount: number,
-): number {
-  // Base: 15% — males should lose MOST of the time
-  let prob = 0.15;
-
-  // HEA: +0.3% per point above 50
-  prob += (hea - 50) * 0.003;
-
-  // Weight: +0.1% per lb above 130
-  prob += Math.max(0, (weight - 130) * 0.001);
-
-  // Low STR is good (less stressed): up to +6% for very low stress
-  prob += Math.max(0, (30 - str) * 0.002);
-
-  // Penalties for injuries and parasites
-  prob -= injuryCount * 0.05;
-  prob -= parasiteCount * 0.03;
-
-  // Clamp: never guaranteed, max 45% for a peak-condition buck
-  return Math.max(0.02, Math.min(0.45, prob));
-}
-
-const FAWN_DEATH_CAUSES = [
-  'Killed by predators',
-  'Died of exposure',
-  'Succumbed to disease',
-  'Lost to starvation',
-];
 
 /** Tick reproduction state each turn */
 export function tickReproduction(
   reproduction: IteroparousReproductionState,
   animal: AnimalState,
   time: TimeState,
+  config: SpeciesConfig,
   rng: Rng,
 ): {
   reproduction: IteroparousReproductionState;
@@ -122,6 +115,11 @@ export function tickReproduction(
   const flagsToAdd: string[] = [];
   const flagsToRemove: string[] = [];
   let updated = { ...reproduction };
+  const reproConfig = config.reproduction;
+
+  if (reproConfig.type !== 'iteroparous') {
+    return { reproduction, narratives, flagsToAdd, flagsToRemove };
+  }
 
   // 1. Tick pregnancy
   if (updated.pregnancy) {
@@ -131,20 +129,22 @@ export function tickReproduction(
       // Birth
       const wis = computeEffectiveValue(animal.stats[StatId.WIS]);
       const count = updated.pregnancy.offspringCount;
-      const fawns = createFawns(count, time.turn, time.year, wis, false, rng);
+      const offspring = createOffspring(count, time.turn, time.year, wis, false, config, rng);
       updated = {
         ...updated,
-        offspring: [...updated.offspring, ...fawns],
+        offspring: [...updated.offspring, ...offspring],
         pregnancy: null,
       };
-      flagsToAdd.push('fawns-dependent');
-      flagsToRemove.push('pregnant');
+      flagsToAdd.push(reproConfig.dependentFlag);
+      flagsToRemove.push(reproConfig.pregnantFlag);
 
-      const fawnWord =
-        count === 1 ? 'a single fawn' : count === 2 ? 'twin fawns' : 'triplet fawns';
+      const label = count === 1 
+        ? reproConfig.offspringLabelSingle 
+        : (count === 2 ? reproConfig.offspringLabelTwin : reproConfig.offspringLabelTriple);
+        
       narratives.push(
-        `You have given birth to ${fawnWord}. They are small, spotted, and impossibly ` +
-        `fragile. Every instinct tells you to protect them with your life.`,
+        `The time has come. ${label} have been born. They are small, weak, and utterly ` +
+        `dependent on you for warmth and nutrition. Your life is no longer just your own.`,
       );
     } else {
       updated = {
@@ -158,42 +158,43 @@ export function tickReproduction(
   let anyDependent = false;
   let anyJustBecameIndependent = false;
 
-  const updatedOffspring = updated.offspring.map((fawn) => {
-    if (!fawn.alive) return fawn;
+  const updatedOffspring = updated.offspring.map((off) => {
+    if (!off.alive) return off;
 
-    const f = { ...fawn, ageTurns: fawn.ageTurns + 1 };
+    const o = { ...off, ageTurns: off.ageTurns + 1 };
 
-    // Independence check: ~20 turns = ~5 months
-    if (!f.independent && f.ageTurns >= 20) {
-      f.independent = true;
+    // Independence check
+    if (!o.independent && o.ageTurns >= reproConfig.dependenceTurns) {
+      o.independent = true;
       anyJustBecameIndependent = true;
     }
 
-    // Survival roll for independent, non-matured fawns
-    if (f.independent && !f.matured) {
-      if (!rollFawnSurvival(f, time.season, rng, animal.flags)) {
-        f.alive = false;
-        f.causeOfDeath = rng.pick(FAWN_DEATH_CAUSES);
+    // Survival roll for independent, non-matured offspring
+    if (o.independent && !o.matured) {
+      if (!rollOffspringSurvival(o, time.season, config, rng, animal.flags)) {
+        o.alive = false;
+        o.causeOfDeath = rng.pick(reproConfig.offspringDeathCauses);
         narratives.push(
-          `You sense, in the way that animals do, that one of your offspring has not survived. ` +
-          `${f.causeOfDeath}.`,
+          `A cold realization settles over you: one of your offspring has not survived. ` +
+          `${o.causeOfDeath}.`,
         );
       }
     }
 
-    // Maturation check: 72 turns = 18 months
-    if (f.alive && f.independent && f.ageTurns >= 72 && !f.matured) {
-      f.matured = true;
+    // Maturation check
+    if (o.alive && o.independent && o.ageTurns >= reproConfig.maturationTurns && !o.matured) {
+      o.matured = true;
       narratives.push(
-        `One of your offspring has reached reproductive age. They will carry your bloodline forward.`,
+        `One of your offspring has reached maturity. They disappear into the wild to find their own path, ` +
+        `carrying your genetic legacy with them.`,
       );
     }
 
-    if (f.alive && !f.independent) {
+    if (o.alive && !o.independent) {
       anyDependent = true;
     }
 
-    return f;
+    return o;
   });
 
   updated = { ...updated, offspring: updatedOffspring };
@@ -210,31 +211,36 @@ export function tickReproduction(
     updated = { ...updated, offspring: afterInfanticide };
     if (hadDependents) {
       narratives.push(
-        'Your offspring did not survive. The loss is absolute — there is nothing to protect anymore.',
+        'The loss is absolute. Your dependent offspring have been killed, and your body begins to cycle back toward readiness.',
       );
     }
     flagsToRemove.push('infanticide-occurred');
-    // Also remove the dependent flag since there are no more dependents
     anyDependent = false;
   }
 
   // Update dependent flag
-  if (!anyDependent && animal.flags.has('fawns-dependent')) {
-    flagsToRemove.push('fawns-dependent');
+  if (!anyDependent && animal.flags.has(reproConfig.dependentFlag)) {
+    flagsToRemove.push(reproConfig.dependentFlag);
   }
   if (anyJustBecameIndependent) {
-    flagsToAdd.push('fawns-just-independent');
+    flagsToAdd.push(reproConfig.independenceFlag);
   }
 
-  // Season reset: first week of September → reset mating flags for new rut season
-  if (time.month === 'September' && time.week === 1) {
+  // Season reset: reset mating flags for new season
+  if (time.month === reproConfig.matingSeasonResetMonth && time.week === 1) {
     updated = { ...updated, matedThisSeason: false };
-    flagsToRemove.push('mated-this-season', 'rut-seen', 'nest-quality-prime', 'nest-quality-poor');
+    flagsToRemove.push(
+      reproConfig.maleCompetition.matedFlag, 
+      'rut-seen', 
+      'courtship-success',
+      'nest-quality-prime', 
+      'nest-quality-poor'
+    );
   }
 
   // Remove temporary flags
-  if (animal.flags.has('fawns-just-independent')) {
-    flagsToRemove.push('fawns-just-independent');
+  if (animal.flags.has(reproConfig.independenceFlag)) {
+    flagsToRemove.push(reproConfig.independenceFlag);
   }
 
   // Recompute fitness

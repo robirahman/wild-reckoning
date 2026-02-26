@@ -5,7 +5,7 @@ import { StatId, computeEffectiveValue } from '../types/stats';
 import { DIFFICULTY_PRESETS } from '../types/difficulty';
 import { generateEvents } from './EventGenerator';
 import { tickHealth } from './HealthSystem';
-import { computeBuckWinProbability, determineFawnCount } from './ReproductionSystem';
+import { computeBuckWinProbability, determineOffspringCount } from './ReproductionSystem';
 import { getRegionDefinition } from '../data/regions';
 
 /**
@@ -201,7 +201,7 @@ export function resolveTurn(state: GameState): {
       );
 
       if (state.rng.chance(winProb)) {
-        const offspringCount = determineFawnCount(state.animal.weight, hea, state.rng);
+        const offspringCount = determineOffspringCount(state.animal.weight, hea, state.speciesBundle.config, state.rng);
         allConsequences.push({ type: 'sire_offspring', offspringCount });
         allConsequences.push({ type: 'set_flag', flag: maleComp.matedFlag });
       } else {

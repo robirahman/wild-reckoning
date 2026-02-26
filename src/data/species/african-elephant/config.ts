@@ -120,7 +120,7 @@ export const AFRICAN_ELEPHANT_CONFIG: SpeciesConfig = {
     offspringLabelTriple: 'twin calves',
     dependenceTurns: 36,
     maturationTurns: 120,
-    offspringBaseSurvival: 0.968,    // Scaled for monthly turns (0.992^4)
+    offspringBaseSurvival: 0.996,
     offspringSurvivalWinterPenalty: 0.008,
     offspringSurvivalSummerBonus: 0.004,
     offspringSurvivalYoungPenalty: 0.012,

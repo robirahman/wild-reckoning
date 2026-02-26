@@ -6,7 +6,7 @@ import { tickSocial } from '../../engine/SocialSystem';
 import { StatId, computeEffectiveValue } from '../../types/stats';
 import { addModifier, tickModifiers, removeModifiersBySource } from '../../engine/StatCalculator';
 import { getScaling } from '../../engine/SpeciesScale';
-import { tickReproduction, determineFawnCount, createFawns } from '../../engine/ReproductionSystem';
+import { tickReproduction, determineOffspringCount, createOffspring } from '../../engine/ReproductionSystem';
 import { DIFFICULTY_PRESETS } from '../../types/difficulty';
 import { TERRITORIAL_SPECIES, territoryWeightModifier } from '../../engine/TerritorySystem';
 import { modifyPopulation } from '../../engine/EcosystemSystem';
@@ -154,14 +154,14 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
         break;
       }
       case 'start_pregnancy': {
-        if (animal.sex === 'female' && state.reproduction.type === 'iteroparous' && !state.reproduction.pregnancy) {
+        if (state.reproduction.type === 'iteroparous' && !state.reproduction.pregnancy) {
           const reproConfig = config.reproduction;
           if (reproConfig.type !== 'iteroparous') break;
 
           const hea = computeEffectiveValue(animal.stats[StatId.HEA]);
           const count = consequence.offspringCount > 0
             ? consequence.offspringCount
-            : determineFawnCount(animal.weight, hea, state.rng);
+            : determineOffspringCount(animal.weight, hea, config, state.rng);
 
           const newFlags = new Set(animal.flags);
           newFlags.add(reproConfig.pregnantFlag as any);
@@ -191,10 +191,10 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
           const hea = computeEffectiveValue(animal.stats[StatId.HEA]);
           const count = consequence.offspringCount > 0
             ? consequence.offspringCount
-            : determineFawnCount(animal.weight, hea, state.rng);
+            : determineOffspringCount(animal.weight, hea, config, state.rng);
 
           const wis = computeEffectiveValue(animal.stats[StatId.WIS]);
-          const fawns = createFawns(count, state.time.turn, state.time.year, wis, true, state.rng);
+          const fawns = createOffspring(count, state.time.turn, state.time.year, wis, true, config, state.rng);
 
           const newFlags = new Set(animal.flags);
           newFlags.add(reproConfig.maleCompetition.matedFlag as any);
@@ -506,7 +506,7 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
 
       const newFlags = new Set(currentAnimal.flags);
       if (currentReproduction.type === 'iteroparous') {
-        const reproResult = tickReproduction(currentReproduction, currentAnimal, newTime, state.rng);
+        const reproResult = tickReproduction(currentReproduction, currentAnimal, newTime, config, state.rng);
         for (const f of reproResult.flagsToAdd) newFlags.add(f as any);
         for (const f of reproResult.flagsToRemove) newFlags.delete(f as any);
         currentReproduction = reproResult.reproduction;

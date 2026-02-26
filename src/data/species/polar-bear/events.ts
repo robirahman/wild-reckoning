@@ -862,6 +862,60 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
   // ══════════════════════════════════════════════
 
   {
+    id: 'pb-mating-sow',
+    type: 'active',
+    category: 'reproduction',
+    narrativeText:
+      'A large boar polar bear has been shadowing you for two days, his scent thick and urgent on the wind. He approaches now, head low, making soft chuffing sounds. You assess him: he is massive, his shoulders broad, his coat scarred but thick with fat. Mating will initiate a long biological burden — delayed implantation means you will not den for months — but your cycle is at its peak.',
+    statEffects: [
+      { stat: StatId.NOV, amount: 5, label: '+NOV' },
+    ],
+    choices: [
+      {
+        id: 'pb-accept-mate',
+        label: 'Accept the boar',
+        description: 'Mate and prepare for autumn denning. Pregnancy lasts ~8 months.',
+        narrativeResult: 'You allow the boar to approach. The mating is brief but intense. For the next week, you walk together across the ice before he finally wanders off. You are now carrying the potential for new life, though the embryos will not implant until you enter your maternity den in autumn.',
+        statEffects: [
+          { stat: StatId.WIS, amount: 3, label: '+WIS' },
+        ],
+        consequences: [
+          { type: 'start_pregnancy', offspringCount: 0 },
+        ],
+        revocable: false,
+        style: 'default',
+      },
+      {
+        id: 'pb-reject-mate',
+        label: 'Reject the boar',
+        description: 'Flee or drive him off. Preserves your strength for hunting.',
+        narrativeResult: 'You snarl and snap at his muzzle, making it clear his advances are unwelcome. After a tense standoff, he turns away — there are other sows on the ice. You remain unburdened, free to focus entirely on your own survival.',
+        statEffects: [
+          { stat: StatId.TRA, amount: 4, label: '+TRA' },
+          { stat: StatId.ADV, amount: 3, label: '+ADV' },
+        ],
+        consequences: [
+          { type: 'set_flag', flag: 'mated-this-season' },
+        ],
+        revocable: false,
+        style: 'danger',
+      },
+    ],
+    conditions: [
+      { type: 'species', speciesIds: ['polar-bear'] },
+      { type: 'season', seasons: ['spring'] },
+      { type: 'sex', sex: 'female' },
+      { type: 'age_range', min: 60 },
+      { type: 'no_flag', flag: 'pregnant' },
+      { type: 'no_flag', flag: 'mated-this-season' },
+      { type: 'no_flag', flag: 'cubs-dependent' },
+    ],
+    weight: 20,
+    cooldown: 24,
+    tags: ['reproduction', 'social'],
+  },
+
+  {
     id: 'pb-courtship-on-ice',
     type: 'active',
     category: 'reproduction',

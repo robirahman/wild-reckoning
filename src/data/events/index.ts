@@ -751,7 +751,7 @@ export const allEvents: GameEvent[] = [
       { type: 'has_flag', flag: 'rut-seen' },
       { type: 'no_flag', flag: 'mated-this-season' },
     ],
-    weight: 18,
+    weight: 25,
     cooldown: 20,
     tags: ['mating', 'social'],
   },

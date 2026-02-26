@@ -165,7 +165,7 @@ export const ARCTIC_TERN_CONFIG: SpeciesConfig = {
     offspringLabelTriple: 'three chicks',
     dependenceTurns: 3,
     maturationTurns: 24,
-    offspringBaseSurvival: 0.65,
+    offspringBaseSurvival: 0.99,
     offspringSurvivalWinterPenalty: 0.08,
     offspringSurvivalSummerBonus: 0.05,
     offspringSurvivalYoungPenalty: 0.02,

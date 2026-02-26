@@ -1148,6 +1148,59 @@ const wolfEvents: GameEvent[] = [
   // ══════════════════════════════════════════════
 
   {
+    id: 'wolf-mating-encounter',
+    type: 'active',
+    category: 'reproduction',
+    narrativeText:
+      'The alpha male approaches you at dusk, his tail held high, his ears forward. The pack is quiet, watching from the edges of the clearing. The winter air is sharp, and the hormone-scented wind tells the story: it is time for the pack to renew itself. Mating ensures the future of your bloodline within the pack, but it also means a season of extreme physical demand ahead.',
+    statEffects: [
+      { stat: StatId.NOV, amount: 4, label: '+NOV' },
+    ],
+    choices: [
+      {
+        id: 'wolf-accept-mate',
+        label: 'Accept the alpha male',
+        description: 'Mate and prepare for spring denning. Gestation is ~9 weeks.',
+        narrativeResult: 'The ritual is complete. You and the alpha male are bonded for the season. The pack will now prioritize your protection and nutrition as the embryos develop. In two months, the den will be your world.',
+        statEffects: [
+          { stat: StatId.WIS, amount: 2, label: '+WIS' },
+        ],
+        consequences: [
+          { type: 'start_pregnancy', offspringCount: 0 },
+        ],
+        revocable: false,
+        style: 'default',
+      },
+      {
+        id: 'wolf-reject-mate',
+        label: 'Submit but avoid mating',
+        description: 'Stay subordinate. Preserves your strength but limits your legacy.',
+        narrativeResult: 'You roll onto your back, offering submission but avoiding the physical act. The alpha male lingers for a moment, then turns away. You have avoided the burden of pregnancy, but the pack\u2019s focus may shift to another female.',
+        statEffects: [
+          { stat: StatId.TRA, amount: 5, label: '+TRA' },
+        ],
+        consequences: [
+          { type: 'set_flag', flag: 'mated-this-season' },
+        ],
+        revocable: false,
+        style: 'default',
+      },
+    ],
+    conditions: [
+      { type: 'species', speciesIds: ['gray-wolf'] },
+      { type: 'season', seasons: ['winter'] },
+      { type: 'sex', sex: 'female' },
+      { type: 'age_range', min: 22 },
+      { type: 'no_flag', flag: 'pregnant' },
+      { type: 'no_flag', flag: 'mated-this-season' },
+      { type: 'no_flag', flag: 'pups-dependent' },
+    ],
+    weight: 15,
+    cooldown: 12,
+    tags: ['reproduction', 'social'],
+  },
+
+  {
     id: 'wolf-courtship-howl',
     type: 'passive',
     category: 'reproduction',
