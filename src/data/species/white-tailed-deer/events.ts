@@ -597,6 +597,7 @@ const deerEvents: GameEvent[] = [
     id: 'deer-antler-velvet',
     type: 'passive',
     category: 'seasonal',
+    simulated: true,
     narrativeText:
       'The itching began weeks ago — a maddening, bone-deep sensation at the tops of your pedicles where last year\'s antlers fell away. Now the new growth is unmistakable. Soft, warm knobs of tissue are pushing upward, sheathed in velvet skin laced with blood vessels that pulse visibly beneath the surface. The antlers will grow faster than any other mammalian bone — up to half an inch per day, fueled by a torrent of calcium and phosphorus stripped from your own skeleton. Your ribs will weaken to build your crown. By autumn, these nubs will be hardened weapons capable of puncturing hide and snapping bone. But for now they are tender, fragile, and exquisitely sensitive to every bump and branch.',
     statEffects: [
@@ -620,6 +621,7 @@ const deerEvents: GameEvent[] = [
     id: 'deer-summer-flies',
     type: 'passive',
     category: 'seasonal',
+    simulated: true,
     narrativeText:
       'The heat brings them in clouds — deer flies, horse flies, bot flies, and the ever-present ticks that crawl up through the grass and latch onto the thin skin behind your ears and between your legs. You twitch your skin in rippling waves, stamp your hooves, flick your ears in a ceaseless, futile battle against the swarm. A deer fly opens a neat incision on your flank and drinks from the welling blood. You swing your head to bite at it and another lands on your rump. They are relentless, mindless, and they will not stop until the first frost kills them.',
     statEffects: [
@@ -655,6 +657,7 @@ const deerEvents: GameEvent[] = [
     id: 'deer-autumn-rut',
     type: 'active',
     category: 'seasonal',
+    simulated: true,
     narrativeText:
       'It begins in the shortening days, a hormonal wildfire that burns through every cell. Your neck swells until it is nearly as thick as your barrel. The velvet on your antlers dries, cracks, and peels away in bloody ribbons that you scrub against tree trunks until the bone beneath gleams white and hard. You stop eating. Sleep becomes an afterthought. Every waking moment is consumed by a single, overwhelming imperative: find does, fight rivals, breed. The rut has seized you, and you are no longer entirely yourself. You are something older, fiercer, and far more reckless.',
     statEffects: [
@@ -699,6 +702,7 @@ const deerEvents: GameEvent[] = [
     id: 'deer-winter-yard',
     type: 'passive',
     category: 'seasonal',
+    simulated: true,
     narrativeText:
       'The snow is hip-deep now and still falling. Travel through open ground has become impossible — each step plunges you to your chest, burning calories you cannot afford to spend. But here, beneath the dense canopy of a hemlock and cedar stand, the snow is shallow, packed down by the hooves of dozens of deer who have gathered in this traditional wintering area. A deer yard. The trees block the wind and hold the snow on their branches, creating a sheltered maze of packed trails that connect feeding areas to bedding sites. You are not alone — the yard is crowded with does, fawns, and young bucks, all sharing body heat and the diminished browse. It is not comfort, exactly. But it is survival.',
     statEffects: [
@@ -722,6 +726,7 @@ const deerEvents: GameEvent[] = [
     id: 'deer-rut-ends',
     type: 'passive',
     category: 'seasonal',
+    simulated: true,
     narrativeText:
       'The frenzy is over. The swelling in your neck is subsiding, the obsessive energy draining away like water from a cracked vessel. You are gaunt — ribs visible beneath loose hide, haunches wasted from weeks of fighting and pacing and refusing to eat. The does have scattered back to their matrilineal groups, carrying whatever will come of this season inside them. Your antlers feel heavy and purposeless now, the bone already beginning the slow chemical dissolution that will drop them into the snow by February. The rut took everything you had. Now winter will decide if it was enough.',
     statEffects: [
@@ -900,6 +905,7 @@ const deerEvents: GameEvent[] = [
     id: 'deer-scout-winter-yard',
     type: 'active',
     category: 'migration',
+    simulated: true,
     narrativeText:
       'The first hard frost has come and gone, and something in the air — the angle of the light, the smell of dead leaves, a barometric pressure your body reads but your mind cannot name — tells you it is time to move. The summer range is emptying. You need to find the wintering area, the dense conifer stand where generations of deer have weathered the deep snow. You set off alone, nose to the wind, following a trail of memory and scent that your mother walked before you, and her mother before her.',
     statEffects: [
@@ -976,6 +982,7 @@ const deerEvents: GameEvent[] = [
     id: 'deer-spring-return',
     type: 'passive',
     category: 'migration',
+    simulated: true,
     narrativeText:
       'The snow is retreating. Patches of bare earth appear on south-facing slopes, dark and wet and fragrant with the promise of new growth. The deer yard that sheltered you through the worst of winter is thinning out — does are leaving in small groups, drawn back toward their summer ranges by the same invisible compass that brought them here. You feel it too, the pull northward, uphill, toward the open meadows where the first green shoots are already pushing through the snowmelt. You are thinner than you were in autumn, your ribs visible beneath your dull winter coat, but you are alive. The worst is over. You step out of the conifer canopy and into the strengthening sun, and the warmth on your back feels like forgiveness.',
     statEffects: [
@@ -1271,6 +1278,7 @@ const deerEvents: GameEvent[] = [
     id: 'deer-fawn-birth',
     type: 'passive',
     category: 'reproduction',
+    simulated: true,
     narrativeText:
       'You have chosen your place with care — a thicket of tall fescue on a gentle south-facing slope, hidden from the wind, screened from above by the low branches of a crabapple tree. The contractions come in waves, each one deeper and more insistent than the last. You lie on your side, breathing in shallow, rapid bursts, the muscles of your abdomen working with an intelligence that requires nothing from your conscious mind. Then, in a rush of fluid and effort, the fawn arrives — slick, steaming, impossibly small, its legs folded beneath it like wet origami. You lick it clean with long, firm strokes, memorizing its scent, imprinting it into the deepest architecture of your brain. Within an hour it is standing. Within two, it is nursing. Within a day, you will hide it in the grass and leave to feed, trusting its spotted coat and absolute stillness to keep it safe from the world that wants to eat it.',
     statEffects: [
@@ -1297,6 +1305,7 @@ const deerEvents: GameEvent[] = [
     id: 'deer-fawn-defense',
     type: 'active',
     category: 'reproduction',
+    simulated: true,
     narrativeText:
       'The coyote has found your fawn. You can see it nosing through the grass not ten yards from where the spotted body lies motionless, pressed flat against the earth in the instinctive freeze that has saved a million fawns before this one. The coyote has not seen it yet — it is following the scent, zigzagging closer with each pass. Your fawn\'s eyes are open, glassy with terror, but it does not move. It will not break its freeze unless the teeth are already closing. Everything in your body is screaming. You are fifty yards away and closing fast.',
     statEffects: [

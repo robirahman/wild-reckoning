@@ -26,6 +26,23 @@ import {
   allyWarnsTrigger,
   yearlingDispersalTrigger,
 } from './triggers/social';
+import {
+  antlerVelvetTrigger,
+  insectHarassmentTrigger,
+  autumnRutTrigger,
+  winterYardTrigger,
+  rutEndsTrigger,
+} from './triggers/seasonal';
+import {
+  winterYardScoutTrigger,
+  travelHazardsTrigger,
+  springReturnTrigger,
+} from './triggers/migration';
+import {
+  fawnBirthTrigger,
+  fawnDefenseTrigger,
+  rutDisplayTrigger,
+} from './triggers/reproduction';
 
 const ALL_TRIGGERS: SimulationTrigger[] = [
   rehabilitationIntroTrigger,
@@ -57,6 +74,20 @@ const ALL_TRIGGERS: SimulationTrigger[] = [
   rivalReturnsTrigger,
   allyWarnsTrigger,
   yearlingDispersalTrigger,
+  // Seasonal triggers
+  antlerVelvetTrigger,
+  insectHarassmentTrigger,
+  autumnRutTrigger,
+  winterYardTrigger,
+  rutEndsTrigger,
+  // Migration triggers
+  winterYardScoutTrigger,
+  travelHazardsTrigger,
+  springReturnTrigger,
+  // Reproduction triggers
+  fawnBirthTrigger,
+  fawnDefenseTrigger,
+  rutDisplayTrigger,
 ];
 
 // ── Behavioral Multiplier (mirrors EventGenerator logic) ──
