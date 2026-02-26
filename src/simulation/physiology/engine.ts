@@ -18,7 +18,7 @@ export function tickPhysiologyEngine(input: PhysiologyTickInput): PhysiologyTick
   const {
     animal, time, weather, config, metabolismConfig: mc,
     behavior, regionDef, currentNodeType, currentNodeResources,
-    isPregnant, isLactating, rng, ffMult,
+    isPregnant, isLactating, ffMult,
   } = input;
 
   // Clone current state (caller will write back)

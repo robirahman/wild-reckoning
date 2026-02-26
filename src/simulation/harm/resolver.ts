@@ -1,6 +1,6 @@
 import type { AnatomyIndex, BodyPart, TissueType, BodyZone } from '../anatomy/types';
 import type { BodyState, ConditionType } from '../anatomy/bodyState';
-import type { HarmEvent, HarmResult, PartDamageResult, CapabilityImpairmentDelta } from './types';
+import type { HarmEvent, HarmType, HarmResult, PartDamageResult, CapabilityImpairmentDelta } from './types';
 import { recomputeCapabilities } from '../anatomy/capabilities';
 import type { Rng } from '../../engine/RandomUtils';
 

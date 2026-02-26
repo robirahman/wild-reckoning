@@ -1,6 +1,6 @@
-import type { SimulationTrigger, SimulationContext, SimulationOutcome, SimulationChoice } from '../types';
+import type { SimulationTrigger, SimulationContext } from '../types';
 import type { HarmEvent } from '../../harm/types';
-import { StatId, computeEffectiveValue } from '../../../types/stats';
+import { StatId } from '../../../types/stats';
 import { getEncounterRate } from '../../calibration/calibrator';
 
 function getLocomotion(ctx: SimulationContext): number {
@@ -222,16 +222,7 @@ export const vehicleStrikeTrigger: SimulationTrigger = {
     return base;
   },
 
-  resolve(ctx) {
-    const vehicleHarm: HarmEvent = {
-      id: `vehicle-impact-${ctx.time.turn}`,
-      sourceLabel: 'vehicle impact',
-      magnitude: ctx.rng.int(70, 95),
-      targetZone: 'random',
-      spread: 0.6,
-      harmType: 'blunt',
-    };
-
+  resolve(_ctx) {
     return {
       harmEvents: [],
       statEffects: [

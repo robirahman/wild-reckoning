@@ -1,11 +1,7 @@
-import type { SimulationTrigger, SimulationContext, SimulationOutcome, SimulationChoice } from '../types';
+import type { SimulationTrigger } from '../types';
 import type { HarmEvent } from '../../harm/types';
 import { StatId, computeEffectiveValue } from '../../../types/stats';
 import { getEncounterRate } from '../../calibration/calibrator';
-
-function getLocomotion(ctx: SimulationContext): number {
-  return ctx.animal.bodyState?.capabilities['locomotion'] ?? 100;
-}
 
 // ══════════════════════════════════════════════════
 //  RUT COMBAT (Male deer territorial/mating fight)
@@ -55,7 +51,6 @@ export const rutCombatTrigger: SimulationTrigger = {
 
   getChoices(ctx) {
     const hea = computeEffectiveValue(ctx.animal.stats[StatId.HEA]);
-    const locomotion = getLocomotion(ctx);
 
     // Antler strike targeting head/neck/front-legs
     const antlerStrike: HarmEvent = {
@@ -64,16 +59,6 @@ export const rutCombatTrigger: SimulationTrigger = {
       magnitude: ctx.rng.int(35, 65),
       targetZone: ctx.rng.pick(['head', 'neck', 'front-legs']),
       spread: 0.2,
-      harmType: 'blunt',
-    };
-
-    // A heavier, more dangerous exchange
-    const prolongedCombat: HarmEvent = {
-      id: `antler-lock-${ctx.time.turn}`,
-      sourceLabel: 'antler lock and twist',
-      magnitude: ctx.rng.int(50, 80),
-      targetZone: 'neck',
-      spread: 0.3,
       harmType: 'blunt',
     };
 

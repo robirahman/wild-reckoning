@@ -1,6 +1,6 @@
-import type { SimulationTrigger, SimulationContext, SimulationOutcome, SimulationChoice } from '../types';
+import type { SimulationTrigger, SimulationContext, SimulationChoice } from '../types';
 import type { HarmEvent } from '../../harm/types';
-import { StatId, computeEffectiveValue } from '../../../types/stats';
+import { StatId } from '../../../types/stats';
 import { getEncounterRate } from '../../calibration/calibrator';
 
 // ── Helper: compute locomotion effectiveness for escape chances ──
@@ -59,16 +59,6 @@ export const wolfPackTrigger: SimulationTrigger = {
     const locomotion = getLocomotion(ctx);
     const isWinter = ctx.time.season === 'winter';
     const isSnowy = ctx.currentWeather?.type === 'snow' || ctx.currentWeather?.type === 'blizzard';
-
-    // Wolf attack targets hindquarters (classic wolf hunting strategy)
-    const baseHarm: HarmEvent = {
-      id: `wolf-bite-${ctx.time.turn}`,
-      sourceLabel: 'wolf bite',
-      magnitude: ctx.rng.int(45, 75),
-      targetZone: 'hind-legs',
-      spread: 0.3,
-      harmType: 'sharp',
-    };
 
     let narrative: string;
     if (isWinter && isSnowy) {
@@ -227,7 +217,7 @@ export const coyoteStalkerTrigger: SimulationTrigger = {
     return base;
   },
 
-  resolve(ctx) {
+  resolve(_ctx) {
     return {
       harmEvents: [],
       statEffects: [
@@ -327,7 +317,7 @@ export const cougarAmbushTrigger: SimulationTrigger = {
     return base;
   },
 
-  resolve(ctx) {
+  resolve(_ctx) {
     return {
       harmEvents: [],
       statEffects: [
@@ -428,7 +418,7 @@ export const huntingSeasonTrigger: SimulationTrigger = {
     return getEncounterRate(ctx.calibratedRates, 'hunting', ctx.time.season);
   },
 
-  resolve(ctx) {
+  resolve(_ctx) {
     return {
       harmEvents: [],
       statEffects: [

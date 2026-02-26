@@ -1,6 +1,6 @@
-import type { SimulationTrigger, SimulationContext, SimulationOutcome, SimulationChoice } from '../types';
+import type { SimulationTrigger } from '../types';
 import type { HarmEvent } from '../../harm/types';
-import { StatId, computeEffectiveValue } from '../../../types/stats';
+import { StatId } from '../../../types/stats';
 
 // Caloric density: kcal-units per lb of body weight (from DEER_METABOLISM)
 const KCAL_PER_LB = 35;
@@ -19,7 +19,7 @@ export const seasonalBrowseTrigger: SimulationTrigger = {
   category: 'foraging',
   tags: ['foraging', 'food'],
 
-  isPlausible(ctx) {
+  isPlausible(_ctx) {
     // Foraging always plausible; quality varies by season
     return true;
   },

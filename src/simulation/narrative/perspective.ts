@@ -1,7 +1,6 @@
-import type { NarrativeEntity, NarrativeBodyEffect, EntityArchetype } from './types';
+import type { NarrativeEntity, NarrativeBodyEffect } from './types';
 import type { PartDamageResult, HarmResult } from '../harm/types';
 import type { AnatomyIndex } from '../anatomy/types';
-import type { ActiveBodyCondition } from '../anatomy/bodyState';
 
 // ══════════════════════════════════════════════════
 //  ENTITY DISCLOSURE

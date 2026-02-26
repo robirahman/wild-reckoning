@@ -1,5 +1,5 @@
-import type { HarmResult, PartDamageResult, CapabilityImpairmentDelta } from '../harm/types';
-import type { HarmEvent, HarmType } from '../harm/types';
+import type { HarmResult } from '../harm/types';
+import type { HarmEvent } from '../harm/types';
 import type { BodyZone } from '../anatomy/types';
 import type { EventCategory } from '../../types/events';
 

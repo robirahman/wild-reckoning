@@ -1,15 +1,13 @@
 import type { Rng } from '../../engine/RandomUtils';
 import type {
   NarrativeContext,
-  NarrativeEntity,
   NarrativeBodyEffect,
   DebriefingEntry,
-  EmotionalTone,
 } from './types';
-import { describeEntity, describeEntityClinical, describeCondition } from './perspective';
+import { describeEntity, describeEntityClinical } from './perspective';
 
 // ── Template imports ──
-import { pickImpact, pickZonePain, describeCapabilityImpairment } from './templates/injury';
+import { pickZonePain, describeCapabilityImpairment } from './templates/injury';
 import { pickDetection, CANID_DETECTIONS, FELID_DETECTIONS, HUMAN_DETECTIONS } from './templates/predator';
 
 // ══════════════════════════════════════════════════
@@ -90,7 +88,7 @@ export function toDebriefingEntry(
   ctx: NarrativeContext,
   turn: number,
   animalNarrative: string,
-  wisdomLevel: number,
+  _wisdomLevel: number,
 ): DebriefingEntry {
   const clinicalNarrative = renderDebriefing(ctx);
 

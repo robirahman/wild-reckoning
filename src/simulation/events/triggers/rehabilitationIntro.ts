@@ -25,7 +25,7 @@ export const rehabilitationIntroTrigger: SimulationTrigger = {
     return true;
   },
 
-  computeWeight(ctx) {
+  computeWeight(_ctx) {
     // Very high weight — intro events should always fire when plausible
     return 1.0;
   },
@@ -52,7 +52,7 @@ export const rehabilitationIntroTrigger: SimulationTrigger = {
 
 // ── Turn 1: Release from rehabilitation center ──
 
-function resolveRelease(ctx: SimulationContext): SimulationOutcome {
+function resolveRelease(_ctx: SimulationContext): SimulationOutcome {
   return {
     harmEvents: [],
     statEffects: [
@@ -66,7 +66,7 @@ function resolveRelease(ctx: SimulationContext): SimulationOutcome {
   };
 }
 
-function getReleaseChoices(ctx: SimulationContext): SimulationChoice[] {
+function getReleaseChoices(_ctx: SimulationContext): SimulationChoice[] {
   return [
     {
       id: 'bolt-into-trees',
@@ -109,7 +109,7 @@ function getReleaseChoices(ctx: SimulationContext): SimulationChoice[] {
 
 // ── Turn 2: First night in the wild ──
 
-function resolveFirstNight(ctx: SimulationContext): SimulationOutcome {
+function resolveFirstNight(_ctx: SimulationContext): SimulationOutcome {
   return {
     harmEvents: [],
     statEffects: [
@@ -157,7 +157,7 @@ function resolveFirstForage(ctx: SimulationContext): SimulationOutcome {
   };
 }
 
-function getForageChoices(ctx: SimulationContext): SimulationChoice[] {
+function getForageChoices(_ctx: SimulationContext): SimulationChoice[] {
   return [
     {
       id: 'eat-everything',
