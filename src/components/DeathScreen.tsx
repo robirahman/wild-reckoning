@@ -107,7 +107,7 @@ export function DeathScreen() {
           {grade.letter}
         </div>
         <div className={styles.fitnessCaption}>
-          Based on inclusive genetic fitness and offspring survival
+          Based on offspring survival and successful maturation
         </div>
       </div>
 
