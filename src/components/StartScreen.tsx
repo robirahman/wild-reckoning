@@ -95,7 +95,8 @@ export function StartScreen() {
       <h1 
         className={styles.title}
         onClick={(e) => {
-          if (e.detail === 3) {
+          // Trigger on every 3rd click (3, 6, 9...) to be more reliable
+          if (e.detail > 0 && e.detail % 3 === 0) {
             const nextState = !debugAllUnlocked;
             toggleDebugAllUnlocked();
             console.log('Debug mode set to:', nextState);
