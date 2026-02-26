@@ -17,6 +17,7 @@ export const ILLUSTRATION_POOLS: Record<EventCategory, string[]> = {
   psychological: [],
   migration: [],
   reproduction: [],
+  milestone: [],
 };
 
 /**

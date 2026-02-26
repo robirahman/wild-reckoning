@@ -1,4 +1,4 @@
-import type { MortalityProfile, CalibratedRates, MortalityCause } from './types';
+import type { MortalityProfile, CalibratedRates } from './types';
 import type { Season } from '../../types/world';
 
 /**

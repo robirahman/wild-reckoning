@@ -14,7 +14,7 @@ import { DIFFICULTY_PRESETS } from '../types/difficulty';
 import { weatherContextMultiplier } from './WeatherSystem';
 import { pickIllustration } from './IllustrationPicker';
 import { isSimulationMode } from '../simulation/mode';
-import { generateSimulationEvents, getSimulationCategories, drainDebriefingEntries } from '../simulation/events/SimEventGenerator';
+import { generateSimulationEvents } from '../simulation/events/SimEventGenerator';
 import type { SimulationContext } from '../simulation/events/types';
 import type { CalibratedRates } from '../simulation/calibration/types';
 import { calibrate } from '../simulation/calibration/calibrator';

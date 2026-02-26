@@ -1,9 +1,8 @@
 import type { SimulationContext, SimulationTrigger, SimulationOutcome, SimulationChoice } from './types';
 import type { ResolvedEvent, GameEvent, EventChoice } from '../../types/events';
-import type { HarmEvent } from '../harm/types';
 import type { DebriefingEntry } from '../narrative/types';
 import { StatId, computeEffectiveValue } from '../../types/stats';
-import { renderAnimalPerspective, renderDebriefing, toDebriefingEntry } from '../narrative/renderer';
+import { renderAnimalPerspective, toDebriefingEntry } from '../narrative/renderer';
 
 // ── Trigger Registry ──
 

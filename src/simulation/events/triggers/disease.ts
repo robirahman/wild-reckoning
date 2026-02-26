@@ -1,4 +1,4 @@
-import type { SimulationTrigger, SimulationContext, SimulationOutcome, SimulationChoice } from '../types';
+import type { SimulationTrigger } from '../types';
 import type { HarmEvent } from '../../harm/types';
 import { StatId, computeEffectiveValue } from '../../../types/stats';
 import { getEncounterRate } from '../../calibration/calibrator';
