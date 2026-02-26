@@ -39,37 +39,39 @@ export const HONEYBEE_WORKER_CONFIG: SpeciesConfig = {
   },
 
   age: {
-    oldAgeOnsetMonths: 5,
-    oldAgeBaseChance: 0.12,
-    oldAgeEscalation: 3.0,
-    maxOldAgeChance: 0.95,
+    oldAgeOnsetMonths: 1.5, // ~6 weeks in summer
+    oldAgeBaseChance: 0.05,  // Daily check (scaled)
+    oldAgeEscalation: 1.1,
+    maxOldAgeChance: 0.90,
   },
 
-  diseaseDeathChanceAtCritical: 0.15,
+  diseaseDeathChanceAtCritical: 0.02, // Daily check (scaled)
 
   predationVulnerability: {
     injuryProbIncrease: 0.10,
     parasiteProbIncrease: 0.08,
     underweightFactor: 0.012,
     underweightThreshold: 0.00014,
-    deathChanceMin: 0.02,
-    deathChanceMax: 0.90,
+    deathChanceMin: 0.001,
+    deathChanceMax: 0.40,
   },
 
   seasonalWeight: {
-    spring: 0.000008,
-    summer: 0.000010,
-    autumn: 0.000005,
-    winter: -0.000005,
-    foragingBonus: 0.000003,
+    spring: 0.0000003, // Scaled for daily (4 turns/day)
+    summer: 0.0000004,
+    autumn: 0.0000002,
+    winter: -0.0000002,
+    foragingBonus: 0.0000001,
   },
+
+  turnUnit: 'day', // 4 turns per day
 
   agePhases: [
     {
       id: 'nurse',
       label: 'Nurse Bee',
       minAge: 0,
-      maxAge: 1,
+      maxAge: 0.3, // ~10 days
       statModifiers: [
         { stat: StatId.IMM, amount: -5 },
         { stat: StatId.HOM, amount: -5 },
@@ -78,14 +80,14 @@ export const HONEYBEE_WORKER_CONFIG: SpeciesConfig = {
     {
       id: 'house-bee',
       label: 'House Bee',
-      minAge: 1,
-      maxAge: 2,
+      minAge: 0.3,
+      maxAge: 0.6, // ~20 days
     },
     {
       id: 'guard',
       label: 'Guard Bee',
-      minAge: 2,
-      maxAge: 3,
+      minAge: 0.6,
+      maxAge: 0.8, // ~25 days
       statModifiers: [
         { stat: StatId.ADV, amount: 8 },
       ],
@@ -93,8 +95,8 @@ export const HONEYBEE_WORKER_CONFIG: SpeciesConfig = {
     {
       id: 'forager',
       label: 'Forager',
-      minAge: 3,
-      maxAge: 5,
+      minAge: 0.8,
+      maxAge: 1.4, // ~42 days
       statModifiers: [
         { stat: StatId.HOM, amount: 10 },
         { stat: StatId.CLI, amount: 8 },
@@ -104,7 +106,7 @@ export const HONEYBEE_WORKER_CONFIG: SpeciesConfig = {
     {
       id: 'scout',
       label: 'Scout',
-      minAge: 5,
+      minAge: 1.4,
       statModifiers: [
         { stat: StatId.ADV, amount: 15 },
         { stat: StatId.WIS, amount: 8 },
@@ -115,7 +117,7 @@ export const HONEYBEE_WORKER_CONFIG: SpeciesConfig = {
 
   reproduction: {
     type: 'semelparous',
-    spawningMinAge: 2,
+    spawningMinAge: 0.5,
     spawningSeasons: ['spring', 'summer', 'autumn', 'winter'],
     baseEggCount: 0,
     eggCountHeaFactor: 0,

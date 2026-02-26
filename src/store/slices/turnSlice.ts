@@ -388,7 +388,7 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
       // Seasonal weight
       let seasonalWeightChange = config.seasonalWeight[newTime.season]
         + config.seasonalWeight.foragingBonus * state.behavioralSettings.foraging
-        + (newWeather ? computeWeatherPenalty(newWeather).weightChange : 0);
+        + (newWeather ? computeWeatherPenalty(newWeather).weightChange * massScale : 0);
 
       // Map Node Integration
       if (currentMap) {
@@ -460,7 +460,7 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
       if (climate) {
         const temp = climate.temperatureByMonth[newTime.monthIndex];
         if (temp < 20) {
-          seasonalWeightChange -= (20 - temp) * 0.05;
+          seasonalWeightChange -= (20 - temp) * 0.05 * massScale;
         }
       }
 

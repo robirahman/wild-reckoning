@@ -64,7 +64,7 @@ export const HONEYBEE_WORKER_EVENTS: GameEvent[] = [
           { stat: StatId.WIS, amount: 3, label: '+WIS' },
         ],
         consequences: [
-          { type: 'modify_weight', amount: -0.000005 },
+          { type: 'modify_weight', amount: -0.0000008 },
         ],
         revocable: false,
         style: 'default',
@@ -302,7 +302,7 @@ export const HONEYBEE_WORKER_EVENTS: GameEvent[] = [
           { stat: StatId.WIS, amount: 2, label: '+WIS' },
         ],
         consequences: [
-          { type: 'modify_weight', amount: 0.000008 },
+          { type: 'modify_weight', amount: 0.0000015 },
         ],
         revocable: false,
         style: 'default',
@@ -317,7 +317,7 @@ export const HONEYBEE_WORKER_EVENTS: GameEvent[] = [
           { stat: StatId.NOV, amount: 3, label: '+NOV' },
         ],
         consequences: [
-          { type: 'modify_weight', amount: 0.000010 },
+          { type: 'modify_weight', amount: 0.0000020 },
         ],
         revocable: false,
         style: 'default',
@@ -342,11 +342,10 @@ export const HONEYBEE_WORKER_EVENTS: GameEvent[] = [
       { stat: StatId.HEA, amount: 3, label: '+HEA' },
       { stat: StatId.WIS, amount: 2, label: '+WIS' },
     ],
-    consequences: [
-      { type: 'modify_weight', amount: 0.000005 },
-      { type: 'set_flag', flag: 'pollen-collected' },
-    ],
-    conditions: [
+            consequences: [
+              { type: 'modify_weight', amount: 0.0000010 },
+              { type: 'set_flag', flag: 'pollen-collected' },
+            ],    conditions: [
       { type: 'species', speciesIds: ['honeybee-worker'] },
       { type: 'has_flag', flag: 'first-flight-complete' },
       { type: 'season', seasons: ['spring', 'summer', 'autumn'] },
@@ -419,7 +418,7 @@ export const HONEYBEE_WORKER_EVENTS: GameEvent[] = [
           { stat: StatId.NOV, amount: 8, label: '+NOV' },
         ],
         consequences: [
-          { type: 'modify_weight', amount: 0.000005 },
+          { type: 'modify_weight', amount: 0.0000010 },
         ],
         revocable: false,
         style: 'danger',
@@ -438,7 +437,7 @@ export const HONEYBEE_WORKER_EVENTS: GameEvent[] = [
           { stat: StatId.WIS, amount: 5, label: '+WIS' },
         ],
         consequences: [
-          { type: 'modify_weight', amount: 0.000003 },
+          { type: 'modify_weight', amount: 0.0000005 },
         ],
         revocable: false,
         style: 'default',
@@ -600,7 +599,7 @@ export const HONEYBEE_WORKER_EVENTS: GameEvent[] = [
       { stat: StatId.HEA, amount: -3, label: '-HEA' },
     ],
     consequences: [
-      { type: 'modify_weight', amount: -0.000008 },
+      { type: 'modify_weight', amount: -0.0000012 },
     ],
     conditions: [
       { type: 'species', speciesIds: ['honeybee-worker'] },
