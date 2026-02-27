@@ -13,6 +13,7 @@ import { getRegionDefinition } from '../data/regions';
  * the EventGenerator. Returns the resolved events for this turn.
  */
 export function generateTurnEvents(state: GameState): ResolvedEvent[] {
+  const currentNode = state.map?.nodes.find(n => n.id === state.map!.currentLocationId);
   return generateEvents({
     animal: state.animal,
     time: state.time,
@@ -26,12 +27,12 @@ export function generateTurnEvents(state: GameState): ResolvedEvent[] {
     regionDef: getRegionDefinition(state.animal.region),
     currentWeather: state.currentWeather ?? undefined,
     ecosystem: state.ecosystem,
-    currentNodeType: state.map?.nodes.find(n => n.id === state.map!.currentLocationId)?.type,
-    currentNodeResources: (() => {
-      const node = state.map?.nodes.find(n => n.id === state.map!.currentLocationId);
-      return node?.resources;
-    })(),
+    currentNodeType: currentNode?.type,
+    currentNodeResources: currentNode?.resources,
+    currentNodeId: state.map?.currentLocationId,
     fastForward: state.fastForward,
+    worldMemory: state.worldMemory,
+    npcBehaviorStates: state.npcBehaviorStates,
   });
 }
 
@@ -231,9 +232,35 @@ export function resolveTurn(state: GameState): {
   const healthResult = tickHealth(state.animal, state.rng, state.speciesBundle.parasites, state.difficulty, healthFfMult);
 
   // Tick anatomy-based body state (Phase 0+ simulation layer)
-  const bodyResult = tickBodyState(healthResult.animal, state.rng, healthFfMult);
+  // Pass physiology state for condition cascade engine (Phase 2)
+  const currentNode = state.map?.nodes.find(n => n.id === state.map!.currentLocationId);
+  const bodyResult = tickBodyState(
+    healthResult.animal,
+    state.rng,
+    healthFfMult,
+    healthResult.animal.physiologyState ?? undefined,
+    state.behavioralSettings?.foraging,
+    currentNode?.type === 'water',
+  );
   healthResult.animal = bodyResult.animal;
   healthResult.narratives.push(...bodyResult.narratives);
+
+  // Feed fever level back into physiology state
+  if (bodyResult.feverLevel > 0 && healthResult.animal.physiologyState) {
+    healthResult.animal = {
+      ...healthResult.animal,
+      physiologyState: {
+        ...healthResult.animal.physiologyState,
+        feverLevel: bodyResult.feverLevel,
+      },
+    };
+  }
+
+  // Handle condition cascade death (sepsis)
+  if (bodyResult.conditionDeathCause && healthResult.animal.alive !== false) {
+    allConsequences.push({ type: 'death', cause: bodyResult.conditionDeathCause });
+  }
+
   // Body state stat modifiers get added as stat effects
   for (const mod of bodyResult.modifiers) {
     allStatEffects.push({

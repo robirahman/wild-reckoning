@@ -9,6 +9,7 @@ import { createInitialAnimal, initialReproduction } from './helpers';
 import { generateRegionMap } from '../../engine/MapSystem';
 import { getSpeciesBundle } from '../../data/species';
 import { INITIAL_LIFETIME_STATS } from '../../types/stats';
+import { computeMovementCost } from '../../simulation/spatial/movement';
 
 export const createAnimalSlice: GameSlice<AnimalSlice> = (set, get) => {
   const defaultBundle = getSpeciesBundle('white-tailed-deer');
@@ -140,35 +141,57 @@ export const createAnimalSlice: GameSlice<AnimalSlice> = (set, get) => {
     moveLocation: (nodeId) => {
       const state = get();
       if (!state.map) return;
-      
+
       const currentNode = state.map.nodes.find(n => n.id === state.map!.currentLocationId);
       if (!currentNode?.connections.includes(nodeId)) return;
-      
+
+      const targetNode = state.map.nodes.find(n => n.id === nodeId);
+      if (!targetNode) return;
+
       const scaling = getScaling(state.speciesBundle.config.massType);
-      
+
+      // Compute movement caloric cost from spatial dynamics
+      const locomotionCapability = state.animal.bodyState?.capabilities['locomotion'] ?? 100;
+      const moveCost = computeMovementCost({
+        targetNode,
+        locomotionCapability,
+        weather: state.currentWeather,
+        season: state.time.season,
+      });
+
       const newMap = { ...state.map };
       newMap.currentLocationId = nodeId;
       newMap.nodes = newMap.nodes.map(n => n.id === nodeId ? { ...n, visited: true, discovered: true } : n);
-      
+
       const newFlags = new Set(state.animal.flags);
       newFlags.add('just-moved');
-      
+
       const regions = new Set(state.animal.lifetimeStats.regionsVisited);
       regions.add(state.animal.region);
 
-      set({ 
-        map: newMap, 
-        animal: { 
-          ...state.animal, 
-          flags: newFlags,
-          energy: Math.max(0, state.animal.energy - scaling.movementCost),
-          lifetimeStats: {
-            ...state.animal.lifetimeStats,
-            distanceTraveled: state.animal.lifetimeStats.distanceTraveled + 1,
-            regionsVisited: Array.from(regions),
-          }
-        } 
-      });
+      // Deduct movement cost via physiology (add_calories) or legacy energy
+      let updatedAnimal = {
+        ...state.animal,
+        flags: newFlags,
+        energy: Math.max(0, state.animal.energy - scaling.movementCost),
+        lifetimeStats: {
+          ...state.animal.lifetimeStats,
+          distanceTraveled: state.animal.lifetimeStats.distanceTraveled + 1,
+          regionsVisited: Array.from(regions),
+        }
+      };
+
+      if (updatedAnimal.physiologyState) {
+        updatedAnimal = {
+          ...updatedAnimal,
+          physiologyState: {
+            ...updatedAnimal.physiologyState,
+            caloricIntakeThisTurn: updatedAnimal.physiologyState.caloricIntakeThisTurn - moveCost,
+          },
+        };
+      }
+
+      set({ map: newMap, animal: updatedAnimal });
     },
 
     sniff: () => {

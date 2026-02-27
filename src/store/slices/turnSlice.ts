@@ -16,6 +16,9 @@ import { resolveHarm } from '../../simulation/harm/resolver';
 import { convertHarmToLegacy } from '../../simulation/harm/converter';
 import { tickPhysiologyEngine } from '../../simulation/physiology/engine';
 import { getMetabolismConfig } from '../../simulation/physiology/configs';
+import { tickWorldMemory } from '../../simulation/memory/ticker';
+import { tickNodeResources, buildNPCNodeMap } from '../../simulation/spatial/resources';
+import { tickNPCBehavior } from '../../simulation/npc/engine';
 
 export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
   currentEvents: [],
@@ -347,6 +350,9 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
     let currentCooldowns = { ...state.eventCooldowns };
     let currentClimateShift = state.climateShift;
     let currentMap = state.map;
+    let currentWorldMemory = state.worldMemory;
+    let currentNPCBehaviorStates = { ...state.npcBehaviorStates };
+    let currentNPCs = [...state.npcs];
     const currentHistory = [...state.turnHistory];
 
     for (let i = 0; i < iterations; i++) {
@@ -381,8 +387,30 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
         tickedStats = addModifier(tickedStats, mod);
       }
 
-      // Tick NPC Movement
-      get().tickNPCMovement();
+      // Tick NPC Behavior (state machine movement + intent transitions)
+      if (currentMap) {
+        const behaviorResult = tickNPCBehavior({
+          npcs: currentNPCs,
+          nodes: currentMap.nodes,
+          playerNodeId: currentMap.currentLocationId,
+          turn: newTime.turn,
+          season: newTime.season,
+          rng: state.rng,
+          ffMult: state.fastForward ? 12 : 1,
+          behaviorStates: currentNPCBehaviorStates,
+        });
+        currentNPCs = behaviorResult.npcs;
+        currentNPCBehaviorStates = behaviorResult.behaviorStates;
+      }
+
+      // Tick World Memory (accumulate event history, node state, threat tracking)
+      currentWorldMemory = tickWorldMemory(
+        currentWorldMemory,
+        state.currentEvents,
+        newTime.turn,
+        currentMap?.currentLocationId,
+        newTime.season,
+      );
 
       // Tick cooldowns
       const newCooldowns: Record<string, number> = {};
@@ -438,6 +466,7 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
       // ── Map Node Integration (world state: scent, noise, resource depletion) ──
       let currentNode: { type: string; resources: { food: number; cover: number } } | undefined;
       if (currentMap) {
+        // Tick scent and noise decay
         currentMap = {
           ...currentMap,
           nodes: currentMap.nodes.map(n => {
@@ -448,8 +477,30 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
             }
             if (state.rng.chance(0.05)) scent += 40;
             if (n.type === 'plain' && state.rng.chance(0.02)) noise += 60;
-            return { ...n, scentLevel: scent, noiseLevel: noise };
+
+            // Prune stale activity entries (older than 5 turns)
+            const recentActivity = n.recentActivity
+              ? n.recentActivity.filter(a => newTime.turn - a.turn <= 5)
+              : [];
+
+            return { ...n, scentLevel: scent, noiseLevel: noise, recentActivity };
           })
+        };
+
+        // Sync NPC node presence
+        const npcsByNode: Record<string, string[]> = {};
+        for (const npc of currentNPCs) {
+          if (npc.alive && npc.currentNodeId) {
+            if (!npcsByNode[npc.currentNodeId]) npcsByNode[npc.currentNodeId] = [];
+            npcsByNode[npc.currentNodeId].push(npc.id);
+          }
+        }
+        currentMap = {
+          ...currentMap,
+          nodes: currentMap.nodes.map(n => ({
+            ...n,
+            presentNPCIds: npcsByNode[n.id] ?? [],
+          }))
         };
 
         const node = currentMap.nodes.find(n => n.id === currentMap!.currentLocationId);
@@ -465,35 +516,39 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
               duration: 1
             });
           }
-
-          const depletion = state.behavioralSettings.foraging * 0.5;
-          currentMap = {
-            ...currentMap,
-            nodes: currentMap.nodes.map(n =>
-              n.id === currentMap!.currentLocationId
-                ? { ...n, resources: { ...n.resources, food: Math.max(0, n.resources.food - depletion) } }
-                : n
-            )
-          };
         }
 
+        // Tick node resources: depletion + seasonal regeneration
+        const npcNodeMap = buildNPCNodeMap(currentNPCs);
+        const ffMult = state.fastForward ? 12 : 1;
+        currentMap = {
+          ...currentMap,
+          nodes: tickNodeResources({
+            nodes: currentMap.nodes,
+            season: newTime.season,
+            foragingEffort: state.behavioralSettings.foraging,
+            currentNodeId: currentMap.currentLocationId,
+            npcNodeMap,
+            ffMult,
+          }),
+        };
+
+        // Seasonal type changes (water freezes in winter, thaws in spring)
         if (newTime.dayInMonth === 1 || (turnUnit === 'week' && newTime.week === 1) || turnUnit === 'month') {
           currentMap = {
             ...currentMap,
             nodes: currentMap.nodes.map(n => {
               let type = n.type;
-              const resources = { ...n.resources };
               if (newTime.season === 'winter' && type === 'water' && state.rng.chance(0.7)) {
                 type = 'plain';
               } else if (newTime.season !== 'winter' && type === 'plain' && n.id.includes('water')) {
                 type = 'water';
               }
+              // Heat wave stress on vegetation
               if (newTime.season === 'summer' && newWeather?.type === 'heat_wave') {
-                resources.food = Math.max(0, resources.food - 10);
+                return { ...n, type, resources: { ...n.resources, food: Math.max(0, n.resources.food - 10) } };
               }
-              if (newTime.season === 'spring') resources.food = Math.min(100, resources.food + 15);
-              else resources.food = Math.min(100, resources.food + 5);
-              return { ...n, type, resources };
+              return type !== n.type ? { ...n, type } : n;
             })
           };
         }
@@ -678,6 +733,9 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
       reproduction: currentReproduction,
       currentWeather,
       map: currentMap,
+      worldMemory: currentWorldMemory,
+      npcs: currentNPCs,
+      npcBehaviorStates: currentNPCBehaviorStates,
       currentEvents: [],
       pendingChoices: [],
       turnHistory: currentHistory,

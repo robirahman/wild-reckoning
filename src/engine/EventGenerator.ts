@@ -17,6 +17,8 @@ import { isSimulationMode } from '../simulation/mode';
 import { generateSimulationEvents } from '../simulation/events/SimEventGenerator';
 import type { SimulationContext } from '../simulation/events/types';
 import type { CalibratedRates } from '../simulation/calibration/types';
+import type { WorldMemory } from '../simulation/memory/types';
+import type { NPCBehaviorState } from '../simulation/npc/types';
 import { calibrate } from '../simulation/calibration/calibrator';
 import { DEER_MORTALITY } from '../simulation/calibration/data/deer';
 
@@ -35,8 +37,11 @@ interface GenerationContext {
   ecosystem?: EcosystemState;
   currentNodeType?: string;
   currentNodeResources?: { food: number; water: number; cover: number };
+  currentNodeId?: string;
   fastForward?: boolean;
   calibratedRates?: CalibratedRates;
+  worldMemory?: WorldMemory;
+  npcBehaviorStates?: Record<string, NPCBehaviorState>;
 }
 
 // ── Calibration cache ──
@@ -264,8 +269,11 @@ export function generateEvents(ctx: GenerationContext): ResolvedEvent[] {
       ecosystem: ctx.ecosystem,
       currentNodeType: ctx.currentNodeType,
       currentNodeResources: ctx.currentNodeResources,
+      currentNodeId: ctx.currentNodeId,
       calibratedRates: getCalibratedRates(ctx.config.id),
       fastForward: ctx.fastForward,
+      worldMemory: ctx.worldMemory,
+      npcBehaviorStates: ctx.npcBehaviorStates,
     };
 
     simEvents = generateSimulationEvents(simCtx);

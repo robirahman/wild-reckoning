@@ -2,6 +2,8 @@ import type { StateStorage } from 'zustand/middleware';
 import type { GameState } from './gameStore';
 import { createRng } from '../engine/RandomUtils';
 import { getSpeciesBundle } from '../data/species';
+import type { WorldMemory, SeasonalTotals } from '../simulation/memory/types';
+import { createWorldMemory } from '../simulation/memory/types';
 
 const STORAGE_KEY = 'wild-reckoning-save';
 
@@ -9,6 +11,16 @@ const STORAGE_KEY = 'wild-reckoning-save';
  * Serializable shape of game state stored in localStorage.
  * Differs from GameState: Set<string> → string[], Rng → number (internal state).
  */
+/** Serialized form of SeasonalTotals (Set → array) */
+interface SerializedSeasonalTotals extends Omit<SeasonalTotals, 'nodesVisited'> {
+  nodesVisited: string[];
+}
+
+/** Serialized form of WorldMemory (Set fields converted to arrays) */
+interface SerializedWorldMemory extends Omit<WorldMemory, 'seasonalTotals'> {
+  seasonalTotals: SerializedSeasonalTotals;
+}
+
 interface SerializedState {
   phase: GameState['phase'];
   seed: number;
@@ -26,6 +38,7 @@ interface SerializedState {
   currentWeather: GameState['currentWeather'];
   turnHistory: GameState['turnHistory'];
   eventCooldowns: GameState['eventCooldowns'];
+  worldMemory?: SerializedWorldMemory;
 }
 
 /** Convert live game state to a JSON-safe object */
@@ -50,6 +63,13 @@ export function serializeState(state: GameState): SerializedState {
     currentWeather: state.currentWeather,
     turnHistory: state.turnHistory,
     eventCooldowns: state.eventCooldowns,
+    worldMemory: state.worldMemory ? {
+      ...state.worldMemory,
+      seasonalTotals: {
+        ...state.worldMemory.seasonalTotals,
+        nodesVisited: Array.from(state.worldMemory.seasonalTotals.nodesVisited),
+      },
+    } : undefined,
   };
 }
 
@@ -83,6 +103,13 @@ export function deserializeState(data: SerializedState): Partial<GameState> {
     showingResults: false,
     turnHistory: data.turnHistory,
     eventCooldowns: data.eventCooldowns,
+    worldMemory: data.worldMemory ? {
+      ...data.worldMemory,
+      seasonalTotals: {
+        ...data.worldMemory.seasonalTotals,
+        nodesVisited: new Set(data.worldMemory.seasonalTotals.nodesVisited),
+      },
+    } : createWorldMemory('spring'),
   };
 }
 

@@ -18,6 +18,21 @@ function getVision(ctx: SimulationContext): number {
   return ctx.animal.bodyState?.capabilities['vision'] ?? 100;
 }
 
+/** Check if any predator NPC of the given species is nearby and actively hunting */
+function hasNearbyHuntingNPC(ctx: SimulationContext, speciesLabel: string): boolean {
+  if (!ctx.npcs || !ctx.npcBehaviorStates || !ctx.currentNodeId) return false;
+  // Find NPCs of the right species at the player's node or adjacent
+  const currentNode = ctx.currentNodeId;
+  for (const npc of ctx.npcs) {
+    if (!npc.alive || npc.type !== 'predator') continue;
+    if (!npc.speciesLabel.toLowerCase().includes(speciesLabel)) continue;
+    const behavior = ctx.npcBehaviorStates[npc.id];
+    if (!behavior || behavior.intent !== 'hunting') continue;
+    if (npc.currentNodeId === currentNode) return true;
+  }
+  return false;
+}
+
 // ══════════════════════════════════════════════════
 //  WOLF PACK ENCOUNTER
 // ══════════════════════════════════════════════════
@@ -36,7 +51,7 @@ export const wolfPackTrigger: SimulationTrigger = {
 
   computeWeight(ctx) {
     if (!ctx.calibratedRates) return 0.02;
-    const base = getEncounterRate(ctx.calibratedRates, 'predation-canid', ctx.time.season);
+    let base = getEncounterRate(ctx.calibratedRates, 'predation-canid', ctx.time.season);
 
     const locoImpairment = (100 - getLocomotion(ctx)) / 100;
     const visionImpairment = (100 - getVision(ctx)) / 100;
@@ -49,7 +64,33 @@ export const wolfPackTrigger: SimulationTrigger = {
       (ctx.currentWeather?.type === 'snow' || ctx.currentWeather?.type === 'blizzard');
     const snowMult = isSnowy ? 1.8 : 1;
 
-    return base * popMult * timeMult * snowMult * (1 + locoImpairment * 0.5 + visionImpairment * 0.3);
+    base = base * popMult * timeMult * snowMult * (1 + locoImpairment * 0.5 + visionImpairment * 0.3);
+
+    // ── World Memory: wolves are persistent — recent encounters increase return rate ──
+    const wolfThreat = ctx.worldMemory?.threatMap['Gray Wolf'];
+    if (wolfThreat && wolfThreat.recentEncounters >= 2) {
+      const turnsSince = ctx.time.turn - wolfThreat.lastEncounterTurn;
+      if (turnsSince < 4) base *= 1.6; // the pack is still nearby
+    }
+
+    // Open wounds increase predator interest (blood scent)
+    const hasOpenWound = ctx.animal.bodyState?.conditions.some(
+      c => (c.type === 'laceration' || c.type === 'puncture') && c.infectionLevel < 30,
+    );
+    if (hasOpenWound) base *= 1.3;
+
+    // Node with recent kills attracts wolves back (successful hunting ground)
+    const nodeMemory = ctx.currentNodeId ? ctx.worldMemory?.nodeMemory[ctx.currentNodeId] : undefined;
+    if (nodeMemory && nodeMemory.killCount > 0 && (ctx.time.turn - nodeMemory.lastKillTurn) < 6) {
+      base *= 1.2;
+    }
+
+    // NPC wolf at the player's node and actively hunting = near-guaranteed encounter
+    if (hasNearbyHuntingNPC(ctx, 'wolf')) {
+      base *= 3.0;
+    }
+
+    return base;
   },
 
   resolve(ctx) {
@@ -58,27 +99,49 @@ export const wolfPackTrigger: SimulationTrigger = {
     const isSnowy = ctx.currentWeather?.type === 'snow' || ctx.currentWeather?.type === 'blizzard';
     const env = buildEnvironment(ctx);
 
+    // ── World Memory: narrative varies based on whether wolves have been seen before ──
+    const wolfThreat = ctx.worldMemory?.threatMap['Gray Wolf'];
+    const isRecurring = wolfThreat && wolfThreat.recentEncounters >= 1;
+
     let narrative: string;
     let actionDetail: string;
     let clinicalDetail: string;
     if (isWinter && isSnowy) {
-      narrative = 'The snow is deep and crusted, and your hooves punch through with every stride while the gray shapes behind you run on top of it. There are several of them — you can hear their panting, feel the vibration of their coordinated pursuit through the frozen ground. They have been herding you toward the river, where the ice may or may not hold your weight. Your lungs burn. Your legs are heavy. The gap is closing.';
-      actionDetail = 'The snow is deep and crusted, and your hooves punch through with every stride while they run on top of it. They have been herding you toward the river. Your lungs burn. The gap is closing.';
-      clinicalDetail = 'Wolf pack coordinated pursuit in deep snow. Deer at disadvantage — hooves punch through crust while wolves travel on surface. Pack herding toward river.';
+      narrative = isRecurring
+        ? 'The same deep tracks in the crusted snow. The same acrid scent riding the wind. They are back — the gray shapes that have been shadowing you through this frozen landscape. Your hooves punch through the crust with every stride while they glide across the surface. They know your territory now. They know your weaknesses. The gap is closing.'
+        : 'The snow is deep and crusted, and your hooves punch through with every stride while the gray shapes behind you run on top of it. There are several of them — you can hear their panting, feel the vibration of their coordinated pursuit through the frozen ground. They have been herding you toward the river, where the ice may or may not hold your weight. Your lungs burn. Your legs are heavy. The gap is closing.';
+      actionDetail = isRecurring
+        ? 'They are back. They know your territory now. Your hooves punch through the crust while they glide across. The gap is closing.'
+        : 'The snow is deep and crusted, and your hooves punch through with every stride while they run on top of it. They have been herding you toward the river. Your lungs burn. The gap is closing.';
+      clinicalDetail = isRecurring
+        ? `Wolf pack return encounter (#${(wolfThreat?.recentEncounters ?? 0) + 1}). Pack has learned deer's range. Deep snow pursuit.`
+        : 'Wolf pack coordinated pursuit in deep snow. Deer at disadvantage — hooves punch through crust while wolves travel on surface. Pack herding toward river.';
     } else if (ctx.time.timeOfDay === 'night' || ctx.time.timeOfDay === 'dusk') {
-      narrative = 'You smell them before you see them — the sharp, acrid musk that makes every muscle in your body lock rigid. Gray shapes materialize from the tree line, low and deliberate, spreading in a loose arc. Their eyes catch the last light. They are not rushing. They do not need to.';
-      actionDetail = 'They spread in a loose arc, low and deliberate. Their eyes catch the last light. They are not rushing. They do not need to.';
-      clinicalDetail = 'Wolf pack detected at dusk/night. Pack in pursuit formation, spreading to flank.';
+      narrative = isRecurring
+        ? 'That smell again. The sharp, acrid musk you know now — the one that makes your heart lurch before your mind catches up. You know what comes next. Gray shapes in the half-light, spreading in their patient arc. The same pack. The same deliberate hunger. They remember you, too.'
+        : 'You smell them before you see them — the sharp, acrid musk that makes every muscle in your body lock rigid. Gray shapes materialize from the tree line, low and deliberate, spreading in a loose arc. Their eyes catch the last light. They are not rushing. They do not need to.';
+      actionDetail = isRecurring
+        ? 'That smell again. The same pack. The same deliberate hunger. They remember you, too.'
+        : 'They spread in a loose arc, low and deliberate. Their eyes catch the last light. They are not rushing. They do not need to.';
+      clinicalDetail = isRecurring
+        ? `Recurring wolf pack encounter (#${(wolfThreat?.recentEncounters ?? 0) + 1}) at dusk/night. Pack exhibiting site fidelity to deer's range.`
+        : 'Wolf pack detected at dusk/night. Pack in pursuit formation, spreading to flank.';
     } else {
-      narrative = 'A sound that isn\'t wind. A movement that isn\'t branch-sway. Your head snaps up and your nostrils flare, and then you see them — lean gray shapes flowing between the trunks, silent and purposeful. A hunting pack, already in formation, already committed.';
-      actionDetail = 'They flow between the trunks, silent and purposeful. A hunting pack, already in formation, already committed.';
-      clinicalDetail = 'Wolf pack detected during daylight. Pack already in hunting formation.';
+      narrative = isRecurring
+        ? 'You know the sound now — not wind, not branch-sway, but the soft pad of organized weight moving through undergrowth. Your body reacts before your mind does: head up, nostrils wide, muscles coiled. The same lean gray shapes flow between the trunks. They found you again.'
+        : 'A sound that isn\'t wind. A movement that isn\'t branch-sway. Your head snaps up and your nostrils flare, and then you see them — lean gray shapes flowing between the trunks, silent and purposeful. A hunting pack, already in formation, already committed.';
+      actionDetail = isRecurring
+        ? 'You know the sound now. The same lean gray shapes. They found you again.'
+        : 'They flow between the trunks, silent and purposeful. A hunting pack, already in formation, already committed.';
+      clinicalDetail = isRecurring
+        ? `Recurring wolf pack encounter (#${(wolfThreat?.recentEncounters ?? 0) + 1}). Pack demonstrating learned hunting patterns in this territory.`
+        : 'Wolf pack detected during daylight. Pack already in hunting formation.';
     }
 
     return {
       harmEvents: [],
       statEffects: [
-        { stat: StatId.TRA, amount: 8, duration: 4, label: '+TRA' },
+        { stat: StatId.TRA, amount: isRecurring ? 12 : 8, duration: 4, label: '+TRA' },
         { stat: StatId.ADV, amount: 5, duration: 3, label: '+ADV' },
       ],
       consequences: [],
@@ -244,6 +307,17 @@ export const coyoteStalkerTrigger: SimulationTrigger = {
     if (ctx.animal.age < 18) base *= 2;
     if (getLocomotion(ctx) < 60) base *= 1.5;
 
+    // World Memory: coyotes follow weakness — open wounds attract them
+    const hasOpenWound = ctx.animal.bodyState?.conditions.some(
+      c => (c.type === 'laceration' || c.type === 'puncture') && c.infectionLevel < 30,
+    );
+    if (hasOpenWound) base *= 1.4;
+
+    // NPC coyote nearby and hunting
+    if (hasNearbyHuntingNPC(ctx, 'coyote')) {
+      base *= 2.5;
+    }
+
     return base;
   },
 
@@ -382,6 +456,21 @@ export const cougarAmbushTrigger: SimulationTrigger = {
 
     const visionImpairment = (100 - getVision(ctx)) / 100;
     base *= 1 + visionImpairment * 0.8;
+
+    // World Memory: cougars are ambush-repeat hunters — revisit successful attack sites
+    const nodeMemory = ctx.currentNodeId ? ctx.worldMemory?.nodeMemory[ctx.currentNodeId] : undefined;
+    if (nodeMemory && nodeMemory.perceivedDanger > 30) base *= 1.3;
+
+    // Open wounds attract solitary predators
+    const hasOpenWound = ctx.animal.bodyState?.conditions.some(
+      c => (c.type === 'laceration' || c.type === 'puncture') && c.infectionLevel < 30,
+    );
+    if (hasOpenWound) base *= 1.25;
+
+    // NPC cougar nearby and hunting
+    if (hasNearbyHuntingNPC(ctx, 'cougar')) {
+      base *= 3.0;
+    }
 
     return base;
   },
@@ -544,7 +633,20 @@ export const huntingSeasonTrigger: SimulationTrigger = {
 
   computeWeight(ctx) {
     if (!ctx.calibratedRates) return 0.01;
-    return getEncounterRate(ctx.calibratedRates, 'hunting', ctx.time.season);
+    let base = getEncounterRate(ctx.calibratedRates, 'hunting', ctx.time.season);
+
+    // World Memory: hunters track deer by activity — high foraging pressure nodes attract scouts
+    const nodeMemory = ctx.currentNodeId ? ctx.worldMemory?.nodeMemory[ctx.currentNodeId] : undefined;
+    if (nodeMemory && nodeMemory.turnsOccupied > 5) base *= 1.3; // predictable movement patterns
+
+    // Previous hunter encounters at this node increase chance (stands, blinds placed)
+    const hunterThreat = ctx.worldMemory?.threatMap['Human Hunter'];
+    if (hunterThreat && hunterThreat.recentEncounters >= 1) {
+      const turnsSince = ctx.time.turn - hunterThreat.lastEncounterTurn;
+      if (turnsSince < 5) base *= 1.4;
+    }
+
+    return base;
   },
 
   resolve(ctx) {

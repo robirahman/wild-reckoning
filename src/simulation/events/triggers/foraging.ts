@@ -36,6 +36,13 @@ export const seasonalBrowseTrigger: SimulationTrigger = {
     // Forest and plain are better foraging than mountain
     if (ctx.currentNodeType === 'mountain') base *= 0.6;
 
+    // World Memory: heavy foraging pressure depletes an area
+    const nodeMemory = ctx.currentNodeId ? ctx.worldMemory?.nodeMemory[ctx.currentNodeId] : undefined;
+    if (nodeMemory && nodeMemory.foragingPressure > 15) {
+      // Reduced quality from overgrazing — less likely to trigger the "good foraging" event
+      base *= Math.max(0.3, 1 - nodeMemory.foragingPressure * 0.02);
+    }
+
     return base;
   },
 

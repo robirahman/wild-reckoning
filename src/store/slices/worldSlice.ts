@@ -2,6 +2,7 @@ import type { GameSlice, WorldSlice } from './types';
 import { createInitialTime } from '../../engine/TimeSystem';
 import { initializeEcosystem } from '../../engine/EcosystemSystem';
 import { INITIAL_TERRITORY } from '../../types/territory';
+import { createWorldMemory } from '../../simulation/memory/types';
 
 export const createWorldSlice: GameSlice<WorldSlice> = (set, get) => ({
   time: createInitialTime(5, 1),
@@ -13,6 +14,8 @@ export const createWorldSlice: GameSlice<WorldSlice> = (set, get) => ({
   npcs: [],
   activeStorylines: [],
   scenario: null,
+  worldMemory: createWorldMemory('spring'),
+  npcBehaviorStates: {},
 
   tickNPCMovement: () => {
     const state = get();

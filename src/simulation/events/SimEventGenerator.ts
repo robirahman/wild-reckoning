@@ -43,6 +43,11 @@ import {
   fawnDefenseTrigger,
   rutDisplayTrigger,
 } from './triggers/reproduction';
+import {
+  woundDeteriorationTrigger,
+  feverEventTrigger,
+  sepsisEventTrigger,
+} from './triggers/woundProgression';
 
 const ALL_TRIGGERS: SimulationTrigger[] = [
   rehabilitationIntroTrigger,
@@ -92,6 +97,10 @@ const ALL_TRIGGERS: SimulationTrigger[] = [
   forestFireTrigger,
   floodingCreekTrigger,
   dispersalNewRangeTrigger,
+  // Wound progression triggers (condition cascades)
+  woundDeteriorationTrigger,
+  feverEventTrigger,
+  sepsisEventTrigger,
 ];
 
 // ── Behavioral Multiplier (mirrors EventGenerator logic) ──

@@ -39,6 +39,10 @@ export interface PhysiologyState {
   /** Whether the animal is currently immunocompromised (load > capacity). */
   immunocompromised: boolean;
 
+  // ── Condition Cascades ──
+  /** Total fever level from infected/septic conditions (degrees deviation, 0-8+). */
+  feverLevel: number;
+
   // ── Derived / Cached ──
   /** Body condition score (1-5 scale, like real wildlife biology BCS). */
   bodyConditionScore: number;

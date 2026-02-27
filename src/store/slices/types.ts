@@ -20,6 +20,8 @@ import type { Rng } from '../../engine/RandomUtils';
 import type { LineageTraits } from '../../types/lineage';
 import { StatId, type LifetimeStats } from '../../types/stats';
 import type { InstinctNudge } from '../../simulation/instinct/types';
+import type { WorldMemory } from '../../simulation/memory/types';
+import type { NPCBehaviorState } from '../../simulation/npc/types';
 
 export type GameSlice<T> = StateCreator<GameState, [['zustand/devtools', never]], [], T>;
 
@@ -88,6 +90,9 @@ export interface WorldSlice {
   npcs: NPC[];
   activeStorylines: ActiveStoryline[];
   scenario: ScenarioDefinition | null;
+  worldMemory: WorldMemory;
+  /** NPC behavior states (keyed by NPC ID, stored separately for backward compatibility) */
+  npcBehaviorStates: Record<string, NPCBehaviorState>;
 
   tickNPCMovement: () => void;
   setActiveStorylines: (storylines: ActiveStoryline[]) => void;

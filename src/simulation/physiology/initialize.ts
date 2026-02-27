@@ -27,6 +27,9 @@ export function initializePhysiology(
     immuneLoad: 0,
     immunocompromised: false,
 
+    // Condition cascades
+    feverLevel: 0,
+
     // Derived
     bodyConditionScore: bodyCondition,
     negativeEnergyBalance: false,

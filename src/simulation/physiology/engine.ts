@@ -97,8 +97,9 @@ export function tickPhysiologyEngine(input: PhysiologyTickInput): PhysiologyTick
   }
   physio.thermoregulationCost = thermoCost;
 
-  // 2d. Immune response caloric cost
-  const immuneCost = physio.immuneLoad * mc.immuneMetabolicCost;
+  // 2d. Immune response caloric cost (fever increases metabolic demand)
+  const feverMetabolicBonus = physio.feverLevel * 0.5; // each degree of fever costs extra kcal
+  const immuneCost = physio.immuneLoad * mc.immuneMetabolicCost + feverMetabolicBonus;
 
   // 2e. Reproduction costs
   let reproCost = 0;
@@ -149,6 +150,9 @@ export function tickPhysiologyEngine(input: PhysiologyTickInput): PhysiologyTick
   //  STEP 4: THERMOREGULATION STATE
   // ═══════════════════════════════════════════
 
+  // Fever from condition cascades pushes core temperature up
+  const feverContribution = physio.feverLevel * 0.3; // each degree of fever = +0.3 deviation
+
   if (ambientTemp < mc.lowerCriticalTemp && thermoCost > bmr * 0.5) {
     // Cold exceeds what metabolism can comfortably compensate → core temp drifts down
     const excessCold = (thermoCost - bmr * 0.5) / bmr;
@@ -157,6 +161,9 @@ export function tickPhysiologyEngine(input: PhysiologyTickInput): PhysiologyTick
     // Recovery toward normal (exponential decay)
     physio.coreTemperatureDeviation *= Math.pow(0.7, ffMult);
   }
+
+  // Add fever (after cold/recovery calculation — fever fights hypothermia but can cause hyperthermia)
+  physio.coreTemperatureDeviation += feverContribution;
 
   // Hypothermia death threshold
   if (physio.coreTemperatureDeviation < -8) {

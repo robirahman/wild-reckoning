@@ -13,6 +13,8 @@ import {
 } from './constants';
 import type { BodyState } from '../simulation/anatomy/bodyState';
 import { recomputeCapabilities, checkCapabilityDeath } from '../simulation/anatomy/capabilities';
+import { tickConditionProgression } from '../simulation/conditions/engine';
+import type { PhysiologyState } from '../simulation/physiology/types';
 
 interface HealthTickResult {
   animal: AnimalState;
@@ -151,18 +153,24 @@ export function tickBodyState(
   animal: AnimalState,
   rng: Rng,
   ffMult: number = 1,
-): { animal: AnimalState; narratives: string[]; modifiers: StatModifier[] } {
+  physiologyState?: PhysiologyState,
+  foragingBehavior?: number,
+  nearWater?: boolean,
+): { animal: AnimalState; narratives: string[]; modifiers: StatModifier[]; feverLevel: number; conditionDeathCause?: string } {
   const narratives: string[] = [];
   const modifiers: StatModifier[] = [];
+  let feverLevel = 0;
+  let conditionDeathCause: string | undefined;
 
   if (!animal.bodyState || !animal.anatomyIndex) {
-    return { animal, narratives, modifiers };
+    return { animal, narratives, modifiers, feverLevel };
   }
 
   const bodyState: BodyState = {
     parts: { ...animal.bodyState.parts },
     capabilities: { ...animal.bodyState.capabilities },
     conditions: [...animal.bodyState.conditions],
+    conditionProgressions: { ...animal.bodyState.conditionProgressions },
   };
 
   // Deep-copy part states so we don't mutate the original
@@ -184,50 +192,119 @@ export function tickBodyState(
 
       const currentDamage = partState.tissueDamage[tissueId] ?? 0;
       if (currentDamage > 0) {
+        // Chronic conditions leave a damage floor (scar tissue)
+        const progression = bodyState.conditions.find(c => c.bodyPartId === part.id)
+          ? bodyState.conditionProgressions[bodyState.conditions.find(c => c.bodyPartId === part.id)!.id]
+          : undefined;
+        const damageFloor = progression?.phase === 'chronic' ? 10 : 0;
+
         const healAmount = tissue.healingRate * 100 * ffMult;
-        const newDamage = Math.max(0, currentDamage - healAmount);
+        const newDamage = Math.max(damageFloor, currentDamage - healAmount);
         partState.tissueDamage[tissueId] = newDamage;
 
-        if (currentDamage > 20 && newDamage <= 0) {
+        if (currentDamage > 20 && newDamage <= damageFloor) {
           narratives.push(`Your ${part.label} tissue has fully healed.`);
         }
       }
     }
   }
 
-  // 2. Progress body conditions
-  const remainingConditions = [];
-  for (const condition of bodyState.conditions) {
-    condition.turnsActive += ffMult;
+  // 2. Progress body conditions via cascade engine
+  if (physiologyState) {
+    const cascadeResult = tickConditionProgression({
+      physiology: physiologyState,
+      conditions: bodyState.conditions,
+      progressions: bodyState.conditionProgressions,
+      turn: 0, // turn isn't used for progression logic, just for new condition init
+      rng,
+      ffMult,
+      foragingBehavior: foragingBehavior ?? 3,
+      nearWater: nearWater ?? false,
+    });
 
-    // Check if the underlying tissue damage has healed enough to clear the condition
-    const partState = bodyState.parts[condition.bodyPartId];
-    if (partState) {
-      const maxDamage = Math.max(0, ...Object.values(partState.tissueDamage));
-      if (maxDamage < 5) {
-        narratives.push(`Your ${condition.type} on your ${animal.anatomyIndex.partById.get(condition.bodyPartId)?.label ?? condition.bodyPartId} has cleared.`);
-        continue; // Remove this condition
-      }
+    feverLevel = cascadeResult.totalFeverLevel;
+    narratives.push(...cascadeResult.narratives);
+    if (cascadeResult.deathCause) {
+      conditionDeathCause = cascadeResult.deathCause;
     }
 
-    // Infection progression for open wounds
-    if (condition.type === 'laceration' || condition.type === 'puncture') {
-      if (!condition.healing && rng.chance(0.05 * ffMult)) {
-        condition.infectionLevel = Math.min(100, condition.infectionLevel + 10 * ffMult);
-        if (condition.infectionLevel > 30) {
-          narratives.push(`The wound on your ${animal.anatomyIndex.partById.get(condition.bodyPartId)?.label ?? condition.bodyPartId} is showing signs of infection.`);
+    // Update progression states and remove resolved conditions
+    const resolvedIds = new Set(
+      cascadeResult.conditions.filter(e => e.resolved).map(e => e.conditionId),
+    );
+
+    const newProgressions: Record<string, import('../simulation/conditions/types').ConditionProgression> = {};
+    for (const entry of cascadeResult.conditions) {
+      if (!entry.resolved) {
+        newProgressions[entry.conditionId] = entry.progression;
+      }
+    }
+    bodyState.conditionProgressions = newProgressions;
+
+    // Update infection levels on conditions from cascade state
+    const remainingConditions = [];
+    for (const condition of bodyState.conditions) {
+      condition.turnsActive += ffMult;
+
+      // Check if resolved by cascade or by tissue healing
+      if (resolvedIds.has(condition.id)) {
+        narratives.push(`Your ${condition.type} on your ${animal.anatomyIndex.partById.get(condition.bodyPartId)?.label ?? condition.bodyPartId} has healed.`);
+        continue;
+      }
+
+      const partState = bodyState.parts[condition.bodyPartId];
+      if (partState) {
+        const maxDamage = Math.max(0, ...Object.values(partState.tissueDamage));
+        if (maxDamage < 5 && condition.turnsActive > 3) {
+          narratives.push(`Your ${condition.type} on your ${animal.anatomyIndex.partById.get(condition.bodyPartId)?.label ?? condition.bodyPartId} has cleared.`);
+          continue;
         }
       }
-    }
 
-    // Conditions begin healing after enough time
-    if (!condition.healing && condition.turnsActive > 3) {
-      condition.healing = true;
-    }
+      // Sync infection level from cascade phase
+      const prog = newProgressions[condition.id];
+      if (prog) {
+        if (prog.phase === 'infected') condition.infectionLevel = Math.min(100, 40 + prog.turnsInPhase * 10);
+        else if (prog.phase === 'septic') condition.infectionLevel = 80;
+        else if (prog.phase === 'recovering') condition.infectionLevel = Math.max(0, condition.infectionLevel - 10 * ffMult);
+        condition.healing = prog.phase === 'healing' || prog.phase === 'recovering' || prog.phase === 'resolved';
+      }
 
-    remainingConditions.push(condition);
+      remainingConditions.push(condition);
+    }
+    bodyState.conditions = remainingConditions;
+  } else {
+    // Legacy fallback: flat infection logic for non-simulation species
+    const remainingConditions = [];
+    for (const condition of bodyState.conditions) {
+      condition.turnsActive += ffMult;
+
+      const partState = bodyState.parts[condition.bodyPartId];
+      if (partState) {
+        const maxDamage = Math.max(0, ...Object.values(partState.tissueDamage));
+        if (maxDamage < 5) {
+          narratives.push(`Your ${condition.type} on your ${animal.anatomyIndex.partById.get(condition.bodyPartId)?.label ?? condition.bodyPartId} has cleared.`);
+          continue;
+        }
+      }
+
+      if (condition.type === 'laceration' || condition.type === 'puncture') {
+        if (!condition.healing && rng.chance(0.05 * ffMult)) {
+          condition.infectionLevel = Math.min(100, condition.infectionLevel + 10 * ffMult);
+          if (condition.infectionLevel > 30) {
+            narratives.push(`The wound on your ${animal.anatomyIndex.partById.get(condition.bodyPartId)?.label ?? condition.bodyPartId} is showing signs of infection.`);
+          }
+        }
+      }
+
+      if (!condition.healing && condition.turnsActive > 3) {
+        condition.healing = true;
+      }
+
+      remainingConditions.push(condition);
+    }
+    bodyState.conditions = remainingConditions;
   }
-  bodyState.conditions = remainingConditions;
 
   // 3. Recompute capabilities and generate stat modifiers
   const capResult = recomputeCapabilities(bodyState, animal.anatomyIndex);
@@ -244,5 +321,7 @@ export function tickBodyState(
     animal: { ...animal, bodyState },
     narratives,
     modifiers,
+    feverLevel,
+    conditionDeathCause,
   };
 }

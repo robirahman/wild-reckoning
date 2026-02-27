@@ -12,6 +12,8 @@ import type { HarmEvent } from '../harm/types';
 import type { StatEffect, Consequence, EventCategory } from '../../types/events';
 import type { CalibratedRates } from '../calibration/types';
 import type { NarrativeContext } from '../narrative/types';
+import type { WorldMemory } from '../memory/types';
+import type { NPCBehaviorState } from '../npc/types';
 
 // ── Simulation Context ──
 
@@ -30,8 +32,14 @@ export interface SimulationContext {
   currentNodeType?: string;
   /** Map node resources (food/cover) at the animal's current location */
   currentNodeResources?: { food: number; water: number; cover: number };
+  /** Current map node ID */
+  currentNodeId?: string;
   calibratedRates?: CalibratedRates;
   fastForward?: boolean;
+  /** Accumulated world memory: event history, node state, threat tracking */
+  worldMemory?: WorldMemory;
+  /** NPC behavior states (for checking predator intent, etc.) */
+  npcBehaviorStates?: Record<string, NPCBehaviorState>;
 }
 
 // ── Simulation Choices ──

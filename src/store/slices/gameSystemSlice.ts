@@ -8,6 +8,7 @@ import { createInitialTime } from '../../engine/TimeSystem';
 import { DEFAULT_BEHAVIORAL_SETTINGS } from '../../types/behavior';
 import { loadGame } from '../persistence';
 import { createInitialAnimal, initialReproduction } from './helpers';
+import { createWorldMemory } from '../../simulation/memory/types';
 
 export const createGameSystemSlice: GameSlice<GameSystemSlice> = (set) => {
   const seed = Date.now();
@@ -53,6 +54,8 @@ export const createGameSystemSlice: GameSlice<GameSystemSlice> = (set) => {
         map: generateRegionMap(rng),
         scenario: null,
         climateShift: 0,
+        worldMemory: createWorldMemory('spring'),
+        npcBehaviorStates: {},
         lineage: null,
         actionsPerformed: [],
         evolution: { activeMutations: [], availableChoices: [], generationCount: 0, lineageHistory: [] },

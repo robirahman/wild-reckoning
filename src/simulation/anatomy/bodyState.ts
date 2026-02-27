@@ -1,5 +1,6 @@
 import type { AnatomyDefinition, AnatomyIndex } from './types';
 import { buildAnatomyIndex } from './types';
+import type { ConditionProgression } from '../conditions/types';
 
 // ── Body Condition Types ──
 
@@ -45,6 +46,8 @@ export interface BodyState {
   capabilities: Record<string, number>;
   /** Active conditions (fractures, infections, etc.) */
   conditions: ActiveBodyCondition[];
+  /** Condition cascade progression state (keyed by condition ID) */
+  conditionProgressions: Record<string, ConditionProgression>;
 }
 
 // ── Initialization ──
@@ -67,7 +70,7 @@ export function initializeBodyState(anatomy: AnatomyDefinition): BodyState {
     capabilities[cap.id] = 100;
   }
 
-  return { parts, capabilities, conditions: [] };
+  return { parts, capabilities, conditions: [], conditionProgressions: {} };
 }
 
 /** Create an AnatomyIndex and initialized BodyState in one call */
