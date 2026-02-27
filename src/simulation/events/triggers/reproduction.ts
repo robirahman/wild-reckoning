@@ -2,6 +2,7 @@ import type { SimulationTrigger } from '../types';
 import { StatId } from '../../../types/stats';
 import { resolveChase } from '../../interactions/chase';
 import { resolveFight } from '../../interactions/fight';
+import { buildEnvironment, action, buildNarrativeContext, conspecificEntity, smallPredatorEntity } from '../../narrative/contextBuilder';
 // resolveSocial reserved for future mating social dynamics
 
 // ══════════════════════════════════════════════════
@@ -65,6 +66,21 @@ export const fawnBirthTrigger: SimulationTrigger = {
         ...(bcs <= 1 ? [{ type: 'set_flag' as any, flag: 'fawn-fragile' as any }] : []),
       ],
       narrativeText: `The contractions begin at dawn, deep and rhythmic, pulling you into a crouch in the densest cover you can find. ${viableNarrative} ${coverNarrative} You eat the placenta — every calorie matters now, and the scent would draw predators. Then you move away from the birth site, putting distance between yourself and the hidden fawn. You will return to nurse, but for now, absence is the fawn's best defense.`,
+      narrativeContext: buildNarrativeContext({
+        eventCategory: 'reproduction',
+        eventType: 'fawn-birth',
+        entities: [conspecificEntity(
+          bcs >= 3 ? 'two damp, trembling fawns with spotted coats' : 'a single small fawn struggling to stand',
+          bcs >= 3 ? 'viable twin fawns' : bcs >= 2 ? 'single viable fawn' : 'single fragile fawn (low viability)',
+        )],
+        actions: [action(
+          `${viableNarrative} ${coverNarrative}`,
+          `Parturition. BCS: ${bcs}/5. ${bcs >= 3 ? 'Twins born, viable.' : bcs >= 2 ? 'Single fawn, viable.' : 'Single fawn, underweight, fragile.'} Cover quality: ${cover >= 50 ? 'adequate' : 'poor'}.`,
+          bcs <= 1 ? 'high' : 'medium',
+        )],
+        environment: buildEnvironment(ctx),
+        emotionalTone: bcs <= 1 ? 'tension' : 'relief',
+      }),
     };
   },
 
@@ -117,6 +133,7 @@ export const fawnDefenseTrigger: SimulationTrigger = {
       eagle: 'The shadow passes overhead first — a golden eagle, its wingspan enormous, circling lower with each pass. It has spotted something in the grass. Your fawn.',
     };
 
+    const env = buildEnvironment(ctx);
     return {
       harmEvents: [],
       statEffects: [
@@ -126,6 +143,18 @@ export const fawnDefenseTrigger: SimulationTrigger = {
       consequences: [],
       narrativeText: predatorNarrative[predatorType],
       footnote: `Threat: ${predatorType}`,
+      narrativeContext: buildNarrativeContext({
+        eventCategory: 'predator',
+        eventType: 'fawn-defense',
+        entities: [smallPredatorEntity(predatorType as 'coyote' | 'bobcat' | 'eagle')],
+        actions: [action(
+          predatorNarrative[predatorType],
+          `${predatorType.charAt(0).toUpperCase() + predatorType.slice(1)} targeting fawn. Maternal defense required.`,
+          'high',
+        )],
+        environment: env,
+        emotionalTone: 'fear',
+      }),
     };
   },
 
@@ -300,6 +329,20 @@ export const rutDisplayTrigger: SimulationTrigger = {
       narrativeText: displayQuality === 'impressive'
         ? 'A doe stands at the far edge of the meadow, her head raised, testing the wind. Your scent reaches her — testosterone, tarsal gland secretions, the chemical resume of your fitness. You approach with the stiff-legged, head-high gait of courtship, your neck swollen, your polished antlers catching the light. You are advertising everything you are: your weight, your health, your genetic quality. She watches, motionless, assessing.'
         : 'You catch the scent of a doe and follow it through the hardwoods, your body rigid with urgency. When you find her, you approach carefully — the display must be convincing despite your condition. You arch your neck, raise your head, and present your antlers. She watches for a long moment, then turns away. You follow, persistent, circling to present yourself again.',
+      narrativeContext: buildNarrativeContext({
+        eventCategory: 'reproduction',
+        eventType: 'rut-display',
+        entities: [conspecificEntity('doe', 'adult female deer')],
+        actions: [action(
+          displayQuality === 'impressive'
+            ? 'Your scent reaches her. You approach with the courtship gait, neck swollen, antlers catching the light. She watches, motionless, assessing.'
+            : 'You catch the scent of a doe. The display must be convincing despite your condition. She watches, then turns away. You follow, persistent.',
+          `Rut courtship display. Display quality: ${displayQuality}. Weight: ${weight}kg, BCS: ${bcs}/5. ${displayQuality === 'impressive' ? 'Strong physical condition supporting courtship signals.' : 'Suboptimal condition may reduce mating success.'}`,
+          'medium',
+        )],
+        environment: buildEnvironment(ctx),
+        emotionalTone: 'tension',
+      }),
     };
   },
 

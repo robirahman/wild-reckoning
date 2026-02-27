@@ -1,6 +1,7 @@
 import type { SimulationTrigger } from '../types';
 import type { HarmEvent } from '../../harm/types';
 import { StatId } from '../../../types/stats';
+import { buildEnvironment, action, buildNarrativeContext } from '../../narrative/contextBuilder';
 
 // Caloric density: kcal-units per lb of body weight (from DEER_METABOLISM)
 const KCAL_PER_LB = 35;
@@ -89,6 +90,7 @@ export const seasonalBrowseTrigger: SimulationTrigger = {
       }
     }
 
+    const env = buildEnvironment(ctx);
     return {
       harmEvents: [],
       statEffects: [
@@ -98,6 +100,17 @@ export const seasonalBrowseTrigger: SimulationTrigger = {
         ? [{ type: 'add_calories' as const, amount: bonusCalories, source: 'seasonal-browse' }]
         : [],
       narrativeText: narrative,
+      narrativeContext: buildNarrativeContext({
+        eventCategory: 'foraging',
+        eventType: 'seasonal-browse',
+        actions: [action(
+          narrative,
+          `Seasonal foraging in ${season}/${terrain}. ${bonusCalories >= 0 ? `+${bonusCalories}` : bonusCalories} bonus kcal vs baseline.`,
+          bonusCalories < -50 ? 'high' : 'low',
+        )],
+        environment: env,
+        emotionalTone: bonusCalories < -30 ? 'tension' : 'calm',
+      }),
     };
   },
 
@@ -138,6 +151,7 @@ export const riskyForagingTrigger: SimulationTrigger = {
   resolve(ctx) {
     // Pick a scenario: orchard, cornfield, or toxic plant
     const roll = ctx.rng.int(0, 2);
+    const env = buildEnvironment(ctx);
 
     if (roll === 0) {
       return {
@@ -145,6 +159,17 @@ export const riskyForagingTrigger: SimulationTrigger = {
         statEffects: [],
         consequences: [],
         narrativeText: 'The smell drifts to you on the evening breeze — sweet, fermenting, irresistible. Through the tree line you can see rows of fruit trees heavy with produce, some already fallen and splitting open in the grass. A structure sits at the edge, its windows lit, and a territorial animal chained near the entrance. The food is close, almost within reach. But this is human ground.',
+        narrativeContext: buildNarrativeContext({
+          eventCategory: 'foraging',
+          eventType: 'risky-foraging-orchard',
+          actions: [action(
+            'The smell drifts on the evening breeze — sweet, fermenting, irresistible. Rows of fruit trees heavy with produce. But this is human ground.',
+            'Deer near human orchard. High-calorie food source with risk of human contact.',
+            'medium',
+          )],
+          environment: env,
+          emotionalTone: 'tension',
+        }),
       };
     } else if (roll === 1) {
       return {
@@ -152,6 +177,17 @@ export const riskyForagingTrigger: SimulationTrigger = {
         statEffects: [],
         consequences: [],
         narrativeText: 'The field stretches out under the moonlight like a dark, rustling sea. The stalks are tall enough to hide you completely, and the ears are fat with ripe kernels — a concentration of calories that the forest cannot match. You can hear other deer already inside, the soft tearing of husks and the wet crunch of feeding. But the rich grain in quantity can acidify your gut until it presses against your lungs.',
+        narrativeContext: buildNarrativeContext({
+          eventCategory: 'foraging',
+          eventType: 'risky-foraging-cornfield',
+          actions: [action(
+            'A field of corn under moonlight, stalks tall enough to hide you. The ears are fat with ripe kernels. But the rich grain can acidify your gut.',
+            'Deer near agricultural cornfield. Risk of ruminal acidosis from high-starch diet.',
+            'medium',
+          )],
+          environment: env,
+          emotionalTone: 'tension',
+        }),
       };
     } else {
       return {
@@ -163,6 +199,17 @@ export const riskyForagingTrigger: SimulationTrigger = {
           { type: 'modify_nutrients', nutrient: 'minerals', amount: 5 },
         ],
         narrativeText: 'A cluster of mushrooms pushes up through the leaf litter at the base of a rotting stump — pale caps glistening with morning dew, their earthy scent cutting through the dampness. You nose at them cautiously. Fungi are a delicacy your body craves, rich in minerals that the browse cannot provide.',
+        narrativeContext: buildNarrativeContext({
+          eventCategory: 'foraging',
+          eventType: 'risky-foraging-mushroom',
+          actions: [action(
+            'A cluster of mushrooms at the base of a rotting stump — pale caps glistening with morning dew. Your body craves the minerals.',
+            'Wild mushroom foraging. Potential mycotoxin risk (12% chance of toxic species).',
+            'low',
+          )],
+          environment: env,
+          emotionalTone: 'calm',
+        }),
       };
     }
   },
@@ -339,6 +386,7 @@ export const toxicPlantTrigger: SimulationTrigger = {
       harmType: 'chemical',
     };
 
+    const env = buildEnvironment(ctx);
     return {
       harmEvents: [harmEvent],
       statEffects: [
@@ -350,6 +398,19 @@ export const toxicPlantTrigger: SimulationTrigger = {
         { type: 'add_calories' as const, amount: -3 * KCAL_PER_LB, source: 'plant-poisoning' },
       ],
       narrativeText: 'The plant looked like everything else — green, leafy, unremarkable. You were already chewing before the taste turned wrong: bitter, astringent, with a chemical bite that made your tongue go numb. You spit it out, but some has already gone down. Within minutes your stomach cramps violently and the world tilts. Something in those leaves is fighting your body from the inside.',
+      narrativeContext: buildNarrativeContext({
+        eventCategory: 'foraging',
+        eventType: 'toxic-plant',
+        actions: [action(
+          'The taste turned wrong: bitter, astringent, a chemical bite that made your tongue go numb. Within minutes your stomach cramps violently.',
+          'Ingestion of toxic plant (likely water hemlock or similar). Chemical poisoning causing gastrointestinal distress and metabolic disruption.',
+          'high',
+          ['internal'],
+        )],
+        environment: env,
+        emotionalTone: 'pain',
+        sourceHarmEvents: [harmEvent],
+      }),
     };
   },
 

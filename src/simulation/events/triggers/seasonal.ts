@@ -1,6 +1,7 @@
 import type { SimulationTrigger } from '../types';
 import { StatId } from '../../../types/stats';
 import { resolveExposure } from '../../interactions/exposure';
+import { buildEnvironment, action, buildNarrativeContext } from '../../narrative/contextBuilder';
 
 // ══════════════════════════════════════════════════
 //  ANTLER VELVET — spring antler growth
@@ -46,6 +47,17 @@ export const antlerVelvetTrigger: SimulationTrigger = {
         { type: 'add_calories', amount: bcs >= 3 ? -150 : -80, source: 'antler growth' },
       ],
       narrativeText: `The pedicles on your skull itch with a deep, insistent pressure. Something is happening beneath the skin — a biological imperative written in bone and blood. ${qualityNarrative} For now, they are fragile, easily damaged. You move through the woods with uncharacteristic caution, ducking branches that once meant nothing.`,
+      narrativeContext: buildNarrativeContext({
+        eventCategory: 'seasonal',
+        eventType: 'antler-velvet',
+        actions: [action(
+          `The pedicles itch with a deep pressure. ${qualityNarrative} For now they are fragile. You move with uncharacteristic caution.`,
+          `Spring antler growth initiated. Velvet antler quality: ${antlerQuality}. BCS: ${bcs}/5. Caloric cost: ${bcs >= 3 ? 150 : 80} kcal.`,
+          'low',
+        )],
+        environment: buildEnvironment(ctx),
+        emotionalTone: 'calm',
+      }),
     };
   },
 
@@ -94,6 +106,19 @@ export const insectHarassmentTrigger: SimulationTrigger = {
       narrativeText: nearWater
         ? 'The swarm finds you at the water\'s edge — deer flies first, their bites like hot needles, then the smaller gnats that crawl into your ears and nostrils. Bot flies circle in wide, lazy arcs, waiting for their moment to deposit eggs on your legs. You stamp and shake your head, but the cloud follows you, a personal torment that will not lift until the first hard frost.'
         : 'They come with the rising heat — deer flies, horse flies, gnats, mosquitoes, each species with its own schedule of misery. The deer flies are the worst, tearing small chunks of skin with scissor-like mouthparts, drawing blood that attracts still more flies. You twitch your skin, stamp your hooves, and swing your head constantly, burning energy on a battle you cannot win.',
+      narrativeContext: buildNarrativeContext({
+        eventCategory: 'seasonal',
+        eventType: 'insect-harassment',
+        actions: [action(
+          nearWater
+            ? 'The swarm finds you at the water\'s edge — deer flies, gnats, bot flies. A personal torment until the first hard frost.'
+            : 'Deer flies tear small chunks of skin. You twitch, stamp, and swing your head constantly, burning energy on a battle you cannot win.',
+          `Summer insect harassment. ${nearWater ? 'Near water — elevated biting fly density (Chrysops, Culicoides, Hypoderma).' : 'Forest/field exposure to Tabanidae (deer flies, horse flies). Metabolic cost of defensive behavior.'}`,
+          'medium',
+        )],
+        environment: buildEnvironment(ctx),
+        emotionalTone: 'pain',
+      }),
     };
   },
 
@@ -179,6 +204,17 @@ export const autumnRutTrigger: SimulationTrigger = {
         { type: 'modify_weight', amount: -4 },
       ],
       narrativeText: `The change is chemical and absolute. The shortening daylight triggers a hormonal cascade that rewrites your priorities in a matter of days. Your velvet dries, cracks, and peels away in bloody strips, revealing the polished bone beneath — pale ivory stained rust-brown by the sap of the saplings you rake obsessively. Your neck swells. Your appetite vanishes. Every doe on the wind is a signal you cannot ignore, every other buck a threat that must be confronted. ${readyNarrative} The rut has begun.`,
+      narrativeContext: buildNarrativeContext({
+        eventCategory: 'seasonal',
+        eventType: 'autumn-rut-onset',
+        actions: [action(
+          `Your velvet peels away in bloody strips, revealing polished bone. Your neck swells. Your appetite vanishes. ${readyNarrative} The rut has begun.`,
+          `Rut onset. Photoperiod-triggered testosterone surge. Velvet shedding, cervical muscle hypertrophy, behavioral shift to breeding mode. BCS: ${bcs}/5.`,
+          'high',
+        )],
+        environment: buildEnvironment(ctx),
+        emotionalTone: 'aggression',
+      }),
     };
   },
 
@@ -216,7 +252,8 @@ export const winterYardTrigger: SimulationTrigger = {
     return base;
   },
 
-  resolve() {
+  resolve(ctx) {
+    const env = buildEnvironment(ctx);
     return {
       harmEvents: [],
       statEffects: [
@@ -226,6 +263,17 @@ export const winterYardTrigger: SimulationTrigger = {
       ],
       consequences: [],
       narrativeText: 'The snow is belly-deep now, and every step is a labor that costs more calories than it earns. But ahead, through the grey curtain of falling snow, you see the dark shapes of hemlocks and cedars — the traditional winter yard, known to generations of deer through your mother\'s mother\'s memory. The trails are already packed by earlier arrivals, hard-beaten paths between bedding areas and browse. Other deer are here — does and fawns mostly, their body heat warming the sheltered spaces between the evergreens. The yard is safety, but it is also confinement. The browse within reach will be stripped bare within weeks, and then the real test begins.',
+      narrativeContext: buildNarrativeContext({
+        eventCategory: 'seasonal',
+        eventType: 'winter-yard',
+        actions: [action(
+          'The traditional winter yard — hemlock and cedar shelter, packed trails, other deer. Safety, but also confinement. The browse will be stripped bare within weeks.',
+          'Winter deer yard (traditional conifer shelter). Communal wintering site with packed trail network. Browse competition will intensify as winter progresses.',
+          'medium',
+        )],
+        environment: env,
+        emotionalTone: 'cold',
+      }),
     };
   },
 
@@ -317,6 +365,17 @@ export const rutEndsTrigger: SimulationTrigger = {
         { type: 'remove_flag', flag: 'rut-challenge-won' as any },
       ],
       narrativeText: `The fire is gone. One morning you simply wake up and the obsessive urgency that ruled your every thought for weeks has vanished, replaced by a hollowed-out exhaustion. Your antlers feel heavy and wrong — the bone at the pedicle is being dissolved from within, weakened by the same hormonal shift that ended the rut. They will fall soon, sometimes one at a time, leaving you lopsided and vulnerable until the second drops. ${exhaustionNarrative} Winter stretches ahead, long and hungry, and you must survive it on whatever reserves remain.`,
+      narrativeContext: buildNarrativeContext({
+        eventCategory: 'seasonal',
+        eventType: 'rut-ends',
+        actions: [action(
+          `The fire is gone. The obsessive urgency has vanished. Your antlers feel heavy and wrong — bone dissolving at the pedicle. ${exhaustionNarrative}`,
+          `Post-rut exhaustion. Testosterone declining, pedicle osteoclast activity increasing (antler drop imminent). BCS: ${bcs}/5. ${bcs <= 2 ? 'Significant body mass depleted during breeding.' : 'Adequate reserves maintained.'}`,
+          bcs <= 2 ? 'high' : 'medium',
+        )],
+        environment: buildEnvironment(ctx),
+        emotionalTone: bcs <= 2 ? 'pain' : 'calm',
+      }),
     };
   },
 

@@ -2,6 +2,8 @@ import type { SimulationTrigger } from '../types';
 import { StatId } from '../../../types/stats';
 import { getEncounterRate } from '../../calibration/calibrator';
 import { resolveFight } from '../../interactions/fight';
+import { rivalBuckEntity } from '../../narrative/perspective';
+import { buildEnvironment, action, buildNarrativeContext } from '../../narrative/contextBuilder';
 
 // ══════════════════════════════════════════════════
 //  RUT COMBAT (Male deer territorial/mating fight)
@@ -34,6 +36,7 @@ export const rutCombatTrigger: SimulationTrigger = {
 
   resolve(ctx) {
     const rivalName = ctx.npcs?.find((n) => n.type === 'rival' && n.alive)?.name ?? 'another buck';
+    const env = buildEnvironment(ctx);
 
     return {
       harmEvents: [],
@@ -43,6 +46,18 @@ export const rutCombatTrigger: SimulationTrigger = {
       ],
       consequences: [],
       narrativeText: `The scraping sound reaches you first — antler against bark, rhythmic and aggressive. Then you see ${rivalName}, raking a sapling with slow, deliberate fury, leaving bright wounds in the wood. Your scent reaches the other buck at the same moment their scent reaches you. The air between you thickens with testosterone and territorial rage. The other buck turns, lowers their rack, and begins to walk toward you with a stiff-legged gait that means one thing.`,
+      narrativeContext: buildNarrativeContext({
+        eventCategory: 'social',
+        eventType: 'rut-combat',
+        entities: [rivalBuckEntity(rivalName)],
+        actions: [action(
+          `The other buck turns, lowers their rack, and begins to walk toward you with a stiff-legged gait that means one thing.`,
+          `Rut combat challenge from ${rivalName}. Intraspecific territorial/mating competition.`,
+          'high',
+        )],
+        environment: env,
+        emotionalTone: 'aggression',
+      }),
     };
   },
 

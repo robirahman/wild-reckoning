@@ -1,6 +1,7 @@
 import type { SimulationTrigger } from '../types';
 import { StatId } from '../../../types/stats';
 import { resolveForage } from '../../interactions/forage';
+import { buildEnvironment, action, buildNarrativeContext } from '../../narrative/contextBuilder';
 
 // ══════════════════════════════════════════════════
 //  STARVATION PRESSURE
@@ -50,6 +51,7 @@ export const starvationPressureTrigger: SimulationTrigger = {
       narrative = 'The hunger has been building for days, a persistent gnawing that has shifted from discomfort to urgency. Your ribs are starting to show through your thinning coat, and there is a tremor in your legs that wasn\'t there before. The safe browse in the forest understory is picked over, barely enough to sustain you. But beyond the tree line, you can smell something richer.';
     }
 
+    const env = buildEnvironment(ctx);
     return {
       harmEvents: [],
       statEffects: [
@@ -57,6 +59,17 @@ export const starvationPressureTrigger: SimulationTrigger = {
       ],
       consequences: [],
       narrativeText: narrative,
+      narrativeContext: buildNarrativeContext({
+        eventCategory: 'environmental',
+        eventType: 'starvation-pressure',
+        actions: [action(
+          narrative,
+          `Starvation pressure. Body condition score: ${bcs}/5. Negative energy balance sustained. ${bcs <= 1 ? 'Critical muscle wasting.' : 'Early weight loss visible.'}`,
+          bcs <= 1 ? 'extreme' : 'high',
+        )],
+        environment: env,
+        emotionalTone: 'tension',
+      }),
     };
   },
 

@@ -5,6 +5,8 @@ import { getEncounterRate } from '../../calibration/calibrator';
 import { resolveChase } from '../../interactions/chase';
 import { resolveFight } from '../../interactions/fight';
 import { getTerrainProfile } from '../../interactions/types';
+import { wolfEntity, coyoteEntity, cougarEntity, hunterEntity } from '../../narrative/perspective';
+import { buildEnvironment, action, buildNarrativeContext } from '../../narrative/contextBuilder';
 
 // ── Helpers ──
 
@@ -54,14 +56,23 @@ export const wolfPackTrigger: SimulationTrigger = {
     const locomotion = getLocomotion(ctx);
     const isWinter = ctx.time.season === 'winter';
     const isSnowy = ctx.currentWeather?.type === 'snow' || ctx.currentWeather?.type === 'blizzard';
+    const env = buildEnvironment(ctx);
 
     let narrative: string;
+    let actionDetail: string;
+    let clinicalDetail: string;
     if (isWinter && isSnowy) {
       narrative = 'The snow is deep and crusted, and your hooves punch through with every stride while the gray shapes behind you run on top of it. There are several of them — you can hear their panting, feel the vibration of their coordinated pursuit through the frozen ground. They have been herding you toward the river, where the ice may or may not hold your weight. Your lungs burn. Your legs are heavy. The gap is closing.';
+      actionDetail = 'The snow is deep and crusted, and your hooves punch through with every stride while they run on top of it. They have been herding you toward the river. Your lungs burn. The gap is closing.';
+      clinicalDetail = 'Wolf pack coordinated pursuit in deep snow. Deer at disadvantage — hooves punch through crust while wolves travel on surface. Pack herding toward river.';
     } else if (ctx.time.timeOfDay === 'night' || ctx.time.timeOfDay === 'dusk') {
       narrative = 'You smell them before you see them — the sharp, acrid musk that makes every muscle in your body lock rigid. Gray shapes materialize from the tree line, low and deliberate, spreading in a loose arc. Their eyes catch the last light. They are not rushing. They do not need to.';
+      actionDetail = 'They spread in a loose arc, low and deliberate. Their eyes catch the last light. They are not rushing. They do not need to.';
+      clinicalDetail = 'Wolf pack detected at dusk/night. Pack in pursuit formation, spreading to flank.';
     } else {
       narrative = 'A sound that isn\'t wind. A movement that isn\'t branch-sway. Your head snaps up and your nostrils flare, and then you see them — lean gray shapes flowing between the trunks, silent and purposeful. A hunting pack, already in formation, already committed.';
+      actionDetail = 'They flow between the trunks, silent and purposeful. A hunting pack, already in formation, already committed.';
+      clinicalDetail = 'Wolf pack detected during daylight. Pack already in hunting formation.';
     }
 
     return {
@@ -73,6 +84,14 @@ export const wolfPackTrigger: SimulationTrigger = {
       consequences: [],
       narrativeText: narrative,
       footnote: `(Locomotion: ${locomotion}%)`,
+      narrativeContext: buildNarrativeContext({
+        eventCategory: 'predator',
+        eventType: 'wolf-pack-pursuit',
+        entities: [wolfEntity()],
+        actions: [action(actionDetail, clinicalDetail, 'high')],
+        environment: env,
+        emotionalTone: 'fear',
+      }),
     };
   },
 
@@ -228,7 +247,8 @@ export const coyoteStalkerTrigger: SimulationTrigger = {
     return base;
   },
 
-  resolve(_ctx) {
+  resolve(ctx) {
+    const env = buildEnvironment(ctx);
     return {
       harmEvents: [],
       statEffects: [
@@ -237,6 +257,18 @@ export const coyoteStalkerTrigger: SimulationTrigger = {
       ],
       consequences: [],
       narrativeText: 'A pair of shapes shadows you through the brush — smaller than wolves, rangier, more tentative. Coyotes. They keep their distance, testing your awareness, waiting for a stumble or a moment of inattention. Their yipping calls to each other carry an edge of patient hunger.',
+      narrativeContext: buildNarrativeContext({
+        eventCategory: 'predator',
+        eventType: 'coyote-stalk',
+        entities: [coyoteEntity()],
+        actions: [action(
+          'They keep their distance, testing your awareness, waiting for a stumble or a moment of inattention. Their yipping calls carry an edge of patient hunger.',
+          'Coyote pair shadowing deer, maintaining distance and assessing vulnerability. Opportunistic predation behavior typical of injured or juvenile prey targeting.',
+          'medium',
+        )],
+        environment: env,
+        emotionalTone: 'tension',
+      }),
     };
   },
 
@@ -354,7 +386,8 @@ export const cougarAmbushTrigger: SimulationTrigger = {
     return base;
   },
 
-  resolve(_ctx) {
+  resolve(ctx) {
+    const env = buildEnvironment(ctx);
     return {
       harmEvents: [],
       statEffects: [
@@ -363,6 +396,19 @@ export const cougarAmbushTrigger: SimulationTrigger = {
       ],
       consequences: [],
       narrativeText: 'Something is wrong. The birds have stopped singing. A prickling sensation crawls up the back of your neck — the ancient alarm of being watched by something that does not blink. Then a tawny shape launches from the rocks above, silent and enormous, all muscle and claw, aimed directly at your neck.',
+      narrativeContext: buildNarrativeContext({
+        eventCategory: 'predator',
+        eventType: 'cougar-ambush',
+        entities: [cougarEntity()],
+        actions: [action(
+          'A tawny shape launches from the rocks above, silent and enormous, all muscle and claw, aimed directly at your neck.',
+          'Cougar ambush from elevated position. Felid targeting cervical vertebrae — standard kill technique for large prey.',
+          'extreme',
+          ['neck'],
+        )],
+        environment: env,
+        emotionalTone: 'fear',
+      }),
     };
   },
 
@@ -501,7 +547,8 @@ export const huntingSeasonTrigger: SimulationTrigger = {
     return getEncounterRate(ctx.calibratedRates, 'hunting', ctx.time.season);
   },
 
-  resolve(_ctx) {
+  resolve(ctx) {
+    const env = buildEnvironment(ctx);
     return {
       harmEvents: [],
       statEffects: [
@@ -510,6 +557,18 @@ export const huntingSeasonTrigger: SimulationTrigger = {
       ],
       consequences: [],
       narrativeText: 'The forest changes in autumn. Strange smells drift between the trees — acrid, chemical, wrong. Bright shapes move where there should be stillness. Then the sound: a sharp, flat crack that splits the air and sends every bird screaming upward. Another follows, closer. The thunder comes from the direction of the ridge, where the trail narrows between two rock faces. Every instinct in your body locks onto a single imperative: move.',
+      narrativeContext: buildNarrativeContext({
+        eventCategory: 'predator',
+        eventType: 'hunting-season',
+        entities: [hunterEntity()],
+        actions: [action(
+          'A sharp, flat crack splits the air and sends every bird screaming upward. Another follows, closer. Every instinct locks onto a single imperative: move.',
+          'Rifle fire detected during hunting season. Deer in active hunting zone.',
+          'high',
+        )],
+        environment: env,
+        emotionalTone: 'fear',
+      }),
     };
   },
 

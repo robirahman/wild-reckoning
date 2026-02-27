@@ -1,5 +1,6 @@
 import type { SimulationTrigger, SimulationContext, SimulationOutcome, SimulationChoice } from '../types';
 import { StatId } from '../../../types/stats';
+import { buildEnvironment, action, buildNarrativeContext } from '../../narrative/contextBuilder';
 
 // ══════════════════════════════════════════════════
 //  REHABILITATION INTRO — first 3 turns for rehab backstory
@@ -52,7 +53,9 @@ export const rehabilitationIntroTrigger: SimulationTrigger = {
 
 // ── Turn 1: Release from rehabilitation center ──
 
-function resolveRelease(_ctx: SimulationContext): SimulationOutcome {
+function resolveRelease(ctx: SimulationContext): SimulationOutcome {
+  const env = buildEnvironment(ctx);
+  const narrative = 'The enclosure gate swings open — not the way it usually does, when a figure in heavy gloves brings food and checks your leg. This time it stays open. The figure stands to one side, very still, watching. Beyond the gate is a world you have only ever seen through wire mesh: the treeline dark and close, the ground uneven and damp, the air carrying a thousand scents that have no name. Your legs, healed now but stiff from months of confinement, carry you forward. The gravel gives way to soil. The soil gives way to leaf litter. Behind you, the gate closes. The sound it makes is very final.';
   return {
     harmEvents: [],
     statEffects: [
@@ -62,7 +65,18 @@ function resolveRelease(_ctx: SimulationContext): SimulationOutcome {
     consequences: [
       { type: 'set_flag', flag: 'rehab-released' },
     ],
-    narrativeText: 'The enclosure gate swings open — not the way it usually does, when a figure in heavy gloves brings food and checks your leg. This time it stays open. The figure stands to one side, very still, watching. Beyond the gate is a world you have only ever seen through wire mesh: the treeline dark and close, the ground uneven and damp, the air carrying a thousand scents that have no name. Your legs, healed now but stiff from months of confinement, carry you forward. The gravel gives way to soil. The soil gives way to leaf litter. Behind you, the gate closes. The sound it makes is very final.',
+    narrativeText: narrative,
+    narrativeContext: buildNarrativeContext({
+      eventCategory: 'milestone',
+      eventType: 'rehabilitation-release',
+      actions: [action(
+        narrative,
+        'Wildlife rehabilitation release. Yearling deer released from rehabilitation facility into wild habitat. Previously treated for injury. First exposure to unconfined environment.',
+        'high',
+      )],
+      environment: env,
+      emotionalTone: 'confusion',
+    }),
   };
 }
 
@@ -109,7 +123,9 @@ function getReleaseChoices(_ctx: SimulationContext): SimulationChoice[] {
 
 // ── Turn 2: First night in the wild ──
 
-function resolveFirstNight(_ctx: SimulationContext): SimulationOutcome {
+function resolveFirstNight(ctx: SimulationContext): SimulationOutcome {
+  const env = { ...buildEnvironment(ctx), timeOfDay: 'night' as const };
+  const narrative = 'Night falls, and it is nothing like the enclosure. There are no walls to put your back against, no roof to seal out the sky. The darkness is absolute in a way that artificial light had made you forget was possible. Every sound is amplified by the absence of everything familiar: a branch cracking, the scrabble of small claws on bark, a long descending howl from somewhere in the hills that makes the hair along your spine stand rigid. You do not sleep. You stand with your back to a fallen oak, ears pivoting, eyes straining against the dark, learning the first lesson of the wild: everything out here is awake when you are.';
   return {
     harmEvents: [],
     statEffects: [
@@ -119,7 +135,18 @@ function resolveFirstNight(_ctx: SimulationContext): SimulationOutcome {
     consequences: [
       { type: 'set_flag', flag: 'rehab-first-night' },
     ],
-    narrativeText: 'Night falls, and it is nothing like the enclosure. There are no walls to put your back against, no roof to seal out the sky. The darkness is absolute in a way that artificial light had made you forget was possible. Every sound is amplified by the absence of everything familiar: a branch cracking, the scrabble of small claws on bark, a long descending howl from somewhere in the hills that makes the hair along your spine stand rigid. You do not sleep. You stand with your back to a fallen oak, ears pivoting, eyes straining against the dark, learning the first lesson of the wild: everything out here is awake when you are.',
+    narrativeText: narrative,
+    narrativeContext: buildNarrativeContext({
+      eventCategory: 'milestone',
+      eventType: 'rehabilitation-first-night',
+      actions: [action(
+        narrative,
+        'First night in the wild after rehabilitation release. No sleep achieved due to hypervigilance. Nocturnal predator vocalizations detected.',
+        'high',
+      )],
+      environment: env,
+      emotionalTone: 'fear',
+    }),
   };
 }
 
@@ -143,6 +170,7 @@ function resolveFirstForage(ctx: SimulationContext): SimulationOutcome {
     narrative = 'Your first real forage is tentative and clumsy. You nose at plants you have never seen before, tasting and spitting, tasting and swallowing. Some of it is good — your body knows, even if your mind does not, which greens carry the nutrients you need. The processed feed of the rehabilitation center is already a fading memory. Out here, eating is work: walking, searching, testing, chewing through tough stems for the soft growth inside. But with each mouthful, something is waking up — an instinct that was always there, waiting for the wire mesh to open.';
   }
 
+  const env = buildEnvironment(ctx);
   return {
     harmEvents: [],
     statEffects: [
@@ -154,6 +182,17 @@ function resolveFirstForage(ctx: SimulationContext): SimulationOutcome {
       { type: 'modify_weight', amount: weightChange },
     ],
     narrativeText: narrative,
+    narrativeContext: buildNarrativeContext({
+      eventCategory: 'milestone',
+      eventType: 'rehabilitation-first-forage',
+      actions: [action(
+        narrative,
+        `First foraging attempt post-release (${ctx.time.season}). Transition from processed feed to wild browse. ${isWinter ? 'Sparse winter browse, weight loss expected.' : isSummer ? 'Abundant summer growth, instinctive foraging behavior emerging.' : 'Mixed foraging success.'}`,
+        isWinter ? 'high' : 'medium',
+      )],
+      environment: env,
+      emotionalTone: isWinter ? 'tension' : 'calm',
+    }),
   };
 }
 

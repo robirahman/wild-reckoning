@@ -4,6 +4,8 @@ import { StatId } from '../../../types/stats';
 import { getEncounterRate } from '../../calibration/calibrator';
 
 import { resolveExposure } from '../../interactions/exposure';
+import { vehicleEntity } from '../../narrative/perspective';
+import { buildEnvironment, action, buildNarrativeContext, weatherEntity, terrainEntity } from '../../narrative/contextBuilder';
 
 function getLocomotion(ctx: SimulationContext): number {
   return ctx.animal.bodyState?.capabilities['locomotion'] ?? 100;
@@ -69,6 +71,7 @@ export const fallHazardTrigger: SimulationTrigger = {
       harmType: 'blunt',
     };
 
+    const env = buildEnvironment(ctx);
     return {
       harmEvents: [fallHarm],
       statEffects: [
@@ -77,6 +80,22 @@ export const fallHazardTrigger: SimulationTrigger = {
       ],
       consequences: [],
       narrativeText: narrative,
+      narrativeContext: buildNarrativeContext({
+        eventCategory: 'environmental',
+        eventType: 'fall-hazard',
+        entities: [terrainEntity(
+          isMountain ? 'rocky ledge' : isIcy ? 'ice-covered ground' : 'uneven terrain',
+          isMountain ? 'loose shale on a narrow ledge' : isIcy ? 'black ice beneath snow' : 'hidden root in leaf litter',
+        )],
+        actions: [action(
+          narrative,
+          `Fall on ${isMountain ? 'rocky terrain' : isIcy ? 'ice' : 'forest floor'}. Impact magnitude: ${fallMagnitude}.`,
+          isMountain ? 'high' : 'medium',
+        )],
+        environment: env,
+        emotionalTone: 'pain',
+        sourceHarmEvents: [fallHarm],
+      }),
     };
   },
 
@@ -135,6 +154,7 @@ export const blizzardExposureTrigger: SimulationTrigger = {
       ? 'The wind hits like a wall of frozen knives. Snow drives horizontally, stinging your eyes shut, packing into your nostrils. You cannot see. You cannot hear anything over the roar. The temperature is dropping by the minute and the wind strips the heat from your body faster than your metabolism can replace it. You need shelter. Now.'
       : 'The cold deepens overnight into something that feels personal — malicious, searching, finding every thin patch of fur and pressing in. Frost crystallizes on your muzzle and around your eyes. Your legs feel leaden and stiff. Even the act of shivering is becoming exhausting.';
 
+    const env = buildEnvironment(ctx);
     return {
       harmEvents: [coldHarm],
       statEffects: [
@@ -145,6 +165,22 @@ export const blizzardExposureTrigger: SimulationTrigger = {
         { type: 'modify_weight', amount: isBlizzard ? -3 : -1 },
       ],
       narrativeText: narrative,
+      narrativeContext: buildNarrativeContext({
+        eventCategory: 'environmental',
+        eventType: isBlizzard ? 'blizzard-exposure' : 'frost-exposure',
+        entities: [weatherEntity(
+          isBlizzard ? 'blizzard' : 'deep frost',
+          isBlizzard ? 'a wall of frozen wind and driving snow' : 'cold that seeps inward through every thin patch of fur',
+        )],
+        actions: [action(
+          narrative,
+          `${isBlizzard ? 'Blizzard' : 'Frost'} exposure. Thermal-cold harm to extremities. Weight loss from thermoregulatory calorie burn.`,
+          isBlizzard ? 'extreme' : 'high',
+        )],
+        environment: env,
+        emotionalTone: 'cold',
+        sourceHarmEvents: [coldHarm],
+      }),
     };
   },
 
@@ -224,7 +260,8 @@ export const vehicleStrikeTrigger: SimulationTrigger = {
     return base;
   },
 
-  resolve(_ctx) {
+  resolve(ctx) {
+    const env = buildEnvironment(ctx);
     return {
       harmEvents: [],
       statEffects: [
@@ -233,6 +270,18 @@ export const vehicleStrikeTrigger: SimulationTrigger = {
       ],
       consequences: [],
       narrativeText: 'You step out of the tree line and something is wrong — the ground beneath your hooves is flat and hard and smells of tar. Two blazing lights appear, impossibly bright, growing at impossible speed, accompanied by a rising roar. Every nerve in your body fires at once.',
+      narrativeContext: buildNarrativeContext({
+        eventCategory: 'environmental',
+        eventType: 'vehicle-strike',
+        entities: [vehicleEntity()],
+        actions: [action(
+          'Two blazing lights appear, impossibly bright, growing at impossible speed, accompanied by a rising roar. Every nerve in your body fires at once.',
+          'Deer-vehicle encounter on road. Approaching vehicle at speed.',
+          'extreme',
+        )],
+        environment: env,
+        emotionalTone: 'confusion',
+      }),
     };
   },
 
@@ -336,7 +385,8 @@ export const forestFireTrigger: SimulationTrigger = {
     return base;
   },
 
-  resolve() {
+  resolve(ctx) {
+    const env = buildEnvironment(ctx);
     return {
       harmEvents: [],
       statEffects: [
@@ -345,6 +395,18 @@ export const forestFireTrigger: SimulationTrigger = {
       ],
       consequences: [],
       narrativeText: 'You smell it before the sky turns — smoke, acrid and thickening, rolling through the understory in low, grey waves that sting your eyes and coat the back of your throat. Then the sound reaches you: a distant, continuous roar, like a river made of heat. Through the trees you see an orange glow that is not sunset — it is fire, and it is coming toward you at the speed of wind.',
+      narrativeContext: buildNarrativeContext({
+        eventCategory: 'environmental',
+        eventType: 'forest-fire',
+        entities: [weatherEntity('wildfire', 'an orange glow that is not sunset, a roar like a river made of heat')],
+        actions: [action(
+          'Smoke rolls through the understory, stinging your eyes. Through the trees — an orange glow, coming toward you at the speed of wind.',
+          'Wildfire approaching. Smoke inhalation risk. Animal must choose escape route.',
+          'extreme',
+        )],
+        environment: env,
+        emotionalTone: 'fear',
+      }),
     };
   },
 
@@ -456,7 +518,8 @@ export const floodingCreekTrigger: SimulationTrigger = {
     return base;
   },
 
-  resolve() {
+  resolve(ctx) {
+    const env = buildEnvironment(ctx);
     return {
       harmEvents: [],
       statEffects: [
@@ -465,6 +528,18 @@ export const floodingCreekTrigger: SimulationTrigger = {
       ],
       consequences: [],
       narrativeText: 'The creek that you crossed yesterday at ankle depth is unrecognizable. Muddy water surges bank to bank, carrying branches, leaves, and the occasional drowned rodent spinning in the current. The far side holds better browse — you can see the green from here — but the water between you and it is fast, cold, and deep enough to swallow you whole.',
+      narrativeContext: buildNarrativeContext({
+        eventCategory: 'environmental',
+        eventType: 'flooding-creek',
+        entities: [terrainEntity('flooding creek', 'muddy water surging bank to bank, fast and deep')],
+        actions: [action(
+          'The creek that you crossed yesterday at ankle depth is unrecognizable. The water is fast, cold, and deep enough to swallow you whole.',
+          'Flash flooding of creek crossing. Drowning risk and cold exposure if crossing attempted.',
+          'high',
+        )],
+        environment: env,
+        emotionalTone: 'tension',
+      }),
     };
   },
 
@@ -578,6 +653,7 @@ export const dispersalNewRangeTrigger: SimulationTrigger = {
         ? 'The territory is adequate — scattered cover, decent browse, water within reach. Not the richest ground, but livable.'
         : 'The land here is marginal — thin cover, sparse browse, a seasonal creek that may run dry. But you are exhausted from traveling.';
 
+    const env = buildEnvironment(ctx);
     return {
       harmEvents: [],
       statEffects: [
@@ -587,6 +663,17 @@ export const dispersalNewRangeTrigger: SimulationTrigger = {
       ],
       consequences: [],
       narrativeText: `After days of wandering through unfamiliar woods, crossing roads and fences and fields that smelled of humans, you find it — a creek bottom with potential. ${qualityNarrative}`,
+      narrativeContext: buildNarrativeContext({
+        eventCategory: 'environmental',
+        eventType: 'dispersal-new-range',
+        actions: [action(
+          `After days of wandering, you find a creek bottom with potential. ${qualityNarrative}`,
+          `Yearling dispersal: potential home range identified. Territory quality: ${quality >= 60 ? 'good' : quality >= 40 ? 'adequate' : 'marginal'}.`,
+          'low',
+        )],
+        environment: env,
+        emotionalTone: 'calm',
+      }),
     };
   },
 

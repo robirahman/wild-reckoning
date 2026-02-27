@@ -1,6 +1,7 @@
 import type { SimulationTrigger } from '../types';
 import { StatId } from '../../../types/stats';
 import { resolveExposure } from '../../interactions/exposure';
+import { buildEnvironment, action, buildNarrativeContext } from '../../narrative/contextBuilder';
 
 // ══════════════════════════════════════════════════
 //  HYPOTHERMIA PRESSURE
@@ -51,6 +52,7 @@ export const hypothermiaPressureTrigger: SimulationTrigger = {
       narrative = 'The chill won\'t leave. It has been building for hours, creeping deeper despite the constant shivering that burns through your calories like kindling. Your extremities feel numb and distant — ears, muzzle, the tips of your hooves. The wind finds every gap in your fur where injuries have thinned the insulating layer. Your body is losing more heat than it can produce.';
     }
 
+    const env = buildEnvironment(ctx);
     return {
       harmEvents: [],
       statEffects: [
@@ -58,6 +60,17 @@ export const hypothermiaPressureTrigger: SimulationTrigger = {
       ],
       consequences: [],
       narrativeText: narrative,
+      narrativeContext: buildNarrativeContext({
+        eventCategory: 'environmental',
+        eventType: 'hypothermia-pressure',
+        actions: [action(
+          narrative,
+          `Hypothermia developing. Core temperature deviation: ${physio.coreTemperatureDeviation.toFixed(1)}°C. ${severity > 5 ? 'Severe shivering, cognitive impairment.' : 'Persistent cold, extremity numbness.'}`,
+          severity > 5 ? 'extreme' : 'high',
+        )],
+        environment: env,
+        emotionalTone: 'cold',
+      }),
     };
   },
 

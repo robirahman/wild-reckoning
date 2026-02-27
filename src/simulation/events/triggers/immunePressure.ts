@@ -1,5 +1,6 @@
 import type { SimulationTrigger } from '../types';
 import { StatId } from '../../../types/stats';
+import { buildEnvironment, action, buildNarrativeContext } from '../../narrative/contextBuilder';
 
 // ══════════════════════════════════════════════════
 //  IMMUNE CRISIS
@@ -51,6 +52,11 @@ export const immunePressureTrigger: SimulationTrigger = {
       narrative = 'A profound fatigue has settled into your body. Your immune system, depleted by the cumulative stress of survival, has reached its breaking point. Wounds heal slowly. Scratches that should be trivial fester and redden. Your body no longer has the reserves to fight on every front, and the vulnerability shows in your dull coat, your sunken eyes, your labored breathing.';
     }
 
+    const env = buildEnvironment(ctx);
+    const immuneDesc = hasInfection && parasiteCount > 0
+      ? 'Concurrent infection and parasitic load'
+      : hasInfection ? 'Wound infection' : parasiteCount > 0 ? 'Parasitic overload' : 'Immune exhaustion';
+
     return {
       harmEvents: [],
       statEffects: [
@@ -59,6 +65,17 @@ export const immunePressureTrigger: SimulationTrigger = {
       ],
       consequences: [],
       narrativeText: narrative,
+      narrativeContext: buildNarrativeContext({
+        eventCategory: 'environmental',
+        eventType: 'immune-pressure',
+        actions: [action(
+          narrative,
+          `Immunocompromised state. ${immuneDesc}. Immune load exceeds capacity. Caloric deficit from febrile response.`,
+          hasInfection && parasiteCount > 0 ? 'extreme' : 'high',
+        )],
+        environment: env,
+        emotionalTone: 'pain',
+      }),
     };
   },
 

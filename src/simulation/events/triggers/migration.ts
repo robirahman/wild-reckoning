@@ -1,6 +1,7 @@
 import type { SimulationTrigger } from '../types';
 import { StatId } from '../../../types/stats';
 import { resolveExposure } from '../../interactions/exposure';
+import { buildEnvironment, action, buildNarrativeContext } from '../../narrative/contextBuilder';
 
 // ══════════════════════════════════════════════════
 //  WINTER YARD SCOUTING — autumn migration preparation
@@ -46,6 +47,19 @@ export const winterYardScoutTrigger: SimulationTrigger = {
       narrativeText: hasFawns
         ? 'The first killing frost settles in overnight, rimming the grass with white crystal. Something deep in your memory stirs — not a thought exactly, but a pull, a directional certainty inherited from your mother. The winter yard lies to the southwest, in the hemlock valley where generations of does have sheltered their fawns through the worst of winter. Your fawns are strong enough to travel now. The time has come to scout the route.'
         : 'The nights are growing cold with a speed that your body registers before your mind does. You find yourself drifting southwest during your daily wanderings, drawn by a memory that is not quite yours — a scent trail laid down by your mother, and her mother before her, leading to the traditional wintering grounds. The urge to scout the route is becoming difficult to ignore.',
+      narrativeContext: buildNarrativeContext({
+        eventCategory: 'migration',
+        eventType: 'winter-yard-scout',
+        actions: [action(
+          hasFawns
+            ? 'Something deep in your memory stirs — a pull toward the hemlock valley. Your fawns are strong enough to travel. The time has come to scout the route.'
+            : 'You find yourself drifting southwest, drawn by inherited memory. The urge to scout the route is becoming difficult to ignore.',
+          `Autumn migration scouting initiated. ${hasFawns ? 'Female with fawns seeking traditional wintering grounds.' : 'Seasonal migration instinct onset, following matrilineal scent trail to traditional deer yard.'}`,
+          'low',
+        )],
+        environment: buildEnvironment(ctx),
+        emotionalTone: 'tension',
+      }),
     };
   },
 
@@ -141,6 +155,19 @@ export const travelHazardsTrigger: SimulationTrigger = {
       narrativeText: isNight
         ? 'The road appears suddenly — a flat, pale scar cutting through the forest. You can smell the asphalt, the rubber, the exhaust fumes that linger like a toxic fog. Headlights sweep through the trees at irregular intervals, each pair a fast-moving predator with no scent and no sound until it is upon you. The other side is twenty meters away. It might as well be twenty miles.'
         : 'The highway is a river of metal and noise. You stand at the tree line, every instinct screaming to cross — the wintering grounds are on the other side, you can smell the hemlocks from here — but the traffic is relentless. Cars, trucks, an eighteen-wheeler that shakes the ground as it passes. The gap between vehicles is your window, and it is closing fast.',
+      narrativeContext: buildNarrativeContext({
+        eventCategory: 'migration',
+        eventType: 'travel-hazard-road',
+        actions: [action(
+          isNight
+            ? 'The road appears suddenly. Headlights sweep through the trees at irregular intervals. The other side is twenty meters away. It might as well be twenty miles.'
+            : 'The highway is a river of metal and noise. The gap between vehicles is your window, and it is closing fast.',
+          `Road crossing hazard during ${ctx.animal.flags.has('scouting-winter-yard') ? 'migration' : 'dispersal'}. ${isNight ? 'Night crossing — headlight disorientation risk.' : 'Daytime — heavy traffic volume.'}`,
+          'high',
+        )],
+        environment: buildEnvironment(ctx),
+        emotionalTone: 'fear',
+      }),
     };
   },
 
@@ -289,6 +316,17 @@ export const springReturnTrigger: SimulationTrigger = {
         { type: 'remove_flag', flag: 'scouting-winter-yard' as any },
       ],
       narrativeText: `The snow is retreating. What was belly-deep a month ago is now patchy and grey, undermined by the warming earth. The packed trails of the winter yard, trodden by dozens of hooves into hard-packed ice, are turning to slush. And from the north, carried on a warm wind, comes the scent of green — new growth, tender shoots, the first herbs pushing through the thawing soil. The pull is irresistible. One by one, the deer begin to drift away from the yard, following the retreating snow line northward to the summer range. ${conditionNarrative}`,
+      narrativeContext: buildNarrativeContext({
+        eventCategory: 'migration',
+        eventType: 'spring-return',
+        actions: [action(
+          `The snow is retreating. From the north comes the scent of green. The pull is irresistible. ${conditionNarrative}`,
+          `Spring migration from winter yard to summer range. BCS: ${bcs}/5. ${bcs <= 1 ? 'Critical condition — may not survive journey.' : bcs <= 2 ? 'Poor condition — recovery dependent on spring forage.' : 'Adequate condition for return journey.'}`,
+          bcs <= 1 ? 'high' : 'low',
+        )],
+        environment: buildEnvironment(ctx),
+        emotionalTone: bcs <= 1 ? 'tension' : 'relief',
+      }),
     };
   },
 

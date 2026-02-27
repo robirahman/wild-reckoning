@@ -1,6 +1,7 @@
 import type { SimulationTrigger } from '../types';
 import { StatId } from '../../../types/stats';
 import { resolveForage } from '../../interactions/forage';
+import { buildEnvironment, action, buildNarrativeContext } from '../../narrative/contextBuilder';
 
 // ══════════════════════════════════════════════════
 //  INJURY IMPACT
@@ -65,6 +66,11 @@ export const injuryImpactTrigger: SimulationTrigger = {
       narrative = 'Something is wrong inside. The food goes down but the nutrition doesn\'t seem to arrive — your rumen works sluggishly, distended and gassy, failing to extract what your body needs from the browse. You eat and eat but the hunger doesn\'t recede. The injury to your gut is invisible but its effects are not: you are starving on a full stomach.';
     }
 
+    const env = buildEnvironment(ctx);
+    const impairmentDesc = locoImpaired && digestImpaired
+      ? `Locomotion: ${locomotion}%, Digestion: ${digestion}%`
+      : locoImpaired ? `Locomotion: ${locomotion}%` : `Digestion: ${digestion}%`;
+
     return {
       harmEvents: [],
       statEffects: [
@@ -73,6 +79,17 @@ export const injuryImpactTrigger: SimulationTrigger = {
       ],
       consequences: [],
       narrativeText: narrative,
+      narrativeContext: buildNarrativeContext({
+        eventCategory: 'environmental',
+        eventType: 'injury-impact',
+        actions: [action(
+          narrative,
+          `Functional impairment from prior injuries. ${impairmentDesc}. ${locoImpaired ? 'Gait compromised, foraging range reduced.' : ''} ${digestImpaired ? 'Nutrient extraction impaired, negative energy balance.' : ''}`.trim(),
+          locomotion < 50 || digestion < 50 ? 'high' : 'medium',
+        )],
+        environment: env,
+        emotionalTone: 'pain',
+      }),
     };
   },
 

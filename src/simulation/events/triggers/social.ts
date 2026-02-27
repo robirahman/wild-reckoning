@@ -2,6 +2,8 @@ import type { SimulationTrigger } from '../types';
 import { StatId } from '../../../types/stats';
 import { resolveSocial } from '../../interactions/social';
 import { resolveFight } from '../../interactions/fight';
+import { rivalBuckEntity } from '../../narrative/perspective';
+import { buildEnvironment, action, buildNarrativeContext, conspecificEntity } from '../../narrative/contextBuilder';
 // resolveChase reserved for yearling road crossing
 
 // ══════════════════════════════════════════════════
@@ -31,11 +33,24 @@ export const herdAlarmTrigger: SimulationTrigger = {
 
   resolve(ctx) {
     const allyName = ctx.npcs?.find((n) => n.type === 'ally' && n.alive)?.name ?? 'A doe nearby';
+    const env = buildEnvironment(ctx);
     return {
       harmEvents: [],
       statEffects: [],
       consequences: [],
       narrativeText: `${allyName} sees it before you do. Her head snaps up mid-browse, ears locked forward, nostrils flaring. Then the alarm snort — a sharp, percussive exhalation that carries across the clearing like a gunshot. Your body responds before your mind catches up: muscles tensing, head swiveling, legs coiling. The white flag of her tail is already up and pumping as she bolts, and the signal cascades through every deer within earshot.`,
+      narrativeContext: buildNarrativeContext({
+        eventCategory: 'social',
+        eventType: 'herd-alarm',
+        entities: [conspecificEntity(`${allyName}'s alarm snort`, `${allyName} (herd member) alarm signaling`, 'sound')],
+        actions: [action(
+          `${allyName} snorts — a sharp, percussive exhalation. The white flag of her tail goes up and she bolts. The signal cascades through every deer within earshot.`,
+          `Herd alarm response initiated by ${allyName}. Conspecific alarm snort detected; flight response triggered.`,
+          'high',
+        )],
+        environment: env,
+        emotionalTone: 'fear',
+      }),
     };
   },
 
@@ -111,7 +126,8 @@ export const bachelorGroupTrigger: SimulationTrigger = {
     return base;
   },
 
-  resolve(_ctx) {
+  resolve(ctx) {
+    const env = buildEnvironment(ctx);
     return {
       harmEvents: [],
       statEffects: [
@@ -121,6 +137,18 @@ export const bachelorGroupTrigger: SimulationTrigger = {
       ],
       consequences: [],
       narrativeText: 'You find them in a sun-dappled clearing — three other bucks, antlers still in velvet, grazing with the lazy confidence of animals that have nothing to prove. There is no aggression here, not yet. This is the summer brotherhood, a temporary peace between males who will be enemies in autumn. One looks up as you approach, assesses you with dark, calm eyes, and returns to feeding. You are accepted.',
+      narrativeContext: buildNarrativeContext({
+        eventCategory: 'social',
+        eventType: 'bachelor-group',
+        entities: [conspecificEntity('three other bucks with velvet antlers', 'bachelor group of 3 male deer')],
+        actions: [action(
+          'Three other bucks grazing in a clearing. Summer brotherhood — no aggression. One assesses you and returns to feeding. You are accepted.',
+          'Joined bachelor group. Non-agonistic male social bonding during summer antler growth period.',
+          'low',
+        )],
+        environment: env,
+        emotionalTone: 'calm',
+      }),
     };
   },
 
@@ -154,12 +182,25 @@ export const doeHierarchyTrigger: SimulationTrigger = {
     return base;
   },
 
-  resolve(_ctx) {
+  resolve(ctx) {
+    const env = buildEnvironment(ctx);
     return {
       harmEvents: [],
       statEffects: [{ stat: StatId.ADV, amount: 4, duration: 2, label: '+ADV' }],
       consequences: [],
       narrativeText: 'She approaches with stiff, deliberate steps — an older doe, scarred and experienced, her posture broadcasting challenge. This is about territory, about the best fawning cover, about hierarchy. She stops three body lengths away and stares, ears pinned back, one front hoof pawing the ground. The message is clear: yield, or be made to yield.',
+      narrativeContext: buildNarrativeContext({
+        eventCategory: 'social',
+        eventType: 'doe-hierarchy',
+        entities: [conspecificEntity('an older doe with scars, posture broadcasting challenge', 'dominant doe, hierarchical challenge for fawning territory')],
+        actions: [action(
+          'She stops three body lengths away and stares, ears pinned back, one hoof pawing the ground. Yield, or be made to yield.',
+          'Female dominance challenge. Intraspecific competition for fawning territory access.',
+          'medium',
+        )],
+        environment: env,
+        emotionalTone: 'aggression',
+      }),
     };
   },
 
@@ -233,7 +274,8 @@ export const fawnPlayTrigger: SimulationTrigger = {
     return 0.04; // Moderate frequency — feels like a recurring slice of life
   },
 
-  resolve(_ctx) {
+  resolve(ctx) {
+    const env = buildEnvironment(ctx);
     return {
       harmEvents: [],
       statEffects: [
@@ -243,6 +285,18 @@ export const fawnPlayTrigger: SimulationTrigger = {
       ],
       consequences: [],
       narrativeText: 'Your fawns are playing. They chase each other through the tall grass in looping, ecstatic sprints, legs flying at angles that seem physically impossible, white spots flashing in the dappled light. One stumbles, rolls, springs back up without breaking stride. The other leaps clean over a fallen log with a joy so pure it is almost painful to watch. They are alive, and they are yours, and for this moment the forest feels safe.',
+      narrativeContext: buildNarrativeContext({
+        eventCategory: 'social',
+        eventType: 'fawn-play',
+        entities: [conspecificEntity('your fawns chasing each other through tall grass', 'offspring play behavior')],
+        actions: [action(
+          'Your fawns chase each other in looping sprints, white spots flashing in dappled light. They are alive, and they are yours.',
+          'Fawn play behavior observed. Locomotive play bouts indicating healthy development and adequate nutrition.',
+          'low',
+        )],
+        environment: env,
+        emotionalTone: 'relief',
+      }),
     };
   },
 
@@ -276,7 +330,8 @@ export const territorialScrapeTrigger: SimulationTrigger = {
     return base;
   },
 
-  resolve(_ctx) {
+  resolve(ctx) {
+    const env = buildEnvironment(ctx);
     return {
       harmEvents: [],
       statEffects: [
@@ -288,6 +343,17 @@ export const territorialScrapeTrigger: SimulationTrigger = {
         { type: 'add_calories' as const, amount: -8, source: 'territorial-scraping' },
       ],
       narrativeText: 'The urge comes on like a tide — not a thought but a compulsion, rising from somewhere deep in your hindbrain. You find a low-hanging branch and work it with your antlers, twisting and scraping until the bark peels away in long, fragrant strips. Then you paw the earth beneath it into a bare oval, urinate on your tarsal glands, and rub them together until the scent is overpowering. Every buck within half a mile will know you were here. The chemical message is ancient and unmistakable: this is mine.',
+      narrativeContext: buildNarrativeContext({
+        eventCategory: 'social',
+        eventType: 'territorial-scrape',
+        actions: [action(
+          'You find a low-hanging branch and work it with your antlers. Then paw the earth into a bare oval. Every buck within half a mile will know you were here.',
+          'Territorial marking behavior. Antler rub on overhanging branch, ground scrape with tarsal gland scent deposition. Chemical signaling to conspecific males.',
+          'low',
+        )],
+        environment: env,
+        emotionalTone: 'aggression',
+      }),
     };
   },
 
@@ -323,6 +389,7 @@ export const rivalReturnsTrigger: SimulationTrigger = {
 
   resolve(ctx) {
     const rivalName = ctx.npcs?.find((n) => n.type === 'rival' && n.alive)?.name ?? 'The rival buck';
+    const env = buildEnvironment(ctx);
     return {
       harmEvents: [],
       statEffects: [
@@ -331,6 +398,18 @@ export const rivalReturnsTrigger: SimulationTrigger = {
       ],
       consequences: [],
       narrativeText: `You smell ${rivalName} before you see the buck — that distinctive musk, sharp and aggressive, carried on the wind like a declaration of war. Then the shape materializes between the trees: familiar scarred rack, thick neck, the same contemptuous stare. The buck has been here before. This is not the first time, and something in the set of the rival's shoulders says it won't be the last.`,
+      narrativeContext: buildNarrativeContext({
+        eventCategory: 'social',
+        eventType: 'rival-returns',
+        entities: [rivalBuckEntity(rivalName)],
+        actions: [action(
+          `${rivalName} materializes between the trees: familiar scarred rack, thick neck, the same contemptuous stare. This is not the first time.`,
+          `Recurring rival encounter. ${rivalName} returning to contested territory during rut.`,
+          'high',
+        )],
+        environment: env,
+        emotionalTone: 'aggression',
+      }),
     };
   },
 
@@ -444,6 +523,7 @@ export const allyWarnsTrigger: SimulationTrigger = {
 
   resolve(ctx) {
     const allyName = ctx.npcs?.find((n) => n.type === 'ally' && n.alive)?.name ?? 'Your companion';
+    const env = buildEnvironment(ctx);
     return {
       harmEvents: [],
       statEffects: [
@@ -453,6 +533,18 @@ export const allyWarnsTrigger: SimulationTrigger = {
       ],
       consequences: [],
       narrativeText: `${allyName} freezes mid-step, head cocked, one ear swiveled hard to the left. You know this posture. You've learned to trust it. The doe's body language is subtle but unmistakable to anyone who has traveled with her: danger, that direction, close. She doesn't bolt — not yet — but the slight shift of her weight onto her hind legs tells you she's ready. Without the warning, you would have walked straight into whatever she's detected.`,
+      narrativeContext: buildNarrativeContext({
+        eventCategory: 'social',
+        eventType: 'ally-warns',
+        entities: [conspecificEntity(`${allyName} frozen mid-step, ear swiveled`, `${allyName} (ally) early warning signal`, 'sight')],
+        actions: [action(
+          `${allyName} freezes mid-step, body language unmistakable: danger, that direction, close. Without the warning, you would have walked straight into it.`,
+          `Ally early warning. ${allyName} detected threat and communicated via body language, preventing direct encounter.`,
+          'medium',
+        )],
+        environment: env,
+        emotionalTone: 'tension',
+      }),
     };
   },
 
@@ -498,6 +590,7 @@ export const yearlingDispersalTrigger: SimulationTrigger = {
       ? 'The dominant buck finds you in the cedar thicket and there is nothing casual about the approach. Head low, ears pinned, moving with the coiled deliberation of an animal about to attack. The message has moved beyond chemical signals and body language — this is a physical eviction. You are not welcome here anymore. The home range that sheltered you since birth has become hostile territory.'
       : 'Something has shifted inside you over the past weeks — a restlessness that won\'t quiet. The familiar trails feel confining rather than safe. The mature bucks, who tolerated you through summer, now watch you with flat, hostile eyes. Your mother passed you this morning without a flicker of recognition. The message is biological and unavoidable: it is time to leave.';
 
+    const env = buildEnvironment(ctx);
     return {
       harmEvents: [],
       statEffects: [
@@ -508,6 +601,19 @@ export const yearlingDispersalTrigger: SimulationTrigger = {
         ? []
         : [{ type: 'set_flag' as const, flag: 'dispersal-pressure' as const }],
       narrativeText: narrative,
+      narrativeContext: buildNarrativeContext({
+        eventCategory: 'social',
+        eventType: 'yearling-dispersal',
+        actions: [action(
+          narrative,
+          hasDispersalPressure
+            ? 'Forced dispersal. Dominant buck physically evicting yearling male from natal range.'
+            : 'Dispersal instinct onset. Yearling male experiencing restlessness and conspecific aggression signaling need to establish new range.',
+          hasDispersalPressure ? 'high' : 'medium',
+        )],
+        environment: env,
+        emotionalTone: hasDispersalPressure ? 'fear' : 'tension',
+      }),
     };
   },
 
