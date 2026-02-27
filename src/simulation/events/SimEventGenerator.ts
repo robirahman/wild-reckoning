@@ -157,8 +157,8 @@ export function generateSimulationEvents(ctx: SimulationContext): ResolvedEvent[
     const remainingTotal = remainingWeights.reduce((a, b) => a + b, 0);
 
     // Probability that ANY simulation trigger fires this turn
-    // With near-complete simulation coverage (39/41 deer events), cap raised to 0.7
-    const fireChance = Math.min(0.7, remainingTotal);
+    // With full simulation coverage (39/41 deer events + NarrativeContext on all 34 triggers)
+    const fireChance = Math.min(0.8, remainingTotal);
     if (!ctx.rng.chance(fireChance)) break;
 
     // Weighted selection among remaining triggers
