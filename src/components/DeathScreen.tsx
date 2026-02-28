@@ -6,6 +6,10 @@ import { DebriefingPanel } from './DebriefingPanel';
 import { CausalChainPanel } from './CausalChainPanel';
 import { formatWeight } from '../utils/formatWeight';
 import type { Offspring } from '../types/reproduction';
+import { useAchievementStore } from '../store/achievementStore';
+import { SPECIES_UNLOCKS } from '../data/speciesUnlocks';
+import { ACHIEVEMENTS } from '../data/achievements';
+import { getAllSpeciesBundles } from '../data/species';
 import styles from '../styles/deathscreen.module.css';
 
 const SPECIES_AVG_FITNESS: Record<string, number> = {
@@ -84,6 +88,22 @@ export function DeathScreen() {
   const avgFitness = SPECIES_AVG_FITNESS[config.id] ?? 2;
   const fitnessColorClass = reproduction.totalFitness > avgFitness ? styles.goodPerformance : (reproduction.totalFitness < avgFitness * 0.5 ? styles.poorPerformance : '');
 
+  // Find species unlocked by achievements from the current species
+  const unlockedAchievements = useAchievementStore((s) => s.unlockedIds);
+  const allBundles = getAllSpeciesBundles();
+  const speciesUnlockedThisRun = SPECIES_UNLOCKS.filter((u) => {
+    if (u.requirement.type !== 'achievement') return false;
+    if (!unlockedAchievements.has(u.requirement.achievementId)) return false;
+    // Only show unlock for achievements tied to the current species
+    const achDef = ACHIEVEMENTS.find((a) => a.id === u.requirement.achievementId);
+    if (!achDef?.species) return false;
+    const speciesList = Array.isArray(achDef.species) ? achDef.species : [achDef.species];
+    return speciesList.includes(config.id);
+  }).map((u) => {
+    const bundle = allBundles.find((b) => b.config.id === u.speciesId);
+    return bundle ? bundle.config.name : u.speciesId;
+  });
+
   // Find top food source
   const topFoodEntry = Object.entries(animal.lifetimeStats.foodSources).sort((a, b) => b[1] - a[1])[0];
   const favoriteFood = topFoodEntry 
@@ -115,6 +135,19 @@ export function DeathScreen() {
           {grade.letter}
         </div>
       </div>
+
+      {/* ── Species Unlock Notification ── */}
+      {speciesUnlockedThisRun.length > 0 && (
+        <div className={styles.unlockNotification}>
+          <div className={styles.unlockIcon}>&#x1F513;</div>
+          <div>
+            <div className={styles.unlockTitle}>New Species Unlocked!</div>
+            {speciesUnlockedThisRun.map((name) => (
+              <div key={name} className={styles.unlockSpeciesName}>{name}</div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* ── Summary Stats ── */}
       <div className={styles.detailPanelSummary}>

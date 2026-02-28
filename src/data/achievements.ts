@@ -75,6 +75,16 @@ export const ACHIEVEMENTS: AchievementDefinition[] = [
 
   // --- Species-Specific: White-Tailed Deer ---
   {
+    id: 'deer-offspring-survived',
+    name: 'Legacy',
+    description: 'Have at least one offspring survive to adulthood.',
+    checkOn: 'death',
+    species: 'white-tailed-deer',
+    check: (s) =>
+      s.reproduction.type === 'iteroparous' &&
+      s.reproduction.offspring.some((o) => o.matured),
+  },
+  {
     id: 'deer-migrated',
     name: 'The Yard',
     description: 'Complete your first winter migration.',

@@ -197,6 +197,39 @@
   color: #5a9e5a;
 }
 
+/* ── Species Unlock Notification ── */
+
+.unlockNotification {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 24px;
+  margin: 24px 0;
+  background: rgba(90, 158, 90, 0.1);
+  border: 2px solid rgba(90, 158, 90, 0.4);
+  border-radius: 8px;
+  text-align: left;
+}
+
+.unlockIcon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.unlockTitle {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 1rem;
+  color: #5a9e5a;
+  margin-bottom: 4px;
+}
+
+.unlockSpeciesName {
+  font-family: var(--font-ui);
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
 /* ── Start Over Button ── */
 
 .startOverButton {

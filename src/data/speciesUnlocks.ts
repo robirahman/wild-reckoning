@@ -11,7 +11,14 @@ export interface SpeciesUnlockRequirement {
 export const SPECIES_UNLOCKS: SpeciesUnlockRequirement[] = [
   // --- Starter Species ---
   { speciesId: 'white-tailed-deer', requirement: { type: 'default' } },
-  { speciesId: 'gray-wolf', requirement: { type: 'default' } },
+  {
+    speciesId: 'gray-wolf',
+    requirement: {
+      type: 'achievement',
+      achievementId: 'deer-offspring-survived',
+      description: 'Have offspring survive to adulthood as a White-Tailed Deer',
+    },
+  },
 
   // --- Tier 1: Specialized Mammals & Fish ---
   {
