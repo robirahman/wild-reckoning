@@ -1,6 +1,12 @@
 import type { ClimateProfile, Season } from '../types/world';
 import type { Rng } from './RandomUtils';
 import { StatId } from '../types/stats';
+import {
+  WEATHER_TYPE_CONFIGS,
+  TEMPERATURE_RULES,
+  PRECIPITATION_RULES,
+  SEASON_RULES,
+} from './data/weatherConfig';
 
 export type WeatherType =
   | 'clear'
@@ -27,6 +33,11 @@ export interface WeatherState {
 
 const WIND_DIRECTIONS: WindDirection[] = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
 
+const ALL_WEATHER_TYPES: WeatherType[] = [
+  'clear', 'cloudy', 'rain', 'heavy_rain', 'snow',
+  'blizzard', 'fog', 'heat_wave', 'frost', 'drought_conditions',
+];
+
 interface WeatherWeights {
   clear: number;
   cloudy: number;
@@ -40,88 +51,70 @@ interface WeatherWeights {
   drought_conditions: number;
 }
 
-const WEATHER_DESCRIPTIONS: Record<WeatherType, string[]> = {
-  clear: ['Clear skies stretch overhead.', 'The sky is bright and open.', 'Sunlight pours across the landscape.'],
-  cloudy: ['Gray clouds blanket the sky.', 'An overcast sky diffuses the light.', 'Clouds move steadily above.'],
-  rain: ['A steady rain falls.', 'Rain patters against the ground.', 'Drizzle mists the air.'],
-  heavy_rain: ['Heavy rain hammers the ground.', 'A downpour drenches everything.', 'Torrential rain floods the low ground.'],
-  snow: ['Snow falls softly, muffling all sound.', 'A light snowfall dusts the ground.', 'Snowflakes drift down steadily.'],
-  blizzard: ['A blizzard howls across the landscape.', 'Driving snow reduces visibility to nothing.', 'The wind screams with ice and snow.'],
-  fog: ['Dense fog clings to the ground.', 'Thick mist obscures everything beyond a few paces.', 'Fog rolls in, swallowing familiar landmarks.'],
-  heat_wave: ['Oppressive heat shimmers off the ground.', 'The air is furnace-hot and still.', 'A brutal heat wave bakes the land.'],
-  frost: ['A heavy frost coats every surface.', 'Ice crystals glitter in the early light.', 'Frost has crept over everything overnight.'],
-  drought_conditions: ['The land is parched and cracked.', 'Dry conditions persist — water sources are shrinking.', 'Dust rises from the bone-dry earth.'],
-};
-
 function getWeatherWeights(
   climate: ClimateProfile | undefined,
   monthIndex: number,
   season: Season,
   tempOffset: number = 0,
 ): WeatherWeights {
-  const weights: WeatherWeights = {
-    clear: 30,
-    cloudy: 25,
-    rain: 15,
-    heavy_rain: 5,
-    snow: 0,
-    blizzard: 0,
-    fog: 5,
-    heat_wave: 0,
-    frost: 0,
-    drought_conditions: 0,
-  };
+  // Initialize from base weights in config
+  const weights = {} as WeatherWeights;
+  for (const type of ALL_WEATHER_TYPES) {
+    weights[type] = WEATHER_TYPE_CONFIGS[type].baseWeight;
+  }
 
   if (!climate) return weights;
 
   const temp = climate.temperatureByMonth[monthIndex] + tempOffset;
   const precip = climate.precipitationByMonth[monthIndex];
 
-  // Temperature-driven adjustments
-  if (temp < 20) {
-    weights.snow += 25;
-    weights.blizzard += 10;
-    weights.frost += 15;
-    weights.rain = 0;
-    weights.heavy_rain = 0;
-    weights.clear -= 10;
-  } else if (temp < 32) {
-    weights.snow += 15;
-    weights.frost += 10;
-    weights.rain -= 5;
-    weights.heavy_rain = 0;
-  } else if (temp > 85) {
-    weights.heat_wave += 20;
-    weights.drought_conditions += 10;
-    weights.clear += 10;
-  } else if (temp > 75) {
-    weights.heat_wave += 5;
-    weights.clear += 5;
+  // Temperature-driven adjustments (first matching rule wins, like the original if/else if)
+  let tempMatched = false;
+  for (const rule of TEMPERATURE_RULES) {
+    if (tempMatched) break;
+    const matches =
+      (rule.condition === 'below' && temp < rule.threshold) ||
+      (rule.condition === 'above' && temp > rule.threshold);
+    if (matches) {
+      tempMatched = true;
+      if (rule.zeroOut) {
+        for (const t of rule.zeroOut) {
+          weights[t] = 0;
+        }
+      }
+      for (const [t, adj] of Object.entries(rule.adjustments) as [WeatherType, number][]) {
+        weights[t] += adj;
+      }
+    }
   }
 
-  // Precipitation-driven adjustments
-  if (precip > 4.0) {
-    weights.rain += 15;
-    weights.heavy_rain += 10;
-    weights.fog += 5;
-    weights.clear -= 10;
-  } else if (precip > 2.5) {
-    weights.rain += 8;
-    weights.heavy_rain += 3;
-  } else if (precip < 1.0) {
-    weights.drought_conditions += 10;
-    weights.clear += 10;
-    weights.rain -= 10;
-    weights.heavy_rain = 0;
+  // Precipitation-driven adjustments (first matching rule wins)
+  let precipMatched = false;
+  for (const rule of PRECIPITATION_RULES) {
+    if (precipMatched) break;
+    const matches =
+      (rule.condition === 'below' && precip < rule.threshold) ||
+      (rule.condition === 'above' && precip > rule.threshold);
+    if (matches) {
+      precipMatched = true;
+      if (rule.zeroOut) {
+        for (const t of rule.zeroOut) {
+          weights[t] = 0;
+        }
+      }
+      for (const [t, adj] of Object.entries(rule.adjustments) as [WeatherType, number][]) {
+        weights[t] += adj;
+      }
+    }
   }
 
-  // Season-specific flavor
-  if (season === 'autumn') {
-    weights.fog += 8;
-  }
-  if (season === 'spring') {
-    weights.rain += 5;
-    weights.fog += 3;
+  // Season-specific flavor (all matching rules apply)
+  for (const rule of SEASON_RULES) {
+    if (season === rule.season) {
+      for (const [t, adj] of Object.entries(rule.adjustments) as [WeatherType, number][]) {
+        weights[t] += adj;
+      }
+    }
   }
 
   // Ensure no negative weights
@@ -140,30 +133,13 @@ function selectWeather(weights: WeatherWeights, rng: Rng): WeatherType {
 }
 
 function getPersistence(type: WeatherType, rng: Rng): number {
-  switch (type) {
-    case 'blizzard': return rng.int(2, 4);
-    case 'heavy_rain': return rng.int(1, 3);
-    case 'drought_conditions': return rng.int(3, 6);
-    case 'heat_wave': return rng.int(2, 4);
-    case 'snow': return rng.int(1, 3);
-    case 'fog': return rng.int(1, 2);
-    case 'frost': return rng.int(1, 2);
-    case 'rain': return rng.int(1, 3);
-    case 'cloudy': return rng.int(1, 2);
-    case 'clear': return rng.int(1, 3);
-  }
+  const [min, max] = WEATHER_TYPE_CONFIGS[type].persistence;
+  return rng.int(min, max);
 }
 
 function getIntensity(type: WeatherType, rng: Rng): number {
-  switch (type) {
-    case 'blizzard': return 0.7 + rng.random() * 0.3;
-    case 'heavy_rain': return 0.6 + rng.random() * 0.4;
-    case 'heat_wave': return 0.6 + rng.random() * 0.4;
-    case 'drought_conditions': return 0.5 + rng.random() * 0.5;
-    case 'snow': return 0.3 + rng.random() * 0.4;
-    case 'frost': return 0.3 + rng.random() * 0.4;
-    default: return 0.1 + rng.random() * 0.4;
-  }
+  const [min, max] = WEATHER_TYPE_CONFIGS[type].intensity;
+  return min + rng.random() * (max - min);
 }
 
 export function generateWeather(
@@ -175,15 +151,16 @@ export function generateWeather(
 ): WeatherState {
   const weights = getWeatherWeights(climate, monthIndex, season, tempOffset);
   const type = selectWeather(weights, rng);
-  const descriptions = WEATHER_DESCRIPTIONS[type];
+  const config = WEATHER_TYPE_CONFIGS[type];
+  const [windMin, windMax] = config.windSpeed ?? [5, 40];
 
   return {
     type,
-    description: rng.pick(descriptions),
+    description: rng.pick(config.descriptions),
     persistenceTurnsLeft: getPersistence(type, rng),
     intensity: getIntensity(type, rng),
     windDirection: rng.pick(WIND_DIRECTIONS),
-    windSpeed: type === 'blizzard' ? 80 + rng.int(0, 20) : rng.int(5, 40),
+    windSpeed: windMin + rng.int(0, windMax - windMin),
   };
 }
 
@@ -222,35 +199,11 @@ export function weatherContextMultiplier(
 ): number {
   let mult = 1.0;
   const { type, intensity } = weather;
+  const config = WEATHER_TYPE_CONFIGS[type];
 
-  if (type === 'blizzard' || type === 'heavy_rain') {
-    if (category === 'environmental' || category === 'seasonal') {
-      mult *= 1.0 + intensity * 0.5;
-    }
-    if (category === 'predator') {
-      mult *= 1.0 - intensity * 0.2;
-    }
-    if (category === 'foraging') {
-      mult *= 1.0 - intensity * 0.3;
-    }
-  }
-
-  if (type === 'heat_wave' || type === 'drought_conditions') {
-    if (category === 'foraging') {
-      mult *= 1.0 - intensity * 0.3;
-    }
-    if (category === 'health') {
-      mult *= 1.0 + intensity * 0.3;
-    }
-    if (category === 'environmental') {
-      mult *= 1.0 + intensity * 0.4;
-    }
-  }
-
-  if (type === 'frost' || type === 'snow') {
-    if (category === 'seasonal') {
-      mult *= 1.0 + intensity * 0.3;
-    }
+  const entry = config.eventMultipliers[category];
+  if (entry) {
+    mult *= entry.base + intensity * entry.intensityScale;
   }
 
   return mult;
@@ -265,36 +218,18 @@ export interface WeatherPenalty {
 export function computeWeatherPenalty(weather: WeatherState): WeatherPenalty {
   const result: WeatherPenalty = { weightChange: 0, statModifiers: [] };
   const { type, intensity } = weather;
+  const config = WEATHER_TYPE_CONFIGS[type];
 
-  if (type === 'blizzard') {
-    result.weightChange = -2 * intensity;
-    result.statModifiers.push({ stat: StatId.CLI, amount: Math.round(10 * intensity), duration: 1 });
-  } else if (type === 'heat_wave') {
-    result.weightChange = -1.5 * intensity;
-    result.statModifiers.push({ stat: StatId.CLI, amount: Math.round(8 * intensity), duration: 1 });
-  } else if (type === 'drought_conditions') {
-    result.weightChange = -1 * intensity;
-    result.statModifiers.push({ stat: StatId.HOM, amount: Math.round(5 * intensity), duration: 1 });
-  } else if (type === 'heavy_rain') {
-    result.statModifiers.push({ stat: StatId.CLI, amount: Math.round(4 * intensity), duration: 1 });
-  } else if (type === 'frost') {
-    result.weightChange = -0.5 * intensity;
+  result.weightChange = config.penalty.weightChange * intensity;
+
+  if (config.penalty.statModifier) {
+    const { stat, baseAmount } = config.penalty.statModifier;
+    result.statModifiers.push({ stat, amount: Math.round(baseAmount * intensity), duration: 1 });
   }
 
   return result;
 }
 
 export function weatherLabel(type: WeatherType): string {
-  switch (type) {
-    case 'clear': return 'Clear';
-    case 'cloudy': return 'Cloudy';
-    case 'rain': return 'Rain';
-    case 'heavy_rain': return 'Heavy Rain';
-    case 'snow': return 'Snow';
-    case 'blizzard': return 'Blizzard';
-    case 'fog': return 'Fog';
-    case 'heat_wave': return 'Heat Wave';
-    case 'frost': return 'Frost';
-    case 'drought_conditions': return 'Drought';
-  }
+  return WEATHER_TYPE_CONFIGS[type].label;
 }

@@ -3,6 +3,7 @@ import { deleteSaveGame } from '../store/persistence';
 import { AchievementList } from './achievements/AchievementList';
 import { RunSummary } from './RunSummary';
 import { DebriefingPanel } from './DebriefingPanel';
+import { CausalChainPanel } from './CausalChainPanel';
 import { formatWeight } from '../utils/formatWeight';
 import type { Offspring } from '../types/reproduction';
 import styles from '../styles/deathscreen.module.css';
@@ -102,6 +103,8 @@ export function DeathScreen() {
       <p className={styles.causeOfDeath}>
         {animal.causeOfDeath || 'Your body could no longer sustain the burden of survival.'}
       </p>
+
+      <CausalChainPanel />
 
       {/* ── Survival Grade ── */}
       <div className={styles.fitnessBox}>
