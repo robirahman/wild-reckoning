@@ -4,6 +4,16 @@ import type { NarrativeEntity } from '../../narrative/types';
 import { StatId } from '../../../types/stats';
 import { resolveSocial } from '../../interactions/social';
 import { resolveFight } from '../../interactions/fight';
+import { buildEnvironment } from '../../narrative/contextBuilder';
+import { pickContextualText, toFragmentContext } from '../../narrative/templates/shared';
+import {
+  HERD_ALARM_NARRATIVES,
+  BACHELOR_GROUP_NARRATIVES,
+  DOE_HIERARCHY_NARRATIVES,
+  FAWN_PLAY_NARRATIVES,
+  TERRITORIAL_NARRATIVES,
+  YEARLING_DISPERSAL_NARRATIVES,
+} from '../../narrative/templates/social';
 
 // ── Config Types ──
 
@@ -113,8 +123,11 @@ export const HERD_ALARM_CONFIG: SocialTriggerConfig = {
 
   narrative(ctx) {
     const allyName = ctx.npcs?.find((n) => n.type === 'ally' && n.alive)?.name ?? 'A doe nearby';
+    const env = buildEnvironment(ctx);
+    const fragmentCtx = toFragmentContext(env);
+    const text = pickContextualText(HERD_ALARM_NARRATIVES, fragmentCtx, ctx.rng);
     return {
-      text: `${allyName} sees it before you do. Her head snaps up mid-browse, ears locked forward, nostrils flaring. Then the alarm snort — a sharp, percussive exhalation that carries across the clearing like a gunshot. Your body responds before your mind catches up: muscles tensing, head swiveling, legs coiling. The white flag of her tail is already up and pumping as she bolts, and the signal cascades through every deer within earshot.`,
+      text,
       entities: [{ perceivedAs: `${allyName}'s alarm snort`, actualIdentity: `${allyName} (herd member) alarm signaling`, wisdomThreshold: 0, primarySense: 'sound' }],
       actionDetail: `${allyName} snorts — a sharp, percussive exhalation. The white flag of her tail goes up and she bolts. The signal cascades through every deer within earshot.`,
       clinicalDetail: `Herd alarm response initiated by ${allyName}. Conspecific alarm snort detected; flight response triggered.`,
@@ -201,9 +214,12 @@ export const BACHELOR_GROUP_CONFIG: SocialTriggerConfig = {
   ],
   consequences: [],
 
-  narrative(_ctx) {
+  narrative(ctx) {
+    const env = buildEnvironment(ctx);
+    const fragmentCtx = toFragmentContext(env);
+    const text = pickContextualText(BACHELOR_GROUP_NARRATIVES, fragmentCtx, ctx.rng);
     return {
-      text: 'You find them in a sun-dappled clearing — three other bucks, antlers still in velvet, grazing with the lazy confidence of animals that have nothing to prove. There is no aggression here, not yet. This is the summer brotherhood, a temporary peace between males who will be enemies in autumn. One looks up as you approach, assesses you with dark, calm eyes, and returns to feeding. You are accepted.',
+      text,
       entities: [{ perceivedAs: 'three other bucks with velvet antlers', actualIdentity: 'bachelor group of 3 male deer', wisdomThreshold: 0, primarySense: 'sight' }],
       actionDetail: 'Three other bucks grazing in a clearing. Summer brotherhood — no aggression. One assesses you and returns to feeding. You are accepted.',
       clinicalDetail: 'Joined bachelor group. Non-agonistic male social bonding during summer antler growth period.',
@@ -240,9 +256,12 @@ export const DOE_HIERARCHY_CONFIG: SocialTriggerConfig = {
   statEffects: [{ stat: StatId.ADV, amount: 4, duration: 2, label: '+ADV' }],
   consequences: [],
 
-  narrative(_ctx) {
+  narrative(ctx) {
+    const env = buildEnvironment(ctx);
+    const fragmentCtx = toFragmentContext(env);
+    const text = pickContextualText(DOE_HIERARCHY_NARRATIVES, fragmentCtx, ctx.rng);
     return {
-      text: 'She approaches with stiff, deliberate steps — an older doe, scarred and experienced, her posture broadcasting challenge. This is about territory, about the best fawning cover, about hierarchy. She stops three body lengths away and stares, ears pinned back, one front hoof pawing the ground. The message is clear: yield, or be made to yield.',
+      text,
       entities: [{ perceivedAs: 'an older doe with scars, posture broadcasting challenge', actualIdentity: 'dominant doe, hierarchical challenge for fawning territory', wisdomThreshold: 0, primarySense: 'sight' }],
       actionDetail: 'She stops three body lengths away and stares, ears pinned back, one hoof pawing the ground. Yield, or be made to yield.',
       clinicalDetail: 'Female dominance challenge. Intraspecific competition for fawning territory access.',
@@ -327,9 +346,12 @@ export const FAWN_PLAY_CONFIG: SocialTriggerConfig = {
   ],
   consequences: [],
 
-  narrative(_ctx) {
+  narrative(ctx) {
+    const env = buildEnvironment(ctx);
+    const fragmentCtx = toFragmentContext(env);
+    const text = pickContextualText(FAWN_PLAY_NARRATIVES, fragmentCtx, ctx.rng);
     return {
-      text: 'Your fawns are playing. They chase each other through the tall grass in looping, ecstatic sprints, legs flying at angles that seem physically impossible, white spots flashing in the dappled light. One stumbles, rolls, springs back up without breaking stride. The other leaps clean over a fallen log with a joy so pure it is almost painful to watch. They are alive, and they are yours, and for this moment the forest feels safe.',
+      text,
       entities: [{ perceivedAs: 'your fawns chasing each other through tall grass', actualIdentity: 'offspring play behavior', wisdomThreshold: 0, primarySense: 'sight' }],
       actionDetail: 'Your fawns chase each other in looping sprints, white spots flashing in dappled light. They are alive, and they are yours.',
       clinicalDetail: 'Fawn play behavior observed. Locomotive play bouts indicating healthy development and adequate nutrition.',
@@ -373,9 +395,12 @@ export const TERRITORIAL_SCRAPE_CONFIG: SocialTriggerConfig = {
     { type: 'add_calories' as const, amount: -8, source: 'territorial-scraping' },
   ],
 
-  narrative(_ctx) {
+  narrative(ctx) {
+    const env = buildEnvironment(ctx);
+    const fragmentCtx = toFragmentContext(env);
+    const text = pickContextualText(TERRITORIAL_NARRATIVES, fragmentCtx, ctx.rng);
     return {
-      text: 'The urge comes on like a tide — not a thought but a compulsion, rising from somewhere deep in your hindbrain. You find a low-hanging branch and work it with your antlers, twisting and scraping until the bark peels away in long, fragrant strips. Then you paw the earth beneath it into a bare oval, urinate on your tarsal glands, and rub them together until the scent is overpowering. Every buck within half a mile will know you were here. The chemical message is ancient and unmistakable: this is mine.',
+      text,
       entities: [],
       actionDetail: 'You find a low-hanging branch and work it with your antlers. Then paw the earth into a bare oval. Every buck within half a mile will know you were here.',
       clinicalDetail: 'Territorial marking behavior. Antler rub on overhanging branch, ground scrape with tarsal gland scent deposition. Chemical signaling to conspecific males.',
@@ -606,9 +631,14 @@ export const YEARLING_DISPERSAL_CONFIG: SocialTriggerConfig = {
   narrative(ctx) {
     const hasDispersalPressure = ctx.animal.flags?.has?.('dispersal-pressure');
 
-    const text = hasDispersalPressure
-      ? 'The dominant buck finds you in the cedar thicket and there is nothing casual about the approach. Head low, ears pinned, moving with the coiled deliberation of an animal about to attack. The message has moved beyond chemical signals and body language — this is a physical eviction. You are not welcome here anymore. The home range that sheltered you since birth has become hostile territory.'
-      : 'Something has shifted inside you over the past weeks — a restlessness that won\'t quiet. The familiar trails feel confining rather than safe. The mature bucks, who tolerated you through summer, now watch you with flat, hostile eyes. Your mother passed you this morning without a flicker of recognition. The message is biological and unavoidable: it is time to leave.';
+    let text: string;
+    if (hasDispersalPressure) {
+      text = 'The dominant buck finds you in the cedar thicket and there is nothing casual about the approach. Head low, ears pinned, moving with the coiled deliberation of an animal about to attack. The message has moved beyond chemical signals and body language — this is a physical eviction. You are not welcome here anymore. The home range that sheltered you since birth has become hostile territory.';
+    } else {
+      const env = buildEnvironment(ctx);
+      const fragmentCtx = toFragmentContext(env);
+      text = pickContextualText(YEARLING_DISPERSAL_NARRATIVES, fragmentCtx, ctx.rng);
+    }
 
     return {
       text,

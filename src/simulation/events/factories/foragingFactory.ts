@@ -8,6 +8,12 @@ import type {
 } from '../data/foragingConfigs';
 import { StatId } from '../../../types/stats';
 import { buildEnvironment, action, buildNarrativeContext } from '../../narrative/contextBuilder';
+import { pickContextualText, toFragmentContext } from '../../narrative/templates/shared';
+import {
+  SEASONAL_BROWSE_NARRATIVES,
+  CONTEXTUAL_TOXIC_DISCOVERIES,
+  RISKY_FORAGING_NARRATIVES,
+} from '../../narrative/templates/foraging';
 
 // ── Seasonal Browse Factory ──
 
@@ -66,6 +72,13 @@ export function createSeasonalBrowseTrigger(config: SeasonalBrowseConfig): Simul
     resolve(ctx) {
       const entry = matchBrowseEntry(config.entries, ctx) ?? config.fallback;
       const env = buildEnvironment(ctx);
+      const fragCtx = toFragmentContext(env);
+
+      // Use contextual narrative pool with entry.narrative as fallback
+      const narrativeText =
+        SEASONAL_BROWSE_NARRATIVES.length > 0
+          ? pickContextualText(SEASONAL_BROWSE_NARRATIVES, fragCtx, ctx.rng)
+          : entry.narrative;
 
       return {
         harmEvents: [],
@@ -75,12 +88,12 @@ export function createSeasonalBrowseTrigger(config: SeasonalBrowseConfig): Simul
         consequences: entry.bonusCalories !== 0
           ? [{ type: 'add_calories' as const, amount: entry.bonusCalories, source: 'seasonal-browse' }]
           : [],
-        narrativeText: entry.narrative,
+        narrativeText,
         narrativeContext: buildNarrativeContext({
           eventCategory: config.category as any,
           eventType: 'seasonal-browse',
           actions: [action(
-            entry.narrative,
+            narrativeText,
             entry.clinicalDetail || `Seasonal foraging in ${ctx.time.season}/${ctx.currentNodeType ?? 'forest'}. ${entry.bonusCalories >= 0 ? `+${entry.bonusCalories}` : entry.bonusCalories} bonus kcal vs baseline.`,
             entry.bonusCalories < -50 ? 'high' : 'low',
           )],
@@ -129,17 +142,24 @@ export function createRiskyForagingTrigger(config: RiskyForagingConfig): Simulat
       const scenarioIndex = ctx.rng.int(0, config.scenarios.length - 1);
       const scenario = config.scenarios[scenarioIndex](ctx);
       const env = buildEnvironment(ctx);
+      const fragCtx = toFragmentContext(env);
+
+      // Use contextual narrative pool with scenario.narrativeText as fallback
+      const narrativeText =
+        RISKY_FORAGING_NARRATIVES.length > 0
+          ? pickContextualText(RISKY_FORAGING_NARRATIVES, fragCtx, ctx.rng)
+          : scenario.narrativeText;
 
       return {
         harmEvents: [],
         statEffects: [...scenario.statEffects],
         consequences: [...scenario.consequences],
-        narrativeText: scenario.narrativeText,
+        narrativeText,
         narrativeContext: buildNarrativeContext({
           eventCategory: config.category as any,
           eventType: `risky-foraging-${scenario.id}`,
           actions: [action(
-            scenario.narrativeText.substring(0, 200) + '...',
+            narrativeText.substring(0, 200) + '...',
             scenario.clinicalDetail,
             'medium',
           )],
@@ -196,18 +216,26 @@ export function createToxicPlantTrigger(config: ToxicPlantConfig): SimulationTri
       };
 
       const env = buildEnvironment(ctx);
+      const fragCtx = toFragmentContext(env);
+
+      // Use contextual toxic discovery pool with config.narrativeText as fallback
+      const narrativeText =
+        CONTEXTUAL_TOXIC_DISCOVERIES.length > 0
+          ? pickContextualText(CONTEXTUAL_TOXIC_DISCOVERIES, fragCtx, ctx.rng)
+          : config.narrativeText;
+
       return {
         harmEvents: [harmEvent],
         statEffects: [...config.statEffects],
         consequences: [
           { type: 'add_calories' as const, amount: -config.caloryCost, source: 'plant-poisoning' },
         ],
-        narrativeText: config.narrativeText,
+        narrativeText,
         narrativeContext: buildNarrativeContext({
           eventCategory: config.category as any,
           eventType: 'toxic-plant',
           actions: [action(
-            config.narrativeText.substring(0, 200) + '...',
+            narrativeText.substring(0, 200) + '...',
             config.clinicalDetail,
             'high',
             [config.targetZone as any],

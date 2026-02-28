@@ -5,6 +5,15 @@ import type { StatEffect } from '../../../types/events';
 import type { NarrativeEntity } from '../../narrative/types';
 import { StatId } from '../../../types/stats';
 import { resolveExposure } from '../../interactions/exposure';
+import { buildEnvironment } from '../../narrative/contextBuilder';
+import { toFragmentContext, pickContextualText } from '../../narrative/templates/shared';
+import {
+  BLIZZARD_NARRATIVES,
+  FALL_NARRATIVES,
+  VEHICLE_NARRATIVES,
+  FIRE_NARRATIVES,
+  FLOOD_NARRATIVES,
+} from '../../narrative/templates/environment';
 
 // ── Config Types ──
 
@@ -120,15 +129,9 @@ export const FALL_HAZARD_CONFIG: EnvironmentalHazardConfig = {
   narrative: (ctx) => {
     const isIcy = ctx.currentWeather?.type === 'frost' || ctx.currentWeather?.type === 'snow';
     const isMountain = ctx.currentNodeType === 'mountain';
-
-    let text: string;
-    if (isIcy) {
-      text = 'The ground betrays you without warning. What looked like firm earth is a sheet of black ice beneath a dusting of snow, and your hooves lose purchase mid-stride. For one sickening moment you are weightless, legs splaying, and then the impact — hard, jarring, the world tilting sideways as you slam into the frozen ground.';
-    } else if (isMountain) {
-      text = 'The trail narrows along a rocky ledge, loose shale sliding beneath your hooves. You step carefully, but the rock face crumbles — a section of trail simply vanishes, and you are scrabbling at empty air, hind legs kicking at nothing, before the slope catches you and you tumble.';
-    } else {
-      text = 'A root hidden beneath the leaf litter catches your hoof at full stride. The world spins as your front legs buckle and momentum carries you forward into a rolling, crashing fall through the undergrowth.';
-    }
+    const env = buildEnvironment(ctx);
+    const fragmentCtx = toFragmentContext(env);
+    const text = pickContextualText(FALL_NARRATIVES, fragmentCtx, ctx.rng);
 
     return {
       text,
@@ -190,9 +193,9 @@ export const BLIZZARD_EXPOSURE_CONFIG: EnvironmentalHazardConfig = {
 
   narrative: (ctx) => {
     const isBlizzard = ctx.currentWeather?.type === 'blizzard';
-    const text = isBlizzard
-      ? 'The wind hits like a wall of frozen knives. Snow drives horizontally, stinging your eyes shut, packing into your nostrils. You cannot see. You cannot hear anything over the roar. The temperature is dropping by the minute and the wind strips the heat from your body faster than your metabolism can replace it. You need shelter. Now.'
-      : 'The cold deepens overnight into something that feels personal — malicious, searching, finding every thin patch of fur and pressing in. Frost crystallizes on your muzzle and around your eyes. Your legs feel leaden and stiff. Even the act of shivering is becoming exhausting.';
+    const env = buildEnvironment(ctx);
+    const fragmentCtx = toFragmentContext(env);
+    const text = pickContextualText(BLIZZARD_NARRATIVES, fragmentCtx, ctx.rng);
 
     return {
       text,
@@ -273,13 +276,19 @@ export const VEHICLE_STRIKE_CONFIG: EnvironmentalHazardConfig = {
     { stat: StatId.TRA, amount: 8, duration: 3, label: '+TRA' },
   ],
 
-  narrative: () => ({
-    text: 'You step out of the tree line and something is wrong — the ground beneath your hooves is flat and hard and smells of tar. Two blazing lights appear, impossibly bright, growing at impossible speed, accompanied by a rising roar. Every nerve in your body fires at once.',
-    actionDetail: 'Two blazing lights appear, impossibly bright, growing at impossible speed, accompanied by a rising roar. Every nerve in your body fires at once.',
-    clinicalDetail: 'Deer-vehicle encounter on road. Approaching vehicle at speed.',
-    intensity: 'extreme',
-    emotionalTone: 'confusion',
-  }),
+  narrative: (ctx) => {
+    const env = buildEnvironment(ctx);
+    const fragmentCtx = toFragmentContext(env);
+    const text = pickContextualText(VEHICLE_NARRATIVES, fragmentCtx, ctx.rng);
+
+    return {
+      text,
+      actionDetail: text,
+      clinicalDetail: 'Deer-vehicle encounter on road. Approaching vehicle at speed.',
+      intensity: 'extreme',
+      emotionalTone: 'confusion',
+    };
+  },
 
   choices: (ctx) => {
     const locomotion = ctx.animal.bodyState?.capabilities['locomotion'] ?? 100;
@@ -380,13 +389,19 @@ export const FOREST_FIRE_CONFIG: EnvironmentalHazardConfig = {
     { stat: StatId.ADV, amount: 10, duration: 3, label: '+ADV' },
   ],
 
-  narrative: () => ({
-    text: 'You smell it before the sky turns — smoke, acrid and thickening, rolling through the understory in low, grey waves that sting your eyes and coat the back of your throat. Then the sound reaches you: a distant, continuous roar, like a river made of heat. Through the trees you see an orange glow that is not sunset — it is fire, and it is coming toward you at the speed of wind.',
-    actionDetail: 'Smoke rolls through the understory, stinging your eyes. Through the trees — an orange glow, coming toward you at the speed of wind.',
-    clinicalDetail: 'Wildfire approaching. Smoke inhalation risk. Animal must choose escape route.',
-    intensity: 'extreme',
-    emotionalTone: 'fear',
-  }),
+  narrative: (ctx) => {
+    const env = buildEnvironment(ctx);
+    const fragmentCtx = toFragmentContext(env);
+    const text = pickContextualText(FIRE_NARRATIVES, fragmentCtx, ctx.rng);
+
+    return {
+      text,
+      actionDetail: text,
+      clinicalDetail: 'Wildfire approaching. Smoke inhalation risk. Animal must choose escape route.',
+      intensity: 'extreme',
+      emotionalTone: 'fear',
+    };
+  },
 
   choices: (ctx) => {
     const locomotion = ctx.animal.bodyState?.capabilities['locomotion'] ?? 100;
@@ -496,13 +511,19 @@ export const FLOODING_CREEK_CONFIG: EnvironmentalHazardConfig = {
     { stat: StatId.NOV, amount: 5, duration: 2, label: '+NOV' },
   ],
 
-  narrative: () => ({
-    text: 'The creek that you crossed yesterday at ankle depth is unrecognizable. Muddy water surges bank to bank, carrying branches, leaves, and the occasional drowned rodent spinning in the current. The far side holds better browse — you can see the green from here — but the water between you and it is fast, cold, and deep enough to swallow you whole.',
-    actionDetail: 'The creek that you crossed yesterday at ankle depth is unrecognizable. The water is fast, cold, and deep enough to swallow you whole.',
-    clinicalDetail: 'Flash flooding of creek crossing. Drowning risk and cold exposure if crossing attempted.',
-    intensity: 'high',
-    emotionalTone: 'tension',
-  }),
+  narrative: (ctx) => {
+    const env = buildEnvironment(ctx);
+    const fragmentCtx = toFragmentContext(env);
+    const text = pickContextualText(FLOOD_NARRATIVES, fragmentCtx, ctx.rng);
+
+    return {
+      text,
+      actionDetail: text,
+      clinicalDetail: 'Flash flooding of creek crossing. Drowning risk and cold exposure if crossing attempted.',
+      intensity: 'high',
+      emotionalTone: 'tension',
+    };
+  },
 
   choices: (ctx) => {
     const locomotion = ctx.animal.bodyState?.capabilities['locomotion'] ?? 100;
