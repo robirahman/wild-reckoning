@@ -2,7 +2,7 @@
 
 ## Summary
 
-The simulation transition is complete through Phases A, B, and the data-driven refactor (trigger extraction, narrative expansion, weather extraction). The species unlock system (Phase C) remains as future work.
+The simulation transition is complete through all planned phases: A, B, data-driven refactor (trigger extraction, narrative expansion, weather extraction), and Phase C (species unlock system).
 
 ### Completed Work
 
@@ -50,32 +50,13 @@ Trigger files reduced from ~3,500 lines of hardcoded logic to ~100 lines of fact
 - Rewrote `WeatherSystem.ts` to use data-driven lookups from config instead of switch/if-else chains
 - All 9 WeatherSystem tests pass unchanged
 
----
+**Phase C: Species Unlock System** — Done
 
-## Remaining Work
-
-### Phase C: Species Unlock System
-
-**Goal**: Beat the game as deer (have offspring that survive to adulthood) to unlock gray wolf. The vision doc says "hunting sheep as a lion should make you remember what it's like to be hunted."
-
-#### C1. Unlock state types
-
-- New file: `src/types/unlock.ts` — `SpeciesUnlock` interface, `UnlockCondition` type, `UNLOCK_CHAIN` constant
-- Unlock chain: `white-tailed-deer` (default) → `gray-wolf` → future species
-- Condition: `{ type: 'offspring_survived', speciesId: 'white-tailed-deer', count: 1 }`
-
-#### C2. Unlock persistence
-
-- `src/store/persistence.ts`: add `unlockedSpecies: string[]` to a new `META_STORAGE_KEY` (separate from save game — persists across runs)
-- Helper functions: `getUnlockedSpecies()`, `unlockSpecies(id)`, `isSpeciesUnlocked(id)`
-
-#### C3. Check unlock on death
-
-- `src/components/DeathScreen.tsx`: after rendering the grade, check if any offspring survived to adulthood. If so, call `unlockSpecies('gray-wolf')` and show an unlock notification.
-
-#### C4. Gate species selection
-
-- `src/components/SpeciesSelect.tsx` (or equivalent menu component): show locked species as grayed-out with unlock hint text ("Survive as a deer to unlock")
+- Added `deer-offspring-survived` achievement (checked on death) — having any offspring survive to adulthood as deer
+- Changed gray wolf unlock from `{ type: 'default' }` to `{ type: 'achievement', achievementId: 'deer-offspring-survived' }`
+- Added species unlock notification on death screen (green banner with unlock icon)
+- Leveraged existing infrastructure: `achievementStore.ts` persistence, `AchievementChecker.ts` death checks, `StartScreen.tsx` species gating UI
+- Full unlock chain: deer (default) → wolf (deer offspring survived) → polar bear, elephant, salmon (various achievements) → turtle, octopus → frog, butterfly → tern → honeybee → fig wasp
 
 ---
 
@@ -87,3 +68,5 @@ Trigger files reduced from ~3,500 lines of hardcoded logic to ~100 lines of fact
 - Weather system uses declarative config table
 - Causal chains built on death, displayed in CausalChainPanel on death screen
 - Debriefing panel shows flat timeline below causal chains
+- Species unlock progression: gray wolf locked behind deer offspring survival achievement
+- All planned phases complete
