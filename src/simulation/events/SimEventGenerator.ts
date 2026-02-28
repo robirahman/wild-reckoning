@@ -8,7 +8,7 @@ import { renderAnimalPerspective, toDebriefingEntry } from '../narrative/rendere
 
 import { wolfPackTrigger, coyoteStalkerTrigger, cougarAmbushTrigger, huntingSeasonTrigger } from './triggers/predatorEncounter';
 import { rutCombatTrigger } from './triggers/intraspecificFight';
-import { fallHazardTrigger, blizzardExposureTrigger, vehicleStrikeTrigger, forestFireTrigger, floodingCreekTrigger, dispersalNewRangeTrigger } from './triggers/environmentalHazard';
+import { fallHazardTrigger, blizzardExposureTrigger, vehicleStrikeTrigger, forestFireTrigger, floodingCreekTrigger, dispersalNewRangeTrigger, barbedWireTrigger, iceFallThroughTrigger, mudTrapTrigger } from './triggers/environmentalHazard';
 import { seasonalBrowseTrigger, riskyForagingTrigger, toxicPlantTrigger } from './triggers/foraging';
 import { parasiteExposureTrigger, woundInfectionTrigger, diseaseOutbreakTrigger } from './triggers/disease';
 import { rehabilitationIntroTrigger } from './triggers/rehabilitationIntro';
@@ -48,6 +48,13 @@ import {
   feverEventTrigger,
   sepsisEventTrigger,
 } from './triggers/woundProgression';
+import {
+  locomotionImpairmentTrigger,
+  visionImpairmentTrigger,
+  breathingImpairmentTrigger,
+  herdSeparationTrigger,
+  starvationInfectionTrigger,
+} from './triggers/impairmentNarrative';
 
 const ALL_TRIGGERS: SimulationTrigger[] = [
   rehabilitationIntroTrigger,
@@ -97,10 +104,19 @@ const ALL_TRIGGERS: SimulationTrigger[] = [
   forestFireTrigger,
   floodingCreekTrigger,
   dispersalNewRangeTrigger,
+  barbedWireTrigger,
+  iceFallThroughTrigger,
+  mudTrapTrigger,
   // Wound progression triggers (condition cascades)
   woundDeteriorationTrigger,
   feverEventTrigger,
   sepsisEventTrigger,
+  // Impairment narrative triggers (emergent feedback loops)
+  locomotionImpairmentTrigger,
+  visionImpairmentTrigger,
+  breathingImpairmentTrigger,
+  herdSeparationTrigger,
+  starvationInfectionTrigger,
 ];
 
 // ── Behavioral Multiplier (mirrors EventGenerator logic) ──
@@ -122,6 +138,89 @@ function behaviorMultiplier(trigger: SimulationTrigger, ctx: SimulationContext):
   return mult;
 }
 
+// ── Body-State Multiplier ──
+// Applies global weight modifiers based on the animal's physical condition.
+// This creates emergent feedback loops: injuries attract predators, hunger
+// drives foraging, sickness suppresses exploration, etc.
+
+function stateMultiplier(trigger: SimulationTrigger, ctx: SimulationContext): number {
+  let mult = 1.0;
+  const tags = trigger.tags;
+  const bs = ctx.animal.bodyState;
+  const ps = ctx.animal.physiologyState;
+
+  // ── Locomotion impairment ──
+  const locomotion = bs?.capabilities['locomotion'] ?? 100;
+  const locoImpairment = (100 - locomotion) / 100; // 0 = healthy, 1 = fully impaired
+
+  if (tags.includes('predator') || tags.includes('danger')) {
+    // Predators target weak prey — impaired locomotion makes encounters more likely
+    mult *= 1 + locoImpairment * 0.6;
+  }
+  if (tags.includes('travel') || tags.includes('exploration') || tags.includes('migration')) {
+    // Hard to travel when you can't walk well
+    mult *= 1 - locoImpairment * 0.5;
+  }
+
+  // ── Open wounds (blood scent attracts predators and parasites) ──
+  const openWounds = bs?.conditions.filter(
+    c => (c.type === 'laceration' || c.type === 'puncture') && c.infectionLevel < 30
+  ).length ?? 0;
+  if (openWounds > 0) {
+    if (tags.includes('predator')) mult *= 1 + openWounds * 0.15;
+    if (tags.includes('disease') || tags.includes('parasite')) mult *= 1 + openWounds * 0.25;
+  }
+
+  // ── Caloric state (hunger drives foraging, suppresses other activities) ──
+  const bcs = ps?.bodyConditionScore ?? 3;
+  if (bcs <= 2) {
+    if (tags.includes('foraging') || tags.includes('food')) {
+      mult *= 1.4; // hunger makes foraging events more prominent
+    }
+    if (tags.includes('social') || tags.includes('exploration')) {
+      mult *= 0.7; // starving animals are less social and less curious
+    }
+    // Malnourished animals are weaker prey
+    if (tags.includes('predator')) mult *= 1 + (3 - bcs) * 0.15;
+  }
+
+  // ── Fever / immunocompromised ──
+  if (ps?.immunocompromised) {
+    if (tags.includes('disease') || tags.includes('parasite')) {
+      mult *= 1.5; // weakened immune system → more susceptible
+    }
+    if (tags.includes('confrontation') || tags.includes('territorial')) {
+      mult *= 0.5; // sick animals avoid conflict
+    }
+  }
+  if (ps && ps.feverLevel > 2) {
+    // Fever suppresses physical activity events
+    if (tags.includes('travel') || tags.includes('exploration') || tags.includes('confrontation')) {
+      mult *= Math.max(0.3, 1 - ps.feverLevel * 0.1);
+    }
+  }
+
+  // ── High trauma → anxiety events more likely ──
+  const tra = computeEffectiveValue(ctx.animal.stats[StatId.TRA]);
+  if (tra > 60) {
+    if (tags.includes('predator') || tags.includes('danger')) {
+      // Hypervigilance: traumatized animals perceive more threats
+      mult *= 1 + (tra - 60) * 0.005;
+    }
+  }
+
+  // ── Vision impairment ──
+  const vision = bs?.capabilities['vision'] ?? 100;
+  if (vision < 70) {
+    // Poor vision increases danger from ambush predators
+    if (tags.includes('predator')) mult *= 1 + (70 - vision) * 0.008;
+    // But decreases likelihood of finding food
+    if (tags.includes('foraging')) mult *= 0.8;
+  }
+
+  return Math.max(0.1, mult); // floor at 0.1 so events are never fully suppressed
+}
+
 // ── Generator ──
 
 /**
@@ -133,11 +232,12 @@ export function generateSimulationEvents(ctx: SimulationContext): ResolvedEvent[
   const plausible = ALL_TRIGGERS.filter((t) => t.isPlausible(ctx));
   if (plausible.length === 0) return [];
 
-  // 2. Compute weights
+  // 2. Compute weights (base × behavior × body-state)
   const weights = plausible.map((t) => {
     const base = t.computeWeight(ctx);
     const bMult = behaviorMultiplier(t, ctx);
-    return Math.max(0, base * bMult);
+    const sMult = stateMultiplier(t, ctx);
+    return Math.max(0, base * bMult * sMult);
   });
 
   const results: ResolvedEvent[] = [];

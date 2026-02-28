@@ -153,6 +153,11 @@ const CONDITION_DESCRIPTIONS: Record<string, ConditionDescription> = {
     clinicalView: 'laceration',
     discloseTermDuringPlay: true, // you feel the wound
   },
+  contusion: {
+    animalView: 'deeply bruised',
+    clinicalView: 'contusion',
+    discloseTermDuringPlay: true,
+  },
   bruise: {
     animalView: 'deeply bruised',
     clinicalView: 'contusion',
@@ -178,6 +183,16 @@ const CONDITION_DESCRIPTIONS: Record<string, ConditionDescription> = {
     clinicalView: 'puncture wound',
     discloseTermDuringPlay: true,
   },
+  sprain: {
+    animalView: 'swollen and tender, refusing to bear full weight',
+    clinicalView: 'ligament sprain',
+    discloseTermDuringPlay: true, // felt directly
+  },
+  dislocation: {
+    animalView: 'wrong — the joint sits at an angle that makes your body recoil',
+    clinicalView: 'joint dislocation',
+    discloseTermDuringPlay: true, // felt directly
+  },
   organ_damage: {
     animalView: 'a deep, nauseating wrongness inside',
     clinicalView: 'internal organ damage',
@@ -198,7 +213,127 @@ const CONDITION_DESCRIPTIONS: Record<string, ConditionDescription> = {
     clinicalView: 'spinal cord injury',
     discloseTermDuringPlay: false, // terrifyingly non-understandable to the animal
   },
+  // ── Additional conditions for expanded simulation ──
+  hypothermia_mild: {
+    animalView: 'sluggish, as though moving through cold water from the inside',
+    clinicalView: 'mild hypothermia',
+    discloseTermDuringPlay: true, // non-actionable
+  },
+  hypothermia_severe: {
+    animalView: 'the shivering has stopped — a strange warmth spreads through you, and you feel almost peaceful',
+    clinicalView: 'severe hypothermia (paradoxical undressing phase)',
+    discloseTermDuringPlay: false, // the "warmth" is itself the danger — disclosing would break immersion
+  },
+  malnutrition: {
+    animalView: 'your ribs press against your hide — food fills your stomach but leaves you hollow',
+    clinicalView: 'chronic malnutrition (BCS 1-2)',
+    discloseTermDuringPlay: true, // non-actionable
+  },
+  abscess: {
+    animalView: 'a hard, hot lump beneath the skin, pulsing with your heartbeat',
+    clinicalView: 'subcutaneous abscess',
+    discloseTermDuringPlay: true, // non-actionable
+  },
+  parasitic_neuro: {
+    animalView: 'something behind your eyes that shouldn\'t be there — the world tilts when you turn your head',
+    clinicalView: 'meningeal worm (P. tenuis) neurological damage',
+    discloseTermDuringPlay: true, // knowing it's a "brainworm" doesn't help you fix it
+  },
+  parasitic_liver: {
+    animalView: 'a deep ache in your side that worsens after eating, and nothing you do eases it',
+    clinicalView: 'liver fluke (F. magna) hepatic damage',
+    discloseTermDuringPlay: true, // non-actionable
+  },
+  tick_infestation: {
+    animalView: 'hundreds of pinpoint irritations across your neck and shoulders, each one a tiny mouth burrowing deeper',
+    clinicalView: 'winter tick infestation (D. albipictus)',
+    discloseTermDuringPlay: true, // non-actionable
+  },
+  antler_damage: {
+    animalView: 'a piece of your crown is gone — splintered where it struck, leaving a jagged edge',
+    clinicalView: 'antler tine fracture',
+    discloseTermDuringPlay: true, // felt directly
+  },
+  pneumonia: {
+    animalView: 'a wet, rattling sound in your chest with every breath, and a feeling of drowning on dry land',
+    clinicalView: 'pneumonia',
+    discloseTermDuringPlay: true, // non-actionable
+  },
+  sepsis: {
+    animalView: 'everything is wrong — trembling, burning, the world tilting and spinning',
+    clinicalView: 'sepsis (systemic inflammatory response)',
+    discloseTermDuringPlay: true, // non-actionable
+  },
 };
+
+// ══════════════════════════════════════════════════
+//  CAPABILITY IMPAIRMENT DESCRIPTIONS
+// ══════════════════════════════════════════════════
+
+interface CapabilityDescription {
+  /** Threshold ranges and their animal-perspective descriptions */
+  ranges: Array<{
+    max: number; // capability value must be < this
+    min: number; // capability value must be >= this
+    animalView: string;
+    clinicalView: string;
+  }>;
+}
+
+const CAPABILITY_DESCRIPTIONS: Record<string, CapabilityDescription> = {
+  locomotion: {
+    ranges: [
+      { max: 100, min: 80, animalView: 'Your gait hitches slightly with each stride — a small hesitation where the body negotiates with damage before committing.', clinicalView: 'Mild locomotor impairment — gait asymmetry detectable.' },
+      { max: 80, min: 60, animalView: 'Every step is a conscious act. You favor the damaged side, listing slightly, and your pace has slowed to something that would shame a fawn.', clinicalView: 'Moderate locomotor impairment — compensatory gait pattern, reduced speed.' },
+      { max: 60, min: 40, animalView: 'Walking is a deliberate, calculated act. Each step must be planned, tested, committed to. Your gait draws attention from everything with eyes.', clinicalView: 'Significant locomotor impairment — sustained flight impossible.' },
+      { max: 40, min: 20, animalView: 'You drag yourself forward on trembling legs. The world has shrunk to the next few steps and the desperate hope that you can make them.', clinicalView: 'Severe locomotor impairment — animal effectively hobbled.' },
+      { max: 20, min: 0, animalView: 'Movement is agony. The world has shrunk to the patch of ground beneath you. Your muscles tremble from the effort of simply remaining upright.', clinicalView: 'Near-total locomotor failure — animal immobile.' },
+    ],
+  },
+  vision: {
+    ranges: [
+      { max: 100, min: 70, animalView: 'Distant details are slightly blurred, as though seen through heat shimmer.', clinicalView: 'Mild visual impairment.' },
+      { max: 70, min: 50, animalView: 'The world is dimming — not the way twilight dims it, but from within. You rely more on your ears, turning your head to track sounds your eyes can no longer resolve.', clinicalView: 'Moderate visual impairment — increasingly dependent on auditory detection.' },
+      { max: 50, min: 20, animalView: 'Shadows take threatening shapes. The edges of everything blur and merge. You flinch at phantoms.', clinicalView: 'Significant visual impairment — spatial awareness severely degraded.' },
+      { max: 20, min: 0, animalView: 'The world is dissolving into a gray wash where nothing has edges. You navigate by smell and memory alone.', clinicalView: 'Near-total vision loss.' },
+    ],
+  },
+  breathing: {
+    ranges: [
+      { max: 100, min: 70, animalView: 'Your breath catches slightly after exertion, a tightness that takes a moment longer than it should to clear.', clinicalView: 'Mild respiratory compromise.' },
+      { max: 70, min: 50, animalView: 'Your chest is tight. You breathe in and the air stops short, filling only part of your lungs before something refuses it further entry.', clinicalView: 'Moderate respiratory impairment — exercise intolerance.' },
+      { max: 50, min: 25, animalView: 'The smallest exertion leaves you gasping, sides heaving, heart racing to compensate for what your lungs cannot provide.', clinicalView: 'Significant respiratory impairment — dyspnea on minimal exertion.' },
+      { max: 25, min: 0, animalView: 'Each breath is a shallow, wheezing negotiation between your lungs and the air, and the air is winning. The world narrows to the next breath.', clinicalView: 'Severe respiratory failure — dyspnea at rest.' },
+    ],
+  },
+  digestion: {
+    ranges: [
+      { max: 100, min: 60, animalView: 'Your stomach feels unsettled — food sits heavy and seems to pass through without nourishing.', clinicalView: 'Mild digestive impairment — reduced caloric extraction.' },
+      { max: 60, min: 30, animalView: 'Eating is followed by cramping and nausea. Your body rejects what it desperately needs.', clinicalView: 'Moderate digestive impairment — malabsorption.' },
+      { max: 30, min: 0, animalView: 'Food passes through you like water through sand. Your body is starving no matter how much you eat.', clinicalView: 'Severe digestive failure — critical malabsorption.' },
+    ],
+  },
+};
+
+/**
+ * Get an animal-perspective description of the current capability level.
+ * Returns undefined if the capability is not impaired enough to describe.
+ */
+export function describeCapabilityImpairment(
+  capability: string,
+  value: number,
+  mode: 'gameplay' | 'debriefing',
+): string | undefined {
+  const desc = CAPABILITY_DESCRIPTIONS[capability];
+  if (!desc) return undefined;
+
+  for (const range of desc.ranges) {
+    if (value < range.max && value >= range.min) {
+      return mode === 'debriefing' ? range.clinicalView : range.animalView;
+    }
+  }
+  return undefined;
+}
 
 /**
  * Get the appropriate description for a body condition.

@@ -34,6 +34,18 @@ export function computeInstincts(ctx: SimulationContext): InstinctNudge[] {
   // ── Social isolation ──
   checkSocial(ctx, nudges);
 
+  // ── Predator scent / proximity ──
+  checkPredatorProximity(ctx, nudges);
+
+  // ── Unfamiliar territory ──
+  checkTerritoryFamiliarity(ctx, nudges);
+
+  // ── Dawn/dusk alertness ──
+  checkCrepuscularAlertness(ctx, nudges);
+
+  // ── Vision impairment anxiety ──
+  checkVisionAnxiety(ctx, nudges);
+
   // Sort by priority (high first), then take top 3
   const priorityOrder = { high: 0, medium: 1, low: 2 };
   nudges.sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]);
@@ -250,6 +262,107 @@ function checkSocial(ctx: SimulationContext, nudges: InstinctNudge[]): void {
       suggestedDirection: 'increase',
       priority: 'low',
       source: 'social',
+    });
+  }
+}
+
+function checkPredatorProximity(ctx: SimulationContext, nudges: InstinctNudge[]): void {
+  if (!ctx.npcs || !ctx.npcBehaviorStates) return;
+
+  // Check if any predator NPC is nearby and hunting
+  const nearbyHunter = ctx.npcs.some(npc => {
+    if (!npc.alive || npc.type !== 'predator') return false;
+    const behavior = ctx.npcBehaviorStates?.[npc.id];
+    if (!behavior || behavior.intent !== 'hunting') return false;
+    return npc.currentNodeId === ctx.currentNodeId;
+  });
+
+  if (nearbyHunter) {
+    nudges.push({
+      id: 'predator-scent',
+      label: 'Predator Scent',
+      description: 'A sharp, acrid musk on the wind that makes every muscle lock rigid. Something is hunting here. Something close. The urge to flee is almost overwhelming.',
+      suggestedBehavior: 'caution',
+      suggestedDirection: 'increase',
+      priority: 'high',
+      source: 'predator',
+    });
+  } else {
+    // Check threat map for recent encounters in this area
+    const nodeId = ctx.currentNodeId;
+    if (nodeId && ctx.worldMemory?.nodeMemory[nodeId]) {
+      const nodeMem = ctx.worldMemory.nodeMemory[nodeId];
+      if (nodeMem.killCount > 0 && (ctx.time.turn - nodeMem.lastKillTurn) < 6) {
+        nudges.push({
+          id: 'death-scent',
+          label: 'Death Scent',
+          description: 'The ground here smells of old blood and fear. Something died here recently. Your body wants to be elsewhere — anywhere but this killing ground.',
+          suggestedBehavior: 'exploration',
+          suggestedDirection: 'increase',
+          priority: 'medium',
+          source: 'predator',
+        });
+      }
+    }
+  }
+}
+
+function checkTerritoryFamiliarity(ctx: SimulationContext, nudges: InstinctNudge[]): void {
+  if (!ctx.worldMemory?.nodeMemory || !ctx.currentNodeId) return;
+
+  const nodeMem = ctx.worldMemory.nodeMemory[ctx.currentNodeId];
+  // If the animal has spent very little time in this node, it's unfamiliar
+  if (!nodeMem || nodeMem.turnsOccupied <= 1) {
+    nudges.push({
+      id: 'unfamiliar-ground',
+      label: 'Unfamiliar Ground',
+      description: 'Nothing here smells right. The paths are wrong, the cover is uncertain, the escape routes unknown. Your body is tense with the vulnerability of not knowing this ground.',
+      suggestedBehavior: 'caution',
+      suggestedDirection: 'increase',
+      priority: 'low',
+      source: 'territory',
+    });
+  }
+}
+
+function checkCrepuscularAlertness(ctx: SimulationContext, nudges: InstinctNudge[]): void {
+  const timeOfDay = ctx.time.timeOfDay;
+
+  // Dawn and dusk are peak predator activity times
+  if (timeOfDay === 'dusk' || timeOfDay === 'dawn') {
+    // Only trigger if there are predators in the ecosystem
+    const hasPredators = ctx.ecosystem && Object.entries(ctx.ecosystem.populations).some(
+      ([key, pop]) => (key.includes('Wolf') || key.includes('Cougar') || key.includes('Coyote')) && pop.level > -2,
+    );
+
+    if (hasPredators) {
+      nudges.push({
+        id: 'twilight-alert',
+        label: 'Twilight Alert',
+        description: timeOfDay === 'dusk'
+          ? 'The light is failing and the shadows are deepening. This is when they hunt — the gray shapes that flow between the trees. Your ears swivel constantly, tracking every sound.'
+          : 'The first light brings the most dangerous hour. Predators are finishing their night hunts, hungry and desperate. You watch the tree line with every nerve alight.',
+        suggestedBehavior: 'caution',
+        suggestedDirection: 'increase',
+        priority: 'low',
+        source: 'circadian',
+      });
+    }
+  }
+}
+
+function checkVisionAnxiety(ctx: SimulationContext, nudges: InstinctNudge[]): void {
+  const vision = ctx.animal.bodyState?.capabilities['vision'] ?? 100;
+
+  if (vision < 40) {
+    nudges.push({
+      id: 'blind-terror',
+      label: 'Blind Terror',
+      description: 'The world is a blur of indistinct shapes and shifting shadows. Every sound is amplified by what you cannot see. The darkness behind your failing eyes is more frightening than any predator.',
+      suggestedBehavior: 'caution',
+      suggestedDirection: 'increase',
+      priority: 'high',
+      source: 'injury',
     });
   }
 }

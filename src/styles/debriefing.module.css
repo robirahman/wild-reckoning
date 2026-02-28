@@ -135,6 +135,90 @@
   font-style: italic;
 }
 
+/* View toggle for timeline vs chain view */
+.viewToggle {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 16px;
+}
+
+.viewButton {
+  padding: 4px 12px;
+  font-size: 0.75rem;
+  font-family: var(--font-ui);
+  font-weight: 600;
+  border: 1px solid var(--color-border);
+  border-radius: 3px;
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+}
+
+.viewButton:hover {
+  background: var(--color-bar-bg);
+}
+
+.viewButtonActive {
+  composes: viewButton;
+  background: var(--color-panel-bg);
+  color: var(--color-text);
+  border-color: var(--color-accent);
+}
+
+/* Causal chain link display */
+.chainLinks {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 8px 0;
+  padding-left: 8px;
+  border-left: 2px solid var(--color-border-light);
+}
+
+.chainLink {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.chainIcon {
+  flex-shrink: 0;
+  width: 14px;
+  text-align: center;
+  font-weight: 700;
+  color: var(--color-text-muted);
+}
+
+.chainTurn {
+  flex-shrink: 0;
+  width: 28px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.chainArrow {
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+}
+
+.chainEffect {
+  font-weight: 600;
+  color: var(--color-text);
+  font-size: 0.78rem;
+}
+
+.chainSummary {
+  margin-top: 8px;
+  font-size: 0.75rem;
+  font-family: var(--font-narrative);
+  font-style: italic;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
 @media (max-width: 768px) {
   .dualView {
     grid-template-columns: 1fr;

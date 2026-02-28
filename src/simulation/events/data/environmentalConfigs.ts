@@ -604,6 +604,340 @@ export const FLOODING_CREEK_CONFIG: EnvironmentalHazardConfig = {
   },
 };
 
+// ══════════════════════════════════════════════════
+//  BARBED WIRE FENCE — year-round hazard near farmland/suburban edges
+// ══════════════════════════════════════════════════
+
+export const BARBED_WIRE_CONFIG: EnvironmentalHazardConfig = {
+  id: 'sim-barbed-wire',
+  category: 'environmental',
+  tags: ['danger', 'human', 'exploration'],
+
+  plausibility: {
+    custom: (ctx) =>
+      ctx.currentNodeType === 'farmstead' ||
+      ctx.currentNodeType === 'plain' ||
+      ctx.currentNodeType === 'suburban',
+  },
+
+  weight: {
+    base: 0.012,
+    locomotionImpairmentFactor: 1.5, // impaired animals get tangled more easily
+    explorationBehaviorFactor: 0.3,
+    terrainMultipliers: { farmstead: 2, suburban: 1.5 },
+    timeMultipliers: { night: 1.8, dusk: 1.3 }, // harder to see in low light
+  },
+
+  statEffects: [
+    { stat: StatId.NOV, amount: 5, duration: 2, label: '+NOV' },
+    { stat: StatId.TRA, amount: 3, duration: 2, label: '+TRA' },
+  ],
+
+  harmTemplate: (ctx) => {
+    const loco = ctx.animal.bodyState?.capabilities['locomotion'] ?? 100;
+    // Worse injuries if impaired (can't clear the fence cleanly)
+    const baseMag = loco < 60 ? [30, 55] as [number, number] : [15, 35] as [number, number];
+    return {
+      sourceLabel: 'barbed wire laceration',
+      magnitudeRange: baseMag,
+      targetZones: ['front-legs', 'hind-legs', 'torso'],
+      spread: 0.3,
+      harmType: 'sharp',
+    };
+  },
+
+  narrative: (ctx) => {
+    const loco = ctx.animal.bodyState?.capabilities['locomotion'] ?? 100;
+    const isNight = ctx.time.timeOfDay === 'night' || ctx.time.timeOfDay === 'dusk';
+    const env = buildEnvironment(ctx);
+
+    let text: string;
+    if (loco < 60) {
+      text = 'The fence appears without warning — a line of thin, vicious wire strung between wooden posts. You try to jump, but your damaged legs betray you. The wire catches your belly and legs, biting deep, and for a terrible moment you are tangled, thrashing, the barbs tearing new wounds with every panicked movement. When you finally wrench free, you leave tufts of fur and streaks of blood on the wire behind you.';
+    } else if (isNight) {
+      text = 'In the darkness, the fence is invisible until you are upon it. The wire catches you mid-stride, barbs raking across your chest and forelegs in a line of fire. You scramble backward, then forward, then over — clearing it with a desperate lunge that leaves a long gash along your flank.';
+    } else {
+      text = 'The fence line stretches across the meadow — a human boundary invisible in intent but brutally physical in execution. You leap, but the top wire catches your belly, the twisted barbs finding skin beneath the fur. You clear it, but the price is a stinging line of blood that will attract flies for days.';
+    }
+
+    return {
+      text,
+      actionDetail: text,
+      clinicalDetail: `Barbed wire fence encounter. Lacerations to ${loco < 60 ? 'multiple body zones from entanglement' : 'ventral and limb surfaces from fence crossing'}. Open wound infection risk elevated.`,
+      intensity: loco < 60 ? 'high' : 'medium',
+      emotionalTone: 'pain',
+    };
+  },
+
+  choices: (ctx) => {
+    const loco = ctx.animal.bodyState?.capabilities['locomotion'] ?? 100;
+    if (loco >= 70) return []; // Healthy deer clear fences without incident often enough
+
+    return [
+      {
+        id: 'force-through',
+        label: 'Force through the fence',
+        description: 'Power through. The wire will cut, but you will be free.',
+        style: 'danger',
+        narrativeResult: 'You lower your head and charge. The wire screams against your hide, barbs tearing furrows in your skin. But momentum carries you through. On the other side, you stand bleeding and panting, but free.',
+        modifyOutcome(base) {
+          return base; // Default harm applies
+        },
+      },
+      {
+        id: 'find-gap',
+        label: 'Search for a gap or low point',
+        description: 'There may be a place where the fence sags or the bottom wire is loose.',
+        style: 'default',
+        narrativeResult: 'You walk the fence line, testing, until you find a place where the bottom wire has pulled loose from its staple. You wriggle under, belly pressed to the earth, and emerge on the other side with only minor scratches.',
+        modifyOutcome(base, innerCtx) {
+          const foundGap = innerCtx.rng.chance(0.6);
+          if (foundGap) {
+            return {
+              ...base,
+              harmEvents: [], // No harm from finding a gap
+              consequences: [
+                { type: 'add_calories' as const, amount: -20, source: 'fence search' },
+              ],
+            };
+          }
+          return base; // Couldn't find gap, default harm
+        },
+      },
+    ];
+  },
+};
+
+// ══════════════════════════════════════════════════
+//  ICE FALL-THROUGH — winter water hazard
+// ══════════════════════════════════════════════════
+
+export const ICE_FALL_THROUGH_CONFIG: EnvironmentalHazardConfig = {
+  id: 'sim-ice-fall-through',
+  category: 'environmental',
+  tags: ['danger', 'water', 'seasonal'],
+
+  plausibility: {
+    seasons: ['winter'],
+    custom: (ctx) => ctx.currentNodeType === 'water' || ctx.currentNodeType === 'wetland',
+  },
+
+  weight: {
+    base: 0.008,
+    terrainMultipliers: { water: 2, wetland: 1.5 },
+    custom: (ctx, base) => {
+      // Higher risk in early winter (thin ice) and late winter (thaw)
+      if (ctx.time.monthIndex === 0 || ctx.time.monthIndex === 2) return base * 2;
+      return base;
+    },
+  },
+
+  statEffects: [
+    { stat: StatId.CLI, amount: 15, duration: 4, label: '+CLI' },
+    { stat: StatId.TRA, amount: 10, duration: 3, label: '+TRA' },
+  ],
+
+  harmTemplate: {
+    sourceLabel: 'ice water immersion',
+    magnitudeRange: [20, 45],
+    targetZones: ['front-legs', 'hind-legs', 'torso'],
+    spread: 0.9,
+    harmType: 'thermal-cold',
+  },
+
+  consequences: [
+    { type: 'modify_weight', amount: -2 },
+  ],
+
+  narrative: (ctx) => {
+    const env = buildEnvironment(ctx);
+
+    return {
+      text: 'The ice looks solid — it held your weight yesterday, held it the day before. But today, something is different. The crack comes first — a sharp, gunshot report that freezes you mid-stride. Then the surface tilts beneath you and you are in the water, the cold so intense it stops your breath, stops your heart, stops your thoughts. Your legs churn against nothing. The edges of the hole crumble when you try to climb out. The cold is eating you alive.',
+      actionDetail: 'The ice cracks and gives way. You are in the water, the cold so intense it stops your breath. The edges crumble when you try to climb out.',
+      clinicalDetail: 'Ice fall-through into sub-zero water. Acute cold water immersion. Hypothermia onset within minutes. Drowning risk if animal cannot self-rescue.',
+      intensity: 'extreme',
+      emotionalTone: 'fear',
+    };
+  },
+
+  choices: (ctx) => {
+    const loco = ctx.animal.bodyState?.capabilities['locomotion'] ?? 100;
+
+    return [
+      {
+        id: 'break-ice-forward',
+        label: 'Break the ice forward toward shore',
+        description: `Use your chest to smash a path through the ice toward the bank.${loco < 60 ? ' Your legs are weak.' : ''}`,
+        style: loco < 50 ? 'danger' : 'default',
+        narrativeResult: 'You throw yourself forward, chest crashing against the ice edge. It breaks. You surge forward. More ice breaks. Step by agonizing step, you smash a channel toward the bank, the cold sapping your strength with every second. When your hooves finally touch bottom and you drag yourself onto solid ground, you collapse, shaking violently, steam rising from your soaked hide.',
+        modifyOutcome(base, innerCtx) {
+          const escapeChance = 0.5 + loco * 0.004;
+          const escaped = innerCtx.rng.chance(escapeChance);
+
+          if (!escaped) {
+            return {
+              ...base,
+              consequences: [
+                ...base.consequences,
+                { type: 'death' as const, cause: 'Drowned after falling through ice' },
+              ],
+            };
+          }
+
+          return {
+            ...base,
+            consequences: [
+              ...base.consequences,
+              { type: 'add_calories' as const, amount: -200, source: 'ice escape' },
+            ],
+          };
+        },
+      },
+      {
+        id: 'scramble-back',
+        label: 'Scramble back the way you came',
+        description: 'The ice behind you held. Try to climb back onto it.',
+        style: 'default',
+        narrativeResult: 'You twist in the water and fling your forelegs onto the ice behind you. It groans but holds. You kick, hauling yourself up, belly scraping against the wet surface. For a long moment you are half in, half out, hooves scrabbling for purchase. Then you are up, sliding, crawling away from the hole on your belly until you reach solid ground.',
+        modifyOutcome(base, innerCtx) {
+          const holdChance = 0.65;
+          const held = innerCtx.rng.chance(holdChance);
+
+          if (!held) {
+            // Ice collapses again — worse situation
+            return {
+              ...base,
+              harmEvents: base.harmEvents.map(h => ({
+                ...h,
+                magnitude: Math.round(h.magnitude * 1.5),
+              })),
+              consequences: [
+                ...base.consequences,
+                { type: 'add_calories' as const, amount: -250, source: 'extended immersion' },
+              ],
+            };
+          }
+
+          return {
+            ...base,
+            consequences: [
+              ...base.consequences,
+              { type: 'add_calories' as const, amount: -150, source: 'ice escape' },
+            ],
+          };
+        },
+      },
+    ];
+  },
+};
+
+// ══════════════════════════════════════════════════
+//  MUD TRAP — spring thaw / wetland hazard
+// ══════════════════════════════════════════════════
+
+export const MUD_TRAP_CONFIG: EnvironmentalHazardConfig = {
+  id: 'sim-mud-trap',
+  category: 'environmental',
+  tags: ['danger', 'exploration'],
+
+  plausibility: {
+    seasons: ['spring'],
+    custom: (ctx) => ctx.currentNodeType === 'water' || ctx.currentNodeType === 'wetland',
+  },
+
+  weight: {
+    base: 0.01,
+    terrainMultipliers: { wetland: 2, water: 1.5 },
+    locomotionImpairmentFactor: 1.0,
+  },
+
+  statEffects: [
+    { stat: StatId.HOM, amount: 8, duration: 3, label: '+HOM' },
+    { stat: StatId.ADV, amount: 5, duration: 2, label: '+ADV' },
+  ],
+
+  harmTemplate: (ctx) => ({
+    sourceLabel: 'mud trap strain',
+    magnitudeRange: [10, 30] as [number, number],
+    targetZones: ['hind-legs', 'front-legs'],
+    spread: 0.2,
+    harmType: 'blunt' as const,
+  }),
+
+  narrative: (_ctx) => {
+    return {
+      text: 'The ground looks solid — dark earth covered in last year\'s dead grass. But when you step forward, your leg sinks to the knee in cold, sucking mud. The more you pull, the deeper you go. Your other legs begin to sink too, the mud gripping with a patient, mindless hunger. Panic rises in your chest as you realize you cannot simply walk out of this.',
+      actionDetail: 'Your legs sink into cold, sucking mud. The more you pull, the deeper you go. Panic rises as you realize you cannot simply walk out.',
+      clinicalDetail: 'Animal mired in deep mud (spring thaw bog). Risk of exhaustion, muscle strain, joint injury, and hypothermia from prolonged immersion. Predation risk critically elevated while immobile.',
+      intensity: 'high',
+      emotionalTone: 'fear',
+    };
+  },
+
+  choices: (ctx) => {
+    const loco = ctx.animal.bodyState?.capabilities['locomotion'] ?? 100;
+
+    return [
+      {
+        id: 'thrash-free',
+        label: 'Thrash and lunge toward solid ground',
+        description: `Brute force. Exhausting but direct.${loco < 60 ? ' Your injured legs make this harder.' : ''}`,
+        style: loco < 50 ? 'danger' : 'default',
+        narrativeResult: 'You throw yourself forward with everything you have, legs churning in the muck. Mud sprays. Your muscles scream. For a terrible moment you sink deeper — then your front hooves find something solid. You haul yourself forward, belly dragging through the slime, until at last you are free, gasping, coated in black mud, trembling with exhaustion.',
+        modifyOutcome(base, innerCtx) {
+          const freeChance = 0.6 + loco * 0.003;
+          const freed = innerCtx.rng.chance(freeChance);
+
+          if (!freed) {
+            // Exhausted but eventually freed
+            return {
+              ...base,
+              harmEvents: base.harmEvents.map(h => ({
+                ...h,
+                magnitude: Math.round(h.magnitude * 1.5),
+              })),
+              consequences: [
+                ...base.consequences,
+                { type: 'add_calories' as const, amount: -300, source: 'prolonged mud struggle' },
+              ],
+            };
+          }
+
+          return {
+            ...base,
+            consequences: [
+              ...base.consequences,
+              { type: 'add_calories' as const, amount: -150, source: 'mud escape' },
+            ],
+          };
+        },
+      },
+      {
+        id: 'calm-and-shift',
+        label: 'Stop struggling and work free slowly',
+        description: 'Calm yourself. Shift weight carefully. Let the suction break naturally.',
+        style: 'default',
+        narrativeResult: 'You force yourself to stop thrashing. The mud settles around your legs, holding but no longer pulling. Slowly, carefully, you rock your weight forward, lifting one leg at a time, breaking the suction with small, patient movements. It takes a long time. But eventually, covered in mud and shaking, you are free.',
+        modifyOutcome(base) {
+          return {
+            ...base,
+            harmEvents: [], // No physical harm from patient escape
+            consequences: [
+              ...base.consequences,
+              { type: 'add_calories' as const, amount: -100, source: 'mud escape' },
+            ],
+            statEffects: [
+              { stat: StatId.HOM, amount: 6, duration: 2, label: '+HOM' },
+              { stat: StatId.WIS, amount: 2, label: '+WIS' },
+            ],
+          };
+        },
+      },
+    ];
+  },
+};
+
 export const DISPERSAL_NEW_RANGE_CONFIG: EnvironmentalHazardConfig = {
   id: 'sim-dispersal-new-range',
   category: 'environmental',

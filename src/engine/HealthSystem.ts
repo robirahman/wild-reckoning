@@ -221,6 +221,7 @@ export function tickBodyState(
       ffMult,
       foragingBehavior: foragingBehavior ?? 3,
       nearWater: nearWater ?? false,
+      totalConditionCount: bodyState.conditions.length + animal.injuries.length,
     });
 
     feverLevel = cascadeResult.totalFeverLevel;
