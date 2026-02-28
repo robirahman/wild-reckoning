@@ -10,6 +10,7 @@ import type { BodyState } from '../simulation/anatomy/bodyState';
 import type { AnatomyIndex } from '../simulation/anatomy/types';
 import type { DebriefingEntry } from '../simulation/narrative/types';
 import type { PhysiologyState } from '../simulation/physiology/types';
+import type { CausalChain } from '../simulation/memory/causalChain';
 
 export type Diet = 'herbivore' | 'carnivore' | 'omnivore';
 
@@ -146,4 +147,7 @@ export interface AnimalState {
 
   /** Continuous physiology simulation state. Present only for species with metabolismId. */
   physiologyState?: PhysiologyState;
+
+  /** Causal chains built at death: connected sequences from initial event to final outcome. */
+  causalChains?: CausalChain[];
 }

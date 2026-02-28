@@ -10,6 +10,7 @@ import { generateRegionMap } from '../../engine/MapSystem';
 import { getSpeciesBundle } from '../../data/species';
 import { INITIAL_LIFETIME_STATS } from '../../types/stats';
 import { computeMovementCost } from '../../simulation/spatial/movement';
+import { buildCausalChains } from '../../simulation/memory/causalChain';
 
 export const createAnimalSlice: GameSlice<AnimalSlice> = (set, get) => {
   const defaultBundle = getSpeciesBundle('white-tailed-deer');
@@ -121,9 +122,13 @@ export const createAnimalSlice: GameSlice<AnimalSlice> = (set, get) => {
           });
         }
 
+        const causalChains = state.animal.bodyState
+          ? buildCausalChains(state.worldMemory, state.animal.bodyState.conditionProgressions, cause)
+          : undefined;
+
         set({
           phase: 'dead',
-          animal: { ...state.animal, alive: false, causeOfDeath: cause },
+          animal: { ...state.animal, alive: false, causeOfDeath: cause, causalChains },
           reproduction: {
             ...state.reproduction,
             offspring: updatedOffspring,
@@ -131,9 +136,13 @@ export const createAnimalSlice: GameSlice<AnimalSlice> = (set, get) => {
           },
         });
       } else {
+        const causalChains = state.animal.bodyState
+          ? buildCausalChains(state.worldMemory, state.animal.bodyState.conditionProgressions, cause)
+          : undefined;
+
         set({
           phase: 'dead',
-          animal: { ...state.animal, alive: false, causeOfDeath: cause },
+          animal: { ...state.animal, alive: false, causeOfDeath: cause, causalChains },
         });
       }
     },

@@ -1,8 +1,9 @@
 import type { AnatomyIndex, BodyPart, TissueType, BodyZone } from '../anatomy/types';
-import type { BodyState, ConditionType } from '../anatomy/bodyState';
+import type { BodyState } from '../anatomy/bodyState';
 import type { HarmEvent, HarmType, HarmResult, PartDamageResult, CapabilityImpairmentDelta } from './types';
 import { recomputeCapabilities } from '../anatomy/capabilities';
 import type { Rng } from '../../engine/RandomUtils';
+import { getHarmTypeMultiplier, determineConditionType } from './data';
 
 /**
  * Resolve a HarmEvent against an anatomy, producing tissue damage, conditions,
@@ -247,44 +248,6 @@ function applyDamageToPart(
   }
 
   return { bodyPartId: part.id, bodyPartLabel: part.label, tissueDamage: tissueDamageResults, conditionProduced };
-}
-
-/** Harm type multipliers: how effective each harm type is against each tissue */
-function getHarmTypeMultiplier(harmType: HarmType, tissueId: string): number {
-  const multipliers: Record<HarmType, Record<string, number>> = {
-    blunt: { bone: 1.2, muscle: 0.8, skin: 0.6, tendon: 0.9, nerve: 0.5, organ: 1.0, cartilage: 1.0, 'eye-tissue': 0.8, antler: 1.3 },
-    sharp: { bone: 0.5, muscle: 1.3, skin: 1.5, tendon: 1.2, nerve: 0.8, organ: 1.4, cartilage: 0.7, 'eye-tissue': 1.5, antler: 0.3 },
-    'thermal-cold': { bone: 0.3, muscle: 0.5, skin: 1.2, tendon: 0.4, nerve: 0.8, organ: 0.3, cartilage: 0.3, 'eye-tissue': 0.6, antler: 0.1 },
-    'thermal-heat': { bone: 0.2, muscle: 0.6, skin: 1.4, tendon: 0.5, nerve: 0.7, organ: 0.4, cartilage: 0.3, 'eye-tissue': 0.8, antler: 0.1 },
-    chemical: { bone: 0.1, muscle: 0.4, skin: 1.0, tendon: 0.3, nerve: 0.6, organ: 1.5, cartilage: 0.2, 'eye-tissue': 1.3, antler: 0.0 },
-    biological: { bone: 0.2, muscle: 0.5, skin: 0.8, tendon: 0.3, nerve: 0.8, organ: 1.2, cartilage: 0.2, 'eye-tissue': 0.5, antler: 0.0 },
-  };
-
-  return multipliers[harmType]?.[tissueId] ?? 1.0;
-}
-
-/** Map harm type + tissue to the type of condition produced */
-function determineConditionType(harmType: HarmType, tissueId: string): ConditionType | undefined {
-  if (tissueId === 'bone') {
-    return harmType === 'blunt' ? 'fracture' : 'fracture';
-  }
-  if (tissueId === 'muscle' || tissueId === 'tendon') {
-    return harmType === 'blunt' ? 'contusion' : 'laceration';
-  }
-  if (tissueId === 'skin') {
-    if (harmType === 'sharp') return 'laceration';
-    if (harmType === 'blunt') return 'contusion';
-    if (harmType === 'thermal-cold') return 'frostbite';
-    if (harmType === 'thermal-heat') return 'burn';
-    return 'puncture';
-  }
-  if (tissueId === 'organ') {
-    return harmType === 'sharp' ? 'puncture' : 'hemorrhage';
-  }
-  if (tissueId === 'nerve') {
-    return 'contusion';
-  }
-  return undefined;
 }
 
 /** Map raw damage amount to a severity level (0-3) */

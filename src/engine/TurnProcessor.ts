@@ -241,6 +241,7 @@ export function resolveTurn(state: GameState): {
     healthResult.animal.physiologyState ?? undefined,
     state.behavioralSettings?.foraging,
     currentNode?.type === 'water',
+    state.time.turn,
   );
   healthResult.animal = bodyResult.animal;
   healthResult.narratives.push(...bodyResult.narratives);

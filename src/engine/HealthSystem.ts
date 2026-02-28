@@ -156,6 +156,7 @@ export function tickBodyState(
   physiologyState?: PhysiologyState,
   foragingBehavior?: number,
   nearWater?: boolean,
+  turn: number = 0,
 ): { animal: AnimalState; narratives: string[]; modifiers: StatModifier[]; feverLevel: number; conditionDeathCause?: string } {
   const narratives: string[] = [];
   const modifiers: StatModifier[] = [];
@@ -215,7 +216,7 @@ export function tickBodyState(
       physiology: physiologyState,
       conditions: bodyState.conditions,
       progressions: bodyState.conditionProgressions,
-      turn: 0, // turn isn't used for progression logic, just for new condition init
+      turn,
       rng,
       ffMult,
       foragingBehavior: foragingBehavior ?? 3,
