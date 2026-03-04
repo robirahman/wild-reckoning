@@ -1,130 +1,44 @@
-import type { SimulationContext, SimulationTrigger, SimulationOutcome, SimulationChoice } from './types';
+import type { SimulationContext, SimulationOutcome, SimulationChoice } from './types';
 import type { ResolvedEvent, GameEvent, EventChoice } from '../../types/events';
 import type { DebriefingEntry } from '../narrative/types';
 import { StatId, computeEffectiveValue } from '../../types/stats';
 import { renderAnimalPerspective, toDebriefingEntry } from '../narrative/renderer';
+import { detectSituations } from './situations/detector';
+import type { Situation, InteractionTemplate, MatchResult } from './situations/types';
+import { matchTemplates } from './situations/matcher';
 
-// ── Trigger Registry ──
+// ── Template Registry (generative event system) ──
 
-import { wolfPackTrigger, coyoteStalkerTrigger, cougarAmbushTrigger, huntingSeasonTrigger } from './triggers/predatorEncounter';
-import { rutCombatTrigger } from './triggers/intraspecificFight';
-import { fallHazardTrigger, blizzardExposureTrigger, vehicleStrikeTrigger, forestFireTrigger, floodingCreekTrigger, dispersalNewRangeTrigger, barbedWireTrigger, iceFallThroughTrigger, mudTrapTrigger } from './triggers/environmentalHazard';
-import { seasonalBrowseTrigger, riskyForagingTrigger, toxicPlantTrigger } from './triggers/foraging';
-import { parasiteExposureTrigger, woundInfectionTrigger, diseaseOutbreakTrigger } from './triggers/disease';
-import { rehabilitationIntroTrigger } from './triggers/rehabilitationIntro';
-import { starvationPressureTrigger } from './triggers/starvationPressure';
-import { hypothermiaPressureTrigger } from './triggers/hypothermiaPressure';
-import { injuryImpactTrigger } from './triggers/injuryImpact';
-import { immunePressureTrigger } from './triggers/immunePressure';
-import {
-  herdAlarmTrigger,
-  bachelorGroupTrigger,
-  doeHierarchyTrigger,
-  fawnPlayTrigger,
-  territorialScrapeTrigger,
-  rivalReturnsTrigger,
-  allyWarnsTrigger,
-  yearlingDispersalTrigger,
-} from './triggers/social';
-import {
-  antlerVelvetTrigger,
-  insectHarassmentTrigger,
-  autumnRutTrigger,
-  winterYardTrigger,
-  rutEndsTrigger,
-} from './triggers/seasonal';
-import {
-  winterYardScoutTrigger,
-  travelHazardsTrigger,
-  springReturnTrigger,
-} from './triggers/migration';
-import {
-  fawnBirthTrigger,
-  fawnDefenseTrigger,
-  rutDisplayTrigger,
-} from './triggers/reproduction';
-import {
-  woundDeteriorationTrigger,
-  feverEventTrigger,
-  sepsisEventTrigger,
-} from './triggers/woundProgression';
-import {
-  locomotionImpairmentTrigger,
-  visionImpairmentTrigger,
-  breathingImpairmentTrigger,
-  herdSeparationTrigger,
-  starvationInfectionTrigger,
-} from './triggers/impairmentNarrative';
+import { predatorEncounterTemplate } from './situations/templates/predatorTemplate';
+import { environmentalHazardTemplate } from './situations/templates/environmentalTemplate';
+import { socialInteractionTemplate } from './situations/templates/socialTemplate';
+import { reproductionTemplate } from './situations/templates/reproductionTemplate';
+import { foragingTemplate } from './situations/templates/foragingTemplate';
+import { healthTemplate } from './situations/templates/healthTemplate';
+import { seasonalTemplate } from './situations/templates/seasonalTemplate';
+import { migrationTemplate } from './situations/templates/migrationTemplate';
+import { impairmentTemplate } from './situations/templates/impairmentTemplate';
+import { physiologyTemplate } from './situations/templates/physiologyTemplate';
+import { rehabilitationTemplate } from './situations/templates/rehabilitationTemplate';
 
-const ALL_TRIGGERS: SimulationTrigger[] = [
-  rehabilitationIntroTrigger,
-  wolfPackTrigger,
-  coyoteStalkerTrigger,
-  cougarAmbushTrigger,
-  huntingSeasonTrigger,
-  rutCombatTrigger,
-  fallHazardTrigger,
-  blizzardExposureTrigger,
-  vehicleStrikeTrigger,
-  seasonalBrowseTrigger,
-  riskyForagingTrigger,
-  toxicPlantTrigger,
-  parasiteExposureTrigger,
-  woundInfectionTrigger,
-  diseaseOutbreakTrigger,
-  // Physiology-driven triggers (fire based on physiological state)
-  starvationPressureTrigger,
-  hypothermiaPressureTrigger,
-  injuryImpactTrigger,
-  immunePressureTrigger,
-  // Social triggers
-  herdAlarmTrigger,
-  bachelorGroupTrigger,
-  doeHierarchyTrigger,
-  fawnPlayTrigger,
-  territorialScrapeTrigger,
-  rivalReturnsTrigger,
-  allyWarnsTrigger,
-  yearlingDispersalTrigger,
-  // Seasonal triggers
-  antlerVelvetTrigger,
-  insectHarassmentTrigger,
-  autumnRutTrigger,
-  winterYardTrigger,
-  rutEndsTrigger,
-  // Migration triggers
-  winterYardScoutTrigger,
-  travelHazardsTrigger,
-  springReturnTrigger,
-  // Reproduction triggers
-  fawnBirthTrigger,
-  fawnDefenseTrigger,
-  rutDisplayTrigger,
-  // Additional environmental hazards
-  forestFireTrigger,
-  floodingCreekTrigger,
-  dispersalNewRangeTrigger,
-  barbedWireTrigger,
-  iceFallThroughTrigger,
-  mudTrapTrigger,
-  // Wound progression triggers (condition cascades)
-  woundDeteriorationTrigger,
-  feverEventTrigger,
-  sepsisEventTrigger,
-  // Impairment narrative triggers (emergent feedback loops)
-  locomotionImpairmentTrigger,
-  visionImpairmentTrigger,
-  breathingImpairmentTrigger,
-  herdSeparationTrigger,
-  starvationInfectionTrigger,
+const ALL_TEMPLATES: InteractionTemplate[] = [
+  predatorEncounterTemplate,
+  environmentalHazardTemplate,
+  socialInteractionTemplate,
+  reproductionTemplate,
+  foragingTemplate,
+  healthTemplate,
+  seasonalTemplate,
+  migrationTemplate,
+  impairmentTemplate,
+  physiologyTemplate,
+  rehabilitationTemplate,
 ];
 
-// ── Behavioral Multiplier (mirrors EventGenerator logic) ──
+// ── Behavioral Multiplier ──
 
-function behaviorMultiplier(trigger: SimulationTrigger, ctx: SimulationContext): number {
+function behaviorMultiplierForTags(tags: string[], ctx: SimulationContext): number {
   let mult = 1.0;
-  const tags = trigger.tags;
-
   if (tags.includes('predator') || tags.includes('danger')) {
     mult *= 1.5 - ctx.behavior.caution * 0.2;
   }
@@ -134,7 +48,6 @@ function behaviorMultiplier(trigger: SimulationTrigger, ctx: SimulationContext):
   if (tags.includes('exploration') || tags.includes('travel')) {
     mult *= 0.5 + ctx.behavior.exploration * 0.3;
   }
-
   return mult;
 }
 
@@ -143,26 +56,23 @@ function behaviorMultiplier(trigger: SimulationTrigger, ctx: SimulationContext):
 // This creates emergent feedback loops: injuries attract predators, hunger
 // drives foraging, sickness suppresses exploration, etc.
 
-function stateMultiplier(trigger: SimulationTrigger, ctx: SimulationContext): number {
+function stateMultiplierForTags(tags: string[], ctx: SimulationContext): number {
   let mult = 1.0;
-  const tags = trigger.tags;
   const bs = ctx.animal.bodyState;
   const ps = ctx.animal.physiologyState;
 
   // ── Locomotion impairment ──
   const locomotion = bs?.capabilities['locomotion'] ?? 100;
-  const locoImpairment = (100 - locomotion) / 100; // 0 = healthy, 1 = fully impaired
+  const locoImpairment = (100 - locomotion) / 100;
 
   if (tags.includes('predator') || tags.includes('danger')) {
-    // Predators target weak prey — impaired locomotion makes encounters more likely
     mult *= 1 + locoImpairment * 0.6;
   }
   if (tags.includes('travel') || tags.includes('exploration') || tags.includes('migration')) {
-    // Hard to travel when you can't walk well
     mult *= 1 - locoImpairment * 0.5;
   }
 
-  // ── Open wounds (blood scent attracts predators and parasites) ──
+  // ── Open wounds ──
   const openWounds = bs?.conditions.filter(
     c => (c.type === 'laceration' || c.type === 'puncture') && c.infectionLevel < 30
   ).length ?? 0;
@@ -171,40 +81,29 @@ function stateMultiplier(trigger: SimulationTrigger, ctx: SimulationContext): nu
     if (tags.includes('disease') || tags.includes('parasite')) mult *= 1 + openWounds * 0.25;
   }
 
-  // ── Caloric state (hunger drives foraging, suppresses other activities) ──
+  // ── Caloric state ──
   const bcs = ps?.bodyConditionScore ?? 3;
   if (bcs <= 2) {
-    if (tags.includes('foraging') || tags.includes('food')) {
-      mult *= 1.4; // hunger makes foraging events more prominent
-    }
-    if (tags.includes('social') || tags.includes('exploration')) {
-      mult *= 0.7; // starving animals are less social and less curious
-    }
-    // Malnourished animals are weaker prey
+    if (tags.includes('foraging') || tags.includes('food')) mult *= 1.4;
+    if (tags.includes('social') || tags.includes('exploration')) mult *= 0.7;
     if (tags.includes('predator')) mult *= 1 + (3 - bcs) * 0.15;
   }
 
   // ── Fever / immunocompromised ──
   if (ps?.immunocompromised) {
-    if (tags.includes('disease') || tags.includes('parasite')) {
-      mult *= 1.5; // weakened immune system → more susceptible
-    }
-    if (tags.includes('confrontation') || tags.includes('territorial')) {
-      mult *= 0.5; // sick animals avoid conflict
-    }
+    if (tags.includes('disease') || tags.includes('parasite')) mult *= 1.5;
+    if (tags.includes('confrontation') || tags.includes('territorial')) mult *= 0.5;
   }
   if (ps && ps.feverLevel > 2) {
-    // Fever suppresses physical activity events
     if (tags.includes('travel') || tags.includes('exploration') || tags.includes('confrontation')) {
       mult *= Math.max(0.3, 1 - ps.feverLevel * 0.1);
     }
   }
 
-  // ── High trauma → anxiety events more likely ──
+  // ── High trauma ──
   const tra = computeEffectiveValue(ctx.animal.stats[StatId.TRA]);
   if (tra > 60) {
     if (tags.includes('predator') || tags.includes('danger')) {
-      // Hypervigilance: traumatized animals perceive more threats
       mult *= 1 + (tra - 60) * 0.005;
     }
   }
@@ -212,85 +111,90 @@ function stateMultiplier(trigger: SimulationTrigger, ctx: SimulationContext): nu
   // ── Vision impairment ──
   const vision = bs?.capabilities['vision'] ?? 100;
   if (vision < 70) {
-    // Poor vision increases danger from ambush predators
     if (tags.includes('predator')) mult *= 1 + (70 - vision) * 0.008;
-    // But decreases likelihood of finding food
     if (tags.includes('foraging')) mult *= 0.8;
   }
 
-  return Math.max(0.1, mult); // floor at 0.1 so events are never fully suppressed
+  return Math.max(0.1, mult);
 }
 
 // ── Generator ──
 
+/** Most recently detected situations (for diagnostics) */
+let lastDetectedSituations: Situation[] = [];
+
+/** Get the situations detected on the most recent turn (for diagnostics) */
+export function getLastDetectedSituations(): Readonly<Situation[]> {
+  return lastDetectedSituations;
+}
+
 /**
- * Evaluate all registered simulation triggers and select 0-2 events.
+ * Detect situations → match templates → weighted selection → resolve.
  * Returns ResolvedEvent[] compatible with the existing event pipeline.
  */
 export function generateSimulationEvents(ctx: SimulationContext): ResolvedEvent[] {
-  // 1. Filter plausible triggers
-  const plausible = ALL_TRIGGERS.filter((t) => t.isPlausible(ctx));
-  if (plausible.length === 0) return [];
+  // 1. Detect situations (unified world scan)
+  lastDetectedSituations = detectSituations(ctx);
 
-  // 2. Compute weights (base × behavior × body-state)
-  const weights = plausible.map((t) => {
-    const base = t.computeWeight(ctx);
-    const bMult = behaviorMultiplier(t, ctx);
-    const sMult = stateMultiplier(t, ctx);
-    return Math.max(0, base * bMult * sMult);
-  });
+  // 2. Match templates against detected situations
+  const templateMatches = matchTemplates(ctx, lastDetectedSituations, ALL_TEMPLATES);
+
+  if (templateMatches.length === 0) return [];
+
+  // 3. Build weighted pool with behavioral + body-state multipliers
+  const weights: number[] = [];
+  for (const match of templateMatches) {
+    const bMult = behaviorMultiplierForTags(match.template.tags, ctx);
+    const sMult = stateMultiplierForTags(match.template.tags, ctx);
+    weights.push(Math.max(0, match.weight * bMult * sMult));
+  }
 
   const results: ResolvedEvent[] = [];
   const selectedIndices = new Set<number>();
 
-  // 3a. Guaranteed triggers always fire when plausible (intro events, etc.)
-  for (let i = 0; i < plausible.length; i++) {
-    if (plausible[i].guaranteed) {
+  // 4a. Guaranteed entries (milestone events like rehabilitation)
+  for (let i = 0; i < templateMatches.length; i++) {
+    if (templateMatches[i].template.guaranteed) {
       selectedIndices.add(i);
-      const trigger = plausible[i];
-      const outcome = trigger.resolve(ctx);
-      const choices = trigger.getChoices(ctx);
-      results.push(convertToResolvedEvent(trigger, outcome, choices, ctx));
+      results.push(resolveTemplateMatch(templateMatches[i], ctx));
     }
   }
 
-  // 3b. Probabilistic selection for remaining triggers (0-2 total including guaranteed)
+  // 4b. Probabilistic selection (0-2 total including guaranteed)
   const totalWeight = weights.reduce((a, b) => a + b, 0);
   if (totalWeight <= 0) return results;
 
   const maxEvents = ctx.fastForward ? 2 : 1;
   const maxProbEvents = Math.max(0, maxEvents - results.length);
 
-  for (let i = 0; i < maxProbEvents && selectedIndices.size < plausible.length; i++) {
+  for (let j = 0; j < maxProbEvents && selectedIndices.size < templateMatches.length; j++) {
     const remainingWeights = weights.map((w, idx) => selectedIndices.has(idx) ? 0 : w);
     const remainingTotal = remainingWeights.reduce((a, b) => a + b, 0);
 
-    // Probability that ANY simulation trigger fires this turn
-    // With full simulation coverage (39/41 deer events + NarrativeContext on all 34 triggers)
     const fireChance = Math.min(0.8, remainingTotal);
     if (!ctx.rng.chance(fireChance)) break;
 
-    // Weighted selection among remaining triggers
     const idx = ctx.rng.weightedSelect(remainingWeights);
     selectedIndices.add(idx);
-
-    const trigger = plausible[idx];
-    const outcome = trigger.resolve(ctx);
-    const choices = trigger.getChoices(ctx);
-
-    results.push(convertToResolvedEvent(trigger, outcome, choices, ctx));
+    results.push(resolveTemplateMatch(templateMatches[idx], ctx));
   }
 
   return results;
 }
 
-/** Get the set of event categories covered by simulation triggers */
+/**
+ * Resolve a template match into a ResolvedEvent.
+ */
+function resolveTemplateMatch(match: MatchResult, ctx: SimulationContext): ResolvedEvent {
+  const { template, situations } = match;
+  const outcome = template.resolve(ctx, situations);
+  const choices = template.getChoices(ctx, situations);
+  return convertTemplateToResolvedEvent(template, outcome, choices, ctx);
+}
+
+/** Get the set of event categories covered by templates */
 export function getSimulationCategories(): Set<string> {
-  const categories = new Set<string>();
-  for (const t of ALL_TRIGGERS) {
-    categories.add(t.category);
-  }
-  return categories;
+  return new Set(ALL_TEMPLATES.map(t => t.category));
 }
 
 // ── Debriefing Log ──
@@ -308,32 +212,29 @@ export function drainDebriefingEntries(): DebriefingEntry[] {
 // ── Conversion to Legacy Format ──
 
 /**
- * Convert a simulation outcome into a ResolvedEvent that the existing
- * turn processing pipeline can handle.
+ * Convert a template-resolved outcome into a ResolvedEvent.
  */
-function convertToResolvedEvent(
-  trigger: SimulationTrigger,
+function convertTemplateToResolvedEvent(
+  template: InteractionTemplate,
   outcome: SimulationOutcome,
   choices: SimulationChoice[],
   ctx: SimulationContext,
 ): ResolvedEvent {
-  // Determine narrative text: use renderer if NarrativeContext is available,
-  // otherwise fall back to the hardcoded narrativeText
+  // Determine narrative text: use renderer if NarrativeContext is available
   let narrativeText = outcome.narrativeText;
   if (outcome.narrativeContext) {
     const wisdomLevel = computeEffectiveValue(ctx.animal.stats[StatId.WIS]);
     narrativeText = renderAnimalPerspective(outcome.narrativeContext, wisdomLevel, ctx.rng);
   }
 
-  // Build legacy-compatible consequences: include apply_harm for each harm event
+  // Build consequences: include apply_harm for each harm event
   const consequences = [
     ...outcome.consequences,
     ...outcome.harmEvents.map((harm) => ({ type: 'apply_harm' as const, harm })),
   ];
 
-  // Convert SimulationChoices to legacy EventChoices
+  // Convert SimulationChoices to EventChoices
   const eventChoices: EventChoice[] = choices.map((choice) => {
-    // Pre-resolve the modified outcome for each choice to extract effects
     const modifiedOutcome = choice.modifyOutcome({ ...outcome }, ctx);
     const choiceConsequences = [
       ...modifiedOutcome.consequences,
@@ -352,24 +253,22 @@ function convertToResolvedEvent(
     };
   });
 
-  // Build the synthetic GameEvent definition
   const syntheticEvent: GameEvent = {
-    id: `sim-${trigger.id}-${ctx.time.turn}`,
+    id: `sim-${template.id}-${ctx.time.turn}`,
     type: 'active',
-    category: trigger.category,
+    category: template.category,
     narrativeText,
     image: outcome.image,
-    // If there are choices, the base effects go on the event itself only when no choices
     statEffects: eventChoices.length > 0 ? [] : outcome.statEffects,
     consequences: eventChoices.length > 0 ? [] : consequences,
     choices: eventChoices.length > 0 ? eventChoices : undefined,
-    conditions: [], // Already evaluated by isPlausible
-    weight: 0, // Not used (already selected)
-    tags: trigger.tags,
+    conditions: [],
+    weight: 0,
+    tags: template.tags,
     footnote: outcome.footnote,
   };
 
-  // Store debriefing entry if narrative context is available
+  // Store debriefing entry
   if (outcome.narrativeContext) {
     const wisdomLevel = computeEffectiveValue(ctx.animal.stats[StatId.WIS]);
     const entry = toDebriefingEntry(

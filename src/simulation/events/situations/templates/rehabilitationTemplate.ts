@@ -1,57 +1,57 @@
-import type { SimulationTrigger, SimulationContext, SimulationOutcome, SimulationChoice } from '../types';
-import { StatId } from '../../../types/stats';
-import { buildEnvironment, action, buildNarrativeContext } from '../../narrative/contextBuilder';
+import type { InteractionTemplate, Situation } from '../types';
+import type { SimulationContext, SimulationOutcome, SimulationChoice } from '../../types';
+import { StatId } from '../../../../types/stats';
+import { buildEnvironment, action, buildNarrativeContext } from '../../../narrative/contextBuilder';
 
 // ══════════════════════════════════════════════════
-//  REHABILITATION INTRO — first 3 turns for rehab backstory
-//  Per simulation_refactor.md: skip early childhood via
-//  rehabilitation release, giving the player a controlled
-//  introduction before the wild takes over.
+//  REHABILITATION INTRO TEMPLATE
 // ══════════════════════════════════════════════════
+//
+// Replaces rehabilitationIntroTrigger.
+// Guaranteed event for first 3 turns of rehabilitation backstory.
+//
 
-export const rehabilitationIntroTrigger: SimulationTrigger = {
-  id: 'sim-rehab-intro',
+export const rehabilitationTemplate: InteractionTemplate = {
+  id: 'rehabilitation-intro',
   category: 'milestone',
   tags: ['milestone', 'narrative'],
   guaranteed: true,
 
-  isPlausible(ctx) {
-    // Only fires for rehabilitation backstory in the first 3 turns
+  requiredSituations: [],
+  optionalSituations: [
+    'terrain-feature',
+    'weather-condition',
+    'seasonal-phase',
+    'memory-trigger',
+  ],
+
+  extraPlausibility(ctx) {
     if (ctx.animal.backstory.type !== 'rehabilitation') return false;
     if (ctx.time.turn > 3) return false;
-    // Don't repeat: check flags for each stage
     if (ctx.time.turn === 1 && ctx.animal.flags.has('rehab-released')) return false;
     if (ctx.time.turn === 2 && ctx.animal.flags.has('rehab-first-night')) return false;
     if (ctx.time.turn === 3 && ctx.animal.flags.has('rehab-first-forage')) return false;
     return true;
   },
 
-  computeWeight(_ctx) {
-    // Very high weight — intro events should always fire when plausible
+  computeWeight() {
     return 1.0;
   },
 
-  resolve(ctx): SimulationOutcome {
-    if (ctx.time.turn === 1) {
-      return resolveRelease(ctx);
-    } else if (ctx.time.turn === 2) {
-      return resolveFirstNight(ctx);
-    } else {
-      return resolveFirstForage(ctx);
-    }
+  resolve(ctx) {
+    if (ctx.time.turn === 1) return resolveRelease(ctx);
+    if (ctx.time.turn === 2) return resolveFirstNight(ctx);
+    return resolveFirstForage(ctx);
   },
 
-  getChoices(ctx): SimulationChoice[] {
-    if (ctx.time.turn === 1) {
-      return getReleaseChoices(ctx);
-    } else if (ctx.time.turn === 3) {
-      return getForageChoices(ctx);
-    }
+  getChoices(ctx) {
+    if (ctx.time.turn === 1) return getReleaseChoices();
+    if (ctx.time.turn === 3) return getForageChoices();
     return [];
   },
 };
 
-// ── Turn 1: Release from rehabilitation center ──
+// ── Turn 1: Release ──
 
 function resolveRelease(ctx: SimulationContext): SimulationOutcome {
   const env = buildEnvironment(ctx);
@@ -80,7 +80,7 @@ function resolveRelease(ctx: SimulationContext): SimulationOutcome {
   };
 }
 
-function getReleaseChoices(_ctx: SimulationContext): SimulationChoice[] {
+function getReleaseChoices(): SimulationChoice[] {
   return [
     {
       id: 'bolt-into-trees',
@@ -121,7 +121,7 @@ function getReleaseChoices(_ctx: SimulationContext): SimulationChoice[] {
   ];
 }
 
-// ── Turn 2: First night in the wild ──
+// ── Turn 2: First Night ──
 
 function resolveFirstNight(ctx: SimulationContext): SimulationOutcome {
   const env = { ...buildEnvironment(ctx), timeOfDay: 'night' as const };
@@ -150,7 +150,7 @@ function resolveFirstNight(ctx: SimulationContext): SimulationOutcome {
   };
 }
 
-// ── Turn 3: First foraging attempt ──
+// ── Turn 3: First Forage ──
 
 function resolveFirstForage(ctx: SimulationContext): SimulationOutcome {
   const isSummer = ctx.time.season === 'summer';
@@ -196,7 +196,7 @@ function resolveFirstForage(ctx: SimulationContext): SimulationOutcome {
   };
 }
 
-function getForageChoices(_ctx: SimulationContext): SimulationChoice[] {
+function getForageChoices(): SimulationChoice[] {
   return [
     {
       id: 'eat-everything',
@@ -205,7 +205,6 @@ function getForageChoices(_ctx: SimulationContext): SimulationChoice[] {
       style: 'default',
       narrativeResult: 'You eat indiscriminately — leaves, shoots, bark, berries whose color you do not recognize. Most of it sits well enough. Your stomach is full for the first time since the gate opened, and the fullness feels like safety.',
       modifyOutcome(base) {
-        // Replace weight change: eat more = gain a bit more
         const nonWeightConsequences = base.consequences.filter(c => c.type !== 'modify_weight');
         return {
           ...base,
