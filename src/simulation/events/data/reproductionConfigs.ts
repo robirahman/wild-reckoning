@@ -1,5 +1,4 @@
 import type { SimulationContext, SimulationChoice, SimulationOutcome } from '../types';
-import type { StatEffect } from '../../../types/events';
 import { StatId } from '../../../types/stats';
 import { resolveChase } from '../../interactions/chase';
 import { resolveFight } from '../../interactions/fight';

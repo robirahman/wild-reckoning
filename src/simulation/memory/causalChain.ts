@@ -96,7 +96,7 @@ export function buildCausalChains(
  */
 function traceChainFromEvent(
   event: EventMemoryEntry,
-  memory: WorldMemory,
+  _memory: WorldMemory,
   conditionProgressions: Record<string, ConditionProgression>,
 ): CausalChain {
   const links: CausalLink[] = [];

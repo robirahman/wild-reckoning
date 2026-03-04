@@ -1,4 +1,4 @@
-import type { SimulationTrigger, SimulationContext } from '../types';
+import type { SimulationTrigger } from '../types';
 import type { SeasonalTriggerConfig } from '../data/seasonalConfigs';
 import { buildEnvironment, action, buildNarrativeContext } from '../../narrative/contextBuilder';
 

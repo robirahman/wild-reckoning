@@ -41,7 +41,7 @@ export function createMigrationTrigger(config: MigrationTriggerConfig): Simulati
             payload.urgency,
           )],
           environment: buildEnvironment(ctx),
-          emotionalTone: payload.emotionalTone,
+          emotionalTone: payload.emotionalTone as import('../../narrative/types').EmotionalTone,
         }),
       };
     },

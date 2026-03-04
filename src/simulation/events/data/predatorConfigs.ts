@@ -1,9 +1,7 @@
 import type { ChaseParams, FightParams } from '../../interactions/types';
-import type { HarmType } from '../../harm/types';
-import type { BodyZone } from '../../anatomy/types';
 import type { NarrativeEntity } from '../../narrative/types';
 import type { StatEffect } from '../../../types/events';
-import type { SimulationContext, SimulationChoice } from '../types';
+import type { SimulationContext } from '../types';
 import { StatId } from '../../../types/stats';
 import { wolfEntity, coyoteEntity, cougarEntity, hunterEntity } from '../../narrative/perspective';
 
@@ -126,7 +124,7 @@ export interface PredatorEncounterConfig {
   /** Narrative variants ordered by priority (first matching wins) */
   narrativeVariants: PredatorNarrativeVariant[];
   /** Emotional tone for narrative context */
-  emotionalTone: 'fear' | 'tension' | 'alarm';
+  emotionalTone: 'fear' | 'tension';
   /** Event type for narrative context */
   narrativeEventType: string;
 
@@ -530,7 +528,7 @@ export const HUNTING_CONFIG: PredatorEncounterConfig = {
     predatorEndurance: 0,
     packBonus: 0,
     strikeHarmType: 'sharp',
-    strikeTargetZone: 'random',
+    strikeTargetZone: 'torso',
     strikeMagnitudeRange: [95, 95],
     strikeLabel: 'rifle bullet',
   },

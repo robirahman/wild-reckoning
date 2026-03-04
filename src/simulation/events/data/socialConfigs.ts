@@ -128,7 +128,7 @@ export const HERD_ALARM_CONFIG: SocialTriggerConfig = {
     const text = pickContextualText(HERD_ALARM_NARRATIVES, fragmentCtx, ctx.rng);
     return {
       text,
-      entities: [{ perceivedAs: `${allyName}'s alarm snort`, actualIdentity: `${allyName} (herd member) alarm signaling`, wisdomThreshold: 0, primarySense: 'sound' }],
+      entities: [{ perceivedAs: `${allyName}'s alarm snort`, actualIdentity: `${allyName} (herd member) alarm signaling`, wisdomThreshold: 0, primarySense: 'sound', archetype: 'conspecific' as const }],
       actionDetail: `${allyName} snorts — a sharp, percussive exhalation. The white flag of her tail goes up and she bolts. The signal cascades through every deer within earshot.`,
       clinicalDetail: `Herd alarm response initiated by ${allyName}. Conspecific alarm snort detected; flight response triggered.`,
       intensity: 'high',
@@ -220,7 +220,7 @@ export const BACHELOR_GROUP_CONFIG: SocialTriggerConfig = {
     const text = pickContextualText(BACHELOR_GROUP_NARRATIVES, fragmentCtx, ctx.rng);
     return {
       text,
-      entities: [{ perceivedAs: 'three other bucks with velvet antlers', actualIdentity: 'bachelor group of 3 male deer', wisdomThreshold: 0, primarySense: 'sight' }],
+      entities: [{ perceivedAs: 'three other bucks with velvet antlers', actualIdentity: 'bachelor group of 3 male deer', wisdomThreshold: 0, primarySense: 'sight', archetype: 'conspecific' as const }],
       actionDetail: 'Three other bucks grazing in a clearing. Summer brotherhood — no aggression. One assesses you and returns to feeding. You are accepted.',
       clinicalDetail: 'Joined bachelor group. Non-agonistic male social bonding during summer antler growth period.',
       intensity: 'low',
@@ -262,7 +262,7 @@ export const DOE_HIERARCHY_CONFIG: SocialTriggerConfig = {
     const text = pickContextualText(DOE_HIERARCHY_NARRATIVES, fragmentCtx, ctx.rng);
     return {
       text,
-      entities: [{ perceivedAs: 'an older doe with scars, posture broadcasting challenge', actualIdentity: 'dominant doe, hierarchical challenge for fawning territory', wisdomThreshold: 0, primarySense: 'sight' }],
+      entities: [{ perceivedAs: 'an older doe with scars, posture broadcasting challenge', actualIdentity: 'dominant doe, hierarchical challenge for fawning territory', wisdomThreshold: 0, primarySense: 'sight', archetype: 'conspecific' as const }],
       actionDetail: 'She stops three body lengths away and stares, ears pinned back, one hoof pawing the ground. Yield, or be made to yield.',
       clinicalDetail: 'Female dominance challenge. Intraspecific competition for fawning territory access.',
       intensity: 'medium',
@@ -352,7 +352,7 @@ export const FAWN_PLAY_CONFIG: SocialTriggerConfig = {
     const text = pickContextualText(FAWN_PLAY_NARRATIVES, fragmentCtx, ctx.rng);
     return {
       text,
-      entities: [{ perceivedAs: 'your fawns chasing each other through tall grass', actualIdentity: 'offspring play behavior', wisdomThreshold: 0, primarySense: 'sight' }],
+      entities: [{ perceivedAs: 'your fawns chasing each other through tall grass', actualIdentity: 'offspring play behavior', wisdomThreshold: 0, primarySense: 'sight', archetype: 'conspecific' as const }],
       actionDetail: 'Your fawns chase each other in looping sprints, white spots flashing in dappled light. They are alive, and they are yours.',
       clinicalDetail: 'Fawn play behavior observed. Locomotive play bouts indicating healthy development and adequate nutrition.',
       intensity: 'low',
@@ -577,7 +577,7 @@ export const ALLY_WARNS_CONFIG: SocialTriggerConfig = {
     const allyName = ctx.npcs?.find((n) => n.type === 'ally' && n.alive)?.name ?? 'Your companion';
     return {
       text: `${allyName} freezes mid-step, head cocked, one ear swiveled hard to the left. You know this posture. You've learned to trust it. The doe's body language is subtle but unmistakable to anyone who has traveled with her: danger, that direction, close. She doesn't bolt — not yet — but the slight shift of her weight onto her hind legs tells you she's ready. Without the warning, you would have walked straight into whatever she's detected.`,
-      entities: [{ perceivedAs: `${allyName} frozen mid-step, ear swiveled`, actualIdentity: `${allyName} (ally) early warning signal`, wisdomThreshold: 0, primarySense: 'sight' }],
+      entities: [{ perceivedAs: `${allyName} frozen mid-step, ear swiveled`, actualIdentity: `${allyName} (ally) early warning signal`, wisdomThreshold: 0, primarySense: 'sight', archetype: 'conspecific' as const }],
       actionDetail: `${allyName} freezes mid-step, body language unmistakable: danger, that direction, close. Without the warning, you would have walked straight into it.`,
       clinicalDetail: `Ally early warning. ${allyName} detected threat and communicated via body language, preventing direct encounter.`,
       intensity: 'medium',
@@ -680,7 +680,6 @@ export const YEARLING_DISPERSAL_CONFIG: SocialTriggerConfig = {
           style: 'default' as const,
           narrativeResult: 'You stop fighting it. The next morning, instead of following the familiar trails, you turn north — into country you have never explored. Every step takes you further from everything you know. The forest smells different here. The fear is real, but so is the exhilaration.',
           modifyOutcome(base: SimulationOutcome, innerCtx: SimulationContext) {
-            const { resolveSocial } = require('../../interactions/social');
             const social = resolveSocial(innerCtx, {
               interactionType: 'dispersal',
               groupSize: 1,

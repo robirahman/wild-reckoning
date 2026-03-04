@@ -24,5 +24,5 @@ export interface InstinctNudge {
   /** Priority determines display order and visual emphasis */
   priority: 'low' | 'medium' | 'high';
   /** What system generated this nudge (for grouping/filtering) */
-  source: 'terrain' | 'physiology' | 'weather' | 'social' | 'injury' | 'reproductive';
+  source: 'terrain' | 'physiology' | 'weather' | 'social' | 'injury' | 'reproductive' | 'predator' | 'territory' | 'circadian';
 }

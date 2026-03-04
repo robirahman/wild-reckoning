@@ -1,5 +1,5 @@
 import type { SimulationContext, SimulationChoice } from '../types';
-import type { HarmEvent, HarmType } from '../../harm/types';
+import type { HarmType } from '../../harm/types';
 import type { StatEffect } from '../../../types/events';
 import type { BodyZone } from '../../anatomy/types';
 import { StatId } from '../../../types/stats';
@@ -205,7 +205,7 @@ export const RISKY_FORAGING_CONFIG: RiskyForagingConfig = {
 
   scenarios: [
     // Orchard
-    (ctx) => ({
+    (_ctx) => ({
       id: 'orchard',
       narrativeText: 'The smell drifts to you on the evening breeze — sweet, fermenting, irresistible. Through the tree line you can see rows of fruit trees heavy with produce, some already fallen and splitting open in the grass. A structure sits at the edge, its windows lit, and a territorial animal chained near the entrance. The food is close, almost within reach. But this is human ground.',
       clinicalDetail: 'Deer near human orchard. High-calorie food source with risk of human contact.',
@@ -252,7 +252,7 @@ export const RISKY_FORAGING_CONFIG: RiskyForagingConfig = {
     }),
 
     // Cornfield
-    (ctx) => ({
+    (_ctx) => ({
       id: 'cornfield',
       narrativeText: 'The field stretches out under the moonlight like a dark, rustling sea. The stalks are tall enough to hide you completely, and the ears are fat with ripe kernels — a concentration of calories that the forest cannot match. You can hear other deer already inside, the soft tearing of husks and the wet crunch of feeding. But the rich grain in quantity can acidify your gut until it presses against your lungs.',
       clinicalDetail: 'Deer near agricultural cornfield. Risk of ruminal acidosis from high-starch diet.',
@@ -292,7 +292,7 @@ export const RISKY_FORAGING_CONFIG: RiskyForagingConfig = {
     }),
 
     // Mushrooms
-    (ctx) => ({
+    (_ctx) => ({
       id: 'mushroom',
       narrativeText: 'A cluster of mushrooms pushes up through the leaf litter at the base of a rotting stump — pale caps glistening with morning dew, their earthy scent cutting through the dampness. You nose at them cautiously. Fungi are a delicacy your body craves, rich in minerals that the browse cannot provide.',
       clinicalDetail: 'Wild mushroom foraging. Potential mycotoxin risk (12% chance of toxic species).',

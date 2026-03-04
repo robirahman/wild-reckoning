@@ -78,6 +78,11 @@ export function tickConditionProgression(ctx: ConditionProgressionContext): Cond
                                      (bcs <= 1) ? 1.5 :
                                      (bcs <= 2 && isImmunocompromised) ? 1.3 : 1;
 
+  // Bundle compounding factors for advancePhase
+  const compounding: CompoundingFactors = {
+    isCold, coldSeverity, immuneOverloadFactor, feverExertionPenalty, starvationInfectionFactor,
+  };
+
   for (const condition of ctx.conditions) {
     // Get or create progression state for this condition
     let prog = ctx.progressions[condition.id];
@@ -102,7 +107,7 @@ export function tickConditionProgression(ctx: ConditionProgressionContext): Cond
 
     // Process phase transitions
     const prevPhase = prog.phase;
-    prog = advancePhase(prog, params, condition, ctx, woundCategory);
+    prog = advancePhase(prog, params, condition, ctx, woundCategory, compounding);
 
     // Track phase transitions for event triggers
     if (prevPhase !== 'infected' && prog.phase === 'infected') {
@@ -155,6 +160,15 @@ export function tickConditionProgression(ctx: ConditionProgressionContext): Cond
   };
 }
 
+/** Cross-system compounding factors passed to advancePhase */
+interface CompoundingFactors {
+  isCold: boolean;
+  coldSeverity: number;
+  immuneOverloadFactor: number;
+  feverExertionPenalty: number;
+  starvationInfectionFactor: number;
+}
+
 /**
  * Advance a single condition through its phase model.
  */
@@ -164,6 +178,7 @@ function advancePhase(
   condition: ActiveBodyCondition,
   ctx: ConditionProgressionContext,
   _woundCategory: 'open' | 'thermal' | 'closed',
+  cf: CompoundingFactors,
 ): ConditionProgression {
   const rng = ctx.rng;
   const isImmunocompromised = ctx.physiology.immunocompromised;
@@ -193,11 +208,11 @@ function advancePhase(
       if (!prog.resting) infectionChance *= 1.3; // activity aggravates wounds
       if (condition.severity >= 2) infectionChance *= 1.5; // severe wounds infect more easily
       // Cross-system: cold suppresses immune response, increasing infection risk
-      if (isCold) infectionChance *= 1 + coldSeverity * 0.25;
+      if (cf.isCold) infectionChance *= 1 + cf.coldSeverity * 0.25;
       // Cross-system: multiple conditions overwhelm immune system
-      infectionChance *= immuneOverloadFactor;
+      infectionChance *= cf.immuneOverloadFactor;
       // Cross-system: fever + exertion worsens inflammatory response
-      infectionChance *= feverExertionPenalty;
+      infectionChance *= cf.feverExertionPenalty;
 
       // Scale by ffMult for fast-forward (approximate: 1-(1-p)^n)
       const effectiveInfectionChance = 1 - Math.pow(1 - infectionChance, ctx.ffMult);
@@ -218,7 +233,7 @@ function advancePhase(
       // enough and underlying tissue damage is low (handled by HealthSystem).
       // Can still become chronic if healing is prolonged.
       // Cross-system: cold and malnutrition slow healing (require more turns)
-      const healingDelay = (isCold ? Math.ceil(coldSeverity) : 0)
+      const healingDelay = (cf.isCold ? Math.ceil(cf.coldSeverity) : 0)
                          + (bcs <= 2 ? (3 - bcs) * 2 : 0);
       if (prog.turnsInPhase > 8 + healingDelay && condition.turnsActive > 12 + healingDelay) {
         if (condition.severity >= 2 && rng.chance(params.chronicChance)) {
@@ -239,17 +254,17 @@ function advancePhase(
       if (prog.resting) recoveryChance *= 1.3; // rest helps
       if (prog.cleaned) recoveryChance *= 1.2;
       // Cross-system: cold slows recovery
-      if (isCold) recoveryChance *= Math.max(0.4, 1 - coldSeverity * 0.15);
+      if (cf.isCold) recoveryChance *= Math.max(0.4, 1 - cf.coldSeverity * 0.15);
 
       let sepsisChance = params.baseSepsisChance;
       if (isImmunocompromised) sepsisChance *= 2;
       if (bcs <= 2) sepsisChance *= 1.5;
       // Cross-system compounding: starvation + infection → much worse
-      sepsisChance *= starvationInfectionFactor;
+      sepsisChance *= cf.starvationInfectionFactor;
       // Cross-system: multiple conditions overwhelm immune system
-      sepsisChance *= immuneOverloadFactor;
+      sepsisChance *= cf.immuneOverloadFactor;
       // Cross-system: cold accelerates sepsis progression
-      if (isCold) sepsisChance *= 1 + coldSeverity * 0.2;
+      if (cf.isCold) sepsisChance *= 1 + cf.coldSeverity * 0.2;
 
       const effectiveRecovery = 1 - Math.pow(1 - recoveryChance, ctx.ffMult);
       const effectiveSepsis = 1 - Math.pow(1 - sepsisChance, ctx.ffMult);

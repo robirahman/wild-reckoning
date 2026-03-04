@@ -1,4 +1,4 @@
-import type { SimulationContext, SimulationOutcome, SimulationChoice } from '../types';
+import type { SimulationContext, SimulationChoice } from '../types';
 import type { StatEffect, EventCategory } from '../../../types/events';
 import type { NarrativeEntity } from '../../narrative/types';
 import { StatId } from '../../../types/stats';

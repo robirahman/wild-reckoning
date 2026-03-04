@@ -1,4 +1,4 @@
-import type { SimulationTrigger, SimulationContext, SimulationOutcome, SimulationChoice } from '../types';
+import type { SimulationContext, SimulationChoice } from '../types';
 import type { HarmEvent, HarmType } from '../../harm/types';
 import type { BodyZone } from '../../anatomy/types';
 import type { StatEffect } from '../../../types/events';

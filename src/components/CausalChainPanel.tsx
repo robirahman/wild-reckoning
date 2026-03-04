@@ -84,7 +84,7 @@ export function CausalChainPanel() {
       {visible && (
         <>
           <div className={styles.heading}>How You Died</div>
-          {chains.map((chain, i) => (
+          {chains.map((chain) => (
             <ChainCard
               key={chain.id}
               chain={chain}

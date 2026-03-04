@@ -113,7 +113,7 @@ export function createSocialTrigger(config: SocialTriggerConfig): SimulationTrig
 
       // Build entities — use conspecificEntity helper for standard entities
       const entities = narr.entities.length > 0
-        ? narr.entities.map(e => conspecificEntity(e.perceivedAs, e.actualIdentity, e.primarySense))
+        ? narr.entities.map(e => conspecificEntity(e.perceivedAs, e.actualIdentity, e.primarySense as 'sight' | 'smell' | 'sound'))
         : [];
 
       // Special case: rival-returns uses rivalBuckEntity

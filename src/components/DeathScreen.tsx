@@ -93,9 +93,10 @@ export function DeathScreen() {
   const allBundles = getAllSpeciesBundles();
   const speciesUnlockedThisRun = SPECIES_UNLOCKS.filter((u) => {
     if (u.requirement.type !== 'achievement') return false;
-    if (!unlockedAchievements.has(u.requirement.achievementId)) return false;
+    const req = u.requirement;
+    if (!unlockedAchievements.has(req.achievementId)) return false;
     // Only show unlock for achievements tied to the current species
-    const achDef = ACHIEVEMENTS.find((a) => a.id === u.requirement.achievementId);
+    const achDef = ACHIEVEMENTS.find((a) => a.id === req.achievementId);
     if (!achDef?.species) return false;
     const speciesList = Array.isArray(achDef.species) ? achDef.species : [achDef.species];
     return speciesList.includes(config.id);

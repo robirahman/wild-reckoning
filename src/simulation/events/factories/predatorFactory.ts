@@ -226,7 +226,7 @@ export function createPredatorTrigger(config: PredatorEncounterConfig): Simulati
           id: template.id,
           label: resolveStringOrFn(template.label, ctx),
           description: resolveStringOrFn(template.description, ctx),
-          style: resolveStringOrFn(template.style, ctx),
+          style: resolveStringOrFn(template.style, ctx) as 'default' | 'danger',
           narrativeResult: resolveStringOrFn(template.narrativeResult, ctx),
           modifyOutcome: buildOutcomeModifier(config, template, ctx),
         };

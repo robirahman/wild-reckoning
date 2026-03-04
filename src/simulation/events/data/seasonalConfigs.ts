@@ -1,4 +1,4 @@
-import type { SimulationContext, SimulationOutcome, SimulationChoice } from '../types';
+import type { SimulationContext, SimulationChoice } from '../types';
 import type { StatEffect } from '../../../types/events';
 import { StatId } from '../../../types/stats';
 import { resolveExposure } from '../../interactions/exposure';

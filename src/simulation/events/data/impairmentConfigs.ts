@@ -9,7 +9,7 @@ function getCapability(ctx: SimulationContext, cap: string): number {
   return ctx.animal.bodyState?.capabilities[cap] ?? 100;
 }
 
-function hasFractureInZone(ctx: SimulationContext, zone: string): boolean {
+function _hasFractureInZone(ctx: SimulationContext, zone: string): boolean {
   if (!ctx.animal.bodyState) return false;
   return ctx.animal.bodyState.conditions.some(
     c => c.type === 'fracture' && c.bodyPartId.includes(zone),
@@ -251,7 +251,7 @@ export const HERD_SEPARATION_CONFIG: HealthTriggerConfig = {
     if (loco >= 50) return false;
     // Check for nearby conspecifics
     const hasNearbyHerd = ctx.npcs?.some(
-      npc => npc.alive && npc.type === 'conspecific' && npc.currentNodeId === ctx.currentNodeId,
+      npc => npc.alive && (npc.type === 'ally' || npc.type === 'mate') && npc.currentNodeId === ctx.currentNodeId,
     ) ?? false;
     // Fire when there's no nearby herd (separated due to impairment)
     return !hasNearbyHerd;

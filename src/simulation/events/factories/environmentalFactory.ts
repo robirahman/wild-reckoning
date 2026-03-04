@@ -1,9 +1,8 @@
-import type { SimulationTrigger, SimulationContext, SimulationOutcome } from '../types';
+import type { SimulationTrigger, SimulationContext } from '../types';
 import type { HarmEvent } from '../../harm/types';
 import type { EnvironmentalHazardConfig, HarmTemplate } from '../data/environmentalConfigs';
 import { getEncounterRate } from '../../calibration/calibrator';
-import { buildEnvironment, action, buildNarrativeContext, terrainEntity, weatherEntity } from '../../narrative/contextBuilder';
-import { vehicleEntity } from '../../narrative/perspective';
+import { buildEnvironment, action, buildNarrativeContext } from '../../narrative/contextBuilder';
 
 // ── Helpers ──
 

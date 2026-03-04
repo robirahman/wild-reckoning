@@ -1,4 +1,4 @@
-import type { SimulationTrigger, SimulationContext } from '../types';
+import type { SimulationTrigger } from '../types';
 import type { ReproductionTriggerConfig } from '../data/reproductionConfigs';
 
 /**

@@ -1,6 +1,5 @@
 import type { SimulationContext, SimulationOutcome, SimulationChoice } from '../types';
 import type { HarmEvent } from '../../harm/types';
-import type { StatEffect, Consequence } from '../../../types/events';
 import { StatId, computeEffectiveValue } from '../../../types/stats';
 import { getEncounterRate } from '../../calibration/calibrator';
 import { buildEnvironment, action, buildNarrativeContext } from '../../narrative/contextBuilder';
