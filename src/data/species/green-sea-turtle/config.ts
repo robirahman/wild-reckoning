@@ -57,7 +57,7 @@ export const GREEN_SEA_TURTLE_CONFIG: SpeciesConfig = {
   },
 
   turnUnit: 'month',
-  naturalHealingRate: 6,  // Slow but steady reptilian healing over decades
+  naturalHealingRate: 35,  // Must outpace cumulative event HEA drain over 800+ monthly turns
 
   thermalProfile: {
     type: 'ectotherm',

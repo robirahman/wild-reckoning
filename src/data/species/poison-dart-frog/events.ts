@@ -617,4 +617,44 @@ export const POISON_DART_FROG_EVENTS: GameEvent[] = [
     weight: 20,
     tags: ['health', 'milestone'],
   },
+
+  // ── Parasite Events ──
+  {
+    id: 'frog-chytrid-exposure',
+    type: 'passive',
+    category: 'health',
+    narrativeText: 'The stream you crossed was teeming with invisible danger. Batrachochytrium dendrobatidis — chytrid fungus — releases zoospores into warm, still water. They find your permeable skin irresistible, burrowing into the keratin layer where they multiply and thicken the tissue that you breathe through. Amphibians worldwide are dying from this pathogen. Your alkaloid armor protects you from predators, but not from this.',
+    statEffects: [
+      { stat: StatId.HEA, amount: -4, label: '-HEA' },
+      { stat: StatId.IMM, amount: -5, label: '-IMM' },
+    ],
+    consequences: [
+      { type: 'add_parasite', parasiteId: 'chytrid-fungus' },
+    ],
+    conditions: [
+      { type: 'no_parasite', parasiteId: 'chytrid-fungus' },
+      { type: 'season', seasons: ['spring', 'summer'] },
+    ],
+    cooldown: 9999,
+    weight: 3,
+    tags: ['health', 'parasite'],
+  },
+  {
+    id: 'frog-nematode-prey',
+    type: 'passive',
+    category: 'health',
+    narrativeText: 'The ant you swallowed carried more than calories. Inside its body, encysted nematode larvae waited for exactly this moment — to be eaten by a frog. Now free in your gut, they burrow through the intestinal wall and begin their developmental cycle, growing from microscopic threads into finger-length worms coiled in your abdominal cavity.',
+    statEffects: [
+      { stat: StatId.HEA, amount: -2, label: '-HEA' },
+    ],
+    consequences: [
+      { type: 'add_parasite', parasiteId: 'frog-nematode' },
+    ],
+    conditions: [
+      { type: 'no_parasite', parasiteId: 'frog-nematode' },
+    ],
+    cooldown: 9999,
+    weight: 3,
+    tags: ['health', 'parasite', 'foraging'],
+  },
 ];

@@ -15,6 +15,8 @@ export const REGION_DEFINITIONS: Record<string, RegionDefinition> = {
       { id: 'forest-browse', name: 'Forest Browse', availableSeasons: ['spring', 'summer', 'autumn'], nutritiveValue: 40, abundanceByMonth: [0, 0, 0.2, 0.6, 0.8, 0.9, 0.9, 0.8, 0.6, 0.3, 0, 0] },
       { id: 'clover', name: 'Clover', availableSeasons: ['spring', 'summer'], nutritiveValue: 55, abundanceByMonth: [0, 0, 0.1, 0.5, 0.8, 0.9, 0.8, 0.6, 0.3, 0, 0, 0] },
       { id: 'frozen-browse', name: 'Frozen Browse', availableSeasons: ['winter'], nutritiveValue: 15, abundanceByMonth: [0.4, 0.3, 0, 0, 0, 0, 0, 0, 0, 0, 0.2, 0.5] },
+      { id: 'white-cedar-browse', name: 'White Cedar Browse', availableSeasons: ['winter', 'spring'], nutritiveValue: 30, abundanceByMonth: [0.4, 0.3, 0.2, 0.1, 0, 0, 0, 0, 0, 0, 0.2, 0.4] },
+      { id: 'standing-dead-grass', name: 'Standing Dead Grass', availableSeasons: ['winter'], nutritiveValue: 25, abundanceByMonth: [0.3, 0.2, 0, 0, 0, 0, 0, 0, 0, 0, 0.3, 0.4] },
     ],
     fauna: ['white-tailed-deer', 'gray-wolf', 'turkey', 'grouse', 'moose', 'snowshoe-hare'],
     predators: ['wolf', 'coyote', 'bear', 'hunter', 'bobcat'],

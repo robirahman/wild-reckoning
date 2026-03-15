@@ -697,20 +697,26 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
         }
       }
 
-      // Natural healing: passive HEA recovery each turn for long-lived species
+      // Natural healing: fully restore HEA toward base each turn for species
+      // with naturalHealingRate. This counteracts the unbounded accumulation of
+      // permanent negative HEA modifiers from events over long lifespans.
+      // Animals recover between insults — cumulative damage shouldn't stack
+      // indefinitely across decades.
       tickedStats = removeModifiersBySource(tickedStats, 'natural-healing');
       if (config.naturalHealingRate && config.naturalHealingRate > 0) {
         const currentHEA = computeEffectiveValue(tickedStats[StatId.HEA]);
         const baseHEA = config.baseStats[StatId.HEA];
         if (currentHEA < baseHEA) {
-          const healAmount = Math.min(baseHEA - currentHEA, config.naturalHealingRate);
+          // Heal the full deficit — events still matter per-turn (they reduce
+          // HEA before healing kicks in next turn) but damage doesn't accumulate
+          // across turns. This is biologically accurate: animals heal between insults.
+          const healAmount = baseHEA - currentHEA;
           tickedStats = addModifier(tickedStats, {
             id: 'natural-healing',
             source: 'natural-healing',
             sourceType: 'condition' as const,
             stat: StatId.HEA,
             amount: healAmount,
-            duration: 1,
           });
         }
       }

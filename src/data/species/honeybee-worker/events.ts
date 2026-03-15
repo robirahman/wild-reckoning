@@ -733,4 +733,45 @@ export const HONEYBEE_WORKER_EVENTS: GameEvent[] = [
     weight: 30,
     tags: ['health'],
   },
+
+  // ── Parasite Events ──
+  {
+    id: 'bee-varroa-mite',
+    type: 'passive',
+    category: 'health',
+    narrativeText: 'A reddish-brown disc clings to the soft membrane between your thorax segments — a Varroa destructor mite, feeding on your fat body tissue. It hitched a ride from a brood cell where it reproduced on a developing pupa. The mite weakens your immune system and vectors deformed wing virus, a one-two punch that has collapsed colonies across the world.',
+    statEffects: [
+      { stat: StatId.HEA, amount: -3, label: '-HEA' },
+      { stat: StatId.IMM, amount: -5, label: '-IMM' },
+    ],
+    consequences: [
+      { type: 'add_parasite', parasiteId: 'varroa-mite' },
+    ],
+    conditions: [
+      { type: 'no_parasite', parasiteId: 'varroa-mite' },
+    ],
+    cooldown: 9999,
+    weight: 3,
+    tags: ['health', 'parasite'],
+  },
+  {
+    id: 'bee-nosema-infection',
+    type: 'passive',
+    category: 'health',
+    narrativeText: 'The honey stores taste slightly off — a faint sourness beneath the sweetness. Nosema ceranae spores have contaminated the comb, shed by infected sisters who defecated inside the hive during a long cold spell. The microsporidian parasite colonizes your gut lining, destroying the cells that absorb nutrients from your food. You eat but gain nothing.',
+    statEffects: [
+      { stat: StatId.HEA, amount: -2, label: '-HEA' },
+      { stat: StatId.HOM, amount: -3, label: '-HOM' },
+    ],
+    consequences: [
+      { type: 'add_parasite', parasiteId: 'nosema-ceranae' },
+    ],
+    conditions: [
+      { type: 'no_parasite', parasiteId: 'nosema-ceranae' },
+      { type: 'season', seasons: ['winter', 'spring'] },
+    ],
+    cooldown: 9999,
+    weight: 3,
+    tags: ['health', 'parasite'],
+  },
 ];

@@ -45,7 +45,7 @@ export const PIG_CONFIG: SpeciesConfig = {
     maxOldAgeChance: 0.95,
   },
 
-  diseaseDeathChanceAtCritical: 0.15,
+  diseaseDeathChanceAtCritical: 0.005, // Slaughter is primary death cause, not disease
 
   predationVulnerability: {
     injuryProbIncrease: 0.05,

@@ -166,4 +166,85 @@ export const PIG_EVENTS: GameEvent[] = [
     weight: 20,
     tags: ['instinct', 'reproduction', 'stress']
   },
+
+  // ── Slaughter ──
+  {
+    id: 'pig-market-slaughter',
+    type: 'active',
+    category: 'health',
+    narrativeText: 'You have reached market weight. You are herded up a ramp onto a transport truck with dozens of others, packed so tightly you cannot lie down. The journey to the slaughterhouse takes twelve hours without food or water. At the plant, you are driven down a concrete corridor toward a CO2 gas chamber. The gas burns your lungs and eyes as you thrash and scream. When you stop moving, you are shackled, hoisted, and bled out on the line.',
+    statEffects: [],
+    consequences: [
+      { type: 'death', cause: 'Slaughtered at processing plant after reaching market weight of approximately 280 lbs in 6 months.' },
+    ],
+    conditions: [
+      { type: 'weight_above', threshold: 250 },
+      { type: 'turn_above', threshold: 200 },
+    ],
+    weight: 9999,
+    tags: ['slaughter', 'death'],
+  },
+
+  // ── Forced breeding (enables gestation crate + nesting frustration events) ──
+  {
+    id: 'pig-artificial-insemination',
+    type: 'passive',
+    category: 'reproduction',
+    narrativeText: 'Farm workers restrain you in a narrow chute. An insemination technician forces a catheter into your reproductive tract. The procedure is uncomfortable and frightening. Your body registers the pregnancy that your mind never chose.',
+    statEffects: [
+      { stat: StatId.TRA, amount: 10, label: '+TRA' },
+      { stat: StatId.STR, amount: 5, label: '+STR' },
+    ],
+    consequences: [
+      { type: 'start_pregnancy', offspringCount: 10 },
+    ],
+    conditions: [
+      { type: 'sex', sex: 'female' },
+      { type: 'turn_above', threshold: 800 },
+      { type: 'no_flag', flag: 'pregnant' },
+    ],
+    cooldown: 400,
+    weight: 60,
+    tags: ['reproduction', 'trauma'],
+  },
+
+  // ── Parasites ──
+  {
+    id: 'pig-roundworm-infection',
+    type: 'passive',
+    category: 'health',
+    narrativeText: 'The concrete floor is never truly clean. Microscopic roundworm eggs, shed in the feces of previous occupants and resistant to disinfectant, survive in the cracks between slats. You ingest them unknowingly as you root at the floor. Within weeks, larvae are migrating through your liver and lungs before settling in your intestines.',
+    statEffects: [
+      { stat: StatId.HEA, amount: -3, label: '-HEA' },
+      { stat: StatId.IMM, amount: -2, label: '-IMM' },
+    ],
+    consequences: [
+      { type: 'add_parasite', parasiteId: 'swine-roundworm' },
+    ],
+    conditions: [
+      { type: 'no_parasite', parasiteId: 'swine-roundworm' },
+      { type: 'turn_above', threshold: 40 },
+    ],
+    cooldown: 9999,
+    weight: 3,
+    tags: ['health', 'parasite'],
+  },
+  {
+    id: 'pig-louse-infestation',
+    type: 'passive',
+    category: 'health',
+    narrativeText: 'Contact with the pig in the adjacent pen — through the bars, during the brief chaos of pen cleaning — has left you with passengers. Pig lice, flat-bodied and fast-moving, have colonized the warm folds behind your ears and along your flanks. The constant irritation makes you rub against the bars until your skin is raw.',
+    statEffects: [
+      { stat: StatId.HEA, amount: -2, label: '-HEA' },
+    ],
+    consequences: [
+      { type: 'add_parasite', parasiteId: 'pig-louse' },
+    ],
+    conditions: [
+      { type: 'no_parasite', parasiteId: 'pig-louse' },
+    ],
+    cooldown: 9999,
+    weight: 3,
+    tags: ['health', 'parasite'],
+  },
 ];

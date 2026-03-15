@@ -45,7 +45,7 @@ export const CHICKEN_CONFIG: SpeciesConfig = {
     maxOldAgeChance: 0.9,
   },
 
-  diseaseDeathChanceAtCritical: 0.2, // High disease pressure
+  diseaseDeathChanceAtCritical: 0.03, // Slaughter is primary death cause, not disease
 
   predationVulnerability: {
     injuryProbIncrease: 0.2,

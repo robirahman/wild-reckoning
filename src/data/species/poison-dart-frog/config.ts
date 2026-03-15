@@ -45,7 +45,7 @@ export const POISON_DART_FROG_CONFIG: SpeciesConfig = {
     maxOldAgeChance: 0.80,
   },
 
-  diseaseDeathChanceAtCritical: 0.04,
+  diseaseDeathChanceAtCritical: 0.002, // Parasites cause chronic drain but very rarely kill
 
   predationVulnerability: {
     injuryProbIncrease: 0.05,

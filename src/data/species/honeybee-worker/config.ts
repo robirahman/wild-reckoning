@@ -45,7 +45,7 @@ export const HONEYBEE_WORKER_CONFIG: SpeciesConfig = {
     maxOldAgeChance: 0.90,
   },
 
-  diseaseDeathChanceAtCritical: 0.02, // Daily check (scaled)
+  diseaseDeathChanceAtCritical: 0.005, // Parasites add health burden but old age is primary killer
 
   predationVulnerability: {
     injuryProbIncrease: 0.10,

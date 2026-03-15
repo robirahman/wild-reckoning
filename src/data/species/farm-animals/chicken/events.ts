@@ -145,4 +145,63 @@ export const CHICKEN_EVENTS: GameEvent[] = [
     weight: 15,
     tags: ['instinct', 'stress']
   },
+
+  // ── Slaughter ──
+  {
+    id: 'chicken-broiler-slaughter',
+    type: 'active',
+    category: 'health',
+    narrativeText: 'You have reached market weight. Workers move through the shed in the dark, grabbing birds by the legs — four or five in each hand — and stuffing them into plastic transport crates. The ride to the processing plant takes hours. You arrive terrified, dehydrated, and covered in the feces of the birds stacked above you. At the plant, you are shackled upside down on a moving line and dragged through an electrified water bath meant to stun you. Then a mechanical blade cuts your throat.',
+    statEffects: [],
+    consequences: [
+      { type: 'death', cause: 'Slaughtered at processing plant after reaching market weight of approximately 6 lbs in 42 days.' },
+    ],
+    conditions: [
+      { type: 'weight_above', threshold: 5.5 },
+      { type: 'turn_above', threshold: 140 },
+    ],
+    weight: 9999,
+    tags: ['slaughter', 'death'],
+  },
+
+  // ── Parasites ──
+  {
+    id: 'chicken-mite-infestation',
+    type: 'passive',
+    category: 'health',
+    narrativeText: 'At night, the red mites emerge from cracks in the housing infrastructure — tiny vampires that feed on your blood while you sleep. By morning your comb is pale and you feel weak. The mites retreat into the woodwork before the lights come on, invisible to the workers who never look closely enough.',
+    statEffects: [
+      { stat: StatId.HEA, amount: -2, label: '-HEA' },
+      { stat: StatId.IMM, amount: -3, label: '-IMM' },
+    ],
+    consequences: [
+      { type: 'add_parasite', parasiteId: 'chicken-mite' },
+    ],
+    conditions: [
+      { type: 'no_parasite', parasiteId: 'chicken-mite' },
+      { type: 'turn_above', threshold: 20 },
+    ],
+    cooldown: 9999,
+    weight: 3,
+    tags: ['health', 'parasite'],
+  },
+  {
+    id: 'chicken-scaly-leg',
+    type: 'passive',
+    category: 'health',
+    narrativeText: 'Your legs itch constantly. The scales are lifting, thickening, crusting over with a chalky white residue. Burrowing mites have colonized the skin beneath your leg scales, tunneling through the tissue and leaving behind debris that deforms the keratin above. Walking becomes painful.',
+    statEffects: [
+      { stat: StatId.HEA, amount: -3, label: '-HEA' },
+    ],
+    consequences: [
+      { type: 'add_parasite', parasiteId: 'scaly-leg-mite' },
+    ],
+    conditions: [
+      { type: 'no_parasite', parasiteId: 'scaly-leg-mite' },
+      { type: 'turn_above', threshold: 60 },
+    ],
+    cooldown: 9999,
+    weight: 3,
+    tags: ['health', 'parasite'],
+  },
 ];

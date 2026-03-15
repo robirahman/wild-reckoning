@@ -31,7 +31,7 @@ export function computeForageQuality(
 
   // Normalize: if 3+ good food sources are available at decent abundance, quality ≈ 1.0
   const floraQuality = floraCount > 0
-    ? Math.min(1, totalNutrition / 1.5)
+    ? Math.max(0.15, Math.min(1, totalNutrition / 1.5))
     : 0.25; // Bare minimum (bark, dead leaves, cached food, dormant browse)
 
   // Map node food resources (0-100 scale)

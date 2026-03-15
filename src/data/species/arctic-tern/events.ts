@@ -1121,4 +1121,44 @@ export const ARCTIC_TERN_EVENTS: GameEvent[] = [
     cooldown: 10,
     tags: ['foraging', 'food'],
   },
+
+  // ── Parasite Events ──
+  {
+    id: 'tern-mosquito-stopover',
+    type: 'passive',
+    category: 'health',
+    narrativeText: 'At a coastal stopover, clouds of mosquitoes descend at dusk. They find the thin skin around your eyes and at the base of your bill, feeding greedily. Among the millions of bites, some carry Plasmodium — avian malaria — a parasite that will quietly invade your red blood cells and begin replicating.',
+    statEffects: [
+      { stat: StatId.HEA, amount: -3, label: '-HEA' },
+      { stat: StatId.IMM, amount: -2, label: '-IMM' },
+    ],
+    consequences: [
+      { type: 'add_parasite', parasiteId: 'avian-malaria' },
+    ],
+    conditions: [
+      { type: 'no_parasite', parasiteId: 'avian-malaria' },
+      { type: 'season', seasons: ['summer'] },
+    ],
+    cooldown: 9999,
+    weight: 3,
+    tags: ['health', 'parasite'],
+  },
+  {
+    id: 'tern-feather-lice-colony',
+    type: 'passive',
+    category: 'health',
+    narrativeText: 'Nesting in close quarters with hundreds of other terns, you pick up passengers — feather lice that transfer from bird to bird during the intimate proximity of colony life. They chew at the barbs of your flight feathers, weakening the vanes that keep you airborne across oceans.',
+    statEffects: [
+      { stat: StatId.HEA, amount: -2, label: '-HEA' },
+    ],
+    consequences: [
+      { type: 'add_parasite', parasiteId: 'feather-lice' },
+    ],
+    conditions: [
+      { type: 'no_parasite', parasiteId: 'feather-lice' },
+    ],
+    cooldown: 9999,
+    weight: 3,
+    tags: ['health', 'parasite', 'social'],
+  },
 ];
