@@ -97,6 +97,7 @@ export const GREEN_SEA_TURTLE_CONFIG: SpeciesConfig = {
     matingOnsetAge: 300,
     matingSeasons: ['spring', 'summer'],
     matingSeasonResetMonth: 'March',
+    autoMatingProbability: 0.015,
     maleCompetition: {
       enabled: false,
       baseWinProb: 0.5,

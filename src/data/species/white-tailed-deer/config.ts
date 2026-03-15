@@ -97,6 +97,7 @@ export const WHITE_TAILED_DEER_CONFIG: SpeciesConfig = {
     matingOnsetAge: 18,
     matingSeasons: ['autumn'],
     matingSeasonResetMonth: 'September',
+    autoMatingProbability: 0.25,  // Nearly every doe conceives in first eligible autumn
     maleCompetition: {
       enabled: true,
       baseWinProb: 0.15,

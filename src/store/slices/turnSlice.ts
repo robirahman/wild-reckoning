@@ -729,6 +729,41 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
         currentReproduction = reproResult.reproduction;
       }
 
+      // Auto-spawning for semelparous species: when the animal reaches
+      // spawning age and is in a valid season, trigger spawning automatically.
+      // This ensures species like salmon, octopus, and monarch reproduce
+      // without depending on specific event chains.
+      if (
+        currentReproduction.type === 'semelparous' &&
+        !currentReproduction.spawned &&
+        config.reproduction.type === 'semelparous' &&
+        newAge >= config.reproduction.spawningMinAge &&
+        config.reproduction.spawningSeasons.includes(newTime.season as 'spring' | 'summer' | 'autumn' | 'winter')
+      ) {
+        const autoSpawnProb = 0.08; // ~8% per turn once eligible
+        if (state.rng.chance(autoSpawnProb)) {
+          const hea = computeEffectiveValue(tickedStats[StatId.HEA]);
+          const wis = computeEffectiveValue(tickedStats[StatId.WIS]);
+          const reproConfig = config.reproduction;
+          const eggCount = Math.round(
+            reproConfig.baseEggCount +
+            hea * reproConfig.eggCountHeaFactor +
+            currentAnimal.weight * reproConfig.eggCountWeightFactor
+          );
+          let survivalRate = reproConfig.eggSurvivalBase + wis * reproConfig.eggSurvivalWisFactor;
+          const estimatedSurvivors = Math.round(eggCount * survivalRate);
+
+          newFlags.add(reproConfig.spawningCompleteFlag as GameFlag);
+          currentReproduction = {
+            ...currentReproduction,
+            spawned: true,
+            eggCount,
+            estimatedSurvivors,
+            totalFitness: estimatedSurvivors,
+          };
+        }
+      }
+
       if (config.migration) {
         const mig = config.migration;
         if (newTime.season === mig.migrationSeason && newFlags.has(mig.migrationFlag as GameFlag) && !newFlags.has(mig.migratedFlag as GameFlag)) {

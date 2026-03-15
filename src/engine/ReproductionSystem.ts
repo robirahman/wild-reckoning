@@ -226,6 +226,37 @@ export function tickReproduction(
     flagsToAdd.push(reproConfig.independenceFlag);
   }
 
+  // 3. Automatic mating: if conditions are met and not already pregnant,
+  // attempt mating. This ensures reproduction happens at biologically
+  // realistic rates without depending on specific events firing.
+  if (
+    animal.sex === 'female' &&
+    !updated.pregnancy &&
+    !updated.matedThisSeason &&
+    animal.age >= reproConfig.matingMinAge &&
+    (reproConfig.matingSeasons === 'any' || reproConfig.matingSeasons.includes(time.season as Season))
+  ) {
+    // Mating probability calibrated per-turn so that mean lifetime fitness ≈ 2
+    // (demographic replacement rate for a stable population).
+    const matingProb = reproConfig.autoMatingProbability ?? 0.08;
+    if (rng.chance(matingProb)) {
+      const hea = computeEffectiveValue(animal.stats[StatId.HEA]);
+      const count = determineOffspringCount(animal.weight, hea, config, rng);
+      if (count > 0) {
+        updated = {
+          ...updated,
+          pregnancy: {
+            conceivedOnTurn: time.turn,
+            turnsRemaining: reproConfig.gestationTurns,
+            offspringCount: count,
+          },
+          matedThisSeason: true,
+        };
+        flagsToAdd.push(reproConfig.pregnantFlag);
+      }
+    }
+  }
+
   // Season reset: reset mating flags for new season
   if (time.month === reproConfig.matingSeasonResetMonth && time.week === 1) {
     updated = { ...updated, matedThisSeason: false };

@@ -81,6 +81,7 @@ export const AFRICAN_ELEPHANT_CONFIG: SpeciesConfig = {
     matingOnsetAge: 144,
     matingSeasons: 'any',
     matingSeasonResetMonth: 'January',
+    autoMatingProbability: 0.01,
     maleCompetition: {
       enabled: true,
       baseWinProb: 0.20,

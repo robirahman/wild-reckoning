@@ -104,6 +104,7 @@ export const POLAR_BEAR_CONFIG: SpeciesConfig = {
     matingOnsetAge: 60,
     matingSeasons: ['spring'],
     matingSeasonResetMonth: 'March',
+    autoMatingProbability: 0,  // Reproduction handled by existing legacy events
     maleCompetition: {
       enabled: true,
       baseWinProb: 0.45,

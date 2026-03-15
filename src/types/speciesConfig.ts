@@ -44,6 +44,9 @@ export interface IteroparousReproConfig {
   matingOnsetAge: number;
   matingSeasons: Season[] | 'any';
   matingSeasonResetMonth: string;
+  /** Per-turn probability of automatic mating when conditions are met (female, right age/season, not pregnant).
+   *  Calibrate so mean lifetime fitness ≈ 2 (demographic replacement rate). Default: 0.08. */
+  autoMatingProbability?: number;
   maleCompetition: MaleCompetitionConfig;
   gestationTurns: number;
   offspringCountFormula: OffspringCountFormula;

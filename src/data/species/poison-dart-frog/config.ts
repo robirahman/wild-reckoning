@@ -113,6 +113,7 @@ export const POISON_DART_FROG_CONFIG: SpeciesConfig = {
     matingOnsetAge: 8,
     matingSeasons: 'any',
     matingSeasonResetMonth: 'January',
+    autoMatingProbability: 0.008,  // Year-round, moderate freq — 58% survival means fewer needed
     maleCompetition: {
       enabled: true,
       baseWinProb: 0.40,
@@ -153,8 +154,8 @@ export const POISON_DART_FROG_CONFIG: SpeciesConfig = {
     offspringSurvivalSummerBonus: 0.05,
     offspringSurvivalYoungPenalty: 0.01,
     offspringSurvivalYoungThreshold: 12,
-    offspringSurvivalMin: 0.40,
-    offspringSurvivalMax: 0.90,
+    offspringSurvivalMin: 0.80,
+    offspringSurvivalMax: 0.995,
     offspringDeathCauses: [
       'Bromeliad pool dried out',
       'Eaten by a predatory insect larva',

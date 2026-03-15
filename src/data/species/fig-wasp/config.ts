@@ -116,8 +116,8 @@ export const FIG_WASP_CONFIG: SpeciesConfig = {
     baseEggCount: 300,
     eggCountHeaFactor: 2,
     eggCountWeightFactor: 5000000000,
-    eggSurvivalBase: 0.08,
-    eggSurvivalWisFactor: 0.0005,
+    eggSurvivalBase: 0.003,  // ~2 survivors from ~570 eggs
+    eggSurvivalWisFactor: 0.00005,
     spawningMigrationFlag: 'entered-new-fig',
     spawningGroundsFlag: 'pollinating-fig',
     spawningCompleteFlag: 'eggs-laid',

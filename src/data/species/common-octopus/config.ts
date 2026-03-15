@@ -116,8 +116,8 @@ export const COMMON_OCTOPUS_CONFIG: SpeciesConfig = {
     baseEggCount: 200000,
     eggCountHeaFactor: 5000,
     eggCountWeightFactor: 20000,
-    eggSurvivalBase: 0.0001,
-    eggSurvivalWisFactor: 0.000002,
+    eggSurvivalBase: 0.000001,  // ~1-2 survivors from ~800K eggs (real: ~1-2 per brood)
+    eggSurvivalWisFactor: 0.00000002,
     spawningMigrationFlag: 'den-search-begun',
     spawningGroundsFlag: 'brooding-den-found',
     spawningCompleteFlag: 'eggs-laid',
