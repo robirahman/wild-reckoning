@@ -88,6 +88,8 @@ export interface MetabolismConfig {
   coldCostPerDegree: number;
   /** How much skin damage increases cold cost (multiplier per damage point, 0-100). */
   insulationLossPerDamagePoint: number;
+  /** Fractional BMR reduction in winter (0-1). E.g., 0.25 = 25% lower BMR. Models metabolic depression. */
+  winterMetabolicReduction?: number;
 
   // ── Immune ──
   /** Baseline immune capacity at full health and nutrition. */

@@ -64,12 +64,13 @@ export const CHICKEN_CONFIG: SpeciesConfig = {
   },
 
   seasonalWeight: {
-    // Broilers gain ~0.12-0.15 lbs/day on growth-optimized feed
-    // Reaches 6+ lbs in 42 days — faster than skeletons can support
-    spring: 0.13,
-    summer: 0.11,  // Heat stress in packed sheds
-    autumn: 0.13,
-    winter: 0.12,
+    // Broilers gain ~0.12-0.15 lbs/day on growth-optimized feed.
+    // With turnUnit='day' (4 turns/day), values are per 6-hour turn.
+    // Target: ~0.14 lbs/day = 0.035 lbs per turn.
+    spring: 0.035,
+    summer: 0.030,  // Heat stress in packed sheds
+    autumn: 0.035,
+    winter: 0.033,
     foragingBonus: 0,  // No foraging in confinement — all feed is delivered
   },
 

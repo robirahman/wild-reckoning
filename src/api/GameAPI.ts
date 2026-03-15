@@ -691,7 +691,10 @@ export class GameAPI {
       if (def && parasite.currentStage === def.stages.length - 1) {
         const imm = computeEffectiveValue(animal.stats[StatId.IMM]);
         const immFactor = 1.0 + (imm / 100);
-        if (state.rng.chance(config.diseaseDeathChanceAtCritical * immFactor)) {
+        // Scale disease death check by turn frequency — day-turn species
+        // get 4× more checks per day than weekly species
+        const turnScale = (config.turnUnit === 'day') ? 0.25 : 1;
+        if (state.rng.chance(config.diseaseDeathChanceAtCritical * immFactor * turnScale)) {
           state.killAnimal(`Died from complications of ${def.name}.`);
           return;
         }

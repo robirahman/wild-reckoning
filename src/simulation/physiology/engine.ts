@@ -63,7 +63,14 @@ export function tickPhysiologyEngine(input: PhysiologyTickInput): PhysiologyTick
 
   // 2a. Basal metabolic rate, scaled by body mass (Kleiber's law)
   const massRatio = Math.max(0.3, animal.weight / mc.referenceWeight);
-  const bmr = mc.basalMetabolicRate * Math.pow(massRatio, mc.metabolicScalingExponent);
+  let bmr = mc.basalMetabolicRate * Math.pow(massRatio, mc.metabolicScalingExponent);
+
+  // Winter metabolic depression: deer reduce BMR by 20-30% in winter
+  // (reduced thyroid activity, lower heart rate, behavioral torpor)
+  if (mc.winterMetabolicReduction && (time.season === 'winter' || time.season === 'autumn')) {
+    const reduction = time.season === 'winter' ? mc.winterMetabolicReduction : mc.winterMetabolicReduction * 0.5;
+    bmr *= (1 - reduction);
+  }
 
   // 2b. Activity cost: foraging effort, movement, fleeing
   // ~25% of BMR at neutral activity; scales with foraging intensity
@@ -110,8 +117,10 @@ export function tickPhysiologyEngine(input: PhysiologyTickInput): PhysiologyTick
   const agePhase = config.agePhases.find(p =>
     animal.age >= p.minAge && (p.maxAge === undefined || animal.age < p.maxAge)
   );
-  const growthCost = (agePhase?.id === 'fawn' || agePhase?.id === 'yearling')
+  const growthCost = agePhase?.id === 'fawn'
     ? bmr * 0.15 // 15% of BMR goes to skeletal/muscle growth
+    : agePhase?.id === 'yearling'
+    ? bmr * 0.08 // 8% — yearlings are past peak growth
     : 0;
 
   const totalExpenditure = (bmr + activityCost + thermoCost + immuneCost + reproCost + growthCost) * ffMult;

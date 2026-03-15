@@ -64,12 +64,13 @@ export const PIG_CONFIG: SpeciesConfig = {
   },
 
   seasonalWeight: {
-    // Industrial pigs gain ~1.5-2.0 lbs/day on high-energy feed
-    // Slightly reduced in summer (heat stress in sheds)
-    spring: 1.6,
-    summer: 1.3,  // Heat stress reduces feed conversion
-    autumn: 1.6,
-    winter: 1.5,
+    // Industrial pigs gain ~1.5-2.0 lbs/day on high-energy feed.
+    // With turnUnit='day' (4 turns/day), values are per 6-hour turn.
+    // Target: ~1.6 lbs/day = 0.4 lbs per turn.
+    spring: 0.4,
+    summer: 0.33,  // Heat stress reduces feed conversion
+    autumn: 0.4,
+    winter: 0.38,
     foragingBonus: 0,  // No foraging in confinement — all feed is delivered
   },
 

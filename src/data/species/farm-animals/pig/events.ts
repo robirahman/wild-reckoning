@@ -60,9 +60,9 @@ export const PIG_EVENTS: GameEvent[] = [
     category: 'environmental',
     narrativeText: 'Now that you are pregnant, you have been moved to a gestation crate. It is so narrow you cannot turn around or even lie down comfortably. Your muscles begin to atrophy.',
     statEffects: [
-      { stat: StatId.HEA, amount: -10, label: '-HEA' },
+      { stat: StatId.HEA, amount: -3, label: '-HEA' },
       { stat: StatId.TRA, amount: 15, label: '+TRA' },
-      { stat: StatId.ADV, amount: -10, label: '-ADV' }
+      { stat: StatId.ADV, amount: -5, label: '-ADV' }
     ],
     conditions: [
       { type: 'has_flag', flag: 'pregnant' },
@@ -77,7 +77,7 @@ export const PIG_EVENTS: GameEvent[] = [
     category: 'health',
     narrativeText: 'To prevent tail-biting caused by the stress of overcrowding, the farmer clips your tail off. No pain relief is used.',
     statEffects: [
-      { stat: StatId.HEA, amount: -5, label: '-HEA' },
+      { stat: StatId.HEA, amount: -2, label: '-HEA' },
       { stat: StatId.TRA, amount: 15, label: '+TRA' }
     ],
     conditions: [
@@ -109,13 +109,14 @@ export const PIG_EVENTS: GameEvent[] = [
     category: 'health',
     narrativeText: 'Dust and high levels of ammonia from the manure pits below the slats irritate your respiratory tract. You have developed a persistent, hacking cough.',
     statEffects: [
-      { stat: StatId.HEA, amount: -12, label: '-HEA' },
-      { stat: StatId.IMM, amount: -10, label: '-IMM' }
+      { stat: StatId.HEA, amount: -4, label: '-HEA' },
+      { stat: StatId.IMM, amount: -3, label: '-IMM' }
     ],
     conditions: [
       { type: 'region', regionIds: ['farmstead'] }
     ],
-    weight: 15,
+    cooldown: 20,
+    weight: 10,
     tags: ['health', 'environmental']
   },
   {
@@ -179,7 +180,7 @@ export const PIG_EVENTS: GameEvent[] = [
     ],
     conditions: [
       { type: 'weight_above', threshold: 250 },
-      { type: 'turn_above', threshold: 200 },
+      { type: 'turn_above', threshold: 680 },  // ~170 days at 4 turns/day
     ],
     weight: 9999,
     tags: ['slaughter', 'death'],

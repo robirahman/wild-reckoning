@@ -19,13 +19,13 @@ export const DEER_METABOLISM: MetabolismConfig = {
   referenceWeight: 150,              // lbs (adult male reference)
   metabolicScalingExponent: 0.75,    // Kleiber's law
   caloricDensityPerLb: 35,          // kcal-units per lb of body fat
-  maxFatMobilization: 3,            // Max lbs/turn loss from fat reserves
-  maxFatDeposition: 3,              // Max lbs/turn gain from caloric surplus
+  maxFatMobilization: 2,            // Max lbs/turn loss from fat reserves (real: ~0.4 lb/day = 2.8/wk)
+  maxFatDeposition: 5,              // Max lbs/turn gain from caloric surplus (real: ~0.7 lb/day = 5/wk in autumn)
 
   // ── Foraging ──
   // At quality=1.0 and foraging=3 (neutral), intake ≈ 400 → surplus of ~60 → slow gain
   // At quality=0.3 (harsh winter) and foraging=3, intake ≈ 120 → deficit of ~220 → rapid loss
-  baseForagingRate: 700,            // kcal-units/turn at quality=1.0, foraging=3
+  baseForagingRate: 900,            // kcal-units/turn at quality=1.0, foraging=3
   foragingBehaviorMultiplier: 0.15, // Each foraging level above/below 3 adds ±15%
 
   // ── Thermoregulation ──
@@ -34,6 +34,7 @@ export const DEER_METABOLISM: MetabolismConfig = {
   lowerCriticalTemp: 14,            // F — with winter coat
   upperCriticalTemp: 86,            // F
   coldCostPerDegree: 3,             // kcal-units per degree below LCT (with winter coat insulation)
+  winterMetabolicReduction: 0.25,  // 25% BMR reduction in winter (reduced thyroid, behavioral torpor)
   insulationLossPerDamagePoint: 0.012, // 1.2% increase in cold cost per skin damage point
 
   // ── Immune ──
