@@ -27,6 +27,8 @@ export const SFX_BY_CATEGORY: Record<EventCategory, string[]> = {
   migration: [],
   reproduction: [],
   milestone: [],
+  impairment: [],
+  physiology: [],
 };
 
 export const SFX_BY_TAG: Record<string, string[]> = {

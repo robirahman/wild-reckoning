@@ -1,4 +1,4 @@
-import type { InteractionTemplate, Situation, SituationType } from '../types';
+import type { InteractionTemplate, Situation } from '../types';
 import type { SimulationContext, SimulationOutcome, SimulationChoice } from '../../types';
 import { composeNarrative } from '../narrativeComposer';
 

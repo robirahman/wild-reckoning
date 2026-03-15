@@ -9,12 +9,7 @@ function getCapability(ctx: SimulationContext, cap: string): number {
   return ctx.animal.bodyState?.capabilities[cap] ?? 100;
 }
 
-function _hasFractureInZone(ctx: SimulationContext, zone: string): boolean {
-  if (!ctx.animal.bodyState) return false;
-  return ctx.animal.bodyState.conditions.some(
-    c => c.type === 'fracture' && c.bodyPartId.includes(zone),
-  );
-}
+// Removed unused _hasFractureInZone helper
 
 // ══════════════════════════════════════════════════
 //  LOCOMOTION IMPAIRMENT — fires when movement is significantly impaired

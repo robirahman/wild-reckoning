@@ -18,6 +18,8 @@ export const ILLUSTRATION_POOLS: Record<EventCategory, string[]> = {
   migration: [],
   reproduction: [],
   milestone: [],
+  impairment: [],
+  physiology: [],
 };
 
 /**

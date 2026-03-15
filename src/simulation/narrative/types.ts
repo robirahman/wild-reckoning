@@ -114,7 +114,10 @@ export type EmotionalTone =
   | 'relief'      // escape, recovery
   | 'cold'        // exposure, blizzard
   | 'confusion'   // novel/incomprehensible events
-  | 'calm';       // neutral events
+  | 'calm'        // neutral events
+  | 'discomfort'  // environmental irritants, mild harm
+  | 'joy'         // play, bonding, positive social
+  | 'surprise';   // unexpected encounters
 
 // ── Debriefing Entry ──
 

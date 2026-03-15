@@ -1,7 +1,6 @@
 import type { SimulationContext } from '../types';
-import type { Situation, SituationType, NarrativeHook } from './types';
+import type { Situation } from './types';
 import { getTerrainProfile } from '../../interactions/types';
-import { StatId, computeEffectiveValue } from '../../../types/stats';
 
 // ══════════════════════════════════════════════════
 //  SITUATION DETECTOR
@@ -471,7 +470,7 @@ function detectMemorySituations(ctx: SimulationContext, out: Situation[]): void 
   }
 
   // Rehabilitation intro (first few turns)
-  if (ctx.time.turn <= 3 && ctx.animal.backstory?.id === 'rehabilitated') {
+  if (ctx.time.turn <= 3 && ctx.animal.backstory?.type === 'rehabilitated') {
     out.push({
       type: 'memory-trigger',
       source: 'rehabilitation-intro',

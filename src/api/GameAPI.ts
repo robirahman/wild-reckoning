@@ -33,12 +33,12 @@ import { DEER_MORTALITY } from '../simulation/calibration/data/deer';
 import { getRegionDefinition } from '../data/regions';
 import { computeInstincts } from '../simulation/instinct/engine';
 import { pickIllustration } from '../engine/IllustrationPicker';
-import { BACKSTORY_OPTIONS, type Backstory } from '../types/species';
+import { BACKSTORY_OPTIONS } from '../types/species';
 import { getAllSpeciesIds } from '../data/species';
 import type { SimulationContext } from '../simulation/events/types';
 import type { CalibratedRates } from '../simulation/calibration/types';
 import type { ResolvedEvent } from '../types/events';
-import type { TurnResult, PendingDeathRoll } from '../types/turnResult';
+import type { TurnResult } from '../types/turnResult';
 import type { BehavioralSettings, BehaviorLevel } from '../types/behavior';
 
 // ---------------------------------------------------------------------------
@@ -227,7 +227,7 @@ export class GameAPI {
       const reproConfig = state.speciesBundle.config.reproduction;
       const isMating =
         (reproConfig.type === 'iteroparous' &&
-          (reproConfig.matingSeasons === 'any' || reproConfig.matingSeasons.includes(state.time.season as 'spring' | 'summer' | 'fall' | 'winter'))) ||
+          (reproConfig.matingSeasons === 'any' || reproConfig.matingSeasons.includes(state.time.season))) ||
         (reproConfig.type === 'semelparous' &&
           state.animal.flags.has(reproConfig.spawningMigrationFlag));
       if (isMating) {
@@ -349,7 +349,7 @@ export class GameAPI {
 
     return {
       turn: state.time.turn,
-      month: state.time.month,
+      month: state.time.monthIndex,
       year: state.time.year,
       season: state.time.season,
       events: allEvents.map(summarizeEvent),
@@ -551,9 +551,9 @@ export class GameAPI {
     if (!state.map) return [];
     const current = state.map.nodes.find(n => n.id === state.map!.currentLocationId);
     if (!current) return [];
-    return current.edges.map(edgeId => {
-      const node = state.map!.nodes.find(n => n.id === edgeId);
-      return node ? { id: node.id, type: node.type, name: (node as { name?: string }).name } : { id: edgeId, type: 'unknown' };
+    return current.connections.map((connId: string) => {
+      const node = state.map!.nodes.find(n => n.id === connId);
+      return node ? { id: node.id, type: node.type, name: (node as { name?: string }).name } : { id: connId, type: 'unknown' };
     });
   }
 
@@ -566,7 +566,7 @@ export class GameAPI {
     return {
       phase: state.phase,
       turn: state.time.turn,
-      month: state.time.month,
+      month: state.time.monthIndex,
       year: state.time.year,
       season: state.time.season,
       species: a.speciesId,
@@ -578,7 +578,7 @@ export class GameAPI {
       stats: this.getStatSnapshot(),
       parasites: a.parasites.map(p => p.definitionId),
       injuries: a.injuries.map(i => i.definitionId),
-      conditions: (a.conditions ?? []).map(c => c.id ?? c.definitionId ?? String(c)),
+      conditions: (a.conditions ?? []).map(c => c.definitionId),
       flags: Array.from(a.flags),
       behavioralSettings: { ...state.behavioralSettings },
       energy: a.energy,

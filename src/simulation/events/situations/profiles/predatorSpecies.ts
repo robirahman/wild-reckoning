@@ -3,7 +3,6 @@ import type { NarrativeEntity } from '../../../narrative/types';
 import type { StatEffect } from '../../../../types/events';
 import type { ContextualFragment } from '../../../narrative/templates/shared';
 import type { SimulationContext } from '../../types';
-import type { SimulationChoice } from '../../types';
 import { StatId } from '../../../../types/stats';
 import { wolfEntity, coyoteEntity, cougarEntity, hunterEntity } from '../../../narrative/perspective';
 import {

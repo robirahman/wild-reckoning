@@ -66,7 +66,7 @@ describe('GameAPI', () => {
 
   it('makes choices and ends turn', () => {
     game.start({ species: 'white-tailed-deer', backstory: 'wild-born', sex: 'female', seed: 42 });
-    const turn = game.generateTurn();
+    game.generateTurn();
 
     // Auto-choose any pending choices
     game.autoChoose();

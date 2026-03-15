@@ -1,5 +1,5 @@
 import type { InteractionTemplate, Situation } from '../types';
-import type { SimulationContext, SimulationOutcome, SimulationChoice } from '../../types';
+import type { SimulationContext } from '../../types';
 import type { HealthTriggerConfig } from '../../data/healthConfigs';
 import { composeNarrative } from '../narrativeComposer';
 

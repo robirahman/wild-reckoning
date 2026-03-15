@@ -1,6 +1,5 @@
 import type { SimulationContext } from '../types';
 import type { Situation, NarrativeSlot } from './types';
-import type { NarrativeEnvironment } from '../../narrative/types';
 import type { ContextualFragment } from '../../narrative/templates/shared';
 import { pickContextualText, toFragmentContext } from '../../narrative/templates/shared';
 import { buildEnvironment } from '../../narrative/contextBuilder';

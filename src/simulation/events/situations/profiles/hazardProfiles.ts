@@ -1,12 +1,10 @@
 import type { StatEffect } from '../../../../types/events';
 import type { ContextualFragment } from '../../../narrative/templates/shared';
-import type { SimulationContext, SimulationOutcome, SimulationChoice } from '../../types';
+import type { SimulationContext, SimulationChoice } from '../../types';
 import type { HarmEvent, HarmType } from '../../../harm/types';
 import type { BodyZone } from '../../../anatomy/types';
 import type { Situation } from '../types';
 import { StatId } from '../../../../types/stats';
-import { getTerrainProfile } from '../../../interactions/types';
-import { resolveExposure } from '../../../interactions/exposure';
 
 // ══════════════════════════════════════════════════
 //  ENVIRONMENTAL HAZARD PROFILES

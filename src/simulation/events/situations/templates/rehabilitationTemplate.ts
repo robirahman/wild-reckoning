@@ -1,4 +1,4 @@
-import type { InteractionTemplate, Situation } from '../types';
+import type { InteractionTemplate } from '../types';
 import type { SimulationContext, SimulationOutcome, SimulationChoice } from '../../types';
 import { StatId } from '../../../../types/stats';
 import { buildEnvironment, action, buildNarrativeContext } from '../../../narrative/contextBuilder';

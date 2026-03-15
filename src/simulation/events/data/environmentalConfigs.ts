@@ -649,8 +649,6 @@ export const BARBED_WIRE_CONFIG: EnvironmentalHazardConfig = {
   narrative: (ctx) => {
     const loco = ctx.animal.bodyState?.capabilities['locomotion'] ?? 100;
     const isNight = ctx.time.timeOfDay === 'night' || ctx.time.timeOfDay === 'dusk';
-    const env = buildEnvironment(ctx);
-
     let text: string;
     if (loco < 60) {
       text = 'The fence appears without warning — a line of thin, vicious wire strung between wooden posts. You try to jump, but your damaged legs betray you. The wire catches your belly and legs, biting deep, and for a terrible moment you are tangled, thrashing, the barbs tearing new wounds with every panicked movement. When you finally wrench free, you leave tufts of fur and streaks of blood on the wire behind you.';
@@ -749,9 +747,7 @@ export const ICE_FALL_THROUGH_CONFIG: EnvironmentalHazardConfig = {
     { type: 'modify_weight', amount: -2 },
   ],
 
-  narrative: (ctx) => {
-    const env = buildEnvironment(ctx);
-
+  narrative: (_ctx) => {
     return {
       text: 'The ice looks solid — it held your weight yesterday, held it the day before. But today, something is different. The crack comes first — a sharp, gunshot report that freezes you mid-stride. Then the surface tilts beneath you and you are in the water, the cold so intense it stops your breath, stops your heart, stops your thoughts. Your legs churn against nothing. The edges of the hole crumble when you try to climb out. The cold is eating you alive.',
       actionDetail: 'The ice cracks and gives way. You are in the water, the cold so intense it stops your breath. The edges crumble when you try to climb out.',
@@ -857,7 +853,7 @@ export const MUD_TRAP_CONFIG: EnvironmentalHazardConfig = {
     { stat: StatId.ADV, amount: 5, duration: 2, label: '+ADV' },
   ],
 
-  harmTemplate: (ctx) => ({
+  harmTemplate: (_ctx) => ({
     sourceLabel: 'mud trap strain',
     magnitudeRange: [10, 30] as [number, number],
     targetZones: ['hind-legs', 'front-legs'],

@@ -15,7 +15,9 @@ export type EventCategory =
   | 'psychological'
   | 'migration'
   | 'reproduction'
-  | 'milestone';
+  | 'milestone'
+  | 'impairment'
+  | 'physiology';
 
 // ── Stat Effects ──
 

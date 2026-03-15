@@ -79,7 +79,7 @@ const HERD_ALARM: SocialProfile = {
   clinicalDetail: 'Herd alarm response triggered by conspecific detection of threat.',
   emotionalTone: 'fear',
 
-  choices(ctx) {
+  choices(_ctx) {
     return [
       {
         id: 'follow-alarm',
@@ -160,7 +160,7 @@ const DOE_HIERARCHY: SocialProfile = {
   clinicalDetail: 'Doe hierarchy challenge. Dominance display for territory and feeding priority.',
   emotionalTone: 'tension',
 
-  choices(ctx) {
+  choices(_ctx) {
     return [
       {
         id: 'challenge-doe',
@@ -174,7 +174,7 @@ const DOE_HIERARCHY: SocialProfile = {
             opponentRank: 'peer',
             groupSize: 2,
           });
-          if (result.won) {
+          if (result.rankChange > 0) {
             return {
               ...base,
               statEffects: [{ stat: StatId.WIS, amount: 3, label: '+WIS' }, { stat: StatId.ADV, amount: -3, label: '-ADV' }],
@@ -329,7 +329,7 @@ const RIVAL_RETURNS: SocialProfile = {
             opponentRank: 'peer',
             groupSize: 2,
           });
-          if (social.won) {
+          if (social.rankChange > 0) {
             return { ...base, statEffects: [{ stat: StatId.WIS, amount: 2, label: '+WIS' }, { stat: StatId.TRA, amount: -3, label: '-TRA' }] };
           }
           return { ...base, statEffects: [{ stat: StatId.ADV, amount: 4, duration: 2, label: '+ADV' }] };

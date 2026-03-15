@@ -267,7 +267,7 @@ export const WINTER_YARD_CONFIG: SeasonalTriggerConfig = {
     eventType: 'winter-yard',
   }),
 
-  choices: (ctx) => [
+  choices: (_ctx) => [
     {
       id: 'join-yard',
       label: 'Join the winter yard',

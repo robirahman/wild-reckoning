@@ -1,8 +1,8 @@
 import type { InteractionTemplate, Situation } from '../types';
 import type { SimulationContext, SimulationOutcome, SimulationChoice } from '../../types';
 import type { HarmEvent } from '../../../harm/types';
-import { findSituation, hasSituation, filterSituations } from '../types';
-import { findSpeciesProfile, PREDATOR_SPECIES } from '../profiles/predatorSpecies';
+import { findSituation, hasSituation } from '../types';
+import { findSpeciesProfile } from '../profiles/predatorSpecies';
 import type { PredatorSpeciesProfile, PredatorChoiceProfile } from '../profiles/predatorSpecies';
 import { getEncounterRate } from '../../../calibration/calibrator';
 import { resolveChase } from '../../../interactions/chase';
@@ -25,10 +25,6 @@ import { StatId } from '../../../../types/stats';
 
 function getLocomotion(ctx: SimulationContext): number {
   return ctx.animal.bodyState?.capabilities['locomotion'] ?? 100;
-}
-
-function getVision(ctx: SimulationContext): number {
-  return ctx.animal.bodyState?.capabilities['vision'] ?? 100;
 }
 
 /**

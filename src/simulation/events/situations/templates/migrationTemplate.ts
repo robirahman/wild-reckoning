@@ -1,5 +1,5 @@
 import type { InteractionTemplate, Situation } from '../types';
-import type { SimulationContext, SimulationOutcome, SimulationChoice } from '../../types';
+import type { SimulationContext } from '../../types';
 import { composeNarrative } from '../narrativeComposer';
 
 // Import existing configs and factory

@@ -1,6 +1,5 @@
 import type { SimulationContext, SimulationChoice, SimulationOutcome } from '../../types';
 import type { Situation } from '../types';
-import type { StatEffect } from '../../../../types/events';
 import { StatId } from '../../../../types/stats';
 import { resolveChase } from '../../../interactions/chase';
 import { resolveFight } from '../../../interactions/fight';
@@ -67,7 +66,7 @@ export const FAWN_BIRTH_PROFILE: ReproductionProfile = {
   emotionalTone: 'relief',
 
   narratives: [
-    { text: 'The contractions begin at dawn, deep and rhythmic, pulling you into a crouch in the densest cover you can find.', specificity: 1, conditions: [] },
+    { text: 'The contractions begin at dawn, deep and rhythmic, pulling you into a crouch in the densest cover you can find.' },
   ],
 
   computeWeight(ctx, _situations, base) {
@@ -143,7 +142,7 @@ export const FAWN_DEFENSE_PROFILE: ReproductionProfile = {
   emotionalTone: 'fear',
 
   narratives: [
-    { text: 'A predator has been drawn to where your fawn lies hidden.', specificity: 1, conditions: [] },
+    { text: 'A predator has been drawn to where your fawn lies hidden.' },
   ],
 
   computeWeight(ctx, situations, base) {
@@ -326,7 +325,7 @@ export const RUT_DISPLAY_PROFILE: ReproductionProfile = {
   emotionalTone: 'tension',
 
   narratives: [
-    { text: 'A doe stands at the far edge of the meadow, her head raised, testing the wind.', specificity: 1, conditions: [] },
+    { text: 'A doe stands at the far edge of the meadow, her head raised, testing the wind.' },
   ],
 
   computeWeight(ctx, _situations, base) {
@@ -440,7 +439,7 @@ export const RUT_COMBAT_PROFILE: ReproductionProfile = {
   emotionalTone: 'aggression',
 
   narratives: [
-    { text: 'The scraping sound reaches you first — antler against bark, rhythmic and aggressive.', specificity: 1, conditions: [] },
+    { text: 'The scraping sound reaches you first — antler against bark, rhythmic and aggressive.' },
   ],
 
   computeWeight(ctx, situations, base) {

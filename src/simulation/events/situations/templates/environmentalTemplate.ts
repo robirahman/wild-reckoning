@@ -1,6 +1,5 @@
 import type { InteractionTemplate, Situation } from '../types';
-import type { SimulationContext } from '../../types';
-import { hasSituation } from '../types';
+import type { SimulationContext, SimulationOutcome } from '../../types';
 import { HAZARD_PROFILES, resolveHarmFromProfile } from '../profiles/hazardProfiles';
 import type { HazardProfile } from '../profiles/hazardProfiles';
 import { getEncounterRate } from '../../../calibration/calibrator';
@@ -122,8 +121,8 @@ export const environmentalHazardTemplate: InteractionTemplate = {
       ? profile.statEffects(ctx)
       : [...profile.statEffects];
 
-    // Consequences
-    const consequences = profile.consequences ? [...profile.consequences] : [];
+    // Consequences (profile consequences are typed loosely; cast to Consequence[])
+    const consequences = profile.consequences ? [...profile.consequences] as SimulationOutcome['consequences'] : [];
 
     return {
       harmEvents,
