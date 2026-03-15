@@ -62,14 +62,24 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
   applyStatEffects: (effects) => {
     const state = get();
     let stats = { ...state.animal.stats };
+    const config = state.speciesBundle.config;
+    // Scale event stat effects by turn frequency. Day-turn species receive
+    // events every 6 hours (4x/day) vs weekly species (1x/week). Scale
+    // negative effects down so cumulative damage matches the intended rate.
+    const turnUnit = config.turnUnit ?? 'week';
+    const statScale = turnUnit === 'day' ? 0.25 : 1;
 
     for (const effect of effects) {
+      const scaledAmount = effect.amount < 0
+        ? Math.round(effect.amount * statScale)
+        : effect.amount; // Don't scale positive effects (buffs feel better unscaled)
+      if (scaledAmount === 0) continue;
       const modifier = {
         id: `effect-${state.time.turn}-${effect.stat}-${Math.random().toString(36).slice(2, 6)}`,
         source: effect.label,
         sourceType: 'event' as const,
         stat: effect.stat,
-        amount: effect.amount,
+        amount: scaledAmount,
         duration: effect.duration,
       };
       stats = addModifier(stats, modifier);
@@ -442,14 +452,18 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
       }
       currentCooldowns = newCooldowns;
 
-      // Age the animal
+      // Age the animal (increment by 1 month at the start of each new month)
       let ageIncrement = 0;
       if (turnUnit === 'month') {
         ageIncrement = 1;
       } else if (turnUnit === 'week') {
         if (newTime.week === 1) ageIncrement = 1;
       } else if (turnUnit === 'day') {
-        if (newTime.dayInMonth === 1) ageIncrement = 1;
+        // Increment once when the month changes (dayInMonth wraps back to 1)
+        const prevDay = currentAnimal.age === 0 && newTime.turn <= 1
+          ? 1  // Don't increment on very first turn
+          : (currentTime.dayInMonth ?? 1);
+        if (newTime.dayInMonth === 1 && prevDay !== 1) ageIncrement = 1;
       }
       const newAge = currentAnimal.age + ageIncrement;
 

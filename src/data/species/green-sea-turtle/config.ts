@@ -45,7 +45,7 @@ export const GREEN_SEA_TURTLE_CONFIG: SpeciesConfig = {
     maxOldAgeChance: 0.90,
   },
 
-  diseaseDeathChanceAtCritical: 0.02,
+  diseaseDeathChanceAtCritical: 0.005, // Turtles have robust immune systems; parasites rarely lethal
 
   predationVulnerability: {
     injuryProbIncrease: 0.02,

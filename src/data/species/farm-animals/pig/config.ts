@@ -12,10 +12,11 @@ export const PIG_CONFIG: SpeciesConfig = {
 
   startingWeight: { male: 15, female: 15 }, // Weaned piglets
   startingAge: {
-    'industrial-sow': 8,
-    'grower-pig': 3,
+    'industrial-sow': 3,  // Weaned piglet entering the grow-out phase
+    'grower-pig': 2,
   },
   turnUnit: 'day',
+  naturalHealingRate: 15, // Day-turn species face events every 6hr; very high healing needed
   baseStats: {
     [StatId.IMM]: 40,
     [StatId.CLI]: 30,
@@ -24,7 +25,7 @@ export const PIG_CONFIG: SpeciesConfig = {
     [StatId.ADV]: 15,
     [StatId.NOV]: 2,  // Barren environment
     [StatId.WIS]: 20,
-    [StatId.HEA]: 55, // Enough to survive to market weight (~6 months)
+    [StatId.HEA]: 100, // Must survive ~720 day-turns (180 days) against constant event drain
     [StatId.STR]: 60,
   },
 
@@ -74,10 +75,10 @@ export const PIG_CONFIG: SpeciesConfig = {
 
   agePhases: [
     { id: 'piglet', label: 'Piglet', minAge: 0, maxAge: 1 },
-    { id: 'grower', label: 'Grower Pig', minAge: 1, maxAge: 4, statModifiers: [{ stat: StatId.HEA, amount: -5 }] },
-    // Market hogs reach ~280 lbs at ~6 months. Confinement stress,
-    // respiratory disease, and joint problems accumulate rapidly.
-    { id: 'finisher', label: 'Finisher', minAge: 4, maxAge: 8, statModifiers: [{ stat: StatId.HEA, amount: -30 }] },
+    { id: 'grower', label: 'Grower Pig', minAge: 1, maxAge: 5, statModifiers: [{ stat: StatId.HEA, amount: -10 }] },
+    // Market hogs reach ~280 lbs at ~6 months. Slaughter is imminent.
+    // Confinement stress, respiratory disease, and joint problems peak.
+    { id: 'finisher', label: 'Finisher', minAge: 5, maxAge: 8, statModifiers: [{ stat: StatId.HEA, amount: -45 }] },
     { id: 'breeding-stock', label: 'Breeding Stock', minAge: 8 },
   ],
 

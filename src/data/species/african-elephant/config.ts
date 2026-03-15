@@ -46,7 +46,7 @@ export const AFRICAN_ELEPHANT_CONFIG: SpeciesConfig = {
     maxOldAgeChance: 0.95,
   },
 
-  diseaseDeathChanceAtCritical: 0.005,  // Elephants rarely die from infections; robust immune system
+  diseaseDeathChanceAtCritical: 0.003,  // Elephants rarely die from infections; robust immune system
 
   predationVulnerability: {
     injuryProbIncrease: 0.03,

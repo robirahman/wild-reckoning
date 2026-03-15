@@ -16,6 +16,7 @@ export const CHICKEN_CONFIG: SpeciesConfig = {
     'layer': 0,
   },
   turnUnit: 'day', // 4 turns per day
+  naturalHealingRate: 12, // Day-turn species face events every 6hr; high healing needed
   baseStats: {
     [StatId.IMM]: 30, // Stressed immune system
     [StatId.CLI]: 40,
@@ -24,7 +25,7 @@ export const CHICKEN_CONFIG: SpeciesConfig = {
     [StatId.ADV]: 10,
     [StatId.NOV]: 5,  // Almost no novelty
     [StatId.WIS]: 10,
-    [StatId.HEA]: 55, // Enough to survive to slaughter age (~6-8 weeks)
+    [StatId.HEA]: 100, // Must survive ~168 day-turns (42 days) against constant event drain
     [StatId.STR]: 50, // High physiological stress
   },
 

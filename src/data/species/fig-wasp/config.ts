@@ -27,7 +27,7 @@ export const FIG_WASP_CONFIG: SpeciesConfig = {
     [StatId.ADV]: 30,
     [StatId.NOV]: 35,
     [StatId.WIS]: 15,
-    [StatId.HEA]: 15,  // Adults have ~48 hours of energy; minimal health buffer
+    [StatId.HEA]: 35,  // Adults have ~48 hours of energy
     [StatId.STR]: 30,
   },
 

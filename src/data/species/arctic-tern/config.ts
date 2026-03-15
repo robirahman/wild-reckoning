@@ -72,7 +72,7 @@ export const ARCTIC_TERN_CONFIG: SpeciesConfig = {
   },
 
   turnUnit: 'month',
-  naturalHealingRate: 5,
+  naturalHealingRate: 6,
 
   weightUnit: 'g',
   weightDisplayMultiplier: 453.592,

@@ -25,7 +25,7 @@ export const HONEYBEE_WORKER_CONFIG: SpeciesConfig = {
     [StatId.ADV]: 25,
     [StatId.NOV]: 30,
     [StatId.WIS]: 40,
-    [StatId.HEA]: 55,
+    [StatId.HEA]: 80,
     [StatId.STR]: 30,
   },
 
@@ -65,6 +65,7 @@ export const HONEYBEE_WORKER_CONFIG: SpeciesConfig = {
   },
 
   turnUnit: 'day', // 4 turns per day
+  naturalHealingRate: 8, // Day-turn species face events every 6hr; high healing needed
 
   agePhases: [
     {

@@ -45,7 +45,7 @@ export function removeModifiersBySource(stats: StatBlock, sourceId: string): Sta
 
   for (const statId of Object.values(StatId)) {
     const stat = result[statId];
-    const filtered = stat.modifiers.filter((m) => m.id !== sourceId);
+    const filtered = stat.modifiers.filter((m) => m.source !== sourceId && m.id !== sourceId);
     if (filtered.length !== stat.modifiers.length) {
       result[statId] = { ...stat, modifiers: filtered };
     }
