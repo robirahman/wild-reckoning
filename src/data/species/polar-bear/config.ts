@@ -45,18 +45,19 @@ export const POLAR_BEAR_CONFIG: SpeciesConfig = {
     maxOldAgeChance: 0.95,
   },
 
-  diseaseDeathChanceAtCritical: 0.09,
+  diseaseDeathChanceAtCritical: 0.04,
 
   predationVulnerability: {
     injuryProbIncrease: 0.03,
     parasiteProbIncrease: 0.01,
     underweightFactor: 0.002,
     underweightThreshold: 300,
-    deathChanceMin: 0.005,
-    deathChanceMax: 0.50,
+    deathChanceMin: 0.003,
+    deathChanceMax: 0.02,  // Apex predator; lethal encounters rare per-month
   },
 
   turnUnit: 'month',
+  naturalHealingRate: 3,
 
   thermalProfile: {
     type: 'endotherm',

@@ -25,7 +25,7 @@ export const ARCTIC_TERN_CONFIG: SpeciesConfig = {
     [StatId.ADV]: 35,
     [StatId.NOV]: 30,
     [StatId.WIS]: 40,
-    [StatId.HEA]: 55,
+    [StatId.HEA]: 75,
     [StatId.STR]: 45,
   },
 
@@ -45,15 +45,15 @@ export const ARCTIC_TERN_CONFIG: SpeciesConfig = {
     maxOldAgeChance: 0.80,
   },
 
-  diseaseDeathChanceAtCritical: 0.12,
+  diseaseDeathChanceAtCritical: 0.04,
 
   predationVulnerability: {
     injuryProbIncrease: 0.06,
     parasiteProbIncrease: 0.04,
     underweightFactor: 0.005,
     underweightThreshold: 0.18,
-    deathChanceMin: 0.03,
-    deathChanceMax: 0.65,
+    deathChanceMin: 0.005,
+    deathChanceMax: 0.01,  // Adult terns are extremely agile flyers; monthly death risk very low
   },
 
   thermalProfile: {
@@ -64,14 +64,15 @@ export const ARCTIC_TERN_CONFIG: SpeciesConfig = {
   },
 
   seasonalWeight: {
-    spring: 0.005,
-    summer: 0.008,
-    autumn: 0.003,
-    winter: -0.002,
-    foragingBonus: 0.003,
+    spring: 0.05,
+    summer: 0.07,
+    autumn: 0.03,
+    winter: -0.01,
+    foragingBonus: 0.02,
   },
 
   turnUnit: 'month',
+  naturalHealingRate: 5,
 
   weightUnit: 'g',
   weightDisplayMultiplier: 453.592,

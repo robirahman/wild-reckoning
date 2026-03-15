@@ -25,7 +25,7 @@ export const GREEN_SEA_TURTLE_CONFIG: SpeciesConfig = {
     [StatId.ADV]: 25,
     [StatId.NOV]: 30,
     [StatId.WIS]: 35,
-    [StatId.HEA]: 65,
+    [StatId.HEA]: 95,
     [StatId.STR]: 25,
   },
 
@@ -45,18 +45,19 @@ export const GREEN_SEA_TURTLE_CONFIG: SpeciesConfig = {
     maxOldAgeChance: 0.90,
   },
 
-  diseaseDeathChanceAtCritical: 0.20,
+  diseaseDeathChanceAtCritical: 0.02,
 
   predationVulnerability: {
     injuryProbIncrease: 0.02,
     parasiteProbIncrease: 0.01,
     underweightFactor: 0.001,
     underweightThreshold: 180,
-    deathChanceMin: 0.005,
-    deathChanceMax: 0.50,
+    deathChanceMin: 0.002,
+    deathChanceMax: 0.005,  // Adult turtles are heavily armored; lethal encounters rare per-month
   },
 
   turnUnit: 'month',
+  naturalHealingRate: 6,  // Slow but steady reptilian healing over decades
 
   thermalProfile: {
     type: 'ectotherm',
@@ -77,7 +78,7 @@ export const GREEN_SEA_TURTLE_CONFIG: SpeciesConfig = {
     { id: 'hatchling', label: 'Hatchling', minAge: 0, maxAge: 6 },
     { id: 'juvenile', label: 'Juvenile', minAge: 6, maxAge: 120 },
     { id: 'sub-adult', label: 'Sub-Adult', minAge: 120, maxAge: 240, statModifiers: [{ stat: StatId.WIS, amount: 5 }] },
-    { id: 'adult', label: 'Adult', minAge: 240, statModifiers: [{ stat: StatId.WIS, amount: 8 }, { stat: StatId.HEA, amount: 3 }] },
+    { id: 'adult', label: 'Adult', minAge: 240, statModifiers: [{ stat: StatId.WIS, amount: 8 }, { stat: StatId.HEA, amount: 12 }] },
   ],
 
   migration: {

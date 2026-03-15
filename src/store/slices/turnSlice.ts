@@ -126,7 +126,14 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
         break;
       }
       case 'modify_weight': {
-        animal.weight = Math.max(config.weight.minFloor, animal.weight + consequence.amount);
+        // Scale weight consequences proportionally for species without explicit massType.
+        // Events define weight changes in absolute lbs (calibrated for ~100 lb animals).
+        // A -2 lb penalty is 2% for a deer but 900% for a 0.22 lb tern.
+        const weightScale = config.massType
+          ? 1  // massType species have events calibrated for their scale
+          : Math.min(1, animal.weight / 100);
+        const scaledAmount = consequence.amount * weightScale;
+        animal.weight = Math.max(config.weight.minFloor, animal.weight + scaledAmount);
         set({ animal });
         break;
       }
@@ -201,6 +208,14 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
         break;
       }
       case 'death': {
+        // For species with very low deathChanceMax (long-lived species),
+        // direct death consequences from events get a survival check.
+        // This prevents accumulation of rare-but-certain deaths over 500+ turns.
+        const maxChance = config.predationVulnerability.deathChanceMax;
+        if (maxChance < 0.05 && state.rng.chance(1 - maxChance)) {
+          // Survived — narrow escape
+          break;
+        }
         animal.alive = false;
         animal.causeOfDeath = consequence.cause;
         set({ animal });
@@ -342,6 +357,12 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
     const turnUnit = config.turnUnit ?? 'week';
     const iterations = state.fastForward ? 12 : 1;
     const massScale = config.massType === 'micro' ? 0.000001 : (config.massType === 'mega' ? 5 : 1);
+    // For weather/node/climate penalties: use body-weight-proportional scaling
+    // for species without explicit massType. Prevents tiny species (terns, frogs,
+    // butterflies) from receiving penalties calibrated for 100 lb animals.
+    const penaltyScale = config.massType
+      ? massScale
+      : Math.min(massScale, state.animal.weight / 100);
 
     let currentAnimal = { ...state.animal };
     let currentTime = { ...state.time };
@@ -599,20 +620,20 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
         // Legacy mode: scattered weight formula
         seasonalWeightChange = config.seasonalWeight[newTime.season]
           + config.seasonalWeight.foragingBonus * state.behavioralSettings.foraging
-          + (newWeather ? computeWeatherPenalty(newWeather).weightChange * massScale : 0);
+          + (newWeather ? computeWeatherPenalty(newWeather).weightChange * penaltyScale : 0);
 
         // Legacy node food/cover weight contributions
         if (currentNode) {
-          const foodModifier = (currentNode.resources.food - 50) / 50 * 0.5 * massScale;
+          const foodModifier = (currentNode.resources.food - 50) / 50 * 0.5 * penaltyScale;
           seasonalWeightChange += foodModifier;
-          const coverModifier = (currentNode.resources.cover - 50) / 100 * 0.2 * massScale;
+          const coverModifier = (currentNode.resources.cover - 50) / 100 * 0.2 * penaltyScale;
           seasonalWeightChange += coverModifier;
         }
 
         if (climate) {
           const temp = climate.temperatureByMonth[newTime.monthIndex];
           if (temp < 20) {
-            seasonalWeightChange -= (20 - temp) * 0.05 * massScale;
+            seasonalWeightChange -= (20 - temp) * 0.05 * penaltyScale;
           }
         }
 
@@ -658,6 +679,24 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
             sourceType: 'condition' as const,
             stat: mod.stat,
             amount: mod.amount,
+          });
+        }
+      }
+
+      // Natural healing: passive HEA recovery each turn for long-lived species
+      tickedStats = removeModifiersBySource(tickedStats, 'natural-healing');
+      if (config.naturalHealingRate && config.naturalHealingRate > 0) {
+        const currentHEA = computeEffectiveValue(tickedStats[StatId.HEA]);
+        const baseHEA = config.baseStats[StatId.HEA];
+        if (currentHEA < baseHEA) {
+          const healAmount = Math.min(baseHEA - currentHEA, config.naturalHealingRate);
+          tickedStats = addModifier(tickedStats, {
+            id: 'natural-healing',
+            source: 'natural-healing',
+            sourceType: 'condition' as const,
+            stat: StatId.HEA,
+            amount: healAmount,
+            duration: 1,
           });
         }
       }

@@ -24,7 +24,7 @@ export const CHICKEN_CONFIG: SpeciesConfig = {
     [StatId.ADV]: 10,
     [StatId.NOV]: 5,  // Almost no novelty
     [StatId.WIS]: 10,
-    [StatId.HEA]: 40, // Selective breeding causes health issues
+    [StatId.HEA]: 55, // Enough to survive to slaughter age (~6-8 weeks)
     [StatId.STR]: 50, // High physiological stress
   },
 
@@ -74,8 +74,10 @@ export const CHICKEN_CONFIG: SpeciesConfig = {
 
   agePhases: [
     { id: 'chick', label: 'Chick', minAge: 0, maxAge: 1 },
-    { id: 'juvenile', label: 'Fast-Growing Juvenile', minAge: 1, maxAge: 2, statModifiers: [{ stat: StatId.HEA, amount: -10 }] },
-    { id: 'slaughter-weight', label: 'Slaughter Weight', minAge: 2, statModifiers: [{ stat: StatId.HEA, amount: -20 }] },
+    // Broilers reach slaughter weight (~6 lbs) at 42 days (~1.5 months).
+    // Rapid growth causes leg problems, organ failure, ascites.
+    { id: 'juvenile', label: 'Fast-Growing Juvenile', minAge: 1, maxAge: 1.5, statModifiers: [{ stat: StatId.HEA, amount: -15 }] },
+    { id: 'slaughter-weight', label: 'Slaughter Weight', minAge: 1.5, statModifiers: [{ stat: StatId.HEA, amount: -35 }] },
   ],
 
   reproduction: {

@@ -10,6 +10,7 @@ export const WHITE_TAILED_DEER_CONFIG: SpeciesConfig = {
   diet: 'herbivore',
   anatomyId: 'white-tailed-deer',
   metabolismId: 'white-tailed-deer',
+  naturalHealingRate: 1,
   defaultRegion: 'northern-minnesota',
   defaultRegionDisplayName: 'Northern Minnesota',
 

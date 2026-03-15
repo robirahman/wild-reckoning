@@ -206,6 +206,11 @@ export interface SpeciesConfig {
   /** Time unit per turn. 'week' = 4 turns/month (default). 'month' = 1 turn/month. */
   turnUnit?: 'week' | 'month' | 'day';
 
+  /** Per-turn passive HEA recovery (0–5). Represents natural healing capacity.
+   *  Long-lived species need this to counteract cumulative event-based HEA drain.
+   *  Applied each turn as a temporary +HEA modifier when effective HEA is below base. */
+  naturalHealingRate?: number;
+
   /** Natural activity pattern */
   diurnalType?: 'diurnal' | 'nocturnal' | 'crepuscular';
 

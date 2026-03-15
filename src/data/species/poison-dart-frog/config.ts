@@ -25,7 +25,7 @@ export const POISON_DART_FROG_CONFIG: SpeciesConfig = {
     [StatId.ADV]: 25,
     [StatId.NOV]: 30,
     [StatId.WIS]: 35,
-    [StatId.HEA]: 65,
+    [StatId.HEA]: 80,
     [StatId.STR]: 25,
   },
 
@@ -45,26 +45,27 @@ export const POISON_DART_FROG_CONFIG: SpeciesConfig = {
     maxOldAgeChance: 0.80,
   },
 
-  diseaseDeathChanceAtCritical: 0.12,
+  diseaseDeathChanceAtCritical: 0.04,
 
   predationVulnerability: {
     injuryProbIncrease: 0.05,
     parasiteProbIncrease: 0.03,
     underweightFactor: 0.004,
     underweightThreshold: 0.000018,
-    deathChanceMin: 0.01,
-    deathChanceMax: 0.60,
+    deathChanceMin: 0.003,
+    deathChanceMax: 0.008,  // Toxin-protected; few predators risk eating them
   },
 
   seasonalWeight: {
-    spring: 0.0000012,
-    summer: 0.0000015,
-    autumn: 0.0000010,
-    winter: 0.0000008,
-    foragingBonus: 0.0000005,
+    spring: 0.0000080,
+    summer: 0.0000100,
+    autumn: 0.0000070,
+    winter: 0.0000050,
+    foragingBonus: 0.0000030,
   },
 
   turnUnit: 'week',
+  naturalHealingRate: 3,
 
   weightUnit: 'g',
   weightDisplayMultiplier: 453.592,

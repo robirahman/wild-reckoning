@@ -14,9 +14,10 @@ export const FIG_WASP_CONFIG: SpeciesConfig = {
 
   startingWeight: { male: 0.000000030, female: 0.000000040 },
   startingAge: {
-    'healthy-fig': 0,
-    'stressed-fig': 0,
-    'crowded-gall': 0,
+    // Adults emerge fully formed — start at adult age phase
+    'healthy-fig': 1,
+    'stressed-fig': 1,
+    'crowded-gall': 1,
   },
   baseStats: {
     [StatId.IMM]: 30,
@@ -26,7 +27,7 @@ export const FIG_WASP_CONFIG: SpeciesConfig = {
     [StatId.ADV]: 30,
     [StatId.NOV]: 35,
     [StatId.WIS]: 15,
-    [StatId.HEA]: 55,
+    [StatId.HEA]: 15,  // Adults have ~48 hours of energy; minimal health buffer
     [StatId.STR]: 30,
   },
 
@@ -58,11 +59,14 @@ export const FIG_WASP_CONFIG: SpeciesConfig = {
   },
 
   seasonalWeight: {
-    spring: 0.000000003,
-    summer: 0.000000004,
-    autumn: 0.000000002,
-    winter: -0.000000001,
-    foragingBonus: 0.000000001,
+    // Adults don't eat — they burn finite larval fat reserves each turn (6 hours).
+    // Starting weight ~0.000000040, starvation at 0.000000008.
+    // Budget: 0.000000032 lbs of reserves ÷ ~8 turns = ~0.000000004/turn burn.
+    spring: -0.000000004,
+    summer: -0.000000004,
+    autumn: -0.000000004,
+    winter: -0.000000005,
+    foragingBonus: 0,
   },
 
   agePhases: [
@@ -70,23 +74,28 @@ export const FIG_WASP_CONFIG: SpeciesConfig = {
       id: 'gall-larva',
       label: 'Gall Larva',
       minAge: 0,
-      maxAge: 0.75, // ~21 days
+      maxAge: 0.75,
     },
     {
       id: 'pupa',
       label: 'Pupa',
       minAge: 0.75,
-      maxAge: 1.0, // ~7 days
+      maxAge: 1.0,
       statModifiers: [
         { stat: StatId.ADV, amount: 15 },
         { stat: StatId.NOV, amount: 10 },
       ],
     },
     {
+      // Adult wasps have ~48 hours of energy. Massive HEA drain represents
+      // the ticking clock of finite fat reserves and irreversible senescence.
       id: 'adult-in-fig',
       label: 'Adult (Inside Fig)',
       minAge: 1.0,
-      maxAge: 1.05, // ~1.4 days
+      maxAge: 1.05,
+      statModifiers: [
+        { stat: StatId.HEA, amount: -10 },
+      ],
     },
     {
       id: 'free-flying-adult',
@@ -95,6 +104,7 @@ export const FIG_WASP_CONFIG: SpeciesConfig = {
       statModifiers: [
         { stat: StatId.HOM, amount: 10 },
         { stat: StatId.CLI, amount: 5 },
+        { stat: StatId.HEA, amount: -12 },
       ],
     },
   ],

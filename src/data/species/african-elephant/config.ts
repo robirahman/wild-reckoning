@@ -26,7 +26,7 @@ export const AFRICAN_ELEPHANT_CONFIG: SpeciesConfig = {
     [StatId.ADV]: 30,
     [StatId.NOV]: 40,
     [StatId.WIS]: 25,
-    [StatId.HEA]: 60,
+    [StatId.HEA]: 90,
     [StatId.STR]: 35,
   },
 
@@ -46,18 +46,19 @@ export const AFRICAN_ELEPHANT_CONFIG: SpeciesConfig = {
     maxOldAgeChance: 0.95,
   },
 
-  diseaseDeathChanceAtCritical: 0.22,  // Scaled for monthly turns (was 0.06 at weekly)
+  diseaseDeathChanceAtCritical: 0.005,  // Elephants rarely die from infections; robust immune system
 
   predationVulnerability: {
     injuryProbIncrease: 0.03,
     parasiteProbIncrease: 0.01,
     underweightFactor: 0.001,
     underweightThreshold: 3000,
-    deathChanceMin: 0.01,
-    deathChanceMax: 0.60,
+    deathChanceMin: 0.002,
+    deathChanceMax: 0.005,  // Adult elephants have almost no natural predators
   },
 
   turnUnit: 'month',
+  naturalHealingRate: 8,  // Elephants heal well — robust immune systems, long recovery periods
 
   seasonalWeight: {
     spring: 6.0,    // Wet season start — good grazing (scaled for monthly turns)
@@ -70,8 +71,8 @@ export const AFRICAN_ELEPHANT_CONFIG: SpeciesConfig = {
   agePhases: [
     { id: 'calf', label: 'Calf', minAge: 0, maxAge: 48 },
     { id: 'juvenile', label: 'Juvenile', minAge: 48, maxAge: 144, statModifiers: [{ stat: StatId.ADV, amount: 5 }, { stat: StatId.WIS, amount: -3 }] },
-    { id: 'prime', label: 'Prime Adult', minAge: 144, maxAge: 540 },
-    { id: 'elderly', label: 'Elder', minAge: 540, statModifiers: [{ stat: StatId.HEA, amount: -5 }, { stat: StatId.WIS, amount: 15 }] },
+    { id: 'prime', label: 'Prime Adult', minAge: 144, maxAge: 540, statModifiers: [{ stat: StatId.HEA, amount: 8 }] },
+    { id: 'elderly', label: 'Elder', minAge: 540, statModifiers: [{ stat: StatId.HEA, amount: -8 }, { stat: StatId.WIS, amount: 15 }] },
   ],
 
   reproduction: {

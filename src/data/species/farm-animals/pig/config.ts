@@ -24,7 +24,7 @@ export const PIG_CONFIG: SpeciesConfig = {
     [StatId.ADV]: 15,
     [StatId.NOV]: 2,  // Barren environment
     [StatId.WIS]: 20,
-    [StatId.HEA]: 50,
+    [StatId.HEA]: 55, // Enough to survive to market weight (~6 months)
     [StatId.STR]: 60,
   },
 
@@ -74,9 +74,11 @@ export const PIG_CONFIG: SpeciesConfig = {
 
   agePhases: [
     { id: 'piglet', label: 'Piglet', minAge: 0, maxAge: 1 },
-    { id: 'grower', label: 'Grower Pig', minAge: 1, maxAge: 6, statModifiers: [{ stat: StatId.HEA, amount: -5 }] },
-    { id: 'finisher', label: 'Finisher', minAge: 6, maxAge: 12, statModifiers: [{ stat: StatId.HEA, amount: -15 }] },
-    { id: 'breeding-stock', label: 'Breeding Stock', minAge: 12 },
+    { id: 'grower', label: 'Grower Pig', minAge: 1, maxAge: 4, statModifiers: [{ stat: StatId.HEA, amount: -5 }] },
+    // Market hogs reach ~280 lbs at ~6 months. Confinement stress,
+    // respiratory disease, and joint problems accumulate rapidly.
+    { id: 'finisher', label: 'Finisher', minAge: 4, maxAge: 8, statModifiers: [{ stat: StatId.HEA, amount: -30 }] },
+    { id: 'breeding-stock', label: 'Breeding Stock', minAge: 8 },
   ],
 
   reproduction: {
