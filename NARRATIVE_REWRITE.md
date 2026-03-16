@@ -1,12 +1,15 @@
 # Narrative Rewrite Guide — Wild Reckoning
 
-This document specifies what text needs to be rewritten and the criteria for the rewrite.
-The rewrite should be handled by a separate pipeline (e.g., DeepSeek V3 via OpenRouter
-with the designer's custom system prompt), NOT by Claude Code.
+## The Problem
+
+The current narrative text reads like nature documentary voiceover — sentimental,
+overwrought, and written from a human observer's perspective rather than the animal's.
+The designer calls this "Bambislop": Disney-inflected prose that romanticizes the
+animal experience instead of conveying it.
 
 ## What Needs Rewriting
 
-Every player-facing narrative string in the codebase. The complete inventory:
+Every player-facing narrative string in the codebase (~1,000-1,200 blocks total).
 
 ### Species Event Files (~740 blocks)
 Each file contains `narrativeText` and `narrativeResult` strings in events and choices.
@@ -29,7 +32,7 @@ Each file contains `narrativeText` and `narrativeResult` strings in events and c
 | `src/data/species/farm-animals/chicken/events.ts` | 12 |
 
 ### Ambient Text (~62 entries)
-`src/data/ambientText.ts` — seasonal/weather-specific atmospheric prose shown at turn start.
+`src/data/ambientText.ts` — seasonal/weather-specific atmospheric prose shown each turn.
 
 ### Storyline Text (~70 blocks)
 | File | ~Blocks |
@@ -56,76 +59,124 @@ Each file contains `narrativeText` and `narrativeResult` strings in events and c
 
 ### Other Narrative Strings
 - `offspringDeathCauses` arrays in each species config
-- `narrativeText` in instinct nudge descriptions (`src/simulation/instinct/engine.ts`)
+- Instinct nudge descriptions (`src/simulation/instinct/engine.ts`)
 - Death cause strings in event consequences
 - Choice labels and descriptions
 
-**Total: ~1,000-1,200 distinct narrative text blocks.**
+---
+
+## Examples of Bad Text (Current)
+
+> "The forest creaks and groans around you, but in this small refuge the air is still.
+> You chew your cud with the meditative slowness of an animal that has, for the moment,
+> found something close to safety."
+
+Problems: "meditative slowness" is a human literary concept. "Something close to safety"
+is sentimental editorializing. The animal is chewing cud in a hollow. Say that.
+
+> "A prickling sensation runs down your spine — the ancient, wordless alarm that means
+> you are being watched."
+
+Problems: "ancient, wordless alarm" is poetic flourish. "Runs down your spine" is a
+human idiom. The animal's ears swivel, its muscles tense, it smells something wrong.
+
+> "A small box strapped to a tree blinks with a red light as you pass. A faint click
+> sounds — the box has taken your picture. You sniff it cautiously. It smells of metal,
+> plastic, and faintly of human hands, but it poses no threat. Your image will join a
+> research database you will never know exists."
+
+Problems: "taken your picture," "research database you will never know exists" — these
+are human concepts completely outside the animal's experience. The animal sees a blinking
+light, smells metal and human scent. That's all it knows.
+
+> "To you, it is a hymn of fear."
+
+Empty literary posturing. Animals don't have hymns.
 
 ---
 
-## Criteria for Good Narrative Text
+## What Good Text Looks Like
 
-The design document (`simulation_refactor.md`) specifies **Lynchian literalism**: describe
-events as the animal would conceptualize them. The following rules apply:
+The text should describe the animal's **immediate sensory experience** — what it smells,
+hears, feels, sees, tastes — without interpretation, sentiment, or explanation.
 
-### DO
-- Describe only what the animal can **sense**: smell, touch, sound, taste, sight, temperature, pain, hunger, proprioception.
-- Use **present tense**, second person ("you").
-- Be **terse**. One to three sentences. No wasted words.
-- Let the **body speak**: "Your right foreleg buckles under weight" instead of "You have a broken leg."
-- Allow **ambiguity**: the animal doesn't know what a trail camera is. It smells metal and hears a click.
-- Use **specific sensory detail**: not "the forest is beautiful" but "wet bark, cold air, the sound of dripping."
+**A deer finding shelter:**
+> Wet bark against your flank. The wind cuts less here. You lower your head and chew.
 
-### DO NOT
-- **Romanticize or sentimentalize**: No "meditative slowness," "hymn of fear," "ancient, wordless alarm," "something close to safety." No poetic flourishes.
-- **Anthropomorphize**: No "you wonder," "you reflect," "you sense something profound." Animals don't wonder. They smell, hear, feel.
-- **Break animal POV**: No "a research database you will never know exists," "a biological adhesive," "demographic." The animal doesn't have these concepts.
-- **Moralize or Disney-ify**: Compassion doesn't grant wisdom. Helping a stranger doesn't mean "kindness repaid." There are no life lessons.
-- **Over-explain**: Don't explain what the animal is experiencing in human terms. Don't add footnotes or parenthetical clarifications.
-- **Use hollow literary cliches**: "Older than language," "older than you are," "the weight of the moment," "a stone settling behind you," "electric tension."
+**A deer sensing a predator:**
+> Your ears lock forward. Something in the brush. Urine smell, old but strong. Your
+> weight shifts to your hindquarters.
 
-### Wisdom-Gated Disclosure
-Clinical/medical terms can be used ONLY when:
-1. The term describes a **somatic sensation** the animal would feel (e.g., "the ulna" is where it hurts).
-2. The information is **non-actionable** — knowing the term doesn't help the player metagame.
+**A deer encountering a trail camera:**
+> Red light. Click. Metal smell and human hands, faint. You circle it once and move on.
 
-Example of what NOT to do: "You have contracted chronic wasting disease, a prion-based
-neurological condition..." The animal doesn't know any of this.
+**A salmon encountering a fishing net:**
+> The water changes. Something blocks the current ahead — a wall that gives when you
+> push against it but wraps tighter the harder you fight.
 
-Example of what TO do: "Something is wrong behind your eyes. The world tilts. Your legs
+**A fig wasp emerging from a fig:**
+> Light. Air moving. Your wings dry in seconds. The chemical gradient pulls you
+> southeast.
+
+---
+
+## Desiderata for Final Text
+
+### Voice and Perspective
+- **Second person, present tense.** "You smell," "you hear," "your legs ache."
+- **Animal sensory perspective only.** The text conveys what the animal can perceive
+  through its actual senses. A deer has excellent hearing and smell but poor color vision.
+  An octopus has superb vision and chemoreception. A honeybee navigates by polarized
+  light and pheromone gradients.
+- **No narrator.** There is no omniscient voice commenting on the scene. The text IS the
+  animal's experience, not a description of it.
+
+### Biological Accuracy
+- **Species-specific sensory capabilities.** A salmon smells its natal river. A polar
+  bear detects seal breathing holes under ice by scent. A monarch butterfly navigates
+  by sun compass and magnetic field. Use each species' real sensory biology.
+- **Realistic events.** Parasites should behave as they actually behave. Predator
+  encounters should reflect real predator-prey dynamics. Weather effects should match
+  the species' real thermal biology. Seasonal changes should reflect the species' actual
+  habitat.
+- **Accurate anatomy.** A deer has a rumen. A salmon has gills. An octopus has three
+  hearts. When the body is described, it should be the right body.
+
+### What to Avoid
+- **Sentimentality.** No wistfulness, no beauty, no profundity, no "something close to
+  safety." The animal is not reflecting on its life.
+- **Anthropomorphism.** No wondering, reflecting, sensing something profound, feeling
+  "ancient" connections. Animals process stimuli; they don't have existential experiences.
+- **Human-only concepts.** No databases, research, photography, biological adhesive,
+  demographic, conservation. If the animal can't perceive it, it doesn't exist in the text.
+- **Moral framing.** No kindness repaid, no compassion rewarded, no life lessons. Helping
+  another animal may reduce local competition or create a useful alliance. It is not virtue.
+- **Literary cliche.** No "older than language," "hymn of fear," "electric tension,"
+  "weight of the moment," "stone settling behind you." No metaphors the animal wouldn't
+  have.
+- **Over-explanation.** One to three sentences per event. Say what happens. Stop.
+
+### Conditional Disclosure of Clinical Terms
+Medical or scientific terms may appear when both conditions are met:
+1. The term names a **sensation the animal is feeling** — "the ulna" is where it hurts,
+   "nausea" is what the gut is doing. The animal doesn't need to know the word; the
+   player benefits from the specificity.
+2. The knowledge is **non-actionable** — knowing the clinical name doesn't give the
+   player a strategy advantage. "Brainworm" doesn't help you avoid brainworms.
+
+Bad: "You have contracted chronic wasting disease, a prion-based neurological condition
+that will progressively destroy your brain tissue."
+
+Good: "Something is wrong behind your eyes. The world tilts when you stand. Your legs
 do what they want."
 
-### Tone Reference
-The designer has a custom system prompt for generating text in the correct style:
-https://pastebin.com/wY6xEiwW
-
-And a DeepSeek V3 example output demonstrating the correct tone:
-https://pastebin.com/uPBweAcn
-
 ---
 
-## Extraction Format
+## Scope
 
-Each narrative block can be extracted as a JSON record for batch rewriting:
+Every `narrativeText`, `narrativeResult`, `description`, choice `label`, death cause
+string, offspring death cause, instinct nudge description, and ambient text entry in the
+codebase should be reviewed and rewritten to meet the above criteria.
 
-```json
-{
-  "file": "src/data/species/white-tailed-deer/events.ts",
-  "eventId": "deer-shelter-hollow",
-  "field": "narrativeText",
-  "species": "white-tailed-deer",
-  "category": "environmental",
-  "currentText": "The forest creaks and groans around you...",
-  "context": "The deer has found a sheltered hollow to rest in during bad weather."
-}
-```
-
-The rewrite pipeline should:
-1. Extract all narrative blocks to JSON
-2. Send each to the LLM with the system prompt + species context
-3. Collect rewritten text
-4. Patch back into the source files
-
-A script to extract and re-inject could be built using the headless API infrastructure
-in `src/api/` as a starting point.
+The mechanical/gameplay content of each event (what happens, what stat effects apply,
+what consequences fire) should NOT change. Only the text that the player reads.
