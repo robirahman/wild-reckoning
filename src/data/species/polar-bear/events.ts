@@ -910,8 +910,8 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
       { type: 'no_flag', flag: 'mated-this-season' },
       { type: 'no_flag', flag: 'cubs-dependent' },
     ],
-    weight: 20,
-    cooldown: 24,
+    weight: 12,
+    cooldown: 36,  // Real polar bears breed every 3-4 years (cub dependency 2.5y)
     tags: ['reproduction', 'social'],
   },
 

@@ -168,13 +168,13 @@ export const ARCTIC_TERN_CONFIG: SpeciesConfig = {
     offspringLabelTriple: 'three chicks',
     dependenceTurns: 3,
     maturationTurns: 24,
-    offspringBaseSurvival: 0.995,
-    offspringSurvivalWinterPenalty: 0.02,
+    offspringBaseSurvival: 0.965,  // Real chick-to-fledging survival ~50-60%, to maturity ~35%
+    offspringSurvivalWinterPenalty: 0.03,
     offspringSurvivalSummerBonus: 0.01,
-    offspringSurvivalYoungPenalty: 0.01,
+    offspringSurvivalYoungPenalty: 0.02,
     offspringSurvivalYoungThreshold: 6,
-    offspringSurvivalMin: 0.85,
-    offspringSurvivalMax: 0.998,
+    offspringSurvivalMin: 0.80,
+    offspringSurvivalMax: 0.985,
     offspringDeathCauses: [
       'Taken by a great skua',
       'Starved during a storm',

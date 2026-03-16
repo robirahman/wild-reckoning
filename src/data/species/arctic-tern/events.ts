@@ -540,8 +540,8 @@ export const ARCTIC_TERN_EVENTS: GameEvent[] = [
       { type: 'no_flag', flag: 'pregnant' },
       { type: 'no_flag', flag: 'mated-this-season' },
     ],
-    weight: 15,
-    cooldown: 8,
+    weight: 8,
+    cooldown: 18,  // ~1.5 years between successful nestings (many fail in real life)
     tags: ['reproduction', 'social'],
   },
 
