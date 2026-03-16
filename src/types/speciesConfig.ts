@@ -214,6 +214,11 @@ export interface SpeciesConfig {
    *  Applied each turn as a temporary +HEA modifier when effective HEA is below base. */
   naturalHealingRate?: number;
 
+  /** Base attention budget for behavioral sliders. Total slider points cannot exceed this.
+   *  Varies by species intelligence (elephant 22, deer 18, insect 12). Age and wisdom
+   *  can increase the effective budget at runtime. Default: 18. */
+  attentionBudget?: number;
+
   /** Natural activity pattern */
   diurnalType?: 'diurnal' | 'nocturnal' | 'crepuscular';
 

@@ -46,6 +46,7 @@ export const CHINOOK_SALMON_CONFIG: SpeciesConfig = {
   },
 
   diseaseDeathChanceAtCritical: 0.10,
+  attentionBudget: 14,
 
   predationVulnerability: {
     injuryProbIncrease: 0.08,

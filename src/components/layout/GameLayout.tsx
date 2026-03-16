@@ -1,13 +1,10 @@
 import { useEffect, useState } from 'react';
 import { TurnHeader } from '../header/TurnHeader';
-import { ActiveEvents } from '../events/ActiveEvents';
-import { PassiveEvents } from '../events/PassiveEvents';
+import { SequentialEventReveal } from '../events/SequentialEventReveal';
 import { StatsPanel } from '../stats/StatsPanel';
 import { ParasiticInfections } from '../health/ParasiticInfections';
 import { HealthComplications } from '../health/HealthComplications';
 import { BehavioralSettings } from '../behavior/BehavioralSettings';
-import { TurnControls } from '../TurnControls';
-import { ActionPanel } from '../ActionPanel';
 import { TurnResultsScreen } from '../results/TurnResultsScreen';
 import { EventHistoryPanel } from '../history/EventHistoryPanel';
 import { JournalView } from '../JournalView';
@@ -80,12 +77,7 @@ export function GameLayout() {
         {showingResults ? (
           <TurnResultsScreen />
         ) : (
-          <>
-            <ActiveEvents />
-            <PassiveEvents />
-            <ActionPanel />
-            <TurnControls />
-          </>
+          <SequentialEventReveal />
         )}
       </main>
 

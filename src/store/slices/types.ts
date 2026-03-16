@@ -43,6 +43,8 @@ export interface UISlice {
   turnResult: TurnResult | null;
   /** Active instinct nudges for the current turn (transient, advisory only) */
   instinctNudges: InstinctNudge[];
+  /** Stat currently being hovered over in event badges (for sidebar highlight) */
+  highlightedStat: string | null;
 
   toggleFastForward: () => void;
   advanceTutorial: () => void;
@@ -51,6 +53,7 @@ export interface UISlice {
   returnToMenu: () => void;
   setTurnResult: (result: TurnResult) => void;
   setInstinctNudges: (nudges: InstinctNudge[]) => void;
+  setHighlightedStat: (statId: string | null) => void;
 }
 
 export interface GameSystemSlice {

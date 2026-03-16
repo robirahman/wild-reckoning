@@ -59,6 +59,7 @@ export const AFRICAN_ELEPHANT_CONFIG: SpeciesConfig = {
 
   turnUnit: 'month',
   naturalHealingRate: 40,  // Must outpace cumulative event HEA drain over 500+ monthly turns
+  attentionBudget: 22,
 
   seasonalWeight: {
     spring: 6.0,    // Wet season start — good grazing (scaled for monthly turns)

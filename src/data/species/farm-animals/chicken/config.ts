@@ -17,6 +17,7 @@ export const CHICKEN_CONFIG: SpeciesConfig = {
   },
   turnUnit: 'day', // 4 turns per day
   naturalHealingRate: 12, // Day-turn species face events every 6hr; high healing needed
+  attentionBudget: 14,
   baseStats: {
     [StatId.IMM]: 30, // Stressed immune system
     [StatId.CLI]: 40,

@@ -58,6 +58,7 @@ export const GREEN_SEA_TURTLE_CONFIG: SpeciesConfig = {
 
   turnUnit: 'month',
   naturalHealingRate: 35,  // Must outpace cumulative event HEA drain over 800+ monthly turns
+  attentionBudget: 16,
 
   thermalProfile: {
     type: 'ectotherm',

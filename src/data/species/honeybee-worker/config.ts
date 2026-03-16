@@ -66,6 +66,7 @@ export const HONEYBEE_WORKER_CONFIG: SpeciesConfig = {
 
   turnUnit: 'day', // 4 turns per day
   naturalHealingRate: 8, // Day-turn species face events every 6hr; high healing needed
+  attentionBudget: 14,
 
   agePhases: [
     {

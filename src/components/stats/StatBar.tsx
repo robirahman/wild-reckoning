@@ -9,9 +9,10 @@ interface StatBarProps {
   value: number; // 0-100
   trend?: StatTrend;
   modifiers?: StatModifier[];
+  highlighted?: boolean;
 }
 
-export function StatBar({ statId, value, trend, modifiers }: StatBarProps) {
+export function StatBar({ statId, value, trend, modifiers, highlighted }: StatBarProps) {
   const [showTooltip, setShowTooltip] = useState(false);
   const name = STAT_NAMES[statId];
   const level = getStatLevel(value);
@@ -42,7 +43,7 @@ export function StatBar({ statId, value, trend, modifiers }: StatBarProps) {
 
   return (
     <div
-      className={styles.statBar}
+      className={`${styles.statBar}${highlighted ? ` ${styles.statBarHighlighted}` : ''}`}
       onMouseEnter={() => setShowTooltip(true)}
       onMouseLeave={() => setShowTooltip(false)}
       role="meter"

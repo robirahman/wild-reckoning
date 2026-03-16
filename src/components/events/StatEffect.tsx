@@ -1,4 +1,5 @@
 import { StatId } from '../../types/stats';
+import { useGameStore } from '../../store/gameStore';
 import styles from '../../styles/events.module.css';
 
 // Stats where higher = worse for the animal (stress/burden stats)
@@ -12,6 +13,8 @@ interface StatEffectProps {
 }
 
 export function StatEffect({ label }: StatEffectProps) {
+  const setHighlightedStat = useGameStore((s) => s.setHighlightedStat);
+
   // Parse direction and stat ID from label like "+TRA" or "-HEA (exhaustion)"
   const isIncrease = label.startsWith('+');
   const statId = label.replace(/^[+-]/, '').split(' ')[0].split('(')[0].trim();
@@ -21,5 +24,13 @@ export function StatEffect({ label }: StatEffectProps) {
   const isGoodForAnimal = isStressStat ? !isIncrease : isIncrease;
   const colorClass = isGoodForAnimal ? styles.effectPositive : styles.effectNegative;
 
-  return <span className={`${styles.statEffect} ${colorClass}`}>{label}</span>;
+  return (
+    <span
+      className={`${styles.statEffect} ${colorClass}`}
+      onMouseEnter={() => setHighlightedStat(statId)}
+      onMouseLeave={() => setHighlightedStat(null)}
+    >
+      {label}
+    </span>
+  );
 }

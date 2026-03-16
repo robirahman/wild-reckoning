@@ -13,8 +13,14 @@ const DISPLAYED_SETTINGS: (keyof BehaviorType)[] = [
 export function BehavioralSettings() {
   const settings = useGameStore((s) => s.behavioralSettings);
   const updateSetting = useGameStore((s) => s.updateBehavioralSetting);
+  const config = useGameStore((s) => s.speciesBundle.config);
   const [expandedSetting, setExpandedSetting] = useState<keyof BehaviorType | null>(null);
   const [presetName, setPresetName] = useState('');
+
+  // Attention budget: total slider points cannot exceed the species' budget
+  const baseBudget = config.attentionBudget ?? 18;
+  const totalUsed = DISPLAYED_SETTINGS.reduce((sum, key) => sum + settings[key], 0);
+  const remaining = baseBudget - totalUsed;
 
   const presets = usePresetStore((s) => s.presets);
   const savePreset = usePresetStore((s) => s.savePreset);
@@ -42,6 +48,9 @@ export function BehavioralSettings() {
   return (
     <div className={styles.behaviorBar}>
       <span className={styles.label}>Behavioral Settings:</span>
+      <span className={styles.budgetLabel} style={{ opacity: remaining <= 2 ? 1 : 0.6 }}>
+        ({remaining} pts remaining)
+      </span>
       <InstinctBadges />
       {DISPLAYED_SETTINGS.map((key) => (
         <div key={key} style={{ position: 'relative' }}>
@@ -61,8 +70,10 @@ export function BehavioralSettings() {
                 {([1, 2, 3, 4, 5] as BehaviorLevel[]).map((val) => (
                   <button
                     key={val}
-                    className={`${styles.sliderDot} ${settings[key] === val ? styles.sliderDotActive : ''}`}
+                    className={`${styles.sliderDot} ${settings[key] === val ? styles.sliderDotActive : ''}${val > settings[key] && (val - settings[key]) > remaining ? ` ${styles.sliderDotDisabled}` : ''}`}
                     onClick={() => {
+                      const cost = val - settings[key];
+                      if (cost > 0 && cost > remaining) return; // Over budget
                       updateSetting(key, val);
                       setExpandedSetting(null);
                     }}

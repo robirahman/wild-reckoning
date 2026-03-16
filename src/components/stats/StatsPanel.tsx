@@ -56,9 +56,23 @@ function computeTrends(
   return trends;
 }
 
+// Player-facing stat descriptions (animal-perspective)
+const STAT_INFO: Record<string, string> = {
+  [StatId.IMM]: 'Immune load — the burden of parasites, infection, and disease on your body.',
+  [StatId.CLI]: 'Climate stress — how much the weather and temperature are wearing on you.',
+  [StatId.HOM]: 'Homeostatic strain — nutritional deficit, dehydration, and metabolic stress.',
+  [StatId.TRA]: 'Trauma — post-traumatic stress from extreme events like predator attacks and near-death experiences. These marks never fully fade.',
+  [StatId.ADV]: 'Adversity — the level of hardship in your environment. Overcrowding, competition, and scarcity make life harder; shelter and security make it easier.',
+  [StatId.NOV]: 'Novelty — exposure to unfamiliar situations you lack evolved instincts to navigate. Human structures, new environments, unprecedented stimuli.',
+  [StatId.WIS]: 'Wisdom — accumulated survival knowledge. Learned behaviors that help you find food, avoid danger, and navigate your world.',
+  [StatId.HEA]: 'Health — your overall physiological condition. When this reaches zero, your body gives out.',
+  [StatId.STR]: 'Composite stress — the aggregate load across all stress categories.',
+};
+
 export function StatsPanel() {
   const stats = useGameStore((s) => s.animal.stats);
   const turnHistory = useGameStore((s) => s.turnHistory);
+  const highlightedStat = useGameStore((s) => s.highlightedStat);
 
   // Compute effective values for display
   const effectiveValues = useMemo(() => {
@@ -113,9 +127,15 @@ export function StatsPanel() {
             values={effectiveValues}
             trends={trends}
             modifiers={allModifiers}
+            highlightedStat={highlightedStat}
           />
         ))}
       </div>
+      {highlightedStat && STAT_INFO[highlightedStat] && (
+        <div className={styles.statInfoBox}>
+          {STAT_INFO[highlightedStat]}
+        </div>
+      )}
     </div>
   );
 }

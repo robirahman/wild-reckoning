@@ -66,6 +66,7 @@ export const POISON_DART_FROG_CONFIG: SpeciesConfig = {
 
   turnUnit: 'week',
   naturalHealingRate: 3,
+  attentionBudget: 14,
 
   weightUnit: 'g',
   weightDisplayMultiplier: 453.592,

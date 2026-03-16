@@ -10,9 +10,10 @@ interface StatCategoryProps {
   values: Record<StatId, number>;
   trends: Record<StatId, StatTrend>;
   modifiers: StatModifier[];
+  highlightedStat?: string | null;
 }
 
-export function StatCategory({ label, stats, values, trends, modifiers }: StatCategoryProps) {
+export function StatCategory({ label, stats, values, trends, modifiers, highlightedStat }: StatCategoryProps) {
   return (
     <div className={styles.category}>
       <h4 className={styles.categoryLabel}>{label} =</h4>
@@ -23,6 +24,7 @@ export function StatCategory({ label, stats, values, trends, modifiers }: StatCa
           value={values[statId]}
           trend={trends[statId]}
           modifiers={modifiers}
+          highlighted={highlightedStat === statId}
         />
       ))}
     </div>

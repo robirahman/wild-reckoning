@@ -151,6 +151,7 @@ export const FIG_WASP_CONFIG: SpeciesConfig = {
   lineageMode: true,
 
   turnUnit: 'day',
+  attentionBudget: 12,
 
   weightUnit: 'μg',
   weightDisplayMultiplier: 453592000,

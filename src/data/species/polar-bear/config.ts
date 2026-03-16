@@ -58,6 +58,7 @@ export const POLAR_BEAR_CONFIG: SpeciesConfig = {
 
   turnUnit: 'month',
   naturalHealingRate: 3,
+  attentionBudget: 20,
 
   thermalProfile: {
     type: 'endotherm',

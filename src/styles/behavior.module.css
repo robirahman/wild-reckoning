@@ -13,6 +13,16 @@
   font-size: 0.85rem;
 }
 
+.budgetLabel {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.sliderDotDisabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
 .settingButton {
   padding: var(--space-xs) var(--space-md);
   font-size: 0.85rem;

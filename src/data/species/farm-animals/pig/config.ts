@@ -17,6 +17,7 @@ export const PIG_CONFIG: SpeciesConfig = {
   },
   turnUnit: 'day',
   naturalHealingRate: 15, // Day-turn species face events every 6hr; very high healing needed
+  attentionBudget: 22,
   baseStats: {
     [StatId.IMM]: 40,
     [StatId.CLI]: 30,

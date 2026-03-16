@@ -46,6 +46,7 @@ export const MONARCH_BUTTERFLY_CONFIG: SpeciesConfig = {
   },
 
   diseaseDeathChanceAtCritical: 0.15,
+  attentionBudget: 12,
 
   predationVulnerability: {
     injuryProbIncrease: 0.10,

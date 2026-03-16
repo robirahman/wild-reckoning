@@ -46,6 +46,7 @@ export const COMMON_OCTOPUS_CONFIG: SpeciesConfig = {
   },
 
   diseaseDeathChanceAtCritical: 0.12,
+  attentionBudget: 20,
 
   predationVulnerability: {
     injuryProbIncrease: 0.10,

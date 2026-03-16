@@ -104,6 +104,27 @@
   font-family: var(--font-ui);
   position: relative;
   cursor: help;
+  transition: background 0.15s;
+  border-radius: 3px;
+  padding: 2px 4px;
+  margin-left: -4px;
+  margin-right: -4px;
+}
+
+.statBarHighlighted {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.statInfoBox {
+  margin-top: var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  background: rgba(255, 255, 255, 0.06);
+  border-left: 3px solid var(--color-text-muted);
+  border-radius: 0 4px 4px 0;
+  font-size: 0.82rem;
+  line-height: 1.4;
+  color: var(--color-text-muted);
+  font-family: var(--font-ui);
 }
 
 .statNameRow {

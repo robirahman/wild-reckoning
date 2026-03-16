@@ -46,6 +46,9 @@ export function computeInstincts(ctx: SimulationContext): InstinctNudge[] {
   // ── Vision impairment anxiety ──
   checkVisionAnxiety(ctx, nudges);
 
+  // ── Weight / body condition ──
+  checkWeightCondition(ctx, nudges);
+
   // Sort by priority (high first), then take top 3
   const priorityOrder = { high: 0, medium: 1, low: 2 };
   nudges.sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]);
@@ -363,6 +366,43 @@ function checkVisionAnxiety(ctx: SimulationContext, nudges: InstinctNudge[]): vo
       suggestedDirection: 'increase',
       priority: 'high',
       source: 'injury',
+    });
+  }
+}
+
+function checkWeightCondition(ctx: SimulationContext, nudges: InstinctNudge[]): void {
+  const config = ctx.config;
+  const weight = ctx.animal.weight;
+
+  // Skip if the physiology engine already handles hunger nudges
+  if (ctx.animal.physiologyState) return;
+
+  const { starvationDeath, starvationDebuff, maximumBiologicalWeight } = config.weight;
+
+  if (weight <= starvationDebuff) {
+    // Critically underweight — visceral hunger
+    const severity = weight <= starvationDeath * 1.2 ? 'high' : 'medium';
+    nudges.push({
+      id: 'body-wasting',
+      label: severity === 'high' ? 'Wasting' : 'Hungry',
+      description: severity === 'high'
+        ? 'Your ribs press against your skin. Every movement costs more than the last. The emptiness inside you is not hunger anymore — it is your body consuming itself.'
+        : 'A persistent hollow ache below your ribs. Your body feels lighter than it should, and the urge to find food crowds out other thoughts.',
+      suggestedBehavior: 'foraging',
+      suggestedDirection: 'increase',
+      priority: severity,
+      source: 'physiology',
+    });
+  } else if (weight >= maximumBiologicalWeight * 0.9) {
+    // Well-fed / peak condition
+    nudges.push({
+      id: 'well-fed',
+      label: 'Sated',
+      description: 'Your body feels solid and heavy with reserves. The urgency to eat has faded. You can afford to be cautious.',
+      suggestedBehavior: 'foraging',
+      suggestedDirection: 'decrease',
+      priority: 'low',
+      source: 'physiology',
     });
   }
 }
