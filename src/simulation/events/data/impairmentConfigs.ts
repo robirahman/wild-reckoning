@@ -41,15 +41,15 @@ export const LOCOMOTION_IMPAIRMENT_CONFIG: HealthTriggerConfig = {
     let intensity: 'low' | 'medium' | 'high' | 'extreme';
 
     if (loco < 20) {
-      narrative = 'Movement is agony. The world has shrunk to the patch of ground beneath you. Every shift of weight sends fire through your body. You can feel your muscles trembling — not from cold, but from the effort of simply remaining upright. The herd is long gone. You are alone with your pain and the terrible knowledge that you cannot follow.';
+      narrative = 'Every shift of weight sends fire through your body. Your muscles tremble from the effort of standing. The herd is gone. You cannot follow.';
       clinicalDetail = `Severe locomotion impairment (${loco}%). ${hasFracture ? 'Compound fracture preventing weight-bearing.' : 'Multiple injuries preventing effective ambulation.'} Animal effectively immobile. Predation risk critically elevated.`;
       intensity = 'extreme';
     } else if (loco < 40) {
-      narrative = 'Walking is a deliberate, calculated act. Each step must be planned, tested, committed to. Your gait is a lurching, three-legged rhythm that draws attention from everything with eyes. You can still move, but the gap between you and everything that moves normally grows wider with every stride.';
+      narrative = 'Each step is deliberate. Your gait is a lurching, three-legged rhythm. Everything with eyes can see it. You still move, but slowly.';
       clinicalDetail = `Significant locomotion impairment (${loco}%). ${hasFracture ? 'Weight-bearing compromised by fracture.' : 'Gait severely altered.'} Animal mobile but unable to sustain flight from predators.`;
       intensity = 'high';
     } else {
-      narrative = 'Your gait hitches with each stride — a slight catch, a millisecond of hesitation where your body negotiates with the damaged leg before committing to the next step. It is enough to notice, enough to slow you, enough that every predator within eyeshot can see the flag of weakness in the way you move.';
+      narrative = 'Your gait hitches with each stride. A slight catch, a hesitation before the weight commits. It slows you. Anything watching can see the unevenness.';
       clinicalDetail = `Moderate locomotion impairment (${loco}%). Gait asymmetry visible. Animal compensating but performance degraded for sustained flight or rough terrain.`;
       intensity = 'medium';
     }
@@ -90,7 +90,7 @@ export const LOCOMOTION_IMPAIRMENT_CONFIG: HealthTriggerConfig = {
             { stat: StatId.HOM, amount: 5, duration: 2, label: '+HOM' },
           ],
         }),
-        narrativeResult: 'You lower yourself into a thicket, tucking the damaged leg beneath you. The ground is cold but the brush is dense. Nothing can reach you without making noise. You close your eyes and wait for your body to do what it can.',
+        narrativeResult: 'You lower yourself into a thicket, tucking the damaged leg beneath you. The ground is cold but the brush is dense. Nothing can reach you without making noise.',
       },
       {
         id: 'push-on',
@@ -108,7 +108,7 @@ export const LOCOMOTION_IMPAIRMENT_CONFIG: HealthTriggerConfig = {
             { type: 'add_calories' as const, amount: -15, source: 'painful locomotion' },
           ],
         }),
-        narrativeResult: 'You force yourself forward, one agonizing step at a time. The pain is a constant companion now, a sharp voice that tells you to stop with every stride. You ignore it. Stopping is dying.',
+        narrativeResult: 'You force yourself forward, one step at a time. The pain comes with every stride. You keep moving.',
       },
     ];
   },
@@ -141,10 +141,10 @@ export const VISION_IMPAIRMENT_CONFIG: HealthTriggerConfig = {
     let clinicalDetail: string;
 
     if (vis < 20) {
-      narrative = 'The world is dissolving. Shapes merge into a gray wash where nothing has edges. You navigate by smell and sound and the memory of paths walked before, but memories are unreliable guides in a forest that is always changing. A shadow moves at the periphery — or does it? You flinch at phantoms, exhausted by a vigilance that can no longer see what it is watching for.';
+      narrative = 'Shapes merge into gray. Nothing has edges. You navigate by smell and sound and the memory of paths walked before. A shadow moves at the edge of your sight, or does not. You flinch.';
       clinicalDetail = `Near-total vision loss (${vis}%). Likely meningeal worm optic nerve damage or severe ocular trauma. Animal navigating primarily by olfaction and spatial memory.`;
     } else {
-      narrative = 'Shadows take threatening shapes at the edges of your vision. The world is dimming — not the way twilight dims it, but from within, as though a curtain is slowly being drawn across your eyes. Distant details blur and vanish. You find yourself relying more on your ears, turning your head to track sounds that your eyes can no longer resolve.';
+      narrative = 'The world is dimming. Distant details blur and vanish. You turn your head more, tracking sounds that your eyes can no longer resolve. Your ears do the work now.';
       clinicalDetail = `Moderate vision impairment (${vis}%). Progressive visual degradation. Animal increasingly dependent on auditory and olfactory detection.`;
     }
 
@@ -200,10 +200,10 @@ export const BREATHING_IMPAIRMENT_CONFIG: HealthTriggerConfig = {
     let clinicalDetail: string;
 
     if (breath < 25) {
-      narrative = 'Your chest heaves with the effort of simply existing. Each breath is a shallow, wheezing negotiation between your lungs and the air, and the air is winning. The smallest exertion — lifting your head, shifting your weight — leaves you gasping, sides heaving, heart racing to compensate for what your lungs cannot provide. The world narrows to the next breath, and the next, and the desperate hope that there will always be a next.';
+      narrative = 'Your chest heaves just standing still. Each breath is shallow and wheezing. Lifting your head leaves you gasping, sides heaving, heart racing.';
       clinicalDetail = `Severe respiratory impairment (${breath}%). Dyspnea at rest. Likely thoracic injury or pneumonia. Any physical exertion risks respiratory failure.`;
     } else {
-      narrative = 'Your chest is tight. Not the tightness of cold air or hard running, but a persistent constriction that never fully releases. You breathe in and the air stops short, filling only part of your lungs before something — pain, swelling, damage — refuses it further entry. After the smallest exertion you stand with your legs braced wide, flanks heaving, waiting for the oxygen debt to slowly, painfully clear.';
+      narrative = 'Your chest is tight. You breathe in and the air stops short, filling only part of your lungs. After the smallest exertion you stand with legs braced wide, flanks heaving, waiting to catch your breath.';
       clinicalDetail = `Moderate respiratory impairment (${breath}%). Exercise intolerance. Likely rib fracture, pleural effusion, or early pneumonia.`;
     }
 
@@ -268,14 +268,14 @@ export const HERD_SEPARATION_CONFIG: HealthTriggerConfig = {
         { stat: StatId.HOM, amount: 5, duration: 2, label: '+HOM' },
       ],
       consequences: [],
-      narrativeText: 'The herd moved on without you. You watched them go — the bobbing white tails disappearing into the tree line one by one, a receding constellation of the only safety you have ever known. You called after them, the soft bleating alarm that means wait, come back, I am here, but they did not come back. They cannot afford to wait for the one who cannot keep up. Nothing can.',
-      footnote: '(Herd separation — locomotion impairment)',
+      narrativeText: 'The herd moved on. White tails bobbed into the tree line, one by one, until they were gone. You bleated after them. No answer came back.',
+      footnote: '(Herd separation, locomotion impairment)',
       narrativeContext: buildNarrativeContext({
         eventCategory: 'health',
         eventType: 'herd-separation',
         entities: [],
         actions: [action(
-          'The herd moved on without you. You watched them go — the bobbing white tails disappearing into the tree line.',
+          'The herd moved on. White tails disappeared into the tree line. You bleated after them. No answer.',
           'Animal separated from social group due to locomotion impairment. Isolation increases predation risk and eliminates group vigilance benefits.',
           'high',
         )],
@@ -320,8 +320,8 @@ export const STARVATION_INFECTION_CONFIG: HealthTriggerConfig = {
     const env = buildEnvironment(ctx);
 
     const narrative = bcs <= 1
-      ? 'Your body is consuming itself. The ribs press against your hide like the bars of a cage you are locked inside. The infection — the hot, throbbing wrongness that radiates from the wound — demands energy your body no longer has. Your immune system is shutting down, one defense at a time, surrendering territory to an invader it can no longer afford to fight. You are being eaten from two directions at once: from without by hunger, from within by infection.'
-      : 'The fever is draining what little reserves you have left. Every calorie your body scrapes together goes to fueling the immune response — the shivering, the elevated temperature, the white blood cells flooding toward the wound — leaving nothing for movement, for warmth, for thought. You are caught between two killers, each making the other stronger.';
+      ? 'Your ribs press against your hide. The wound radiates heat. Your body has nothing left to fight with. You shiver and cannot stop.'
+      : 'The fever burns through what little you have left. You shiver, you sweat, you cannot eat enough to keep up. The wound stays hot.';
 
     return {
       harmEvents: [],
@@ -340,8 +340,8 @@ export const STARVATION_INFECTION_CONFIG: HealthTriggerConfig = {
         entities: [],
         actions: [action(
           bcs <= 1
-            ? 'Your body is consuming itself. Ribs press against hide. The infection demands energy your body no longer has.'
-            : 'The fever drains what little reserves you have. Every calorie fuels the immune response, leaving nothing else.',
+            ? 'Ribs press against hide. The wound radiates heat. Nothing left to fight with.'
+            : 'The fever burns through what little remains. The wound stays hot.',
           `Compound crisis: malnutrition (BCS ${bcs}) concurrent with active infection. Immune function severely compromised. Metabolic demands exceed intake. Prognosis poor without resolution of either condition.`,
           bcs <= 1 ? 'extreme' : 'high',
         )],

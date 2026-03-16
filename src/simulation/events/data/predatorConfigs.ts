@@ -190,28 +190,28 @@ export const WOLF_PACK_CONFIG: PredatorEncounterConfig = {
   narrativeVariants: [
     {
       condition: 'winter-snow',
-      narrative: 'The snow is deep and crusted, and your hooves punch through with every stride while the gray shapes behind you run on top of it. There are several of them — you can hear their panting, feel the vibration of their coordinated pursuit through the frozen ground. They have been herding you toward the river, where the ice may or may not hold your weight. Your lungs burn. Your legs are heavy. The gap is closing.',
-      recurringNarrative: 'The same deep tracks in the crusted snow. The same acrid scent riding the wind. They are back — the gray shapes that have been shadowing you through this frozen landscape. Your hooves punch through the crust with every stride while they glide across the surface. They know your territory now. They know your weaknesses. The gap is closing.',
-      actionDetail: 'The snow is deep and crusted, and your hooves punch through with every stride while they run on top of it. They have been herding you toward the river. Your lungs burn. The gap is closing.',
-      recurringActionDetail: 'They are back. They know your territory now. Your hooves punch through the crust while they glide across. The gap is closing.',
+      narrative: 'Your hooves punch through crust. Theirs do not. Panting behind you, several sets of lungs. The gap between their smell and your back legs is shrinking.',
+      recurringNarrative: 'That urine-on-snow smell again. Your hooves punch through crust. Theirs do not. They know this ground now. The gap is shrinking.',
+      actionDetail: 'Your hooves punch through crust. Theirs do not. The gap is shrinking.',
+      recurringActionDetail: 'That smell again. They know this ground. The gap is shrinking.',
       clinicalDetail: 'Wolf pack coordinated pursuit in deep snow. Deer at disadvantage — hooves punch through crust while wolves travel on surface. Pack herding toward river.',
       recurringClinicalDetail: 'Wolf pack return encounter. Pack has learned deer\'s range. Deep snow pursuit.',
     },
     {
       condition: 'night-dusk',
-      narrative: 'You smell them before you see them — the sharp, acrid musk that makes every muscle in your body lock rigid. Gray shapes materialize from the tree line, low and deliberate, spreading in a loose arc. Their eyes catch the last light. They are not rushing. They do not need to.',
-      recurringNarrative: 'That smell again. The sharp, acrid musk you know now — the one that makes your heart lurch before your mind catches up. You know what comes next. Gray shapes in the half-light, spreading in their patient arc. The same pack. The same deliberate hunger. They remember you, too.',
-      actionDetail: 'They spread in a loose arc, low and deliberate. Their eyes catch the last light. They are not rushing. They do not need to.',
-      recurringActionDetail: 'That smell again. The same pack. The same deliberate hunger. They remember you, too.',
+      narrative: 'Musk smell, sharp and close. Your legs lock. Gray shapes low against the dark tree line, fanning wide. Their eyes hold the last light. They are not running yet.',
+      recurringNarrative: 'That musk again. Your legs lock before you see them. Gray shapes fanning wide in the half-light. The same ones. They are not running yet.',
+      actionDetail: 'Gray shapes fanning wide against the dark tree line. Their eyes hold the last light. They are not running yet.',
+      recurringActionDetail: 'That musk again. The same ones, fanning wide. They are not running yet.',
       clinicalDetail: 'Wolf pack detected at dusk/night. Pack in pursuit formation, spreading to flank.',
       recurringClinicalDetail: 'Recurring wolf pack encounter at dusk/night. Pack exhibiting site fidelity to deer\'s range.',
     },
     {
       condition: 'default',
-      narrative: 'A sound that isn\'t wind. A movement that isn\'t branch-sway. Your head snaps up and your nostrils flare, and then you see them — lean gray shapes flowing between the trunks, silent and purposeful. A hunting pack, already in formation, already committed.',
-      recurringNarrative: 'You know the sound now — not wind, not branch-sway, but the soft pad of organized weight moving through undergrowth. Your body reacts before your mind does: head up, nostrils wide, muscles coiled. The same lean gray shapes flow between the trunks. They found you again.',
-      actionDetail: 'They flow between the trunks, silent and purposeful. A hunting pack, already in formation, already committed.',
-      recurringActionDetail: 'You know the sound now. The same lean gray shapes. They found you again.',
+      narrative: 'A soft pad of weight on leaves. Your head snaps up, nostrils wide. Gray shapes between the trunks, moving together, already spread into a line.',
+      recurringNarrative: 'That soft padding again. Your head snaps up before you think. Gray shapes between the trunks, the same ones. They found this ground again.',
+      actionDetail: 'Gray shapes between the trunks, moving together, already spread into a line.',
+      recurringActionDetail: 'That soft padding again. The same gray shapes. They found this ground again.',
       clinicalDetail: 'Wolf pack detected during daylight. Pack already in hunting formation.',
       recurringClinicalDetail: 'Recurring wolf pack encounter. Pack demonstrating learned hunting patterns in this territory.',
     },
@@ -223,7 +223,7 @@ export const WOLF_PACK_CONFIG: PredatorEncounterConfig = {
       label: 'Run',
       description: (ctx) => {
         const loco = ctx.animal.bodyState?.capabilities['locomotion'] ?? 100;
-        return `Sprint for cover. ${loco < 70 ? 'Your injured legs will slow you.' : 'Your legs are strong.'}`;
+        return `Sprint for cover. ${loco < 70 ? 'Your legs are wrong.' : 'Your legs are sound.'}`;
       },
       style: (ctx) => {
         const loco = ctx.animal.bodyState?.capabilities['locomotion'] ?? 100;
@@ -232,8 +232,8 @@ export const WOLF_PACK_CONFIG: PredatorEncounterConfig = {
       narrativeResult: (ctx) => {
         const loco = ctx.animal.bodyState?.capabilities['locomotion'] ?? 100;
         return loco >= 70
-          ? 'You explode into motion, hooves tearing at the earth. The forest blurs. Behind you, the pack gives chase — but your legs are sound and the fear drives you faster than they can follow. After an agonizing minute of all-out sprint, the sounds of pursuit fade.'
-          : 'You run. You run with everything you have, but the ground betrays you — your gait is uneven, favoring the damaged leg, and each stride sends a lance of fire through your body. The wolves sense the weakness. They are gaining.';
+          ? 'Your hindquarters fire. Hooves tear earth. Wind in your ears, then just your own breathing. The panting behind you fades.'
+          : 'You run but the bad leg hitches. Each stride jolts through your spine. The panting behind you is not fading.';
       },
       resolutionType: 'chase',
       statEffects: [
@@ -245,7 +245,7 @@ export const WOLF_PACK_CONFIG: PredatorEncounterConfig = {
       label: 'Freeze and watch',
       description: 'Hold perfectly still. Wolves track movement.',
       style: 'danger',
-      narrativeResult: 'You freeze. Every instinct screams at you to run, but you lock your joints and hold, trembling, as the gray shapes circle. Their yellow eyes sweep across the clearing. One raises its nose, testing the air. For a long, terrible moment, the world is silent except for the sound of your own heartbeat hammering in your skull.',
+      narrativeResult: 'Your joints lock. You hold, trembling. The gray shapes circle. One lifts its nose, testing the air. Your heartbeat pounds in your ears.',
       resolutionType: 'freeze',
       statEffects: [
         { stat: StatId.TRA, amount: 5, duration: 6, label: '+TRA' },
@@ -256,14 +256,14 @@ export const WOLF_PACK_CONFIG: PredatorEncounterConfig = {
       label: 'Make for the water',
       description: (ctx) => {
         const isWinter = ctx.time.season === 'winter';
-        return isWinter ? 'The river ice may hold your weight but not theirs.' : 'Wolves hesitate at deep water.';
+        return isWinter ? 'The ice may hold your weight but not theirs.' : 'Deep water. They will not follow.';
       },
       style: 'danger',
       narrativeResult: (ctx) => {
         const isWinter = ctx.time.season === 'winter';
         return isWinter
-          ? 'You bolt for the river. The ice groans beneath you, cracking in spiderweb patterns, but it holds — barely. Behind you, the lead wolf stops at the bank, paws testing the surface, then backs away. The others mill at the edge, whining. You stand on the far side, shaking, the cold already seeping through your hooves.'
-          : 'You crash into the river, the shock of cold water hitting your chest like a fist. The current pulls at you but you kick hard, driving toward the far bank. Behind you, the wolves pace the shoreline, unwilling to follow into the deep water.';
+          ? 'You bolt for the ice. It groans under your hooves, cracking, but holds. Behind you the lead one stops at the edge, tests the surface, backs away. The others pace and whine. Cold seeps up through your hooves on the far side.'
+          : 'Cold water hits your chest. The current grabs your legs but you kick hard for the far bank. Behind you they pace the shoreline, unwilling to follow.';
       },
       resolutionType: 'water-chase',
       chaseParamsOverride: {
@@ -342,10 +342,10 @@ export const COYOTE_CONFIG: PredatorEncounterConfig = {
   narrativeVariants: [
     {
       condition: 'default',
-      narrative: 'A pair of shapes shadows you through the brush — smaller than wolves, rangier, more tentative. Coyotes. They keep their distance, testing your awareness, waiting for a stumble or a moment of inattention. Their yipping calls to each other carry an edge of patient hunger.',
-      recurringNarrative: 'A pair of shapes shadows you through the brush — smaller than wolves, rangier, more tentative. Coyotes. They keep their distance, testing your awareness, waiting for a stumble or a moment of inattention. Their yipping calls to each other carry an edge of patient hunger.',
-      actionDetail: 'They keep their distance, testing your awareness, waiting for a stumble or a moment of inattention. Their yipping calls carry an edge of patient hunger.',
-      recurringActionDetail: 'They keep their distance, testing your awareness, waiting for a stumble or a moment of inattention. Their yipping calls carry an edge of patient hunger.',
+      narrative: 'Two shapes in the brush, smaller than wolves, rangy. They hold back, watching. One yips to the other. They are waiting for you to stumble.',
+      recurringNarrative: 'Two shapes in the brush again, rangy and patient. One yips. They are waiting for you to stumble.',
+      actionDetail: 'Two smaller shapes holding back in the brush. One yips to the other. Waiting.',
+      recurringActionDetail: 'Two shapes in the brush again. One yips. Waiting.',
       clinicalDetail: 'Coyote pair shadowing deer, maintaining distance and assessing vulnerability. Opportunistic predation behavior typical of injured or juvenile prey targeting.',
       recurringClinicalDetail: 'Coyote pair shadowing deer, maintaining distance and assessing vulnerability. Opportunistic predation behavior typical of injured or juvenile prey targeting.',
     },
@@ -357,7 +357,7 @@ export const COYOTE_CONFIG: PredatorEncounterConfig = {
       label: 'Stand your ground',
       description: 'Face them directly. You are larger than they are.',
       style: 'default',
-      narrativeResult: 'You turn to face them, ears forward, hooves planted. At your full height, you tower over them. The coyotes slow, exchange a glance, and melt back into the underbrush. Not worth the risk. Not today.',
+      narrativeResult: 'You turn, ears forward, hooves planted. You are tall above them. They slow, look at each other, and back into the brush.',
       resolutionType: 'fight',
       statEffects: [],
     },
@@ -366,7 +366,7 @@ export const COYOTE_CONFIG: PredatorEncounterConfig = {
       label: 'Bolt immediately',
       description: (ctx) => {
         const loco = ctx.animal.bodyState?.capabilities['locomotion'] ?? 100;
-        return `Don't give them a chance to close in.${loco < 70 ? ' Your legs may betray you.' : ''}`;
+        return `Sprint before they close in.${loco < 70 ? ' Your legs are wrong.' : ''}`;
       },
       style: (ctx) => {
         const loco = ctx.animal.bodyState?.capabilities['locomotion'] ?? 100;
@@ -375,8 +375,8 @@ export const COYOTE_CONFIG: PredatorEncounterConfig = {
       narrativeResult: (ctx) => {
         const loco = ctx.animal.bodyState?.capabilities['locomotion'] ?? 100;
         return loco >= 70
-          ? 'You leap away before they can close the gap, crashing through the brush at full speed. The coyotes give a half-hearted chase but break off quickly — an uninjured adult deer is simply too fast.'
-          : 'You run, but your stride is wrong — hitching, labored. The coyotes sense it instantly and close the distance with alarming speed. One darts in, snapping at your heels.';
+          ? 'You leap and crash through the brush at full speed. They follow for a few strides, then fall back. You are faster.'
+          : 'You run but the stride hitches. They close the gap fast. One darts in, snapping at your heels.';
       },
       resolutionType: 'chase',
       statEffects: [
@@ -448,10 +448,10 @@ export const COUGAR_CONFIG: PredatorEncounterConfig = {
   narrativeVariants: [
     {
       condition: 'default',
-      narrative: 'Something is wrong. The birds have stopped singing. A prickling sensation crawls up the back of your neck — the ancient alarm of being watched by something that does not blink. Then a tawny shape launches from the rocks above, silent and enormous, all muscle and claw, aimed directly at your neck.',
-      recurringNarrative: 'Something is wrong. The birds have stopped singing. A prickling sensation crawls up the back of your neck — the ancient alarm of being watched by something that does not blink. Then a tawny shape launches from the rocks above, silent and enormous, all muscle and claw, aimed directly at your neck.',
-      actionDetail: 'A tawny shape launches from the rocks above, silent and enormous, all muscle and claw, aimed directly at your neck.',
-      recurringActionDetail: 'A tawny shape launches from the rocks above, silent and enormous, all muscle and claw, aimed directly at your neck.',
+      narrative: 'The birds go silent. Your skin twitches along your spine. A tawny shape drops from the rocks above, heavy and fast, claws out, aimed at your neck.',
+      recurringNarrative: 'The birds go silent. Your skin twitches. You know this feeling. A tawny shape drops from the rocks above, claws out, aimed at your neck.',
+      actionDetail: 'A tawny shape drops from the rocks above, heavy and fast, aimed at your neck.',
+      recurringActionDetail: 'That silence again. A tawny shape drops from the rocks, aimed at your neck.',
       clinicalDetail: 'Cougar ambush from elevated position. Felid targeting cervical vertebrae — standard kill technique for large prey.',
       recurringClinicalDetail: 'Cougar ambush from elevated position. Felid targeting cervical vertebrae — standard kill technique for large prey.',
     },
@@ -463,7 +463,7 @@ export const COUGAR_CONFIG: PredatorEncounterConfig = {
       label: 'Dodge and bolt',
       description: (ctx) => {
         const loco = ctx.animal.bodyState?.capabilities['locomotion'] ?? 100;
-        return `Twist away from the lunge and sprint.${loco < 60 ? ' Your legs may fail you.' : ''}`;
+        return `Twist away and sprint.${loco < 60 ? ' Your legs are wrong.' : ''}`;
       },
       style: (ctx) => {
         const loco = ctx.animal.bodyState?.capabilities['locomotion'] ?? 100;
@@ -472,8 +472,8 @@ export const COUGAR_CONFIG: PredatorEncounterConfig = {
       narrativeResult: (ctx) => {
         const loco = ctx.animal.bodyState?.capabilities['locomotion'] ?? 100;
         return loco >= 60
-          ? 'Instinct saves you. You jerk sideways in the fraction of a second before impact, and the great cat\'s claws rake across your shoulder instead of closing on your throat. You run — not looking back, not thinking, just running — and the distance opens.'
-          : 'You try to twist away but your body doesn\'t respond fast enough. Claws tear across your flank as the weight of the cat drives you sideways. You stumble but keep your feet and run, the hot breath fading behind you.';
+          ? 'You jerk sideways. Claws rake your shoulder instead of closing on your throat. You run. The distance opens.'
+          : 'You twist but your body is slow. Claws tear across your flank. The weight drives you sideways. You stumble, keep your feet, and run.';
       },
       resolutionType: 'chase',
       statEffects: [
@@ -483,9 +483,9 @@ export const COUGAR_CONFIG: PredatorEncounterConfig = {
     {
       id: 'rear-kick',
       label: 'Rear up and kick',
-      description: 'Fight back with your hooves. Dangerous but can deter the cat.',
+      description: 'Strike with your hooves.',
       style: 'danger',
-      narrativeResult: 'You rear up, lashing out with your front hooves as the great cat closes. A hoof connects — you feel the solid thud of impact against the cat\'s skull. It recoils, shaking its head, stunned for a moment. You use the opening to put distance between you.',
+      narrativeResult: 'You rear up and strike with your front hooves. One connects, solid thud against the skull. It recoils, shaking its head. You use the opening to run.',
       resolutionType: 'fight',
       statEffects: [
         { stat: StatId.ADV, amount: 6, duration: 3, label: '+ADV' },
@@ -546,10 +546,10 @@ export const HUNTING_CONFIG: PredatorEncounterConfig = {
   narrativeVariants: [
     {
       condition: 'default',
-      narrative: 'The forest changes in autumn. Strange smells drift between the trees — acrid, chemical, wrong. Bright shapes move where there should be stillness. Then the sound: a sharp, flat crack that splits the air and sends every bird screaming upward. Another follows, closer. The thunder comes from the direction of the ridge, where the trail narrows between two rock faces. Every instinct in your body locks onto a single imperative: move.',
-      recurringNarrative: 'The forest changes in autumn. Strange smells drift between the trees — acrid, chemical, wrong. Bright shapes move where there should be stillness. Then the sound: a sharp, flat crack that splits the air and sends every bird screaming upward. Another follows, closer. The thunder comes from the direction of the ridge, where the trail narrows between two rock faces. Every instinct in your body locks onto a single imperative: move.',
-      actionDetail: 'A sharp, flat crack splits the air and sends every bird screaming upward. Another follows, closer. Every instinct locks onto a single imperative: move.',
-      recurringActionDetail: 'A sharp, flat crack splits the air and sends every bird screaming upward. Another follows, closer. Every instinct locks onto a single imperative: move.',
+      narrative: 'Acrid smell, wrong, not from the ground or any animal you know. Bright shapes moving where there should be stillness. A flat crack splits the air. Birds scatter. Another crack, closer. Your legs are already moving.',
+      recurringNarrative: 'That acrid smell again. Bright shapes between the trees. A flat crack, then another, closer. Your legs are already moving.',
+      actionDetail: 'A flat crack splits the air. Birds scatter. Another crack, closer. Your legs are already moving.',
+      recurringActionDetail: 'That crack again, closer. Your legs are already moving.',
       clinicalDetail: 'Rifle fire detected during hunting season. Deer in active hunting zone.',
       recurringClinicalDetail: 'Rifle fire detected during hunting season. Deer in active hunting zone. Repeat encounter in established blind area.',
     },
@@ -561,7 +561,7 @@ export const HUNTING_CONFIG: PredatorEncounterConfig = {
       label: 'Flee to dense cover',
       description: 'Run for the thickest brush you can find.',
       style: 'default',
-      narrativeResult: 'You plunge into the densest thicket you can find, thorns raking your flanks as you force your way through the tangled undergrowth. The crashing sounds of pursuit do not follow — the brush is too thick. You stand panting in the green darkness, heart hammering, listening.',
+      narrativeResult: 'You plunge into the thickest brush. Thorns rake your flanks. The sounds do not follow. You stand panting in the dark undergrowth, listening.',
       resolutionType: 'concealment',
       statEffects: [
         { stat: StatId.HOM, amount: 5, duration: 2, label: '+HOM' },
@@ -570,9 +570,9 @@ export const HUNTING_CONFIG: PredatorEncounterConfig = {
     {
       id: 'hold-position',
       label: 'Hold in the brush',
-      description: 'Stay low and motionless. Hunters look for movement.',
+      description: 'Stay low and motionless. They look for movement.',
       style: 'default',
-      narrativeResult: 'You sink into the brush, lowering your body until your belly nearly touches the ground. Every muscle trembles with the effort of stillness. The orange shapes move past, footsteps crunching on dry leaves. They do not see you. This time.',
+      narrativeResult: 'You lower your body until your belly nearly touches the ground. Your muscles tremble. Footsteps crunch on dry leaves, passing. The bright shapes move on.',
       resolutionType: 'concealment',
       statEffects: [],
     },

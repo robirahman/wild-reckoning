@@ -129,7 +129,7 @@ export const SEASONAL_BROWSE_CONFIG: SeasonalBrowseConfig = {
       terrain: 'mountain',
       bonusCalories: -80,
       homChange: 6,
-      narrative: 'The browse is gone. Every twig within reach has been stripped, every bark surface gnawed to pale wood. You scrape at frozen lichen with your teeth, but the calories don\'t come close to what your body burns just staying warm. Your ribs are becoming visible beneath your winter coat.',
+      narrative: 'Every twig stripped, bark gnawed to pale wood. You scrape at frozen lichen. Ribs showing through your winter coat.',
       clinicalDetail: 'Severe winter browse depletion on mountain terrain. -80 bonus kcal.',
     },
     // Winter — moderate (snow)
@@ -138,7 +138,7 @@ export const SEASONAL_BROWSE_CONFIG: SeasonalBrowseConfig = {
       weather: 'snow',
       bonusCalories: -30,
       homChange: 3,
-      narrative: 'You paw through the snow to reach the dead grass beneath, nosing aside frozen leaves to find the withered remains of summer browse. It\'s enough to quiet the ache in your gut, but just barely. Each mouthful costs almost as many calories to dig up as it provides.',
+      narrative: 'You paw through snow to reach dead grass. Nosing aside frozen leaves. Enough to quiet the gut-ache, barely.',
       clinicalDetail: 'Winter foraging under snow. -30 bonus kcal.',
     },
     // Winter — mild (default winter)
@@ -146,7 +146,7 @@ export const SEASONAL_BROWSE_CONFIG: SeasonalBrowseConfig = {
       season: 'winter',
       bonusCalories: 0,
       homChange: 2,
-      narrative: 'The cedars and hemlock still carry their needles, and you strip the lower branches with methodical efficiency. The browse is resinous and bitter, nutritionally poor, but it fills your rumen and keeps the worst of the hunger at bay.',
+      narrative: 'Cedar and hemlock still have needles. You strip the lower branches. Resinous, bitter. It fills the rumen.',
       clinicalDetail: 'Baseline winter browse on conifers. 0 bonus kcal.',
     },
     // Spring
@@ -154,7 +154,7 @@ export const SEASONAL_BROWSE_CONFIG: SeasonalBrowseConfig = {
       season: 'spring',
       bonusCalories: 50,
       homChange: -5,
-      narrative: 'The forest is waking. New buds swell on every branch, and the first green shoots push through the leaf litter with urgent vitality. You graze on tender spring growth — dandelion, fresh clover, young maple leaves — each mouthful a concentrated burst of the protein and minerals your winter-depleted body craves. You can feel the recovery beginning, weight returning to your frame.',
+      narrative: 'New buds on every branch. Green shoots pushing through leaf litter. You graze on dandelion, fresh clover, young maple leaves. The taste is sharp and wet after months of bark.',
       clinicalDetail: 'Spring green-up foraging. +50 bonus kcal.',
     },
     // Summer
@@ -162,7 +162,7 @@ export const SEASONAL_BROWSE_CONFIG: SeasonalBrowseConfig = {
       season: 'summer',
       bonusCalories: 40,
       homChange: -4,
-      narrative: 'The forest is thick with food. Lush browse fills every layer — wildflowers in the clearings, succulent forbs along the creek, mushrooms pushing up through the damp leaf litter. You eat with the unhurried satisfaction of an animal surrounded by abundance, your rumen working steadily through the rich summer diet.',
+      narrative: 'Wildflowers in the clearings, forbs along the creek, mushrooms in the damp leaf litter. You eat without hurrying. The rumen works steadily.',
       clinicalDetail: 'Peak summer browse abundance. +40 bonus kcal.',
     },
     // Autumn — mast year (40% chance)
@@ -171,7 +171,7 @@ export const SEASONAL_BROWSE_CONFIG: SeasonalBrowseConfig = {
       chance: 0.4,
       bonusCalories: 100,
       homChange: -6,
-      narrative: 'Acorns blanket the forest floor in a dense, copper-brown carpet. The oaks have produced abundantly this year, and you crunch through them with steady, rhythmic feeding. The tannin-rich nuts are building fat reserves along your ribs and haunches — an invisible armor against the approaching winter.',
+      narrative: 'Acorns everywhere on the forest floor. You crunch through them steadily. The bitter tannin taste, then the dense fat of the nut. Your ribs are padding over.',
       clinicalDetail: 'Mast year acorn crop. +100 bonus kcal.',
     },
     // Autumn — normal
@@ -179,7 +179,7 @@ export const SEASONAL_BROWSE_CONFIG: SeasonalBrowseConfig = {
       season: 'autumn',
       bonusCalories: 20,
       homChange: -2,
-      narrative: 'The autumn browse is adequate but not abundant. You work through the available forage — dried grasses, fallen fruit, the last of the season\'s forbs — storing what calories you can before winter strips the forest bare.',
+      narrative: 'Dried grasses, fallen fruit, the last forbs. You work through what is available.',
       clinicalDetail: 'Normal autumn foraging. +20 bonus kcal.',
     },
   ],
@@ -188,7 +188,7 @@ export const SEASONAL_BROWSE_CONFIG: SeasonalBrowseConfig = {
     season: 'any',
     bonusCalories: 0,
     homChange: 0,
-    narrative: 'You browse on whatever the forest offers, filling your rumen with methodical efficiency.',
+    narrative: 'You browse on what the forest offers. The rumen fills.',
     clinicalDetail: 'Baseline foraging. 0 bonus kcal.',
   },
 };
@@ -207,7 +207,7 @@ export const RISKY_FORAGING_CONFIG: RiskyForagingConfig = {
     // Orchard
     (_ctx) => ({
       id: 'orchard',
-      narrativeText: 'The smell drifts to you on the evening breeze — sweet, fermenting, irresistible. Through the tree line you can see rows of fruit trees heavy with produce, some already fallen and splitting open in the grass. A structure sits at the edge, its windows lit, and a territorial animal chained near the entrance. The food is close, almost within reach. But this is human ground.',
+      narrativeText: 'Sweet ferment on the evening breeze. Through the tree line, rows of fruit trees, fallen fruit splitting in the grass. A structure at the edge, lit windows. A chained animal near the entrance.',
       clinicalDetail: 'Deer near human orchard. High-calorie food source with risk of human contact.',
       statEffects: [],
       consequences: [],
@@ -216,9 +216,9 @@ export const RISKY_FORAGING_CONFIG: RiskyForagingConfig = {
         {
           id: 'raid-crops',
           label: 'Slip in and feed',
-          description: 'Rich food, but human ground is dangerous.',
+          description: 'Rich food. The chained animal and lit structure.',
           style: 'danger',
-          narrativeResult: 'You pick your way through the rows in silence, ears swiveling, eating as fast as you dare. The fruit is sweet and heavy with juice, each bite flooding your mouth with sugar. You eat until your gut is taut, then melt back into the tree line before anything stirs.',
+          narrativeResult: 'You pick through the rows in silence, ears swiveling. The fruit is sweet, heavy with juice. You eat until your gut is taut, then slip back into the tree line.',
           modifyOutcome(base, innerCtx) {
             const caught = innerCtx.rng.chance(0.03);
             return {
@@ -229,7 +229,7 @@ export const RISKY_FORAGING_CONFIG: RiskyForagingConfig = {
               ],
               consequences: [
                 { type: 'add_calories' as const, amount: 3 * KCAL_PER_LB, source: 'orchard-raid' },
-                ...(caught ? [{ type: 'death' as const, cause: 'Shot by farmer while raiding orchard' }] : []),
+                ...(caught ? [{ type: 'death' as const, cause: 'Loud crack from the structure. Impact. Legs fold.' }] : []),
               ],
             };
           },
@@ -237,9 +237,9 @@ export const RISKY_FORAGING_CONFIG: RiskyForagingConfig = {
         {
           id: 'avoid-crops',
           label: 'Turn back to the forest',
-          description: 'Safer. Your stomach aches with missed opportunity.',
+          description: 'The smell pulls at you. You turn away.',
           style: 'default',
-          narrativeResult: 'You watch for a long moment, the smell pulling at you like a physical force. But something holds you back — an instinct older than hunger. You turn and fade back into the forest, the sweetness lingering in your nostrils like a taunt.',
+          narrativeResult: 'You stand at the tree line, nostrils full of sweetness. Something holds you still. You turn back into the forest.',
           modifyOutcome(base) {
             return {
               ...base,
@@ -254,7 +254,7 @@ export const RISKY_FORAGING_CONFIG: RiskyForagingConfig = {
     // Cornfield
     (_ctx) => ({
       id: 'cornfield',
-      narrativeText: 'The field stretches out under the moonlight like a dark, rustling sea. The stalks are tall enough to hide you completely, and the ears are fat with ripe kernels — a concentration of calories that the forest cannot match. You can hear other deer already inside, the soft tearing of husks and the wet crunch of feeding. But the rich grain in quantity can acidify your gut until it presses against your lungs.',
+      narrativeText: 'Rustling stalks in moonlight, tall enough to hide you. Ears fat with ripe kernels. You hear other deer inside already, the soft tearing of husks, the wet crunch of feeding.',
       clinicalDetail: 'Deer near agricultural cornfield. Risk of ruminal acidosis from high-starch diet.',
       statEffects: [],
       consequences: [],
@@ -263,9 +263,9 @@ export const RISKY_FORAGING_CONFIG: RiskyForagingConfig = {
         {
           id: 'gorge',
           label: 'Gorge yourself',
-          description: 'Extraordinary calories, but the risk of acidosis is real.',
+          description: 'Rich grain. Your gut may not handle the quantity.',
           style: 'danger',
-          narrativeResult: 'You eat and eat. The corn is impossibly rich, each kernel a pellet of concentrated energy. Your rumen swells. A dull pressure builds in your abdomen as the acids begin their work.',
+          narrativeResult: 'You eat and eat. Each kernel dense and rich. Your rumen swells. Dull pressure building in your abdomen.',
           modifyOutcome(base) {
             return {
               ...base,
@@ -277,9 +277,9 @@ export const RISKY_FORAGING_CONFIG: RiskyForagingConfig = {
         {
           id: 'graze-cautious',
           label: 'Graze cautiously and leave early',
-          description: 'Take what your rumen can handle, then slip away.',
+          description: 'Eat carefully. Leave before the pressure builds.',
           style: 'default',
-          narrativeResult: 'You eat carefully, measured mouthfuls, pausing to let your rumen adjust to the unfamiliar richness. When the first twinge of discomfort signals enough, you stop. Discipline. Survival.',
+          narrativeResult: 'You eat in measured mouthfuls. When the first twinge of discomfort comes, you stop and leave.',
           modifyOutcome(base) {
             return {
               ...base,
@@ -294,7 +294,7 @@ export const RISKY_FORAGING_CONFIG: RiskyForagingConfig = {
     // Mushrooms
     (_ctx) => ({
       id: 'mushroom',
-      narrativeText: 'A cluster of mushrooms pushes up through the leaf litter at the base of a rotting stump — pale caps glistening with morning dew, their earthy scent cutting through the dampness. You nose at them cautiously. Fungi are a delicacy your body craves, rich in minerals that the browse cannot provide.',
+      narrativeText: 'Earthy scent at the base of a rotting stump. Pale caps pushing through leaf litter, glistening with dew. You nose at them.',
       clinicalDetail: 'Wild mushroom foraging. Potential mycotoxin risk (12% chance of toxic species).',
       statEffects: [{ stat: StatId.HOM, amount: -3, label: '-HOM' }],
       consequences: [{ type: 'modify_nutrients', nutrient: 'minerals', amount: 5 }],
@@ -303,9 +303,9 @@ export const RISKY_FORAGING_CONFIG: RiskyForagingConfig = {
         {
           id: 'eat-mushrooms',
           label: 'Eat the mushrooms',
-          description: 'Rich in minerals your body craves.',
+          description: 'The earthy smell draws you.',
           style: 'default',
-          narrativeResult: 'You bite into the first cap and the flavor is clean and loamy, like eating the forest itself. Your body floods with a quiet satisfaction as the minerals it has been missing finally arrive.',
+          narrativeResult: 'You bite into the first cap. Clean, loamy flavor. You eat the rest.',
           modifyOutcome(base, innerCtx) {
             const toxic = innerCtx.rng.chance(0.12);
             if (toxic) {
@@ -332,9 +332,9 @@ export const RISKY_FORAGING_CONFIG: RiskyForagingConfig = {
         {
           id: 'leave-mushrooms',
           label: 'Leave them alone',
-          description: 'You can\'t be sure they\'re safe.',
+          description: 'The smell is unfamiliar.',
           style: 'default',
-          narrativeResult: 'You sniff once more, then turn away. The forest offers other food — slower, less concentrated, but without the uncertainty. Caution has its own kind of nutrition.',
+          narrativeResult: 'You sniff once more, then turn away. Other browse nearby.',
           modifyOutcome(base) {
             return { ...base, statEffects: [], consequences: [] };
           },
@@ -367,7 +367,7 @@ export const TOXIC_PLANT_CONFIG: ToxicPlantConfig = {
   ],
   caloryCost: 3 * KCAL_PER_LB,
 
-  narrativeText: 'The plant looked like everything else — green, leafy, unremarkable. You were already chewing before the taste turned wrong: bitter, astringent, with a chemical bite that made your tongue go numb. You spit it out, but some has already gone down. Within minutes your stomach cramps violently and the world tilts. Something in those leaves is fighting your body from the inside.',
+  narrativeText: 'You were already chewing before the taste turned wrong. Bitter, astringent, a chemical bite numbing your tongue. You spit. Some already swallowed. Your stomach cramps.',
   clinicalDetail: 'Ingestion of toxic plant (likely water hemlock or similar). Chemical poisoning causing gastrointestinal distress and metabolic disruption.',
   emotionalTone: 'pain',
 };

@@ -84,9 +84,9 @@ export const STARVATION_PRESSURE_CONFIG: PressureConfig = {
 
     let narrative: string;
     if (bcs <= 1) {
-      narrative = 'Your body is consuming itself. The muscles along your spine have wasted to cables of sinew over bone, and your haunches have hollowed into cavities where fat once lay. Every movement costs more than the last. The hunger is no longer a sensation — it is your entire existence, a void that pulls at you from the inside. You need food. Any food. Now.';
+      narrative = 'The muscles along your spine have gone ropy and thin. Your haunches are hollow. Each step costs more than the last. The hunger is constant, a pull from inside your gut that never stops.';
     } else {
-      narrative = 'The hunger has been building for days, a persistent gnawing that has shifted from discomfort to urgency. Your ribs are starting to show through your thinning coat, and there is a tremor in your legs that wasn\'t there before. The safe browse in the forest understory is picked over, barely enough to sustain you. But beyond the tree line, you can smell something richer.';
+      narrative = 'Your ribs show through the thinning coat. A tremor has settled into your legs. The understory browse is picked over, barely worth chewing. Beyond the tree line, you smell richer forage on the wind.';
     }
 
     return {
@@ -110,9 +110,9 @@ export const STARVATION_PRESSURE_CONFIG: PressureConfig = {
       {
         id: 'risk-open',
         label: 'Risk the open ground for better browse',
-        description: `Exposed feeding, but the calories are worth it.${locomotion < 60 ? ' Your legs make fleeing difficult.' : ''}`,
+        description: `Open ground, but the forage is better.${locomotion < 60 ? ' Your legs make fleeing difficult.' : ''}`,
         style: locomotion < 50 ? 'danger' : 'default',
-        narrativeResult: 'You push past the tree line into the open, where the grasses are thicker and the browse untouched. Every nerve screams that you are exposed — a silhouette against the sky. But the food is here, and your body demands it.',
+        narrativeResult: 'You step past the tree line. The grass is thick here, the browse untouched. Wind hits you from every direction. You are a silhouette against the sky. You eat anyway.',
         modifyOutcome(base, innerCtx) {
           const forage = resolveForage(innerCtx, {
             foodType: terrain === 'plain' ? 'grass' : 'browse',
@@ -147,7 +147,7 @@ export const STARVATION_PRESSURE_CONFIG: PressureConfig = {
         label: 'Stay in cover and conserve energy',
         description: 'Safer, but the deficit grows.',
         style: 'default',
-        narrativeResult: 'You stay where you are, tucked into the understory, scraping at bark and dead leaves. The food is poor — barely enough to quiet the ache in your gut, let alone reverse the decline. But at least you are hidden.',
+        narrativeResult: 'You stay in the understory, scraping at bark and dead leaves. The food is poor. It does not quiet the ache in your gut. But nothing can see you here.',
         modifyOutcome(base) {
           return {
             ...base,
@@ -167,7 +167,7 @@ export const STARVATION_PRESSURE_CONFIG: PressureConfig = {
         label: 'Strip bark from the nearest tree',
         description: 'Desperate, low-calorie food. Hard on your teeth.',
         style: 'default',
-        narrativeResult: 'You press your incisors against the trunk and pull, peeling long strips of inner bark that taste of turpentine and desperation. Your teeth ache with the effort. The bark provides some carbohydrates — just enough to keep your body from burning its last reserves tonight.',
+        narrativeResult: 'You press your incisors against the trunk and pull. The inner bark tastes of turpentine. Your teeth ache. It is barely food, but it keeps your body from consuming its last reserves tonight.',
         modifyOutcome(base) {
           return {
             ...base,
@@ -221,9 +221,9 @@ export const HYPOTHERMIA_PRESSURE_CONFIG: PressureConfig = {
 
     let narrative: string;
     if (severity > 5) {
-      narrative = 'The cold has moved past your skin and muscles and settled into your core. Your shivering has become violent, uncontrollable — your whole body convulsing in a desperate bid to generate heat. Your thoughts are slowing, turning thick and confused. Some part of your brain, the old part, knows that you are dying. You need shelter, warmth, anything — or this cold will finish what it started.';
+      narrative = 'The cold is in your core. Your shivering has gone violent, whole-body convulsions that you cannot stop. Your legs buckle and catch. Everything is slow. You need shelter or you will not get up again.';
     } else {
-      narrative = 'The chill won\'t leave. It has been building for hours, creeping deeper despite the constant shivering that burns through your calories like kindling. Your extremities feel numb and distant — ears, muzzle, the tips of your hooves. The wind finds every gap in your fur where injuries have thinned the insulating layer. Your body is losing more heat than it can produce.';
+      narrative = 'The chill will not leave. Hours of shivering and you are still cold. Your ears, muzzle, and hoof-tips have gone numb. The wind finds every gap in your fur where the coat has thinned. You are losing heat faster than you can make it.';
     }
 
     return {
@@ -247,11 +247,11 @@ export const HYPOTHERMIA_PRESSURE_CONFIG: PressureConfig = {
       {
         id: 'seek-shelter',
         label: 'Search for better shelter',
-        description: hasShelter ? 'Dense forest or a windbreak could save you.' : 'The terrain offers little cover.',
+        description: hasShelter ? 'Dense trees ahead. The wind might drop there.' : 'The ground here is open. Little cover.',
         style: hasShelter ? 'default' : 'danger',
         narrativeResult: hasShelter
-          ? 'You push deeper into the forest, forcing your stiff legs to carry you until the wind drops and the canopy thickens overhead. Between two fallen trunks, sheltered by dense hemlock boughs, you find a pocket of still air. You fold your legs beneath you and press your belly to the ground. The shivering gradually eases as your body heat collects in the small space.'
-          : 'You stumble through the open ground, searching for anything — a depression, a rock outcrop, a drift of snow deep enough to burrow into. The wind follows you, relentless, stripping heat faster than your legs can carry you to safety.',
+          ? 'You push into the trees until the wind drops. Between two fallen trunks, under hemlock boughs, the air is still. You fold your legs under you and press your belly to the ground. The shivering eases.'
+          : 'You stumble across the open ground, searching for a depression, a rock, anything. The wind strips heat from you with every step.',
         modifyOutcome(base, innerCtx) {
           const exposure = resolveExposure(innerCtx, {
             type: 'cold',
@@ -279,7 +279,7 @@ export const HYPOTHERMIA_PRESSURE_CONFIG: PressureConfig = {
         label: 'Curl up tight where you are',
         description: 'Minimize surface area. Endure.',
         style: 'default',
-        narrativeResult: 'You fold your legs beneath you and tuck your nose against your flank, making yourself as small as possible. Your breathing slows. The snow begins to accumulate on your back — an ironic blanket, insulating even as the source of your misery. You wait.',
+        narrativeResult: 'You fold your legs under you and tuck your nose against your flank. Your breathing slows. Snow accumulates on your back, trapping a thin layer of warmth against your fur. You wait.',
         modifyOutcome(base, innerCtx) {
           const exposure = resolveExposure(innerCtx, {
             type: 'cold',
@@ -306,7 +306,7 @@ export const HYPOTHERMIA_PRESSURE_CONFIG: PressureConfig = {
         label: 'Keep moving to generate heat',
         description: 'Burns calories but maintains core temperature.',
         style: 'default',
-        narrativeResult: 'You force yourself to walk — steady, rhythmic movement that pushes blood through your chilled muscles and generates the frictional warmth of exertion. Your legs protest but your core warms. The movement costs energy you can barely afford, but freezing to death costs more.',
+        narrativeResult: 'You force yourself to walk. Steady, rhythmic steps push blood through your chilled muscles. Your legs ache but your core warms. The movement burns calories you cannot spare, but you are warmer.',
         modifyOutcome(base) {
           return {
             ...base,
@@ -358,13 +358,13 @@ export const IMMUNE_PRESSURE_CONFIG: PressureConfig = {
 
     let narrative: string;
     if (hasInfection && parasiteCount > 0) {
-      narrative = 'Your body is fighting a war on multiple fronts, and losing. The infected wound throbs with dull, constant heat, while the parasites drain resources your immune system desperately needs. A lethargy has settled over you like a heavy blanket — not the comfortable drowsiness of rest, but the bone-deep exhaustion of a body spending everything it has on staying alive and falling short. Your eyes are dull. Your coat is rough. Even breathing feels like work.';
+      narrative = 'The wound throbs with constant heat. The parasites pull at you from inside. A bone-deep exhaustion has settled in, heavier than sleep. Your eyes are dull. Your coat is rough. Even breathing takes effort.';
     } else if (hasInfection) {
-      narrative = 'The wound that should have closed days ago is getting worse. The flesh around it is hot and swollen, weeping a thin, foul-smelling fluid. A fever has taken hold — your body throwing everything it has at the invasion, burning through calories it cannot spare. You feel simultaneously burning and freezing, your body\'s thermostat broken by the immune response. The infection is winning.';
+      narrative = 'The wound is hot and swollen, weeping thin fluid that smells wrong. Fever has taken hold. You shiver and burn at the same time. The infection is spreading.';
     } else if (parasiteCount > 0) {
-      narrative = 'The parasites are taking their toll. You can feel them — not as individual creatures, but as a pervasive drain, a constant tax on every system. Your coat has thinned in patches. Your appetite is ravenous but your body can\'t seem to keep up. The immune response that should be controlling them has been overwhelmed by malnutrition and stress, and now they multiply unchecked.';
+      narrative = 'Something is draining you from inside. Your coat has thinned in patches. You eat constantly but stay hungry. The itch and pull never stops.';
     } else {
-      narrative = 'A profound fatigue has settled into your body. Your immune system, depleted by the cumulative stress of survival, has reached its breaking point. Wounds heal slowly. Scratches that should be trivial fester and redden. Your body no longer has the reserves to fight on every front, and the vulnerability shows in your dull coat, your sunken eyes, your labored breathing.';
+      narrative = 'Everything heals slowly now. Small scratches stay red and swollen. Your coat is dull, your eyes sunken. You are tired in a way that sleep does not fix.';
     }
 
     const immuneDesc = hasInfection && parasiteCount > 0
@@ -392,9 +392,9 @@ export const IMMUNE_PRESSURE_CONFIG: PressureConfig = {
       {
         id: 'rest-recover',
         label: 'Find a quiet place and rest',
-        description: 'Let your body redirect energy to immune function.',
+        description: 'Lie still. Let the fever do its work.',
         style: 'default',
-        narrativeResult: 'You find a sheltered depression beneath the low branches of a hemlock, its needles forming a fragrant canopy overhead. You lie still for a long time, your body doing its invisible work — white blood cells marshaling, fever burning off invaders, damaged tissue slowly knitting. The hunger is a price you pay for healing.',
+        narrativeResult: 'You find a depression beneath a hemlock and lie still. The smell of resin fills your nose. You do not eat. Your body is hot and working hard at something you cannot see.',
         modifyOutcome(base) {
           return {
             ...base,
@@ -413,9 +413,9 @@ export const IMMUNE_PRESSURE_CONFIG: PressureConfig = {
       {
         id: 'forage-anyway',
         label: 'Push through and keep foraging',
-        description: `Your body needs fuel to fight infection.${bcs <= 1 ? ' But you barely have the energy to stand.' : ''}`,
+        description: `You need fuel to keep going.${bcs <= 1 ? ' You can barely stand.' : ''}`,
         style: bcs <= 1 ? 'danger' : 'default',
-        narrativeResult: 'You drag yourself to your feet and force your body to do what it least wants to do: move. The foraging is slow and painful, every step a negotiation between the demands of hunger and the demands of healing. But your body needs fuel — without calories, even your immune system shuts down.',
+        narrativeResult: 'You drag yourself up and move. Each step hurts. The foraging is slow. But you chew and swallow whatever you find.',
         modifyOutcome(base) {
           return {
             ...base,
@@ -432,9 +432,9 @@ export const IMMUNE_PRESSURE_CONFIG: PressureConfig = {
       {
         id: 'water-seek',
         label: 'Seek out water',
-        description: 'Hydration helps your body fight the infection.',
+        description: 'You smell water. Your mouth is dry.',
         style: 'default',
-        narrativeResult: 'Instinct drives you toward water. You find a stream — cold, clear, running over smooth stones — and drink deeply, your parched tissues soaking up the moisture like dry earth after rain. The water won\'t cure you, but it gives your body one less deficit to manage, freeing resources for the immune battle within.',
+        narrativeResult: 'You follow the smell of water to a stream. The water is cold and runs over smooth stones. You drink for a long time. The fever does not break, but your mouth is no longer cracked.',
         modifyOutcome(base) {
           return {
             ...base,
@@ -484,16 +484,16 @@ export const INJURY_IMPACT_CONFIG: PressureConfig = {
 
     let narrative: string;
     if (locoImpaired && digestImpaired) {
-      narrative = 'Your body is failing on multiple fronts. The injured leg forces a limping gait that makes every step a negotiation with pain, while something inside your gut has gone wrong — each mouthful of browse sits heavy and undigested, the nutrition passing through you like water through a sieve. You are burning more energy than you can extract, and the deficit is accelerating.';
+      narrative = 'The injured leg drags. Each mouthful of browse sits heavy and undigested in your gut. You eat and eat but stay hungry. You limp and limp but cover no ground.';
     } else if (locoImpaired) {
       const severity = locomotion < 50 ? 'severe' : 'moderate';
       if (severity === 'severe') {
-        narrative = 'The leg barely holds you. Each step sends a bolt of pain from hoof to hip that makes your vision blur. You can manage a walk — barely — but running is beyond you. The realization settles with cold clarity: if anything forces you to sprint, you cannot. Your survival now depends entirely on not being tested.';
+        narrative = 'The leg barely holds weight. Each step sends pain from hoof to hip. You can walk, barely. Running is not possible. If anything chases you, you cannot flee.';
       } else {
-        narrative = 'The injury has settled into a persistent ache that flares with each stride. You can still move, still forage, still run if pressed — but everything takes more effort, costs more energy, produces more pain. You find yourself favoring the good leg, shortening your gait, spending longer at each food source because traveling between them hurts.';
+        narrative = 'The ache flares with each stride. You favor the good leg, shortening your gait. You spend longer at each food source because walking between them hurts.';
       }
     } else {
-      narrative = 'Something is wrong inside. The food goes down but the nutrition doesn\'t seem to arrive — your rumen works sluggishly, distended and gassy, failing to extract what your body needs from the browse. You eat and eat but the hunger doesn\'t recede. The injury to your gut is invisible but its effects are not: you are starving on a full stomach.';
+      narrative = 'Something is wrong inside. Your rumen is distended and gassy, working sluggishly. The food goes down but the hunger does not recede. You eat and eat and stay empty.';
     }
 
     const impairmentDesc = locoImpaired && digestImpaired
@@ -526,7 +526,7 @@ export const INJURY_IMPACT_CONFIG: PressureConfig = {
           label: 'Eat only the most digestible food',
           description: 'Less calories, but your damaged gut can handle it.',
           style: 'default',
-          narrativeResult: 'You become picky — seeking out only the tenderest shoots, the softest buds, food that requires minimal breakdown. Your gut protests less. The calories are fewer, but they actually reach your bloodstream.',
+          narrativeResult: 'You seek the tenderest shoots, the softest buds. Your gut handles them. Less food, but it stays down.',
           modifyOutcome(base, innerCtx) {
             const forage = resolveForage(innerCtx, {
               foodType: 'browse',
@@ -553,7 +553,7 @@ export const INJURY_IMPACT_CONFIG: PressureConfig = {
           label: 'Force down as much as you can',
           description: 'Quantity over quality. Risky with a damaged gut.',
           style: 'danger',
-          narrativeResult: 'You eat everything within reach — bark, dead leaves, half-frozen grass, the bitter twigs you would normally ignore. Your gut distends painfully, working overtime to extract what it can from the bulk. Some of it passes through undigested. But some gets through.',
+          narrativeResult: 'You eat everything within reach. Bark, dead leaves, half-frozen grass, bitter twigs. Your gut distends painfully. Some of it passes through undigested. Some gets through.',
           modifyOutcome(base) {
             return {
               ...base,
@@ -576,7 +576,7 @@ export const INJURY_IMPACT_CONFIG: PressureConfig = {
         label: 'Rest and let the leg recover',
         description: 'No foraging, but the injury may improve.',
         style: 'default',
-        narrativeResult: 'You find a sheltered spot and fold your legs carefully beneath you, taking the weight off the damaged limb. For a long time you simply lie still, feeling the slow pulse of your own healing. The hunger builds, but the pain ebbs slightly.',
+        narrativeResult: 'You find a sheltered spot and fold your legs carefully, taking the weight off the damaged limb. You lie still. The hunger builds, but the pain ebbs slightly.',
         modifyOutcome(base) {
           return {
             ...base,
@@ -594,7 +594,7 @@ export const INJURY_IMPACT_CONFIG: PressureConfig = {
         label: 'Push through the pain to forage',
         description: `Keep feeding despite the injury.${locomotion < 50 ? ' This will be agonizing.' : ''}`,
         style: locomotion < 40 ? 'danger' : 'default',
-        narrativeResult: 'You haul yourself up and move, each step a small battle between need and pain. The browse is there, waiting, and your body needs it more than it needs rest. You eat steadily, shifting your weight to spare the injured leg, finding a rhythm between bites that almost lets you forget the damage.',
+        narrativeResult: 'You haul yourself up and move. Each step hurts. You eat steadily, shifting weight off the bad leg, chewing between steps.',
         modifyOutcome(base, innerCtx) {
           const forage = resolveForage(innerCtx, {
             foodType: 'browse',
@@ -649,7 +649,7 @@ export const RUT_COMBAT_CONFIG: PressureConfig = {
   resolve(ctx) {
     const rivalName = ctx.npcs?.find((n) => n.type === 'rival' && n.alive)?.name ?? 'another buck';
 
-    const narrative = `The scraping sound reaches you first — antler against bark, rhythmic and aggressive. Then you see ${rivalName}, raking a sapling with slow, deliberate fury, leaving bright wounds in the wood. Your scent reaches the other buck at the same moment their scent reaches you. The air between you thickens with testosterone and territorial rage. The other buck turns, lowers their rack, and begins to walk toward you with a stiff-legged gait that means one thing.`;
+    const narrative = `You hear scraping. Antler on bark, rhythmic. Then you see ${rivalName} raking a sapling, leaving bright wounds in the wood. Your scent reaches the other buck. Their scent reaches you. The other buck turns, lowers their rack, and walks toward you stiff-legged.`;
 
     return {
       narrative,
@@ -659,7 +659,7 @@ export const RUT_COMBAT_CONFIG: PressureConfig = {
       ],
       consequences: [],
       entity: rivalBuckEntity(rivalName),
-      actionDetail: 'The other buck turns, lowers their rack, and begins to walk toward you with a stiff-legged gait that means one thing.',
+      actionDetail: 'The other buck turns, lowers their rack, and walks toward you stiff-legged.',
       clinicalDetail: `Rut combat challenge from ${rivalName}. Intraspecific territorial/mating competition.`,
       intensity: 'high',
       emotionalTone: 'aggression',
@@ -688,9 +688,9 @@ export const RUT_COMBAT_CONFIG: PressureConfig = {
       {
         id: 'engage',
         label: 'Lower your antlers and charge',
-        description: `Meet the challenge. ${ctx.animal.weight > rivalWeight ? 'You outweigh the rival.' : 'The rival looks formidable.'}`,
+        description: `Meet the challenge head-on. ${ctx.animal.weight > rivalWeight ? 'You outweigh the rival.' : 'The rival is big.'}`,
         style: ctx.animal.weight < rivalWeight * 0.8 ? 'danger' : 'default',
-        narrativeResult: 'You lower your rack and drive forward. The impact is tremendous — a crack like a breaking branch as antler meets antler, tines interlocking, muscles straining. You shove with everything you have, hooves tearing at the ground for purchase, necks twisting as you try to throw the other buck off balance.',
+        narrativeResult: 'You lower your rack and drive forward. The crack of antler on antler is loud. Tines interlock. You shove, hooves tearing ground, neck twisting, trying to throw the other buck off balance.',
         modifyOutcome(base, innerCtx) {
           const fight = resolveFight(innerCtx, rutFightParams);
 
@@ -731,7 +731,7 @@ export const RUT_COMBAT_CONFIG: PressureConfig = {
         label: 'Posture and intimidate',
         description: 'Display your size without committing to combat.',
         style: 'default',
-        narrativeResult: 'You turn broadside, making yourself as large as possible, neck arched, muscles taut. You rake the ground with a hoof and snort — a challenge that says "look how big I am." The other buck hesitates, measures you, and after a tense moment either accepts the display or presses forward.',
+        narrativeResult: 'You turn broadside. Neck arched, muscles taut. You rake the ground with a hoof and snort. The other buck hesitates, measuring you.',
         modifyOutcome(base, innerCtx) {
           // Intimidation: fight resolver with lower intensity
           const postureResult = resolveFight(innerCtx, {
@@ -772,9 +772,9 @@ export const RUT_COMBAT_CONFIG: PressureConfig = {
       {
         id: 'retreat',
         label: 'Yield and withdraw',
-        description: 'Turn away. Discretion over valor.',
+        description: 'Turn away. Keep your body intact.',
         style: 'default',
-        narrativeResult: 'You break eye contact first, turning your body away in the universal gesture of submission. The other buck watches you go with a stiff, imperious posture, having won without a blow. Your pride stings, but your body is intact.',
+        narrativeResult: 'You break eye contact and turn your body away. The other buck watches you go, standing tall. You walk until the smell of him fades. Your body is intact.',
         modifyOutcome(base) {
           return {
             ...base,

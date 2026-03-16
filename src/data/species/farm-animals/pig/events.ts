@@ -7,7 +7,7 @@ export const PIG_EVENTS: GameEvent[] = [
     id: 'pig-industrial-feeding',
     type: 'passive',
     category: 'foraging',
-    narrativeText: 'The automated feeder clatters to life, dumping a measured ration of corn-and-soy pellets into the trough. You and the others surge forward, shoving and biting for position. The feed is engineered for maximum weight gain — high energy, growth hormones, antibiotics mixed into the grain. You eat until the trough is empty and your stomach aches. There is nothing else to do until the next feeding.',
+    narrativeText: 'A clatter from the feeder. The smell of grain hits before you see it. You shove toward the trough and eat until it is empty.',
     statEffects: [
       { stat: StatId.HOM, amount: -2, label: '-HOM' },
     ],
@@ -22,7 +22,7 @@ export const PIG_EVENTS: GameEvent[] = [
     id: 'pig-feed-competition',
     type: 'passive',
     category: 'social',
-    narrativeText: 'A larger pig shoulders you away from the feeder. In the overcrowded pen, dominance at the trough determines who eats first and who gets the scraps. You manage to grab mouthfuls between shoves, but the stress of the competition burns nearly as many calories as you consume.',
+    narrativeText: 'A larger pig shoulders you off the trough. You grab mouthfuls between shoves, snout bruised against metal.',
     statEffects: [
       { stat: StatId.TRA, amount: 3, label: '+TRA' },
       { stat: StatId.STR, amount: 2, label: '+STR' },
@@ -38,7 +38,7 @@ export const PIG_EVENTS: GameEvent[] = [
     id: 'pig-growth-promoters',
     type: 'passive',
     category: 'health',
-    narrativeText: 'The feed today has a chemical undertone — ractopamine, a growth promoter that redirects your metabolism toward muscle instead of fat. Your heart races. Your muscles twitch and ache as they grow faster than your tendons can adapt. The industry calls this "feed efficiency." Your body calls it something else.',
+    narrativeText: 'The feed smells wrong today. A sharp chemical note under the grain. Your heart races after eating. Your muscles twitch and ache.',
     statEffects: [
       { stat: StatId.HEA, amount: -3, label: '-HEA' },
       { stat: StatId.STR, amount: 3, label: '+STR' },
@@ -58,7 +58,7 @@ export const PIG_EVENTS: GameEvent[] = [
     id: 'pig-gestation-crate',
     type: 'passive',
     category: 'environmental',
-    narrativeText: 'Now that you are pregnant, you have been moved to a gestation crate. It is so narrow you cannot turn around or even lie down comfortably. Your muscles begin to atrophy.',
+    narrativeText: 'The new pen is too narrow to turn around in. Metal bars press both flanks. Your legs stiffen from standing in one position.',
     statEffects: [
       { stat: StatId.HEA, amount: -3, label: '-HEA' },
       { stat: StatId.TRA, amount: 15, label: '+TRA' },
@@ -75,7 +75,7 @@ export const PIG_EVENTS: GameEvent[] = [
     id: 'pig-tail-docking',
     type: 'passive',
     category: 'health',
-    narrativeText: 'To prevent tail-biting caused by the stress of overcrowding, the farmer clips your tail off. No pain relief is used.',
+    narrativeText: 'Hands grip you. A sharp hot pain at the base of your tail, then the pressure is gone. The spot throbs.',
     statEffects: [
       { stat: StatId.HEA, amount: -2, label: '-HEA' },
       { stat: StatId.TRA, amount: 15, label: '+TRA' }
@@ -91,7 +91,7 @@ export const PIG_EVENTS: GameEvent[] = [
     id: 'pig-bar-biting',
     type: 'passive',
     category: 'psychological',
-    narrativeText: 'Driven mad by the lack of stimulation and confinement, you find yourself compulsively biting at the metal bars of your crate until your gums bleed.',
+    narrativeText: 'Your mouth finds the metal bar again. You bite and gnaw. The taste is iron and blood from your own gums. You cannot stop.',
     statEffects: [
       { stat: StatId.HEA, amount: -2, label: '-HEA' },
       { stat: StatId.WIS, amount: -5, label: '-WIS' },
@@ -107,7 +107,7 @@ export const PIG_EVENTS: GameEvent[] = [
     id: 'pig-respiratory-distress',
     type: 'passive',
     category: 'health',
-    narrativeText: 'Dust and high levels of ammonia from the manure pits below the slats irritate your respiratory tract. You have developed a persistent, hacking cough.',
+    narrativeText: 'The air burns your nostrils. Ammonia rises through the slats from below. Each breath triggers a hacking cough you cannot clear.',
     statEffects: [
       { stat: StatId.HEA, amount: -4, label: '-HEA' },
       { stat: StatId.IMM, amount: -3, label: '-IMM' }
@@ -123,7 +123,7 @@ export const PIG_EVENTS: GameEvent[] = [
     id: 'pig-piglet-removal',
     type: 'passive',
     category: 'social',
-    narrativeText: 'Your piglets are only three weeks old, but the cycle of production moves on. Farm employees roughly separate you from your litter. You hear their high-pitched squeals as they are hauled away to another building. You will never see them again.',
+    narrativeText: 'Hands pull the piglets away. Their squealing gets fainter down the corridor. Their smell fades from the pen.',
     statEffects: [
       { stat: StatId.TRA, amount: 25, label: '+TRA' },
       { stat: StatId.STR, amount: 20, label: '+STR' },
@@ -140,7 +140,7 @@ export const PIG_EVENTS: GameEvent[] = [
     id: 'pig-frustrated-rooting',
     type: 'passive',
     category: 'psychological',
-    narrativeText: 'An overwhelming urge to root in the earth overcomes you, but there is only hard, slatted concrete beneath your feet. You scrape your snout against the floor until it bleeds, unable to satisfy the natural instinct to explore.',
+    narrativeText: 'Your snout pushes at the concrete. The urge to root is overwhelming but there is nothing to turn over, nothing to smell under. You scrape until the skin on your nose is raw.',
     statEffects: [
       { stat: StatId.TRA, amount: 8, label: '+TRA' },
       { stat: StatId.HEA, amount: -2, label: '-HEA' }
@@ -155,7 +155,7 @@ export const PIG_EVENTS: GameEvent[] = [
     id: 'pig-frustrated-nesting',
     type: 'passive',
     category: 'psychological',
-    narrativeText: 'As your farrowing date approaches, you feel a desperate need to gather straw and build a nest for your young. But there is no bedding here—only cold metal bars. You paw fruitlessly at the air and floor, trapped in a state of high anxiety.',
+    narrativeText: 'The urge to gather and pile bedding is constant. Your front feet scrape at bare metal. There is nothing to gather. You paw at the floor and the air.',
     statEffects: [
       { stat: StatId.STR, amount: 15, label: '+STR' },
       { stat: StatId.TRA, amount: 10, label: '+TRA' }
@@ -173,7 +173,7 @@ export const PIG_EVENTS: GameEvent[] = [
     id: 'pig-market-slaughter',
     type: 'active',
     category: 'health',
-    narrativeText: 'You have reached market weight. You are herded up a ramp onto a transport truck with dozens of others, packed so tightly you cannot lie down. The journey to the slaughterhouse takes twelve hours without food or water. At the plant, you are driven down a concrete corridor toward a CO2 gas chamber. The gas burns your lungs and eyes as you thrash and scream. When you stop moving, you are shackled, hoisted, and bled out on the line.',
+    narrativeText: 'A ramp. Unfamiliar pigs pressed against you. Hours of movement with no water. Then a concrete corridor. A heavy gas fills your lungs and burns.',
     statEffects: [],
     consequences: [
       { type: 'death', cause: 'Slaughtered at processing plant after reaching market weight of approximately 280 lbs in 6 months.' },
@@ -191,7 +191,7 @@ export const PIG_EVENTS: GameEvent[] = [
     id: 'pig-artificial-insemination',
     type: 'passive',
     category: 'reproduction',
-    narrativeText: 'Farm workers restrain you in a narrow chute. An insemination technician forces a catheter into your reproductive tract. The procedure is uncomfortable and frightening. Your body registers the pregnancy that your mind never chose.',
+    narrativeText: 'Hands force you into a narrow chute. Pressure inside your body, sharp and wrong. The smell of the handler stays in your nostrils long after.',
     statEffects: [
       { stat: StatId.TRA, amount: 10, label: '+TRA' },
       { stat: StatId.STR, amount: 5, label: '+STR' },
@@ -214,7 +214,7 @@ export const PIG_EVENTS: GameEvent[] = [
     id: 'pig-roundworm-infection',
     type: 'passive',
     category: 'health',
-    narrativeText: 'The concrete floor is never truly clean. Microscopic roundworm eggs, shed in the feces of previous occupants and resistant to disinfectant, survive in the cracks between slats. You ingest them unknowingly as you root at the floor. Within weeks, larvae are migrating through your liver and lungs before settling in your intestines.',
+    narrativeText: 'You nose at the cracks between the slats. Something in the grit you swallow does not sit right. A dull ache settles in your gut over the following days.',
     statEffects: [
       { stat: StatId.HEA, amount: -3, label: '-HEA' },
       { stat: StatId.IMM, amount: -2, label: '-IMM' },
@@ -234,7 +234,7 @@ export const PIG_EVENTS: GameEvent[] = [
     id: 'pig-louse-infestation',
     type: 'passive',
     category: 'health',
-    narrativeText: 'Contact with the pig in the adjacent pen — through the bars, during the brief chaos of pen cleaning — has left you with passengers. Pig lice, flat-bodied and fast-moving, have colonized the warm folds behind your ears and along your flanks. The constant irritation makes you rub against the bars until your skin is raw.',
+    narrativeText: 'An itch behind your ears that will not stop. You rub your flank against the bars but the crawling sensation spreads. The skin there is raw now.',
     statEffects: [
       { stat: StatId.HEA, amount: -2, label: '-HEA' },
     ],

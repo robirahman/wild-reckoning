@@ -249,7 +249,7 @@ export const FAWN_DEFENSE_PROFILE: ReproductionProfile = {
         label: 'Feign injury to lure predator away',
         description: 'Broken-wing display. Draw the predator from the fawn.',
         style: 'default' as const,
-        narrativeResult: 'You stumble from cover, dragging one leg as if it were broken, bleating in distress. The performance is ancient and convincing — every doe knows this dance. The predator\'s attention locks onto you, the easier prey, and it follows as you limp away from the fawn, gradually increasing your speed until you are running flat out and the predator realizes it has been duped.',
+        narrativeResult: 'You stumble from cover, dragging one leg as if it were broken, bleating in distress. The performance is automatic and convincing. Your body knows how to do this. The predator\'s attention locks onto you, the easier prey, and it follows as you limp away from the fawn, gradually increasing your speed until you are running flat out and the predator realizes it has been duped.',
         modifyOutcome(base: SimulationOutcome, innerCtx: SimulationContext) {
           const successChance = 0.5 + (locomotion - 50) * 0.005;
 

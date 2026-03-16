@@ -10,7 +10,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
     id: 'octopus-planktonic-drift',
     type: 'passive',
     category: 'environmental',
-    narrativeText: 'You drift in the plankton, a speck among millions. The Mediterranean current carries you past jellyfish tentacles and through clouds of copepods. Each day you grow a fraction larger, each day you learn what can be eaten and what eats you.',
+    narrativeText: 'The current pushes you through clouds of copepods. Your arms taste salt and chitin. Everything is larger than you.',
     statEffects: [
       { stat: StatId.NOV, amount: 5, label: '+NOV' },
       { stat: StatId.ADV, amount: 3, label: '+ADV' },
@@ -29,14 +29,14 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
     id: 'octopus-reef-settlement',
     type: 'active',
     category: 'environmental',
-    narrativeText: 'Below you, the reef beckons — rocky crevices, waving seagrass, and the scent of crabs. The current is pulling you past. This may be your only chance to settle.',
+    narrativeText: 'Below, your suckers taste crab-scent rising from rock crevices. The current is pulling you past. The reef is dropping away.',
     statEffects: [],
     choices: [
       {
         id: 'settle-now',
         label: 'Settle on this reef',
-        description: 'Drop out of the current and claim a crevice.',
-        narrativeResult: 'You jet downward with everything you have, your tiny siphon pulsing. The current releases you. Your arms touch rock for the first time. You squeeze into a crevice barely wider than your body. Home.',
+        description: 'Jet downward and squeeze into a crevice.',
+        narrativeResult: 'Your siphon pulses. The current releases you. Your arms grip rock for the first time, suckers tasting algae and shell. You compress into a gap barely wider than your mantle.',
         statEffects: [
           { stat: StatId.HOM, amount: -5, duration: 4, label: '-HOM' },
           { stat: StatId.WIS, amount: 3, label: '+WIS' },
@@ -51,7 +51,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
         id: 'keep-drifting',
         label: 'Keep drifting',
         description: 'The current may carry you to a better reef.',
-        narrativeResult: 'You let the current carry you onward. The reef recedes below. Somewhere ahead there may be a better place — or there may be nothing but open water.',
+        narrativeResult: 'The reef drops away below. The water column opens around you, featureless and cold.',
         statEffects: [
           { stat: StatId.ADV, amount: 5, label: '+ADV' },
           { stat: StatId.NOV, amount: 3, label: '+NOV' },
@@ -61,7 +61,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
         style: 'danger',
         deathChance: {
           probability: 0.06,
-          cause: 'Lost in open water. The current carried you beyond any reef.',
+          cause: 'Carried past the last reef. Open water, no bottom.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.02 }],
         },
       },
@@ -79,14 +79,14 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
     id: 'octopus-first-hunt',
     type: 'active',
     category: 'foraging',
-    narrativeText: 'A small shore crab sits in a sandy patch between two rocks. Its claws are up, sensing the water. You have never hunted anything this large before. Your arms twitch with anticipation.',
+    narrativeText: 'A shore crab sits on sand between two rocks. Your suckers taste its chemical trail. Your arms twitch.',
     statEffects: [],
     choices: [
       {
         id: 'pounce',
         label: 'Pounce',
         description: 'Engulf it with your web and pull it to your beak.',
-        narrativeResult: 'You launch from your crevice in a blur of arms. The crab\'s claws snap at you but your arms are already wrapping around it, your web spreading like a parachute. You pull it to your beak and bite through the joint between carapace and abdomen. Venom flows. The crab goes still. Your first real meal.',
+        narrativeResult: 'Your arms wrap the crab before its claws close. Your beak finds the joint between carapace and abdomen. Venom flows. The crab goes still.',
         statEffects: [
           { stat: StatId.WIS, amount: 5, label: '+WIS' },
           { stat: StatId.HEA, amount: 3, label: '+HEA' },
@@ -102,7 +102,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
         id: 'wait',
         label: 'Wait for easier prey',
         description: 'A crab\'s claws can injure a young octopus.',
-        narrativeResult: 'You watch the crab from your crevice. It wanders away eventually. Later, you find a small mussel and pry it open with your suckers. It isn\'t much, but it\'s safe.',
+        narrativeResult: 'The crab wanders off. Later, you find a mussel and pry it open with your suckers. Not much meat.',
         statEffects: [
           { stat: StatId.WIS, amount: 3, label: '+WIS' },
           { stat: StatId.ADV, amount: -3, label: '-ADV' },
@@ -131,14 +131,14 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
     id: 'octopus-coconut-shell',
     type: 'active',
     category: 'environmental',
-    narrativeText: 'Half a coconut shell lies on the sandy bottom, discarded by humans. It is concave, rigid, and just large enough to fit over your body. Something about it interests you.',
+    narrativeText: 'A hard, concave object sits on the sand. Your suckers taste it: not rock, not shell. It is rigid, hollow, large enough to fit over your body.',
     statEffects: [],
     choices: [
       {
         id: 'carry-shell',
         label: 'Carry it as portable shelter',
         description: 'Hold it beneath you as you walk. Pull it over yourself when threatened.',
-        narrativeResult: 'You wrap two arms around the shell and lift it. Walking on your remaining six arms, you carry it across the sand like an upside-down umbrella. When a shadow passes overhead, you pull the shell over yourself instantly. You have just used a tool — one of the first invertebrates on Earth to do so.',
+        narrativeResult: 'Two arms grip the shell. Six arms walk. When a shadow passes overhead, you pull the shell over yourself. The shadow moves on.',
         statEffects: [
           { stat: StatId.WIS, amount: 8, label: '+WIS' },
           { stat: StatId.NOV, amount: 5, label: '+NOV' },
@@ -153,7 +153,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
         id: 'ignore-shell',
         label: 'Ignore it',
         description: 'You have your crevice. This is just debris.',
-        narrativeResult: 'You jet past the shell without a second glance. The reef provides all the shelter you need.',
+        narrativeResult: 'You jet past. The object stays on the sand.',
         statEffects: [],
         consequences: [],
         revocable: false,
@@ -175,14 +175,14 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
     id: 'octopus-rock-tool',
     type: 'active',
     category: 'foraging',
-    narrativeText: 'A large clam is wedged into a rock crevice, its shell tightly closed. You cannot pry it open with your suckers alone. But there are loose rocks scattered nearby.',
+    narrativeText: 'A large clam is wedged into a crevice, shell sealed tight. Your suckers cannot pry it open. Loose rocks lie nearby.',
     statEffects: [],
     choices: [
       {
         id: 'use-rock',
         label: 'Hammer it with a rock',
         description: 'Grip a stone and strike the clam shell until it cracks.',
-        narrativeResult: 'You pick up a flat stone with two arms and bring it down on the clam\'s shell. Once. Twice. On the fifth strike, the shell cracks. You pry it open and feast on the soft meat inside. Problem-solving rewarded.',
+        narrativeResult: 'Two arms grip a flat stone. Five strikes. The shell cracks. You pry it open and taste the soft meat inside.',
         statEffects: [
           { stat: StatId.WIS, amount: 5, label: '+WIS' },
           { stat: StatId.HEA, amount: 2, label: '+HEA' },
@@ -198,7 +198,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
         id: 'drill-with-beak',
         label: 'Drill through the shell',
         description: 'Use your radula and salivary papilla to bore a hole.',
-        narrativeResult: 'You press your beak against the clam and begin the slow work of drilling through the shell with your radula, injecting digestive enzymes through the hole. It takes hours, but eventually you access the meat. Patience rewarded.',
+        narrativeResult: 'You press your beak against the shell and begin the slow work of drilling, injecting digestive enzymes through the hole. Hours pass. You reach the meat.',
         statEffects: [
           { stat: StatId.WIS, amount: 3, label: '+WIS' },
         ],
@@ -227,14 +227,14 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
     id: 'octopus-chromatophore-mastery',
     type: 'active',
     category: 'environmental',
-    narrativeText: 'You rest on a patch of reef encrusted with coralline algae, barnacles, and sponges. The pattern is complex — dozens of colors and textures in a square meter. Your skin ripples as your chromatophores fire in sequence, each tiny muscle-controlled sac expanding to reveal its pigment.',
+    narrativeText: 'You rest on coralline algae, barnacles, and sponges. Your chromatophores fire in sequence, each pigment sac expanding, testing against the substrate.',
     statEffects: [],
     choices: [
       {
         id: 'practice-camouflage',
         label: 'Match the reef perfectly',
         description: 'Spend time honing your color and texture match.',
-        narrativeResult: 'You cycle through patterns: mottled brown, stippled white, raised papillae mimicking barnacles. After several minutes of adjustments, you are indistinguishable from the reef beneath you. A fish swims directly over you without flinching. You have become invisible.',
+        narrativeResult: 'Mottled brown. Stippled white. Papillae raised to mimic barnacles. A fish passes directly over you without changing course.',
         statEffects: [
           { stat: StatId.WIS, amount: 5, label: '+WIS' },
           { stat: StatId.ADV, amount: -5, duration: 4, label: '-ADV' },
@@ -249,7 +249,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
         id: 'stay-bold',
         label: 'Stay bold-patterned',
         description: 'You are hunting, not hiding.',
-        narrativeResult: 'You keep your skin in a bold pattern of dark and light — no point in hiding when you are the predator. You move across the reef with confidence.',
+        narrativeResult: 'You hold a high-contrast pattern of dark and light. You move across the reef.',
         statEffects: [
           { stat: StatId.ADV, amount: 3, label: '+ADV' },
         ],
@@ -278,14 +278,14 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
     id: 'octopus-crab-hunt',
     type: 'active',
     category: 'foraging',
-    narrativeText: 'You spot a large spider crab picking its way across a rocky outcrop. It is well-armored but slow. Its flesh would sustain you for days.',
+    narrativeText: 'A large spider crab crosses a rocky outcrop. Slow, well-armored. Your suckers taste its chemical trail on the rock.',
     statEffects: [],
     choices: [
       {
         id: 'ambush-from-crevice',
         label: 'Ambush from your crevice',
         description: 'Wait for it to pass, then strike.',
-        narrativeResult: 'You wait, perfectly still, your skin matching the rock. As the crab passes within arm\'s reach, you explode outward. Eight arms engulf it before its claws can react. Your beak finds the nerve cluster. The crab goes limp.',
+        narrativeResult: 'You hold still, skin matching rock. The crab passes within arm-reach. Eight arms engulf it. Your beak finds the nerve cluster. The crab goes limp.',
         statEffects: [
           { stat: StatId.WIS, amount: 3, label: '+WIS' },
         ],
@@ -299,7 +299,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
         id: 'stalk-and-pounce',
         label: 'Stalk across the open',
         description: 'Cross exposed reef to close the distance.',
-        narrativeResult: 'You flow across the reef like liquid, your arms pulling you forward in a rapid crawl. The crab sees you and raises its claws, but you are faster. You engulf it from above, your web smothering its defenses.',
+        narrativeResult: 'You flow across the reef, arms pulling you forward. The crab raises its claws. You engulf it from above, web smothering its defenses.',
         statEffects: [
           { stat: StatId.HEA, amount: 2, label: '+HEA' },
         ],
@@ -328,7 +328,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
     id: 'octopus-mussel-feast',
     type: 'passive',
     category: 'foraging',
-    narrativeText: 'You find a bed of mussels clinging to a submerged rock face. You spend the morning prying them open one by one with your suckers, each mussel yielding a tiny morsel of meat. It is tedious work but reliable food.',
+    narrativeText: 'A bed of mussels clings to submerged rock. You pry them open one by one, suckers gripping each shell, tasting the meat inside. Tedious. Reliable.',
     statEffects: [
       { stat: StatId.HEA, amount: 2, label: '+HEA' },
       { stat: StatId.WIS, amount: 2, label: '+WIS' },
@@ -349,14 +349,14 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
     id: 'octopus-fish-ambush',
     type: 'active',
     category: 'foraging',
-    narrativeText: 'A small damselfish darts in and out of a coral head, guarding its territory. Fish are harder prey than crabs — faster, more alert. But the protein is worth the risk.',
+    narrativeText: 'A damselfish darts in and out of a coral head. Faster than crabs, more alert. Your suckers taste its trail in the water.',
     statEffects: [],
     choices: [
       {
         id: 'web-trap',
         label: 'Spread your web over the coral',
         description: 'Block the fish\'s escape routes and trap it.',
-        narrativeResult: 'You spread your inter-arm web over the coral head like a tent, blocking every exit. The damselfish panics inside, bouncing off your arms. You close the trap and your beak does the rest.',
+        narrativeResult: 'Your inter-arm web spreads over the coral head, sealing every exit. The fish panics inside, bouncing off your arms. You close the web. Your beak does the rest.',
         statEffects: [
           { stat: StatId.WIS, amount: 4, label: '+WIS' },
         ],
@@ -370,7 +370,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
         id: 'let-it-go',
         label: 'Find easier prey',
         description: 'Fish are fast and the coral is sharp.',
-        narrativeResult: 'You turn away from the damselfish and crawl toward a sandy patch where you know crabs hide. Patience over ambition.',
+        narrativeResult: 'You turn toward a sandy patch where your suckers taste crab-sign. Crabs are slower.',
         statEffects: [
           { stat: StatId.ADV, amount: -2, label: '-ADV' },
         ],
@@ -399,14 +399,14 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
     id: 'octopus-den-construction',
     type: 'active',
     category: 'environmental',
-    narrativeText: 'You have found a promising crevice in the reef rock, but the entrance is too wide — any predator could reach in and pull you out. Scattered around the entrance are shells, rocks, and broken coral fragments.',
+    narrativeText: 'A crevice in the reef rock. The entrance is too wide. Your suckers taste the edges. Shells, rocks, and broken coral fragments lie scattered around the opening.',
     statEffects: [],
     choices: [
       {
         id: 'build-fortress',
         label: 'Build a fortress',
         description: 'Stack rocks and shells to narrow the entrance and create a defensive wall.',
-        narrativeResult: 'Over the course of several hours, you carry rocks, shells, and coral fragments to your den entrance. You arrange them carefully with your arms, testing each piece for stability. When you are finished, only a narrow slit remains — just wide enough for your boneless body to squeeze through. You have built yourself a castle.',
+        narrativeResult: 'You carry rocks and shells to the entrance, testing each piece with your suckers for fit. When you finish, only a narrow slit remains. Your boneless body squeezes through. Nothing else will.',
         statEffects: [
           { stat: StatId.WIS, amount: 5, label: '+WIS' },
           { stat: StatId.HOM, amount: -5, duration: 6, label: '-HOM' },
@@ -421,7 +421,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
         id: 'use-as-is',
         label: 'Use the crevice as-is',
         description: 'Good enough. You don\'t need a palace.',
-        narrativeResult: 'You squeeze into the crevice and make yourself comfortable. It\'s exposed, but you can always jet away if something comes.',
+        narrativeResult: 'You squeeze inside. The opening is wide, but you can jet away if something comes.',
         statEffects: [
           { stat: StatId.ADV, amount: 3, label: '+ADV' },
         ],
@@ -449,7 +449,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
     id: 'octopus-moray-encounter',
     type: 'active',
     category: 'predator',
-    narrativeText: 'A moray eel slides out of a crack in the reef, its mouth gaping rhythmically as it breathes. Its eyes fix on you. Morays hunt octopuses by scent — they can follow your chemical trail into the tightest crevice.',
+    narrativeText: 'A moray eel slides from a crack in the reef. Its mouth gapes rhythmically. Your suckers taste its chemical signature in the water. Morays hunt octopuses by scent and can follow a trail into any crevice.',
     statEffects: [
       { stat: StatId.ADV, amount: 8, label: '+ADV' },
     ],
@@ -458,7 +458,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
         id: 'ink-and-jet',
         label: 'Ink cloud and jet away',
         description: 'Release a cloud of ink and blast away with your siphon.',
-        narrativeResult: 'You fire a dense cloud of melanin-rich ink directly at the moray\'s face. In the same instant, you jet backward with all the force your mantle can generate. The moray lunges into the ink cloud, biting at nothing. By the time it clears, you are thirty meters away, squeezing into an unfamiliar crevice.',
+        narrativeResult: 'You fire a dense cloud of ink at the moray. Your siphon fires in the same instant, driving you backward. The moray lunges into the ink, biting at nothing. You squeeze into an unfamiliar crevice thirty meters away.',
         statEffects: [
           { stat: StatId.TRA, amount: 5, duration: 3, label: '+TRA' },
           { stat: StatId.ADV, amount: -3, duration: 2, label: '-ADV' },
@@ -470,8 +470,8 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
       {
         id: 'camouflage-freeze',
         label: 'Freeze and camouflage',
-        description: 'Become the reef. Don\'t move a muscle.',
-        narrativeResult: 'You flatten yourself against the rock and your chromatophores fire in a cascade of color matching. Your skin sprouts papillae mimicking the surrounding algae. The moray slides closer, its tongue tasting the water. It passes within centimeters of your arm. You don\'t breathe. It moves on.',
+        description: 'Match the reef. Don\'t move.',
+        narrativeResult: 'You flatten against rock. Chromatophores fire in a cascade. Papillae sprout to mimic algae. The moray slides within centimeters of your arm, tongue tasting the water. It moves on.',
         statEffects: [
           { stat: StatId.WIS, amount: 5, label: '+WIS' },
         ],
@@ -480,7 +480,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
         style: 'default',
         deathChance: {
           probability: 0.08,
-          cause: 'The moray eel detected you despite your camouflage. Its jaws closed around your mantle.',
+          cause: 'The moray detected you through the camouflage. Its jaws closed on your mantle.',
           statModifiers: [
             { stat: StatId.WIS, factor: -0.03 },
             { stat: StatId.HEA, factor: -0.02 },
@@ -492,7 +492,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
       {
         eventId: 'octopus-moray-arm-bite',
         chance: 0.15,
-        narrativeText: 'The moray strikes as you jet away. Its teeth catch one of your trailing arms. You wrench free, leaving the tip behind. The arm tip continues to writhe on the reef floor, distracting the eel as you escape.',
+        narrativeText: 'The moray strikes as you jet. Teeth catch a trailing arm. You wrench free, leaving the tip behind. The severed tip writhes on the reef, drawing the eel away.',
         statEffects: [
           { stat: StatId.TRA, amount: 8, duration: 3, label: '+TRA' },
         ],
@@ -514,7 +514,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
     id: 'octopus-dolphin-hunt',
     type: 'active',
     category: 'predator',
-    narrativeText: 'Shadows pass overhead — a pod of bottlenose dolphins is hunting the reef. Their echolocation clicks penetrate the water like sonar. They can find you inside your den. They can find you anywhere.',
+    narrativeText: 'Shadows above. Echolocation clicks penetrate the water, pulsing through your mantle. Dolphins. Their sonar can find you inside your den.',
     statEffects: [
       { stat: StatId.ADV, amount: 10, label: '+ADV' },
       { stat: StatId.TRA, amount: 5, label: '+TRA' },
@@ -523,8 +523,8 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
       {
         id: 'den-deep',
         label: 'Retreat deep into your den',
-        description: 'Squeeze as far back as possible and hope they pass.',
-        narrativeResult: 'You compress your body into the deepest recess of your den, your soft body folding into impossible shapes. The dolphin clicks intensify, scanning the reef. One pauses near your den entrance. Then the pod moves on. You wait a long time before emerging.',
+        description: 'Compress yourself into the deepest recess.',
+        narrativeResult: 'You fold your body into the deepest part of the crevice. The clicks intensify, scanning the rock. One pauses near the entrance. Then the pod moves on. You do not move for a long time.',
         statEffects: [
           { stat: StatId.TRA, amount: 5, duration: 3, label: '+TRA' },
         ],
@@ -533,7 +533,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
         style: 'default',
         deathChance: {
           probability: 0.05,
-          cause: 'A dolphin reached into your den with its rostrum and pulled you out.',
+          cause: 'A dolphin reached into the den with its rostrum and pulled you out.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.02 }],
         },
       },
@@ -541,7 +541,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
         id: 'flee-open-water',
         label: 'Flee into open water',
         description: 'Jet away from the reef at maximum speed.',
-        narrativeResult: 'You blast out of your den and jet across the sand flat, trailing a cloud of ink. The dolphins are faster — but they are hunting the reef, not the open sand. You keep jetting until your mantle aches.',
+        narrativeResult: 'You blast out and jet across the sand flat, trailing ink. The dolphins are hunting the reef, not the open sand. You keep jetting until your mantle aches.',
         statEffects: [
           { stat: StatId.HEA, amount: -3, label: '-HEA' },
           { stat: StatId.ADV, amount: -5, duration: 2, label: '-ADV' },
@@ -551,7 +551,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
         style: 'danger',
         deathChance: {
           probability: 0.10,
-          cause: 'A dolphin spotted your ink trail and chased you across the open sand.',
+          cause: 'A dolphin followed your ink trail across the open sand.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.03 }],
         },
       },
@@ -570,7 +570,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
     id: 'octopus-conger-eel',
     type: 'passive',
     category: 'predator',
-    narrativeText: 'A massive conger eel emerges from the deeper reef at dusk — three meters of sinuous muscle with a gape wide enough to swallow you whole. You see it slide past your den entrance, its pale eyes scanning. You remain perfectly still, your chromatophores matching the interior of your crevice. It does not see you. This time.',
+    narrativeText: 'A conger eel emerges from the deeper reef at dusk. Three meters of muscle with a gape wide enough to take you whole. It slides past your den entrance. Your chromatophores match the crevice interior. It does not see you.',
     statEffects: [
       { stat: StatId.ADV, amount: 6, label: '+ADV' },
       { stat: StatId.TRA, amount: 4, label: '+TRA' },
@@ -592,14 +592,14 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
     id: 'octopus-ink-pseudomorph',
     type: 'active',
     category: 'predator',
-    narrativeText: 'A grouper is tracking you across the reef, its large mouth opening and closing in anticipation. It is gaining on you. You have one special trick left.',
+    narrativeText: 'A grouper is tracking you across the reef, mouth opening and closing. It is gaining.',
     statEffects: [],
     choices: [
       {
         id: 'create-pseudomorph',
         label: 'Create an ink pseudomorph',
-        description: 'Release a blob of ink mixed with mucus that holds its shape — a decoy that looks like you.',
-        narrativeResult: 'You release a thick blob of ink mixed with mucus. It hangs in the water, roughly your shape and size. Simultaneously, you blanch white and jet sideways. The grouper lunges at the ink decoy, biting through the dark cloud. By the time it realizes the deception, you are gone.',
+        description: 'Release a blob of ink mixed with mucus that holds its shape as a decoy.',
+        narrativeResult: 'You release a thick blob of ink bound with mucus. It hangs in the water, roughly your shape. You blanch white and jet sideways. The grouper lunges at the ink decoy. By the time it bites through, you are gone.',
         statEffects: [
           { stat: StatId.WIS, amount: 5, label: '+WIS' },
           { stat: StatId.NOV, amount: 3, label: '+NOV' },
@@ -612,7 +612,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
         id: 'jet-straight',
         label: 'Just jet away',
         description: 'Raw speed. No tricks.',
-        narrativeResult: 'You aim your siphon and fire a water jet with everything your mantle can produce. The grouper gives chase for twenty meters before losing interest. Your mantle is sore from the effort.',
+        narrativeResult: 'Your siphon fires with everything your mantle can produce. The grouper chases for twenty meters, then stops. Your mantle is sore.',
         statEffects: [
           { stat: StatId.HEA, amount: -2, label: '-HEA' },
         ],
@@ -621,7 +621,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
         style: 'default',
         deathChance: {
           probability: 0.06,
-          cause: 'The grouper was faster than expected. Its cavernous mouth engulfed you mid-jet.',
+          cause: 'The grouper was faster. Its mouth engulfed you mid-jet.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.02 }],
         },
       },
@@ -644,14 +644,14 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
     id: 'octopus-rival-encounter',
     type: 'active',
     category: 'social',
-    narrativeText: 'Another octopus has moved into a den thirty meters from yours. You can see it sitting at its entrance, its skin dark with aggression patterns. Two octopuses on the same stretch of reef is one too many.',
+    narrativeText: 'Another octopus has occupied a den thirty meters away. Its skin is dark with aggression patterns. Your suckers taste its chemical trace on the reef between you.',
     statEffects: [],
     choices: [
       {
         id: 'display-aggression',
         label: 'Display dominance',
         description: 'Raise yourself tall, darken your skin, and spread your arms wide.',
-        narrativeResult: 'You rear up on your hind arms, spreading your web to maximum span. Your skin flushes dark red-brown in a dominance display. The rival responds in kind. For several minutes you face each other in a contest of size and color intensity. Eventually the rival pales and retreats into its den. This stretch of reef is yours.',
+        narrativeResult: 'You rear up on your hind arms, web at full span. Your skin flushes deep red-brown. The rival responds in kind. Minutes pass. The rival pales and retreats into its den.',
         statEffects: [
           { stat: StatId.WIS, amount: 3, label: '+WIS' },
           { stat: StatId.HOM, amount: -4, duration: 3, label: '-HOM' },
@@ -666,7 +666,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
         id: 'ignore-rival',
         label: 'Ignore it',
         description: 'The reef is big enough for two.',
-        narrativeResult: 'You go about your business, hunting on your side of the reef. The other octopus does the same. An uneasy coexistence settles in.',
+        narrativeResult: 'You hunt on your side of the reef. The other octopus hunts on its side.',
         statEffects: [
           { stat: StatId.ADV, amount: 3, label: '+ADV' },
         ],
@@ -689,7 +689,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
     id: 'octopus-male-contest',
     type: 'active',
     category: 'social',
-    narrativeText: 'Another male has settled at the mouth of a prime den — a deep crevice beneath a flat rock, the kind of shelter a female would choose for egg-laying. He is large, his mantle swollen with muscle, his skin cycling through dark aggressive patterns: bars, stripes, and the deep mahogany flush that means he is ready to fight. He has seen you. His arms are spread wide across the rock face, suckers gripping, claiming every inch. The den behind him is worth fighting for. The female whose chemical trace led you both here is worth more.',
+    narrativeText: 'A male is spread across the mouth of a prime den, suckers gripping rock, skin cycling through dark bars and mahogany flush. Your suckers taste a female\'s chemical trace in the water. He has tasted it too.',
     statEffects: [
       { stat: StatId.ADV, amount: 6, label: '+ADV' },
       { stat: StatId.NOV, amount: 3, label: '+NOV' },
@@ -698,8 +698,8 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
       {
         id: 'grapple-rival',
         label: 'Flash dark patterns and grapple',
-        description: 'Darken your skin, spread your arms, and engage. Arm wrestling between male octopuses is a test of raw strength — intertwine arms, pull, and overpower.',
-        narrativeResult: 'You flush dark — the deepest red-brown your chromatophores can produce — and jet forward. Your arms meet his in a tangle of suckers and muscle. The grappling is silent and brutal, an alien calculus of leverage and grip strength played out across eight arms apiece. You twist one of his arms backward, your suckers popping free and reattaching in rapid sequence, seeking purchase, seeking advantage. He pulls back with tremendous force and you feel your own arm stretch to its limit. Minutes pass. The reef around you is forgotten. There is only this: two soft bodies locked in a geometry of force, each trying to peel the other from the rock. At last his grip fails on three arms simultaneously and you wrench him free. He jets backward in a cloud of silt, his skin flashing pale — submission. The den is yours.',
+        description: 'Intertwine arms, pull, and overpower.',
+        narrativeResult: 'You flush dark and jet forward. Arms tangle. Suckers grip and release in rapid sequence. You twist one of his arms backward. Minutes pass. His grip fails on three arms simultaneously. You wrench him free. He jets away, skin flashing pale.',
         statEffects: [
           { stat: StatId.HOM, amount: 8, label: '+HOM' },
           { stat: StatId.ADV, amount: -5, label: '-ADV' },
@@ -713,8 +713,8 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
       {
         id: 'ink-retreat',
         label: 'Jet ink and retreat',
-        description: 'Release a cloud of ink and jet away. Live to find another den, another day.',
-        narrativeResult: 'You contract your mantle and release a burst of ink — a dark, mucus-bound cloud that holds its shape in the water like a phantom octopus. The rival strikes at the decoy while you jet backward, your siphon pulsing, your skin blanching to white for maximum contrast against the dark ink. Within seconds you are twenty meters away, tucked into a crack in the reef, your hearts hammering. The den is lost. But you are whole.',
+        description: 'Release ink and flee. Find another den.',
+        narrativeResult: 'You release a mucus-bound ink cloud. The rival strikes the decoy. You jet backward, skin blanching white. Twenty meters away, you squeeze into a crack. The den is lost. You are whole.',
         statEffects: [
           { stat: StatId.TRA, amount: 5, label: '+TRA' },
         ],
@@ -724,9 +724,9 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
       },
       {
         id: 'sneaker-coloring',
-        label: 'Hold small — use sneaker coloring',
-        description: 'Adopt female coloration and body posture. Flatten your mantle, tuck your arms, display the mottled pattern of a non-threatening female. Slip past the guard and into the den.',
-        narrativeResult: 'You suppress every aggressive impulse and reshape yourself. Your skin shifts to the pale, mottled pattern of a female — the spots, the smooth texture, the passive posture. You tuck your hectocotylus out of sight and flatten your mantle. Then you drift forward, unhurried, unthreatening. The rival male glances at you and dismisses you — another female, no concern of his. You slip past him and into the den. By the time he realizes the deception, you are already inside, your suckers gripping the walls, your skin flushing triumphant dark. Intelligence over brute force.',
+        label: 'Hold small. Use sneaker coloring.',
+        description: 'Adopt female coloration and body posture. Slip past the guard and into the den.',
+        narrativeResult: 'Your skin shifts to the pale, mottled pattern of a female. You tuck your hectocotylus out of sight. You flatten your mantle and drift forward. The rival glances at you and dismisses you. You slip past him and into the den. Your skin flushes dark once you grip the walls inside.',
         statEffects: [
           { stat: StatId.WIS, amount: 6, label: '+WIS' },
           { stat: StatId.NOV, amount: 3, label: '+NOV' },
@@ -741,7 +741,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
         eventId: 'arm-damage-sub',
         chance: 0.15,
         conditions: [],
-        narrativeText: 'During the grapple, his beak found the base of one of your arms. You felt the chitin slice through muscle — a clean, cold cut that barely registered until you pulled free and saw the arm trailing a ribbon of pale tissue. The wound has already sealed itself, the muscles clamping shut with involuntary precision. But the damage is done. Suckers are missing. Sensation is dulled. The arm will regenerate, given time. Your kind has that grace. But time, for an octopus, is the one thing always in short supply.',
+        narrativeText: 'His beak found the base of one of your arms during the grapple. A clean cut through muscle. Suckers missing. Sensation dulled. The arm will regenerate, given time.',
         footnote: 'Male octopuses frequently sustain arm damage during territorial grappling. Unlike most animals, octopuses can regenerate lost arm tissue, though the process takes weeks to months and the regenerated tissue may be less sensitive than the original.',
         statEffects: [
           { stat: StatId.HEA, amount: -3, label: '-HEA' },
@@ -771,14 +771,14 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
     id: 'octopus-mating-display',
     type: 'active',
     category: 'reproduction',
-    narrativeText: 'You detect the chemical signature of a receptive female in the water current. She is in a den on the far side of the reef. To reach her, you must cross open ground — and any other males in the area will have detected the same signal.',
+    narrativeText: 'Your suckers taste a receptive female\'s chemical signature in the current. She is in a den on the far side of the reef. Open ground between you.',
     statEffects: [],
     choices: [
       {
         id: 'approach-boldly',
         label: 'Approach boldly',
         description: 'Cross the reef in full display, daring rivals to challenge you.',
-        narrativeResult: 'You flow across the reef in a display of bold stripes, your arms spread wide. A smaller male sees you coming and flattens himself against the rock, deferring. You reach the female\'s den and extend your hectocotylus — your modified mating arm. She accepts the spermatophore. The act is brief and businesslike.',
+        narrativeResult: 'You flow across the reef in bold stripes, arms spread wide. A smaller male flattens against rock as you pass. You reach the female\'s den and extend your hectocotylus. She accepts the spermatophore.',
         statEffects: [
           { stat: StatId.WIS, amount: 3, label: '+WIS' },
         ],
@@ -790,7 +790,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
         style: 'default',
         deathChance: {
           probability: 0.08,
-          cause: 'A larger rival male attacked you during your approach. His beak found your mantle.',
+          cause: 'A larger rival attacked during the approach. His beak found your mantle.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.03 }],
         },
       },
@@ -798,7 +798,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
         id: 'sneaker-approach',
         label: 'Sneak as a "female mimic"',
         description: 'Adopt female coloration and patterns to slip past rival males.',
-        narrativeResult: 'You change your skin to mimic a female\'s mottled pattern and flatten your body. A large male guarding the approach barely glances at you as you slip past. You reach the female and quickly mate before the guard realizes the deception. Cunning over brawn.',
+        narrativeResult: 'You shift to a female\'s mottled pattern, body flattened. A large guarding male barely glances at you. You reach the female and mate before the guard registers the deception.',
         statEffects: [
           { stat: StatId.WIS, amount: 6, label: '+WIS' },
           { stat: StatId.NOV, amount: 3, label: '+NOV' },
@@ -826,14 +826,14 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
     id: 'octopus-female-mating',
     type: 'active',
     category: 'reproduction',
-    narrativeText: 'A male octopus approaches your den, his skin flushed in a bold display. He extends his third right arm — the hectocotylus — toward you. This is the offer. After this, everything changes.',
+    narrativeText: 'A male approaches your den, skin flushed in display. He extends his third right arm toward you.',
     statEffects: [],
     choices: [
       {
         id: 'accept-mate',
         label: 'Accept the mating',
         description: 'Allow him to pass the spermatophore. You can store it until you are ready to fertilize.',
-        narrativeResult: 'You allow the male to extend his hectocotylus into your mantle cavity. He passes a spermatophore — a packet of sperm you will store in your oviducal gland. The male withdraws and leaves quickly. You will choose when to fertilize your eggs. You have what you need.',
+        narrativeResult: 'He extends his hectocotylus into your mantle cavity. A spermatophore passes. The male withdraws and leaves.',
         statEffects: [
           { stat: StatId.WIS, amount: 3, label: '+WIS' },
         ],
@@ -847,8 +847,8 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
       {
         id: 'reject-mate',
         label: 'Reject this male',
-        description: 'Drive him away. You can afford to be selective.',
-        narrativeResult: 'You flash a dark aggressive pattern and lunge at the male with your arms spread. He jets backward, startled, and retreats across the reef. You will wait for a larger, stronger male.',
+        description: 'Drive him away.',
+        narrativeResult: 'You flash dark and lunge with arms spread. He jets backward across the reef.',
         statEffects: [
           { stat: StatId.ADV, amount: 3, label: '+ADV' },
         ],
@@ -871,7 +871,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
     id: 'octopus-den-competition',
     type: 'active',
     category: 'reproduction',
-    narrativeText: 'You have found the perfect brooding crevice — deep, narrow-mouthed, with a steady current of oxygen-rich water flowing through from a crack in the rock behind. But another female is already wedged inside, her arms pressed against the walls, her chromatophores flashing a warning pattern of dark red and white. She has not laid her eggs yet either. This is the best den on the reef — the water flow will keep your egg strings oxygenated and free of fungus. The exposed crevice thirty meters away has sluggish flow and poor water circulation; eggs laid there will suffocate in patches, fungus spreading from strand to strand.',
+    narrativeText: 'A deep crevice with steady current flowing through a crack behind it. Another female is wedged inside, chromatophores flashing dark red and white. She has not laid eggs yet either. The exposed crevice thirty meters away has sluggish flow.',
     statEffects: [
       { stat: StatId.ADV, amount: 5, label: '+ADV' },
     ],
@@ -880,7 +880,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
         id: 'arm-wrestle-den',
         label: 'Arm-wrestle her out of the crevice',
         description: 'Better oxygen flow means more eggs hatch, but she will fight',
-        narrativeResult: 'You drive your arms into the crevice mouth, grappling with hers in a writhing tangle of suckers and muscle. The fight is silent and savage — arms intertwining, pulling, tearing at each other\'s grip on the rock. Your suckers rip free and re-attach, over and over, as you try to pry her loose. She is strong but you are relentless, and after long minutes of struggle you drag her from the crevice inch by inch. She jets away across the reef in a cloud of ink. The den is yours — and your eggs will breathe.',
+        narrativeResult: 'You drive arms into the crevice mouth. Suckers grip and rip free and re-attach. She is strong. You are relentless. You drag her out inch by inch. She jets away in ink. The den is yours.',
         statEffects: [
           { stat: StatId.HOM, amount: 6, label: '+HOM' },
           { stat: StatId.ADV, amount: -5, label: '-ADV' },
@@ -895,7 +895,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
         id: 'take-exposed-crevice',
         label: 'Take the exposed crevice',
         description: 'Poor water flow means fewer eggs survive, but no fight',
-        narrativeResult: 'You retreat to the exposed crevice, a shallow depression in the reef wall with no back opening for water circulation. You wedge yourself inside, but the space feels wrong — too open, too still. The water here barely moves. When you lay your eggs, you will have to aerate them constantly with your siphon, exhausting yourself faster, and even then some strands will suffocate in the dead water.',
+        narrativeResult: 'You wedge into the exposed crevice. The water barely moves here. You will have to aerate the eggs constantly with your siphon.',
         statEffects: [
           { stat: StatId.TRA, amount: 4, label: '+TRA' },
         ],
@@ -910,7 +910,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
       {
         eventId: 'octopus-den-arm-damage-sub',
         chance: 0.15,
-        narrativeText: 'During the grapple, she locked her suckers around one of your arms and twisted with her full body weight. You felt the muscle tear — a sharp, searing pain that weakened your grip. The arm still functions but the damaged section moves sluggishly.',
+        narrativeText: 'She locked suckers around one of your arms and twisted with her full body weight. Muscle torn. The arm still functions but moves sluggishly.',
         footnote: '(Arm damage from den fight)',
         statEffects: [
           { stat: StatId.HEA, amount: -3, label: '-HEA' },
@@ -938,14 +938,14 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
     id: 'octopus-brooding-den',
     type: 'active',
     category: 'reproduction',
-    narrativeText: 'You have found a deep, sheltered crevice — perfect for laying your eggs. The water flow is gentle, the temperature is stable, and the entrance is narrow enough to guard. This is where your story ends and your offspring\'s begins.',
+    narrativeText: 'A deep, sheltered crevice. Gentle current. Stable temperature. The entrance is narrow enough to guard.',
     statEffects: [],
     choices: [
       {
         id: 'lay-eggs',
         label: 'Lay your eggs',
         description: 'Attach strings of eggs to the ceiling of the den. Begin the brooding vigil.',
-        narrativeResult: 'Over several days, you lay thousands of eggs in delicate strings, attaching each strand to the ceiling of the den with a secretion. The eggs hang like tiny translucent grapes, each one containing a developing embryo. You seal yourself inside. You will not eat again. For the next four months, you will guard these eggs, aerating them with your siphon, cleaning them with your arms, and slowly dying.',
+        narrativeResult: 'You lay thousands of eggs in strings, attaching each strand to the ceiling with a secretion. They hang translucent, each capsule containing a developing embryo. You seal yourself inside. You will not eat again.',
         statEffects: [
           { stat: StatId.HOM, amount: 10, label: '+HOM' },
           { stat: StatId.WIS, amount: 5, label: '+WIS' },
@@ -962,7 +962,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
         id: 'keep-searching',
         label: 'Keep searching for a better den',
         description: 'This one isn\'t perfect. Keep looking.',
-        narrativeResult: 'You leave the crevice and continue searching the reef. The eggs inside you are getting heavier. You need to lay them soon.',
+        narrativeResult: 'You leave the crevice. The eggs inside you are heavy.',
         statEffects: [
           { stat: StatId.ADV, amount: 5, label: '+ADV' },
           { stat: StatId.HEA, amount: -3, label: '-HEA' },
@@ -991,7 +991,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
     id: 'octopus-female-brooding-vigil',
     type: 'passive',
     category: 'health',
-    narrativeText: 'You have not eaten in weeks. Your body is consuming itself to fuel the endless work of egg care. Your arms are thinner, your skin is pale and papery, and your chromatophores no longer fire with the same precision. But the eggs are developing well. You can see tiny eyes forming inside the translucent capsules. You are dying so they can live. This is the contract.',
+    narrativeText: 'Weeks without food. Your body is consuming itself. Arms thinner. Skin pale and papery. Chromatophores slow to respond. But the eggs are developing. You can see tiny eyes forming inside the capsules. You aerate them with your siphon and clean them with your arms.',
     statEffects: [
       { stat: StatId.HEA, amount: -8, label: '-HEA' },
       { stat: StatId.HOM, amount: 8, label: '+HOM' },
@@ -1015,7 +1015,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
     id: 'octopus-male-senescence',
     type: 'passive',
     category: 'health',
-    narrativeText: 'Something is wrong and you know it. Since mating, your body has been changing. Your appetite has vanished. Your skin hangs loose. Your arms move with less coordination. The optic gland behind your eyes has activated a hormonal cascade that is systematically shutting down your body. You are not sick. You are running a program written millions of years ago.',
+    narrativeText: 'Since mating, your appetite has vanished. Your skin hangs loose. Your arms move with less coordination. Something behind your eyes has activated a process that is shutting your body down, system by system.',
     statEffects: [
       { stat: StatId.HEA, amount: -10, label: '-HEA' },
       { stat: StatId.HOM, amount: 10, label: '+HOM' },
@@ -1040,7 +1040,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
     id: 'octopus-eggs-hatching',
     type: 'passive',
     category: 'reproduction',
-    narrativeText: 'The eggs are hatching. Thousands of tiny paralarvae are emerging from their capsules, riding the current you create with your siphon out of the den and into the open water. They are specks — each one carrying the complete blueprint for an animal that can change color, solve puzzles, and squeeze through any gap wider than its beak. You have given them everything. Your arms hang limp. Your skin is translucent. The last paralarvae drift past you and into the Mediterranean night. You have fulfilled the only purpose your biology recognizes.',
+    narrativeText: 'The eggs are hatching. Thousands of paralarvae emerge from their capsules, riding the current you create with your siphon. They drift past you and out of the den. Your arms hang limp. Your skin is translucent. The last paralarvae drift into the dark water.',
     statEffects: [
       { stat: StatId.HOM, amount: 15, label: '+HOM' },
       { stat: StatId.WIS, amount: 5, label: '+WIS' },
@@ -1062,10 +1062,10 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
     id: 'octopus-female-death',
     type: 'passive',
     category: 'health',
-    narrativeText: 'The den is empty now. The eggs have hatched and your paralarvae are somewhere in the plankton, beginning their own brief stories. Your body has nothing left to give. Your three hearts slow. Your chromatophores fade to a uniform pale white. The reef continues without you — crabs emerge from hiding, fish resume their patrols, and somewhere above, a paralarva that carries your genes is drifting toward a reef it has never seen. You close your eyes.',
+    narrativeText: 'The den is empty. Your three hearts slow. Your chromatophores fade to uniform pale white. Crabs emerge from hiding around you. The current carries your scent away.',
     statEffects: [],
     consequences: [
-      { type: 'death', cause: 'Post-brooding senescence. You died guarding your eggs — as every octopus mother has for 300 million years.' },
+      { type: 'death', cause: 'Post-brooding senescence. Body shut down after eggs hatched.' },
     ],
     conditions: [
       { type: 'species', speciesIds: ['common-octopus'] },
@@ -1080,10 +1080,10 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
     id: 'octopus-male-death',
     type: 'passive',
     category: 'health',
-    narrativeText: 'You have not eaten in weeks. Your arms barely respond. You drift across the reef like a ghost of yourself, your skin a permanent pale white. A crab walks past you without fear. You settle into a crevice — not your den, just a place — and your hearts slow one by one. First the two branchial hearts. Then, finally, the systemic heart. The current carries your scent away.',
+    narrativeText: 'Your arms barely respond. Your skin is permanent pale white. A crab walks past you without reacting. You settle into a crevice. Your branchial hearts stop first. Then the systemic heart.',
     statEffects: [],
     consequences: [
-      { type: 'death', cause: 'Post-mating senescence. The optic gland\'s hormonal cascade completed its work.' },
+      { type: 'death', cause: 'Post-mating senescence. The optic gland\'s hormonal cascade completed.' },
     ],
     conditions: [
       { type: 'species', speciesIds: ['common-octopus'] },
@@ -1103,14 +1103,14 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
     id: 'octopus-night-hunt',
     type: 'active',
     category: 'foraging',
-    narrativeText: 'Night falls on the reef. The diurnal fish retreat to their sleeping crevices and the nocturnal hunters emerge. You are one of them. In the darkness, your chemoreceptors are more valuable than eyes. The reef is a different world at night.',
+    narrativeText: 'The light fades. Your chemoreceptors sharpen in the dark water. The reef smells different at night: sleeping fish, active crabs, different chemical signatures.',
     statEffects: [],
     choices: [
       {
         id: 'hunt-aggressively',
         label: 'Hunt aggressively',
         description: 'Cover maximum ground, raiding every crevice.',
-        narrativeResult: 'You flow across the reef in a systematic search pattern, probing every crack and crevice with your arms. Two crabs, a sleeping fish, and a handful of shrimp fall to your beak. It is a productive night.',
+        narrativeResult: 'You flow across the reef, probing every crack with your arms. Two crabs, a sleeping fish, a handful of shrimp. Your suckers taste their chemical signatures before your eyes find them.',
         statEffects: [
           { stat: StatId.HEA, amount: 3, label: '+HEA' },
         ],
@@ -1129,7 +1129,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
         id: 'hunt-cautiously',
         label: 'Stay close to your den',
         description: 'Hunt only in familiar territory.',
-        narrativeResult: 'You hunt within arm\'s reach of your den, darting out to grab passing prey and retreating immediately. The haul is modest but you stay safe.',
+        narrativeResult: 'You hunt within arm-reach of your den, grabbing passing prey and retreating. Modest haul. Close to shelter.',
         statEffects: [
           { stat: StatId.WIS, amount: 2, label: '+WIS' },
         ],
@@ -1153,7 +1153,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
     id: 'octopus-storm-surge',
     type: 'passive',
     category: 'environmental',
-    narrativeText: 'A storm passes over the Mediterranean. Waves surge across the reef, tearing loose anything not firmly attached. You grip the inside of your den with every sucker, your arms braced against the walls as the current tries to rip you free. Sand and debris hammer your exposed mantle. When the storm passes, the reef is rearranged — new crevices have opened, old ones have collapsed.',
+    narrativeText: 'The current surges hard. Sand and debris hammer your mantle. You grip the inside of your den with every sucker, arms braced against the walls. When the surge stops, the reef is rearranged.',
     statEffects: [
       { stat: StatId.CLI, amount: 8, label: '+CLI' },
       { stat: StatId.HOM, amount: 5, label: '+HOM' },
@@ -1173,7 +1173,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
     id: 'octopus-warm-water',
     type: 'passive',
     category: 'environmental',
-    narrativeText: 'The summer heat has raised the water temperature on the shallow reef. Warmer water holds less oxygen. You find yourself breathing harder, your gills working overtime. The deeper reef offers cooler water, but it is farther from your den and your hunting grounds.',
+    narrativeText: 'The water is warm. Your gills work harder. Less oxygen per breath. The deeper reef is cooler but farther from your den.',
     statEffects: [
       { stat: StatId.CLI, amount: 6, label: '+CLI' },
       { stat: StatId.HOM, amount: 4, label: '+HOM' },
@@ -1192,7 +1192,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
     id: 'octopus-fishing-net',
     type: 'active',
     category: 'predator',
-    narrativeText: 'A fishing net descends from above — a wall of nylon mesh sweeping across the reef. Crabs and fish are already tangled in it. The net is moving slowly but inexorably toward you.',
+    narrativeText: 'A wall of mesh sweeps across the reef. Fish and crabs are already tangled. The net is moving toward you.',
     statEffects: [
       { stat: StatId.ADV, amount: 8, label: '+ADV' },
     ],
@@ -1201,7 +1201,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
         id: 'squeeze-through',
         label: 'Squeeze through the mesh',
         description: 'Your boneless body can fit through any gap wider than your beak.',
-        narrativeResult: 'You compress your body and slide through a gap in the mesh that no fish could dream of passing through. Your beak — the only hard part of your body — scrapes against the nylon as you push through. You emerge on the other side, free.',
+        narrativeResult: 'You compress and slide through a gap in the mesh. Your beak scrapes nylon as you push through. You emerge on the other side.',
         statEffects: [
           { stat: StatId.WIS, amount: 5, label: '+WIS' },
           { stat: StatId.NOV, amount: 3, label: '+NOV' },
@@ -1214,7 +1214,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
         id: 'flee-deep',
         label: 'Jet toward deep water',
         description: 'Outrun the net by going deeper than it reaches.',
-        narrativeResult: 'You jet downward along the reef wall, descending into colder, darker water. The net passes above you, dragging its catch toward the surface. You wait in the deep until the danger passes.',
+        narrativeResult: 'You jet downward along the reef wall into colder, darker water. The net passes above. You wait in the deep.',
         statEffects: [
           { stat: StatId.CLI, amount: 3, label: '+CLI' },
         ],
@@ -1223,7 +1223,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
         style: 'default',
         deathChance: {
           probability: 0.04,
-          cause: 'The net caught you before you could escape to depth. Hauled aboard a fishing boat.',
+          cause: 'The net caught you before you reached depth.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.02 }],
         },
       },
@@ -1242,14 +1242,14 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
     id: 'octopus-exploration',
     type: 'active',
     category: 'environmental',
-    narrativeText: 'The reef extends beyond your familiar territory. You can see unfamiliar rock formations, new coral heads, and different prey species in the distance. The unknown calls to you.',
+    narrativeText: 'Beyond your territory, unfamiliar rock formations. Your suckers taste chemical traces of prey species you do not recognize.',
     statEffects: [],
     choices: [
       {
         id: 'explore-new-area',
         label: 'Explore the unknown reef',
         description: 'Leave your territory and investigate.',
-        narrativeResult: 'You venture across the boundary of your known territory, arms tasting unfamiliar rock. The new section of reef is rich — more crevices, more crabs, fewer competitors. You memorize the route back.',
+        narrativeResult: 'You cross the boundary of known ground. Arms taste unfamiliar rock. More crevices here, more crabs, fewer chemical traces of other octopuses.',
         statEffects: [
           { stat: StatId.WIS, amount: 4, label: '+WIS' },
           { stat: StatId.NOV, amount: 5, label: '+NOV' },
@@ -1263,8 +1263,8 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
       {
         id: 'stay-home',
         label: 'Stay in familiar territory',
-        description: 'You know where every predator hides here. That counts for something.',
-        narrativeResult: 'You return to your den and hunt the familiar grounds. No surprises, but no dangers either.',
+        description: 'You know where every predator hides here.',
+        narrativeResult: 'You return to your den and hunt the familiar grounds.',
         statEffects: [
           { stat: StatId.HOM, amount: -3, duration: 2, label: '-HOM' },
         ],
@@ -1288,7 +1288,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
     id: 'octopus-arm-autonomy',
     type: 'passive',
     category: 'health',
-    narrativeText: 'One of your arms, severed weeks ago by a moray eel, has been regenerating. The new tip is smaller and paler than the original, with fewer suckers, but it is functional. Each sucker contains hundreds of chemoreceptors. You test the new arm against the reef, tasting the rock, the algae, the chemical traces of prey. It works. Your body has rebuilt what was lost.',
+    narrativeText: 'The arm tip severed weeks ago has been regenerating. The new growth is smaller and paler, fewer suckers. You test it against the reef. The chemoreceptors register rock, algae, the trace of a crab that passed here recently. The arm works.',
     statEffects: [
       { stat: StatId.HEA, amount: 5, label: '+HEA' },
       { stat: StatId.WIS, amount: 3, label: '+WIS' },
@@ -1306,7 +1306,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
     id: 'octopus-vibrio-exposure',
     type: 'passive',
     category: 'health',
-    narrativeText: 'The Mediterranean summer has heated the shallow water to bathlike temperatures. Vibrio bacteria thrive in warm water, and every wound, every scrape from a rocky den entrance, becomes a potential entry point. You notice a pale discoloration spreading from a small cut on one arm.',
+    narrativeText: 'The shallow water is warm. Your suckers taste a different chemistry on a small cut on one arm. A pale discoloration is spreading from the wound.',
     statEffects: [{ stat: StatId.IMM, amount: 2, label: '+IMM' }],
     consequences: [],
     choices: [],
@@ -1314,7 +1314,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
       {
         eventId: 'octopus-vibrio-infection',
         chance: 0.14,
-        narrativeText: 'The wound festers. Vibrio bacteria have entered the tissue and are spreading.',
+        narrativeText: 'The wound festers. The tissue around it is changing color and texture.',
         statEffects: [],
         consequences: [{ type: 'add_parasite', parasiteId: 'vibrio-infection' }],
       },
@@ -1332,7 +1332,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
     id: 'octopus-moray-den-contest',
     type: 'active',
     category: 'environmental',
-    narrativeText: "You return to your den after a night hunt to find a moray eel has moved in. The eel's green head protrudes from your entrance, jaws slowly working, watching you with cold, lidless eyes. Moray eels are one of the few predators that can follow an octopus into its den — and they are immune to most of your defenses.",
+    narrativeText: 'You return to your den after a night hunt. A moray eel\'s head protrudes from the entrance, jaws working, watching you. Morays can follow an octopus into its den and are immune to most of your defenses.',
     statEffects: [],
     consequences: [],
     choices: [
@@ -1340,7 +1340,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
         id: 'octopus-moray-ink-flush',
         label: 'Blast the den with ink',
         description: 'Jet a cloud of ink into the den opening. The irritant may drive the eel out.',
-        narrativeResult: 'You jet a thick cloud of ink directly into the den. The moray thrashes, then retreats backward through a crack in the rocks, trailing strands of mucus. Your den reeks of ink, but it is yours again.',
+        narrativeResult: 'You jet ink directly into the den. The moray thrashes and retreats backward through a crack in the rock. Your den smells of ink, but it is yours again.',
         statEffects: [{ stat: StatId.ADV, amount: 3, label: '+ADV' }],
         consequences: [],
         revocable: false,
@@ -1350,7 +1350,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
         id: 'octopus-moray-find-new',
         label: 'Find a new den',
         description: 'Abandon this one. You are vulnerable while searching.',
-        narrativeResult: 'You slip away and begin searching the reef for a new crevice. After hours of probing, you find one — smaller and more exposed than the last, but it will serve.',
+        narrativeResult: 'You search the reef for hours, arms probing crevices. You find one. Smaller and more exposed.',
         statEffects: [{ stat: StatId.ADV, amount: 2, label: '+ADV' }],
         consequences: [{ type: 'modify_territory', qualityChange: -10 }],
         revocable: false,
@@ -1362,7 +1362,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
         eventId: 'octopus-moray-bite',
         chance: 0.15,
         conditions: [],
-        narrativeText: 'The moray strikes as you approach. Its needle teeth sink into one of your arms before you can pull free.',
+        narrativeText: 'The moray strikes as you approach. Needle teeth sink into one of your arms.',
         statEffects: [{ stat: StatId.HEA, amount: -5, label: '-HEA' }],
         consequences: [{ type: 'add_injury', injuryId: 'arm-damage', severity: 0 }],
       },
@@ -1379,7 +1379,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
     id: 'octopus-warm-water-bloom',
     type: 'passive',
     category: 'environmental',
-    narrativeText: 'The Mediterranean summer has superheated the shallow waters, triggering a massive algal bloom. The water has turned a sickly green, visibility is near zero, and — most critically — dissolved oxygen is plummeting as the algae decompose. Your three hearts labor to push oxygen-poor blood through your body. Octopuses are exquisitely sensitive to dissolved oxygen levels, and hypoxic events kill more marine invertebrates than any predator.',
+    narrativeText: 'The water has turned green. Visibility near zero. Your gills labor to extract oxygen. Your three hearts pump harder against the depleted water.',
     statEffects: [
       { stat: StatId.IMM, amount: 4, label: '+IMM' },
       { stat: StatId.HOM, amount: 5, label: '+HOM' },

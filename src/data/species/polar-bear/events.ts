@@ -11,7 +11,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
     type: 'active',
     category: 'foraging',
     narrativeText:
-      'You lower yourself onto the ice beside a ringed seal breathing hole, your black nose tucked beneath a forepaw to hide the only dark spot on your body. Hours pass. The wind scours your fur. Then — a faint ripple, a whisker-twitch of movement beneath the ice. You explode downward, smashing through the thin crust with both forepaws, and haul the seal out in a spray of freezing water.',
+      'You flatten onto the ice beside a breathing hole, nose tucked under a forepaw. Wind scours your fur. Hours pass. Then a faint ripple below the ice. You smash through with both forepaws and haul the seal out in a spray of freezing water.',
     statEffects: [
       { stat: StatId.HOM, amount: -8, label: '-HOM' },
       { stat: StatId.ADV, amount: -5, label: '-ADV' },
@@ -24,7 +24,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
         eventId: 'pb-seal-bite-sub',
         chance: 0.12,
         narrativeText:
-          'The seal twists in your grip and sinks its teeth into your forepaw before you can deliver the killing bite. Blood stains the ice.',
+          'The seal twists in your grip and bites into your forepaw. Blood on the ice.',
         footnote: '(Seal bite injury)',
         statEffects: [
           { stat: StatId.HEA, amount: -3, label: '-HEA' },
@@ -40,7 +40,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
           { type: 'no_parasite', parasiteId: 'trichinella' },
         ],
         narrativeText:
-          'You devour the seal meat raw and warm. Coiled within the muscle fibers, Trichinella larvae begin their journey into your gut.',
+          'You eat the seal meat warm. Trichinella larvae coiled in the muscle fibers pass into your gut.',
         footnote: '(Parasitized by Trichinella)',
         statEffects: [],
         consequences: [
@@ -62,7 +62,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
     type: 'active',
     category: 'foraging',
     narrativeText:
-      'A group of bearded seals has hauled out onto a low ice shelf to bask. You approach from downwind, belly pressed to the ice, moving with glacial patience. At thirty meters you burst into a sprint across the floe. The seals panic and roll toward the water, but you reach the nearest one before it can slide off the edge. The kill is clean and heavy — a bearded seal can weigh more than you.',
+      'Bearded seals hauled out on a low ice shelf. You approach from downwind, belly to the ice. At thirty meters you sprint. The seals roll toward the water but you reach the nearest one before it slides off the edge.',
     statEffects: [
       { stat: StatId.HOM, amount: -6, label: '-HOM' },
       { stat: StatId.ADV, amount: -3, label: '-ADV' },
@@ -84,7 +84,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
     type: 'active',
     category: 'foraging',
     narrativeText:
-      'A pod of beluga whales is trapped in a shrinking polynya — a pocket of open water surrounded by thickening ice. They surface in turns to breathe, their white backs ghostly against the dark water. You station yourself at the edge and wait. When a beluga rises close enough, you lunge and hook it with your claws. The struggle is immense, but blubber is the richest food in the Arctic.',
+      'Beluga whales trapped in a shrinking pocket of open water. They surface in turns to breathe, white backs against dark water. You wait at the ice edge. When one rises close, you lunge and hook it with your claws. The blubber smell is overwhelming.',
     statEffects: [
       { stat: StatId.HOM, amount: -4, label: '-HOM' },
     ],
@@ -105,7 +105,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
     type: 'passive',
     category: 'foraging',
     narrativeText:
-      'The wind carries a smell so rich and rank it makes your mouth water from a kilometer away. A bowhead whale carcass has washed ashore, its flanks split open by decay and the feeding of other bears. You approach cautiously — three other bears are already there, gorging on blubber. There is enough for everyone, but proximity to other bears is always tense.',
+      'A smell reaches you from far downwind, rich and rank. Whale carcass. You follow the scent to the shore. Three other bears are already there, feeding on split-open blubber. You approach. The proximity is tense.',
     statEffects: [
       { stat: StatId.HOM, amount: -10, label: '-HOM' },
       { stat: StatId.TRA, amount: 3, label: '+TRA' },
@@ -127,7 +127,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
     type: 'active',
     category: 'foraging',
     narrativeText:
-      'Stranded ashore with no ice to hunt from, you wade into the shallows and pull strands of kelp from the rocks with your teeth. It is bitter, stringy, and nearly devoid of calories — a carnivore reduced to grazing like a herbivore. Your stomach cramps around the unfamiliar food. This is what the ice-free season has become.',
+      'No ice. You wade into the shallows and pull kelp from the rocks with your teeth. Bitter, stringy, almost no calories. Your stomach cramps around the unfamiliar food.',
     statEffects: [
       { stat: StatId.HOM, amount: 4, label: '+HOM' },
       { stat: StatId.ADV, amount: 5, label: '+ADV' },
@@ -149,7 +149,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
     type: 'active',
     category: 'foraging',
     narrativeText:
-      'You spot a seal basking near a crack in the ice and begin your stalk. But the ice here is thin and rotten — each step produces an ominous creak. Twenty meters from the seal, a section gives way beneath your hindquarters and you plunge into the water up to your chest. The seal vanishes. You haul yourself out, soaked and shivering, calories spent for nothing.',
+      'Seal scent near a crack in the ice. You stalk, but the ice here is thin. Each step creaks. Twenty meters out, the surface gives way beneath your hindquarters. You plunge in to your chest. The seal is gone. You haul out, soaked, shivering.',
     statEffects: [
       { stat: StatId.HOM, amount: 6, label: '+HOM' },
       { stat: StatId.CLI, amount: 5, label: '+CLI' },
@@ -176,7 +176,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
     type: 'passive',
     category: 'environmental',
     narrativeText:
-      'The temperature drops below minus thirty and holds. Along the coastline, grease ice forms first — a slick, oily sheen that thickens into pancake ice, then consolidates into a solid platform stretching toward the horizon. The sea ice is back. You step onto it with something like joy, your massive paws spreading your weight across the surface. The hunting season has begun.',
+      'Temperature drops and holds. Grease ice forms along the coast, thickens into pancake ice, consolidates into a solid platform. You step onto it, paws spreading your weight. Seal scent already on the wind.',
     statEffects: [
       { stat: StatId.ADV, amount: -8, label: '-ADV' },
       { stat: StatId.HOM, amount: -5, label: '-HOM' },
@@ -197,7 +197,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
     type: 'passive',
     category: 'environmental',
     narrativeText:
-      'The ice is disintegrating. What was a solid highway to the seal hunting grounds is now a maze of shrinking floes separated by widening leads of dark water. Each day the cracks grow wider and the floes smaller. Soon there will be nothing left but open ocean and a long, hungry summer on land. You make your last kill and eat every scrap, fat and bone and skin, packing on every calorie you can before the fast begins.',
+      'The ice is breaking apart. Shrinking floes separated by widening leads of dark water. Each day the cracks grow wider. You make your last kill and eat every scrap, fat and bone and skin.',
     statEffects: [
       { stat: StatId.ADV, amount: 8, label: '+ADV' },
       { stat: StatId.HOM, amount: 5, label: '+HOM' },
@@ -220,7 +220,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
     type: 'active',
     category: 'environmental',
     narrativeText:
-      'The next floe is visible but distant — a white raft on the grey sea. You slide into the water and begin to swim, your massive forepaws pulling you forward in a steady dog-paddle. The water is minus one degree Celsius. Your thick blubber insulates you, but the swim is long and the current fights you. Hours pass. Your muscles burn. Finally, your claws scrape ice and you haul yourself out, exhausted.',
+      'The next floe is distant, a white shape on grey water. You slide in and swim. Forepaws pulling, steady. The water is below freezing. Your blubber insulates but the swim is long. Hours pass. Muscles burn. Finally, claws scrape ice.',
     statEffects: [
       { stat: StatId.HOM, amount: 8, label: '+HOM' },
       { stat: StatId.CLI, amount: 4, label: '+CLI' },
@@ -243,7 +243,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
     type: 'passive',
     category: 'environmental',
     narrativeText:
-      'The ice beneath you groans and flexes. A web of cracks radiates outward from where you stand. You freeze, distributing your weight carefully, then begin to move — slowly, so slowly — toward thicker ice. Each step is a negotiation with physics. The cracks chase you, branching and splitting.',
+      'The ice groans and flexes beneath you. Cracks radiate outward from your weight. You freeze, then move slowly toward thicker ice. The cracks follow, branching and splitting.',
     statEffects: [
       { stat: StatId.TRA, amount: 10, label: '+TRA' },
       { stat: StatId.ADV, amount: 8, label: '+ADV' },
@@ -293,7 +293,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
     type: 'passive',
     category: 'environmental',
     narrativeText:
-      'The sun does not rise. It has not risen for weeks. The sky cycles through shades of indigo and violet at midday before descending back into starlit darkness. The aurora borealis ripples overhead, green and pink curtains of light that illuminate the ice in an eerie glow. You hunt by starlight and scent alone. The world has become a place of sound and smell.',
+      'No sun for weeks. The sky shifts through shades of dark blue at midday, then back to black. Green light ripples overhead. You hunt by scent and hearing. Ice creaks. Wind carries seal smell. The world is sound and smell and cold.',
     statEffects: [
       { stat: StatId.NOV, amount: 3, label: '+NOV' },
       { stat: StatId.CLI, amount: 4, label: '+CLI' },
@@ -313,7 +313,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
     type: 'passive',
     category: 'environmental',
     narrativeText:
-      'The sun circles the horizon without setting, a pale disc that gilds the ice in perpetual golden light. There is no night. Time becomes meaningless — you hunt, rest, and hunt again in an endless luminous haze. The seals are wary in this constant light, harder to stalk when there are no shadows to hide in.',
+      'The sun circles the horizon without setting. Constant light on the ice. No shadows to stalk in. The seals are warier, harder to approach. You hunt, rest, hunt again.',
     statEffects: [
       { stat: StatId.NOV, amount: 2, label: '+NOV' },
       { stat: StatId.HOM, amount: 3, label: '+HOM' },
@@ -336,7 +336,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
     type: 'passive',
     category: 'environmental',
     narrativeText:
-      'November passes. Then December begins, and still the bay refuses to freeze. The water is too warm, holding summer heat deep in its currents. You pace the shoreline, testing the mush ice that forms at the margins and dissolves by afternoon. Your fat reserves are dwindling. Every day without ice is a day without seals.',
+      'The bay will not freeze. You pace the shoreline, testing mush ice that forms at the margins and dissolves by afternoon. No seal scent on the wind. Your fat reserves thin with each day.',
     statEffects: [
       { stat: StatId.ADV, amount: 10, label: '+ADV' },
       { stat: StatId.HOM, amount: 8, label: '+HOM' },
@@ -359,7 +359,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
     type: 'passive',
     category: 'environmental',
     narrativeText:
-      'The ice is breaking up weeks ahead of schedule. In April the floes should be solid enough to support your weight anywhere, but this year the southern edge of the ice pack has already retreated past your hunting grounds. You are forced ashore lighter than you should be, facing a longer fast with fewer reserves.',
+      'The ice is breaking up early. Floes that should hold your weight are cracking and drifting apart. The seal hunting grounds are open water. You are forced ashore, lighter than you should be.',
     statEffects: [
       { stat: StatId.ADV, amount: 8, label: '+ADV' },
       { stat: StatId.HOM, amount: 6, label: '+HOM' },
@@ -382,7 +382,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
     type: 'passive',
     category: 'environmental',
     narrativeText:
-      'You do the math that every polar bear does instinctively: the ice formed late and it will melt early. The window for seal hunting — your entire annual caloric budget — has shrunk again. Last year it was five months. The year before, five and a half. Your grandmother hunted for seven months on the ice. The numbers are going in one direction.',
+      'The ice formed late. It will melt early. The seal-hunting season is shorter than last year. Your body burns through fat faster than you can replace it.',
     statEffects: [
       { stat: StatId.ADV, amount: 6, label: '+ADV' },
       { stat: StatId.HOM, amount: 4, label: '+HOM' },
@@ -401,7 +401,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
     type: 'active',
     category: 'foraging',
     narrativeText:
-      'Driven ashore by the melting ice and weakened by weeks of fasting, you follow the smell of refuse to the outskirts of a human settlement. The dump is a chaos of plastic bags, rotting food scraps, and rusted metal. Other bears are already here, rummaging through the garbage. It is degrading and dangerous — humans with cracker shells and rubber bullets patrol nearby — but your body demands calories.',
+      'The smell of rotting food pulls you toward a human settlement. Refuse piled in the open. Other bears are already rummaging through it. Humans patrol nearby. Your gut is empty.',
     statEffects: [
       { stat: StatId.NOV, amount: 8, label: '+NOV' },
       { stat: StatId.TRA, amount: 5, label: '+TRA' },
@@ -458,7 +458,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
     type: 'active',
     category: 'social',
     narrativeText:
-      'A large male stands between you and the seal carcass, his head lowered and swinging. He is at least your size, maybe bigger, his scarred muzzle and torn ear speaking of many fights won. He huffs a warning — a deep, resonant sound that you feel in your chest. The carcass is rich with blubber. But so is he with muscle.',
+      'A large male between you and the seal carcass. Head low, swinging. Scarred muzzle, torn ear. He huffs. You feel the sound in your chest. The blubber smell is strong.',
     statEffects: [
       { stat: StatId.TRA, amount: 6, label: '+TRA' },
     ],
@@ -507,7 +507,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
     type: 'active',
     category: 'social',
     narrativeText:
-      'The female is close — you can smell her trail woven through the pressure ridges, warm and urgent against the sterile cold of the ice. But you are not the only male who has followed it. Another bear steps out from behind a hummock, massive and deliberate, his breath pluming in the frozen air. He is heavy with spring seal fat, his shoulders rolling with muscle beneath scarred hide. His muzzle is a map of old fights — torn lip, notched ear, a canine-width groove across the bridge of his nose. He sees you and stops. Lowers his head. Opens his mouth to show the yellowed canines. The female watches from fifty meters away, indifferent to which of you survives this.',
+      'The female\'s scent trail winds through the pressure ridges, warm against the sterile cold. Another male steps from behind a hummock. Heavy, scarred muzzle, breath pluming. He sees you and stops. Lowers his head. Opens his mouth. The female watches from fifty meters away.',
     statEffects: [
       { stat: StatId.TRA, amount: 8, label: '+TRA' },
       { stat: StatId.ADV, amount: 6, label: '+ADV' },
@@ -518,7 +518,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
         label: 'Rise up and grapple',
         description: 'Rear onto your hind legs, lock forepaws with him, and fight with everything you have',
         narrativeResult:
-          'You rise onto your hind legs and he mirrors you — two half-ton animals standing upright on the ice like grotesque dancers. You slam together chest to chest, forepaws grappling for purchase on each other\'s shoulders and neck. The ice groans beneath your combined weight. You bite at his face; he rakes your shoulder with claws the length of a man\'s finger. You shove and twist, trying to throw him down where you can pin him. The sound is terrible — the wet crack of teeth on bone, the tearing of hide, grunts of exertion that fog the air between you. Minutes pass. Your muscles burn with lactic acid. Finally, one of you falters, and the other presses the advantage with savage, single-minded fury.',
+          'You rise onto hind legs. He mirrors you. You slam together chest to chest, forepaws grappling at shoulders and neck. The ice groans. You bite at his face. He rakes your shoulder with claws. The sounds are teeth on bone, tearing hide, heavy breathing fogging the air. Your muscles burn. One of you falters.',
         statEffects: [
           { stat: StatId.HOM, amount: 15, label: '+HOM' },
           { stat: StatId.STR, amount: -3, label: '-STR' },
@@ -531,7 +531,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
         style: 'danger',
         deathChance: {
           probability: 0.03,
-          cause: 'Killed in a breeding fight with a rival male polar bear. His canines found your throat.',
+          cause: 'His canines found your throat during the grapple.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.003 }],
         },
       },
@@ -540,7 +540,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
         label: 'Circle and test his resolve',
         description: 'Pace around him, jaw-gape, assess whether he will back down without a full fight',
         narrativeResult:
-          'You do not charge. Instead you begin to circle, head low, mouth open to display your canines. He turns to face you, mirroring your arc. You are reading each other — every scar, every pound of body mass, every subtle signal of confidence or hesitation. You lunge forward and snap the air near his face; he flinches but holds his ground. You repeat the display, each feint a question: are you sure? How much are you willing to pay for this? The negotiation is silent and brutal in its honesty.',
+          'You circle, head low, mouth open, showing canines. He turns to face you. You lunge and snap the air near his face. He flinches but holds. You snap again. He does not move.',
         statEffects: [
           { stat: StatId.WIS, amount: 3, label: '+WIS' },
           { stat: StatId.HOM, amount: 6, label: '+HOM' },
@@ -552,7 +552,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
         style: 'default',
         deathChance: {
           probability: 0.005,
-          cause: 'The rival male charged without warning during a circling display and delivered a fatal bite to the neck.',
+          cause: 'He charged without warning and bit into your neck.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
         },
       },
@@ -561,7 +561,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
         label: 'Back away',
         description: 'Yield the female — there will be other springs, other chances',
         narrativeResult:
-          'You lower your head and turn your body sideways — the universal signal of submission among bears. He watches you go with flat, expressionless eyes, his breath still heavy with adrenaline. You walk away across the ice, and with each step the urgency drains from your body and is replaced by something quieter: the knowledge that discretion has kept you alive and whole for another breeding season. The scars you do not carry are worth more than the ones you would have earned.',
+          'You lower your head and turn sideways. He watches you go. You walk away across the ice, uninjured.',
         statEffects: [
           { stat: StatId.TRA, amount: 3, label: '+TRA' },
           { stat: StatId.WIS, amount: 4, label: '+WIS' },
@@ -576,7 +576,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
         eventId: 'pb-breeding-claw-rake-sub',
         chance: 0.30,
         narrativeText:
-          'In the grapple, his forepaw rakes across you with terrible force — claws tearing through fur and hide in four parallel lines. Blood wells up instantly, hot against the cold air, and the pain arrives a half-second later like fire drawn across your skin.',
+          'His forepaw rakes across you. Four parallel lines through fur and hide. Blood wells up, hot against the cold air.',
         footnote: '(Bear claw rake injury)',
         statEffects: [
           { stat: StatId.HEA, amount: -4, label: '-HEA' },
@@ -589,7 +589,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
         eventId: 'pb-breeding-bite-wound-sub',
         chance: 0.20,
         narrativeText:
-          'He lunges for your neck and his jaws clamp down — you feel the canines punch through your hide and into the muscle beneath. You wrench sideways and tear free, leaving skin and fur in his teeth. The puncture wounds are deep and already swelling.',
+          'He lunges for your neck. Canines punch through hide into muscle. You wrench free, leaving skin and fur in his teeth. The punctures are deep.',
         footnote: '(Bear bite wound)',
         statEffects: [
           { stat: StatId.HEA, amount: -6, label: '-HEA' },
@@ -616,7 +616,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
     type: 'passive',
     category: 'social',
     narrativeText:
-      'Your cubs tumble after you across the ice, mimicking your every move with clumsy enthusiasm. You stop at a seal breathing hole and demonstrate the technique: lie flat, forepaws tucked, nose hidden. Wait. The cubs try to copy you but cannot hold still — one pounces on its sibling, sending both rolling. You cuff the offender gently and resume the lesson. Patience is the first thing a polar bear must learn.',
+      'Your cubs follow you across the ice. You stop at a breathing hole and flatten down. Forepaws tucked, nose hidden. The cubs try to copy. One pounces on its sibling. You cuff it and resume the position.',
     statEffects: [
       { stat: StatId.ADV, amount: -3, label: '-ADV' },
       { stat: StatId.WIS, amount: 3, label: '+WIS' },
@@ -636,7 +636,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
     type: 'active',
     category: 'social',
     narrativeText:
-      'You find a snowdrift on a south-facing slope and begin to dig. Your massive forepaws scoop out compacted snow, carving a tunnel that angles upward into a chamber just large enough for your body. The work is hard but the engineering is precise — the entrance must be lower than the sleeping platform so cold air drains away. Inside, your body heat will raise the temperature to near freezing even when it is minus forty outside.',
+      'A deep snowdrift on a south-facing slope. You dig with your forepaws, scooping compacted snow, carving a tunnel that angles upward into a chamber. The entrance lower than the sleeping platform. Cold air drains down and out.',
     statEffects: [
       { stat: StatId.HOM, amount: -6, label: '-HOM' },
       { stat: StatId.CLI, amount: -5, label: '-CLI' },
@@ -660,7 +660,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
     type: 'active',
     category: 'social',
     narrativeText:
-      'You have found the perfect denning site — a deep, south-facing snowdrift on a sheltered slope, the kind that will hold its shape through the worst blizzards and warm to near freezing from your body heat alone. But another pregnant female has found it too. She stands at the entrance to the drift, her breath pluming, her body heavy with the fat reserves that will sustain her through months of fasting and nursing. She is your size, perhaps slightly larger, and she has no intention of leaving. There is only one south-facing drift on this slope. The north-facing drifts are shallow, poorly insulated, and exposed to the prevailing wind — a den dug there will cost more energy to heat and offer less protection for newborn cubs.',
+      'A deep south-facing snowdrift, sheltered. Another female stands at the entrance, breath pluming, body heavy with fat. She is your size. There is one south-facing drift on this slope. The north-facing drifts are shallow and wind-exposed.',
     statEffects: [
       { stat: StatId.ADV, amount: 6, label: '+ADV' },
     ],
@@ -670,7 +670,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
         label: 'Fight for the south-facing den',
         description: 'Warmer den means healthier cubs, but she will not yield easily',
         narrativeResult:
-          'You charge. The two of you collide with a force that shakes snow from the overhanging drift — half a ton of pregnant bear slamming into half a ton of pregnant bear. You grapple with forepaws, biting at face and neck, your claws raking through thick fur. She is strong but you are desperate, and desperation has its own kind of strength. You drive her backward, away from the drift entrance, pressing every advantage of angle and footing. She breaks off and retreats across the slope, huffing with exertion. The south-facing drift is yours. Your cubs will be born in warmth.',
+          'You charge. The collision shakes snow from the drift. Forepaws grappling, biting at face and neck, claws through thick fur. You drive her backward from the entrance. She breaks off and retreats across the slope. The south-facing drift is yours.',
         statEffects: [
           { stat: StatId.HOM, amount: 8, label: '+HOM' },
           { stat: StatId.ADV, amount: -6, label: '-ADV' },
@@ -687,7 +687,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
         label: 'Search for another drift',
         description: 'Avoid the fight, but the north-facing slopes are poor denning sites',
         narrativeResult:
-          'You turn away and circle the slope, searching for alternatives. The only viable drift faces north — shallow, wind-scoured, the snow packed hard rather than soft. You dig anyway, carving a tunnel that angles upward into a chamber that feels too small, too cold, too exposed. When the blizzards come, the wind will find every crack. Your cubs will be born in a den that costs you more calories to heat and offers less insulation than the one you walked away from.',
+          'You circle the slope. The only other drift faces north. Shallow, wind-scoured, hard-packed. You dig anyway. The chamber feels too small, too cold. Wind will find every crack.',
         statEffects: [
           { stat: StatId.TRA, amount: 4, label: '+TRA' },
           { stat: StatId.WIS, amount: 2, label: '+WIS' },
@@ -704,7 +704,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
         eventId: 'pb-den-fight-claw-rake-sub',
         chance: 0.25,
         narrativeText:
-          'Her forepaw catches you across the shoulder during the grapple, four claws tearing through your thick fur and into the fat beneath. Blood mats your fur in dark streaks.',
+          'Her forepaw catches your shoulder. Four claws through thick fur into the fat beneath. Blood mats your fur.',
         footnote: '(Claw rake from den fight)',
         statEffects: [
           { stat: StatId.HEA, amount: -4, label: '-HEA' },
@@ -717,7 +717,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
         eventId: 'pb-den-fight-bite-wound-sub',
         chance: 0.15,
         narrativeText:
-          'She lunges for your neck and her jaws close on the thick scruff, canines punching through hide into muscle. You wrench free but the punctures are deep and already swelling.',
+          'She lunges for your neck. Canines punch through the scruff into muscle. You wrench free. The punctures are deep.',
         footnote: '(Bite wound from den fight)',
         statEffects: [
           { stat: StatId.HEA, amount: -5, label: '-HEA' },
@@ -746,7 +746,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
     type: 'active',
     category: 'social',
     narrativeText:
-      'You pause at a prominent ice ridge and rub your body against it, leaving scent from glands on your feet and face. Then you urinate on the ice, the steam rising in the cold air. This is not territory in the way a wolf claims territory — polar bears are too solitary for that — but it is a message: I am here, I am large, I passed this way recently. Other bears will read it and adjust their movements accordingly.',
+      'You rub your body against a prominent ice ridge, leaving scent from the glands on your feet and face. You urinate on the ice. Steam rises in the cold air. Other bears will smell this and adjust their path.',
     statEffects: [
       { stat: StatId.ADV, amount: -2, label: '-ADV' },
       { stat: StatId.NOV, amount: -2, label: '-NOV' },
@@ -768,7 +768,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
     type: 'passive',
     category: 'seasonal',
     narrativeText:
-      'The den is complete. You seal yourself inside and your metabolism begins to slow. Your heart rate drops. Your body temperature decreases slightly. Outside, blizzards rage and temperatures plunge below minus fifty, but inside your snow chamber the air is still and almost warm. If you are pregnant, your cubs will be born here in the deepest cold of January — blind, hairless, and utterly dependent on your dwindling fat reserves.',
+      'The den is sealed. Your heartbeat slows. Body temperature drops. Outside, blizzards. Inside the snow chamber, still air, warmed by your body. Your fat reserves burn down slowly.',
     statEffects: [
       { stat: StatId.CLI, amount: -8, label: '-CLI' },
       { stat: StatId.HOM, amount: -4, label: '-HOM' },
@@ -795,7 +795,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
     type: 'passive',
     category: 'seasonal',
     narrativeText:
-      'The light is blinding. After months in the darkness of the den, the spring sun reflecting off the snow is almost painful. You stand at the den entrance and blink, breathing air that tastes of open space and distant ocean. You are thin — gaunt, even — having lost a third of your body weight through the denning period. But the ice is out there, and on the ice, seals are waiting.',
+      'Light. Blinding off the snow after months in the dark den. You stand at the entrance and blink. The air smells of open space and distant ocean. You are thin. But seal scent rides the wind from the ice.',
     statEffects: [
       { stat: StatId.HOM, amount: 5, label: '+HOM' },
       { stat: StatId.ADV, amount: -4, label: '-ADV' },
@@ -820,7 +820,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
     type: 'passive',
     category: 'seasonal',
     narrativeText:
-      'The ice is gone. All of it. The bay is a flat expanse of grey-blue water without a floe in sight. You lie on the gravel beach, conserving energy, your body burning through the fat reserves you built during the spring seal hunt. Nearby, other bears do the same — sprawled on the tundra like pale boulders, sleeping twenty hours a day, waiting for the world to freeze again.',
+      'No ice. The bay is open grey-blue water. You lie on the gravel beach, conserving energy. Your body burns through fat reserves. Other bears sprawl on the tundra nearby, sleeping. Waiting for freeze-up.',
     statEffects: [
       { stat: StatId.HOM, amount: 6, label: '+HOM' },
       { stat: StatId.ADV, amount: 5, label: '+ADV' },
@@ -843,7 +843,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
     type: 'passive',
     category: 'seasonal',
     narrativeText:
-      'The wind has shifted to the north and the temperature is plummeting. Along the shoreline, puddles freeze overnight and do not thaw by noon. You test the bay ice each morning, venturing a few steps out before retreating. Not yet. Not strong enough. But soon. The anticipation is electric — you have been fasting for months, living on reserves, and the hunger is a constant, gnawing companion. When the ice sets, you will hunt.',
+      'North wind. Temperature dropping. Shoreline puddles freeze overnight and hold through the day. You test the bay ice each morning, a few steps out, then retreat. Not thick enough yet. But the seal smell is there.',
     statEffects: [
       { stat: StatId.ADV, amount: -3, label: '-ADV' },
       { stat: StatId.HOM, amount: 3, label: '+HOM' },
@@ -866,7 +866,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
     type: 'active',
     category: 'reproduction',
     narrativeText:
-      'A large boar polar bear has been shadowing you for two days, his scent thick and urgent on the wind. He approaches now, head low, making soft chuffing sounds. You assess him: he is massive, his shoulders broad, his coat scarred but thick with fat. Mating will initiate a long biological burden — delayed implantation means you will not den for months — but your cycle is at its peak.',
+      'A large male has been following your scent for two days. He approaches now, head low, chuffing softly. His shoulders are broad, coat scarred but thick with fat. Your body is ready.',
     statEffects: [
       { stat: StatId.NOV, amount: 5, label: '+NOV' },
     ],
@@ -875,7 +875,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
         id: 'pb-accept-mate',
         label: 'Accept the boar',
         description: 'Mate and prepare for autumn denning. Pregnancy lasts ~8 months.',
-        narrativeResult: 'You allow the boar to approach. The mating is brief but intense. For the next week, you walk together across the ice before he finally wanders off. You are now carrying the potential for new life, though the embryos will not implant until you enter your maternity den in autumn.',
+        narrativeResult: 'You allow him to approach. The mating is brief. For the next week you walk together across the ice. Then he wanders off. The embryos will not implant until you den in autumn.',
         statEffects: [
           { stat: StatId.WIS, amount: 3, label: '+WIS' },
         ],
@@ -889,7 +889,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
         id: 'pb-reject-mate',
         label: 'Reject the boar',
         description: 'Flee or drive him off. Preserves your strength for hunting.',
-        narrativeResult: 'You snarl and snap at his muzzle, making it clear his advances are unwelcome. After a tense standoff, he turns away — there are other sows on the ice. You remain unburdened, free to focus entirely on your own survival.',
+        narrativeResult: 'You snarl and snap at his muzzle. He holds, then turns away across the ice. You are unburdened.',
         statEffects: [
           { stat: StatId.TRA, amount: 4, label: '+TRA' },
           { stat: StatId.ADV, amount: 3, label: '+ADV' },
@@ -920,7 +920,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
     type: 'active',
     category: 'reproduction',
     narrativeText:
-      'You have been following the scent trail of a female for three days across the pack ice. Her tracks are fresh now, and you can see her — a pale shape moving along the edge of a pressure ridge. You approach with deliberate slowness, head low, making soft chuffing sounds. She turns to assess you: your size, your condition, the breadth of your shoulders. If you pass her inspection, you will walk together for days before she allows mating.',
+      'Three days following a female\'s scent trail across the pack ice. Her tracks are fresh now. A pale shape moving along a pressure ridge. You approach slowly, head low, chuffing. She turns and faces you.',
     statEffects: [
       { stat: StatId.HOM, amount: -3, label: '-HOM' },
       { stat: StatId.NOV, amount: -4, label: '-NOV' },
@@ -942,7 +942,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
     type: 'passive',
     category: 'reproduction',
     narrativeText:
-      'In the warm darkness of the den, you feel the contractions begin. The birth is quick — your cubs arrive tiny, blind, and covered in fine white fuzz, each one small enough to fit in a human hand. They instinctively nuzzle toward your belly, finding the rich milk that is over 30% fat. You curl around them, your massive body a furnace against the Arctic cold. Everything now depends on the fat you stored last spring.',
+      'Contractions in the warm darkness of the den. The cubs arrive tiny, blind, covered in fine white fuzz. They nuzzle toward your belly and find the milk. You curl around them. Your body heat keeps them alive.',
     statEffects: [
       { stat: StatId.HOM, amount: 5, label: '+HOM' },
       { stat: StatId.ADV, amount: -5, label: '-ADV' },
@@ -968,7 +968,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
     type: 'passive',
     category: 'reproduction',
     narrativeText:
-      'Your cubs are old enough now to follow you onto the ice for their first real hunting lesson. You lead them to a breathing hole and show them how to position themselves — downwind, flat on the belly, perfectly still. The older cub manages to hold the pose for almost a minute before attacking a piece of floating ice. The younger one falls asleep. You have two and a half years to turn these clumsy bundles into apex predators.',
+      'Your cubs follow you onto the ice. You stop at a breathing hole and show them: downwind, flat, still. The older cub holds the pose for almost a minute before pouncing on a piece of floating ice. The younger one falls asleep.',
     statEffects: [
       { stat: StatId.WIS, amount: 2, label: '+WIS' },
       { stat: StatId.ADV, amount: -2, label: '-ADV' },
@@ -989,7 +989,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
     type: 'passive',
     category: 'reproduction',
     narrativeText:
-      'The time has come. Your cubs are nearly three years old, as large as you were when your own mother drove you away. You begin to distance yourself — walking faster, not waiting when they lag, snarling when they approach at a kill. They are confused at first, trailing behind with bewildered huffs. But instinct runs deep, and within days they begin to hunt on their own. You watch them go, two pale shapes receding across the ice, and feel the strange lightness of a body that is once again your own.',
+      'Your cubs are nearly three years old. You walk faster, do not wait when they lag, snarl when they approach at a kill. Within days they begin to hunt on their own. Two pale shapes receding across the ice.',
     statEffects: [
       { stat: StatId.ADV, amount: -5, label: '-ADV' },
       { stat: StatId.HOM, amount: -3, label: '-HOM' },
@@ -1016,7 +1016,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
     id: 'pb-male-infanticide-encounter',
     type: 'active',
     category: 'predator',
-    narrativeText: 'A large male polar bear is approaching — slowly, deliberately, nose to the wind. He is not interested in you. He is interested in your cubs. Male polar bears regularly kill cubs to bring females back into estrus. The male is twice your size and utterly indifferent to your snarling. Your cubs press against your hind legs, whimpering.',
+    narrativeText: 'A large male approaching. Nose to the wind, moving deliberately. He is not looking at you. He is looking at your cubs. Twice your size. Your cubs press against your hind legs.',
     statEffects: [{ stat: StatId.TRA, amount: 8, label: '+TRA' }],
     consequences: [],
     choices: [
@@ -1024,14 +1024,14 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
         id: 'pb-infanticide-fight',
         label: 'Fight to protect your cubs',
         description: 'Charge the male. You are smaller, but maternal fury is ferocious.',
-        narrativeResult: 'You charge with a roar that echoes across the ice. The male rears back, startled by your aggression. You slash his face with your claws and he retreats — but slowly, assessing whether you are worth the effort. This time, he decides you are not. Your cubs survive. You are bleeding but standing.',
+        narrativeResult: 'You charge. The male rears back. You slash his face with your claws. He retreats, slowly. Your cubs are behind you. You are bleeding but standing.',
         statEffects: [{ stat: StatId.ADV, amount: 6, label: '+ADV' }],
         consequences: [],
         revocable: false,
         style: 'danger',
         deathChance: {
           probability: 0.08,
-          cause: 'Killed by a male bear while defending cubs',
+          cause: 'Killed by the male while defending cubs.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.0006 }],
           escapeOptions: [
             {
@@ -1054,7 +1054,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
         id: 'pb-infanticide-flee',
         label: 'Flee with the cubs',
         description: 'Run. You cannot outfight him, but you might outrun him.',
-        narrativeResult: 'You herd your cubs and run. The male gives chase across the ice, gaining steadily. After a terrifying pursuit, he stops — the effort of chasing is not worth it when easier targets exist. Your cubs are shaken but alive.',
+        narrativeResult: 'You herd your cubs and run across the ice. The male chases, gaining. Then he stops. Your cubs are alive.',
         statEffects: [{ stat: StatId.TRA, amount: 5, label: '+TRA' }],
         consequences: [{ type: 'modify_weight', amount: -3 }],
         revocable: false,
@@ -1064,7 +1064,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
         id: 'pb-infanticide-abandon',
         label: 'Abandon the cubs',
         description: 'Walk away. Save yourself for the next breeding season.',
-        narrativeResult: 'You turn and walk away. Behind you, the male approaches the cubs. You do not look back. The loss is biological calculus — you can breed again. The cubs cannot be saved without risking your own life.',
+        narrativeResult: 'You turn and walk away across the ice. Behind you, the male approaches the cubs.',
         statEffects: [{ stat: StatId.TRA, amount: 15, label: '+TRA' }],
         consequences: [{ type: 'set_flag', flag: 'infanticide-occurred' }],
         revocable: false,
@@ -1095,7 +1095,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
     id: 'pb-infanticide-aftermath',
     type: 'passive',
     category: 'psychological',
-    narrativeText: 'The ice where your cubs last played is empty. The wind has already erased their tracks. You return to the spot repeatedly, sniffing, circling, before finally moving on. The loss reshapes your behavior — you are warier now, quicker to flee from large males, more alert to danger on the horizon. The Arctic is indifferent to grief.',
+    narrativeText: 'The ice where your cubs were is empty. Wind has erased their tracks. You return to the spot, sniffing, circling. Then you move on. You are warier now around large males.',
     statEffects: [{ stat: StatId.TRA, amount: 5, label: '+TRA' }, { stat: StatId.WIS, amount: 3, label: '+WIS' }],
     consequences: [{ type: 'remove_flag', flag: 'infanticide-occurred' }],
     choices: [],
@@ -1113,7 +1113,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
     id: 'pb-mother-separation',
     type: 'passive',
     category: 'social',
-    narrativeText: 'Your mother has been increasingly aggressive toward you. Today she turns and swats you — claws retracted, but the message is unmistakable. You are nearly three years old now, large enough to hunt seals on your own. She has tolerated your presence long enough. The next time she mates, she will need you gone. The bond that kept you alive through two Arctic winters is severing, one growl at a time.',
+    narrativeText: 'Your mother swats you. Claws retracted, but hard. She has been snarling more when you approach. You are nearly her size now. She turns away and does not wait for you.',
     statEffects: [{ stat: StatId.TRA, amount: 5, label: '+TRA' }, { stat: StatId.NOV, amount: 6, label: '+NOV' }],
     consequences: [{ type: 'set_flag', flag: 'dispersal-begun' }],
     choices: [],
@@ -1132,7 +1132,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
     id: 'pb-dispersal-long-swim',
     type: 'active',
     category: 'environmental',
-    narrativeText: 'Open water stretches to the horizon. The ice floe you are on is shrinking, and the nearest substantial ice is kilometers away — a dark line barely visible against the sky. You must swim. Polar bears are strong swimmers, but open-ocean crossings kill young bears every year. The water is -1°C and the distance is uncertain.',
+    narrativeText: 'Open water to the horizon. Your floe is shrinking. The nearest ice is a dark line far off. The water is below freezing.',
     statEffects: [{ stat: StatId.TRA, amount: 5, label: '+TRA' }],
     consequences: [],
     choices: [
@@ -1140,14 +1140,14 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
         id: 'pb-swim-now',
         label: 'Swim for it',
         description: 'Enter the water and swim for the distant ice.',
-        narrativeResult: 'You slide into the freezing water and begin the long paddle. Hours pass. Your muscles burn, your body temperature drops. But finally, ice appears beneath your paws. You haul yourself out, shaking and exhausted.',
+        narrativeResult: 'You slide into the water and swim. Hours pass. Muscles burn, body temperature drops. Finally, ice under your paws. You haul out, shaking.',
         statEffects: [{ stat: StatId.HOM, amount: 6, label: '+HOM' }, { stat: StatId.CLI, amount: 4, label: '+CLI' }],
         consequences: [{ type: 'modify_weight', amount: -4 }],
         revocable: false,
         style: 'danger',
         deathChance: {
           probability: 0.08,
-          cause: 'Drowned during an open-water crossing between ice floes',
+          cause: 'Drowned during the open-water crossing.',
           statModifiers: [
             { stat: StatId.HEA, factor: -0.0006 },
           ],
@@ -1157,7 +1157,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
         id: 'pb-swim-wait',
         label: 'Wait on the ice',
         description: 'Hope the wind pushes the floes closer together.',
-        narrativeResult: 'You wait. The wind shifts overnight and the gap narrows enough to swim safely. But the waiting cost you a day without food.',
+        narrativeResult: 'You wait. Overnight the wind shifts and the gap narrows. A short swim. But a day without food.',
         statEffects: [{ stat: StatId.HOM, amount: 4, label: '+HOM' }],
         consequences: [{ type: 'modify_weight', amount: -2 }],
         revocable: false,
@@ -1178,7 +1178,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
     id: 'pb-dispersal-territory-claim',
     type: 'active',
     category: 'environmental',
-    narrativeText: 'You have found a stretch of coastline with abundant seal breathing holes and no fresh bear sign. The ice here is stable, the pressure ridges provide shelter, and the seals are naive — they surface without checking for predators. This could be your hunting ground.',
+    narrativeText: 'A stretch of coastline. Abundant seal breathing holes. No fresh bear scent. The ice is stable, the pressure ridges provide shelter. The seals surface without caution.',
     statEffects: [],
     consequences: [],
     choices: [
@@ -1186,7 +1186,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
         id: 'pb-settle-claim',
         label: 'Establish your hunting range',
         description: 'Begin patrolling and hunting this area exclusively.',
-        narrativeResult: 'You settle into a routine of patient hunting, learning every breathing hole and seal haul-out. The seals become warier, but you become more skilled. This is your ice now.',
+        narrativeResult: 'You learn every breathing hole and seal haul-out along this stretch. The seals grow warier. You grow more skilled.',
         statEffects: [{ stat: StatId.WIS, amount: 5, label: '+WIS' }, { stat: StatId.NOV, amount: -5, label: '-NOV' }],
         consequences: [
           { type: 'set_flag', flag: 'dispersal-settled' },
@@ -1200,7 +1200,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
         id: 'pb-settle-continue',
         label: 'Keep moving along the coast',
         description: 'The ice may be better further north.',
-        narrativeResult: 'You continue north along the ice edge. The hunting is thinner here, and you burn calories traveling. Perhaps you should have stayed.',
+        narrativeResult: 'You continue north along the ice edge. Fewer seal holes. Burning calories traveling.',
         statEffects: [{ stat: StatId.HOM, amount: 3, label: '+HOM' }],
         consequences: [{ type: 'modify_weight', amount: -2 }],
         revocable: false,
@@ -1222,7 +1222,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
     id: 'pb-summer-heat-stress',
     type: 'passive',
     category: 'environmental',
-    narrativeText: 'The summer heat is oppressive. You are built for -40°C, not +25°C. Your dense fur and thick blubber layer — essential for Arctic winter survival — are now liabilities. You pant heavily, sprawled on a patch of remaining ice, unable to hunt. Every hour in this heat burns through your fat reserves. Polar bears are the most heat-sensitive of all Arctic mammals.',
+    narrativeText: 'Heat presses down on you. Your dense fur and thick blubber hold it in. You pant, sprawled on a patch of remaining ice. Your body is burning through fat reserves just trying to stay cool.',
     statEffects: [
       { stat: StatId.CLI, amount: 6, label: '+CLI' },
       { stat: StatId.HOM, amount: 4, label: '+HOM' },
@@ -1243,7 +1243,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
     id: 'pb-arctic-tern-colony-raid',
     type: 'active',
     category: 'foraging',
-    narrativeText: "The ground ahead is white with the wings of thousands of Arctic Terns. Their high-pitched screams fill the air as they dive-bomb anything that approaches. The ground is littered with nests containing eggs and small, downy chicks. It is a bounty of protein, but the birds are relentless in their defense.",
+    narrativeText: "Thousands of terns ahead, screaming. They dive-bomb anything that moves. The ground is covered with nests. Eggs and small, downy chicks. The smell of protein.",
     statEffects: [
       { stat: StatId.ADV, amount: 8, label: '+ADV (mobbing birds)' },
     ],
@@ -1252,7 +1252,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
         id: 'raid-nests',
         label: 'Raid the colony for eggs and chicks',
         description: 'High weight gain, but risk of injury from sharp beaks.',
-        narrativeResult: 'You lumber into the colony, ignoring the cloud of screaming birds. You systematically raid the nests, gulping down eggs and chicks. The terns strike at your eyes and nose, their sharp beaks drawing blood, but you gorge yourself until you are full.',
+        narrativeResult: 'You walk into the colony. Birds strike at your eyes and nose, beaks drawing blood. You gulp down eggs and chicks from nest after nest until your stomach is full.',
         statEffects: [
           { stat: StatId.HOM, amount: -15, label: '-HOM' },
           { stat: StatId.HEA, amount: -5, label: '-HEA (pecks)' },
@@ -1267,7 +1267,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
       {
         id: 'bypass-colony',
         label: 'Bypass the colony',
-        narrativeResult: 'The noise and the constant pecking are not worth the effort. You skirt the edge of the colony, leaving the birds to their frantic defense.',
+        narrativeResult: 'The noise and pecking drive you off. You skirt the colony edge and keep moving.',
         statEffects: [
           { stat: StatId.TRA, amount: -3, label: '-TRA' },
         ],

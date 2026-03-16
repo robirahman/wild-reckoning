@@ -81,23 +81,23 @@ function collectSlotText(
  */
 export const WEATHER_ATMOSPHERE_FRAGMENTS: Record<string, ContextualFragment[]> = {
   blizzard: [
-    { text: 'The wind is a living thing, shrieking through the trees and driving ice crystals into your eyes. The world has been reduced to a white, howling void.' },
-    { text: 'Snow falls so thick it erases the boundary between ground and sky. Each breath is a mouthful of ice crystals.' },
+    { text: 'Wind drives ice into your eyes. You cannot smell anything through it. White in every direction, no horizon.' },
+    { text: 'Snow so thick the ground and sky merge. Each breath pulls ice crystals into your throat.' },
   ],
   heavy_rain: [
-    { text: 'Rain hammers the canopy overhead, turning every surface to mud and every sound to white noise. Water streams down your flanks in cold rivulets.' },
-    { text: 'The downpour is relentless. Visibility shrinks to a few body lengths and the ground gives way beneath your hooves with every step.' },
+    { text: 'Rain pounding the canopy, constant. Water running down your flanks. The ground softens and gives under your weight. All sound flattened to noise.' },
+    { text: 'Visibility closes in to a few body lengths. The ground breaks apart underfoot. Every scent on the ground blooms strong and muddy.' },
   ],
   heat_wave: [
-    { text: 'The heat presses down like a weight. The air shimmers above the baked earth and every breath feels thick and insufficient.' },
-    { text: 'The sun is merciless. Flies orbit your head in a persistent cloud and every patch of shade draws you like water draws the thirsty.' },
+    { text: 'Heat on your back and face, pressing. The air is thick. Each breath feels insufficient. You pant.' },
+    { text: 'Biting things circling your head in a cloud that will not disperse. Every shaded spot pulls you toward it.' },
   ],
   fog: [
-    { text: 'Fog has swallowed the forest. Trees dissolve into gray ghosts three strides ahead, and every sound is muffled and displaced.' },
-    { text: 'The fog turns the world into a place of uncertain distances. Shapes loom and vanish. Your ears become more important than your eyes.' },
+    { text: 'Shapes dissolve three strides ahead. Sound muffled and directionless. Your ears turn but cannot locate the source.' },
+    { text: 'Distances collapse. Things appear and vanish. You rely on your nose and ears; your eyes give you almost nothing.' },
   ],
   snow: [
-    { text: 'Fresh snow muffles every footstep and transforms the landscape into an alien white expanse. Your dark form is visible for a mile.', season: 'winter' },
+    { text: 'Fresh snow on the ground, muffling your steps. Your body stands out dark against the white. Exposed.', season: 'winter' },
   ],
 };
 
@@ -106,19 +106,19 @@ export const WEATHER_ATMOSPHERE_FRAGMENTS: Record<string, ContextualFragment[]> 
  */
 export const IMPAIRMENT_COMPLICATION_FRAGMENTS: Record<string, ContextualFragment[]> = {
   locomotion: [
-    { text: 'Your injured leg protests every step, sending a hot lance of pain through your body that makes your gait hitch and stumble.' },
-    { text: 'The damaged leg drags, refusing to answer at speed. Every stride is a negotiation between urgency and anatomy.' },
+    { text: 'Hot pain through your injured leg with each step. Your gait hitches and catches.' },
+    { text: 'The damaged leg drags. At speed, it will not answer. You favor the other side.' },
   ],
   vision: [
-    { text: 'The world blurs at the edges, shapes dissolving into indistinct smears that could be anything — or nothing.' },
-    { text: 'Your damaged eyes struggle to resolve detail. Shadows become threats and threats become shadows.' },
+    { text: 'Shapes blur at the edges of your field. You cannot resolve what is moving out there.' },
+    { text: 'Your damaged eye gives you smears where there should be detail. Your good eye works harder.' },
   ],
   'open-wound': [
-    { text: 'The wound on your flank weeps with every movement, leaving a trail of scent that announces your vulnerability to everything downwind.' },
-    { text: 'Blood-scent clings to you like a second skin. Every predator within a mile knows you are hurt.' },
+    { text: 'The wound weeps with each movement. Blood-scent trails behind you on the air.' },
+    { text: 'Your own blood-smell is strong on you. Anything downwind knows.' },
   ],
   hunger: [
-    { text: 'Your body is consuming itself. The hollowness in your gut makes it hard to think about anything except food.' },
-    { text: 'Hunger has eroded your caution. The desperate need to feed overrides the instinct to stay hidden.' },
+    { text: 'Hollowness in your gut. Your attention keeps pulling toward any food-smell.' },
+    { text: 'The hunger has worn through your caution. You stay in the open longer than you should, eating.' },
   ],
 };

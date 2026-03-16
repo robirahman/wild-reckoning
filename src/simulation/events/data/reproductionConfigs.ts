@@ -89,15 +89,15 @@ export const FAWN_BIRTH_CONFIG: ReproductionTriggerConfig = {
 
     // Fawn viability depends on mother's body condition
     const viableNarrative = bcs >= 3
-      ? 'The birth is swift. Two fawns — twins, as is common for a well-nourished doe. They are perfect: damp, trembling, their spotted coats already drying in the warm air. Within an hour, they are nursing, their tiny mouths finding the teat with an instinct older than consciousness.'
+      ? 'The birth is swift. Two fawns, damp and trembling, their spotted coats drying in the warm air. Within an hour they are nursing.'
       : bcs >= 2
-        ? 'The labor is hard — harder than it should be. Your depleted body struggles to complete what it started months ago. A single fawn emerges, small but alive, its breath coming in quick, shallow gasps. You lick it clean with desperate urgency, willing it to stand.'
-        : 'The fawn is born too small. You lick it, nudge it, but its legs fold under every attempt to stand. The spotted coat seems too large for the body beneath it, and its breathing is labored. Your body had too little to give.';
+        ? 'The labor is hard. Your body strains. A single fawn emerges, small but alive, breathing in quick shallow gasps. You lick it clean.'
+        : 'The fawn is born too small. You lick it, nudge it. Its legs fold under every attempt to stand. The spotted coat hangs loose. Its breathing is labored.';
 
     // Cover quality affects early fawn survival
     const coverNarrative = cover >= 50
-      ? 'The thicket provides excellent cover — tall ferns and dense undergrowth that will hide the fawn during its first vulnerable days.'
-      : 'The cover here is thin. You will need to be vigilant — a hidden fawn is a safe fawn, and there is not enough hiding to go around.';
+      ? 'Tall ferns and dense undergrowth surround the birth site. Good cover.'
+      : 'The cover here is thin. The fawn will be visible from a distance.';
 
     return {
       harmEvents: [],
@@ -112,7 +112,7 @@ export const FAWN_BIRTH_CONFIG: ReproductionTriggerConfig = {
         // Low BCS fawn is fragile (potential future event triggers on this)
         ...(bcs <= 1 ? [{ type: 'set_flag' as any, flag: 'fawn-fragile' as any }] : []),
       ],
-      narrativeText: `The contractions begin at dawn, deep and rhythmic, pulling you into a crouch in the densest cover you can find. ${viableNarrative} ${coverNarrative} You eat the placenta — every calorie matters now, and the scent would draw predators. Then you move away from the birth site, putting distance between yourself and the hidden fawn. You will return to nurse, but for now, absence is the fawn's best defense.`,
+      narrativeText: `The contractions start at dawn, deep and rhythmic. You crouch in the densest cover you can find. ${viableNarrative} ${coverNarrative} You eat the afterbirth. The smell would draw predators. Then you move away from the birth site. You will return to nurse.`,
       narrativeContext: buildNarrativeContext({
         eventCategory: 'reproduction',
         eventType: 'fawn-birth',
@@ -173,9 +173,9 @@ export const FAWN_DEFENSE_CONFIG: ReproductionTriggerConfig = {
     // Predator type varies by terrain and season
     const predatorType = ctx.rng.pick(['coyote', 'coyote', 'bobcat', 'eagle']);
     const predatorNarrative: Record<string, string> = {
-      coyote: 'The coyote appears at the edge of the clearing, nose down, following the invisible trail of scent that leads to your hidden fawn. It moves with patient, methodical purpose — a specialist in finding what does not want to be found.',
-      bobcat: 'The bobcat materializes from nothing — one moment the undergrowth is empty, the next a tawny shape with tufted ears is crouching low, eyes locked on the patch of ferns where your fawn lies hidden.',
-      eagle: 'The shadow passes overhead first — a golden eagle, its wingspan enormous, circling lower with each pass. It has spotted something in the grass. Your fawn.',
+      coyote: 'A coyote appears at the clearing edge, nose down, following a scent trail toward where the fawn lies hidden. It moves with slow, patient steps.',
+      bobcat: 'A tawny shape with tufted ears crouches low in the undergrowth. Its eyes are locked on the patch of ferns where your fawn lies.',
+      eagle: 'A shadow passes overhead. A golden eagle circles lower with each pass. It has seen something in the grass. Your fawn.',
     };
 
     const env = buildEnvironment(ctx);
@@ -210,9 +210,9 @@ export const FAWN_DEFENSE_CONFIG: ReproductionTriggerConfig = {
       {
         id: 'charge',
         label: 'Charge the predator',
-        description: 'Attack with your hooves. Does are fierce defenders.',
+        description: 'Strike with your front hooves.',
         style: 'danger' as const,
-        narrativeResult: 'You explode from cover, front hooves raised like hammers. The maternal fury that drives you is absolute — every fiber of your being is focused on destroying the threat to your fawn. You strike downward with bone-cracking force.',
+        narrativeResult: 'You burst from cover, front hooves raised. You strike downward hard. The predator flinches.',
         modifyOutcome(base, innerCtx) {
           const fight = resolveFight(innerCtx, {
             opponentStrength: 25,
@@ -261,9 +261,9 @@ export const FAWN_DEFENSE_CONFIG: ReproductionTriggerConfig = {
       {
         id: 'distract',
         label: 'Feign injury to lure predator away',
-        description: 'Broken-wing display. Draw the predator from the fawn.',
+        description: 'Drag a leg. Bleat. Draw the predator away from the fawn.',
         style: 'default' as const,
-        narrativeResult: 'You stumble from cover, dragging one leg as if it were broken, bleating in distress. The performance is ancient and convincing — every doe knows this dance. The predator\'s attention locks onto you, the easier prey, and it follows as you limp away from the fawn, gradually increasing your speed until you are running flat out and the predator realizes it has been duped.',
+        narrativeResult: 'You stumble from cover, dragging one leg, bleating. The predator locks onto you instead. You limp away from the fawn, then run.',
         modifyOutcome(base, innerCtx) {
           // Distraction success depends on locomotion (need to outrun after luring)
           const successChance = 0.5 + (locomotion - 50) * 0.005;
@@ -371,16 +371,16 @@ export const RUT_DISPLAY_CONFIG: ReproductionTriggerConfig = {
       ],
       consequences: [],
       narrativeText: displayQuality === 'impressive'
-        ? 'A doe stands at the far edge of the meadow, her head raised, testing the wind. Your scent reaches her — testosterone, tarsal gland secretions, the chemical resume of your fitness. You approach with the stiff-legged, head-high gait of courtship, your neck swollen, your polished antlers catching the light. You are advertising everything you are: your weight, your health, your genetic quality. She watches, motionless, assessing.'
-        : 'You catch the scent of a doe and follow it through the hardwoods, your body rigid with urgency. When you find her, you approach carefully — the display must be convincing despite your condition. You arch your neck, raise your head, and present your antlers. She watches for a long moment, then turns away. You follow, persistent, circling to present yourself again.',
+        ? 'A doe stands at the meadow edge, head raised, testing the wind. Your neck is swollen. You hold your head high, antlers tilted forward. The tarsal gland smell pours off you. She watches, motionless.'
+        : 'You catch a doe\'s scent through the hardwoods and follow it. When you find her, you arch your neck and present your antlers. She watches, then turns away. You circle and present again.',
       narrativeContext: buildNarrativeContext({
         eventCategory: 'reproduction',
         eventType: 'rut-display',
         entities: [conspecificEntity('doe', 'adult female deer')],
         actions: [action(
           displayQuality === 'impressive'
-            ? 'Your scent reaches her. You approach with the courtship gait, neck swollen, antlers catching the light. She watches, motionless, assessing.'
-            : 'You catch the scent of a doe. The display must be convincing despite your condition. She watches, then turns away. You follow, persistent.',
+            ? 'Your scent reaches her. You approach stiff-legged, neck swollen. She watches, motionless.'
+            : 'You catch the scent of a doe. You arch your neck and present your antlers. She turns away. You follow.',
           `Rut courtship display. Display quality: ${displayQuality}. Weight: ${weight}kg, BCS: ${bcs}/5. ${displayQuality === 'impressive' ? 'Strong physical condition supporting courtship signals.' : 'Suboptimal condition may reduce mating success.'}`,
           'medium',
         )],
@@ -397,9 +397,9 @@ export const RUT_DISPLAY_CONFIG: ReproductionTriggerConfig = {
       {
         id: 'pursue-doe',
         label: 'Pursue the courtship',
-        description: 'Invest energy in the mating chase. Exhausting but biologically imperative.',
+        description: 'Follow her. The chase will cost you.',
         style: 'default' as const,
-        narrativeResult: 'You follow her for hours through the forest, matching her pace, never pressing too close. The courtship chase is a test of endurance as much as fitness — she is measuring your stamina, your persistence, your ability to keep up without flagging. When she finally stops and allows you to approach, the relief is as physical as the triumph.',
+        narrativeResult: 'You follow her for hours through the forest, matching her pace, never pressing too close. When she finally stops and holds still, you approach.',
         modifyOutcome(base, innerCtx) {
           // Mating chase costs significant calories
           const caloriesCost = 300 + (bcs < 3 ? 100 : 0);
@@ -427,9 +427,9 @@ export const RUT_DISPLAY_CONFIG: ReproductionTriggerConfig = {
       {
         id: 'conserve',
         label: 'Conserve energy for the next encounter',
-        description: 'This doe isn\'t interested. Save your strength.',
+        description: 'She is not interested. Walk away.',
         style: 'default' as const,
-        narrativeResult: 'You break off the pursuit, recognizing the signs of rejection in her body language — the pinned ears, the quick glances over her shoulder that say "don\'t follow." There will be other does. The rut is long, and stamina is the currency that matters most.',
+        narrativeResult: 'She pins her ears and glances over her shoulder. You break off. Her scent fades as the distance opens.',
         modifyOutcome(base) {
           return {
             ...base,

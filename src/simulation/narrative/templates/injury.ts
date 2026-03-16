@@ -19,18 +19,18 @@ export const IMPACT_FRAGMENTS: ImpactFragment[] = [
   // Blunt
   { harmType: 'blunt', intensity: 'low', text: 'A dull thud of impact that you feel in your bones.' },
   { harmType: 'blunt', intensity: 'medium', text: 'The blow lands hard enough to make the world ring. Your vision swims for a moment.' },
-  { harmType: 'blunt', intensity: 'high', text: 'The impact is tremendous — a crack like a breaking branch, and then white-hot pain.' },
+  { harmType: 'blunt', intensity: 'high', text: 'The impact is tremendous. A crack, and then white-hot pain.' },
   { harmType: 'blunt', intensity: 'extreme', text: 'The force of it folds your body in a direction bodies aren\'t meant to fold. Something inside gives way.' },
 
   // Sharp
   { harmType: 'sharp', intensity: 'low', text: 'A thin line of pain, sharp and precise, across your skin.' },
-  { harmType: 'sharp', intensity: 'medium', text: 'Teeth — or claws — tear through skin and into the muscle beneath. The pain comes a heartbeat after the wound.' },
+  { harmType: 'sharp', intensity: 'medium', text: 'Teeth or claws tear through skin and into the muscle beneath. The pain comes a heartbeat after the wound.' },
   { harmType: 'sharp', intensity: 'high', text: 'Something bites deep, past skin, past muscle, grating against what feels like the core of you. Warmth spills freely.' },
   { harmType: 'sharp', intensity: 'extreme', text: 'The wound opens you. There is no barrier left between your insides and the air. Things that should stay inside are not staying inside.' },
 
   // Thermal-cold
   { harmType: 'thermal-cold', intensity: 'low', text: 'The cold presses in, numbing the surface of your skin, making your muscles stiff and slow.' },
-  { harmType: 'thermal-cold', intensity: 'medium', text: 'The cold deepens into something that feels personal — searching, finding every thin patch of fur and pressing in.' },
+  { harmType: 'thermal-cold', intensity: 'medium', text: 'The cold deepens into something that feels deliberate, searching, finding every thin patch of fur and pressing in.' },
   { harmType: 'thermal-cold', intensity: 'high', text: 'Your extremities have stopped reporting. The cold has moved past the skin and is working on the muscle beneath.' },
   { harmType: 'thermal-cold', intensity: 'extreme', text: 'The cold has become the world. Your body is a thing that is slowly stopping, and the stopping feels almost peaceful.' },
 
@@ -41,7 +41,7 @@ export const IMPACT_FRAGMENTS: ImpactFragment[] = [
   { harmType: 'thermal-heat', intensity: 'extreme', text: 'The pain transcends what you knew pain could be. Your body convulses, trying to escape the heat by any means.' },
 
   // Biological
-  { harmType: 'biological', intensity: 'low', text: 'A faint wrongness, like a sour note in the symphony of your body.' },
+  { harmType: 'biological', intensity: 'low', text: 'A faint wrongness somewhere inside you, a low discomfort that does not go away.' },
   { harmType: 'biological', intensity: 'medium', text: 'Something inside you is not right. A creeping wrongness that ebbs and flows but does not leave.' },
   { harmType: 'biological', intensity: 'high', text: 'Your body is fighting something you cannot see or touch or flee from. The battle rages inside you.' },
   { harmType: 'biological', intensity: 'extreme', text: 'You are burning from the inside. Your body has become a battleground and you are losing.' },
@@ -65,7 +65,7 @@ export const ZONE_PAIN: Record<string, string[]> = {
   'neck': [
     'Your neck seizes, every muscle locking rigid.',
     'You can\'t turn your head without a lance of pain.',
-    'The vulnerability of it — the soft throat, the windpipe — makes your legs want to run.',
+    'The vulnerability of it, the soft throat, the windpipe, makes your legs want to run.',
   ],
   'torso': [
     'The breath is driven from your lungs.',
@@ -90,7 +90,7 @@ export const ZONE_PAIN: Record<string, string[]> = {
     'The skin tears like wet paper, and the air touches what should never touch air.',
   ],
   'internal': [
-    'Something inside shifts — a nauseating, deep wrongness that has no surface.',
+    'Something inside shifts. A nauseating, deep wrongness that has no surface.',
     'The pain has no location you can point to. It radiates from everywhere and nowhere.',
   ],
 };

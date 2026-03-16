@@ -16,7 +16,7 @@ export const HUMAN_STORYLINES: StorylineDefinition[] = [
         id: 'development-1',
         delayMin: 0,
         delayMax: 0,
-        narrativeText: 'Strange sounds carry on the wind — the growl of engines and the crack of falling trees. On the horizon, a yellow machine crawls across the earth, scraping the ground bare. Humans are building something at the edge of {{region.name}}.',
+        narrativeText: 'A low grinding sound carries from the edge of {{region.name}}. Trees crack and fall. A large yellow shape moves across the ground, scraping soil bare. The smell is diesel and raw earth.',
         statEffects: [
           { stat: StatId.NOV, amount: 8, duration: 4, label: '+NOV (unfamiliar machinery)' },
           { stat: StatId.ADV, amount: 5, duration: 3, label: '+ADV (new threat)' },
@@ -30,7 +30,7 @@ export const HUMAN_STORYLINES: StorylineDefinition[] = [
         id: 'development-2',
         delayMin: 3,
         delayMax: 6,
-        narrativeText: 'The construction has transformed the landscape. Where meadow and forest once stood, there are now rectangular structures, paved surfaces, and fences. The usable habitat has shrunk noticeably. Other animals crowd into the remaining space, increasing competition for food and shelter.',
+        narrativeText: 'Where open ground and trees stood, hard flat surfaces and straight barriers now block your path. The usable range has shrunk. Other animals press into what remains, and food is harder to find.',
         statEffects: [
           { stat: StatId.HOM, amount: 12, duration: 6, label: '+HOM (habitat loss)' },
           { stat: StatId.ADV, amount: 6, duration: 4, label: '+ADV (overcrowding)' },
@@ -44,7 +44,7 @@ export const HUMAN_STORYLINES: StorylineDefinition[] = [
         id: 'development-3',
         delayMin: 4,
         delayMax: 8,
-        narrativeText: 'Months have passed, and the new development has become part of the landscape. You have adjusted your routes, found new food sources in the edge habitat between wild and developed land, and learned which human areas to avoid. Life continues, diminished but adapted.',
+        narrativeText: 'Your routes have shifted around the hard surfaces. New food grows along the edges where cleared ground meets cover. You know which areas carry human scent and avoid them.',
         statEffects: [
           { stat: StatId.WIS, amount: 8, duration: 4, label: '+WIS (adaptation)' },
           { stat: StatId.HOM, amount: -8, duration: 4, label: '-HOM (new normal)' },
@@ -72,7 +72,7 @@ export const HUMAN_STORYLINES: StorylineDefinition[] = [
         id: 'conservation-1',
         delayMin: 0,
         delayMax: 0,
-        narrativeText: 'Humans have been appearing in {{region.name}} — not hunters, but quiet figures who move slowly, carry strange devices, and leave without taking anything. They set up small boxes on trees and drop objects that smell faintly of metal. Their presence is unsettling but not dangerous.',
+        narrativeText: 'Humans appear in {{region.name}}, moving slowly, carrying objects that click and hum. They attach small boxes to trees and leave without chasing anything. They smell of metal and plastic.',
         statEffects: [
           { stat: StatId.ADV, amount: 6, duration: 3, label: '+ADV (human presence)' },
           { stat: StatId.NOV, amount: 5, duration: 3, label: '+NOV (new activity)' },
@@ -84,7 +84,7 @@ export const HUMAN_STORYLINES: StorylineDefinition[] = [
         id: 'conservation-2',
         delayMin: 3,
         delayMax: 7,
-        narrativeText: 'The humans have been busy. New water sources have appeared — clean pools that did not exist before. Certain pathways between fragmented habitat are suddenly easier to traverse. It is as if someone is redesigning the landscape with your needs in mind. The food web is responding; prey is more abundant near these interventions.',
+        narrativeText: 'New water pools have appeared, clean and full. Gaps between patches of cover are easier to cross now. Prey and forage are more abundant near these changes.',
         statEffects: [
           { stat: StatId.HEA, amount: 5, duration: 6, label: '+HEA (improved habitat)' },
           { stat: StatId.HOM, amount: -5, duration: 4, label: '-HOM (better connectivity)' },
@@ -110,7 +110,7 @@ export const HUMAN_STORYLINES: StorylineDefinition[] = [
         id: 'pollution-1',
         delayMin: 0,
         delayMax: 0,
-        narrativeText: 'Something is wrong with the water. It carries an acrid chemical taste and a thin oily sheen. Fish float belly-up near the banks. Birds that drank here are stumbling, disoriented. A spill — from a truck, a pipeline, a factory — has poisoned a section of {{region.name}}.',
+        narrativeText: 'The water tastes wrong, sharp and chemical. An oily film sits on the surface. Dead fish float belly-up near the bank. Other animals that drank here stagger and fall.',
         statEffects: [
           { stat: StatId.HEA, amount: -10, duration: 4, label: '-HEA (contamination)' },
           { stat: StatId.TRA, amount: 10, duration: 4, label: '+TRA (poisoned habitat)' },
@@ -125,7 +125,7 @@ export const HUMAN_STORYLINES: StorylineDefinition[] = [
         id: 'pollution-2',
         delayMin: 3,
         delayMax: 7,
-        narrativeText: 'Humans in white suits have arrived — containment booms across the water, absorbent pads on the banks. The worst of the contamination is being cleaned up, but the damage to the ecosystem will linger. Some species have fled; others were not so lucky.',
+        narrativeText: 'Humans in white coverings place barriers across the water and press absorbent material into the banks. The chemical smell weakens. Some animals have left the area. Others lie still.',
         statEffects: [
           { stat: StatId.HEA, amount: 5, duration: 4, label: '+HEA (cleanup beginning)' },
           { stat: StatId.TRA, amount: -6, duration: 4, label: '-TRA (humans helping)' },
@@ -139,7 +139,7 @@ export const HUMAN_STORYLINES: StorylineDefinition[] = [
         id: 'pollution-3',
         delayMin: 4,
         delayMax: 8,
-        narrativeText: 'The visible contamination is gone, but the soil and water carry traces that will persist for years. The ecosystem is recovering — slowly, incompletely, but recovering. New growth pushes through where the worst damage occurred, and wildlife is cautiously returning.',
+        narrativeText: 'The chemical taste in the water is faint now. New growth pushes through the damaged ground. Other animals are returning, cautious, testing the water before drinking.',
         statEffects: [
           { stat: StatId.HEA, amount: 5, duration: 4, label: '+HEA (recovery)' },
           { stat: StatId.TRA, amount: -5, duration: 4, label: '-TRA (healing land)' },

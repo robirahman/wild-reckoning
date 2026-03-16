@@ -19,7 +19,7 @@ export const SPECIES_STORYLINES: StorylineDefinition[] = [
         id: 'ink-cloud-1',
         delayMin: 0,
         delayMax: 0,
-        narrativeText: 'A moray eel has taken up residence in a crevice near your den. You have seen its green head protruding from the rock, testing the current with its open mouth. It is a patient hunter, and your den is within its patrol range. The reef feels less safe now.',
+        narrativeText: 'A green head protrudes from a crevice near your den, jaws open, tasting the current. A moray eel. It does not leave. Its patrol loop passes your entrance.',
         statEffects: [
           { stat: StatId.ADV, amount: 10, duration: 4, label: '+ADV (moray nearby)' },
           { stat: StatId.TRA, amount: 8, duration: 3, label: '+TRA (predator threat)' },
@@ -31,7 +31,7 @@ export const SPECIES_STORYLINES: StorylineDefinition[] = [
         id: 'ink-cloud-2',
         delayMin: 3,
         delayMax: 5,
-        narrativeText: 'The moray strikes. It lunges from its crevice as you return from a hunt, its elongated body uncoiling like a spring. You jet backward, firing a cloud of ink — a dark, spreading phantom that hangs in the water where you were a moment before. The moray bites the ink cloud. You escape, but barely.',
+        narrativeText: 'The moray lunges as you return from a hunt. You jet backward and release ink. The dark cloud hangs where your body was a moment before. The moray bites into it. You are already gone.',
         statEffects: [
           { stat: StatId.TRA, amount: 12, duration: 3, label: '+TRA (near death)' },
           { stat: StatId.WIS, amount: 5, duration: 4, label: '+WIS (escape learned)' },
@@ -45,7 +45,7 @@ export const SPECIES_STORYLINES: StorylineDefinition[] = [
         id: 'ink-cloud-3',
         delayMin: 4,
         delayMax: 7,
-        narrativeText: 'You have learned the moray\'s patterns — when it hunts, where it patrols, which crevices it uses. Armed with this knowledge, you time your foraging to avoid its active hours and have reinforced your den entrance with shells and stones. The reef has a predator, but so do you have a strategy.',
+        narrativeText: 'You know the moray\'s schedule now. When it hunts, where it rests, which crevices it uses. You forage when it is still. You have packed shells and stones around your den entrance.',
         statEffects: [
           { stat: StatId.WIS, amount: 8, duration: 6, label: '+WIS (predator knowledge)' },
           { stat: StatId.ADV, amount: -6, duration: 4, label: '-ADV (adapted)' },
@@ -71,7 +71,7 @@ export const SPECIES_STORYLINES: StorylineDefinition[] = [
         id: 'colony-siege-1',
         delayMin: 0,
         delayMax: 0,
-        narrativeText: 'The hive is under threat. A persistent wasp species has been probing the entrance, testing the guards. Workers return from foraging reporting fewer flowers and longer flights. The queen\'s laying rate has slowed. Something is straining the colony.',
+        narrativeText: 'Wasps probe the entrance, darting in and pulling back. Foraging flights take longer, returning with less. The colony\'s hum has shifted pitch, lower and uneven.',
         statEffects: [
           { stat: StatId.TRA, amount: 8, duration: 3, label: '+TRA (colony stressed)' },
           { stat: StatId.HOM, amount: 8, duration: 3, label: '+HOM (hive anxiety)' },
@@ -83,7 +83,7 @@ export const SPECIES_STORYLINES: StorylineDefinition[] = [
         id: 'colony-siege-2',
         delayMin: 2,
         delayMax: 5,
-        narrativeText: 'A full-scale robbing raid. Foreign bees — from a stronger colony — have breached the entrance. The air inside the hive is chaos: the smell of alarm pheromone, the buzz of combat, the desperate heat of balling attackers. Workers are dying by the dozen defending the honey stores.',
+        narrativeText: 'Foreign bees force through the entrance. Alarm pheromone floods the hive, sharp and acrid. The sound inside is deafening. Workers ball the intruders, generating killing heat. Bodies pile at the entrance.',
         statEffects: [
           { stat: StatId.HEA, amount: -10, duration: 3, label: '-HEA (combat casualties)' },
           { stat: StatId.TRA, amount: 12, duration: 3, label: '+TRA (hive under attack)' },
@@ -97,7 +97,7 @@ export const SPECIES_STORYLINES: StorylineDefinition[] = [
         id: 'colony-siege-3',
         delayMin: 3,
         delayMax: 6,
-        narrativeText: 'The raid is over. The survivors seal the entrance with propolis, reducing it to a single-bee-width gap that is easier to defend. The colony has lost workers and stores, but the queen lives, and the survivors work with renewed purpose. Within weeks, new brood will emerge and the colony will rebuild.',
+        narrativeText: 'The raiders are gone. Survivors seal the entrance with propolis, narrowing it to a single-body gap. Stores are depleted and workers are few, but the queen is alive. New brood cells are capped and warming.',
         statEffects: [
           { stat: StatId.HOM, amount: -8, duration: 4, label: '-HOM (colony recovering)' },
           { stat: StatId.WIS, amount: 6, duration: 4, label: '+WIS (siege survived)' },
@@ -123,7 +123,7 @@ export const SPECIES_STORYLINES: StorylineDefinition[] = [
         id: 'crosswind-1',
         delayMin: 0,
         delayMax: 0,
-        narrativeText: 'A massive weather system has stalled over the Atlantic, generating persistent crosswinds that push you off course. Your internal compass says south, but the wind pushes east. Every mile is a battle of navigation against raw atmospheric force.',
+        narrativeText: 'Wind hits from the side, steady and strong. Your body says south but the air pushes east. Every correction costs energy. The route stretches longer with each gust.',
         statEffects: [
           { stat: StatId.CLI, amount: 10, duration: 3, label: '+CLI (crosswind)' },
           { stat: StatId.STR, amount: -5, duration: 3, label: '-STR (fighting wind)' },
@@ -137,7 +137,7 @@ export const SPECIES_STORYLINES: StorylineDefinition[] = [
         id: 'crosswind-2',
         delayMin: 2,
         delayMax: 4,
-        narrativeText: 'The wind shifts at last. A break in the weather system opens a corridor of following wind, and you ride it like a river of air, making up lost miles with effortless speed. The ocean below changes color — warmer water ahead. You are back on course.',
+        narrativeText: 'The wind shifts behind you. Speed comes without effort now, the air carrying you forward. The water below changes color, darker to lighter. The route is right again.',
         statEffects: [
           { stat: StatId.STR, amount: 5, duration: 3, label: '+STR (tailwind recovery)' },
           { stat: StatId.WIS, amount: 6, duration: 4, label: '+WIS (weather reading)' },
@@ -166,7 +166,7 @@ export const SPECIES_STORYLINES: StorylineDefinition[] = [
         id: 'golden-frog-1',
         delayMin: 0,
         delayMax: 0,
-        narrativeText: 'Deep in the forest, you encounter a frog you have never seen before — not red like you, but brilliant gold, its skin shimmering like a bead of amber in the leaf litter. It is a different color morph of your own species, carrying different toxin profiles built from a different diet of ants.',
+        narrativeText: 'In the leaf litter, a frog you have never encountered. Not your color. Gold, bright against the dark soil. It smells like your species but different. Its call is slightly off.',
         statEffects: [
           { stat: StatId.NOV, amount: 10, duration: 3, label: '+NOV (new morph)' },
           { stat: StatId.WIS, amount: 5, duration: 3, label: '+WIS (species diversity)' },
@@ -178,7 +178,7 @@ export const SPECIES_STORYLINES: StorylineDefinition[] = [
         id: 'golden-frog-2',
         delayMin: 3,
         delayMax: 6,
-        narrativeText: 'The golden morph population is growing in your territory. Their calls are subtly different from yours — a higher pitch, a faster trill. Competition for calling perches and bromeliad pools has intensified, but you are also learning new feeding strategies by observing their different foraging patterns.',
+        narrativeText: 'More gold morphs now, their higher-pitched calls cutting through yours. The good perches and pools are contested. You watch them forage different patches, feeding on prey you overlooked.',
         statEffects: [
           { stat: StatId.WIS, amount: 8, duration: 6, label: '+WIS (learning from others)' },
           { stat: StatId.ADV, amount: 5, duration: 3, label: '+ADV (competition)' },

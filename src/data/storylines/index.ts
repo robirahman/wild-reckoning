@@ -25,7 +25,7 @@ export const STORYLINES: StorylineDefinition[] = [
         id: 'drought-1',
         delayMin: 0,
         delayMax: 0,
-        narrativeText: 'The creek bed where you usually drink has gone dry. The soil is cracked and dusty. Other deer congregate nervously at the few remaining water sources.',
+        narrativeText: 'The creek bed is dry, soil cracked and powdery underfoot. The remaining water sources smell of concentrated mud and crowded bodies.',
         statEffects: [
           { stat: StatId.TRA, amount: 5, duration: 4, label: '+TRA (drought stress)' },
         ],
@@ -36,7 +36,7 @@ export const STORYLINES: StorylineDefinition[] = [
         id: 'drought-2',
         delayMin: 3,
         delayMax: 6,
-        narrativeText: 'The drought deepens. Vegetation has withered across {{region.name}}. Competition for the remaining forage is fierce. You can feel your ribs showing through your coat.',
+        narrativeText: 'Vegetation across {{region.name}} is brown and brittle. Your sides feel hollow, ribs prominent. Every feeding spot has others already there.',
         statEffects: [
           { stat: StatId.HEA, amount: -8, duration: 4, label: '-HEA (drought)' },
         ],
@@ -49,7 +49,7 @@ export const STORYLINES: StorylineDefinition[] = [
         id: 'drought-3',
         delayMin: 4,
         delayMax: 8,
-        narrativeText: 'Finally, dark clouds gather on the horizon. The first rain in weeks falls heavily across {{region.name}}. Within days, the forest begins to recover. Green shoots push through the parched earth.',
+        narrativeText: 'The smell of rain arrives before the drops. Water falls heavy across {{region.name}}, soaking the cracked ground. Within days, green shoots push through the wet soil.',
         statEffects: [
           { stat: StatId.HEA, amount: 10, duration: 4, label: '+HEA (rain relief)' },
           { stat: StatId.TRA, amount: -8, duration: 4, label: '-TRA (relief)' },
@@ -79,7 +79,7 @@ export const STORYLINES: StorylineDefinition[] = [
         id: 'poacher-1',
         delayMin: 0,
         delayMax: 0,
-        narrativeText: 'You notice strange markings on the trees — blazes cut into bark, not by any animal. The scent of humans lingers, but this is outside hunting season. Something feels wrong.',
+        narrativeText: 'Fresh cuts in the bark of trees, straight and deliberate. Not from any animal. The scent of humans is recent but the timing is wrong.',
         statEffects: [
           { stat: StatId.ADV, amount: 5, duration: 3, label: '+ADV (alertness)' },
         ],
@@ -92,7 +92,7 @@ export const STORYLINES: StorylineDefinition[] = [
         id: 'poacher-2',
         delayMin: 2,
         delayMax: 5,
-        narrativeText: 'A gunshot echoes through the forest, far closer than any hunting blind. You hear a vehicle engine where no road exists. Another deer in your area has been found dead — cleanly shot, antlers removed.',
+        narrativeText: 'A sharp crack echoes through the trees, close. An engine growls where no road runs. Another of your kind lies dead nearby, body still warm, part of it cut away.',
         statEffects: [
           { stat: StatId.TRA, amount: 10, duration: 6, label: '+TRA (poacher threat)' },
           { stat: StatId.ADV, amount: 8, duration: 4, label: '+ADV (hypervigilance)' },
@@ -104,7 +104,7 @@ export const STORYLINES: StorylineDefinition[] = [
         id: 'poacher-3',
         delayMin: 3,
         delayMax: 7,
-        narrativeText: 'Game wardens have been patrolling {{region.name}}. You hear their radios crackling through the trees. The illegal activity seems to have stopped. The forest gradually returns to its normal rhythms.',
+        narrativeText: 'Different humans move through {{region.name}} now, their crackling devices audible from a distance. The engine sounds and sharp cracks have stopped. Normal sounds return.',
         statEffects: [
           { stat: StatId.TRA, amount: -6, duration: 4, label: '-TRA (safety returns)' },
         ],
@@ -132,7 +132,7 @@ export const STORYLINES: StorylineDefinition[] = [
         id: 'leadership-1',
         delayMin: 0,
         delayMax: 0,
-        narrativeText: 'The older members of your {{species.groupNoun}} have begun deferring to you at water sources. Younger elephants follow your lead when choosing paths through the bush.',
+        narrativeText: 'At water sources, others in your {{species.groupNoun}} wait for you to drink first. When you move, the younger ones follow your path.',
         statEffects: [
           { stat: StatId.WIS, amount: 5, duration: 8, label: '+WIS (emerging leader)' },
         ],
@@ -143,7 +143,7 @@ export const STORYLINES: StorylineDefinition[] = [
         id: 'leadership-2',
         delayMin: 4,
         delayMax: 8,
-        narrativeText: 'A crisis faces the herd: the usual watering hole has been claimed by a rival group. The others look to you. Your memory of an alternate route from seasons past guides the {{species.groupNoun}} safely to water.',
+        narrativeText: 'The usual watering hole is occupied by a rival group. The {{species.groupNoun}} clusters behind you. You turn toward a route you remember from a previous dry season, and they follow.',
         statEffects: [
           { stat: StatId.HOM, amount: 8, duration: 6, label: '+HOM (herd bond)' },
           { stat: StatId.WIS, amount: 5, duration: 6, label: '+WIS (proven leader)' },
@@ -169,7 +169,7 @@ export const STORYLINES: StorylineDefinition[] = [
         id: 'upstream-1',
         delayMin: 0,
         delayMax: 0,
-        narrativeText: 'The river narrows ahead into a series of rapids. The water churns white over jagged rocks. Other salmon leap and struggle against the current around you.',
+        narrativeText: 'The current strengthens. Water churns white over rocks, slamming your body sideways. Others around you leap and fall back, leap and fall back.',
         statEffects: [
           { stat: StatId.STR, amount: -5, duration: 3, label: '-STR (exhausting rapids)' },
         ],
@@ -180,7 +180,7 @@ export const STORYLINES: StorylineDefinition[] = [
         id: 'upstream-2',
         delayMin: 2,
         delayMax: 4,
-        narrativeText: 'A concrete dam blocks the river. A fish ladder offers a narrow passage, but the climb is brutal. You throw yourself against the cascading water again and again until you clear the top.',
+        narrativeText: 'A wall of hard gray material blocks the river. A narrow channel of cascading water offers the only way up. You throw your body against the flow, fall back, throw again.',
         statEffects: [
           { stat: StatId.STR, amount: -10, duration: 4, label: '-STR (dam crossing)' },
           { stat: StatId.HEA, amount: -5, duration: 3, label: '-HEA (exhaustion)' },
@@ -208,7 +208,7 @@ export const STORYLINES: StorylineDefinition[] = [
         id: 'winter-survival-1',
         delayMin: 0,
         delayMax: 0,
-        narrativeText: 'An early freeze descends upon {{region.name}}, glazing the snow with a brittle crust of ice. Beneath it, the browse you depend on lies buried and unreachable. The {{species.groupNoun}} paws at the frozen ground in vain.',
+        narrativeText: 'Ice crusts over the snow across {{region.name}}. The food beneath it is unreachable. You scrape at the frozen surface and find nothing.',
         statEffects: [
           { stat: StatId.TRA, amount: 8, duration: 4, label: '+TRA (early freeze)' },
           { stat: StatId.CLI, amount: 6, duration: 4, label: '+CLI (bitter cold)' },
@@ -222,7 +222,7 @@ export const STORYLINES: StorylineDefinition[] = [
         id: 'winter-survival-2',
         delayMin: 3,
         delayMax: 6,
-        narrativeText: 'Deep winter tightens its grip. Starvation pressure builds as the {{species.groupNoun}} crowds into yarding areas, stripping bark from every reachable sapling. The weakest among you have stopped rising at dawn.',
+        narrativeText: 'The {{species.groupNoun}} packs into sheltered ground, stripping bark from every reachable stem. Your body burns its own reserves. Some of the group no longer stand in the morning.',
         statEffects: [
           { stat: StatId.HEA, amount: -10, duration: 4, label: '-HEA (starvation)' },
           { stat: StatId.HOM, amount: 10, duration: 4, label: '+HOM (yarding bond)' },
@@ -236,7 +236,7 @@ export const STORYLINES: StorylineDefinition[] = [
         id: 'winter-survival-3',
         delayMin: 4,
         delayMax: 8,
-        narrativeText: 'A warm front rolls across {{region.name}} at last, and the ice retreats in rivulets of meltwater. The first green shoots push through the softening earth. The {{species.groupNoun}} emerges from the yarding grounds gaunt and hollowed, but alive.',
+        narrativeText: 'Warm air moves across {{region.name}}. Meltwater runs in channels through the softening ground. Green shoots push through. The {{species.groupNoun}} moves out from the sheltered ground, thin but standing.',
         statEffects: [
           { stat: StatId.HEA, amount: 12, duration: 4, label: '+HEA (spring recovery)' },
           { stat: StatId.TRA, amount: -10, duration: 4, label: '-TRA (thaw relief)' },
@@ -267,7 +267,7 @@ export const STORYLINES: StorylineDefinition[] = [
         id: 'fire-season-1',
         delayMin: 0,
         delayMax: 0,
-        narrativeText: 'A pale haze settles over {{region.name}}, and the air carries the acrid tang of distant smoke. Birds wheel overhead in confused spirals. Other animals — raccoons, rabbits, a lone coyote — stream past you, fleeing something you cannot yet see.',
+        narrativeText: 'Smoke hangs in the air over {{region.name}}, acrid and thickening. Other animals move past you in the same direction, away from something. The air burns in your nostrils.',
         statEffects: [
           { stat: StatId.ADV, amount: 10, duration: 3, label: '+ADV (smoke alert)' },
           { stat: StatId.TRA, amount: 8, duration: 3, label: '+TRA (flight instinct)' },
@@ -279,7 +279,7 @@ export const STORYLINES: StorylineDefinition[] = [
         id: 'fire-season-2',
         delayMin: 2,
         delayMax: 4,
-        narrativeText: 'The fire reaches {{region.name}} in a roaring wall of orange and black. Embers rain from a darkened sky. You run blindly through choking smoke, leaping fallen timber, driven from every familiar trail and bedding ground.',
+        narrativeText: 'Heat and noise hit at once. The fire is a wall of orange across {{region.name}}. Embers fall from a dark sky. You run through choking smoke, every familiar path blocked or burning.',
         statEffects: [
           { stat: StatId.HOM, amount: 12, duration: 4, label: '+HOM (displacement)' },
           { stat: StatId.CLI, amount: 8, duration: 4, label: '+CLI (scorched land)' },
@@ -294,7 +294,7 @@ export const STORYLINES: StorylineDefinition[] = [
         id: 'fire-season-3',
         delayMin: 5,
         delayMax: 10,
-        narrativeText: 'Weeks of wandering bring you to unfamiliar territory — unburned forest with strange contours and new scent trails. The land is lush but alien. Slowly, you learn its rhythms, mapping new water sources and bedding sites.',
+        narrativeText: 'Unfamiliar ground. The scent trails here belong to others. Water sources and resting sites are in new places. You circle, sample the air, begin to learn the layout.',
         statEffects: [
           { stat: StatId.NOV, amount: 6, duration: 4, label: '+NOV (new territory)' },
           { stat: StatId.TRA, amount: -6, duration: 4, label: '-TRA (settling in)' },
@@ -322,7 +322,7 @@ export const STORYLINES: StorylineDefinition[] = [
         id: 'elephant-drought-1',
         delayMin: 0,
         delayMax: 0,
-        narrativeText: 'The watering holes of {{region.name}} are shrinking day by day, their muddy rims cracked into mosaics. Dust devils twist across the parched floodplain. The {{species.groupNoun}} gathers at the diminishing pools, uneasy and restless.',
+        narrativeText: 'The watering holes of {{region.name}} are shrinking, muddy rims cracking in the heat. Dust blows across the dry floodplain. The {{species.groupNoun}} clusters at the diminishing pools, bodies tense.',
         statEffects: [
           { stat: StatId.CLI, amount: 8, duration: 4, label: '+CLI (drought heat)' },
           { stat: StatId.HOM, amount: 6, duration: 4, label: '+HOM (water anxiety)' },
@@ -336,7 +336,7 @@ export const STORYLINES: StorylineDefinition[] = [
         id: 'elephant-drought-2',
         delayMin: 3,
         delayMax: 7,
-        narrativeText: 'The matriarch raises her trunk, testing a wind that carries no promise of rain. She turns and leads the {{species.groupNoun}} on a desperate march across the parched savanna, following a memory older than any living elephant — a route her grandmother once walked.',
+        narrativeText: 'The oldest female raises her trunk, sampling the dry wind. She turns and walks. The {{species.groupNoun}} follows, moving across parched ground on a route none of you have traveled before.',
         statEffects: [
           { stat: StatId.HEA, amount: -8, duration: 4, label: '-HEA (exhausting march)' },
           { stat: StatId.HOM, amount: 12, duration: 4, label: '+HOM (far from home)' },
@@ -351,7 +351,7 @@ export const STORYLINES: StorylineDefinition[] = [
         id: 'elephant-drought-3',
         delayMin: 4,
         delayMax: 8,
-        narrativeText: 'Deep in a rocky gorge that no map records, the matriarch finds what she was seeking: a hidden spring seeping from ancient stone, its water cool and sweet. The {{species.groupNoun}} drinks deeply, and for the first time in weeks, calves play at the water\'s edge.',
+        narrativeText: 'In a rocky gorge, water seeps from the stone, cool and clean. The {{species.groupNoun}} drinks. The youngest ones splash and wade for the first time in weeks.',
         statEffects: [
           { stat: StatId.HOM, amount: -15, duration: 4, label: '-HOM (sanctuary found)' },
           { stat: StatId.TRA, amount: -8, duration: 4, label: '-TRA (peace restored)' },
@@ -380,7 +380,7 @@ export const STORYLINES: StorylineDefinition[] = [
         id: 'elephant-poaching-1',
         delayMin: 0,
         delayMax: 0,
-        narrativeText: 'Fresh boot prints scar the red earth near the river crossing, and the glint of spent shell casings catches the light. The {{species.groupNoun}} grows silent and wary, trunks raised to sample a breeze that reeks of diesel and gun oil.',
+        narrativeText: 'Boot prints press into the red earth near the river crossing. Small metal cylinders glint in the dirt. The air carries diesel and a sharp chemical smell. The {{species.groupNoun}} goes quiet, trunks raised.',
         statEffects: [
           { stat: StatId.ADV, amount: 10, duration: 3, label: '+ADV (human threat)' },
           { stat: StatId.TRA, amount: 8, duration: 3, label: '+TRA (poacher scent)' },
@@ -394,7 +394,7 @@ export const STORYLINES: StorylineDefinition[] = [
         id: 'elephant-poaching-2',
         delayMin: 2,
         delayMax: 5,
-        narrativeText: 'A crack splits the dawn — not thunder, but a rifle shot. One of the older bulls in the region falls, and the air fills with the anguished trumpeting of elephants who understand exactly what has happened. The {{species.groupNoun}} flees in a tight, terrified cluster.',
+        narrativeText: 'A sharp crack at dawn. One of the older bulls drops. The {{species.groupNoun}} trumpets, high and loud, then runs in a tight cluster, bodies pressing together.',
         statEffects: [
           { stat: StatId.TRA, amount: 15, duration: 6, label: '+TRA (herd member killed)' },
           { stat: StatId.ADV, amount: 12, duration: 4, label: '+ADV (mortal danger)' },
@@ -408,7 +408,7 @@ export const STORYLINES: StorylineDefinition[] = [
         id: 'elephant-poaching-3',
         delayMin: 4,
         delayMax: 8,
-        narrativeText: 'The rhythmic drone of a patrol aircraft breaks the silence over {{region.name}}. Rangers in olive drab move through the bush, their radios crackling. Within days, the human threat dissolves. The {{species.groupNoun}} slowly unclenches, and calves begin to wander from their mothers\' sides again.',
+        narrativeText: 'A low droning sound overhead, steady and repeating. Different humans move through the bush, radios crackling. The dangerous scent fades over days. The {{species.groupNoun}} spreads out again, the youngest ones ranging farther from the adults.',
         statEffects: [
           { stat: StatId.TRA, amount: -10, duration: 4, label: '-TRA (rangers present)' },
           { stat: StatId.ADV, amount: -8, duration: 4, label: '-ADV (threat removed)' },
@@ -434,7 +434,7 @@ export const STORYLINES: StorylineDefinition[] = [
         id: 'ocean-predator-1',
         delayMin: 0,
         delayMax: 0,
-        narrativeText: 'A shadow passes overhead — vast, black and white, moving with terrible purpose. The orca pod has found your school. The water erupts into chaos as salmon scatter in every direction, silver bodies flashing in panicked bursts of speed.',
+        narrativeText: 'A massive shadow passes above. Black and white, fast. The school explodes outward, bodies scattering in every direction, water churning with the force of it.',
         statEffects: [
           { stat: StatId.TRA, amount: 12, duration: 3, label: '+TRA (predator attack)' },
           { stat: StatId.ADV, amount: 10, duration: 3, label: '+ADV (orca presence)' },
@@ -446,7 +446,7 @@ export const STORYLINES: StorylineDefinition[] = [
         id: 'ocean-predator-2',
         delayMin: 2,
         delayMax: 4,
-        narrativeText: 'The hunting pod moves on, following warmer currents to the north. The survivors drift back together in the cold green water, fewer now but still a school. The deep ocean resumes its uneasy quiet.',
+        narrativeText: 'The large shapes move off, following warmer currents. Survivors drift back together in the cold green water, fewer now. The pressure in the water column returns to normal.',
         statEffects: [
           { stat: StatId.TRA, amount: -8, duration: 3, label: '-TRA (predators gone)' },
           { stat: StatId.ADV, amount: -6, duration: 3, label: '-ADV (danger passed)' },
@@ -472,7 +472,7 @@ export const STORYLINES: StorylineDefinition[] = [
         id: 'spawning-grounds-1',
         delayMin: 0,
         delayMax: 0,
-        narrativeText: 'The gravel beds of the natal stream are crowded with salmon, their scarlet bodies jostling for position. You must claim the best nest site — clean gravel with steady current — and defend it against every rival who surges upstream.',
+        narrativeText: 'The gravel bed is packed with bodies, red and battered, pushing for position. You need clean gravel with steady current. Others keep shoving into the same spot.',
         statEffects: [
           { stat: StatId.ADV, amount: 8, duration: 3, label: '+ADV (nest competition)' },
           { stat: StatId.HOM, amount: 10, duration: 3, label: '+HOM (spawning drive)' },
@@ -484,7 +484,7 @@ export const STORYLINES: StorylineDefinition[] = [
         id: 'spawning-grounds-2',
         delayMin: 1,
         delayMax: 3,
-        narrativeText: 'The redd is yours. With powerful sweeps of your tail, you hollow out the gravel and deposit your eggs in the cool, oxygen-rich current. The ancient purpose that drove you thousands of miles is fulfilled at last.',
+        narrativeText: 'The redd is yours. Your tail sweeps gravel aside, hollowing a depression in the streambed. Eggs release into the cool, oxygen-rich current. Your body is spent.',
         statEffects: [
           { stat: StatId.WIS, amount: 10, duration: 4, label: '+WIS (purpose fulfilled)' },
           { stat: StatId.TRA, amount: -5, duration: 3, label: '-TRA (journey complete)' },

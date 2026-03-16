@@ -73,8 +73,8 @@ export const WOUND_DETERIORATION_CONFIG: HealthTriggerConfig = {
     const isNearWater = ctx.currentNodeType === 'water';
 
     const narrative = isNearWater
-      ? 'Something is wrong with the wound. The edges are swollen and angry, weeping a fluid that smells acrid and wrong. But you are near water — the cool current could wash the corruption away, if you can stand the sting.'
-      : 'Something is wrong with the wound. The edges are swollen and angry, and a dull heat radiates from beneath the skin. Each time you move, the area pulses with a deep, insistent ache. Your body is fighting something it is losing to.';
+      ? 'The wound edges are swollen. Fluid weeping from them, acrid smell. The sound of running water nearby.'
+      : 'The wound edges are swollen. Heat radiating from under the skin. Each step sends a deep pulse through the area.';
 
     return {
       harmEvents: [],
@@ -90,7 +90,7 @@ export const WOUND_DETERIORATION_CONFIG: HealthTriggerConfig = {
         eventType: 'wound-infection',
         entities: [],
         actions: [action(
-          'The wound edges are swollen and angry, weeping acrid fluid. The body is losing this fight.',
+          'Wound edges swollen. Acrid fluid weeping. Heat under the skin.',
           'Wound infection progressing. Inflammatory response inadequate. Risk of sepsis if untreated.',
           'medium',
         )],
@@ -107,8 +107,8 @@ export const WOUND_DETERIORATION_CONFIG: HealthTriggerConfig = {
         id: 'seek-water',
         label: isNearWater ? 'Clean the wound in the stream' : 'Seek water to clean the wound',
         description: isNearWater
-          ? 'The cool water will help fight the infection, but the movement will hurt.'
-          : 'Moving to find water costs energy, but cleaning the wound greatly reduces infection risk.',
+          ? 'Cool water nearby. Moving will hurt.'
+          : 'Moving to water costs energy, but cleans the wound.',
         style: 'default' as const,
         modifyOutcome: (base: SimulationOutcome, _ctx: SimulationContext) => ({
           ...base,
@@ -123,13 +123,13 @@ export const WOUND_DETERIORATION_CONFIG: HealthTriggerConfig = {
           ],
         }),
         narrativeResult: isNearWater
-          ? 'You lower yourself into the stream. The cold water lances through the wound like fire, but you hold steady. When you emerge, the swelling already feels less angry.'
-          : 'You find a stream and wade in, letting the cold current wash over the wound. The pain is sharp but brief. The water carries away the worst of the corruption.',
+          ? 'You step into the stream. Cold water hits the wound. You flinch but hold. The swelling eases.'
+          : 'You find a stream and wade in. Cold current over the wound. Sharp pain, then less. The discharge washes away.',
       },
       {
         id: 'rest',
         label: 'Rest and conserve energy',
-        description: 'Give your immune system the best chance by resting. But you won\'t be foraging.',
+        description: 'Lie still. No foraging.',
         style: 'default' as const,
         modifyOutcome: (base: SimulationOutcome, _ctx: SimulationContext) => ({
           ...base,
@@ -139,12 +139,12 @@ export const WOUND_DETERIORATION_CONFIG: HealthTriggerConfig = {
             { stat: StatId.IMM, amount: -3, duration: 2, label: '-IMM' },
           ],
         }),
-        narrativeResult: 'You find a sheltered spot and lie down, tucking your legs beneath you. Your body trembles with the effort of fighting the infection, but at least you are not spending energy on movement.',
+        narrativeResult: 'You find a sheltered spot and fold your legs under. Trembling. But still.',
       },
       {
         id: 'push-through',
         label: 'Ignore it and keep moving',
-        description: 'The wound will worsen, but you can\'t afford to stop.',
+        description: 'The wound will worsen. You keep moving.',
         style: 'danger' as const,
         modifyOutcome: (base: SimulationOutcome, _ctx: SimulationContext) => ({
           ...base,
@@ -154,7 +154,7 @@ export const WOUND_DETERIORATION_CONFIG: HealthTriggerConfig = {
             { stat: StatId.ADV, amount: 3, duration: 1, label: '+ADV' },
           ],
         }),
-        narrativeResult: 'You push yourself upright and walk. Every step sends a pulse of heat through the wound, but stopping means starving, and starvation kills just as surely as infection.',
+        narrativeResult: 'You push upright and walk. Each step pulses heat through the wound.',
       },
     ];
   },
@@ -185,8 +185,8 @@ export const FEVER_EVENT_CONFIG: HealthTriggerConfig = {
     const isHighFever = fever > 4;
 
     const narrative = isHighFever
-      ? 'The world has gone strange. Colors are too bright, sounds too sharp, and your legs feel like they belong to someone else. A fire burns inside you that has nothing to do with the sun. Your thoughts fragment — where were you going? Why are you standing? The fever has taken hold of your mind.'
-      : 'A deep heat has settled into your body that has nothing to do with the weather. Your muscles ache, your eyes are heavy, and every few steps you shiver despite the warmth radiating from within. The infection is winning, and your body is burning itself to fight back.';
+      ? 'Colors too bright. Sounds too sharp. Your legs do not feel connected to you. Heat from inside, not from the sun. You stop and cannot remember why you were walking.'
+      : 'Heat inside you that is not the weather. Muscles ache. Every few steps, shivering despite the warmth radiating from your core.';
 
     return {
       harmEvents: [],
@@ -204,8 +204,8 @@ export const FEVER_EVENT_CONFIG: HealthTriggerConfig = {
         entities: [],
         actions: [action(
           isHighFever
-            ? 'The world has gone strange. Colors too bright, thoughts fragmenting. The fever has taken hold.'
-            : 'A deep heat. Muscles aching, shivering despite the warmth radiating from within.',
+            ? 'Colors wrong. Legs not connected. Heat from inside. Cannot remember why you were walking.'
+            : 'Heat inside. Muscles ache. Shivering despite the warmth.',
           isHighFever
             ? `High fever (${fever.toFixed(1)}° deviation). Cognitive impairment, dehydration risk. Immune system in crisis.`
             : `Moderate fever (${fever.toFixed(1)}° deviation). Elevated metabolic demand, immune response active.`,
@@ -223,7 +223,7 @@ export const FEVER_EVENT_CONFIG: HealthTriggerConfig = {
       {
         id: 'find-shade',
         label: isNearShelter ? 'Rest in the shade' : 'Find shade or shelter',
-        description: 'Reduce the thermal burden on your body. The fever needs to break.',
+        description: 'Find shade. Lie down. Let the heat pass.',
         style: 'default' as const,
         modifyOutcome: (base: SimulationOutcome, _ctx: SimulationContext) => ({
           ...base,
@@ -237,13 +237,13 @@ export const FEVER_EVENT_CONFIG: HealthTriggerConfig = {
           ],
         }),
         narrativeResult: isNearShelter
-          ? 'You press yourself into the deepest shade you can find, flanks heaving. The coolness of the earth seeps into your overheated body. You close your eyes and let the fever do its work.'
-          : 'You stagger toward the tree line, seeking any relief from the heat radiating from your own body. Under the canopy, the air is cooler. You collapse and wait.',
+          ? 'You press into shade. Flanks heaving. The cool earth against your belly. Eyes close.'
+          : 'You stagger toward the tree line. Under the canopy the air is cooler. You collapse.',
       },
       {
         id: 'keep-moving',
         label: 'Push through the fever',
-        description: 'Dangerous, but staying still means no food.',
+        description: 'Keep walking. No food if you stop.',
         style: 'danger' as const,
         modifyOutcome: (base: SimulationOutcome, _ctx: SimulationContext) => ({
           ...base,
@@ -252,7 +252,7 @@ export const FEVER_EVENT_CONFIG: HealthTriggerConfig = {
             { stat: StatId.HEA, amount: -5, duration: 3, label: '-HEA' },
           ],
         }),
-        narrativeResult: 'You force yourself forward. Each step is an act of will against a body that wants nothing more than to stop. The world tilts and sways, but your legs keep moving.',
+        narrativeResult: 'You force yourself forward. The ground tilts. Your legs keep moving.',
       },
     ];
   },
@@ -289,14 +289,14 @@ export const SEPSIS_EVENT_CONFIG: HealthTriggerConfig = {
         { stat: StatId.WIS, amount: -10, duration: 3, label: '-WIS' },
       ],
       consequences: [],
-      narrativeText: 'Your body is betraying you. The infection has spread beyond the wound, poisoning your blood, turning your own defenses against you. You shake uncontrollably. Your vision dims and brightens in sickening waves. The ground feels distant, as though you are watching yourself from above. This is what dying feels like — not sudden, but a slow untethering from the world. Every instinct screams at you to do something, anything, but your body has nothing left to give.',
+      narrativeText: 'Uncontrollable shaking. Vision dims, then too bright, then dims again. The ground feels far away. Your legs buckle and catch. The heat is everywhere now, not just the wound.',
       footnote: '(Systemic infection — sepsis)',
       narrativeContext: buildNarrativeContext({
         eventCategory: 'health',
         eventType: 'sepsis',
         entities: [],
         actions: [action(
-          'Your body is betraying you. The infection has spread beyond the wound. You shake uncontrollably. This is what dying feels like.',
+          'Uncontrollable shaking. Vision flickering. The heat is everywhere. Legs buckling.',
           'Sepsis: systemic inflammatory response to uncontrolled infection. Multi-organ dysfunction progressing. Without intervention, mortality exceeds 80%.',
           'extreme',
         )],
@@ -311,7 +311,7 @@ export const SEPSIS_EVENT_CONFIG: HealthTriggerConfig = {
       {
         id: 'fight',
         label: 'Fight to survive',
-        description: 'Everything your body has left. There is nothing to do but endure.',
+        description: 'Everything left. Endure.',
         style: 'danger' as const,
         modifyOutcome: (base: SimulationOutcome, _ctx: SimulationContext) => ({
           ...base,
@@ -324,12 +324,12 @@ export const SEPSIS_EVENT_CONFIG: HealthTriggerConfig = {
             { type: 'add_calories' as const, amount: -40, source: 'sepsis metabolic crisis' },
           ],
         }),
-        narrativeResult: 'You dig deep into something beyond instinct — a raw, animal refusal to stop existing. Your body trembles and burns, but you remain. For now.',
+        narrativeResult: 'Your legs lock. You stay standing. Trembling, burning, but standing.',
       },
       {
         id: 'lie-down',
         label: 'Lie down and let it pass',
-        description: 'Conserve the last of your energy. If your body can win this fight, rest gives it the best chance.',
+        description: 'Conserve energy. Lie down.',
         style: 'default' as const,
         modifyOutcome: (base: SimulationOutcome, _ctx: SimulationContext) => ({
           ...base,
@@ -338,7 +338,7 @@ export const SEPSIS_EVENT_CONFIG: HealthTriggerConfig = {
             { type: 'add_calories' as const, amount: -20, source: 'sepsis' },
           ],
         }),
-        narrativeResult: 'You lower yourself to the ground and close your eyes. The shaking continues. The fever burns. But you are still here, and sometimes that is enough.',
+        narrativeResult: 'You lower yourself to the ground. Eyes close. The shaking continues. You are still breathing.',
       },
     ];
   },
@@ -390,12 +390,12 @@ export const PARASITE_EXPOSURE_CONFIG: HealthTriggerConfig = {
         consequences: [
           { type: 'add_parasite', parasiteId: 'liver-fluke' },
         ],
-        narrativeText: 'You drink from a still pool edged with algae, the water warm and faintly metallic. It tastes wrong — a sour undertone beneath the mineral flatness — but your thirst is greater than your caution. Somewhere in that murky water, invisible to any sense you possess, something is waiting to find a home inside you.',
+        narrativeText: 'Still pool, algae at the edges. The water is warm, faintly metallic, a sour undertone. You drink anyway. Your thirst is greater than your caution.',
         narrativeContext: buildNarrativeContext({
           eventCategory: 'health',
           eventType: 'parasite-liver-fluke',
           actions: [action(
-            'You drink from a still pool. The water tastes wrong but your thirst is greater than your caution.',
+            'Still pool, warm, metallic taste. You drink anyway.',
             'Liver fluke (Fascioloides magna) exposure via contaminated stagnant water. Metacercariae ingested with water.',
             'low',
           )],
@@ -414,12 +414,12 @@ export const PARASITE_EXPOSURE_CONFIG: HealthTriggerConfig = {
         consequences: [
           { type: 'add_parasite', parasiteId: 'winter-tick' },
         ],
-        narrativeText: 'The brush you pushed through was thick with waiting passengers. You feel them now — tiny pinpoints of irritation spreading across your neck and shoulders, each one a minuscule mouth burrowing into your skin. You rub against a tree trunk, scraping desperately, but for every one you dislodge, three more have already anchored themselves.',
+        narrativeText: 'Pinpoints of irritation spreading across your neck and shoulders after pushing through the brush. You rub against a tree trunk. Some dislodge. More have already anchored.',
         narrativeContext: buildNarrativeContext({
           eventCategory: 'health',
           eventType: 'parasite-tick',
           actions: [action(
-            'Tiny pinpoints of irritation spreading across your neck and shoulders, each one burrowing into your skin.',
+            'Pinpoints of irritation across neck and shoulders. Rubbing against bark dislodges some. More anchored.',
             'Winter tick (Dermacentor albipictus) infestation acquired from brush contact. Multiple attachment sites on neck and shoulders.',
             'medium',
           )],
@@ -438,12 +438,12 @@ export const PARASITE_EXPOSURE_CONFIG: HealthTriggerConfig = {
         consequences: [
           { type: 'add_parasite', parasiteId: 'meningeal-worm' },
         ],
-        narrativeText: 'You graze on the low shrubs near the wetland edge, oblivious to the tiny snails clinging to the undersides of the leaves. Each one carries a passenger — a larval worm evolved to travel from snail to deer to brain, a journey it has been making for millions of years. You won\'t feel it for weeks. By then, it will be too late to undo.',
+        narrativeText: 'You graze on low shrubs near the wetland edge. Damp leaves, earthy smell. Nothing tastes wrong.',
         narrativeContext: buildNarrativeContext({
           eventCategory: 'health',
           eventType: 'parasite-meningeal-worm',
           actions: [action(
-            'You graze on low shrubs near the wetland edge, oblivious to the tiny snails clinging to the undersides of the leaves.',
+            'Grazing on low shrubs near the wetland edge. Damp leaves, nothing tastes wrong.',
             'Meningeal worm (Parelaphostrongylus tenuis) exposure. Larval nematode ingested via gastropod intermediate host on wetland vegetation. Neurological symptoms will manifest in weeks.',
             'low',
           )],
@@ -461,9 +461,9 @@ export const PARASITE_EXPOSURE_CONFIG: HealthTriggerConfig = {
         {
           id: 'drink-stagnant',
           label: 'Drink from the still water',
-          description: 'You\'re thirsty. The water is right here.',
+          description: 'Thirsty. The water is right here.',
           style: 'default' as const,
-          narrativeResult: 'You lower your muzzle and drink deeply. The water is tepid and tastes of algae, but it quenches the burning thirst. Whatever else it carried, you won\'t know for days.',
+          narrativeResult: 'You lower your muzzle and drink. Tepid, algae taste. The thirst eases.',
           modifyOutcome(base: SimulationOutcome) {
             return base; // The parasite exposure proceeds as resolved
           },
@@ -471,9 +471,9 @@ export const PARASITE_EXPOSURE_CONFIG: HealthTriggerConfig = {
         {
           id: 'search-clean',
           label: 'Search for cleaner water',
-          description: 'Moving water is safer, but you\'re already parched.',
+          description: 'Moving water smells cleaner. You are already parched.',
           style: 'default' as const,
-          narrativeResult: 'You turn away from the stagnant pool and push upstream, following the faint sound of moving water. It takes longer, and your muscles ache with dehydration, but the stream you find is clear and cold and tastes of stone.',
+          narrativeResult: 'You turn from the stagnant pool and follow the sound of moving water upstream. The stream is clear and cold. Tastes of stone.',
           modifyOutcome(base: SimulationOutcome) {
             return {
               ...base,
@@ -543,12 +543,12 @@ export const WOUND_INFECTION_CONFIG: HealthTriggerConfig = {
         { stat: StatId.HOM, amount: 4, duration: 3, label: '+HOM' },
       ],
       consequences: [],
-      narrativeText: 'The wound that had seemed to be healing has changed. The skin around it is hot to the touch, swollen tight, and the discharge has turned from clear to cloudy yellow-green. A foul smell rises from it — the smell of flesh losing its battle against invasion. Your body responds with fever, burning calories to fight an enemy it cannot see or flee from.',
+      narrativeText: 'The wound has changed. Skin around it hot, swollen tight. The discharge cloudy yellow-green now. Foul smell rising from it. Heat spreading through you.',
       narrativeContext: buildNarrativeContext({
         eventCategory: 'health',
         eventType: 'wound-infection',
         actions: [action(
-          'The wound is hot and swollen, discharging cloudy yellow-green fluid. A foul smell rises from it. Your body responds with fever.',
+          'Wound hot and swollen. Cloudy yellow-green discharge. Foul smell. Heat spreading.',
           'Secondary bacterial infection of existing wound. Purulent discharge, localized inflammation, febrile response.',
           'high',
         )],
@@ -608,12 +608,12 @@ export const DISEASE_OUTBREAK_CONFIG: HealthTriggerConfig = {
         consequences: [
           { type: 'modify_weight', amount: -4 },
         ],
-        narrativeText: 'The tiny flies are invisible — you feel only the faint prickle of their bites, no different from a thousand other summer annoyances. But within days, something is terribly wrong. A fever builds until your body radiates heat. Your tongue swells and turns blue. You are drawn irresistibly toward water, standing in the shallows with your head hanging, too weak to walk back to cover. The disease — epizootic hemorrhagic disease, though you have no name for it — is destroying the lining of your blood vessels from the inside.',
+        narrativeText: 'Faint prickle of bites you barely noticed. Then fever. Your tongue swells. You find yourself standing in the shallows, head hanging, too weak to walk back to cover.',
         narrativeContext: buildNarrativeContext({
           eventCategory: 'health',
           eventType: 'disease-ehd',
           actions: [action(
-            'A fever builds until your body radiates heat. Your tongue swells and turns blue. You are drawn irresistibly toward water.',
+            'Fever. Tongue swelling. Standing in shallows, head hanging, too weak to leave the water.',
             'Epizootic hemorrhagic disease (EHD) contracted via Culicoides midge bite. Vascular endothelial destruction causing hemorrhage, fever, oral edema, and acute wasting.',
             'extreme',
           )],
@@ -633,12 +633,12 @@ export const DISEASE_OUTBREAK_CONFIG: HealthTriggerConfig = {
         consequences: [
           { type: 'modify_weight', amount: -3 },
         ],
-        narrativeText: 'It begins subtly — a slight unsteadiness in your gait, a tendency to stand and stare at nothing. You are losing weight despite adequate forage, and the other deer have begun to avoid you. Something is wrong inside your head, behind your eyes, in the parts of your brain that govern balance and recognition. You cannot name it. You cannot fight it. You can only feel the slow erosion of yourself.',
+        narrativeText: 'Slight unsteadiness in your gait. You stand and stare at nothing. Weight dropping despite adequate forage. The other deer avoid you.',
         narrativeContext: buildNarrativeContext({
           eventCategory: 'health',
           eventType: 'disease-cwd',
           actions: [action(
-            'A slight unsteadiness in your gait. Weight loss despite adequate forage. The other deer avoid you. Something is wrong inside your head.',
+            'Unsteady gait. Staring at nothing. Weight dropping. Other deer avoiding you.',
             'Suspected chronic wasting disease (CWD). Transmissible spongiform encephalopathy causing progressive neurological deterioration, weight loss, behavioral changes.',
             'high',
           )],

@@ -15,9 +15,9 @@ export interface WeatherFragment {
 
 export const COLD_EXPOSURE: WeatherFragment[] = [
   { weatherType: 'blizzard', intensity: 'severe', text: 'The wind hits like a wall of frozen knives. Snow drives horizontally, stinging your eyes shut, packing into your nostrils. You cannot see. You cannot hear anything over the roar.' },
-  { weatherType: 'blizzard', intensity: 'severe', text: 'The blizzard descends like a living thing, swallowing the forest whole. The temperature plummets by the minute and the wind strips the heat from your body faster than your metabolism can replace it.' },
+  { weatherType: 'blizzard', intensity: 'severe', text: 'The blizzard descends, swallowing the forest whole. The temperature plummets by the minute and the wind strips the heat from your body faster than your metabolism can replace it.' },
   { weatherType: 'blizzard', intensity: 'moderate', text: 'Snow falls in thick curtains, muffling the world. The wind gusts hard enough to push you sideways. Visibility drops to a few body-lengths.' },
-  { weatherType: 'frost', intensity: 'moderate', text: 'The cold deepens overnight into something that feels personal — malicious, searching, finding every thin patch of fur and pressing in.' },
+  { weatherType: 'frost', intensity: 'moderate', text: 'The cold deepens overnight, pressing through every thin patch of fur and reaching the skin beneath.' },
   { weatherType: 'frost', intensity: 'severe', text: 'Frost crystallizes on your muzzle and around your eyes. Your legs feel leaden and stiff. Even the act of shivering is becoming exhausting.' },
   { weatherType: 'snow', intensity: 'moderate', text: 'The snow continues to fall, soft and silent, gradually burying the world. Your hooves break through the crust with each step, sapping your strength.' },
 ];
@@ -30,26 +30,26 @@ export interface TerrainFragment {
 }
 
 export const FALL_OPENINGS: TerrainFragment[] = [
-  { terrainType: 'mountain', text: 'The trail narrows along a rocky ledge, loose shale sliding beneath your hooves. You step carefully, but the rock face crumbles — a section of trail simply vanishes, and you are scrabbling at empty air.' },
+  { terrainType: 'mountain', text: 'The trail narrows along a rocky ledge, loose shale sliding beneath your hooves. You step carefully, but the rock face crumbles. A section of trail vanishes, and you are scrabbling at empty air.' },
   { terrainType: 'mountain', text: 'A shelf of rock that looked solid gives way beneath your weight. For a sickening instant you are falling, hooves churning at nothing, the canyon wall spinning past.' },
   { terrainType: 'ice', text: 'The ground betrays you without warning. What looked like firm earth is a sheet of black ice beneath a dusting of snow, and your hooves lose purchase mid-stride.' },
   { terrainType: 'ice', text: 'You step onto what appears to be snow-covered ground, but beneath it is polished ice. Your legs splay in four directions at once.' },
   { terrainType: 'forest', text: 'A root hidden beneath the leaf litter catches your hoof at full stride. The world spins as your front legs buckle and momentum carries you forward.' },
-  { terrainType: 'general', text: 'The earth shifts beneath you without warning — a bank giving way, a hidden hole swallowing your foreleg. You pitch forward into a rolling, crashing fall.' },
+  { terrainType: 'general', text: 'The earth shifts beneath you without warning. A bank gives way, a hidden hole swallowing your foreleg. You pitch forward into a rolling, crashing fall.' },
 ];
 
 // ── Vehicle / Road ──
 
 export const ROAD_OPENINGS: ContextualFragment[] = [
-  { text: 'You step out of the tree line and something is wrong — the ground beneath your hooves is flat and hard and smells of tar.' },
-  { text: 'The open ground between the tree lines has an alien texture — smooth, dark, radiating warmth even at night. It smells of nothing that belongs in a forest.', timeOfDay: 'night' },
-  { text: 'You cross the strange flat ground cautiously. The surface is wrong under your hooves — unnaturally smooth, faintly warm.' },
+  { text: 'You step out of the tree line and something is wrong. The ground beneath your hooves is flat and hard and smells of tar.' },
+  { text: 'The open ground between the tree lines has a wrong texture. Smooth, dark, radiating warmth even at night. It smells of nothing that belongs in a forest.', timeOfDay: 'night' },
+  { text: 'You cross the strange flat ground cautiously. The surface is wrong under your hooves. Unnaturally smooth, faintly warm.' },
   { text: 'The tree line ends abruptly and the world opens onto a strip of grey hardness. The air here tastes of chemicals and old rubber, a wrongness that prickles every hair on your body.', timeOfDay: 'day' },
 ];
 
 export const VEHICLE_APPROACH: ContextualFragment[] = [
   { text: 'Two blazing lights appear, impossibly bright, growing at impossible speed, accompanied by a rising roar.', timeOfDay: 'night' },
-  { text: 'A roar builds from the distance — not wind, not animal, something mechanical and furious, accompanied by twin points of light that swell like angry suns.', timeOfDay: 'dusk' },
+  { text: 'A roar builds from the distance. Not wind, not animal. Something mechanical, accompanied by twin points of light that grow fast.', timeOfDay: 'dusk' },
   { text: 'The ground begins to vibrate. A sound like sustained thunder approaches, and the flat ground is illuminated by rushing light.' },
   { text: 'A dark shape hurtles toward you along the hard ground, its roar building into a scream of displaced air and spinning metal.', timeOfDay: 'day' },
 ];
@@ -71,12 +71,12 @@ export const BLIZZARD_NARRATIVES: ContextualFragment[] = [
     weather: 'blizzard',
   },
   {
-    text: 'The blizzard rolls down from the ridgeline like a white avalanche of sound and cold. Visibility collapses to nothing — you cannot see your own forelegs. Ice crusts your eyelashes and seals your nostrils shut. Each breath is a knife of frozen air drawn into burning lungs.',
+    text: 'The blizzard rolls down from the ridgeline. Visibility collapses to nothing. You cannot see your own forelegs. Ice crusts your eyelashes and seals your nostrils shut. Each breath of frozen air burns your lungs.',
     weather: 'blizzard',
     terrain: 'mountain',
   },
   {
-    text: 'Night and blizzard merge into a single featureless darkness that screams. The wind finds gaps in the canopy and drives snow into your fur in horizontal sheets. Your body temperature is falling. You can feel it — a creeping numbness in your ears, your muzzle, the thin skin of your legs.',
+    text: 'Night and blizzard merge into featureless darkness. The wind finds gaps in the canopy and drives snow into your fur in horizontal sheets. Your body temperature is falling. A creeping numbness in your ears, your muzzle, the thin skin of your legs.',
     weather: 'blizzard',
     timeOfDay: 'night',
   },
@@ -86,21 +86,21 @@ export const BLIZZARD_NARRATIVES: ContextualFragment[] = [
     terrain: 'forest',
   },
   {
-    text: 'The cold deepens overnight into something that feels personal — malicious, searching, finding every thin patch of fur and pressing in. Frost crystallizes on your muzzle and around your eyes. Your legs feel leaden and stiff. Even the act of shivering is becoming exhausting.',
+    text: 'The cold deepens overnight, pressing through every thin patch of fur. Frost crystallizes on your muzzle and around your eyes. Your legs feel leaden and stiff. Even the act of shivering is becoming exhausting.',
     weather: 'frost',
   },
   {
-    text: 'Dawn arrives grey and pitiless. The frost has painted everything in white crystal — every branch, every blade of dead grass, your own fur. You try to stand and your joints refuse, locked by cold into rigid angles. It takes three attempts before your legs will bear your weight.',
+    text: 'Dawn arrives grey and cold. Frost covers every branch, every blade of dead grass, your own fur. You try to stand and your joints refuse, locked by cold into rigid angles. It takes three attempts before your legs will bear your weight.',
     weather: 'frost',
     timeOfDay: 'dawn',
   },
   {
-    text: 'The wind screams across the open ground with nothing to slow it. There is no tree line, no ridge, no hollow — just flat expanse and driving snow. The white-out is total. You could be walking in circles and would never know. The cold is a predator, patient and thorough, and it is winning.',
+    text: 'The wind screams across the open ground with nothing to slow it. No tree line, no ridge, no hollow. Just flat expanse and driving snow. You could be walking in circles. The cold does not stop. You can feel your body losing warmth.',
     weather: 'blizzard',
     terrain: 'plain',
   },
   {
-    text: 'Snow accumulates on your back faster than you can shake it loose. The weight of it presses down, and beneath it your muscles tremble with the effort of generating heat. Your body is a furnace running low on fuel, and the blizzard is a thief stealing warmth faster than you can produce it.',
+    text: 'Snow accumulates on your back faster than you can shake it loose. The weight of it presses down, and beneath it your muscles tremble with the effort of generating heat. You are losing warmth faster than your body can produce it.',
     weather: 'blizzard',
   },
 ];
@@ -109,11 +109,11 @@ export const BLIZZARD_NARRATIVES: ContextualFragment[] = [
 
 export const FALL_NARRATIVES: ContextualFragment[] = [
   {
-    text: 'The trail narrows along a rocky ledge, loose shale sliding beneath your hooves. You step carefully, but the rock face crumbles — a section of trail simply vanishes, and you are scrabbling at empty air, hind legs kicking at nothing, before the slope catches you and you tumble downward in a cascade of loose stone.',
+    text: 'The trail narrows along a rocky ledge, loose shale sliding beneath your hooves. The rock face crumbles. A section of trail vanishes, and you are scrabbling at empty air, hind legs kicking at nothing, before the slope catches you and you tumble downward in a cascade of loose stone.',
     terrain: 'mountain',
   },
   {
-    text: 'A shelf of rock that looked solid gives way beneath your weight. For a sickening instant you are falling, hooves churning at nothing, the canyon wall spinning past. The impact comes hard — shoulder first against an outcrop, then hip, then the sliding, tumbling descent until friction and pain bring you to a stop.',
+    text: 'A shelf of rock that looked solid gives way beneath your weight. For a sickening instant you are falling, hooves churning at nothing, the canyon wall spinning past. The impact comes hard. Shoulder first against an outcrop, then hip, then the sliding, tumbling descent until you stop.',
     terrain: 'mountain',
   },
   {
@@ -121,7 +121,7 @@ export const FALL_NARRATIVES: ContextualFragment[] = [
     terrain: 'mountain',
   },
   {
-    text: 'The ground betrays you without warning. What looked like firm earth is a sheet of black ice beneath a dusting of snow, and your hooves lose purchase mid-stride. For one sickening moment you are weightless, legs splaying in four directions, and then the impact — hard, jarring, the world tilting sideways as you slam into the frozen ground.',
+    text: 'What looked like firm earth is a sheet of black ice beneath a dusting of snow. Your hooves lose purchase mid-stride. For one moment you are weightless, legs splaying in four directions. Then you slam into the frozen ground.',
     season: 'winter',
   },
   {
@@ -134,11 +134,11 @@ export const FALL_NARRATIVES: ContextualFragment[] = [
     terrain: 'forest',
   },
   {
-    text: 'The forest floor is a minefield of hidden obstacles — roots, holes, half-buried logs slick with moss. Your foreleg plunges into a gap between rocks and your body pitches forward with sickening momentum. Something in your leg twists as you wrench it free and crash onto your shoulder.',
+    text: 'The forest floor hides roots, holes, half-buried logs slick with moss. Your foreleg plunges into a gap between rocks and your body pitches forward. Something in your leg twists as you wrench it free and crash onto your shoulder.',
     terrain: 'forest',
   },
   {
-    text: 'The earth shifts beneath you without warning — a bank giving way, a hidden hole swallowing your foreleg. You pitch forward into a rolling, crashing fall. The impact drives the air from your chest and for several breaths you lie still, stunned, waiting for the pain to declare itself.',
+    text: 'The earth shifts beneath you without warning. A bank gives way, a hidden hole swallowing your foreleg. You pitch forward into a rolling, crashing fall. The impact drives the air from your chest.',
   },
 ];
 
@@ -146,7 +146,7 @@ export const FALL_NARRATIVES: ContextualFragment[] = [
 
 export const VEHICLE_NARRATIVES: ContextualFragment[] = [
   {
-    text: 'You step out of the tree line and something is wrong — the ground beneath your hooves is flat and hard and smells of tar. Two blazing lights appear, impossibly bright, growing at impossible speed, accompanied by a rising roar. Every nerve in your body fires at once. The lights swallow the world.',
+    text: 'You step out of the tree line. The ground beneath your hooves is flat and hard and smells of tar. Two blazing lights appear, growing at impossible speed, accompanied by a rising roar. The lights swallow the world.',
     timeOfDay: 'night',
   },
   {
@@ -154,7 +154,7 @@ export const VEHICLE_NARRATIVES: ContextualFragment[] = [
     timeOfDay: 'night',
   },
   {
-    text: 'You cross the hard, grey strip between the tree lines at a cautious walk. A dark shape appears in the distance, growing impossibly fast, its roar filling the air. By the time instinct overrides caution and your legs begin to move, the machine is upon you — a wall of metal and displaced air.',
+    text: 'You cross the hard, grey strip between the tree lines at a cautious walk. A dark shape appears in the distance, growing fast, its roar filling the air. By the time your legs begin to move, the machine is upon you.',
     timeOfDay: 'day',
   },
   {
@@ -162,11 +162,11 @@ export const VEHICLE_NARRATIVES: ContextualFragment[] = [
     timeOfDay: 'day',
   },
   {
-    text: 'In the half-light of dusk, the road is a grey river between dark banks of forest. You step onto it and the world changes — headlights crest the hill, their glow turning the mist gold, and behind them comes the mechanical roar. Shadows stretch and swing. Your body freezes between flight and paralysis.',
+    text: 'In the half-light of dusk, the road stretches between dark banks of forest. You step onto it. Headlights crest the hill, their glow filling the mist, and behind them comes the roar. Your body freezes.',
     timeOfDay: 'dusk',
   },
   {
-    text: 'Dawn paints the road in pale pink light. You linger at the edge, browsing the tender shoots that grow in the ditch, then step onto the hard surface. The truck comes around the bend without warning — engine roaring, horn blaring, a monster of steel bearing down at impossible speed.',
+    text: 'Pale pink light covers the road at dawn. You linger at the edge, browsing the tender shoots in the ditch, then step onto the hard surface. A truck comes around the bend without warning. Engine roaring, horn blaring, bearing down fast.',
     timeOfDay: 'dawn',
   },
 ];
@@ -175,20 +175,20 @@ export const VEHICLE_NARRATIVES: ContextualFragment[] = [
 
 export const FIRE_NARRATIVES: ContextualFragment[] = [
   {
-    text: 'You smell it before the sky turns — smoke, acrid and thickening, rolling through the understory in low, grey waves that sting your eyes and coat the back of your throat. Then the sound reaches you: a distant, continuous roar, like a river made of heat. Through the trees you see an orange glow that is not sunset — it is fire, and it is coming toward you at the speed of wind.',
+    text: 'You smell it before the sky turns. Smoke, acrid and thickening, rolling through the understory in low, grey waves that sting your eyes and coat the back of your throat. Then the sound reaches you: a distant, continuous roar. Through the trees you see an orange glow that is not sunset. It is coming toward you.',
     season: 'summer',
   },
   {
-    text: 'The air tastes wrong — metallic, dry, laced with an acrid sharpness that makes your nostrils burn. Ash drifts through the canopy like grey snow. Then you hear it: a sound like the breathing of something vast, a roar and crackle that builds from the west. The undergrowth ahead glows amber and the heat hits your face like an open furnace.',
+    text: 'The air tastes wrong. Metallic, dry, laced with an acrid sharpness that makes your nostrils burn. Ash drifts through the canopy. Then you hear a roar and crackle building from the west. The undergrowth ahead glows amber and the heat hits your face.',
     season: 'summer',
     terrain: 'forest',
   },
   {
-    text: 'Smoke has been pooling in the hollows all morning, and now it thickens into a choking blanket that stings your eyes to slits. Embers float past on the wind — tiny, glowing seeds of destruction. The fire crowns in the canopy to the south, leaping from treetop to treetop with a sound like tearing canvas, and the heat is a wall pressing against your body.',
+    text: 'Smoke has been pooling in the hollows all morning, and now it thickens into a choking blanket that stings your eyes to slits. Embers float past on the wind. The fire crowns in the canopy to the south, leaping from treetop to treetop, and the heat presses against your body.',
     season: 'autumn',
   },
   {
-    text: 'The drought has turned the forest into kindling. Every leaf crackles underfoot, every branch is a dry bone waiting to burn. When the fire comes, it comes fast — a line of flame racing through the dead understory, throwing sparks into the canopy, consuming everything in its path with a hunger that feels alive.',
+    text: 'The drought has turned the forest into kindling. Every leaf crackles underfoot. When the fire comes, it comes fast. A line of flame races through the dead understory, throwing sparks into the canopy, consuming everything in its path.',
     season: 'summer',
   },
 ];
@@ -197,7 +197,7 @@ export const FIRE_NARRATIVES: ContextualFragment[] = [
 
 export const FLOOD_NARRATIVES: ContextualFragment[] = [
   {
-    text: 'The creek that you crossed yesterday at ankle depth is unrecognizable. Muddy water surges bank to bank, carrying branches, leaves, and the occasional drowned rodent spinning in the current. The far side holds better browse — you can see the green from here — but the water between you and it is fast, cold, and deep enough to swallow you whole.',
+    text: 'The creek that you crossed yesterday at ankle depth is unrecognizable. Muddy water surges bank to bank, carrying branches, leaves, and the occasional drowned rodent spinning in the current. The far side holds better browse. You can see the green from here. But the water between is fast, cold, and deep.',
     season: 'spring',
   },
   {
@@ -209,7 +209,7 @@ export const FLOOD_NARRATIVES: ContextualFragment[] = [
     weather: 'rain',
   },
   {
-    text: 'The storm breaks the sky open and rain falls in sheets so thick you can barely see. Within an hour the creek has risen from a trickle to a surging flood, the water brown and angry, tearing at the banks, swallowing the low ground. Your usual crossing is gone — replaced by a moving wall of water that carries whole saplings in its grip.',
+    text: 'The storm breaks and rain falls in sheets so thick you can barely see. Within an hour the creek has risen from a trickle to a surging flood, the water brown and churning, tearing at the banks. Your usual crossing is gone, replaced by fast water that carries whole saplings.',
     weather: 'rain',
   },
 ];
@@ -218,7 +218,7 @@ export const FLOOD_NARRATIVES: ContextualFragment[] = [
 
 export const FALL_IMPACTS: ContextualFragment[] = [
   { text: 'The impact is hard, jarring, the world tilting sideways as you slam into the ground.' },
-  { text: 'You hit the ground wrong — shoulder first, then hip, the breath driven from your lungs.' },
+  { text: 'You hit the ground wrong. Shoulder first, then hip, the breath driven from your lungs.' },
   { text: 'The slope catches you and you tumble, legs tangling, before sliding to a stop against a rocky outcrop.', terrain: 'mountain' },
   { text: 'For one sickening moment you are weightless, and then the ground arrives, suddenly and without mercy.' },
   { text: 'You crash through frozen brush and hit the ice-hardened earth with a crack that reverberates through your skeleton.', season: 'winter' },

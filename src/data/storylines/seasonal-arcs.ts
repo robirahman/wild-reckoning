@@ -19,7 +19,7 @@ export const SEASONAL_STORYLINES: StorylineDefinition[] = [
         id: 'rival-return-1',
         delayMin: 0,
         delayMax: 0,
-        narrativeText: 'A familiar scent on the wind — one you have not encountered in many months. Your old rival has returned to {{region.name}}, larger and stronger than before. Scrapes and scent markings appear at the borders of your range, unmistakable territorial claims.',
+        narrativeText: 'A scent you have not smelled in months hits on the wind. The rival is back in {{region.name}}, heavier now. Fresh scrapes and scent marks appear along your boundary.',
         statEffects: [
           { stat: StatId.ADV, amount: 10, duration: 4, label: '+ADV (rival returns)' },
           { stat: StatId.TRA, amount: 8, duration: 3, label: '+TRA (territory threat)' },
@@ -33,7 +33,7 @@ export const SEASONAL_STORYLINES: StorylineDefinition[] = [
         id: 'rival-return-2',
         delayMin: 3,
         delayMax: 6,
-        narrativeText: 'The confrontation is unavoidable. You encounter your rival at a contested resource — a feeding ground, a water source, the border between your territories. Neither of you will back down. The outcome will determine who dominates this range.',
+        narrativeText: 'You meet the rival at a shared resource. Both of you stop. Neither turns away. The space between you closes.',
         statEffects: [
           { stat: StatId.ADV, amount: 12, duration: 3, label: '+ADV (confrontation)' },
           { stat: StatId.STR, amount: -5, duration: 3, label: '-STR (combat)' },
@@ -47,7 +47,7 @@ export const SEASONAL_STORYLINES: StorylineDefinition[] = [
         id: 'rival-return-3',
         delayMin: 2,
         delayMax: 5,
-        narrativeText: 'The territory dispute has settled into an uneasy equilibrium. One of you controls the better ground; the other has been pushed to the margins. But the competition has sharpened your instincts and tested your resolve. You are harder now, more wary, more capable.',
+        narrativeText: 'The boundary is fixed now. One of you holds the better ground. Your reactions are faster than they were before the contest, your awareness of scent and sound sharper.',
         statEffects: [
           { stat: StatId.WIS, amount: 8, duration: 6, label: '+WIS (hard-won wisdom)' },
           { stat: StatId.TRA, amount: -6, duration: 4, label: '-TRA (settled borders)' },
@@ -75,7 +75,7 @@ export const SEASONAL_STORYLINES: StorylineDefinition[] = [
         id: 'flood-1',
         delayMin: 0,
         delayMax: 0,
-        narrativeText: 'Rain falls without ceasing. The streams that cross {{region.name}} are swelling, brown water creeping higher up the banks with each passing hour. Low-lying ground is already submerged.',
+        narrativeText: 'Rain does not stop. The streams crossing {{region.name}} run brown and fast, water climbing the banks hour by hour. Low ground is already underwater.',
         statEffects: [
           { stat: StatId.CLI, amount: 8, duration: 3, label: '+CLI (rising water)' },
           { stat: StatId.TRA, amount: 6, duration: 3, label: '+TRA (flood threat)' },
@@ -87,7 +87,7 @@ export const SEASONAL_STORYLINES: StorylineDefinition[] = [
         id: 'flood-2',
         delayMin: 2,
         delayMax: 4,
-        narrativeText: 'The flood has transformed {{region.name}}. Familiar paths are underwater. Trees stand in lakes that did not exist a week ago. Animals crowd onto high ground — predator and prey alike, too exhausted and desperate to fight. Food is scarce on the islands of dry land.',
+        narrativeText: 'Familiar paths are gone, submerged under brown water. Animals crowd the remaining high ground. The smell of mud and rot is everywhere. Food is scarce on the shrinking dry patches.',
         statEffects: [
           { stat: StatId.HOM, amount: 12, duration: 4, label: '+HOM (displaced)' },
           { stat: StatId.HEA, amount: -8, duration: 3, label: '-HEA (exposure)' },
@@ -101,7 +101,7 @@ export const SEASONAL_STORYLINES: StorylineDefinition[] = [
         id: 'flood-3',
         delayMin: 3,
         delayMax: 6,
-        narrativeText: 'The waters are receding at last, leaving behind a landscape of mud, debris, and new channels. But the flood has deposited rich silt across the lowlands, and within weeks the land will explode with new growth. Destruction and renewal are two faces of the same process.',
+        narrativeText: 'The water pulls back, leaving mud, debris, and fresh channels. Dark silt coats the lowlands. Already new growth pushes through it, pale green against the brown.',
         statEffects: [
           { stat: StatId.HOM, amount: -10, duration: 4, label: '-HOM (waters recede)' },
           { stat: StatId.HEA, amount: 8, duration: 4, label: '+HEA (abundance coming)' },
@@ -129,7 +129,7 @@ export const SEASONAL_STORYLINES: StorylineDefinition[] = [
         id: 'outbreak-1',
         delayMin: 0,
         delayMax: 0,
-        narrativeText: 'Others of your kind are falling ill. You encounter one lying still, breathing shallowly, too weak to flee at your approach. The sickness is spreading through {{region.name}} — a disease you cannot see, carried in water, soil, or the bodies of the dead.',
+        narrativeText: 'Others of your kind are lying still, breathing fast and shallow, too weak to move when you approach. The sick smell wrong. More of them appear each day across {{region.name}}.',
         statEffects: [
           { stat: StatId.TRA, amount: 10, duration: 4, label: '+TRA (epidemic fear)' },
           { stat: StatId.IMM, amount: 8, duration: 4, label: '+IMM (immune activation)' },
@@ -143,7 +143,7 @@ export const SEASONAL_STORYLINES: StorylineDefinition[] = [
         id: 'outbreak-2',
         delayMin: 3,
         delayMax: 6,
-        narrativeText: 'The disease has peaked. Bodies litter the landscape — others of your species who were not strong enough, not lucky enough. The population has been culled by invisible teeth. You have survived so far, but your immune system is strained and your body is weakened.',
+        narrativeText: 'Dead bodies lie in the open, stiff and bloating. The smell of decay is constant. Your own body feels heavy and slow, joints aching, appetite gone.',
         statEffects: [
           { stat: StatId.HEA, amount: -10, duration: 4, label: '-HEA (disease peak)' },
           { stat: StatId.HOM, amount: 8, duration: 4, label: '+HOM (population crash)' },
@@ -157,7 +157,7 @@ export const SEASONAL_STORYLINES: StorylineDefinition[] = [
         id: 'outbreak-3',
         delayMin: 4,
         delayMax: 8,
-        narrativeText: 'The outbreak is fading. Those who survived have some degree of resistance, and the pathogen is running out of susceptible hosts. The population is diminished but the survivors are strong. Competition for resources has eased, and there is room to grow.',
+        narrativeText: 'Fewer sick ones now. Your body feels stronger, appetite returning. The population is thin but the survivors move well. More food, more space.',
         statEffects: [
           { stat: StatId.IMM, amount: -10, duration: 6, label: '-IMM (immunity gained)' },
           { stat: StatId.HEA, amount: 8, duration: 4, label: '+HEA (recovery)' },
@@ -186,7 +186,7 @@ export const SEASONAL_STORYLINES: StorylineDefinition[] = [
         id: 'great-dry-1',
         delayMin: 0,
         delayMax: 0,
-        narrativeText: 'The dry season has arrived with unusual ferocity. Humidity plummets, water sources shrink to stagnant pools, and the earth cracks open in zigzag patterns. The air itself feels thin and hostile.',
+        narrativeText: 'The air is dry and hot, each breath pulling moisture from your body. Water sources have shrunk to stagnant puddles. The ground is cracked and hard underfoot.',
         statEffects: [
           { stat: StatId.CLI, amount: 10, duration: 4, label: '+CLI (extreme drought)' },
           { stat: StatId.TRA, amount: 6, duration: 3, label: '+TRA (water stress)' },
@@ -200,7 +200,7 @@ export const SEASONAL_STORYLINES: StorylineDefinition[] = [
         id: 'great-dry-2',
         delayMin: 3,
         delayMax: 6,
-        narrativeText: 'The drought deepens into crisis. The last watering holes are ringed with desperate animals. Territorial boundaries dissolve as survival overrides hierarchy. The strongest push the weakest away from water, and the weakest die.',
+        narrativeText: 'The last water holes stink of concentrated urine and trampled mud. Bodies press close, too many animals at too little water. The larger ones shove the smaller ones back.',
         statEffects: [
           { stat: StatId.HEA, amount: -10, duration: 4, label: '-HEA (dehydration)' },
           { stat: StatId.ADV, amount: 10, duration: 3, label: '+ADV (water competition)' },
@@ -214,7 +214,7 @@ export const SEASONAL_STORYLINES: StorylineDefinition[] = [
         id: 'great-dry-3',
         delayMin: 4,
         delayMax: 8,
-        narrativeText: 'Dark clouds build on the horizon. The first drops of rain hit the parched earth and evaporate in tiny puffs of steam. Then the sky opens. Rain hammers down in sheets, filling every crack and hollow. Within hours, the dry watercourses are rivers again. The world is reborn.',
+        narrativeText: 'The smell of rain reaches you before the first drops fall. Water hits the hot ground and hisses into steam. Then the sky opens. Within hours, the dry channels are running full again.',
         statEffects: [
           { stat: StatId.HEA, amount: 12, duration: 4, label: '+HEA (rain at last)' },
           { stat: StatId.TRA, amount: -10, duration: 4, label: '-TRA (relief)' },
@@ -243,7 +243,7 @@ export const SEASONAL_STORYLINES: StorylineDefinition[] = [
         id: 'migration-catastrophe-1',
         delayMin: 0,
         delayMax: 0,
-        narrativeText: 'The migration route this season is cursed. Unusual weather patterns have disrupted the normal currents and wind corridors. Landmarks that should guide you are obscured. The journey has already claimed many of your companions.',
+        narrativeText: 'The route is wrong. Currents and wind corridors have shifted, pushing you off course. Familiar signals are absent. Others traveling with you are falling behind, dropping away.',
         statEffects: [
           { stat: StatId.TRA, amount: 12, duration: 4, label: '+TRA (navigation crisis)' },
           { stat: StatId.CLI, amount: 8, duration: 3, label: '+CLI (weather disruption)' },
@@ -258,7 +258,7 @@ export const SEASONAL_STORYLINES: StorylineDefinition[] = [
         id: 'migration-catastrophe-2',
         delayMin: 2,
         delayMax: 5,
-        narrativeText: 'Against all odds, the weather breaks. The route clears, the winds shift to favorable, and you recognize the landscape ahead. You have survived one of the worst crossings in memory. The destination is close. Every mile you cover now is a mile earned through will alone.',
+        narrativeText: 'The weather shifts. Currents align, winds turn favorable. You recognize the signals ahead. The destination is close. Your body is spent but still moving.',
         statEffects: [
           { stat: StatId.WIS, amount: 10, duration: 6, label: '+WIS (survival wisdom)' },
           { stat: StatId.TRA, amount: -8, duration: 4, label: '-TRA (route clearing)' },

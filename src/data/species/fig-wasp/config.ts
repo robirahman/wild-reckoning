@@ -6,7 +6,7 @@ export const FIG_WASP_CONFIG: SpeciesConfig = {
   name: 'Fig Pollinator Wasp',
   scientificName: 'Pegoscapus mexicanus',
   description:
-    'A creature so small it is invisible to most of the world, performing one of nature\'s most ancient partnerships. You are half of an obligate mutualism 80 million years old — without you, the strangler fig cannot reproduce. Without the fig, you cannot exist. Your entire adult life lasts less than 48 hours. In that time, you must find a fig, enter it, pollinate it, lay your eggs, and die. You are not just an insect. You are a key that fits exactly one lock in the living world.',
+    'A creature so small it is invisible to most of the world, performing an obligate mutualism 80 million years old — without you, the strangler fig cannot reproduce. Without the fig, you cannot exist. Your entire adult life lasts less than 48 hours. In that time, you must find a fig, enter it, pollinate it, lay your eggs, and die. You are not just an insect. You are a key that fits exactly one lock in the living world.',
   diet: 'herbivore',
   massType: 'micro',
   defaultRegion: 'florida-fig-hammock',

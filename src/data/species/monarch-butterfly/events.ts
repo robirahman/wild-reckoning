@@ -10,7 +10,7 @@ export const MONARCH_BUTTERFLY_EVENTS: GameEvent[] = [
     id: 'monarch-milkweed-patch',
     type: 'active',
     category: 'foraging',
-    narrativeText: "You find a dense stand of common milkweed in full bloom — thick stems crowned with clusters of pink flowers, their heavy sweetness filling the air. For a caterpillar, this is paradise. For an adult, the nectar is rich and the leaves will sustain the next generation. The milkweed's cardiac glycosides seep into your tissues, making you poisonous to most predators.",
+    narrativeText: "A thick stand of milkweed. The chemical signature registers through your tarsi the moment you land. The cardiac glycosides seep into your tissues with each feeding.",
     statEffects: [
       { stat: StatId.HOM, amount: -8, label: '-HOM' },
       { stat: StatId.ADV, amount: -4, label: '-ADV' },
@@ -33,7 +33,7 @@ export const MONARCH_BUTTERFLY_EVENTS: GameEvent[] = [
     id: 'monarch-nectar-meadow',
     type: 'active',
     category: 'foraging',
-    narrativeText: "A wildflower meadow stretches before you — coneflowers, black-eyed Susans, and blazing star in riotous bloom. You uncoil your proboscis and probe flower after flower, drawing up nectar rich in sugars and amino acids. The sun warms your wings as you feed. For a few hours, the world is nothing but sweetness and light.",
+    narrativeText: "Coneflowers, black-eyed Susans, blazing star. You uncoil your proboscis and probe flower after flower. The sun heats your wings as you feed.",
     statEffects: [
       { stat: StatId.HOM, amount: -6, label: '-HOM' },
       { stat: StatId.ADV, amount: -3, label: '-ADV' },
@@ -55,14 +55,14 @@ export const MONARCH_BUTTERFLY_EVENTS: GameEvent[] = [
     id: 'monarch-pesticide-milkweed',
     type: 'active',
     category: 'foraging',
-    narrativeText: "You find milkweed growing along the edge of a soybean field. The leaves look healthy, but something is wrong — a faint chemical smell clings to the plant. The field was sprayed recently, and pesticide drift has coated the milkweed. You are hungry.",
+    narrativeText: "Milkweed grows along the edge of a crop field. The leaves look healthy, but a faint chemical trace clings to the plant surface.",
     statEffects: [],
     choices: [
       {
         id: 'eat-contaminated',
         label: 'Feed on the milkweed',
         description: 'You are too hungry to be cautious.',
-        narrativeResult: 'You feed on the contaminated leaves. Within hours, your muscles begin to spasm. The neonicotinoid disrupts your nervous system — your flight becomes erratic, your orientation fails. The poison may not kill you outright, but it has stolen something from you.',
+        narrativeResult: 'You feed. Within hours, your muscles begin to spasm. Your flight goes erratic. Your orientation fails.',
         statEffects: [
           { stat: StatId.HOM, amount: 15, label: '+HOM' },
           { stat: StatId.HEA, amount: -12, label: '-HEA' },
@@ -75,7 +75,7 @@ export const MONARCH_BUTTERFLY_EVENTS: GameEvent[] = [
         style: 'danger',
         deathChance: {
           probability: 0.15,
-          cause: 'Neonicotinoid poisoning from contaminated milkweed',
+          cause: 'Neonicotinoid poisoning from contaminated milkweed.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
         },
       },
@@ -83,7 +83,7 @@ export const MONARCH_BUTTERFLY_EVENTS: GameEvent[] = [
         id: 'avoid-contaminated',
         label: 'Move on hungry',
         description: 'Trust the wrongness you sense.',
-        narrativeResult: 'You leave the contaminated milkweed behind. Your hunger deepens, but your body remains your own. Somewhere ahead, there may be clean plants — if the spraying has not reached them too.',
+        narrativeResult: 'You leave the contaminated plants. Your hunger deepens, but your muscles still respond.',
         statEffects: [
           { stat: StatId.HOM, amount: 5, label: '+HOM' },
           { stat: StatId.WIS, amount: 3, label: '+WIS' },
@@ -107,7 +107,7 @@ export const MONARCH_BUTTERFLY_EVENTS: GameEvent[] = [
     id: 'monarch-degraded-habitat',
     type: 'passive',
     category: 'foraging',
-    narrativeText: "You search for milkweed across mile after mile of monoculture cropland. The fields stretch to every horizon — soybeans, corn, soybeans, corn — and not a single milkweed plant breaks the monotony. Herbicide-tolerant crops have been engineered to survive chemicals that kill everything else. The milkweed that once grew between the rows is gone. You burn precious energy searching for food that does not exist.",
+    narrativeText: "Monoculture cropland in every direction. No milkweed breaks the rows. You fly on, burning reserves, searching for a chemical signature that does not come.",
     statEffects: [
       { stat: StatId.HOM, amount: 10, label: '+HOM' },
       { stat: StatId.ADV, amount: 8, label: '+ADV' },
@@ -130,7 +130,7 @@ export const MONARCH_BUTTERFLY_EVENTS: GameEvent[] = [
     id: 'monarch-goldenrod-fuel',
     type: 'active',
     category: 'foraging',
-    narrativeText: "Goldenrod. Fields of it, blazing yellow against the September sky. This is migration fuel — the last great nectar source before the long flight south. You feed urgently, storing lipids in your abdomen. Every milligram of fat you add now is distance you can fly later. The goldenrod hums with other pollinators, but there is enough for all.",
+    narrativeText: "Goldenrod fields, dense and yellow. You feed urgently, storing lipids in your abdomen. Every milligram of fat is distance you can fly later.",
     statEffects: [
       { stat: StatId.HOM, amount: -10, label: '-HOM' },
       { stat: StatId.ADV, amount: -5, label: '-ADV' },
@@ -157,7 +157,7 @@ export const MONARCH_BUTTERFLY_EVENTS: GameEvent[] = [
     id: 'monarch-bird-attack',
     type: 'active',
     category: 'predator',
-    narrativeText: "A black-backed oriole swoops toward you — one of the few bird species that has learned to eat monarchs despite their toxins. It knows how to gut you, eating the muscle tissue while avoiding the most poisonous parts. Your warning coloration means nothing to this predator.",
+    narrativeText: "A bird swoops toward you. It has learned to gut monarchs, eating the muscle while avoiding the most toxic tissue. Your coloration means nothing to this one.",
     statEffects: [
       { stat: StatId.TRA, amount: 10, label: '+TRA' },
     ],
@@ -166,7 +166,7 @@ export const MONARCH_BUTTERFLY_EVENTS: GameEvent[] = [
         id: 'rely-on-toxicity',
         label: 'Hold still and rely on your toxicity',
         description: 'Most birds spit out monarchs after the first bite.',
-        narrativeResult: 'The oriole strikes. Its beak closes around your abdomen — and then it pauses, tasting the cardenolides flooding its mouth. With a violent shake of its head, it spits you out. You tumble through the air, bruised and leaking hemolymph, but alive. Your poison saved you.',
+        narrativeResult: 'Its beak closes on your abdomen, then pauses. It tastes the cardenolides and spits you out. You tumble through the air, leaking hemolymph, but airborne.',
         statEffects: [
           { stat: StatId.TRA, amount: 5, label: '+TRA' },
           { stat: StatId.WIS, amount: 3, label: '+WIS' },
@@ -178,7 +178,7 @@ export const MONARCH_BUTTERFLY_EVENTS: GameEvent[] = [
         style: 'default',
         deathChance: {
           probability: 0.12,
-          cause: 'Eaten by a bird that tolerated cardenolide toxins',
+          cause: 'Eaten by a bird that tolerated cardenolide toxins.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.001 }],
         },
       },
@@ -186,7 +186,7 @@ export const MONARCH_BUTTERFLY_EVENTS: GameEvent[] = [
         id: 'erratic-flight',
         label: 'Attempt erratic evasive flight',
         description: 'Try to outmaneuver the bird.',
-        narrativeResult: 'You throw yourself into a desperate series of dives and spirals, your bright wings flashing. The oriole follows for a few wingbeats, then breaks off — perhaps the effort is not worth the toxic meal. You escape unharmed but exhausted.',
+        narrativeResult: 'You throw yourself into dives and spirals. The bird follows for a few wingbeats, then breaks off. You escape but have burned reserves.',
         statEffects: [
           { stat: StatId.HOM, amount: 8, label: '+HOM' },
           { stat: StatId.WIS, amount: 2, label: '+WIS' },
@@ -213,7 +213,7 @@ export const MONARCH_BUTTERFLY_EVENTS: GameEvent[] = [
     id: 'monarch-spider-web',
     type: 'active',
     category: 'predator',
-    narrativeText: "A golden orb-weaver's web stretches across your flight path — nearly invisible silk strands glinting in the morning light. You see it almost too late. The web is enormous, engineered to catch exactly something your size.",
+    narrativeText: "Silk strands glint across your flight path. An orb-weaver's web, nearly invisible. You see it almost too late.",
     statEffects: [
       { stat: StatId.TRA, amount: 6, label: '+TRA' },
     ],
@@ -222,7 +222,7 @@ export const MONARCH_BUTTERFLY_EVENTS: GameEvent[] = [
         id: 'power-through',
         label: 'Power through the web',
         description: 'Use your momentum to break the silk.',
-        narrativeResult: 'You hit the web at full speed. The silk stretches, clings to your wings, but your momentum tears through the outer strands. You pull free trailing sticky threads, your wings fouled but functional. The spider rushes to the breach, too late.',
+        narrativeResult: 'You hit the web at speed. The silk stretches, clings to your wings, but your momentum tears through the outer strands. You pull free trailing sticky threads. The spider rushes to the breach, too late.',
         statEffects: [
           { stat: StatId.HOM, amount: 6, label: '+HOM' },
           { stat: StatId.WIS, amount: 2, label: '+WIS' },
@@ -237,7 +237,7 @@ export const MONARCH_BUTTERFLY_EVENTS: GameEvent[] = [
         id: 'veer-away',
         label: 'Veer sharply to avoid it',
         description: 'Change course at the last moment.',
-        narrativeResult: 'You bank hard, your wing tips brushing the outermost anchor thread. The web quivers but holds. You pass safely — but the detour costs you time and energy, and the next web may be harder to see.',
+        narrativeResult: 'You bank hard. Your wing tips brush the outermost strand. The web quivers but holds. You pass.',
         statEffects: [
           { stat: StatId.ADV, amount: 3, label: '+ADV' },
         ],
@@ -260,7 +260,7 @@ export const MONARCH_BUTTERFLY_EVENTS: GameEvent[] = [
     id: 'monarch-praying-mantis',
     type: 'passive',
     category: 'predator',
-    narrativeText: "You land on a flower to feed and something seizes you — a praying mantis, perfectly camouflaged among the petals. Its raptorial forelegs clamp down on your thorax with crushing force. Unlike birds, the mantis is unaffected by your toxins. It begins to eat you alive, starting with your head. There is no escape from this grip.",
+    narrativeText: "You land on a flower to feed. Something seizes you. Raptorial forelegs clamp your thorax. A mantis, perfectly camouflaged among the petals. Your toxins do not affect it.",
     statEffects: [
       { stat: StatId.TRA, amount: 12, label: '+TRA' },
       { stat: StatId.HEA, amount: -8, label: '-HEA' },
@@ -280,11 +280,11 @@ export const MONARCH_BUTTERFLY_EVENTS: GameEvent[] = [
       {
         eventId: 'monarch-mantis-kill',
         chance: 0.20,
-        narrativeText: 'The mantis has you. Its serrated forelegs hold you immobile as it methodically consumes your thorax. Your wings beat uselessly. This is how it ends — not in flight, but in the jaws of something that was waiting in the flowers.',
+        narrativeText: 'Its serrated forelegs hold you immobile. It begins feeding on your thorax. Your wings beat but you cannot break the grip.',
         footnote: 'Mantises consume monarchs headfirst, a process that can take over an hour.',
         statEffects: [],
         consequences: [
-          { type: 'death', cause: 'Killed and consumed by a praying mantis' },
+          { type: 'death', cause: 'Seized and consumed by a praying mantis.' },
         ],
       },
     ],
@@ -294,7 +294,7 @@ export const MONARCH_BUTTERFLY_EVENTS: GameEvent[] = [
     id: 'monarch-wasp-encounter',
     type: 'passive',
     category: 'predator',
-    narrativeText: "A paper wasp lands on the milkweed stem where you are feeding as a caterpillar. It walks toward you with the methodical precision of a hunter, antennae twitching. Wasps are major predators of monarch caterpillars — they chew the larvae into pulp to feed their own young.",
+    narrativeText: "A paper wasp walks down the milkweed stem toward you. Its antennae twitch. Its movement is steady and directed.",
     statEffects: [
       { stat: StatId.TRA, amount: 10, label: '+TRA' },
       { stat: StatId.ADV, amount: 5, label: '+ADV' },
@@ -312,10 +312,10 @@ export const MONARCH_BUTTERFLY_EVENTS: GameEvent[] = [
       {
         eventId: 'monarch-wasp-kill',
         chance: 0.18,
-        narrativeText: 'The wasp seizes you in its mandibles. You thrash, releasing milkweed sap, but the wasp is undeterred. It chews through your soft body, sectioning you into pieces to carry back to its nest. Your brief life as a caterpillar ends here.',
+        narrativeText: 'The wasp seizes you in its mandibles. You thrash, releasing milkweed sap, but the wasp chews through your body and carries the pieces away.',
         statEffects: [],
         consequences: [
-          { type: 'death', cause: 'Killed by a paper wasp as a caterpillar' },
+          { type: 'death', cause: 'Killed by a paper wasp as a caterpillar.' },
         ],
       },
     ],
@@ -326,7 +326,7 @@ export const MONARCH_BUTTERFLY_EVENTS: GameEvent[] = [
     id: 'monarch-tachinid-fly',
     type: 'passive',
     category: 'predator',
-    narrativeText: "A large gray fly hovers near you, then lands on your back. It moves quickly, purposefully — this is no casual visitor. The tachinid fly deposits a tiny white egg on your skin before buzzing away. You cannot remove it. The egg will hatch, and the larva will burrow inside you.",
+    narrativeText: "A large gray fly lands on your back. It moves fast and deposits a tiny white egg on your skin before buzzing away. You cannot remove it.",
     statEffects: [
       { stat: StatId.ADV, amount: 5, label: '+ADV' },
       { stat: StatId.IMM, amount: 3, label: '+IMM' },
@@ -353,7 +353,7 @@ export const MONARCH_BUTTERFLY_EVENTS: GameEvent[] = [
     id: 'monarch-chrysalis-attachment',
     type: 'active',
     category: 'health',
-    narrativeText: "The time has come. Your caterpillar body has grown as large as it will ever be. You climb away from the milkweed, searching for a place to attach your chrysalis — the structure that will house the most radical transformation in nature. Your entire body will dissolve into a biological soup and reassemble as something completely different.",
+    narrativeText: "You have grown as large as you will. You climb away from the milkweed, searching for a place to attach.",
     statEffects: [
       { stat: StatId.NOV, amount: 10, label: '+NOV' },
     ],
@@ -362,7 +362,7 @@ export const MONARCH_BUTTERFLY_EVENTS: GameEvent[] = [
         id: 'sheltered-spot',
         label: 'Choose a sheltered location under a leaf',
         description: 'Hidden from predators but at risk of mold in wet weather.',
-        narrativeResult: 'You attach your silk pad to the underside of a broad leaf, hang in a J-shape, and begin to shed your skin one final time. The chrysalis forms around you — jade green with a ring of gold dots. Hidden here, you begin the impossible process of becoming something else entirely.',
+        narrativeResult: 'You attach your silk pad to the underside of a broad leaf, hang in a J-shape, and shed your skin one final time. The chrysalis forms, jade green with gold dots.',
         statEffects: [
           { stat: StatId.ADV, amount: -5, label: '-ADV' },
           { stat: StatId.IMM, amount: 3, label: '+IMM' },
@@ -378,7 +378,7 @@ export const MONARCH_BUTTERFLY_EVENTS: GameEvent[] = [
         id: 'exposed-spot',
         label: 'Choose an exposed branch with good airflow',
         description: 'Better ventilation but more visible to predators.',
-        narrativeResult: 'You attach to a bare twig in open air. The breeze will keep moisture from building up, and the sun will warm you through the long transformation. But you are visible — a jade pendant hanging in plain sight. You can only hope nothing finds you before you emerge.',
+        narrativeResult: 'You attach to a bare twig in open air. The breeze will keep moisture from building. But you hang in plain sight.',
         statEffects: [
           { stat: StatId.CLI, amount: -3, label: '-CLI' },
           { stat: StatId.TRA, amount: 3, label: '+TRA' },
@@ -406,7 +406,7 @@ export const MONARCH_BUTTERFLY_EVENTS: GameEvent[] = [
     id: 'monarch-chrysalis-cold',
     type: 'passive',
     category: 'seasonal',
-    narrativeText: "A cold front moves through while you hang helpless in your chrysalis. The temperature drops below the threshold for normal development. Inside your jade case, the chemical reactions of metamorphosis slow to a crawl. If the cold persists, the transformation may stall entirely — or produce a deformed adult.",
+    narrativeText: "The temperature drops while you hang in the chrysalis. The chemical reactions inside slow. If it stays cold, the transformation may stall or produce a malformed body.",
     statEffects: [
       { stat: StatId.CLI, amount: 12, label: '+CLI' },
       { stat: StatId.HEA, amount: -5, label: '-HEA' },
@@ -427,7 +427,7 @@ export const MONARCH_BUTTERFLY_EVENTS: GameEvent[] = [
     id: 'monarch-chrysalis-parasitoid',
     type: 'passive',
     category: 'health',
-    narrativeText: "A tiny chalcid wasp — no bigger than a pinhead — lands on your chrysalis and drills through the hardened shell with her needle-like ovipositor. She lays her eggs inside you. Dozens of wasp larvae will develop within your chrysalis, consuming the tissue that was meant to become a butterfly. When the chrysalis opens, wasps will emerge instead of wings.",
+    narrativeText: "A wasp no bigger than a pinhead lands on your chrysalis and drills through the hardened shell with its ovipositor. Dozens of wasp larvae will develop inside, consuming the tissue that was forming a butterfly.",
     statEffects: [
       { stat: StatId.IMM, amount: 12, label: '+IMM' },
       { stat: StatId.HEA, amount: -10, label: '-HEA' },
@@ -445,10 +445,10 @@ export const MONARCH_BUTTERFLY_EVENTS: GameEvent[] = [
       {
         eventId: 'monarch-chrysalis-parasitoid-death',
         chance: 0.30,
-        narrativeText: 'The wasp larvae have consumed you entirely. When the chrysalis case splits open, a cloud of tiny wasps emerges into the sunlight. There is no butterfly. There was never going to be.',
+        narrativeText: 'The wasp larvae have consumed you. When the chrysalis splits, tiny wasps emerge. No butterfly.',
         statEffects: [],
         consequences: [
-          { type: 'death', cause: 'Consumed by parasitoid wasps inside the chrysalis' },
+          { type: 'death', cause: 'Consumed by parasitoid wasps inside the chrysalis.' },
         ],
       },
     ],
@@ -463,7 +463,7 @@ export const MONARCH_BUTTERFLY_EVENTS: GameEvent[] = [
     id: 'monarch-magnetic-navigation',
     type: 'passive',
     category: 'migration',
-    narrativeText: "Something ancient stirs in you as the days shorten. Deep in your antennae, cryptochrome proteins are responding to the Earth's magnetic field, building an internal compass that points toward a place you have never been. Combined with the sun compass in your compound eyes, you can sense a direction — south-southwest — that feels more right than anything you have ever known. You have no memory of Mexico. But your genes remember.",
+    narrativeText: "The days shorten. Something in your antennae responds to the magnetic field, building an internal bearing. Combined with the sun compass in your compound eyes, a direction registers: south-southwest. It pulls.",
     statEffects: [
       { stat: StatId.WIS, amount: 5, label: '+WIS' },
       { stat: StatId.NOV, amount: -8, label: '-NOV' },
@@ -488,7 +488,7 @@ export const MONARCH_BUTTERFLY_EVENTS: GameEvent[] = [
     id: 'monarch-tailwind-bonus',
     type: 'passive',
     category: 'migration',
-    narrativeText: "A cold front sweeps through from the northwest, and with it comes a gift — strong tailwinds pushing south. You rise on a thermal, spread your wings wide, and glide. For miles you barely need to flap, riding the air currents like a leaf in a river. On days like this, you can cover eighty miles with minimal energy expenditure. The wind is carrying you toward a place you have never seen but somehow know.",
+    narrativeText: "A cold front from the northwest pushes tailwinds south. You rise on a thermal, spread your wings, and glide. For miles you barely flap. The air current carries you.",
     statEffects: [
       { stat: StatId.HOM, amount: -5, label: '-HOM' },
       { stat: StatId.ADV, amount: -3, label: '-ADV' },
@@ -510,7 +510,7 @@ export const MONARCH_BUTTERFLY_EVENTS: GameEvent[] = [
     id: 'monarch-gulf-states-crossing',
     type: 'passive',
     category: 'migration',
-    narrativeText: "You cross into Texas, funneling through the Gulf Coast corridor with millions of other monarchs. The air is thick with wings — an endless river of orange flowing south through the live oaks and mesquite. Asters and tropical milkweed line the roadsides, and you stop to refuel. Citizen scientists along the route count you, tag you, photograph you. You are part of something that astonishes even the species that is destroying it.",
+    narrativeText: "The air is thick with other monarchs, all flowing the same direction through live oaks and mesquite. Asters and tropical milkweed line the roadsides. You stop to refuel.",
     statEffects: [
       { stat: StatId.HOM, amount: -3, label: '-HOM' },
       { stat: StatId.ADV, amount: -2, label: '-ADV' },
@@ -535,7 +535,7 @@ export const MONARCH_BUTTERFLY_EVENTS: GameEvent[] = [
     id: 'monarch-oyamel-arrival',
     type: 'passive',
     category: 'migration',
-    narrativeText: "After two months and two thousand miles, you see them — the oyamel fir forests of the Transvolcanic Belt, draped in monarchs. Millions upon millions of butterflies coat every surface, their wings folded, clustering together for warmth at 10,000 feet. The trees sag under their weight. You have never been here before, but your great-great-grandparents left from these exact trees last spring. You find your place among the millions and fold your wings. The journey is complete.",
+    narrativeText: "Fir trees, high on a mountain, draped in butterflies. Millions coat every surface, wings folded, clustering. The branches sag under the weight. You find a place among them and fold your wings.",
     statEffects: [
       { stat: StatId.WIS, amount: 8, label: '+WIS' },
       { stat: StatId.ADV, amount: -10, label: '-ADV' },
@@ -566,7 +566,7 @@ export const MONARCH_BUTTERFLY_EVENTS: GameEvent[] = [
     id: 'monarch-cold-snap',
     type: 'passive',
     category: 'seasonal',
-    narrativeText: "An unseasonable frost descends overnight. Your body temperature drops with the air — you are ectothermic, a creature of the sun, and cold robs you of everything. Your muscles stiffen. Your wings cannot open. You cling to whatever surface you last landed on, paralyzed, waiting for warmth that may or may not come before a predator finds you immobile and helpless.",
+    narrativeText: "Frost. Your body temperature drops with the air. Your muscles stiffen. Your wings will not open. You cling to whatever surface you last landed on, immobile.",
     statEffects: [
       { stat: StatId.CLI, amount: 15, label: '+CLI' },
       { stat: StatId.HEA, amount: -5, label: '-HEA' },
@@ -585,10 +585,10 @@ export const MONARCH_BUTTERFLY_EVENTS: GameEvent[] = [
         eventId: 'monarch-cold-death',
         chance: 0.08,
         conditions: [{ type: 'stat_below', stat: StatId.HEA, threshold: 30 }],
-        narrativeText: 'The cold does not release you. Your hemolymph crystallizes. By morning, you are a frozen shell clinging to a dead stem — one of millions lost to a single night of frost.',
+        narrativeText: 'The cold does not release you. Your hemolymph crystallizes. By morning you are a frozen shell on a dead stem.',
         statEffects: [],
         consequences: [
-          { type: 'death', cause: 'Killed by unseasonable frost' },
+          { type: 'death', cause: 'Killed by frost. Hemolymph crystallized overnight.' },
         ],
       },
     ],
@@ -598,7 +598,7 @@ export const MONARCH_BUTTERFLY_EVENTS: GameEvent[] = [
     id: 'monarch-pesticide-drift',
     type: 'passive',
     category: 'environmental',
-    narrativeText: "A crop duster passes overhead, trailing a white mist that settles across the meadow. The insecticide was meant for aphids in the adjacent field, but the wind carried it here — across the milkweed, across the flowers, across you. The organophosphate disrupts your acetylcholinesterase. Your muscles begin to twitch involuntarily.",
+    narrativeText: "A white mist settles across the meadow from the adjacent field. It coats the milkweed, the flowers, your body. Your muscles begin to twitch.",
     statEffects: [
       { stat: StatId.HOM, amount: 12, label: '+HOM' },
       { stat: StatId.HEA, amount: -8, label: '-HEA' },
@@ -617,10 +617,10 @@ export const MONARCH_BUTTERFLY_EVENTS: GameEvent[] = [
       {
         eventId: 'monarch-pesticide-death',
         chance: 0.12,
-        narrativeText: 'The dose was too high. Your nervous system collapses — muscles locked in spasm, wings rigid. You fall from the milkweed stem and lie twitching in the grass. The crop duster is already out of sight.',
+        narrativeText: 'Your muscles lock in spasm. Wings rigid. You fall from the milkweed stem and lie twitching in the grass.',
         statEffects: [],
         consequences: [
-          { type: 'death', cause: 'Killed by pesticide drift from agricultural spraying' },
+          { type: 'death', cause: 'Killed by pesticide drift. Nervous system collapse.' },
         ],
       },
     ],
@@ -631,7 +631,7 @@ export const MONARCH_BUTTERFLY_EVENTS: GameEvent[] = [
     id: 'monarch-habitat-destruction',
     type: 'passive',
     category: 'environmental',
-    narrativeText: "The meadow where you have been feeding is being developed. Bulldozers are scraping the topsoil, uprooting milkweed, wildflowers, and everything else that grew here. Within hours, a place that sustained caterpillars and butterflies for decades is raw earth. You circle the destruction, searching for flowers that no longer exist, before the hunger drives you elsewhere.",
+    narrativeText: "The meadow where you have been feeding is scraped bare. Raw earth where flowers grew. You circle the site, searching for food that is no longer there, then fly on.",
     statEffects: [
       { stat: StatId.NOV, amount: 12, label: '+NOV' },
       { stat: StatId.ADV, amount: 10, label: '+ADV' },
@@ -654,7 +654,7 @@ export const MONARCH_BUTTERFLY_EVENTS: GameEvent[] = [
     id: 'monarch-logging-overwintering',
     type: 'passive',
     category: 'environmental',
-    narrativeText: "The sound of chainsaws echoes through the mountain forest. Illegal loggers are cutting oyamel firs at the edge of the overwintering colony. Each tree that falls takes thousands of monarchs with it, and the gap in the canopy exposes the remaining clusters to wind and freezing rain. The forest that has sheltered your lineage for millennia is being dismantled, tree by tree.",
+    narrativeText: "Trees are falling at the edge of the colony. Each one takes thousands of butterflies with it. The gap in the canopy exposes the remaining clusters to wind and freezing rain.",
     statEffects: [
       { stat: StatId.CLI, amount: 12, label: '+CLI' },
       { stat: StatId.ADV, amount: 10, label: '+ADV' },
@@ -681,7 +681,7 @@ export const MONARCH_BUTTERFLY_EVENTS: GameEvent[] = [
     id: 'monarch-citizen-scientist',
     type: 'passive',
     category: 'social',
-    narrativeText: "A human approaches slowly through the meadow, carrying a fine mesh net. With practiced care, they catch you, hold you gently by the thorax, and affix a tiny adhesive tag to your hindwing — a code that connects you to a vast database of monarch sightings. They record your sex, your wing condition, your location, and release you. For a moment, you were held in a hand that was trying to save your species. Then you are flying again, carrying a human story on your wing.",
+    narrativeText: "Something catches you mid-flight and holds you by the thorax. A small adhesive disc is pressed to your hindwing. Then you are released and flying again, with a weight on one wing that was not there before.",
     statEffects: [
       { stat: StatId.TRA, amount: 5, label: '+TRA' },
       { stat: StatId.NOV, amount: 5, label: '+NOV' },
@@ -705,7 +705,7 @@ export const MONARCH_BUTTERFLY_EVENTS: GameEvent[] = [
     id: 'monarch-mating-encounter',
     type: 'active',
     category: 'reproduction',
-    narrativeText: "Another monarch crosses your path — spiraling upward in the distinctive courtship flight of your species. The male pursues the female in an aerial chase, bumping her, releasing pheromones, until she lands and allows mating. The coupling lasts for hours, the pair hanging from a branch, connected at the abdomen. This is the entire purpose of the non-migratory generations: to breed, lay eggs, and die within weeks.",
+    narrativeText: "Another monarch spirals upward in a courtship flight. Pheromones in the air. The pair would hang from a branch, connected, for hours.",
     statEffects: [
       { stat: StatId.HOM, amount: 5, label: '+HOM' },
     ],
@@ -714,7 +714,7 @@ export const MONARCH_BUTTERFLY_EVENTS: GameEvent[] = [
         id: 'mate',
         label: 'Mate',
         description: 'Continue the lineage.',
-        narrativeResult: 'The mating is successful. If you are female, you now carry fertilized eggs — up to four hundred of them — ready to be deposited one at a time on milkweed leaves. Each egg is a chance. Each egg is a lottery ticket against impossible odds.',
+        narrativeResult: 'The coupling is successful. You carry fertilized eggs now, ready to be deposited one at a time on milkweed leaves.',
         statEffects: [
           { stat: StatId.WIS, amount: 3, label: '+WIS' },
           { stat: StatId.HOM, amount: 5, label: '+HOM' },
@@ -729,7 +729,7 @@ export const MONARCH_BUTTERFLY_EVENTS: GameEvent[] = [
         id: 'reject-mate',
         label: 'Reject and continue feeding',
         description: 'You are not ready, or the conditions are not right.',
-        narrativeResult: 'You fly away from the encounter. There will be other opportunities — if you live long enough. For now, nectar and survival take priority.',
+        narrativeResult: 'You fly away from the encounter.',
         statEffects: [
           { stat: StatId.ADV, amount: 2, label: '+ADV' },
         ],
@@ -755,7 +755,7 @@ export const MONARCH_BUTTERFLY_EVENTS: GameEvent[] = [
     id: 'monarch-overwintering-cluster',
     type: 'passive',
     category: 'social',
-    narrativeText: "You are one among millions. The oyamel fir trees are so thick with monarchs that the branches bend under their collective weight. When the sun breaks through the clouds, thousands take flight at once, filling the air with a sound like soft rain — the whisper of a hundred million wings. Then the cloud returns, and they settle again, folding their wings, becoming bark. You are pressed against others on all sides, sharing body heat in the thin mountain air. You are a single cell in an organism the size of a forest.",
+    narrativeText: "Millions of butterflies coat the fir branches. When the sun breaks through, thousands lift off at once, filling the air with a sound like soft rain. Then cloud returns and they settle, folding their wings, becoming bark. You are pressed against others on all sides, sharing warmth in the thin mountain air.",
     statEffects: [
       { stat: StatId.CLI, amount: -5, label: '-CLI' },
       { stat: StatId.HOM, amount: -3, label: '-HOM' },
@@ -777,7 +777,7 @@ export const MONARCH_BUTTERFLY_EVENTS: GameEvent[] = [
     id: 'monarch-milkweed-search',
     type: 'active',
     category: 'foraging',
-    narrativeText: "You are a female monarch with a full complement of fertilized eggs. Now you must find milkweed — the only plant your caterpillars can eat. You fly low over fields and roadsides, tasting leaves with your feet, searching for the specific chemical signature of Asclepias. Each egg must be placed alone on a separate plant, giving each larva the best chance of survival.",
+    narrativeText: "You carry fertilized eggs. You fly low over fields and roadsides, tasting leaves with your feet, searching for the chemical signature of Asclepias.",
     statEffects: [
       { stat: StatId.HOM, amount: 5, label: '+HOM' },
     ],
@@ -786,7 +786,7 @@ export const MONARCH_BUTTERFLY_EVENTS: GameEvent[] = [
         id: 'lay-eggs-here',
         label: 'Lay eggs on this milkweed patch',
         description: 'The milkweed is healthy and abundant.',
-        narrativeResult: 'You curl your abdomen beneath a milkweed leaf and deposit a single pale egg, no bigger than a pinhead. Then you move to the next plant, and the next, spacing your eggs to give each caterpillar its own food supply. Over the coming days, you will lay hundreds. Most will never become butterflies. But some will.',
+        narrativeResult: 'You curl your abdomen beneath a milkweed leaf and deposit a single pale egg. Then the next plant, and the next, spacing each egg to give each caterpillar its own food.',
         statEffects: [
           { stat: StatId.WIS, amount: 3, label: '+WIS' },
           { stat: StatId.HOM, amount: 3, label: '+HOM' },
@@ -803,7 +803,7 @@ export const MONARCH_BUTTERFLY_EVENTS: GameEvent[] = [
         id: 'keep-searching',
         label: 'Keep searching for better milkweed',
         description: 'This patch may be too small or too exposed.',
-        narrativeResult: 'You continue searching. The eggs inside you are a ticking clock — you must lay them before you die. But placing them on poor milkweed means certain death for your offspring. You fly on, burning precious energy, hoping the next field will be better.',
+        narrativeResult: 'You continue searching. The eggs inside you are a biological clock. You fly on, burning reserves.',
         statEffects: [
           { stat: StatId.HOM, amount: 8, label: '+HOM' },
           { stat: StatId.ADV, amount: 5, label: '+ADV' },

@@ -10,7 +10,7 @@ export const POISON_DART_FROG_EVENTS: GameEvent[] = [
     id: 'frog-bromeliad-pool-life',
     type: 'passive',
     category: 'environmental',
-    narrativeText: 'You float in a tiny pool of water trapped in the cup of a bromeliad leaf, high above the forest floor. The world is a cylinder of green walls and sky. Mosquito larvae wriggle past you. This is your entire universe — a few tablespoons of water in a plant.',
+    narrativeText: 'Warm water surrounds you. Green walls curve up to a circle of white sky. Something wriggles past your tail.',
     statEffects: [
       { stat: StatId.NOV, amount: 5, label: '+NOV' },
       { stat: StatId.ADV, amount: 3, label: '+ADV' },
@@ -27,7 +27,7 @@ export const POISON_DART_FROG_EVENTS: GameEvent[] = [
     id: 'frog-mother-feeds-egg',
     type: 'passive',
     category: 'foraging',
-    narrativeText: 'A vibration shakes your tiny world — your mother has arrived, climbing the bromeliad with powerful hind legs. She deposits an unfertilized egg into the pool. It is your only food, rich in protein and lipids. Without her visits, you would starve.',
+    narrativeText: 'The water shudders. Heavy vibrations travel up the plant wall. A shape appears at the rim and something round and soft drops into the pool beside you. Food.',
     statEffects: [
       { stat: StatId.HOM, amount: -5, label: '-HOM' },
     ],
@@ -46,7 +46,7 @@ export const POISON_DART_FROG_EVENTS: GameEvent[] = [
     id: 'frog-metamorphosis',
     type: 'passive',
     category: 'seasonal',
-    narrativeText: 'Your tail is shrinking. Your legs, once useless buds, have become powerful springs. Lungs are developing inside your chest, replacing the gills that sustained you in the pool. One morning, you haul yourself over the lip of the bromeliad and drop to the forest floor. The world is suddenly infinite.',
+    narrativeText: 'Your tail is shorter each day. New legs grip the plant wall. Air enters through a passage that was not there before. You climb over the rim and drop. Wet ground, open space, no walls.',
     statEffects: [
       { stat: StatId.NOV, amount: 10, label: '+NOV' },
       { stat: StatId.ADV, amount: -5, label: '-ADV' },
@@ -70,7 +70,7 @@ export const POISON_DART_FROG_EVENTS: GameEvent[] = [
     id: 'frog-ant-foraging',
     type: 'active',
     category: 'foraging',
-    narrativeText: 'A column of tiny ants streams across the leaf litter — Oribatid mites and formicine ants, each one a tiny packet of alkaloid compounds. Eating them is how you build your chemical arsenal.',
+    narrativeText: 'A line of ants crosses the leaf litter. You detect their chemical traces through the pads of your feet. Each one carries compounds your skin needs.',
     statEffects: [
       { stat: StatId.WIS, amount: 3, label: '+WIS' },
     ],
@@ -78,8 +78,8 @@ export const POISON_DART_FROG_EVENTS: GameEvent[] = [
       {
         id: 'gorge-ants',
         label: 'Gorge on the column',
-        description: 'Eat as many as you can — maximize toxin accumulation.',
-        narrativeResult: 'You methodically pick off ant after ant, your sticky tongue flicking with machine-like precision. The alkaloids accumulate in your skin glands, intensifying your chemical defense. You can feel the toxins building — a tingling warmth across your back.',
+        description: 'Eat as many as you can.',
+        narrativeResult: 'Your tongue flicks and flicks. Ant after ant. A tingling heat spreads across the skin of your back as the compounds accumulate.',
         statEffects: [
           { stat: StatId.IMM, amount: -5, label: '-IMM (toxin boost)' },
         ],
@@ -93,8 +93,8 @@ export const POISON_DART_FROG_EVENTS: GameEvent[] = [
       {
         id: 'selective-feeding',
         label: 'Feed selectively',
-        description: 'Pick off the choicest mites and move on.',
-        narrativeResult: 'You take a few of the largest ants and a handful of mites, then move on. Your toxin stores are maintained but not significantly boosted.',
+        description: 'Take a few and move on.',
+        narrativeResult: 'You pick off a few of the largest ones and hop away. The tingling in your skin holds steady.',
         statEffects: [],
         consequences: [
           { type: 'modify_weight', amount: 0.0000004 },
@@ -115,7 +115,7 @@ export const POISON_DART_FROG_EVENTS: GameEvent[] = [
     id: 'frog-mite-hunt',
     type: 'active',
     category: 'foraging',
-    narrativeText: 'Beneath a rotting log, you find a cluster of oribatid mites — tiny arachnids that are the richest source of pumiliotoxin alkaloids in the forest. Each one is smaller than a grain of sand, but their chemistry is potent.',
+    narrativeText: 'Under a rotting log, mites cluster in the damp. Your tongue finds them one by one. Their chemical taste is strong.',
     statEffects: [
       { stat: StatId.HOM, amount: -3, label: '-HOM' },
     ],
@@ -134,7 +134,7 @@ export const POISON_DART_FROG_EVENTS: GameEvent[] = [
     id: 'frog-fruit-fly-feast',
     type: 'passive',
     category: 'foraging',
-    narrativeText: 'A fallen fruit on the forest floor is swarming with tiny flies. You position yourself at the fruit\'s edge and pick them off one by one — easy prey, if nutritionally unremarkable. The flies carry no alkaloids, but they fill your stomach.',
+    narrativeText: 'A fallen fruit crawls with tiny flies. You sit at its edge and pick them off. They carry no useful compounds, but they fill the gut.',
     statEffects: [
       { stat: StatId.TRA, amount: -3, label: '-TRA' },
     ],
@@ -157,7 +157,7 @@ export const POISON_DART_FROG_EVENTS: GameEvent[] = [
     id: 'frog-territory-calling',
     type: 'active',
     category: 'social',
-    narrativeText: 'From a prominent leaf, you inflate your throat and release your call — a rapid, insistent buzz that rings through the understory. The call declares your territory, your fitness, your presence. Other males within earshot must decide: challenge or retreat.',
+    narrativeText: 'You inflate your throat on a high leaf and call. The buzz vibrates through the substrate. Another male\'s call answers from two body-lengths away.',
     statEffects: [
       { stat: StatId.HOM, amount: 5, label: '+HOM' },
     ],
@@ -165,8 +165,8 @@ export const POISON_DART_FROG_EVENTS: GameEvent[] = [
       {
         id: 'call-louder',
         label: 'Call aggressively',
-        description: 'Maximum volume — assert dominance.',
-        narrativeResult: 'Your call rings through the forest with unusual force. A nearby rival falls silent, ceding the area. But the effort has drained your energy, and your vocal sac aches.',
+        description: 'Maximum volume.',
+        narrativeResult: 'You call until your vocal sac aches. The rival\'s sound stops. The leaf beneath you is quiet again.',
         statEffects: [
           { stat: StatId.STR, amount: -3, label: '-STR' },
           { stat: StatId.ADV, amount: -5, label: '-ADV' },
@@ -179,7 +179,7 @@ export const POISON_DART_FROG_EVENTS: GameEvent[] = [
         id: 'call-standard',
         label: 'Standard call rate',
         description: 'Maintain your territory without overexerting.',
-        narrativeResult: 'You call at a steady rhythm, sufficient to maintain your claim. The soundscape of the forest floor accepts your contribution without challenge.',
+        narrativeResult: 'You call at a steady rhythm. No rival answers. The territory holds.',
         statEffects: [],
         consequences: [],
         revocable: false,
@@ -199,7 +199,7 @@ export const POISON_DART_FROG_EVENTS: GameEvent[] = [
     id: 'frog-wrestling-match',
     type: 'active',
     category: 'social',
-    narrativeText: 'A rival male has invaded your calling territory. He is perched on a leaf barely two body-lengths away, calling defiantly. In dart frog society, this means war — a wrestling match that can last for hours.',
+    narrativeText: 'Another male sits on the leaf beside yours, calling. Two body-lengths away. His vibrations run through the branch into your feet.',
     statEffects: [
       { stat: StatId.ADV, amount: 8, label: '+ADV' },
     ],
@@ -207,8 +207,8 @@ export const POISON_DART_FROG_EVENTS: GameEvent[] = [
       {
         id: 'wrestle',
         label: 'Pin the rival',
-        description: 'Grapple and try to press him flat against the leaf.',
-        narrativeResult: 'You leap onto the rival and attempt to pin him belly-down. The struggle is exhausting — two tiny bodies locked in combat on a wet leaf. After many minutes, the rival squirms free and retreats, leaving you victorious but drained.',
+        description: 'Grapple and try to pin him flat.',
+        narrativeResult: 'You leap onto him and press down. Belly to leaf. He writhes under you on the wet surface. After long minutes he squirms free and hops away. Your limbs shake.',
         statEffects: [
           { stat: StatId.STR, amount: -5, label: '-STR' },
           { stat: StatId.ADV, amount: -8, label: '-ADV' },
@@ -222,8 +222,8 @@ export const POISON_DART_FROG_EVENTS: GameEvent[] = [
       {
         id: 'out-call',
         label: 'Out-call him',
-        description: 'Win the war of attrition through sheer vocal endurance.',
-        narrativeResult: 'You sit and call. He calls. You call louder. He matches you. This continues for hours until, at last, his calls grow hoarse and infrequent. He retreats. Victory through stubbornness.',
+        description: 'Keep calling until he stops.',
+        narrativeResult: 'You call. He calls. You call louder. He matches. Hours pass. His calls thin out and slow. He hops away.',
         statEffects: [
           { stat: StatId.STR, amount: -3, label: '-STR' },
           { stat: StatId.WIS, amount: 3, label: '+WIS' },
@@ -238,7 +238,7 @@ export const POISON_DART_FROG_EVENTS: GameEvent[] = [
         eventId: 'wrestling-exhaustion',
         chance: 0.20,
         conditions: [],
-        narrativeText: 'The fight has taken everything from you. Twenty minutes of grappling on a wet leaf — twenty minutes of your tiny body straining against another body exactly your size, every muscle firing, every calorie burning. You won, or you lost — it barely matters now. You sit on the leaf afterward, sides heaving, your bright skin dull with fatigue. You have burned through energy reserves that took days of foraging to build. Your body feels hollow, spent, as if someone reached inside you and scraped out the marrow. You will need to eat voraciously just to return to where you started.',
+        narrativeText: 'You sit on the leaf afterward, sides heaving. Your limbs will not stop trembling. The energy from days of foraging is gone.',
         footnote: 'Dart frog wrestling bouts can last 10-30 minutes and are among the most energetically costly behaviors in their repertoire. Males may lose significant body mass from a single prolonged contest.',
         statEffects: [
           { stat: StatId.HOM, amount: 10, label: '+HOM' },
@@ -252,7 +252,7 @@ export const POISON_DART_FROG_EVENTS: GameEvent[] = [
         eventId: 'vocal-sac-strain-sub',
         chance: 0.10,
         conditions: [],
-        narrativeText: 'The aggressive calling you sustained during the territorial dispute has strained your vocal sac. The thin membrane is inflamed, swollen with fluid, and each attempt to call produces a thin, reedy sound instead of the full-throated buzz that once rang clear across the understory. You can feel the tissue pulsing with your heartbeat, hot and tender. Calling is how you hold territory. Calling is how you attract mates. Without your voice, you are a bright red ornament on a leaf — visible to every predator, audible to no female.',
+        narrativeText: 'Your throat is swollen and hot. When you try to call, the sound comes out thin and reedy. The membrane pulses with each heartbeat.',
         footnote: 'Prolonged aggressive calling can damage the delicate vocal sac membrane in dart frogs, temporarily reducing call quality and volume — directly impacting both territorial defense and mate attraction.',
         statEffects: [
           { stat: StatId.HEA, amount: -3, label: '-HEA' },
@@ -280,7 +280,7 @@ export const POISON_DART_FROG_EVENTS: GameEvent[] = [
     id: 'frog-snake-encounter',
     type: 'active',
     category: 'predator',
-    narrativeText: 'A cat-eyed snake slides through the leaf litter, tongue flicking, testing the air. It is hunting frogs. Your brilliant red skin should warn it off — but not all predators have learned to read the warning.',
+    narrativeText: 'Vibration through the leaf litter. A snake slides past, tongue testing the air. Its head turns toward you.',
     statEffects: [
       { stat: StatId.TRA, amount: 8, label: '+TRA' },
     ],
@@ -288,8 +288,8 @@ export const POISON_DART_FROG_EVENTS: GameEvent[] = [
       {
         id: 'sit-still-display',
         label: 'Display your colors',
-        description: 'Trust your warning coloration. Hold still and be conspicuous.',
-        narrativeResult: 'You sit perfectly still on a bright green leaf, your red body a vivid signal against the green. The snake\'s tongue touches the air near you, tastes the alkaloid compounds rising from your skin, and recoils. It slithers away. Your toxins have spoken for you.',
+        description: 'Hold still on the leaf.',
+        narrativeResult: 'You hold still. The snake\'s tongue flicks the air near your skin, recoils. It turns and slides away.',
         statEffects: [
           { stat: StatId.TRA, amount: -5, label: '-TRA' },
           { stat: StatId.WIS, amount: 3, label: '+WIS' },
@@ -299,15 +299,15 @@ export const POISON_DART_FROG_EVENTS: GameEvent[] = [
         style: 'default',
         deathChance: {
           probability: 0.03,
-          cause: 'This snake had evolved resistance to your toxins. It swallowed you despite the warning colors.',
+          cause: 'The snake was resistant to your skin compounds. It swallowed you.',
           statModifiers: [{ stat: StatId.IMM, factor: -0.0003 }],
         },
       },
       {
         id: 'flee-snake',
         label: 'Leap away',
-        description: 'Don\'t take chances — flee into the leaf litter.',
-        narrativeResult: 'You launch yourself in a desperate leap, landing in the tangle of dead leaves and roots. The snake investigates but cannot find you in the debris. Your heart pounds against your tiny ribs.',
+        description: 'Leap into the leaf litter.',
+        narrativeResult: 'You leap. Dead leaves and roots close around you. The snake probes the litter but does not find you.',
         statEffects: [
           { stat: StatId.ADV, amount: -3, label: '-ADV' },
         ],
@@ -328,7 +328,7 @@ export const POISON_DART_FROG_EVENTS: GameEvent[] = [
     id: 'frog-spider-attack',
     type: 'active',
     category: 'predator',
-    narrativeText: 'A wandering spider — large, fast, and fearless — drops from a leaf above you. Spiders are among the few predators that can overpower a dart frog, and your toxins may not deter an arachnid.',
+    narrativeText: 'Something heavy drops from the leaf above. A spider, larger than you, lands close. Its legs tap the surface, reading vibrations.',
     statEffects: [
       { stat: StatId.TRA, amount: 10, label: '+TRA' },
       { stat: StatId.ADV, amount: 8, label: '+ADV' },
@@ -337,8 +337,8 @@ export const POISON_DART_FROG_EVENTS: GameEvent[] = [
       {
         id: 'leap-escape',
         label: 'Leap for your life',
-        description: 'Jump as far and fast as possible.',
-        narrativeResult: 'You rocket off the leaf, legs fully extended, and land on a branch three feet away. The spider, unable to track your trajectory, hesitates — and you hop again, putting distance between you and those chelicerae.',
+        description: 'Jump.',
+        narrativeResult: 'Legs extend fully. You land on a branch three body-lengths away. The spider hesitates. You hop again.',
         statEffects: [
           { stat: StatId.STR, amount: -3, label: '-STR' },
           { stat: StatId.TRA, amount: -5, label: '-TRA' },
@@ -350,8 +350,8 @@ export const POISON_DART_FROG_EVENTS: GameEvent[] = [
       {
         id: 'toxic-defense',
         label: 'Secrete toxins',
-        description: 'Flood your skin with alkaloid compounds.',
-        narrativeResult: 'You pump alkaloids to the surface of your skin, your body beading with toxic mucus. The spider touches you with a cautious palp, recoils, and retreats. The chemical defense holds — this time.',
+        description: 'Push toxins to the skin surface.',
+        narrativeResult: 'Your skin beads with mucus. The spider touches you with one palp, pulls back, and retreats.',
         statEffects: [
           { stat: StatId.TRA, amount: -8, label: '-TRA' },
         ],
@@ -360,7 +360,7 @@ export const POISON_DART_FROG_EVENTS: GameEvent[] = [
         style: 'default',
         deathChance: {
           probability: 0.05,
-          cause: 'Your toxin reserves were depleted. The spider was not deterred and delivered a fatal bite.',
+          cause: 'Toxin reserves depleted. The spider bit and did not let go.',
           statModifiers: [{ stat: StatId.IMM, factor: -0.0005 }],
         },
       },
@@ -381,7 +381,7 @@ export const POISON_DART_FROG_EVENTS: GameEvent[] = [
     id: 'frog-courtship-display',
     type: 'active',
     category: 'reproduction',
-    narrativeText: 'A female approaches your calling perch, drawn by the quality of your voice. She watches you from a nearby leaf, evaluating. This is the moment — your call, your colors, your territory — it all comes down to whether she stays.',
+    narrativeText: 'A female sits on the next leaf, oriented toward you. She has been there since your last call. She has not moved away.',
     statEffects: [
       { stat: StatId.HOM, amount: 5, label: '+HOM' },
     ],
@@ -389,8 +389,8 @@ export const POISON_DART_FROG_EVENTS: GameEvent[] = [
       {
         id: 'lead-to-site',
         label: 'Lead her to your egg-laying site',
-        description: 'Guide her to a moist, shaded spot beneath a leaf.',
-        narrativeResult: 'You hop deliberately toward your chosen site, pausing to ensure she follows. She does. At the site, she deposits a clutch of eggs on the wet surface of a leaf, and you fertilize them. The eggs glisten like tiny pearls.',
+        description: 'Hop toward a damp, shaded leaf.',
+        narrativeResult: 'You hop toward the damp leaf, pausing. She follows. She deposits eggs on the wet surface. You fertilize them.',
         statEffects: [
           { stat: StatId.HOM, amount: 5, label: '+HOM' },
           { stat: StatId.WIS, amount: 3, label: '+WIS' },
@@ -404,8 +404,8 @@ export const POISON_DART_FROG_EVENTS: GameEvent[] = [
       {
         id: 'continue-calling',
         label: 'Keep calling to attract more females',
-        description: 'This female may not be the only option.',
-        narrativeResult: 'You continue your call, hoping to attract a larger or more vigorous female. The current prospect waits, then hops away. You may have missed your chance — or a better one may come.',
+        description: 'Keep calling.',
+        narrativeResult: 'You keep calling. The female waits, then hops away. The leaf is empty again.',
         statEffects: [
           { stat: StatId.ADV, amount: 3, label: '+ADV' },
         ],
@@ -428,7 +428,7 @@ export const POISON_DART_FROG_EVENTS: GameEvent[] = [
     id: 'frog-tadpole-transport',
     type: 'active',
     category: 'reproduction',
-    narrativeText: 'The eggs have hatched. Tiny tadpoles wriggle on your back, held in place by mucus. You must carry them up into the canopy and deposit each one in a separate bromeliad pool — one tadpole per pool, to prevent cannibalism.',
+    narrativeText: 'Tadpoles wriggle on your back, stuck in mucus. The pull to climb is strong. Each one needs its own pool.',
     statEffects: [
       { stat: StatId.HOM, amount: 8, label: '+HOM' },
     ],
@@ -436,8 +436,8 @@ export const POISON_DART_FROG_EVENTS: GameEvent[] = [
       {
         id: 'nearby-bromeliad',
         label: 'Use the nearest bromeliads',
-        description: 'Deposit them quickly in nearby pools — faster but riskier.',
-        narrativeResult: 'You climb the nearest tree trunk, depositing a tadpole in each bromeliad you find. Some pools are small and may dry out, but the transport is done quickly, sparing your energy.',
+        description: 'Use the closest pools.',
+        narrativeResult: 'You climb the nearest trunk and deposit a tadpole in each bromeliad you find. Some pools are shallow. The climb is short.',
         statEffects: [
           { stat: StatId.STR, amount: -2, label: '-STR' },
         ],
@@ -450,8 +450,8 @@ export const POISON_DART_FROG_EVENTS: GameEvent[] = [
       {
         id: 'search-best-pools',
         label: 'Search for the best pools',
-        description: 'Climb higher — larger pools with more water.',
-        narrativeResult: 'You scale the trunk to the canopy, testing each bromeliad with your hind foot before depositing a tadpole. The climb is exhausting, but the pools you find are deep, shaded, and secure.',
+        description: 'Climb higher for deeper pools.',
+        narrativeResult: 'You climb until the ground disappears below. Each bromeliad you test with a hind foot before depositing. The pools up here hold more water.',
         statEffects: [
           { stat: StatId.STR, amount: -5, label: '-STR' },
           { stat: StatId.WIS, amount: 5, label: '+WIS' },
@@ -476,7 +476,7 @@ export const POISON_DART_FROG_EVENTS: GameEvent[] = [
     id: 'frog-egg-feeding',
     type: 'passive',
     category: 'reproduction',
-    narrativeText: 'You climb to the bromeliad where your tadpole waits, its tiny mouth already gaping in anticipation. You deposit an unfertilized egg into the pool — a nutritional sacrifice that will fuel its growth. This visit is one of dozens you will make before the tadpole metamorphoses.',
+    narrativeText: 'You climb to the bromeliad. The tadpole stirs when your weight shifts the plant. You deposit an unfertilized egg into the pool and climb back down.',
     statEffects: [
       { stat: StatId.HOM, amount: 5, label: '+HOM' },
       { stat: StatId.STR, amount: -2, label: '-STR' },
@@ -501,7 +501,7 @@ export const POISON_DART_FROG_EVENTS: GameEvent[] = [
     id: 'frog-rain-event',
     type: 'passive',
     category: 'environmental',
-    narrativeText: 'Rain hammers the canopy, and a thousand tiny waterfalls cascade down leaf surfaces. The humidity soars. Your skin, which depends on moisture for respiration, absorbs water gratefully. Everything is alive with movement — insects fleeing floods, worms emerging from the soil, frogs calling from every direction.',
+    narrativeText: 'Rain hits the leaves above and water runs down every surface. Your skin drinks it in. The ground vibrates with calling from all directions.',
     statEffects: [
       { stat: StatId.HEA, amount: 5, duration: 2, label: '+HEA (hydration)' },
       { stat: StatId.CLI, amount: -5, duration: 2, label: '-CLI (comfortable humidity)' },
@@ -518,7 +518,7 @@ export const POISON_DART_FROG_EVENTS: GameEvent[] = [
     id: 'frog-dry-spell',
     type: 'passive',
     category: 'environmental',
-    narrativeText: 'Days without rain have turned the leaf litter crisp and papery. Your skin is drying, and you must seek out the dampest microhabitats — under logs, beside streams, deep in the leaf litter. Dehydration is a death sentence for a frog who breathes through its skin.',
+    narrativeText: 'The leaf litter crackles dry underfoot. Your skin tightens. You press yourself under a log where the ground is still damp.',
     statEffects: [
       { stat: StatId.HEA, amount: -5, duration: 3, label: '-HEA (dehydration)' },
       { stat: StatId.CLI, amount: 8, duration: 3, label: '+CLI (dry conditions)' },
@@ -536,7 +536,7 @@ export const POISON_DART_FROG_EVENTS: GameEvent[] = [
     id: 'frog-canopy-exploration',
     type: 'active',
     category: 'environmental',
-    narrativeText: 'A massive tree has dropped a branch, creating a light gap in the canopy. New plants are racing to fill the space, and the increased sunlight has transformed the understory. New bromeliad pools, new insect communities, new territory — if you dare claim it.',
+    narrativeText: 'A branch has fallen. Light pours through the gap above. New growth, new smells, unfamiliar insects moving through the litter.',
     statEffects: [
       { stat: StatId.NOV, amount: 5, label: '+NOV' },
     ],
@@ -544,8 +544,8 @@ export const POISON_DART_FROG_EVENTS: GameEvent[] = [
       {
         id: 'explore-gap',
         label: 'Explore the light gap',
-        description: 'Investigate new territory and resources.',
-        narrativeResult: 'You hop through the bright gap, cataloguing new calling perches and bromeliad pools. The insect community here is different — more varied, with species you have not tasted before.',
+        description: 'Hop into the light gap.',
+        narrativeResult: 'You move through the bright gap. New perches, new bromeliad pools. Insects here taste different.',
         statEffects: [
           { stat: StatId.NOV, amount: 5, label: '+NOV' },
           { stat: StatId.WIS, amount: 3, label: '+WIS' },
@@ -559,8 +559,8 @@ export const POISON_DART_FROG_EVENTS: GameEvent[] = [
       {
         id: 'stay-known',
         label: 'Stay in familiar territory',
-        description: 'Your current range is proven. Don\'t risk the unknown.',
-        narrativeResult: 'You return to your established territory, where every leaf and log is mapped in your memory. The familiar ground offers safety, if not novelty.',
+        description: 'Stay where you know the ground.',
+        narrativeResult: 'You turn back to known ground. Every log and leaf here is familiar under your feet.',
         statEffects: [
           { stat: StatId.TRA, amount: -3, label: '-TRA' },
         ],
@@ -581,7 +581,7 @@ export const POISON_DART_FROG_EVENTS: GameEvent[] = [
     id: 'frog-nightfall-chorus',
     type: 'passive',
     category: 'social',
-    narrativeText: 'As dusk falls, the forest erupts into sound. Frogs of every species begin their evening chorus — treefrogs, glass frogs, rain frogs, and your own kind. The cacophony is deafening but organized; each species occupies a different frequency band, a different rhythm. Your call finds its place in the acoustic tapestry.',
+    narrativeText: 'The light dims. Calls start from every direction, layered at different pitches. The ground buzzes with the sound. You add your own frequency to it.',
     statEffects: [
       { stat: StatId.HOM, amount: 3, duration: 2, label: '+HOM' },
       { stat: StatId.WIS, amount: 3, duration: 2, label: '+WIS' },
@@ -602,7 +602,7 @@ export const POISON_DART_FROG_EVENTS: GameEvent[] = [
     id: 'frog-aging-wisdom',
     type: 'passive',
     category: 'health',
-    narrativeText: 'You have survived many wet and dry seasons. Your coloration has deepened with age, a richer red than the young frogs around you. You know every microhabitat within your range — every crevice, every pool, every ant trail. The younger males call louder, but you call smarter.',
+    narrativeText: 'Many wet seasons and dry seasons. You know every crevice, every pool, every ant trail in your range. Your skin color has deepened.',
     statEffects: [
       { stat: StatId.WIS, amount: 8, label: '+WIS' },
       { stat: StatId.STR, amount: -3, label: '-STR' },
@@ -623,7 +623,7 @@ export const POISON_DART_FROG_EVENTS: GameEvent[] = [
     id: 'frog-chytrid-exposure',
     type: 'passive',
     category: 'health',
-    narrativeText: 'The stream you crossed was teeming with invisible danger. Batrachochytrium dendrobatidis — chytrid fungus — releases zoospores into warm, still water. They find your permeable skin irresistible, burrowing into the keratin layer where they multiply and thicken the tissue that you breathe through. Amphibians worldwide are dying from this pathogen. Your alkaloid armor protects you from predators, but not from this.',
+    narrativeText: 'The still water you crossed carried something. Your skin itches and thickens where the water touched it. Breathing through it is harder now.',
     statEffects: [
       { stat: StatId.HEA, amount: -4, label: '-HEA' },
       { stat: StatId.IMM, amount: -5, label: '-IMM' },
@@ -643,7 +643,7 @@ export const POISON_DART_FROG_EVENTS: GameEvent[] = [
     id: 'frog-nematode-prey',
     type: 'passive',
     category: 'health',
-    narrativeText: 'The ant you swallowed carried more than calories. Inside its body, encysted nematode larvae waited for exactly this moment — to be eaten by a frog. Now free in your gut, they burrow through the intestinal wall and begin their developmental cycle, growing from microscopic threads into finger-length worms coiled in your abdominal cavity.',
+    narrativeText: 'Something is wrong in your gut. The last ant tasted normal, but now there is a dull pressure inside that was not there before. It grows.',
     statEffects: [
       { stat: StatId.HEA, amount: -2, label: '-HEA' },
     ],

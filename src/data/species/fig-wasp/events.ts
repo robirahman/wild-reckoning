@@ -10,7 +10,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
     id: 'figwasp-gall-feeding',
     type: 'active',
     category: 'foraging',
-    narrativeText: 'Inside your gall, you are surrounded by nutritive tissue — the fig\'s gift to its mutualist. The endosperm is rich, sweet, and entirely yours. You can feed aggressively, growing faster but stressing the gall walls, or conservatively, ensuring the gall remains intact around you.',
+    narrativeText: 'Nutritive tissue surrounds you on all sides. The gall wall is warm and close. You feed.',
     statEffects: [
       { stat: StatId.HOM, amount: -5, label: '-HOM' },
     ],
@@ -19,7 +19,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
         id: 'feed-aggressively',
         label: 'Feed aggressively',
         description: 'Consume as much gall tissue as possible.',
-        narrativeResult: 'You gorge on the nutritive tissue, your body swelling inside the gall. The walls thin around you. You are growing fast — perhaps too fast for the chamber that contains you.',
+        narrativeResult: 'You consume fast. Your body swells. The gall walls thin.',
         statEffects: [
           { stat: StatId.HOM, amount: 5, label: '+HOM' },
         ],
@@ -33,7 +33,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
         id: 'feed-conservatively',
         label: 'Feed conservatively',
         description: 'Eat slowly, preserving the gall structure.',
-        narrativeResult: 'You feed steadily, leaving the gall walls thick and protective around you. Growth is slower, but you are safe inside your chamber.',
+        narrativeResult: 'You feed steadily. The gall walls stay thick around you.',
         statEffects: [
           { stat: StatId.HOM, amount: -3, label: '-HOM' },
           { stat: StatId.WIS, amount: 2, label: '+WIS' },
@@ -60,7 +60,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
     id: 'figwasp-neighboring-gall',
     type: 'passive',
     category: 'social',
-    narrativeText: 'Through the thin walls of your gall, you sense vibrations — other larvae developing in adjacent chambers. The fig is full of your siblings, each sealed in their own pocket of nutritive tissue. In this dark, warm interior, you are alone and yet surrounded. The crowding means competition for the fig\'s limited resources, but also the assurance that when the time comes, there will be males to chew the exit tunnels.',
+    narrativeText: 'Vibrations through the gall wall. Other larvae developing in adjacent chambers. The fig is crowded.',
     statEffects: [
       { stat: StatId.NOV, amount: 3, label: '+NOV' },
       { stat: StatId.HOM, amount: -2, label: '-HOM' },
@@ -79,7 +79,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
     id: 'figwasp-nematode-in-gall',
     type: 'passive',
     category: 'health',
-    narrativeText: 'Something is moving inside the fig tissue near your gall. A microscopic nematode — Parasitodiplogaster — has located your chamber and is boring through the wall. These roundworms are ancient parasites of fig wasps, evolving alongside the mutualism for millions of years. They feed on the hemolymph of developing larvae.',
+    narrativeText: 'Something moves in the fig tissue near your gall. A microscopic worm is boring through the wall toward you.',
     statEffects: [
       { stat: StatId.ADV, amount: 5, label: '+ADV' },
     ],
@@ -102,7 +102,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
     id: 'figwasp-gall-development',
     type: 'passive',
     category: 'health',
-    narrativeText: 'Your body is growing steadily inside its chamber. The fig tissue responds to your chemical signals, thickening the gall walls and enriching the endosperm. You are changing — head capsule widening, mandibles forming, the first faint outlines of what you will become visible beneath your larval skin. The fig is building you as much as you are building yourself.',
+    narrativeText: 'The gall wall thickens. Your head capsule widens. Mandibles form beneath your larval skin. The fig tissue responds to your chemical output, enriching itself.',
     statEffects: [
       { stat: StatId.ADV, amount: -3, label: '-ADV' },
       { stat: StatId.HOM, amount: -4, label: '-HOM' },
@@ -128,7 +128,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
     id: 'figwasp-pupation-begins',
     type: 'passive',
     category: 'health',
-    narrativeText: 'The change begins. Your larval body stiffens, your skin splits along invisible seams, and beneath it, something entirely new is taking shape. Inside the sealed chamber of your gall, protected by the fig that has fed you since birth, you undergo the ancient transformation. Your larval organs dissolve into a biological soup from which adult structures crystallize — compound eyes, wings (if you are female), massive mandibles (if you are male), an ovipositor or aedeagus. You are helpless, formless, and utterly vulnerable.',
+    narrativeText: 'Your body stiffens. The skin splits. Beneath it, new structures take shape in the darkness of the gall. You cannot move.',
     statEffects: [
       { stat: StatId.ADV, amount: 10, label: '+ADV' },
       { stat: StatId.NOV, amount: 8, label: '+NOV' },
@@ -152,7 +152,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
     id: 'figwasp-fig-ripening',
     type: 'passive',
     category: 'environmental',
-    narrativeText: 'The fig around you is changing. The syconium walls are softening, the interior temperature is rising, and volatile compounds are building in the cavity. The fig is ripening — a process timed by millions of years of co-evolution to synchronize with your emergence. The chemical signals seeping through your gall walls are the countdown to adulthood.',
+    narrativeText: 'The fig is changing around you. The walls soften. The interior warms. Volatile compounds build in the cavity and seep through your gall wall.',
     statEffects: [
       { stat: StatId.NOV, amount: 4, label: '+NOV' },
       { stat: StatId.ADV, amount: -3, label: '-ADV' },
@@ -175,7 +175,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
     id: 'figwasp-male-emergence',
     type: 'passive',
     category: 'health',
-    narrativeText: 'You chew through the wall of your gall and emerge into the dark interior of the fig. You are blind — your compound eyes are vestigial, useless in this lightless world. You are wingless — you will never fly, never see the sky, never leave this fruit. But your mandibles are enormous, disproportionate weapons forged for a single purpose: to fight other males and chew through the fig wall. You are a soldier born inside a fortress.',
+    narrativeText: 'You chew through the gall wall into the dark interior of the fig. No light. No wings. Your compound eyes register nothing. But your mandibles are massive, and the chemical signals around you are dense with information.',
     statEffects: [
       { stat: StatId.ADV, amount: 8, label: '+ADV' },
       { stat: StatId.NOV, amount: 5, label: '+NOV' },
@@ -200,7 +200,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
     id: 'figwasp-male-combat',
     type: 'active',
     category: 'social',
-    narrativeText: 'In the pitch-dark interior of the fig, you encounter another male. You sense him by vibration and chemical cues — the clash of mandibles against fig tissue, the bitter pheromones of aggression. He is between you and a gall containing an unemerged female. In fig wasp society, there is no negotiation. There is only combat.',
+    narrativeText: 'Vibrations and aggression chemicals in the darkness. Another male, between you and a gall containing an unemerged female. His mandibles scrape fig tissue. Yours open.',
     statEffects: [
       { stat: StatId.TRA, amount: 5, label: '+TRA' },
     ],
@@ -209,7 +209,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
         id: 'fight-aggressively',
         label: 'Attack with full force',
         description: 'Lock mandibles and fight to the death.',
-        narrativeResult: 'You charge forward, mandibles spread wide. The collision is savage — you lock jaws with the rival, each trying to sever the other\'s body. Hemolymph sprays in the darkness. One of you will walk away. The other will die in the fruit that birthed him.',
+        narrativeResult: 'Mandibles lock. Hemolymph sprays. One of you will stop moving. The other will reach the gall.',
         statEffects: [
           { stat: StatId.TRA, amount: 8, label: '+TRA' },
           { stat: StatId.ADV, amount: 5, label: '+ADV' },
@@ -221,7 +221,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
         style: 'danger',
         deathChance: {
           probability: 0.15,
-          cause: 'Killed by a rival male during combat inside the fig',
+          cause: 'Killed by a rival male inside the fig. Mandibles severed the thorax.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
         },
       },
@@ -229,7 +229,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
         id: 'wait-for-opening',
         label: 'Wait for weaker opponents',
         description: 'Let others fight first, then claim the exhausted victor\'s prize.',
-        narrativeResult: 'You retreat into a fold of fig tissue and wait. You hear the sounds of combat — the scrape of chitin, the wet snap of severed limbs. When silence falls, you creep forward. The victor is wounded, and there are other galls nearby.',
+        narrativeResult: 'You retreat into a fold of fig tissue. The scrape of chitin and wet snap of severed limbs. When silence comes, you creep forward.',
         statEffects: [
           { stat: StatId.WIS, amount: 3, label: '+WIS' },
           { stat: StatId.ADV, amount: 3, label: '+ADV' },
@@ -256,7 +256,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
     id: 'figwasp-male-mating',
     type: 'passive',
     category: 'reproduction',
-    narrativeText: 'You locate a gall containing an unemerged female. With delicate precision — a strange contrast to the violence of combat — you chew a small hole into the gall wall. Through this opening, you extend your telescoping aedeagus and mate with the female before she has even fully emerged from pupation. She will carry your sperm to a fig you will never see, to pollinate flowers you will never know exist.',
+    narrativeText: 'You locate a gall containing a female. You chew a small hole through the wall and extend your aedeagus through the opening. The act is brief.',
     statEffects: [
       { stat: StatId.HOM, amount: -5, label: '-HOM' },
       { stat: StatId.ADV, amount: -3, label: '-ADV' },
@@ -279,7 +279,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
     id: 'figwasp-male-tunnel-chewing',
     type: 'active',
     category: 'social',
-    narrativeText: 'Your final act. The females are ready to leave, but they cannot escape on their own — the fig is sealed. You begin chewing through the thick wall of the syconium, grinding your mandibles through layer after layer of dense fig tissue. The tunnel grows slowly. Your mandibles are wearing down, your body is exhausting its last reserves. If you succeed, the females will fly to freedom through the passage you created. You will never use it yourself.',
+    narrativeText: 'The females cannot escape. The fig is sealed. You begin grinding your mandibles through the thick syconium wall. The tunnel grows slowly. Your mandibles wear down with each pass.',
     statEffects: [
       { stat: StatId.HOM, amount: 8, label: '+HOM' },
     ],
@@ -288,7 +288,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
         id: 'wide-tunnel',
         label: 'Chew a wide tunnel',
         description: 'Exhaust yourself creating a generous exit.',
-        narrativeResult: 'You chew with everything you have, widening the tunnel until sunlight streams in — blinding, warm, alien. The females begin to move toward the light. You have given them the world. You retreat into the darkness of the fig, mandibles worn to stubs, body spent.',
+        narrativeResult: 'You chew until light streams in. Warm, blinding. The females move toward it. Your mandibles are stubs. Your body is spent.',
         statEffects: [
           { stat: StatId.WIS, amount: 5, label: '+WIS' },
           { stat: StatId.HEA, amount: -8, label: '-HEA' },
@@ -300,7 +300,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
         style: 'danger',
         deathChance: {
           probability: 0.30,
-          cause: 'Exhaustion from chewing exit tunnel through fig wall',
+          cause: 'Exhausted chewing the exit tunnel. Mandibles ground to stubs, body depleted.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.003 }],
         },
       },
@@ -308,7 +308,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
         id: 'minimal-tunnel',
         label: 'Chew a minimal tunnel',
         description: 'Conserve energy but the tunnel may not fully penetrate.',
-        narrativeResult: 'You chew carefully, conserving your strength. The tunnel reaches the outer layers of the fig but does not fully break through. The females will have to force their way out — but at least you have weakened the wall for them.',
+        narrativeResult: 'The tunnel reaches the outer layers but does not break through. The females will have to force the rest.',
         statEffects: [
           { stat: StatId.HEA, amount: -3, label: '-HEA' },
           { stat: StatId.HOM, amount: 5, label: '+HOM' },
@@ -335,10 +335,10 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
     id: 'figwasp-male-death-in-fig',
     type: 'passive',
     category: 'health',
-    narrativeText: 'Your purpose is fulfilled. You mated. You chewed the tunnel. Now your body is failing — you have no way to feed as an adult, no wings to fly, no eyes to see beyond this dark chamber. You will die inside this fig, and your body will be absorbed by the fruit that gave you life. The females are gone, carrying your genes to figs you will never see. In the economy of evolution, this is success.',
+    narrativeText: 'You cannot feed. You cannot fly. You cannot leave. Your body is failing inside the fig that grew you. The females are gone.',
     statEffects: [],
     consequences: [
-      { type: 'death', cause: 'Died inside natal fig after fulfilling reproductive purpose' },
+      { type: 'death', cause: 'Died inside the natal fig. No wings, no eyes, no way out.' },
     ],
     conditions: [
       { type: 'species', speciesIds: ['fig-wasp'] },
@@ -359,7 +359,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
     id: 'figwasp-female-emergence',
     type: 'passive',
     category: 'health',
-    narrativeText: 'You chew through the wall of your gall and emerge into the dim interior of the fig. Unlike the males, you have wings — four delicate membranes folded tight against your body. You have compound eyes that detect the faint light filtering through the fig wall. And you have antennae, tuned to the volatile compounds of receptive figs. The males are already moving through the darkness around you, fighting, mating, beginning to chew. Your time inside this fig is short.',
+    narrativeText: 'You chew through the gall wall. Dim light filters through the fig. You have wings, folded tight. You have compound eyes. You have antennae tuned to fig volatiles. Males move through the darkness around you.',
     statEffects: [
       { stat: StatId.NOV, amount: 5, label: '+NOV' },
     ],
@@ -382,7 +382,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
     id: 'figwasp-female-mated-in-gall',
     type: 'passive',
     category: 'reproduction',
-    narrativeText: 'A male has chewed into your gall and mated with you before you fully emerged. You felt the intrusion — a small hole in the gall wall, then the brief, mechanical act of insemination. You carry his sperm now, stored in your spermatheca, ready to fertilize the eggs you will lay in a fig you have not yet found. He will die here. You will carry his lineage forward.',
+    narrativeText: 'A small hole appears in your gall wall. Brief intrusion, then it is over. You carry sperm now, stored in the spermatheca.',
     statEffects: [
       { stat: StatId.HOM, amount: -3, label: '-HOM' },
     ],
@@ -404,7 +404,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
     id: 'figwasp-female-pollen-collection',
     type: 'active',
     category: 'foraging',
-    narrativeText: 'Inside the fig, you move methodically among the flowers, collecting pollen in specialized thoracic pockets — corbiculae evolved over millions of years for exactly this purpose. This pollen is your cargo, the currency of the mutualism. The fig fed you as a larva; now you will carry its pollen to a new fig and pollinate its flowers. But you must also reserve ovules for your own eggs. The balance between pollination and parasitism is the razor\'s edge on which 80 million years of co-evolution rests.',
+    narrativeText: 'Flowers line the fig interior. Your thoracic pollen pockets are empty. This pollen is your cargo for the next fig.',
     statEffects: [
       { stat: StatId.HOM, amount: -4, label: '-HOM' },
     ],
@@ -413,7 +413,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
         id: 'collect-thoroughly',
         label: 'Collect pollen thoroughly',
         description: 'Pack your corbiculae full — ensure good pollination at the next fig.',
-        narrativeResult: 'You visit every accessible anther, loading your pollen pockets until they are densely packed. The next fig you enter will be well-pollinated — its seeds will be viable, its offspring strong. And strong figs make strong galls for your larvae.',
+        narrativeResult: 'You visit every accessible anther, packing the pollen pockets dense. The next fig will be well-pollinated.',
         statEffects: [
           { stat: StatId.WIS, amount: 3, label: '+WIS' },
         ],
@@ -428,7 +428,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
         id: 'collect-quickly',
         label: 'Collect quickly and move on',
         description: 'Gather minimal pollen — save energy for the flight ahead.',
-        narrativeResult: 'You grab a cursory dusting of pollen and turn your attention to the exit. The mutualism can survive a little less pollination. What matters now is getting out alive.',
+        narrativeResult: 'A cursory dusting of pollen. Enough. You turn toward the exit.',
         statEffects: [
           { stat: StatId.HOM, amount: 3, label: '+HOM' },
         ],
@@ -459,7 +459,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
     id: 'figwasp-exit-through-tunnel',
     type: 'active',
     category: 'migration',
-    narrativeText: 'The tunnel is open — a rough passage chewed through the fig wall by the males who will die behind you. Light streams in, warm and blinding after weeks of darkness. You must squeeze through. Your wings scrape against the ragged walls of fig tissue. Your antennae bend. The passage is barely wide enough for your body. On the other side: open air, sunlight, the vast and terrifying world outside the fig. You have never been outside.',
+    narrativeText: 'The tunnel is open. Light streams in, warm and blinding. You must squeeze through. Your wings scrape the ragged walls. The passage is barely wide enough.',
     statEffects: [
       { stat: StatId.NOV, amount: 8, label: '+NOV' },
     ],
@@ -468,7 +468,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
         id: 'exit-quickly',
         label: 'Push through quickly',
         description: 'Speed over caution — get out before the tunnel collapses.',
-        narrativeResult: 'You force yourself through the tunnel at full speed. A wing catches on a ridge of fig tissue and tears slightly. But you are through — you are outside — and the air hits you like a revelation. Warm. Moving. Infinite. Your wings unfold and you are flying for the first time in your life.',
+        narrativeResult: 'You force through at speed. A wing catches and tears slightly. But you are outside. Air moves. Your wings unfold.',
         statEffects: [
           { stat: StatId.ADV, amount: 5, label: '+ADV' },
         ],
@@ -483,7 +483,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
         id: 'exit-carefully',
         label: 'Navigate carefully',
         description: 'Take your time — protect your wings.',
-        narrativeResult: 'You move slowly through the tunnel, folding your wings tight against your body, guiding yourself with your antennae. The passage is tight, but you emerge intact. The world explodes into light and air and scent. You unfurl your wings, perfect and whole, and take flight.',
+        narrativeResult: 'You fold your wings tight and guide yourself with your antennae. The passage is tight, but you emerge intact. Air and light hit you. Wings unfurl, whole.',
         statEffects: [
           { stat: StatId.HOM, amount: 4, label: '+HOM' },
           { stat: StatId.WIS, amount: 2, label: '+WIS' },
@@ -511,7 +511,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
     id: 'figwasp-wind-dispersal',
     type: 'passive',
     category: 'environmental',
-    narrativeText: 'A gust of subtropical wind catches you. At two millimeters long, you are utterly at the mercy of air currents — a leaf in a hurricane, a mote of dust in a breeze. The wind carries you away from your natal tree. It could be carrying you toward a distant fig, or it could be carrying you over open water, asphalt, or treeless fields where no fig grows. You have no way to know.',
+    narrativeText: 'A gust catches you. At two millimeters, you are at the mercy of air currents. The wind carries you away from your natal tree. Where it takes you, you cannot determine.',
     statEffects: [
       { stat: StatId.CLI, amount: 5, label: '+CLI' },
       { stat: StatId.NOV, amount: 4, label: '+NOV' },
@@ -534,14 +534,14 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
     id: 'figwasp-scent-detection',
     type: 'active',
     category: 'foraging',
-    narrativeText: 'Your antennae — each one a forest of chemosensory hairs — detect something in the air. Volatile organic compounds: linalool, methyl salicylate, the specific blend that only a receptive Ficus aurea syconium produces. The fig is calling to you across the tropical canopy, a chemical siren song that your species has been answering for 80 million years. The scent is faint, carried on shifting winds.',
+    narrativeText: 'Your antennae register a chemical trace in the air. Linalool, methyl salicylate. The blend matches your innate template. A receptive fig, somewhere upwind. The signal is faint.',
     statEffects: [],
     choices: [
       {
         id: 'follow-scent',
         label: 'Follow this scent signal',
         description: 'Fly toward the source — it could be the fig you need.',
-        narrativeResult: 'You bank into the wind, following the concentration gradient of fig volatiles. The scent grows stronger with each wingbeat. Somewhere ahead, a fig is waiting — its flowers open, its ostiole receptive, its future dependent on your arrival.',
+        narrativeResult: 'You bank into the wind, following the concentration gradient. The chemical signal strengthens with each wingbeat.',
         statEffects: [
           { stat: StatId.NOV, amount: -3, label: '-NOV' },
           { stat: StatId.WIS, amount: 3, label: '+WIS' },
@@ -554,7 +554,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
         id: 'search-stronger',
         label: 'Search for a stronger signal',
         description: 'This scent is faint — there may be a closer fig.',
-        narrativeResult: 'You ignore the faint signal and continue searching, burning precious energy and time. Your adult life can be measured in hours, not days. Every minute spent searching is a minute closer to dying without laying eggs.',
+        narrativeResult: 'You ignore the faint trace and keep searching. Your adult life is measured in hours. Every minute spent searching is a minute closer to depletion.',
         statEffects: [
           { stat: StatId.HOM, amount: 5, label: '+HOM' },
           { stat: StatId.ADV, amount: 3, label: '+ADV' },
@@ -582,7 +582,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
     id: 'figwasp-spider-web-flight',
     type: 'active',
     category: 'predator',
-    narrativeText: 'A golden silk orb-weaver has strung its web between branches near a fig tree. The web is enormous relative to your body — a translucent death trap woven from silk stronger than steel. The sticky spiral threads glisten in the filtered light. You see it just in time. At your size, even a single strand could hold you.',
+    narrativeText: 'Silk strands glisten between branches near a fig tree. A web, enormous relative to your body. At your size, a single sticky strand could hold you.',
     statEffects: [
       { stat: StatId.TRA, amount: 5, label: '+TRA' },
     ],
@@ -591,7 +591,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
         id: 'veer-away',
         label: 'Veer away',
         description: 'Burn energy to fly around the web.',
-        narrativeResult: 'You bank hard, your tiny wings buzzing at maximum frequency. The web passes below you — a glistening plane of death that you barely avoided. The detour costs you precious energy and time, but you are alive.',
+        narrativeResult: 'You bank hard. The web passes below. The detour costs energy, but you are not stuck.',
         statEffects: [
           { stat: StatId.HOM, amount: 4, label: '+HOM' },
         ],
@@ -605,7 +605,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
         id: 'fly-through-gap',
         label: 'Fly through a gap in the web',
         description: 'You see an opening between the spiral threads.',
-        narrativeResult: 'You aim for what looks like a gap in the web\'s sticky spiral. You are so small that the spaces between threads seem navigable — but one wrong wingbeat and you are trapped.',
+        narrativeResult: 'You aim for a gap in the spiral. At your size, the spaces seem navigable. One wrong wingbeat and you are held.',
         statEffects: [
           { stat: StatId.ADV, amount: 5, label: '+ADV' },
         ],
@@ -614,7 +614,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
         style: 'danger',
         deathChance: {
           probability: 0.18,
-          cause: 'Caught in a golden silk orb-weaver web during dispersal flight',
+          cause: 'Caught in an orb-weaver web. The silk held.',
           statModifiers: [{ stat: StatId.WIS, factor: -0.002 }],
         },
       },
@@ -634,7 +634,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
     id: 'figwasp-bird-predation',
     type: 'passive',
     category: 'predator',
-    narrativeText: 'A white-eyed vireo is hunting insects in the canopy near a fig tree. It darts between branches, snatching gnats and small flies from the air with practiced precision. You are flying through its hunting territory. At two millimeters, you are barely a mouthful — but to a vireo, every calorie counts.',
+    narrativeText: 'A small bird darts between branches near a fig tree, snatching insects from the air. You are flying through its territory. At two millimeters, you are barely a mouthful.',
     statEffects: [
       { stat: StatId.TRA, amount: 3, label: '+TRA' },
     ],
@@ -642,11 +642,11 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
       {
         eventId: 'figwasp-bird-predation-strike',
         chance: 0.08,
-        narrativeText: 'The vireo spots you — a flicker of movement against the green canopy. It strikes.',
+        narrativeText: 'The bird detects your movement. It strikes.',
         footnote: 'Fig wasps are incidental prey for insectivorous birds. Their small size makes them low-value targets, but birds hunting near fig trees inevitably consume some dispersing wasps.',
         statEffects: [],
         consequences: [
-          { type: 'death', cause: 'Eaten by an insectivorous bird during dispersal flight' },
+          { type: 'death', cause: 'Taken by a bird mid-flight.' },
         ],
       },
     ],
@@ -665,14 +665,14 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
     id: 'figwasp-ant-gauntlet',
     type: 'active',
     category: 'predator',
-    narrativeText: 'You have found a fig tree — you can see the green syconia hanging from its branches. But the trunk is patrolled by a column of fire ants, thousands of them streaming up and down the bark. They will kill anything that lands on their territory. To reach the figs, you must fly past them.',
+    narrativeText: 'You detect a fig tree. Green syconia hang from its branches. But ants patrol the trunk in thousands, streaming up and down the bark.',
     statEffects: [],
     choices: [
       {
         id: 'fly-direct',
         label: 'Fly directly to a fig',
         description: 'Land on the syconium from the air, avoiding the trunk.',
-        narrativeResult: 'You aim for a hanging fig, approaching from below on the wind. Your tiny body slips past the ant patrol routes. You land on the smooth surface of a syconium, far from the nearest ant. Safe — for now.',
+        narrativeResult: 'You approach from below on the wind and land on the smooth surface of a syconium, far from the nearest ant.',
         statEffects: [
           { stat: StatId.WIS, amount: 2, label: '+WIS' },
         ],
@@ -681,7 +681,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
         style: 'default',
         deathChance: {
           probability: 0.06,
-          cause: 'Killed by fire ants while attempting to reach a fig',
+          cause: 'Killed by ants while attempting to reach a fig.',
           statModifiers: [{ stat: StatId.WIS, factor: -0.001 }],
         },
       },
@@ -689,7 +689,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
         id: 'circle-approach',
         label: 'Circle and approach from downwind',
         description: 'Take a wider path to avoid detection.',
-        narrativeResult: 'You make a wide circuit around the tree, approaching from the downwind side where the ant scent trails are weakest. The detour burns energy, but you reach the fig unmolested.',
+        narrativeResult: 'You circle wide, approaching from the downwind side. The detour burns energy, but you reach the fig without encountering ants.',
         statEffects: [
           { stat: StatId.HOM, amount: 3, label: '+HOM' },
         ],
@@ -715,7 +715,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
     id: 'figwasp-wrong-fig-species',
     type: 'active',
     category: 'foraging',
-    narrativeText: 'You approach what your antennae tell you is a receptive fig — but something is wrong. The chemical profile is subtly off. The volatile blend contains compounds that don\'t match your innate template. This is Ficus citrifolia, not Ficus aurea. The figs look similar, but the interior is incompatible — if you enter, your ovipositor cannot reach the ovules, and your eggs will not develop. But you are exhausting your reserves. You are running out of time.',
+    narrativeText: 'The chemical profile is close but wrong. Compounds that do not match your template. This is the wrong species of fig. But your reserves are low.',
     statEffects: [
       { stat: StatId.ADV, amount: 5, label: '+ADV' },
     ],
@@ -724,13 +724,13 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
         id: 'enter-wrong-fig',
         label: 'Enter anyway',
         description: 'You are desperate. Maybe it will work.',
-        narrativeResult: 'You squeeze through the ostiole, tearing your wings off in the process. Inside, the flowers are wrong — the styles are too long, the structure unfamiliar. Your ovipositor cannot reach the ovules. You pollinate uselessly, lay eggs that will never develop, and die inside a fig that was never meant for you. A dead end in an 80-million-year lineage.',
+        narrativeResult: 'You squeeze through the ostiole. Your wings tear off. Inside, the flower structure is wrong. Your ovipositor cannot reach the ovules. Your eggs will not develop here.',
         statEffects: [
           { stat: StatId.TRA, amount: 15, label: '+TRA' },
           { stat: StatId.HOM, amount: 10, label: '+HOM' },
         ],
         consequences: [
-          { type: 'death', cause: 'Entered incompatible fig species — eggs failed to develop' },
+          { type: 'death', cause: 'Entered the wrong fig species. Eggs failed to develop.' },
         ],
         revocable: false,
         style: 'danger',
@@ -739,7 +739,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
         id: 'keep-searching',
         label: 'Leave and keep searching',
         description: 'Trust your chemical instincts.',
-        narrativeResult: 'You pull away from the wrong fig, your antennae still searching the wind. The correct chemical signature is out there somewhere. But your energy reserves are dwindling, and every wingbeat brings you closer to the end of your brief adult life.',
+        narrativeResult: 'You pull away. The correct chemical signature is somewhere in the air. Your energy reserves are dwindling.',
         statEffects: [
           { stat: StatId.HOM, amount: 6, label: '+HOM' },
           { stat: StatId.WIS, amount: 3, label: '+WIS' },
@@ -771,14 +771,14 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
     id: 'figwasp-ostiole-entry',
     type: 'active',
     category: 'migration',
-    narrativeText: 'You have found it — a receptive Ficus aurea syconium, its chemical signature unmistakable. The ostiole is a tiny, scale-guarded opening at the base of the fig. It is barely wide enough for your body. To enter, you must squeeze through it — and the passage will tear off your wings and may break your antennae. You will enter this fig and never leave. Everything you are, everything your species has been for 80 million years, leads to this moment.',
+    narrativeText: 'The chemical signature is unmistakable. A receptive fig. The ostiole is a scale-guarded opening barely wide enough for your body. To enter, you must squeeze through. The passage will tear off your wings.',
     statEffects: [],
     choices: [
       {
         id: 'enter-fig',
         label: 'Enter the fig',
         description: 'Push through the ostiole. There is no going back.',
-        narrativeResult: 'You push headfirst into the ostiole. The scales clamp around your body like teeth. Your wings — the wings that carried you through open air for the first and last time — catch on the edges and tear away. Your antennae snap. But you are inside. The interior is dark, warm, and smells of pollen and fig sap. You have arrived. The cycle continues.',
+        narrativeResult: 'You push headfirst in. The scales clamp around you. Your wings catch and tear away. Your antennae snap. But you are inside. Dark, warm, pollen and fig sap.',
         statEffects: [
           { stat: StatId.TRA, amount: 5, label: '+TRA' },
           { stat: StatId.HOM, amount: -5, label: '-HOM' },
@@ -795,7 +795,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
         id: 'search-wider-ostiole',
         label: 'Search for a fig with a wider opening',
         description: 'Risk running out of time for a less damaging entry.',
-        narrativeResult: 'You leave the fig and continue searching. Each minute in the open air drains your reserves. You are gambling that there is an easier entry somewhere — but every fig\'s ostiole is calibrated to be just barely passable. This is the price of the mutualism.',
+        narrativeResult: 'You leave and continue searching. Each minute drains your reserves. Every ostiole is calibrated to be barely passable.',
         statEffects: [
           { stat: StatId.HOM, amount: 8, label: '+HOM' },
           { stat: StatId.ADV, amount: 5, label: '+ADV' },
@@ -823,14 +823,14 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
     id: 'figwasp-pollination',
     type: 'active',
     category: 'foraging',
-    narrativeText: 'Wingless, antenna-stumped, bleeding hemolymph from a dozen small wounds, you crawl through the interior of the new fig. The flowers are arranged in a dense carpet — short-styled flowers near the center where your ovipositor can reach, long-styled flowers near the wall where only pollen can go. You unpack your corbiculae and begin the ancient work. Pollination first — then eggs.',
+    narrativeText: 'Wingless, bleeding hemolymph, antennae broken. You crawl through the new fig. Flowers carpet the interior. Short-styled near the center, long-styled near the wall. You unpack your corbiculae.',
     statEffects: [],
     choices: [
       {
         id: 'pollinate-thoroughly',
         label: 'Pollinate thoroughly',
         description: 'Visit every flower. Ensure the fig sets good seed.',
-        narrativeResult: 'You crawl methodically from flower to flower, depositing pollen on each stigma. The fig will produce healthy seeds — and healthy seeds mean a healthy fig, which means your galls will be well-nourished. The mutualism depends on this reciprocity. You honor it.',
+        narrativeResult: 'You crawl from flower to flower, depositing pollen on each stigma.',
         statEffects: [
           { stat: StatId.WIS, amount: 5, label: '+WIS' },
           { stat: StatId.HOM, amount: -3, label: '-HOM' },
@@ -845,7 +845,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
         id: 'focus-on-eggs',
         label: 'Focus on egg-laying sites',
         description: 'Skip some flowers to save energy for oviposition.',
-        narrativeResult: 'You pollinate hastily, skipping the long-styled flowers near the wall and heading straight for the short-styled ones where you can lay eggs. It is a selfish strategy — fewer seeds for the fig, more galls for your offspring. Evolution constrains cheaters, but it also rewards them when they are not caught.',
+        narrativeResult: 'You pollinate hastily and head for the short-styled flowers where you can lay eggs.',
         statEffects: [
           { stat: StatId.HOM, amount: 4, label: '+HOM' },
         ],
@@ -872,7 +872,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
     id: 'figwasp-egg-laying',
     type: 'active',
     category: 'reproduction',
-    narrativeText: 'With your ovipositor — a needle-fine tube evolved over 80 million years — you probe the short-styled flowers of the fig. Each insertion deposits a single egg in a single ovule. Each egg will induce the fig to grow a gall around it — a nursery chamber of nutritive tissue. You lay until your body is spent, your abdomen contracting rhythmically as egg after egg passes down the ovipositor. When you are empty, you will die here, inside this fig, and the fig will absorb your body. Your children will never know you. But they will carry you forward.',
+    narrativeText: 'Your ovipositor probes the short-styled flowers. Each insertion deposits a single egg in a single ovule. Your abdomen contracts rhythmically until you are empty.',
     statEffects: [
       { stat: StatId.HOM, amount: -5, label: '-HOM' },
     ],
@@ -900,7 +900,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
     id: 'figwasp-non-pollinator-rival',
     type: 'passive',
     category: 'predator',
-    narrativeText: 'A non-pollinating fig wasp — a parasitoid from the genus Idarnes — has found the fig. She never enters; she does not pollinate. Instead, she drills through the fig wall with her extraordinarily long ovipositor, probing blindly for the galls inside. If she finds one of yours, her egg will hatch into a larva that consumes your offspring. She is a cheat in the mutualism — a free-rider who benefits from the fig without contributing. And there is nothing you can do to stop her.',
+    narrativeText: 'A parasitoid wasp has found the fig from outside. She never enters. Her ovipositor drills through the fig wall, probing blindly for galls. If she finds yours, her larva will consume your offspring.',
     statEffects: [
       { stat: StatId.ADV, amount: 8, label: '+ADV' },
       { stat: StatId.TRA, amount: 5, label: '+TRA' },
@@ -920,10 +920,10 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
     id: 'figwasp-female-death-in-fig',
     type: 'passive',
     category: 'health',
-    narrativeText: 'Your wings are gone. Your antennae are broken stubs. You have pollinated the flowers and laid your eggs and your body has nothing left to give. You die inside the fig, and the fruit absorbs your corpse — nitrogen, phosphorus, the minerals of your tiny life feeding the tissue that will nourish your children. The males who chewed your escape tunnel are dead beside you. The cycle is complete. In six weeks, your offspring will emerge from their galls, and the daughters among them will fly out into the same sunlight you saw for one brief, burning day.',
+    narrativeText: 'Wings gone. Antennae broken. Eggs laid. Your body has nothing left. You die inside the fig, and the fruit absorbs your remains.',
     statEffects: [],
     consequences: [
-      { type: 'death', cause: 'Died inside the fig after completing pollination and oviposition — the cycle continues' },
+      { type: 'death', cause: 'Died inside the fig after laying eggs. The fruit absorbed the body.' },
     ],
     conditions: [
       { type: 'species', speciesIds: ['fig-wasp'] },
@@ -940,7 +940,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
     id: 'figwasp-hurricane-damage',
     type: 'passive',
     category: 'environmental',
-    narrativeText: 'A tropical storm sweeps through the hammock. The strangler fig sways violently, its aerial roots groaning. Ripe figs are torn from branches and dashed on the limestone ground below. If you are still inside your natal fig, the impact could crush you. If you are flying, the wind is far too powerful for a two-millimeter insect to resist.',
+    narrativeText: 'Wind tears at the fig tree. Ripe figs rip from branches and split on the ground below. The tree groans and sways.',
     statEffects: [
       { stat: StatId.CLI, amount: 8, label: '+CLI' },
       { stat: StatId.TRA, amount: 5, label: '+TRA' },
@@ -949,10 +949,10 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
       {
         eventId: 'figwasp-hurricane-death',
         chance: 0.12,
-        narrativeText: 'The fig tears free from the branch and falls. The impact splits the syconium open.',
+        narrativeText: 'Your fig tears free and falls. The impact splits the syconium.',
         statEffects: [],
         consequences: [
-          { type: 'death', cause: 'Killed when natal fig was torn from the tree by a tropical storm' },
+          { type: 'death', cause: 'The fig tore from the branch and split on impact.' },
         ],
       },
     ],
@@ -969,7 +969,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
     id: 'figwasp-parasitoid-fly',
     type: 'passive',
     category: 'health',
-    narrativeText: 'A tiny parasitoid fly — Dirhinus giffardii — has located the fig. It crawls over the surface, probing with its ovipositor through natural cracks in the fig wall, seeking wasp larvae inside. Its eggs, if they reach you, will hatch into larvae that consume you from within.',
+    narrativeText: 'A parasitoid fly crawls over the fig surface, probing through cracks in the wall with its ovipositor, seeking larvae inside.',
     statEffects: [
       { stat: StatId.ADV, amount: 4, label: '+ADV' },
     ],

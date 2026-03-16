@@ -67,7 +67,7 @@ function checkExposure(ctx: SimulationContext, nudges: InstinctNudge[]): void {
     nudges.push({
       id: 'exposed',
       label: 'Exposed',
-      description: 'The open ground makes your skin crawl. Every instinct screams for cover — a tree line, a thicket, anything between you and the sky.',
+      description: 'Open ground. No cover within a sprint. Your ears keep turning.',
       suggestedBehavior: 'caution',
       suggestedDirection: 'increase',
       priority: 'medium',
@@ -82,7 +82,7 @@ function checkExposure(ctx: SimulationContext, nudges: InstinctNudge[]): void {
       nudges.push({
         id: 'precarious',
         label: 'Precarious',
-        description: 'The steep terrain is treacherous with your injured leg. One misstep on these rocks could be your last.',
+        description: 'Steep ground. Your injured leg slips on the rock. Bad footing here.',
         suggestedBehavior: 'exploration',
         suggestedDirection: 'decrease',
         priority: 'medium',
@@ -100,7 +100,7 @@ function checkHunger(ctx: SimulationContext, nudges: InstinctNudge[]): void {
     nudges.push({
       id: 'starving',
       label: 'Starving',
-      description: 'Your body is consuming itself. The desperate need for food overrides every other instinct — caution, fear, pain. Nothing matters except calories.',
+      description: 'Your body is eating itself. The hollowness under your ribs overrides everything. You will walk into the open for food.',
       suggestedBehavior: 'foraging',
       suggestedDirection: 'increase',
       priority: 'high',
@@ -110,7 +110,7 @@ function checkHunger(ctx: SimulationContext, nudges: InstinctNudge[]): void {
     nudges.push({
       id: 'hunger-drive',
       label: 'Hunger Drive',
-      description: 'The persistent ache of hunger is eroding your caution. Your body wants food more than safety. The risk of the open feels tolerable.',
+      description: 'Persistent ache below your ribs. Your attention keeps pulling toward food-smell. The open ground feels less dangerous than the hunger.',
       suggestedBehavior: 'foraging',
       suggestedDirection: 'increase',
       priority: 'medium',
@@ -127,7 +127,7 @@ function checkCold(ctx: SimulationContext, nudges: InstinctNudge[]): void {
     nudges.push({
       id: 'freezing',
       label: 'Freezing',
-      description: 'A deep cold has settled into your core. Your body needs shelter and warmth — moving burns calories but generates heat. Staying still saves energy but lets the cold win.',
+      description: 'Deep cold in your core. Your legs are numb. Moving burns what little you have left, but standing still the cold gets worse.',
       suggestedBehavior: 'exploration',
       suggestedDirection: 'decrease',
       priority: 'high',
@@ -137,7 +137,7 @@ function checkCold(ctx: SimulationContext, nudges: InstinctNudge[]): void {
     nudges.push({
       id: 'chilled',
       label: 'Chilled',
-      description: 'The shivering has become constant, a low-grade tremor that drains your energy. You would feel better somewhere sheltered from the wind.',
+      description: 'Constant low shivering. It drains you. Somewhere out of the wind would help.',
       suggestedBehavior: 'caution',
       suggestedDirection: 'increase',
       priority: 'low',
@@ -154,7 +154,7 @@ function checkImmune(ctx: SimulationContext, nudges: InstinctNudge[]): void {
     nudges.push({
       id: 'sickly',
       label: 'Sickly',
-      description: 'Your body feels heavy and wrong. A deep fatigue clouds your thinking. Every instinct says to rest, to conserve, to let your body fight its invisible battles.',
+      description: 'Your body feels heavy and wrong. Deep fatigue. Your legs want to fold. Everything says lie down.',
       suggestedBehavior: 'caution',
       suggestedDirection: 'increase',
       priority: 'medium',
@@ -170,7 +170,7 @@ function checkInjury(ctx: SimulationContext, nudges: InstinctNudge[]): void {
     nudges.push({
       id: 'crippled',
       label: 'Crippled',
-      description: 'Your injured leg can barely hold you. Running is agony, and fleeing a predator may be impossible. Stay near cover. Avoid anything that might force you to sprint.',
+      description: 'Your injured leg barely holds weight. Running is not possible. Stay near cover.',
       suggestedBehavior: 'caution',
       suggestedDirection: 'increase',
       priority: 'high',
@@ -180,7 +180,7 @@ function checkInjury(ctx: SimulationContext, nudges: InstinctNudge[]): void {
     nudges.push({
       id: 'limping',
       label: 'Limping',
-      description: 'The injury slows you, each stride a reminder of your vulnerability. You compensate, favoring the good leg, but the old confidence in your speed is gone.',
+      description: 'Your gait hitches. You favor the good side. At speed the bad leg will not keep up.',
       suggestedBehavior: 'exploration',
       suggestedDirection: 'decrease',
       priority: 'low',
@@ -197,7 +197,7 @@ function checkWeather(ctx: SimulationContext, nudges: InstinctNudge[]): void {
     nudges.push({
       id: 'storm-dread',
       label: 'Storm Dread',
-      description: 'The storm is a living thing, howling and tearing at the world. Every fiber of your being says to hunker down, to find the deepest shelter and wait it out.',
+      description: 'Wind and ice, constant. You cannot smell, cannot hear over it. Your body says find shelter and stop moving.',
       suggestedBehavior: 'exploration',
       suggestedDirection: 'decrease',
       priority: 'high',
@@ -207,7 +207,7 @@ function checkWeather(ctx: SimulationContext, nudges: InstinctNudge[]): void {
     nudges.push({
       id: 'heat-lethargy',
       label: 'Heat Lethargy',
-      description: 'The heat presses down like a weight. Your body wants to lie still in the shade, conserving energy, waiting for the cool of evening.',
+      description: 'Heat on your body, pressing. You pant. Your legs want shade and stillness.',
       suggestedBehavior: 'foraging',
       suggestedDirection: 'decrease',
       priority: 'low',
@@ -225,7 +225,7 @@ function checkReproductive(ctx: SimulationContext, nudges: InstinctNudge[]): voi
     nudges.push({
       id: 'rut-fever',
       label: 'Rut Fever',
-      description: 'A chemical imperative burns through your blood, overriding caution and common sense. The need to find does, to fight rivals, to establish dominance — it is not a thought but a compulsion.',
+      description: 'Heat in your muscles, swelling in your neck. Doe-scent on the wind pulls you. The drive to move toward it overrides the drive to eat or rest.',
       suggestedBehavior: 'mating',
       suggestedDirection: 'increase',
       priority: 'medium',
@@ -240,7 +240,7 @@ function checkReproductive(ctx: SimulationContext, nudges: InstinctNudge[]): voi
       nudges.push({
         id: 'maternal',
         label: 'Maternal',
-        description: 'Your fawns need you close. The urge to return to them, to check on them, to feed them is a constant pull at the edge of your attention.',
+        description: 'A pull back toward where you left them. The scent-memory of the small ones at the edge of your attention, constant.',
         suggestedBehavior: 'exploration',
         suggestedDirection: 'decrease',
         priority: 'medium',
@@ -260,7 +260,7 @@ function checkSocial(ctx: SimulationContext, nudges: InstinctNudge[]): void {
     nudges.push({
       id: 'herd-anxiety',
       label: 'Herd Anxiety',
-      description: 'Being alone makes your skin crawl. Every sound could be a predator, and there are no other eyes or ears to share the watch. You want to be near other deer.',
+      description: 'Alone. No other ears scanning, no other noses testing the wind. Your alertness is higher without the others near.',
       suggestedBehavior: 'sociability',
       suggestedDirection: 'increase',
       priority: 'low',
@@ -284,7 +284,7 @@ function checkPredatorProximity(ctx: SimulationContext, nudges: InstinctNudge[])
     nudges.push({
       id: 'predator-scent',
       label: 'Predator Scent',
-      description: 'A sharp, acrid musk on the wind that makes every muscle lock rigid. Something is hunting here. Something close. The urge to flee is almost overwhelming.',
+      description: 'Sharp musk on the wind. Fresh. Close. Every muscle locks. Your weight shifts to your hindquarters.',
       suggestedBehavior: 'caution',
       suggestedDirection: 'increase',
       priority: 'high',
@@ -299,7 +299,7 @@ function checkPredatorProximity(ctx: SimulationContext, nudges: InstinctNudge[])
         nudges.push({
           id: 'death-scent',
           label: 'Death Scent',
-          description: 'The ground here smells of old blood and fear. Something died here recently. Your body wants to be elsewhere — anywhere but this killing ground.',
+          description: 'Old blood smell on the ground here. Something died recently. Your body wants to be somewhere else.',
           suggestedBehavior: 'exploration',
           suggestedDirection: 'increase',
           priority: 'medium',
@@ -319,7 +319,7 @@ function checkTerritoryFamiliarity(ctx: SimulationContext, nudges: InstinctNudge
     nudges.push({
       id: 'unfamiliar-ground',
       label: 'Unfamiliar Ground',
-      description: 'Nothing here smells right. The paths are wrong, the cover is uncertain, the escape routes unknown. Your body is tense with the vulnerability of not knowing this ground.',
+      description: 'No scent-marks you recognize. The paths are wrong. You do not know the escape routes here.',
       suggestedBehavior: 'caution',
       suggestedDirection: 'increase',
       priority: 'low',
@@ -343,8 +343,8 @@ function checkCrepuscularAlertness(ctx: SimulationContext, nudges: InstinctNudge
         id: 'twilight-alert',
         label: 'Twilight Alert',
         description: timeOfDay === 'dusk'
-          ? 'The light is failing and the shadows are deepening. This is when they hunt — the gray shapes that flow between the trees. Your ears swivel constantly, tracking every sound.'
-          : 'The first light brings the most dangerous hour. Predators are finishing their night hunts, hungry and desperate. You watch the tree line with every nerve alight.',
+          ? 'Light fading. The scent-thermals are shifting and your nose is less reliable. Your ears rotate faster.'
+          : 'First light. The wind has not settled yet. Scent-reading is difficult. Your ears work harder.',
         suggestedBehavior: 'caution',
         suggestedDirection: 'increase',
         priority: 'low',
@@ -361,7 +361,7 @@ function checkVisionAnxiety(ctx: SimulationContext, nudges: InstinctNudge[]): vo
     nudges.push({
       id: 'blind-terror',
       label: 'Blind Terror',
-      description: 'The world is a blur of indistinct shapes and shifting shadows. Every sound is amplified by what you cannot see. The darkness behind your failing eyes is more frightening than any predator.',
+      description: 'Shapes without edges. Movement you cannot resolve. Every sound is louder because your eyes give you almost nothing.',
       suggestedBehavior: 'caution',
       suggestedDirection: 'increase',
       priority: 'high',
@@ -386,8 +386,8 @@ function checkWeightCondition(ctx: SimulationContext, nudges: InstinctNudge[]): 
       id: 'body-wasting',
       label: severity === 'high' ? 'Wasting' : 'Hungry',
       description: severity === 'high'
-        ? 'Your ribs press against your skin. Every movement costs more than the last. The emptiness inside you is not hunger anymore — it is your body consuming itself.'
-        : 'A persistent hollow ache below your ribs. Your body feels lighter than it should, and the urge to find food crowds out other thoughts.',
+        ? 'Your ribs press against your skin. Each step costs more. The emptiness is not hunger anymore. Your body is taking itself apart.'
+        : 'Hollow ache below your ribs. Your body feels lighter than it should. Food-smell pulls your attention away from everything else.',
       suggestedBehavior: 'foraging',
       suggestedDirection: 'increase',
       priority: severity,
@@ -398,7 +398,7 @@ function checkWeightCondition(ctx: SimulationContext, nudges: InstinctNudge[]): 
     nudges.push({
       id: 'well-fed',
       label: 'Sated',
-      description: 'Your body feels solid and heavy with reserves. The urgency to eat has faded. You can afford to be cautious.',
+      description: 'Your body feels solid. The urgency to eat has faded. You can afford to be careful.',
       suggestedBehavior: 'foraging',
       suggestedDirection: 'decrease',
       priority: 'low',

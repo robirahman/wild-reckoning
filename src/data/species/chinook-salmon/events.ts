@@ -10,7 +10,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     id: 'salmon-krill-feast',
     type: 'active',
     category: 'foraging',
-    narrativeText: "You hit a dense swarm of krill rising from the deep. The water is thick with them — tiny, translucent bodies pulsing in the current. You open your mouth and swim through the cloud, filtering thousands with each pass. For once, the ocean feels generous.",
+    narrativeText: "A dense swarm of krill rises from below. The water thickens with their bodies. You open your mouth and swim through, filtering thousands with each pass.",
     statEffects: [
       { stat: StatId.HOM, amount: -8, label: '-HOM' },
       { stat: StatId.ADV, amount: -3, label: '-ADV' },
@@ -28,7 +28,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     id: 'salmon-baitfish-school',
     type: 'active',
     category: 'foraging',
-    narrativeText: "A school of herring flickers ahead — silver flashes catching the filtered light. You accelerate, driving into the ball of fish, snapping at the panicked stragglers. A few quick strikes and your stomach is full. The school reforms behind you as if nothing happened.",
+    narrativeText: "Silver flashes ahead. A school of herring. You accelerate into the ball of fish, snapping at stragglers. The school reforms behind you.",
     statEffects: [
       { stat: StatId.HOM, amount: -5, label: '-HOM' },
     ],
@@ -45,7 +45,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     id: 'salmon-deep-dive',
     type: 'active',
     category: 'foraging',
-    narrativeText: "Hunger drives you deeper than usual. The water grows cold and dark, pressing against your body as you descend. Down here, the krill are concentrated in dense layers, but the temperature saps your energy. You feed quickly and rise back toward the light, your body aching from the cold.",
+    narrativeText: "The water grows cold and dark as you descend. Pressure builds against your body. The krill are concentrated in dense layers down here, but the cold saps your muscles.",
     statEffects: [
       { stat: StatId.CLI, amount: 5, label: '+CLI' },
       { stat: StatId.HOM, amount: -3, label: '-HOM' },
@@ -60,7 +60,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     id: 'salmon-jellyfish-encounter',
     type: 'active',
     category: 'foraging',
-    narrativeText: "A bloom of moon jellyfish drifts through your feeding area, their translucent bells pulsing in slow rhythm. Their trailing tentacles sting your flanks as you navigate through them, and the krill you were chasing have scattered. You swim on, irritated and hungry.",
+    narrativeText: "Moon jellyfish drift through your feeding area, their trailing tentacles stinging your flanks. The krill you were chasing have scattered.",
     statEffects: [
       { stat: StatId.HOM, amount: 5, label: '+HOM' },
       { stat: StatId.ADV, amount: 3, label: '+ADV' },
@@ -79,7 +79,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     id: 'salmon-seal-attack',
     type: 'active',
     category: 'predator',
-    narrativeText: "A harbor seal materializes from below — a dark, torpedo-shaped shadow rising fast. Its black eyes are fixed on you. There is no warning, no sound, just sudden predatory intent closing the distance at terrifying speed.",
+    narrativeText: "A dark shape rising fast from below. Harbor seal. Its pressure wave hits your lateral line before you see it. Closing fast.",
     statEffects: [
       { stat: StatId.TRA, amount: 12, label: '+TRA' },
       { stat: StatId.ADV, amount: 10, label: '+ADV' },
@@ -98,7 +98,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
         style: 'default',
         deathChance: {
           probability: 0.08,
-          cause: 'Caught and eaten by a harbor seal.',
+          cause: 'Caught by a harbor seal.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
         },
       },
@@ -114,7 +114,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
         style: 'danger',
         deathChance: {
           probability: 0.12,
-          cause: 'The seal dove after you and caught you in the darkness.',
+          cause: 'The seal followed you into the darkness.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
         },
       },
@@ -129,7 +129,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     id: 'salmon-orca-pod',
     type: 'active',
     category: 'predator',
-    narrativeText: "The water trembles with subsonic clicks and whistles. Then you see them — a pod of orcas, their towering dorsal fins cutting the surface like black sails. They are hunting, driving salmon toward the surface in coordinated sweeps. The ocean itself seems to contract with fear.",
+    narrativeText: "Subsonic clicks and whistles vibrate through your lateral line. Towering dorsal fins cut the surface. Orcas, driving salmon toward the surface in coordinated sweeps.",
     statEffects: [
       { stat: StatId.TRA, amount: 18, label: '+TRA' },
       { stat: StatId.ADV, amount: 15, label: '+ADV' },
@@ -144,14 +144,14 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
         style: 'default',
         deathChance: {
           probability: 0.05,
-          cause: 'An orca picked you out of the school.',
+          cause: 'An orca picked you out of the scattering school.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
         },
       },
       {
         id: 'freeze-in-school',
         label: 'Stay tight in the school',
-        description: 'Safety in numbers — maybe',
+        description: 'Hold position in the mass of bodies',
         statEffects: [],
         consequences: [],
         revocable: false,
@@ -173,7 +173,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     id: 'salmon-fishing-net',
     type: 'active',
     category: 'predator',
-    narrativeText: "A wall of mesh appears from nowhere — a commercial gill net stretching across your path like a curtain of death. Fish around you are already tangled, their silver bodies thrashing uselessly against the monofilament. The net is closing in on you.",
+    narrativeText: "A wall of mesh across the current. Fish around you are tangled, their bodies thrashing against monofilament. The net is closing.",
     statEffects: [
       { stat: StatId.TRA, amount: 15, label: '+TRA' },
       { stat: StatId.NOV, amount: 10, label: '+NOV' },
@@ -190,7 +190,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
         style: 'danger',
         deathChance: {
           probability: 0.15,
-          cause: 'Caught in the net. Hauled aboard. Killed.',
+          cause: 'Tangled in the net. Hauled aboard.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
         },
       },
@@ -204,7 +204,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
         style: 'default',
         deathChance: {
           probability: 0.25,
-          cause: "You couldn't escape the net. Hauled aboard with the rest.",
+          cause: "Could not escape the net. Hauled aboard with the rest.",
           statModifiers: [{ stat: StatId.HEA, factor: -0.003 }],
         },
       },
@@ -219,7 +219,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     id: 'salmon-seabird-attack',
     type: 'active',
     category: 'predator',
-    narrativeText: "A shadow passes over you — then a violent splash as a seabird drives into the water like a spear. Its beak clamps down on your tail, tearing scales loose before you wrench free and dive. The bird surfaces empty-beaked, but you are bleeding and bruised.",
+    narrativeText: "A pressure wave from above, then violent impact. A beak clamps on your tail, tearing scales loose. You wrench free and dive. The bird surfaces empty.",
     statEffects: [
       { stat: StatId.ADV, amount: 5, label: '+ADV' },
       { stat: StatId.TRA, amount: 5, label: '+TRA' },
@@ -237,7 +237,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     id: 'salmon-bear-shallows',
     type: 'active',
     category: 'predator',
-    narrativeText: "The river narrows ahead, and through the churning white water you see it — a massive brown bear standing in the shallows, its paws raised, eyes scanning the water. Salmon carcasses litter the bank behind it. Other fish are stacking up around you, waiting, but the bear shows no sign of leaving.",
+    narrativeText: "The river narrows. Through the churning white water, a pressure disturbance: something massive standing in the current. Other fish are stacking up around you, holding position.",
     statEffects: [
       { stat: StatId.TRA, amount: 15, label: '+TRA' },
       { stat: StatId.ADV, amount: 12, label: '+ADV' },
@@ -245,7 +245,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     choices: [
       {
         id: 'dart-past',
-        label: 'Dart past the bear at full speed',
+        label: 'Dart past at full speed',
         statEffects: [
           { stat: StatId.HOM, amount: 10, label: '+HOM' },
         ],
@@ -254,21 +254,21 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
         style: 'danger',
         deathChance: {
           probability: 0.12,
-          cause: "The bear's paw slammed down on you. It was over in an instant.",
+          cause: "A paw slammed down. Over in an instant.",
           statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
         },
       },
       {
         id: 'wait-for-opening',
-        label: 'Wait for the bear to look away',
-        description: 'Patient, but you risk being caught while waiting',
+        label: 'Wait for the disturbance to shift',
+        description: 'Hold in the pool. Patient, but exposed.',
         statEffects: [],
         consequences: [],
         revocable: false,
         style: 'default',
         deathChance: {
           probability: 0.08,
-          cause: 'The bear caught you while you waited in the shallows.',
+          cause: 'Caught while holding in the shallows.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
         },
       },
@@ -289,13 +289,13 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     id: 'salmon-migration-trigger',
     type: 'active',
     category: 'migration',
-    narrativeText: "Something ancient stirs inside you. The water temperature is dropping, the days are growing shorter, and a pull you cannot name is dragging you toward the coast. You taste the river on the current — faint, impossibly distant, but unmistakable. It is the river where you were born, and it is calling you home to die.",
+    narrativeText: "The water temperature is dropping. Something pulls you toward the coast. You taste the faintest trace of river chemistry on the current. The chemical signature of the water where you hatched.",
     statEffects: [],
     choices: [
       {
         id: 'begin-migration',
-        label: 'Follow the instinct upstream',
-        description: 'Begin the journey home — there is no return from this',
+        label: 'Follow the chemical trace upstream',
+        description: 'Begin the journey. There is no return from this.',
         statEffects: [
           { stat: StatId.HOM, amount: 10, label: '+HOM' },
           { stat: StatId.ADV, amount: 8, label: '+ADV' },
@@ -310,7 +310,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
       {
         id: 'stay-in-ocean',
         label: 'Stay in the ocean',
-        description: 'Ignore the pull — for now',
+        description: 'Ignore the pull. For now.',
         statEffects: [
           { stat: StatId.TRA, amount: -3, label: '-TRA' },
         ],
@@ -332,7 +332,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     id: 'salmon-upstream-rapids',
     type: 'active',
     category: 'migration',
-    narrativeText: "The river surges against you with brutal force. White water crashes over submerged boulders, and the current tears at your body with every stroke. Your muscles burn. Your skin is raw from scraping against rocks. But the river only flows one way, and you must go the other.",
+    narrativeText: "The river pushes against you. White water crashes over boulders. The current tears at your body with every stroke. Your muscles burn. Your skin scrapes against rock.",
     statEffects: [
       { stat: StatId.HOM, amount: 10, label: '+HOM' },
       { stat: StatId.ADV, amount: 8, label: '+ADV' },
@@ -352,7 +352,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     id: 'salmon-waterfall-leap',
     type: 'active',
     category: 'migration',
-    narrativeText: "A waterfall blocks your path — six feet of roaring white water pouring over a ledge of basalt. Other salmon are hurling themselves at it, their silver bodies arcing through the spray, most falling back into the pool below. A narrow side channel trickles around the falls, but it barely has enough water to swim in.",
+    narrativeText: "A ledge of basalt. Six feet of falling water. Other salmon hurl themselves at it, most falling back. A narrow side channel trickles around the falls with barely enough water to swim in.",
     statEffects: [],
     choices: [
       {
@@ -374,7 +374,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
       {
         id: 'side-channel',
         label: 'Take the side channel',
-        description: 'Slower but safer — costs energy',
+        description: 'Slower but safer',
         statEffects: [
           { stat: StatId.HOM, amount: 5, label: '+HOM' },
         ],
@@ -397,7 +397,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     id: 'salmon-dam-obstruction',
     type: 'active',
     category: 'migration',
-    narrativeText: "A concrete wall rises from the river — a hydroelectric dam, humming with power, blocking the entire channel. The water pooling below it is deep and still and smells of nothing. You can feel the river above, tantalizingly close, but the dam stands between you and your birthplace. A fish ladder zigzags up one side, its narrow channels churning with artificial current.",
+    narrativeText: "A wall across the river. The water pooling below it is deep and still and has no chemical signature. You can feel the river above, close. A fish ladder zigzags up one side, its channels churning.",
     statEffects: [
       { stat: StatId.HOM, amount: 15, label: '+HOM' },
       { stat: StatId.ADV, amount: 10, label: '+ADV' },
@@ -440,7 +440,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     id: 'salmon-eagle-attack',
     type: 'active',
     category: 'predator',
-    narrativeText: "A bald eagle circles overhead, its white head tilted downward, tracking your shadow through the shallows. The river is too shallow here to dive — you are exposed, vulnerable, a dark shape against pale gravel. The eagle folds its wings and drops.",
+    narrativeText: "The water is too shallow to dive. You are a dark shape against pale gravel. A pressure wave from above. Talons descending.",
     statEffects: [
       { stat: StatId.TRA, amount: 10, label: '+TRA' },
       { stat: StatId.ADV, amount: 8, label: '+ADV' },
@@ -457,7 +457,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
         style: 'default',
         deathChance: {
           probability: 0.05,
-          cause: 'The eagle plucked you from the shallows before you could reach deep water.',
+          cause: 'Plucked from the shallows before reaching deep water.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
         },
       },
@@ -472,7 +472,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
         style: 'danger',
         deathChance: {
           probability: 0.08,
-          cause: 'The eagle caught you mid-leap between pools.',
+          cause: 'Caught mid-leap between pools.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
         },
       },
@@ -493,7 +493,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     id: 'salmon-finding-redd',
     type: 'active',
     category: 'reproduction',
-    narrativeText: "The stream narrows here, running clear and cold over a bed of clean gravel. The current is gentle, the oxygen levels high, and the substrate is loose enough to dig. Something deep in your body recognizes this place — not this exact bend, perhaps, but this type of place. This is where eggs survive. This is where life begins again. You have found your spawning ground.",
+    narrativeText: "Clear, cold water over clean gravel. The current is gentle. Oxygen levels high. The substrate is loose enough to dig. The chemical signature of this place matches something in your body.",
     statEffects: [
       { stat: StatId.ADV, amount: -5, label: '-ADV' },
       { stat: StatId.WIS, amount: 5, label: '+WIS' },
@@ -514,7 +514,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     id: 'salmon-spawning-event',
     type: 'active',
     category: 'reproduction',
-    narrativeText: "This is the moment your entire life has been building toward. Your body is battered, your skin mottled and torn, your jaw hooked beyond recognition. You have crossed an ocean, climbed a river, fought bears and eagles and the current itself. And now, in this quiet stretch of gravel-bottomed stream, you release everything you have left. Eggs settle into the redd — thousands of them, each one a chance. The water clouds with milt. You sweep gravel over them with the last of your strength. It is done. Your body is failing. But the river will carry your legacy forward, as it always has.",
+    narrativeText: "Your body is battered, skin mottled, jaw hooked. You release eggs into the redd. The water clouds with milt. You sweep gravel over them with the last of your strength.",
     statEffects: [],
     consequences: [
       { type: 'spawn' },
@@ -535,7 +535,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     id: 'salmon-water-temperature',
     type: 'active',
     category: 'health',
-    narrativeText: "The water temperature has spiked. The surface layer feels almost warm — wrong for a salmon, deeply wrong. Your gills work harder to extract oxygen from the heated water, and a sluggish lethargy settles into your muscles. Other fish are sinking to deeper, cooler layers, but even there the relief is marginal.",
+    narrativeText: "The water is warm. Wrong. Your gills work harder to extract oxygen. A sluggish heaviness settles into your muscles.",
     statEffects: [
       { stat: StatId.CLI, amount: 8, label: '+CLI' },
       { stat: StatId.HOM, amount: 5, label: '+HOM' },
@@ -552,7 +552,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     id: 'salmon-sea-lice',
     type: 'active',
     category: 'health',
-    narrativeText: "You notice a persistent irritation along your flanks — a crawling, biting sensation that won't go away no matter how fast you swim. Tiny parasitic copepods have latched onto your skin, feeding on your mucus and blood.",
+    narrativeText: "A crawling, biting sensation along your flanks. Parasitic copepods have latched onto your skin, feeding on your mucus and blood.",
     statEffects: [
       { stat: StatId.ADV, amount: 3, label: '+ADV' },
     ],
@@ -563,7 +563,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
         conditions: [
           { type: 'no_parasite', parasiteId: 'sea-lice' },
         ],
-        narrativeText: 'The sea lice have established a breeding colony on your body. Their numbers are growing, and the damage to your protective mucus layer is becoming significant.',
+        narrativeText: 'The sea lice have established a breeding colony on your body. The damage to your mucus layer is growing.',
         footnote: '(Infested with sea lice)',
         statEffects: [],
         consequences: [
@@ -583,7 +583,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     id: 'salmon-pollution-plume',
     type: 'active',
     category: 'environmental',
-    narrativeText: "The water changes color ahead — a sickly brown-green discharge spreading from a pipe on the riverbank. The smell is chemical and sharp, burning your gills. Other fish are turning back, but the plume extends across most of the channel. Your body absorbs toxins with every breath.",
+    narrativeText: "The water chemistry changes ahead. A sharp, unfamiliar burn in your gills. Other fish are turning back. The plume extends across most of the channel.",
     statEffects: [
       { stat: StatId.HOM, amount: 10, label: '+HOM' },
       { stat: StatId.HEA, amount: -8, label: '-HEA' },
@@ -605,13 +605,13 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     id: 'salmon-squid-hunt',
     type: 'active',
     category: 'foraging',
-    narrativeText: "Night in the open ocean. Far below, bioluminescent squid pulse with cold blue light, their tentacles trailing like lanterns in the abyss. The glow draws you downward — each flash a signal, each signal a meal. The question is how deep you are willing to go.",
+    narrativeText: "Far below, bioluminescent flashes pulse in the dark water. Each flash is something living, something edible. The cold deepens with every body-length of descent.",
     statEffects: [],
     choices: [
       {
         id: 'chase-deep',
         label: 'Chase into the deep water',
-        description: 'Richer hunting, but the cold is punishing',
+        description: 'Richer feeding, but the cold is punishing',
         statEffects: [
           { stat: StatId.CLI, amount: 6, label: '+CLI' },
         ],
@@ -643,7 +643,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     id: 'salmon-plankton-bloom',
     type: 'passive',
     category: 'foraging',
-    narrativeText: "The sea has turned to soup. A massive plankton bloom has erupted across the surface, and every creature in the water column is gorging — herring, anchovies, jellyfish, you. The abundance is staggering, almost violent in its profusion. You eat until your belly aches, carried along in a frenzy that has no leader and no end.",
+    narrativeText: "The water is thick with plankton. Everything in the water column is feeding. Herring, anchovies, jellyfish. You eat until your body aches.",
     statEffects: [
       { stat: StatId.HOM, amount: -6, label: '-HOM' },
     ],
@@ -662,7 +662,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     id: 'salmon-current-ride',
     type: 'passive',
     category: 'foraging',
-    narrativeText: "You find the edge of a great ocean current — a river within the sea, flowing steady and strong in the direction you need to go. You ease into it and let it carry you, your muscles unwinding for the first time in days. Small prey tumbles past in the flow, and you snap at it lazily, barely needing to move. The ocean, for once, is doing the work.",
+    narrativeText: "You find the edge of an ocean current. Strong, steady, flowing the direction you need. You ease into it. Your muscles unwind. Small prey tumbles past in the flow and you snap at it without effort.",
     statEffects: [
       { stat: StatId.HOM, amount: -5, label: '-HOM' },
       { stat: StatId.ADV, amount: -4, label: '-ADV' },
@@ -684,7 +684,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     id: 'salmon-sea-lion-chase',
     type: 'active',
     category: 'predator',
-    narrativeText: "A California sea lion explodes out of the kelp — sleek, enormous, far faster than anything that size should be. It twists through the amber fronds with terrifying agility, its whiskered snout locked on you. The kelp forest is a maze of stalks and shadows, but open water lies just beyond.",
+    narrativeText: "A massive shape explodes out of the kelp. The pressure wave hits your lateral line first. A sea lion, twisting through the fronds, locked on you.",
     statEffects: [
       { stat: StatId.TRA, amount: 10, label: '+TRA' },
       { stat: StatId.ADV, amount: 10, label: '+ADV' },
@@ -693,7 +693,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
       {
         id: 'weave-kelp',
         label: 'Weave through the kelp',
-        description: 'Use the forest to lose the predator',
+        description: 'Use the forest of stalks to lose the predator',
         statEffects: [
           { stat: StatId.HOM, amount: 5, label: '+HOM' },
         ],
@@ -702,14 +702,14 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
         style: 'default',
         deathChance: {
           probability: 0.06,
-          cause: 'The sea lion cornered you in the kelp. There was nowhere left to turn.',
+          cause: 'Cornered in the kelp. Nowhere left to turn.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
         },
       },
       {
         id: 'burst-open-water',
         label: 'Burst into open water',
-        description: 'Outrun it — or die trying',
+        description: 'Outrun it or die',
         statEffects: [
           { stat: StatId.HOM, amount: 10, label: '+HOM' },
         ],
@@ -733,7 +733,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     id: 'salmon-osprey-strike',
     type: 'passive',
     category: 'predator',
-    narrativeText: "A sharp whistle of wind is the only warning. An osprey plunges from the sky feet-first, talons spread wide, punching through the surface in an explosion of spray. The impact sends a shockwave through the shallows. You feel the rake of claws across your flank as you twist away, your heart hammering against your ribs.",
+    narrativeText: "A whistle of wind, then impact. Something punches through the surface feet-first. A shockwave through the shallows. Claws rake your flank as you twist away.",
     statEffects: [
       { stat: StatId.TRA, amount: 8, label: '+TRA' },
       { stat: StatId.ADV, amount: 6, label: '+ADV' },
@@ -743,7 +743,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
         eventId: 'osprey-talon-wound',
         chance: 0.15,
         conditions: [],
-        narrativeText: 'The osprey\'s talons have left shallow furrows along your side. Scales are torn loose, and thin threads of blood trail behind you in the current.',
+        narrativeText: 'Shallow furrows along your side. Scales torn loose. Blood trailing in the current.',
         footnote: '(Raked by osprey talons)',
         statEffects: [],
         consequences: [
@@ -763,7 +763,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     id: 'salmon-lamprey-attach',
     type: 'active',
     category: 'predator',
-    narrativeText: "Something latches onto your side with a wet, sucking grip. You feel the rasp of keratin teeth grinding through your scales, boring toward the flesh beneath. A Pacific lamprey — eyeless, jawless, ancient — has chosen you as its host. Its eel-like body trails behind you like a grotesque pennant.",
+    narrativeText: "Something latches onto your side with a wet, grinding grip. Keratin teeth rasping through scales, boring toward flesh. A lamprey. Its body trails behind you.",
     statEffects: [
       { stat: StatId.TRA, amount: 6, label: '+TRA' },
       { stat: StatId.ADV, amount: 4, label: '+ADV' },
@@ -772,7 +772,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
       {
         id: 'thrash-rocks',
         label: 'Thrash against the rocks to scrape it off',
-        description: 'Violent, but it should work',
+        description: 'Violent, but should work',
         statEffects: [
           { stat: StatId.HOM, amount: 5, label: '+HOM' },
         ],
@@ -785,7 +785,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
       {
         id: 'endure-lamprey',
         label: 'Endure it',
-        description: 'Let it feed — conserve your energy',
+        description: 'Let it feed. Conserve your energy.',
         statEffects: [
           { stat: StatId.HEA, amount: -5, label: '-HEA' },
         ],
@@ -810,13 +810,13 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     id: 'salmon-warm-tributary',
     type: 'active',
     category: 'migration',
-    narrativeText: "A side tributary spills into the river, and the water coming from it is warm — bathwater warm, dangerously warm. The plume spreads across the main channel like a fever, and you can feel your gills laboring in the oxygen-depleted flow. Upstream, through the heat shimmer, the water looks clearer. But there is a cool pocket in the rocks to your left where a spring seeps in.",
+    narrativeText: "Warm water spreads across the channel from a side tributary. Your gills labor in the oxygen-depleted flow. A cool seep from a spring feeds into the rocks to your left.",
     statEffects: [],
     choices: [
       {
         id: 'push-through-warm',
         label: 'Push through the warm zone',
-        description: 'Faster, but the heat could kill you',
+        description: 'Faster, but the heat is dangerous',
         statEffects: [
           { stat: StatId.CLI, amount: 8, label: '+CLI' },
         ],
@@ -825,14 +825,14 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
         style: 'danger',
         deathChance: {
           probability: 0.04,
-          cause: 'The warm water overwhelmed your body. Your heart stopped in the heat.',
+          cause: 'The warm water overwhelmed your body. Heart stopped.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
         },
       },
       {
         id: 'rest-cool-pocket',
         label: 'Rest in the cool pocket and wait',
-        description: 'Safe, but you burn precious reserves',
+        description: 'Safe, but burns reserves',
         statEffects: [],
         consequences: [
           { type: 'modify_weight', amount: -1 },
@@ -853,7 +853,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     id: 'salmon-shallow-gravel-bar',
     type: 'active',
     category: 'migration',
-    narrativeText: "The river braids and spreads across a wide gravel bar, and suddenly the water is ankle-deep — too shallow to swim, barely deep enough to cover your dorsal fin. You are stranded, flopping on your side, gasping as the current trickles past. The deeper channel is ten body-lengths away. Above you, the sky is open and enormous, and somewhere an eagle is circling.",
+    narrativeText: "The river braids and spreads across gravel. The water drops to barely covering your dorsal fin. You are on your side, gills working. The deeper channel is ten body-lengths away.",
     statEffects: [
       { stat: StatId.ADV, amount: 8, label: '+ADV' },
     ],
@@ -861,7 +861,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
       {
         id: 'thrash-to-channel',
         label: 'Thrash toward the deeper channel',
-        description: 'Desperate, exhausting, but your only real option',
+        description: 'Desperate, exhausting, but the only option',
         statEffects: [
           { stat: StatId.HOM, amount: 8, label: '+HOM' },
         ],
@@ -870,14 +870,14 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
         style: 'danger',
         deathChance: {
           probability: 0.05,
-          cause: 'You could not reach deep water. The sun and the air took you.',
+          cause: 'Could not reach deep water. Dried out on the gravel.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
         },
       },
       {
         id: 'wait-for-water',
         label: 'Wait for the water level to rise',
-        description: 'Patience — but you are exposed to everything',
+        description: 'Patient, but fully exposed',
         statEffects: [
           { stat: StatId.TRA, amount: 8, label: '+TRA' },
           { stat: StatId.ADV, amount: 6, label: '+ADV' },
@@ -887,7 +887,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
         style: 'default',
         deathChance: {
           probability: 0.04,
-          cause: 'An eagle took you from the gravel bar while you waited.',
+          cause: 'Taken from the gravel bar by a raptor while waiting.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
         },
       },
@@ -904,13 +904,13 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     id: 'salmon-log-jam',
     type: 'active',
     category: 'migration',
-    narrativeText: "The river is choked. A massive tangle of fallen timber spans the channel — logs stacked and interlocked, bark stripped white by the current, branches reaching into the water like skeletal fingers. The river pours through gaps in the debris, but the openings are narrow and dark, barely wider than your body. You can hear the water thundering on the other side.",
+    narrativeText: "Fallen timber chokes the channel. The river forces through narrow gaps between logs. The openings are barely wider than your body. The current thunders on the other side.",
     statEffects: [],
     choices: [
       {
         id: 'push-through-gaps',
         label: 'Push through the gaps',
-        description: 'Tight, rough, and your scales will pay the price',
+        description: 'Tight, rough. Your scales will pay.',
         statEffects: [
           { stat: StatId.TRA, amount: 5, label: '+TRA' },
         ],
@@ -923,7 +923,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
       {
         id: 'go-around',
         label: 'Go around the long way',
-        description: 'Safe, but exhausting and slow',
+        description: 'Safe, but exhausting',
         statEffects: [
           { stat: StatId.HOM, amount: 8, label: '+HOM' },
         ],
@@ -946,7 +946,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     id: 'salmon-other-salmon-dying',
     type: 'passive',
     category: 'migration',
-    narrativeText: "The stench reaches you before the sight does. Along both banks, the bodies of salmon lie in various states of decay — white fungus blooming on their flanks, jaws still hooked open in death, eye sockets hollow. These are the ones who came before you, who made this same journey weeks ago and finished what they were built to finish. The river runs thick with the smell of spent flesh. You swim through their legacy, through the nutrients they have become, and something ancient in you understands that this is not tragedy. This is the plan.",
+    narrativeText: "The chemical signature of decay reaches you before you see them. Along both banks, salmon bodies in various states of decomposition. White fungus blooming on flanks, jaws still hooked open. You swim through the nutrients their bodies have become.",
     statEffects: [
       { stat: StatId.TRA, amount: 8, label: '+TRA' },
       { stat: StatId.NOV, amount: 6, label: '+NOV' },
@@ -967,7 +967,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     id: 'salmon-smolt-transformation',
     type: 'passive',
     category: 'health',
-    narrativeText: "Your body is betraying its origins. The dark parr marks along your flanks — the camouflage of a river fish — are fading, replaced by a bright silver sheen that catches the light like hammered metal. Inside, deeper changes are underway: your kidneys are rewriting themselves, learning to filter salt instead of freshwater. The river that raised you is becoming chemically hostile. You belong to the ocean now, whether you are ready or not.",
+    narrativeText: "Your parr marks are fading. Your flanks turn silver. Inside, your kidneys are shifting from freshwater filtration to salt processing. The river water that raised you is becoming chemically wrong.",
     statEffects: [
       { stat: StatId.NOV, amount: 8, label: '+NOV' },
       { stat: StatId.HOM, amount: 6, label: '+HOM' },
@@ -987,7 +987,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     id: 'salmon-ocean-growth-spurt',
     type: 'passive',
     category: 'health',
-    narrativeText: "The open ocean is generous, and your body is taking full advantage. You can feel yourself growing — not just heavier, but longer, stronger, faster. Your muscles thicken along your spine. Your jaws widen. Every meal translates directly into mass, and there are so many meals out here that the growing never stops. You are becoming something formidable, a silver missile built for speed and endurance.",
+    narrativeText: "Your muscles thicken along your spine. Your jaws widen. Every meal translates directly into mass. You are growing longer, stronger, faster.",
     statEffects: [
       { stat: StatId.HOM, amount: -5, label: '-HOM' },
       { stat: StatId.HEA, amount: 5, label: '+HEA' },
@@ -1007,7 +1007,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     id: 'salmon-spawning-readiness',
     type: 'passive',
     category: 'health',
-    narrativeText: "Something is happening to your body that you cannot stop. Your jaw is elongating, curving into a vicious hook. Your skin is thickening, darkening from silver to a deep, bruised crimson. Teeth are growing where there were none. You are being unmade and remade — not into something stronger, but into something singular, something designed for one final act. The ocean no longer feels like home. A river is calling, and your body is already answering.",
+    narrativeText: "Your jaw is elongating, curving into a hook. Your skin thickens, darkening from silver to deep crimson. Teeth are growing where there were none. The ocean no longer tastes right. A river\'s chemical trace pulls at you.",
     statEffects: [
       { stat: StatId.NOV, amount: 10, label: '+NOV' },
       { stat: StatId.HEA, amount: -6, label: '-HEA' },
@@ -1029,7 +1029,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     id: 'salmon-hatchery-runoff',
     type: 'passive',
     category: 'environmental',
-    narrativeText: "The water tastes wrong — metallic, synthetic, laced with compounds your gills were never meant to process. Upstream, a fish hatchery is discharging chemical runoff into the current: antibiotics, hormones, disinfectants. The water looks clear but it burns faintly, a slow corrosion working at your mucus membranes. You swim through it because there is no other way, your immune system straining against an enemy it cannot see.",
+    narrativeText: "The water tastes wrong. Metallic, synthetic. Your gills burn faintly. The compounds are unfamiliar: not organic, not natural chemistry. You swim through it because there is no other route.",
     statEffects: [
       { stat: StatId.IMM, amount: 6, label: '+IMM' },
       { stat: StatId.CLI, amount: 4, label: '+CLI' },
@@ -1047,7 +1047,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     id: 'salmon-thermal-refuge',
     type: 'passive',
     category: 'environmental',
-    narrativeText: "You feel it before you see it — a seam of cold, clean water threading into the river from a hidden spring. The temperature drops several degrees in the space of a body-length, and your gills open wide with relief. Other salmon are gathered here too, holding in the current, their bodies visibly calmer. For a few precious hours, the river is kind. The cool water washes the stress from your cells like rain after drought.",
+    narrativeText: "Your lateral line detects a seam of cold water threading into the river from a hidden spring. The temperature drops several degrees in a body-length. Your gills open wide. Other salmon are gathered here, holding in the current.",
     statEffects: [
       { stat: StatId.CLI, amount: -6, label: '-CLI' },
       { stat: StatId.HOM, amount: -5, label: '-HOM' },
@@ -1069,7 +1069,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     id: 'salmon-net-scar',
     type: 'passive',
     category: 'health',
-    narrativeText: "The monofilament scars from the fishing net have not healed cleanly. The raised welts of damaged tissue stand out against your scales like pale roads on a dark map, and the parasites have noticed. Sea lice cluster along the wound margins where your protective mucus is thinnest, finding easy purchase on the roughened flesh. What the net started, the ocean is finishing.",
+    narrativeText: "The monofilament scars have not healed cleanly. Raised welts of damaged tissue. Parasites cluster along the wound margins where your mucus layer is thinnest.",
     statEffects: [
       { stat: StatId.IMM, amount: 6, label: '+IMM' },
     ],
@@ -1080,7 +1080,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
         conditions: [
           { type: 'no_parasite', parasiteId: 'sea-lice' },
         ],
-        narrativeText: 'The damaged tissue along your net scars has become a breeding ground. Sea lice have colonized the wound margins, their tiny bodies clustered in the grooves where your scales once lay smooth.',
+        narrativeText: 'Sea lice have colonized the wound margins, clustered in the grooves where scales once lay.',
         footnote: '(Sea lice attracted to net scars)',
         statEffects: [],
         consequences: [
@@ -1100,7 +1100,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     id: 'salmon-migration-exhaustion',
     type: 'passive',
     category: 'migration',
-    narrativeText: "You have not eaten since you entered the river. Your body is consuming itself — burning through fat reserves, then glycogen, then muscle. Your flanks are concave where they were once rounded. Every stroke costs more than the last, and the current never relents. The river is stripping you down to bone and will, and you can feel the margin between survival and collapse growing thinner with each mile.",
+    narrativeText: "You have not eaten since entering the river. Your body is burning through fat, then glycogen, then muscle. Your flanks are concave. Every stroke costs more than the last.",
     statEffects: [
       { stat: StatId.HOM, amount: 10, label: '+HOM' },
       { stat: StatId.ADV, amount: 8, label: '+ADV' },
@@ -1125,14 +1125,14 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     id: 'salmon-nest-site-selection',
     type: 'active',
     category: 'reproduction',
-    narrativeText: "The gravel bed spreads before you in a mosaic of possibility. Your body reads each patch like a text \u2014 the size of the stones, the speed of the current threading between them, the oxygen content of the water welling up from below. Two sites hold your attention. The first is prime territory: clean, loose gravel in the main current where the water runs fastest and coldest, rich with dissolved oxygen that your eggs will need to survive. But another hen is already circling it, her tail working the substrate in slow, proprietary sweeps. She is large \u2014 her kype-scarred jaw and battered flanks speak of fights already won. The second site is tucked against a fallen hemlock, sheltered from the worst of the flow, its gravel finer and less exposed. The water here is slower, warmer, carrying less oxygen. Eggs laid here will survive \u2014 but fewer of them. The eggs you carry are the sum of everything you have survived. Where you place them will decide whether that survival meant anything at all.",
+    narrativeText: "Two sites. The first: clean, loose gravel in fast, cold, oxygen-rich current. Another hen is already circling it, her tail working the substrate. She is large. The second: tucked against a fallen hemlock, sheltered. Slower water, warmer, less oxygen.",
     statEffects: [],
     choices: [
       {
         id: 'prime-spot',
         label: 'Contest the prime gravel bed',
         description: 'Better oxygenation means more fry survive, but you must fight the other hen',
-        narrativeResult: 'You drive toward her flank-first, your body slamming into hers with a force that sends gravel swirling. She turns and bites \u2014 her jaw raking across your flank \u2014 but you hold your ground, pressing into the current, refusing to yield. Minutes of thrashing, biting, body-checking in water barely deep enough to cover you. Finally she peels away downstream, her tail beating weakly. The prime redd is yours. Your eggs will have the best water the river offers.',
+        narrativeResult: 'You slam into her flank-first. She bites, jaw raking across your side. You hold your ground. Minutes of thrashing, biting, body-checking. She peels away downstream. The prime redd is yours.',
         statEffects: [
           { stat: StatId.ADV, amount: 8, label: '+ADV' },
           { stat: StatId.HOM, amount: 6, label: '+HOM' },
@@ -1146,8 +1146,8 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
       {
         id: 'sheltered-spot',
         label: 'Take the sheltered site by the hemlock',
-        description: 'Less oxygen, fewer surviving fry \u2014 but no fight',
-        narrativeResult: 'You drift to the quieter water and begin to dig. The gravel here is adequate but the current is sluggish, the oxygen levels marginal. Some of your eggs will suffocate in their redds before they ever hatch. But your body is intact, and you will live long enough to guard the nest.',
+        description: 'Less oxygen, fewer surviving fry, but no fight',
+        narrativeResult: 'You drift to the quieter water and begin to dig. The current here is sluggish. Some eggs will suffocate before they hatch. But your body is intact.',
         statEffects: [
           { stat: StatId.HOM, amount: 5, label: '+HOM' },
         ],
@@ -1162,7 +1162,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
       {
         eventId: 'salmon-nest-fight-laceration',
         chance: 0.20,
-        narrativeText: 'The other hen\u2019s jaw caught you hard across the flank during the struggle, tearing a ragged line through your already-deteriorating skin. The wound clouds the water pink around you.',
+        narrativeText: 'The other hen\'s jaw caught you across the flank. A ragged line through deteriorating skin. The water clouds pink.',
         footnote: '(Flank laceration from nest fight)',
         statEffects: [
           { stat: StatId.HEA, amount: -4, label: '-HEA' },
@@ -1187,7 +1187,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     id: 'salmon-rival-redd-confrontation',
     type: 'active',
     category: 'reproduction',
-    narrativeText: "A shadow slides into the edge of your vision \u2014 another male, his jaw hooked into a grotesque curve, his flanks mottled crimson and black with spawning pigment. He is hovering over your redd, his body angled toward the hen, his intent unmistakable. {{npc.rival.name}} has been circling since dawn, darting in whenever you turn to chase off the jacks. Now he holds his ground, his pectoral fins flared wide, his body trembling with aggression. Every cell in your ruined body screams for rest, but the eggs in that gravel carry your bloodline, and this interloper means to replace it with his own.",
+    narrativeText: "Another male hovering over your redd, flanks mottled crimson and black. {{npc.rival.name}} has been circling since dawn. His pectoral fins are flared wide, body trembling.",
     statEffects: [
       { stat: StatId.ADV, amount: 6, label: '+ADV' },
     ],
@@ -1195,7 +1195,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
       {
         id: 'fight-rival-redd',
         label: 'Attack the rival',
-        description: 'Ram him, bite him, drive him off \u2014 but your body is failing',
+        description: 'Ram him, bite him, drive him off',
         statEffects: [
           { stat: StatId.HOM, amount: 10, label: '+HOM' },
         ],
@@ -1206,7 +1206,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
       {
         id: 'yield-position',
         label: 'Yield your position',
-        description: 'Conserve what little strength remains \u2014 find another redd',
+        description: 'Conserve what little strength remains',
         statEffects: [
           { stat: StatId.TRA, amount: 8, label: '+TRA' },
         ],
@@ -1219,7 +1219,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
       {
         eventId: 'redd-fight-injury',
         chance: 0.2,
-        narrativeText: 'His hooked jaw rakes across your flank, tearing a ragged gash through already-weakened skin. Blood clouds the water between you.',
+        narrativeText: 'His hooked jaw rakes your flank. A ragged gash through weakened skin. Blood clouds the water.',
         footnote: '(Wounded in spawning fight)',
         statEffects: [],
         consequences: [
@@ -1240,7 +1240,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     id: 'salmon-egg-laying',
     type: 'passive',
     category: 'reproduction',
-    narrativeText: "The moment arrives without ceremony. Your body arches, your tail fans the gravel one final time, and then the eggs come \u2014 a pale, translucent stream of them, each one a sphere of amber light settling into the spaces between the stones. Thousands of them. The current swirls them gently into the redd, and you feel the weight leave your body like a breath held for years finally released. The male drifts in from downstream, his milt clouding the water in a white veil that settles over the eggs like snow. You sweep gravel across them with movements that are no longer desperate but deliberate, almost tender. Something has been completed. The river accepted what you carried, and now the stones will keep it safe. Your body is hollowed, your strength nearly gone, but there is a stillness inside you that feels nothing like defeat.",
+    narrativeText: "Your body arches. Your tail fans the gravel. The eggs come: a pale stream settling into the spaces between stones. Thousands. The male drifts in from downstream, milt clouding the water. You sweep gravel across them. The weight leaves your body.",
     statEffects: [
       { stat: StatId.WIS, amount: 5, label: '+WIS' },
       { stat: StatId.NOV, amount: 5, label: '+NOV' },
@@ -1263,7 +1263,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     id: 'salmon-redd-fight',
     type: 'active',
     category: 'reproduction',
-    narrativeText: "Another male is holding position beside the hen — a broad-shouldered fish whose crimson flanks are already scarred from previous fights. His hooked kype opens and closes in a slow, deliberate threat display, and his body is angled to block the current lane that leads to the redd. Your own jaw aches with the spawning transformation that warped it into a weapon, the cartilage thickened and curved into a hook designed for exactly this moment. Your skin is sloughing in patches, your immune system collapsing, your organs consuming themselves for energy you stopped replenishing the day you left the ocean. You are dying. He is dying. But the eggs in that gravel will outlive you both, and every cell in your disintegrating body is screaming that they should carry your genes, not his.",
+    narrativeText: "Another male holds position beside the hen. His hooked kype opens and closes. His body blocks the current lane to the redd. Your own jaw aches with the spawning transformation that warped it into this shape. Your skin is sloughing. Your organs are consuming themselves for energy. He is dying. You are dying. But the eggs in that gravel will outlive you both.",
     statEffects: [
       { stat: StatId.ADV, amount: 6, label: '+ADV' },
       { stat: StatId.TRA, amount: 4, label: '+TRA' },
@@ -1272,8 +1272,8 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
       {
         id: 'charge-and-jawlock',
         label: 'Charge and jaw-lock',
-        description: 'Drive into him, lock kypes, and try to wrench him off the redd',
-        narrativeResult: "You explode forward, driving your hooked jaw into his flank. He turns to meet you and your kypes lock together with a grinding, cartilaginous crack — two dying fish clenched jaw-to-jaw in the shallows, thrashing in a cloud of silt and blood. The water churns white around you. You twist your body, using what remains of your muscle mass to lever him sideways, and for a terrible, suspended moment neither of you yields. Then something gives — his grip slips, or yours tightens — and you wrench him off balance. He peels away downstream, his jaw trailing a thread of blood, his flanks heaving. You hold the redd. The hen watches from the gravel, unmoved by the violence, waiting only for the victor.",
+        description: 'Drive into him, lock kypes, wrench him off the redd',
+        narrativeResult: "You drive your hooked jaw into his flank. Kypes lock with a grinding crack. Two bodies jaw-to-jaw in the shallows, thrashing in silt and blood. You twist, levering him sideways. His grip slips. You wrench him off balance. He peels away downstream, jaw trailing blood.",
         statEffects: [
           { stat: StatId.HOM, amount: 12, label: '+HOM' },
           { stat: StatId.ADV, amount: 4, label: '+ADV' },
@@ -1286,15 +1286,15 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
         style: 'danger',
         deathChance: {
           probability: 0.04,
-          cause: 'The jaw-lock lasted too long. Your body, already cannibalizing itself for energy, could not sustain the effort. Your heart gave out in the shallows, your kype still hooked into your rival.',
+          cause: 'The jaw-lock lasted too long. Heart gave out in the shallows.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.003 }],
         },
       },
       {
         id: 'display-and-posture',
         label: 'Display and posture',
-        description: 'Show your size — flare fins, arch your body, try to intimidate without contact',
-        narrativeResult: "You swing broadside to the current, flaring every fin you have left, arching your body to present the maximum silhouette. Your kype gapes open. Your gill plates flare wide, exposing the blood-red tissue beneath. It is a bluff built on the memory of the ocean-fed muscle that once filled your frame — and sometimes memory is enough. The rival holds for a long, trembling moment, reading your display with the lateral line that runs the length of his body. Then, slowly, he backs downstream, yielding the position without contact. It does not always work. But today, it did.",
+        description: 'Flare fins, arch your body, show maximum size',
+        narrativeResult: "You swing broadside to the current, flaring every fin, arching your body, kype gaping, gill plates flared. The rival reads your display with his lateral line. He backs downstream, yielding without contact.",
         statEffects: [
           { stat: StatId.WIS, amount: 3, label: '+WIS' },
           { stat: StatId.HOM, amount: 4, label: '+HOM' },
@@ -1307,9 +1307,9 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
       },
       {
         id: 'jack-strategy',
-        label: 'Use the jack strategy — wait and dart in',
+        label: 'Use the jack strategy. Wait and dart in.',
         description: 'Let them fight. When the winner is spent, dart in and release milt over the eggs.',
-        narrativeResult: "You drift back into the shadow of a submerged root wad, making yourself small, suppressing every instinct that demands you charge. The two larger males crash together over the redd — jaw-locked, thrashing, burning through the last of their reserves in a contest of brute force. You wait. You watch. And when the victor finally breaks free, gasping and spent, his body sagging in the current as the hen begins to deposit her eggs — you move. A single, precise dart from the shadows. Your milt clouds the water over the freshly laid eggs before the exhausted champion can react. He turns, too late, his ruined jaw snapping at empty current. You are already gone. It is not glorious. But your genes are in the gravel, and that is the only currency that matters.",
+        narrativeResult: "You drift back into the shadow of a submerged root wad. The larger males crash together over the redd, jaw-locked, thrashing. When the victor breaks free, gasping and spent, and the hen begins to deposit eggs, you move. A single dart from the shadows. Your milt clouds the water over the freshly laid eggs. The exhausted champion turns too late.",
         statEffects: [
           { stat: StatId.WIS, amount: 5, label: '+WIS' },
           { stat: StatId.TRA, amount: -3, label: '-TRA' },
@@ -1328,7 +1328,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
         conditions: [
           { type: 'has_flag', flag: 'fought-for-redd' },
         ],
-        narrativeText: 'The jaw-lock left its mark. Your kype is cracked along its leading edge, the cartilage splintered where his hooked jaw wrenched against yours. Each time you open your mouth to breathe, a dull, grinding pain radiates through your skull. On a healthy body this would heal in weeks. On yours, it will only worsen.',
+        narrativeText: 'Your kype is cracked along its leading edge. Cartilage splintered. Each time you open your mouth to breathe, a grinding pain radiates through your skull.',
         footnote: '(Jaw wounded in spawning combat)',
         statEffects: [
           { stat: StatId.HOM, amount: 3, label: '+HOM' },
@@ -1343,7 +1343,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
         conditions: [
           { type: 'has_flag', flag: 'fought-for-redd' },
         ],
-        narrativeText: 'The body-slam tore your dorsal fin along its base. The membrane hangs in ragged strips, fluttering uselessly in the current like a tattered flag. You can feel the drag it creates — an asymmetry in every stroke, a constant reminder that your body is a tool being used past its breaking point.',
+        narrativeText: 'Your dorsal fin is torn along its base. The membrane hangs in strips, creating drag with every stroke.',
         footnote: '(Fin torn in spawning combat)',
         statEffects: [
           { stat: StatId.HOM, amount: 2, label: '+HOM' },
@@ -1358,7 +1358,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
         conditions: [
           { type: 'has_flag', flag: 'fought-for-redd' },
         ],
-        narrativeText: 'His teeth raked your flank as you broke apart — a long, ragged furrow torn through darkening skin and the pale muscle beneath. Blood ribbons downstream from the wound, a thin red pennant in the current. The exposed flesh is already whitening at the edges where fungal spores are finding purchase on tissue that has no defenses left to offer.',
+        narrativeText: 'His teeth raked your flank. A long furrow through darkening skin and pale muscle. The exposed flesh is whitening where fungal spores are taking hold.',
         footnote: '(Flank lacerated in spawning combat)',
         statEffects: [
           { stat: StatId.HOM, amount: 3, label: '+HOM' },
@@ -1381,7 +1381,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     id: 'salmon-redd-defense',
     type: 'passive',
     category: 'reproduction',
-    narrativeText: "You hold the redd. The hen is beneath you, her tail sweeping gravel in slow, rhythmic arcs, and the current carries the scent of her readiness like a signal flare to every male in the stream. You have fought for this position — jaw-locked, body-slammed, bled for it — and now you hover above the nest with your fins splayed and your kype open, scanning every shadow for the next challenger. They come constantly. A dark shape materializes upstream, finning against the current with that unmistakable lateral quiver of aggression. He is testing your perimeter, reading your posture, calculating whether your battered body has one more fight left in it. You hold your ground, because holding ground is all you have left. Your body is consuming its own organs for fuel. Your skin is a patchwork of fungus and open sores. But the eggs are not yet laid, and until they are, you are a wall of dying muscle between this redd and every rival male in the river.",
+    narrativeText: "You hold the redd. The hen sweeps gravel below you. You hover with fins splayed and kype open, scanning every shadow. A dark shape materializes upstream, fins quivering. Another challenger testing your perimeter. Your body is consuming its own organs for fuel. Your skin is fungus and open sores. But the eggs are not yet laid.",
     statEffects: [
       { stat: StatId.ADV, amount: 5, label: '+ADV' },
       { stat: StatId.HOM, amount: 6, label: '+HOM' },
@@ -1394,7 +1394,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
       {
         eventId: 'redd-defense-flank-hit',
         chance: 0.15,
-        narrativeText: 'The challenger makes his run. He comes in fast and low, driving his shoulder into your flank before you can turn to meet him. The impact shudders through your body, and you feel scales shear away from the point of contact, leaving a raw streak along your side. You drive him off with a snap of your kype, but the damage is done — another wound on a body that has forgotten how to heal.',
+        narrativeText: 'The challenger comes in fast and low, driving his shoulder into your flank. Scales shear away. You drive him off with a snap of your kype, but the wound is open.',
         footnote: '(Wounded defending redd)',
         statEffects: [
           { stat: StatId.HOM, amount: 3, label: '+HOM' },
@@ -1422,7 +1422,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     id: 'salmon-waterfall-cascade',
     type: 'active',
     category: 'migration',
-    narrativeText: "The river drops away in a staircase of stone \u2014 not one waterfall but three, stacked in a cascading series of ledges, each pouring into a boiling plunge pool before spilling over the next. The spray is so thick it obscures the top, and the roar is a physical weight pressing against your lateral line. Other salmon are gathered in the lowest pool, finning against the current, mustering the explosive energy each leap demands. You can see the broken bodies of those who misjudged the jump lodged in the crevices between the falls. There is no way around. There is only up.",
+    narrativeText: "Not one waterfall but three, stacked in cascading ledges. The spray is thick. The roar presses against your lateral line. Other salmon gather in the lowest pool, mustering energy. Broken bodies lodge in the crevices between falls. There is no way around. Only up.",
     statEffects: [
       { stat: StatId.ADV, amount: 5, label: '+ADV' },
     ],
@@ -1430,7 +1430,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
       {
         id: 'power-through-cascade',
         label: 'Power through all three falls at once',
-        description: 'Spend everything \u2014 every reserve, every muscle fiber',
+        description: 'Spend everything. Every reserve, every muscle fiber.',
         statEffects: [
           { stat: StatId.STR, amount: -8, label: '-STR' },
           { stat: StatId.HOM, amount: 10, label: '+HOM' },
@@ -1442,7 +1442,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
       {
         id: 'rest-between-falls',
         label: 'Rest in each pool between leaps',
-        description: 'Slower and you burn precious fat, but your body survives',
+        description: 'Slower. Burns fat. But your body survives.',
         statEffects: [],
         consequences: [
           { type: 'modify_weight', amount: -2 },
@@ -1463,7 +1463,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     id: 'salmon-gravel-bar-stranding',
     type: 'active',
     category: 'migration',
-    narrativeText: "The channel betrays you. One moment you are swimming in thigh-deep current; the next, the bottom rises sharply and your belly scrapes gravel. The water thins to a sheet barely an inch deep, running fast but flat over an exposed bar of sun-baked stones. You are stranded \u2014 your dorsal fin breaking the surface, your gills laboring in the insufficient flow, the air pressing down on you like a foreign element. A heron stalks the far edge of the bar, its yellow eye locked on you with predatory patience.",
+    narrativeText: "The bottom rises without warning. Your belly scrapes gravel. The water thins to an inch, running fast but flat. Your dorsal fin breaks the surface. Your gills labor. A heron stalks the far edge of the bar.",
     statEffects: [
       { stat: StatId.TRA, amount: 5, label: '+TRA' },
     ],
@@ -1480,14 +1480,14 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
         style: 'danger',
         deathChance: {
           probability: 0.04,
-          cause: 'You could not reach the channel. The sun and the heron finished what the river started.',
+          cause: 'Could not reach the channel. Dried out on the gravel bar.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
         },
       },
       {
         id: 'wait-for-surge',
         label: 'Wait for a surge in the current',
-        description: 'Patience \u2014 the river sometimes gives back what it takes',
+        description: 'The river sometimes gives back what it takes',
         statEffects: [
           { stat: StatId.ADV, amount: 8, label: '+ADV' },
           { stat: StatId.TRA, amount: 5, label: '+TRA' },
@@ -1497,7 +1497,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
         style: 'default',
         deathChance: {
           probability: 0.05,
-          cause: 'The surge never came. You dried out on the gravel bar under a merciless sky.',
+          cause: 'The surge never came. Dried out on the gravel bar.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
         },
       },
@@ -1514,7 +1514,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     id: 'salmon-temperature-shock',
     type: 'passive',
     category: 'health',
-    narrativeText: "The water changes without warning. A tributary feeds in from the south, carrying snowmelt or spring water several degrees colder than the main channel, and the thermal boundary hits your body like a wall. Your muscles seize. Your gills flare and stutter, struggling to recalibrate to the shifted oxygen levels. For a terrible, suspended moment your heart seems to hesitate, unsure of its own rhythm. Then the shock passes, leaving you shaken and gasping, your lateral line tingling with a phantom electricity. The river does not care what your body was built to tolerate. It changes, and you either adapt or you do not.",
+    narrativeText: "A tributary feeds in, several degrees colder than the main channel. The thermal boundary hits your body. Your muscles seize. Your gills stutter, recalibrating to the shifted oxygen levels. Your lateral line tingles with phantom signals.",
     statEffects: [
       { stat: StatId.CLI, amount: 8, label: '+CLI' },
       { stat: StatId.HEA, amount: -5, label: '-HEA' },
@@ -1535,7 +1535,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     id: 'salmon-jellyfish-bloom',
     type: 'passive',
     category: 'environmental',
-    narrativeText: "The ocean has become a cathedral of translucent bells. A jellyfish bloom of staggering density fills the water column from surface to thermocline \u2014 millions of them, their bodies pulsing in slow, hypnotic rhythm, trailing curtains of stinging tentacles through the green water. Your feeding grounds are buried behind this living wall. The krill and herring you depend on have scattered or been consumed, and every attempt to push through earns you another line of welts across your flanks. You circle the bloom's edge, hungry and frustrated, searching for a gap that does not exist.",
+    narrativeText: "Jellyfish fill the water column from surface to thermocline. Millions of them, trailing stinging tentacles. Your feeding grounds are behind this mass. The krill and herring have scattered. Every attempt to push through leaves welts on your flanks.",
     statEffects: [
       { stat: StatId.HOM, amount: 6, label: '+HOM' },
       { stat: StatId.ADV, amount: 4, label: '+ADV' },
@@ -1550,7 +1550,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     id: 'salmon-deep-dive-hunt',
     type: 'active',
     category: 'foraging',
-    narrativeText: "Below you, far below, the sonar-scatter layer is rising with the dusk \u2014 a vast, living carpet of krill, copepods, and lanternfish ascending from the abyss to feed in the fading light. The concentration of food down there is extraordinary, a density the surface waters cannot match. But the dive means cold \u2014 bone-numbing, muscle-slowing cold \u2014 and the pressure increases with every body-length of descent. Your swim bladder aches as you descend, and the light fades from green to indigo to black.",
+    narrativeText: "Below you, a dense layer of krill and lanternfish is rising with the dusk. The concentration of food down there is far greater than the surface. But the cold deepens with every body-length, and your swim bladder aches with the pressure.",
     statEffects: [],
     choices: [
       {
@@ -1593,7 +1593,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     type: 'active',
     category: 'reproduction',
     narrativeText:
-      '{{npc.rival.name}} is here — hovering over the best gravel bed in the pool, his hooked jaw open in a silent threat. You have seen this fish before, fought him before, and the scars on your flank are his signature. He is larger now, his crimson flanks darker, his kype more pronounced. The female is watching from the shallows, waiting to see which of you will claim the redd.',
+      '{{npc.rival.name}} is here, hovering over the best gravel bed. Hooked jaw open. The scars on your flank are from the last time you fought this fish. He is larger now, flanks darker.',
     statEffects: [
       { stat: StatId.ADV, amount: 8, label: '+ADV' },
       { stat: StatId.TRA, amount: 5, label: '+TRA' },
@@ -1636,30 +1636,30 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     id: 'salmon-bear-gauntlet',
     type: 'active',
     category: 'predator',
-    narrativeText: 'The river narrows at a cascade, and a massive brown bear stands in the current with jaws agape, snatching salmon from the air as they leap. There is no way around \u2014 this is the only passage upstream. You must time your leap perfectly or be snatched from the air.',
+    narrativeText: 'The river narrows at a cascade. A massive pressure disturbance in the current: something standing in the water, jaws snapping at fish as they leap. The only passage upstream. You must time your leap.',
     statEffects: [{ stat: StatId.TRA, amount: 4, label: '+TRA' }],
     consequences: [],
     choices: [
       {
         id: 'salmon-bear-rush',
         label: 'Leap immediately',
-        description: 'Go now while the bear is distracted by another fish.',
-        narrativeResult: "You surge forward and launch from the water. The bear's jaws snap shut inches from your tail. You clear the cascade and are through.",
+        description: 'Go now while the disturbance shifts to another fish.',
+        narrativeResult: "You surge forward and launch from the water. Jaws snap shut inches from your tail. You clear the cascade.",
         statEffects: [{ stat: StatId.ADV, amount: 3, label: '+ADV' }],
         consequences: [],
         revocable: false,
         style: 'danger',
         deathChance: {
           probability: 0.08,
-          cause: 'Caught by a bear while leaping the cascade',
+          cause: 'Caught while leaping the cascade',
           statModifiers: [{ stat: StatId.HEA, factor: -0.0005 }],
         },
       },
       {
         id: 'salmon-bear-wait',
-        label: 'Wait for the bear to move',
-        description: 'Hold in the pool below and wait. Bears tire eventually.',
-        narrativeResult: 'You hold in the deep pool, finning against the current. After what feels like an eternity, the bear wades out to eat its catch. You slip through the cascade during the gap.',
+        label: 'Wait for the threat to move',
+        description: 'Hold in the pool below and wait.',
+        narrativeResult: 'You hold in the deep pool, finning against the current. The pressure disturbance shifts. You slip through the cascade during the gap.',
         statEffects: [{ stat: StatId.HOM, amount: 3, label: '+HOM' }],
         consequences: [{ type: 'modify_weight', amount: -1 }],
         revocable: false,
@@ -1679,7 +1679,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     id: 'salmon-warm-water-stress',
     type: 'passive',
     category: 'environmental',
-    narrativeText: 'The river water is dangerously warm. Dissolved oxygen levels plummet as temperature rises, and your gills work harder to extract enough to survive. Other salmon around you are lethargic, some floating belly-up in the shallows. Warm water is an invisible killer — it does not chase you; it simply makes the water unable to sustain you.',
+    narrativeText: 'The river water is warm. Dissolved oxygen drops as temperature rises. Your gills work harder. Other salmon around you are lethargic, some floating belly-up in the shallows.',
     statEffects: [
       { stat: StatId.IMM, amount: 5, label: '+IMM' },
       { stat: StatId.HOM, amount: 4, label: '+HOM' },
@@ -1691,9 +1691,9 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
         eventId: 'salmon-thermal-death',
         chance: 0.04,
         conditions: [],
-        narrativeText: 'The heat is too much. Your body cannot maintain the oxygen levels needed to survive.',
+        narrativeText: 'Your body cannot sustain the oxygen levels needed. Everything slows.',
         statEffects: [],
-        consequences: [{ type: 'death', cause: 'Died from thermal stress in overheated river water' }],
+        consequences: [{ type: 'death', cause: 'Thermal stress in overheated river water' }],
       },
     ],
     conditions: [
@@ -1709,7 +1709,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     id: 'salmon-tern-threat-estuary',
     type: 'active',
     category: 'predator',
-    narrativeText: "The water here is shallow and clear as you approach the river mouth. Above, the air is alive with the sharp, staccato cries of Arctic Terns. They hover and plunge with terrifying precision, each dive sending a shockwave through the school. To reach the open sea, you must run this gauntlet of white wings and sharp beaks.",
+    narrativeText: "Shallow, clear water at the river mouth. Sharp cries above. Pressure waves from repeated plunging impacts. Birds driving into the water around you. To reach the open sea, you must pass through.",
     statEffects: [
       { stat: StatId.ADV, amount: 10, label: '+ADV' },
       { stat: StatId.TRA, amount: 5, label: '+TRA' },
@@ -1718,8 +1718,8 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
       {
         id: 'stay-deep-estuary',
         label: 'Stay in the deepest channels',
-        description: 'Harder for birds to spot you, but more crowded with other fish.',
-        narrativeResult: 'You hug the murky bottom of the main channel, staying below the reach of the diving birds. You see several of your schoolmates snatched away, but you remain hidden in the gloom until the tide carries you past the river mouth.',
+        description: 'Harder for the birds to reach you, but more crowded.',
+        narrativeResult: 'You hug the murky bottom of the main channel. Fish around you are snatched away, but you stay below reach until the tide carries you past the river mouth.',
         statEffects: [
           { stat: StatId.HOM, amount: 3, label: '+HOM' },
         ],
@@ -1730,8 +1730,8 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
       {
         id: 'bolt-for-sea',
         label: 'Bolt for the open water',
-        description: 'Get through the danger as fast as possible. Risky.',
-        narrativeResult: 'You put on a burst of speed, darting through the shallows toward the deep blue. A tern strikes the water inches behind you, its beak snapping shut on empty water. You feel the sharp sting of a near-miss, but you reach the safety of the deeper shelf.',
+        description: 'Get through the danger as fast as possible.',
+        narrativeResult: 'You put on a burst of speed through the shallows. An impact strikes the water inches behind you. You reach the deeper shelf.',
         statEffects: [
           { stat: StatId.STR, amount: -5, label: '-STR' },
         ],
@@ -1740,7 +1740,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
         style: 'danger',
         deathChance: {
           probability: 0.05,
-          cause: 'An Arctic Tern snatched you from the water during your sprint.',
+          cause: 'Snatched from the water during the sprint.',
         },
       },
     ],

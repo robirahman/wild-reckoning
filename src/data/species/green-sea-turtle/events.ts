@@ -11,7 +11,7 @@ const turtleEvents: GameEvent[] = [
     type: 'active',
     category: 'foraging',
     narrativeText:
-      'You glide over a vast meadow of turtle grass, the blades swaying in the gentle current like a green prairie beneath the sea. You lower your head and crop the grass with the serrated edge of your beak, tearing off mouthfuls of the tender blades. The seagrass is rich with the nutrients your body craves — you have been grazing here for hours, and the meadow seems inexhaustible. Small fish dart between the blades, startled by your passage, and a remora clings to your shell, riding along for free.',
+      'The current slows over a broad seagrass flat. You lower your head and crop the blades with the serrated edge of your beak. Small fish scatter from between the stems. A remora shifts on your shell.',
     statEffects: [
       { stat: StatId.HOM, amount: -6, label: '-HOM' },
       { stat: StatId.ADV, amount: -4, label: '-ADV' },
@@ -32,7 +32,7 @@ const turtleEvents: GameEvent[] = [
     type: 'active',
     category: 'foraging',
     narrativeText:
-      'A patch of reef is thick with green and brown algae — the kind that coats dead coral heads in a velvet carpet. You settle against the reef and begin scraping the algae from the rock with your beak, twisting your head methodically to strip each surface clean. The algae is less nutritious than seagrass, but it is plentiful here, and the reef provides shelter from the open-water currents. A hawksbill turtle works the same reef nearby, focused on a sponge you would never touch.',
+      'Green and brown algae coat the dead coral heads. You settle against the reef and scrape with your beak, twisting your head to strip each surface. A hawksbill works the same reef nearby, gnawing at a sponge.',
     statEffects: [
       { stat: StatId.HOM, amount: -4, label: '-HOM' },
     ],
@@ -52,7 +52,7 @@ const turtleEvents: GameEvent[] = [
     type: 'active',
     category: 'foraging',
     narrativeText:
-      'Something pale and translucent drifts past you in the current. It looks like a jellyfish — a rare protein-rich treat that supplements your herbivorous diet. You approach it, turning your head to examine it with one eye. The shape is right, the movement is right, but something about the texture is wrong.',
+      'Something pale and translucent drifts past in the current. It moves like a jellyfish. The shape is right. But the texture, when you turn your head to examine it, registers wrong.',
     statEffects: [],
     choices: [
       {
@@ -60,7 +60,7 @@ const turtleEvents: GameEvent[] = [
         label: 'Eat it',
         description: 'It looks like food. Your instincts say eat.',
         narrativeResult:
-          'You bite down and swallow. The taste is wrong — flat, chemical, nothing like the gelatinous burst of a real jellyfish. A plastic bag slides down your throat and into your stomach, where it will sit for months, blocking nutrient absorption and slowly poisoning you. Millions of years of evolution gave you no defense against this.',
+          'You bite down and swallow. The taste is flat, chemical, nothing like the gelatinous burst of prey. It slides into your stomach and sits there, inert.',
         statEffects: [
           { stat: StatId.HOM, amount: 8, label: '+HOM' },
           { stat: StatId.HEA, amount: -5, label: '-HEA' },
@@ -77,7 +77,7 @@ const turtleEvents: GameEvent[] = [
         label: 'Avoid it',
         description: 'Something seems off. Turn away.',
         narrativeResult:
-          'You veer away at the last moment. The pale shape tumbles past in the current — a plastic shopping bag, its handles streaming like tentacles. It looked so much like a jellyfish. This time, your caution saved you. Next time, you may not be so discerning.',
+          'You veer away. The pale shape tumbles past in the current, handles streaming like tentacles.',
         statEffects: [
           { stat: StatId.WIS, amount: 2, label: '+WIS' },
         ],
@@ -100,7 +100,7 @@ const turtleEvents: GameEvent[] = [
     type: 'active',
     category: 'foraging',
     narrativeText:
-      'The shallow seagrass beds have been heavily grazed, so you dive deeper than usual, pushing down past the reef edge into the dimmer waters where algae grows on rocky outcrops. The pressure builds against your lungs as you descend, and the light fades from turquoise to deep blue. You find a rocky shelf encrusted with red and green algae and begin feeding, your beak scraping against stone. You can hold your breath for hours, but this deep, the cold seeps into your muscles and slows your movements.',
+      'The shallow beds are cropped to stubble. You angle downward past the reef edge into dimmer water. Pressure builds against your lungs. Cold seeps into your muscles. Algae encrusts a rocky shelf below.',
     statEffects: [
       { stat: StatId.HOM, amount: -3, label: '-HOM' },
       { stat: StatId.CLI, amount: 3, label: '+CLI' },
@@ -121,7 +121,7 @@ const turtleEvents: GameEvent[] = [
     type: 'active',
     category: 'foraging',
     narrativeText:
-      'You arrive at a seagrass meadow you have visited before, but something is wrong. The blades are sparse and coated with a brownish slime — epiphytic algae smothering the grass. Large patches of bare sand stretch where dense meadows once grew. The water is cloudier than it should be, thick with sediment from coastal development upstream. You graze what you can find, but the nutritive value is poor and your stomach feels heavy with sediment.',
+      'The blades here are sparse and coated with brownish slime. Bare sand stretches where meadow should be. The water is cloudy with sediment. You graze what you find, but the taste is poor and grit fills your gut.',
     statEffects: [
       { stat: StatId.HOM, amount: 3, label: '+HOM' },
       { stat: StatId.ADV, amount: 4, label: '+ADV' },
@@ -143,7 +143,7 @@ const turtleEvents: GameEvent[] = [
     type: 'active',
     category: 'foraging',
     narrativeText:
-      'You navigate through a healthy coral reef, its surfaces alive with color. Turf algae grows in patches between the coral heads — a secondary food source, less preferred than seagrass but available year-round. You graze carefully, your beak scraping close to the coral without damaging the living polyps. A cleaning station nearby attracts a queue of fish, and a bold wrasse darts in to pick at the barnacles on your shell as you feed. For a moment, the reef feels like a city, and you are simply one of its residents.',
+      'Turf algae patches between coral heads. You scrape close to the living polyps without touching them. A wrasse darts in and picks at the barnacles on your shell while you feed.',
     statEffects: [
       { stat: StatId.HOM, amount: -5, label: '-HOM' },
       { stat: StatId.NOV, amount: -3, label: '-NOV' },
@@ -168,7 +168,7 @@ const turtleEvents: GameEvent[] = [
     type: 'passive',
     category: 'environmental',
     narrativeText:
-      'You have been swallowing small fragments of microplastic with every mouthful of seagrass for weeks. The particles are invisible — embedded in the sediment, coating the blades, suspended in the water column. They accumulate in your gut, leaching chemicals into your tissue. You cannot taste them, smell them, or avoid them. They are simply part of the ocean now.',
+      'Tiny fragments ride every mouthful of seagrass. They coat the blades, hang in the water column, settle in the sediment. You cannot taste them or smell them. They accumulate in your gut.',
     statEffects: [
       { stat: StatId.IMM, amount: 3, label: '+IMM' },
       { stat: StatId.HEA, amount: -3, label: '-HEA' },
@@ -187,7 +187,7 @@ const turtleEvents: GameEvent[] = [
     type: 'passive',
     category: 'environmental',
     narrativeText:
-      'A wall of invisible netting materializes from the murky water. You swim directly into it before you can react — the monofilament wraps around your flippers and neck as your momentum carries you deeper into the mesh. You thrash instinctively, but every movement tightens the lines. The net holds you just below the surface, close enough to breathe if you stretch your neck, but unable to dive or feed. Hours pass. Then days.',
+      'A wall of monofilament appears from the murk. Your momentum carries you into it. The mesh wraps your flippers and neck. Every movement tightens the lines. The surface is close enough to strain toward for air, but you cannot dive or feed.',
     statEffects: [
       { stat: StatId.TRA, amount: 15, label: '+TRA' },
       { stat: StatId.ADV, amount: 12, label: '+ADV' },
@@ -202,11 +202,11 @@ const turtleEvents: GameEvent[] = [
         chance: 0.08,
         conditions: [],
         narrativeText:
-          'The net holds you under. You strain toward the surface, but the mesh tightens with every movement. Your lungs burn. The light above grows dimmer. After hours of struggle, your body goes still.',
+          'The mesh holds you under. You strain upward but each movement pulls tighter. Your lungs burn. The light above dims.',
         footnote: '(Drowned in fishing net)',
         statEffects: [],
         consequences: [
-          { type: 'death', cause: 'Drowned in fishing net' },
+          { type: 'death', cause: 'Drowned in a ghost net. The monofilament held you under until your lungs gave out.' },
         ],
       },
     ],
@@ -224,7 +224,7 @@ const turtleEvents: GameEvent[] = [
     type: 'passive',
     category: 'environmental',
     narrativeText:
-      'You surface to breathe in a busy shipping channel. The sound reaches you too late — a deep, vibrating hum that suddenly becomes a roar. A boat hull passes over you at speed, and the propeller catches you before you can dive. The impact is a white-hot shock that reverberates through your shell and into your bones.',
+      'You surface to breathe in a channel of heavy traffic. A deep vibration reaches you too late. The hull passes overhead and the propeller catches your shell. The impact reverberates through bone.',
     statEffects: [
       { stat: StatId.TRA, amount: 12, label: '+TRA' },
       { stat: StatId.ADV, amount: 8, label: '+ADV' },
@@ -238,11 +238,11 @@ const turtleEvents: GameEvent[] = [
         chance: 0.06,
         conditions: [],
         narrativeText:
-          'The propeller strikes you squarely across the spine. The force is overwhelming — your shell shatters and the world goes dark before you can even register pain. You sink slowly through water that turns red around you.',
+          'The propeller strikes across your spine. The shell shatters. You sink through water that reddens around you.',
         footnote: '(Killed by boat strike)',
         statEffects: [],
         consequences: [
-          { type: 'death', cause: 'Killed by boat strike' },
+          { type: 'death', cause: 'Propeller strike shattered the carapace.' },
         ],
       },
     ],
@@ -260,7 +260,7 @@ const turtleEvents: GameEvent[] = [
     type: 'passive',
     category: 'environmental',
     narrativeText:
-      'The nesting beach glows with artificial light from the resort development behind the dunes. The lights are disorienting — your ancient instinct to follow the brightest horizon toward the sea is confused by the glare of hotels, streetlights, and parking lots. You wander inland instead of toward the water, circling on hot asphalt. The confusion costs you energy and exposes you to terrestrial predators and vehicle traffic.',
+      'The beach glows with artificial light. The brightest horizon is inland now, not seaward. You circle on hot ground, drawn the wrong way, spending energy and exposed.',
     statEffects: [
       { stat: StatId.NOV, amount: 8, label: '+NOV' },
       { stat: StatId.TRA, amount: 5, label: '+TRA' },
@@ -281,7 +281,7 @@ const turtleEvents: GameEvent[] = [
     type: 'passive',
     category: 'environmental',
     narrativeText:
-      'You haul yourself up the beach to nest, but the familiar stretch of sand has changed. A seawall blocks your path where dunes once sloped gently to the tree line. Construction equipment sits idle on the sand, and the beach has narrowed to a thin strip at high tide. You search for a suitable nesting site, but the sand is compacted and littered with debris. The beach that your mother nested on, and her mother before her, is being erased.',
+      'You haul yourself up the sand, but a hard wall blocks the slope where dunes should be. The beach has narrowed. The sand is compacted, littered with debris. You search for soft ground to dig and find none.',
     statEffects: [
       { stat: StatId.ADV, amount: 8, label: '+ADV' },
       { stat: StatId.NOV, amount: 6, label: '+NOV' },
@@ -303,7 +303,7 @@ const turtleEvents: GameEvent[] = [
     type: 'passive',
     category: 'environmental',
     narrativeText:
-      'The water has a strange sheen. A slick of oil spreads across the surface in iridescent swirls, and the smell is sharp and chemical. When you surface to breathe, the oil coats your nostrils and eyes. Below the surface, dispersed droplets cling to your skin and to the seagrass you eat. Your body has no mechanism to process petroleum hydrocarbons — they simply accumulate, poisoning you slowly from the inside.',
+      'The water has a strange sheen. A sharp chemical smell hits when you surface to breathe. The slick coats your nostrils and eyes. Below the surface, droplets cling to your skin and to the seagrass.',
     statEffects: [
       { stat: StatId.IMM, amount: 10, label: '+IMM' },
       { stat: StatId.HEA, amount: -8, label: '-HEA' },
@@ -330,7 +330,7 @@ const turtleEvents: GameEvent[] = [
     type: 'passive',
     category: 'predator',
     narrativeText:
-      'A shadow passes beneath you — long, sinuous, and deliberate. A tiger shark, its blunt head swinging slowly side to side as it tastes the water. It is enormous, easily twice your length, and it has seen you. Tiger sharks are one of the few predators that can bite through a sea turtle\'s shell. It circles once, twice, closing the distance with each pass. Your only advantage is maneuverability — you are more agile than you look.',
+      'A shadow passes beneath you. Long, sinuous, deliberate. A blunt head swings side to side, tasting the water. It has seen you. It circles, closing the distance with each pass.',
     statEffects: [
       { stat: StatId.TRA, amount: 12, label: '+TRA' },
       { stat: StatId.ADV, amount: 8, label: '+ADV' },
@@ -341,7 +341,7 @@ const turtleEvents: GameEvent[] = [
         chance: 0.25,
         conditions: [],
         narrativeText:
-          'The shark strikes. Its jaws close on the edge of your shell with a force that sends a shockwave through your body. You feel the shell crack and the teeth scrape against bone. You wrench yourself free and flee, trailing blood, while the shark circles back for another pass that never comes — it has bitten off a piece of your shell and seems satisfied for now.',
+          'Its jaws close on the edge of your shell. The force sends a shockwave through your body. You feel the shell crack and teeth scrape bone. You wrench free and flee, trailing blood.',
         footnote: '(Bitten by tiger shark)',
         statEffects: [
           { stat: StatId.HEA, amount: -10, label: '-HEA' },
@@ -355,11 +355,11 @@ const turtleEvents: GameEvent[] = [
         chance: 0.04,
         conditions: [],
         narrativeText:
-          'The shark strikes from below with explosive force, its jaws closing around your midsection. The shell cracks like pottery. There is no escape from a predator that has hunted your kind since before the continents took their current shape.',
+          'It strikes from below. Its jaws close around your midsection and the shell cracks apart.',
         footnote: '(Killed by tiger shark)',
         statEffects: [],
         consequences: [
-          { type: 'death', cause: 'Killed by tiger shark' },
+          { type: 'death', cause: 'Killed by tiger shark.' },
         ],
       },
     ],
@@ -376,7 +376,7 @@ const turtleEvents: GameEvent[] = [
     type: 'passive',
     category: 'predator',
     narrativeText:
-      'The water near the river mouth is murky with sediment, and you do not see the bull shark until it is already close. Bull sharks thrive in these brackish waters where rivers meet the sea — the same shallow, warm areas where you feed. This one is stocky and aggressive, bumping you with its snout to test whether you are worth the effort. Your shell holds, but the impact is jarring.',
+      'The water near the river mouth is murky with sediment. You do not detect the bull shark until it is already close. Stocky and blunt-nosed, it bumps your shell with its snout. The impact jars through you.',
     statEffects: [
       { stat: StatId.TRA, amount: 8, label: '+TRA' },
       { stat: StatId.ADV, amount: 6, label: '+ADV' },
@@ -387,7 +387,7 @@ const turtleEvents: GameEvent[] = [
         chance: 0.15,
         conditions: [],
         narrativeText:
-          'The shark bites down on your rear flipper, its serrated teeth tearing through the tough skin. You kick free, leaving a piece of yourself behind, and swim hard for the open reef where you can find cover.',
+          'It bites down on your rear flipper. Serrated teeth tear through the tough skin. You kick free and swim hard for the reef.',
         footnote: '(Bitten by bull shark)',
         statEffects: [
           { stat: StatId.HEA, amount: -6, label: '-HEA' },
@@ -410,7 +410,7 @@ const turtleEvents: GameEvent[] = [
     type: 'passive',
     category: 'predator',
     narrativeText:
-      'You remember the beach. You remember the frantic scramble from sand to surf, your tiny flippers churning against the sand that seemed to stretch forever. The frigatebirds were waiting — dark shapes wheeling overhead, plunging down to snatch your siblings one by one. You made it to the water by luck, by timing, by being one step faster than the hatchling next to you. The memory surfaces unbidden, a primal terror that never fully fades.',
+      'Dark shapes wheel above the surf line, plunging to snatch hatchlings from the sand. You watch from the shallows as a frigatebird takes one, then another. The scramble from nest to water is short but few survive it.',
     statEffects: [
       { stat: StatId.TRA, amount: 5, label: '+TRA' },
       { stat: StatId.WIS, amount: 2, label: '+WIS' },
@@ -428,7 +428,7 @@ const turtleEvents: GameEvent[] = [
     type: 'passive',
     category: 'predator',
     narrativeText:
-      'On the nesting beach, the ghost crabs emerge at dusk — pale, skittering shapes that patrol the sand between the nest and the sea. They are hatchling predators, fast and efficient, and they have learned to wait near the nests for the emergence. You watch from the shallows as newly hatched turtles from another nest run the gauntlet. Some make it. Many do not. The crabs drag their catches sideways into their burrows without ceremony.',
+      'At dusk, pale crabs emerge and patrol the sand between nest and surf. Hatchlings from a nearby nest pour out. The crabs seize them and drag them sideways into burrows. Some hatchlings reach the water. Many do not.',
     statEffects: [
       { stat: StatId.TRA, amount: 4, label: '+TRA' },
       { stat: StatId.ADV, amount: 3, label: '+ADV' },
@@ -451,7 +451,7 @@ const turtleEvents: GameEvent[] = [
     type: 'passive',
     category: 'migration',
     narrativeText:
-      'After weeks of swimming, you recognize something in the water — a chemical signature, a magnetic bearing, something older than thought. This is your natal beach. You were born here decades ago, and you have crossed hundreds of miles of open ocean to return. The sand looks different — the dunes have shifted, a new hotel stands where sea grape trees once grew — but the magnetic imprint in your brain says this is home. The pull is irresistible.',
+      'A chemical trace in the water, a magnetic bearing that aligns with something deep in your skull. This is the beach where you hatched. The dunes have shifted, the shoreline is different, but the pull is the same.',
     statEffects: [
       { stat: StatId.HOM, amount: -5, label: '-HOM' },
       { stat: StatId.NOV, amount: -8, label: '-NOV' },
@@ -471,7 +471,7 @@ const turtleEvents: GameEvent[] = [
     type: 'active',
     category: 'reproduction',
     narrativeText:
-      'Under cover of darkness, you haul yourself up the beach. Your flippers, so graceful in the water, are clumsy instruments on land. You drag your heavy body above the high-tide line and begin to dig, using your rear flippers like cupped hands to scoop out a flask-shaped chamber in the damp sand. It takes over an hour, and you are exhausted by the effort. Sand flies bite at your exposed skin. The hole must be exactly right — deep enough to protect the eggs from the sun, shallow enough for the hatchlings to dig out.',
+      'In darkness you haul yourself above the tide line. Your flippers, so efficient in water, drag clumsily on sand. You scoop a flask-shaped chamber with your rear flippers. Sand flies bite your exposed skin. The digging takes over an hour.',
     statEffects: [
       { stat: StatId.HOM, amount: 6, label: '+HOM' },
       { stat: StatId.ADV, amount: 3, label: '+ADV' },
@@ -495,7 +495,7 @@ const turtleEvents: GameEvent[] = [
     type: 'active',
     category: 'reproduction',
     narrativeText:
-      'You settle over the nest chamber, and the eggs begin to fall — soft, white, leathery spheres the size of ping-pong balls, dropping into the sand cavity in clusters of two and three. Your eyes stream with thick, mucous tears that protect them from the sand and remove excess salt. To a human observer, you would appear to be weeping. You lay over a hundred eggs in twenty minutes, each one a repository of 110 million years of unbroken genetic memory. When the last egg falls, you cover the nest with sand, pack it down with your plastron, and scatter loose sand to disguise the site. Then you turn and drag yourself back to the sea. You will never see these eggs again.',
+      'You settle over the chamber. Soft, leathery eggs drop into the sand in clusters of two and three. Thick mucus streams from your eyes, clearing the grit. Over a hundred eggs fall in twenty minutes. You cover the nest, pack it with your plastron, scatter loose sand over the site, and drag yourself back to the water.',
     statEffects: [
       { stat: StatId.HOM, amount: 8, label: '+HOM' },
       { stat: StatId.WIS, amount: 3, label: '+WIS' },
@@ -523,7 +523,7 @@ const turtleEvents: GameEvent[] = [
     type: 'passive',
     category: 'reproduction',
     narrativeText:
-      'Two months after you laid your eggs and left, the sand stirs. Tiny flippers break the surface in the cool of the night, and a stream of hatchlings pours from the nest like dark water flowing uphill. Each one is no larger than the palm of a human hand, yet each carries the magnetic map of this beach encoded in its brain. They orient toward the brightest horizon — the moonlit sea — and begin their desperate sprint across the sand. Ghost crabs close in from the sides. Frigatebirds will be waiting at dawn. Of the hundred that emerge, perhaps one will survive to adulthood. You are already far away, grazing in waters you will not leave again for years. You will never know how many survived.',
+      'Two months after you left this beach, the sand stirs at night. Tiny flippers break the surface. Hatchlings pour from the nest and orient toward the brightest horizon. Ghost crabs close from the flanks. You are far away, grazing. You will not know how many reached the water.',
     statEffects: [
       { stat: StatId.WIS, amount: 2, label: '+WIS' },
     ],
@@ -547,7 +547,7 @@ const turtleEvents: GameEvent[] = [
     type: 'active',
     category: 'reproduction',
     narrativeText:
-      'You haul yourself up the beach toward the prime nesting zone — the band of soft, well-drained sand above the high-tide line where the temperature is ideal for incubation. But another female is already there, her massive body settled into the sand, her rear flippers scooping methodically at a nest chamber. The prime zone is narrow tonight, and her bulk blocks the best stretch. Below her, closer to the tide line, the sand is wetter and cooler — eggs laid there risk flooding at high tide and temperature-skewed sex ratios. You could challenge her for the spot, digging alongside her and body-checking her away from the prime sand. Or you could accept the marginal site and lay your eggs where the ocean may reclaim them.',
+      'Another female is already dug in at the prime nesting band. Her bulk blocks the best stretch of soft, well-drained sand. Below her, the sand is damp and cool, too close to the tide line.',
     statEffects: [
       { stat: StatId.ADV, amount: 5, label: '+ADV' },
     ],
@@ -557,7 +557,7 @@ const turtleEvents: GameEvent[] = [
         label: 'Body-check her away from the prime sand',
         description: 'Better incubation temperature, but she will bite',
         narrativeResult:
-          'You drag yourself alongside her and shove — two hundred kilograms of shell and muscle pressing against her flank. She turns her head and bites at your front flipper, her serrated beak tearing through the tough skin. You shove again, harder, using the slope of the beach for leverage. She resists for long minutes, but you are fresher, more determined, and finally she abandons the site and drags herself further down the beach. The prime sand is yours. Your eggs will incubate at the perfect temperature.',
+          'You shove against her flank. She bites at your front flipper, her serrated beak tearing skin. You push harder, using the slope for leverage. She abandons the site and drags herself down the beach. The prime sand is yours.',
         statEffects: [
           { stat: StatId.HOM, amount: 8, label: '+HOM' },
           { stat: StatId.ADV, amount: -5, label: '-ADV' },
@@ -573,7 +573,7 @@ const turtleEvents: GameEvent[] = [
         label: 'Dig alongside her in the same zone',
         description: 'Adequate sand, no conflict',
         narrativeResult:
-          'You settle a few body-lengths away and begin to dig. The sand here is acceptable — not the best, but serviceable. Your nests will be close enough that hatchlings from both may emerge on the same night, confusing predators with sheer numbers.',
+          'You settle a few body-lengths away and dig. The sand is serviceable.',
         statEffects: [
           { stat: StatId.WIS, amount: 2, label: '+WIS' },
         ],
@@ -586,7 +586,7 @@ const turtleEvents: GameEvent[] = [
         label: 'Move down to the tide-line sand',
         description: 'No fight, but eggs risk flooding and poor incubation',
         narrativeResult:
-          'You turn and drag yourself toward the lower beach, where the sand is damp and cool beneath your plastron. You dig here, but the chamber fills with seawater before you finish, and you must start again higher up on a narrow strip of marginal sand. Your eggs will be cooler, wetter, and closer to the waves than they should be. Some will not survive.',
+          'You drag yourself to the lower beach. The sand is damp and cool. The chamber fills with seawater before you finish, and you must start again on a narrow strip of marginal ground.',
         statEffects: [
           { stat: StatId.TRA, amount: 4, label: '+TRA' },
         ],
@@ -602,7 +602,7 @@ const turtleEvents: GameEvent[] = [
         eventId: 'turtle-nest-flipper-wound-sub',
         chance: 0.18,
         narrativeText:
-          'Her beak caught your front flipper during the shoving match, tearing a crescent of tough skin away from the leading edge. Blood wells dark against the sand. The wound will heal slowly in the salt water.',
+          'Her beak caught your front flipper during the shoving, tearing a crescent of skin from the leading edge. Blood wells dark against the sand.',
         footnote: '(Flipper wound from nest competition)',
         statEffects: [
           { stat: StatId.HEA, amount: -4, label: '-HEA' },
@@ -635,7 +635,7 @@ const turtleEvents: GameEvent[] = [
     type: 'passive',
     category: 'health',
     narrativeText:
-      'As you graze on a dense seagrass bed, tiny snails cling to the blades — barely visible, no larger than grains of rice. You swallow several with each mouthful. Unbeknownst to you, these snails are shedding microscopic cercariae into the water around them, and the free-swimming larvae are penetrating your skin even as you feed.',
+      'Tiny snails cling to the seagrass blades, no larger than grains of rice. You swallow several with each mouthful.',
     statEffects: [
       { stat: StatId.HOM, amount: -3, label: '-HOM' },
     ],
@@ -646,7 +646,7 @@ const turtleEvents: GameEvent[] = [
         conditions: [
           { type: 'no_parasite', parasiteId: 'spirorchid-fluke' },
         ],
-        narrativeText: 'The cercariae have entered your bloodstream and are migrating toward your heart and brain. Spirorchid blood flukes — they will colonize your blood vessels and begin laying eggs in your vascular walls.',
+        narrativeText: 'Free-swimming larvae from the snails have entered your bloodstream. They migrate toward your heart.',
         footnote: '(Infected with spirorchid blood flukes)',
         statEffects: [],
         consequences: [
@@ -669,7 +669,7 @@ const turtleEvents: GameEvent[] = [
     type: 'passive',
     category: 'health',
     narrativeText:
-      'The seagrass bed you are grazing has a slimy, unhealthy look. A brownish film coats the blades, and small invertebrates are unusually abundant — tiny crustaceans and worms wriggling among the roots. The grass still tastes adequate, so you continue to feed, but your gut feels unsettled afterward.',
+      'A brownish film coats the seagrass. Small crustaceans and worms wriggle among the roots in unusual numbers. The grass tastes adequate, so you continue. Your gut feels unsettled afterward.',
     statEffects: [
       { stat: StatId.HOM, amount: 2, label: '+HOM' },
     ],
@@ -680,7 +680,7 @@ const turtleEvents: GameEvent[] = [
         conditions: [
           { type: 'no_parasite', parasiteId: 'gut-fluke' },
         ],
-        narrativeText: 'Among the contaminated vegetation, you ingested encysted metacercariae of intestinal flukes. Within days, they hatch in your gut and begin attaching to the intestinal wall, feeding on your blood and tissue.',
+        narrativeText: 'Encysted larvae from the contaminated vegetation hatch in your gut and attach to the intestinal wall.',
         footnote: '(Infected with intestinal flukes)',
         statEffects: [],
         consequences: [
@@ -702,7 +702,7 @@ const turtleEvents: GameEvent[] = [
     type: 'passive',
     category: 'health',
     narrativeText:
-      'You settle into a warm, shallow lagoon to rest — the kind of sheltered water where you often sleep, wedged beneath a coral ledge with your head tucked against the rock. As you doze, something attaches to the soft skin behind your rear flippers. Then another, and another. When you rouse and swim into clearer water, you can see them — small, dark, worm-like creatures clinging to your skin and pulsing as they feed.',
+      'You wedge under a coral ledge in a warm, shallow lagoon to rest. As you doze, something attaches to the soft skin behind your rear flippers. Then another. When you swim into clearer water, dark worm-like shapes cling to your skin and pulse.',
     statEffects: [
       { stat: StatId.ADV, amount: 3, label: '+ADV' },
     ],
@@ -713,7 +713,7 @@ const turtleEvents: GameEvent[] = [
         conditions: [
           { type: 'no_parasite', parasiteId: 'turtle-leech' },
         ],
-        narrativeText: 'Several marine leeches have embedded themselves firmly in the soft tissue around your neck and cloaca. They are Ozobranchus — turtle-specialist leeches that will cling to you for weeks, feeding on your blood and potentially transmitting disease.',
+        narrativeText: 'Several leeches have embedded in the soft tissue around your neck and cloaca. They feed steadily.',
         footnote: '(Infested with marine turtle leeches)',
         statEffects: [],
         consequences: [
@@ -739,7 +739,7 @@ const turtleEvents: GameEvent[] = [
     type: 'passive',
     category: 'environmental',
     narrativeText:
-      'The reef is dying. The water temperature has risen just two degrees above normal, but it is enough. The coral is expelling its symbiotic algae, turning from vibrant color to bone-white in a process called bleaching. Without the algae, the coral will starve. Without the coral, the reef ecosystem collapses — the fish leave, the algae overgrows, the seagrass beds silt up. You graze among the bleached skeletons of what was once a thriving reef, and the food is poor.',
+      'The reef has gone white. The coral has expelled its color, turning to bone. Fish have thinned out. Algae smothers the dead heads. You graze among the bleached skeletons, and the food is poor.',
     statEffects: [
       { stat: StatId.HOM, amount: 5, label: '+HOM' },
       { stat: StatId.ADV, amount: 5, label: '+ADV' },
@@ -763,7 +763,7 @@ const turtleEvents: GameEvent[] = [
     type: 'passive',
     category: 'environmental',
     narrativeText:
-      'The water has turned a sickly reddish-brown. A harmful algal bloom — a red tide — has erupted, fed by nutrient runoff from agricultural land. The toxic algae produces brevetoxins that accumulate in the seagrass you eat. Within days, you feel sluggish and disoriented. Your muscles twitch involuntarily, and breathing becomes labored when you surface. Other turtles in the area are similarly affected, floating listlessly at the surface.',
+      'The water has turned a reddish-brown. The seagrass tastes wrong. Within days, your muscles twitch and breathing at the surface takes effort. Other turtles float listlessly nearby.',
     statEffects: [
       { stat: StatId.HEA, amount: -8, label: '-HEA' },
       { stat: StatId.IMM, amount: 6, label: '+IMM' },
@@ -788,7 +788,7 @@ const turtleEvents: GameEvent[] = [
     type: 'passive',
     category: 'environmental',
     narrativeText:
-      'The barometric pressure drops and the swells build to heights you have never experienced. A hurricane is passing over the Caribbean, and the ocean has become a churning chaos of currents, debris, and sand. You dive deep to escape the worst of it, but even at depth the surge reaches you, tumbling you against the reef and filling the water with suspended sediment. When the storm passes days later, the seagrass beds are torn up, the reef is scarred by wave action, and the coastline has been reshaped. Navigation by landmarks is temporarily impossible.',
+      'The pressure drops. Swells build to heights you have never felt. The ocean churns with debris and suspended sand. You dive deep, but even at depth the surge tumbles you against the reef. When it passes, the seagrass beds are torn up and the bottom is unrecognizable.',
     statEffects: [
       { stat: StatId.CLI, amount: 10, label: '+CLI' },
       { stat: StatId.ADV, amount: 8, label: '+ADV' },
@@ -813,7 +813,7 @@ const turtleEvents: GameEvent[] = [
     type: 'passive',
     category: 'environmental',
     narrativeText:
-      'The water temperature has shifted — warmer than usual for this time of year. As an ectotherm, your body temperature matches the water around you. The warmth accelerates your metabolism, making you hungrier, but the seagrass has not increased its growth to match. You burn through energy reserves faster than you can replenish them. On the nesting beaches, warmer sand temperatures are skewing the sex ratio of hatchlings — more females, fewer males — a slow-motion crisis that no individual turtle can perceive.',
+      'The water is warmer than usual. Your metabolism speeds up, burning through reserves faster. The seagrass has not grown to match your hunger.',
     statEffects: [
       { stat: StatId.CLI, amount: 5, label: '+CLI' },
       { stat: StatId.HOM, amount: 4, label: '+HOM' },
@@ -839,7 +839,7 @@ const turtleEvents: GameEvent[] = [
     type: 'active',
     category: 'reproduction',
     narrativeText:
-      'The water near the nesting beach is crowded with males. Several bulls approach you, their curved claws catching the light as they attempt to mount. Mating is a physical struggle that will last for hours, and once complete, you will carry the fertilized eggs for weeks until the sand is ready. It is the beginning of your nesting cycle.',
+      'The shallows near the nesting beach are crowded with males. Several approach, curved claws catching the light as they try to mount. Mating will last hours.',
     statEffects: [
       { stat: StatId.NOV, amount: 5, label: '+NOV' },
     ],
@@ -848,7 +848,7 @@ const turtleEvents: GameEvent[] = [
         id: 'turtle-accept-mate',
         label: 'Accept a mate',
         description: 'Initiate the egg-laying cycle. Gestation is ~4 weeks.',
-        narrativeResult: 'A large bull clamps onto your shell. The struggle is exhausting, but necessary. You are now carrying the fertilized seeds of the next generation. Soon, you must find a beach.',
+        narrativeResult: 'A large bull clamps onto your shell. The coupling is rough and prolonged. You carry fertilized eggs now.',
         statEffects: [
           { stat: StatId.HOM, amount: 5, label: '+HOM' },
         ],
@@ -862,7 +862,7 @@ const turtleEvents: GameEvent[] = [
         id: 'turtle-dive-to-avoid',
         label: 'Dive to avoid the bulls',
         description: 'Stay focused on grazing. Preserves your strength.',
-        narrativeResult: 'You dive into the deep seagrass, leaving the surface chaos behind. You remain unburdened, but the window for nesting this season is closing.',
+        narrativeResult: 'You dive into the deep grass, leaving the surface behind.',
         statEffects: [
           { stat: StatId.TRA, amount: 3, label: '+TRA' },
         ],
@@ -891,7 +891,7 @@ const turtleEvents: GameEvent[] = [
     type: 'passive',
     category: 'social',
     narrativeText:
-      'The shallow waters near the nesting beach are crowded with turtles. Males and females have gathered from across the Caribbean for the annual mating aggregation. Males jostle for position, biting at each other\'s flippers and attempting to mount receptive females. The water churns with their activity. Mating is rough and prolonged — a male clamps onto a female\'s shell with the curved claws on his front flippers and holds on for hours while she continues to swim, breathe, and feed. It is not elegant, but it has worked for 110 million years.',
+      'The shallows churn with turtles. Males jostle and bite at each other, trying to mount receptive females. A bull clamps onto a female with his curved fore-claws and holds on while she swims, breathes, feeds.',
     statEffects: [
       { stat: StatId.NOV, amount: -5, label: '-NOV' },
       { stat: StatId.HOM, amount: 3, label: '+HOM' },
@@ -911,7 +911,7 @@ const turtleEvents: GameEvent[] = [
     type: 'passive',
     category: 'social',
     narrativeText:
-      'The beach is marked with the tracks of dozens of turtles — deep, paired furrows in the sand leading up from the waterline to the dunes and back again. You are not the only one nesting here tonight. Other females haul themselves up the sand around you, each seeking her own patch of undisturbed beach. There is no cooperation, no communication — just a shared instinct that has drawn you all to the same stretch of coast at the same time. The beach smells of salt, sand, and the musky scent of nesting turtles.',
+      'Deep paired furrows mark the sand from waterline to dunes and back. Other females haul themselves up around you, each seeking undisturbed ground. The beach smells of salt and musk.',
     statEffects: [
       { stat: StatId.NOV, amount: -4, label: '-NOV' },
       { stat: StatId.ADV, amount: -3, label: '-ADV' },
@@ -931,7 +931,7 @@ const turtleEvents: GameEvent[] = [
     type: 'passive',
     category: 'social',
     narrativeText:
-      'A pair of remoras have attached themselves to your plastron — their oval suction discs gripping the smooth surface of your underside. They have been riding with you for weeks now, detaching only to grab scraps of food stirred up by your grazing, then reattaching with a gentle bump. They are not parasites — they take nothing from you and may even help by eating dead skin and small external parasites. Their presence is a minor comfort, a reminder that even a solitary ocean wanderer attracts companions.',
+      'Two remoras grip your plastron with their suction discs. They detach to grab scraps stirred up by your grazing, then bump back on. They take nothing from you. Their slight weight and the small tugs when they feed are constant.',
     statEffects: [
       { stat: StatId.NOV, amount: -2, label: '-NOV' },
       { stat: StatId.IMM, amount: -2, label: '-IMM' },
@@ -949,7 +949,7 @@ const turtleEvents: GameEvent[] = [
     type: 'passive',
     category: 'social',
     narrativeText:
-      'Hands grip your shell and lift you, briefly, out of the water. The sensation is alien and terrifying — you have not been out of the water involuntarily since the day you hatched. Researchers measure your carapace length, photograph your facial scales for identification, and clip a small metal tag onto your right rear flipper. The tag pinches but does not truly hurt. They lower you back into the water and you dive immediately, your heart hammering. The tag will last for years, a tiny piece of metal that connects you to a database, a research paper, a conservation effort you will never understand.',
+      'Hands grip your shell and lift you out of the water. The air hits you. Something pinches your rear flipper. Then you are back in the water, diving immediately, heart hammering.',
     statEffects: [
       { stat: StatId.TRA, amount: 6, label: '+TRA' },
       { stat: StatId.NOV, amount: 5, label: '+NOV' },
@@ -967,7 +967,7 @@ const turtleEvents: GameEvent[] = [
     id: 'turtle-fibropapilloma-exposure',
     type: 'passive',
     category: 'health',
-    narrativeText: 'You share a foraging patch with another green turtle whose body is covered in pale, cauliflower-like tumors. Fibropapillomatosis — a herpesvirus that has become epidemic in green sea turtle populations worldwide. The degraded coastal waters here seem to accelerate its spread. You graze side by side, breathing the same water.',
+    narrativeText: 'Another green turtle shares your foraging patch. Its body is covered in pale, cauliflower-like growths. You graze side by side, breathing the same water.',
     statEffects: [{ stat: StatId.IMM, amount: 2, label: '+IMM' }],
     consequences: [],
     choices: [],
@@ -975,7 +975,7 @@ const turtleEvents: GameEvent[] = [
       {
         eventId: 'turtle-fp-infection',
         chance: 0.10,
-        narrativeText: 'Weeks later, a small, rubbery growth appears on your flipper. The virus has taken hold.',
+        narrativeText: 'Weeks later, a small, rubbery growth appears on your flipper.',
         statEffects: [],
         consequences: [{ type: 'add_parasite', parasiteId: 'fibropapillomatosis' }],
       },
@@ -992,7 +992,7 @@ const turtleEvents: GameEvent[] = [
     id: 'turtle-fish-seagrass-competition',
     type: 'passive',
     category: 'foraging',
-    narrativeText: 'The seagrass meadow that has been your primary foraging ground is under siege. Large schools of herbivorous parrotfish and surgeonfish have moved in, cropping the grass faster than it can grow. Where once you grazed on lush blades, now only stubble remains. You must range farther to find enough food, burning more energy with each trip.',
+    narrativeText: 'Parrotfish and surgeonfish swarm the seagrass bed, cropping it faster than it grows. Only stubble remains where you have been feeding. You must range farther.',
     statEffects: [{ stat: StatId.HOM, amount: 3, label: '+HOM' }],
     consequences: [{ type: 'modify_weight', amount: -2 }],
     choices: [],
@@ -1009,7 +1009,7 @@ const turtleEvents: GameEvent[] = [
     id: 'turtle-cold-stun',
     type: 'active',
     category: 'environmental',
-    narrativeText: 'The water temperature has dropped sharply. Your body, calibrated for tropical warmth, is shutting down. Your muscles stiffen, your flippers barely move. Cold-stunning is one of the greatest killers of sea turtles — when water temperatures drop below 10°C, you become immobilized and float helplessly at the surface, unable to dive, feed, or flee.',
+    narrativeText: 'The water temperature drops sharply. Your muscles stiffen. Your flippers barely respond. You float at the surface, unable to dive or feed.',
     statEffects: [{ stat: StatId.CLI, amount: 8, label: '+CLI' }],
     consequences: [],
     choices: [
@@ -1017,7 +1017,7 @@ const turtleEvents: GameEvent[] = [
         id: 'turtle-cold-deep-water',
         label: 'Swim for deeper, warmer water',
         description: 'Deeper water holds heat longer. Push through the lethargy.',
-        narrativeResult: 'With agonizing effort, you push your stiffening flippers and angle downward. The water warms slightly with depth. You hang motionless at ten meters, barely alive but no longer freezing. When the surface warms, you can ascend.',
+        narrativeResult: 'You force your stiffening flippers downward. The water warms slightly with depth. You hang motionless at ten meters, barely functional but no longer freezing.',
         statEffects: [{ stat: StatId.HOM, amount: 5, label: '+HOM' }],
         consequences: [{ type: 'modify_weight', amount: -3 }],
         revocable: false,
@@ -1027,14 +1027,14 @@ const turtleEvents: GameEvent[] = [
         id: 'turtle-cold-float',
         label: 'Conserve energy and float',
         description: 'Stop moving. Minimize energy expenditure and wait for the water to warm.',
-        narrativeResult: 'You go limp and float at the surface, a helpless target for boats, predators, and the cold itself. Hours pass. Eventually the current carries you to warmer water and sensation returns to your flippers.',
+        narrativeResult: 'You go limp at the surface. Hours pass. The current carries you to warmer water and sensation returns.',
         statEffects: [{ stat: StatId.ADV, amount: 6, label: '+ADV' }],
         consequences: [{ type: 'modify_weight', amount: -2 }],
         revocable: false,
         style: 'default',
         deathChance: {
           probability: 0.06,
-          cause: 'Cold-stunned and unable to recover',
+          cause: 'Cold-stunned. Body temperature dropped below function.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.0004 }],
         },
       },

@@ -89,14 +89,14 @@ export const ANTLER_VELVET_CONFIG: SeasonalTriggerConfig = {
     const bcs = ctx.animal.physiologyState?.bodyConditionScore ?? 3;
     const antlerQuality = bcs >= 3 ? 'robust' : bcs >= 2 ? 'modest' : 'stunted';
     const qualityNarrative = antlerQuality === 'robust'
-      ? 'The new growth pushes outward with startling speed — you can almost feel the calcium being pulled from your bones to feed the velvet-sheathed tines. They will be formidable.'
+      ? 'The new growth pushes outward fast. The velvet-sheathed tines are thick and warm with blood. They will be heavy.'
       : antlerQuality === 'modest'
-        ? 'The new antlers emerge cautiously, smaller than you might have grown if winter had been kinder. The velvet is warm and tender, rich with blood vessels that will feed months of growth.'
-        : 'The growth is thin, almost tentative. A hard winter has left too little calcium in your skeleton, and the antlers that emerge are narrow, their velvet sparse. They will be a poor weapon come autumn.';
+        ? 'The new antlers emerge smaller than they could have been. The velvet is warm and tender, rich with blood.'
+        : 'The growth is thin. A hard winter left too little calcium. The antlers that emerge are narrow, their velvet sparse.';
 
     return {
-      text: `The pedicles on your skull itch with a deep, insistent pressure. Something is happening beneath the skin — a biological imperative written in bone and blood. ${qualityNarrative} For now, they are fragile, easily damaged. You move through the woods with uncharacteristic caution, ducking branches that once meant nothing.`,
-      actionDetail: `The pedicles itch with a deep pressure. ${qualityNarrative} For now they are fragile. You move with uncharacteristic caution.`,
+      text: `The pedicles on your skull itch with deep pressure. Something is pushing up beneath the skin. ${qualityNarrative} For now they are soft and fragile. You duck branches that once meant nothing.`,
+      actionDetail: `The pedicles itch. ${qualityNarrative} They are soft and fragile. You duck low branches.`,
       clinicalDetail: `Spring antler growth initiated. Velvet antler quality: ${antlerQuality}. BCS: ${bcs}/5. Caloric cost: ${bcs >= 3 ? 150 : 80} kcal.`,
       intensity: 'low',
       emotionalTone: 'calm',
@@ -133,11 +133,11 @@ export const INSECT_HARASSMENT_CONFIG: SeasonalTriggerConfig = {
     const nearWater = ctx.currentNodeType === 'water';
     return {
       text: nearWater
-        ? 'The swarm finds you at the water\'s edge — deer flies first, their bites like hot needles, then the smaller gnats that crawl into your ears and nostrils. Bot flies circle in wide, lazy arcs, waiting for their moment to deposit eggs on your legs. You stamp and shake your head, but the cloud follows you, a personal torment that will not lift until the first hard frost.'
-        : 'They come with the rising heat — deer flies, horse flies, gnats, mosquitoes, each species with its own schedule of misery. The deer flies are the worst, tearing small chunks of skin with scissor-like mouthparts, drawing blood that attracts still more flies. You twitch your skin, stamp your hooves, and swing your head constantly, burning energy on a battle you cannot win.',
+        ? 'The swarm finds you at the water\'s edge. Deer flies first, their bites sharp and hot. Then gnats crawling into your ears and nostrils. Bot flies circle in wide arcs. You stamp and shake your head but the cloud follows.'
+        : 'Deer flies, horse flies, gnats, mosquitoes. The deer flies are worst, tearing small chunks of skin, drawing blood that attracts more flies. You twitch, stamp, and swing your head. The swarm does not leave.',
       actionDetail: nearWater
-        ? 'The swarm finds you at the water\'s edge — deer flies, gnats, bot flies. A personal torment until the first hard frost.'
-        : 'Deer flies tear small chunks of skin. You twitch, stamp, and swing your head constantly, burning energy on a battle you cannot win.',
+        ? 'The swarm finds you at the water\'s edge. Deer flies, gnats, bot flies. You stamp and shake but they follow.'
+        : 'Deer flies tear small chunks of skin. You twitch, stamp, and swing your head. The swarm does not leave.',
       clinicalDetail: `Summer insect harassment. ${nearWater ? 'Near water — elevated biting fly density (Chrysops, Culicoides, Hypoderma).' : 'Forest/field exposure to Tabanidae (deer flies, horse flies). Metabolic cost of defensive behavior.'}`,
       intensity: 'medium',
       emotionalTone: 'pain',
@@ -151,7 +151,7 @@ export const INSECT_HARASSMENT_CONFIG: SeasonalTriggerConfig = {
       label: 'Endure the swarm',
       description: 'Keep foraging despite the torment.',
       style: 'default' as const,
-      narrativeResult: 'You grit through it, twitching and stamping but refusing to abandon the browse. The constant irritation is exhausting — each bite drains a fraction of your reserves, and the cumulative effect is a slow bleed of energy and patience.',
+      narrativeResult: 'You keep eating, twitching and stamping between bites. The flies do not stop. You do not stop either.',
       modifyOutcome(base) {
         // Risk of tick infestation from staying in brush
         const tickChance = ctx.rng.chance(0.25);
@@ -168,7 +168,7 @@ export const INSECT_HARASSMENT_CONFIG: SeasonalTriggerConfig = {
       label: 'Seek mud or water',
       description: 'Coat yourself in mud to deter the flies.',
       style: 'default' as const,
-      narrativeResult: 'You wade into the shallows and lower yourself until the mud coats your legs and belly. The cool earth hardens in the sun, forming a crude armor against the worst of the biting. The flies circle, frustrated, landing on the dried mud and finding no purchase. It won\'t last, but for now, relief.',
+      narrativeResult: 'You wade into the shallows and lower yourself until mud coats your legs and belly. The mud dries in the sun and hardens. The flies land on it and find no skin.',
       modifyOutcome(base) {
         return {
           ...base,
@@ -214,12 +214,12 @@ export const AUTUMN_RUT_CONFIG: SeasonalTriggerConfig = {
   narrative: (ctx) => {
     const bcs = ctx.animal.physiologyState?.bodyConditionScore ?? 3;
     const readyNarrative = bcs >= 3
-      ? 'You are heavy with summer fat, your neck swollen thick with muscle, your antlers hardened into weapons. You are ready.'
-      : 'You are thinner than you should be — winter\'s echo still lives in your ribs. But the hormones do not care about preparation. The rut will happen whether your body can afford it or not.';
+      ? 'You are heavy with summer fat. Your neck is swollen thick with muscle. Your antlers are hard.'
+      : 'You are thinner than you should be. Your ribs still show. The drive does not care. It is here.';
 
     return {
-      text: `The change is chemical and absolute. The shortening daylight triggers a hormonal cascade that rewrites your priorities in a matter of days. Your velvet dries, cracks, and peels away in bloody strips, revealing the polished bone beneath — pale ivory stained rust-brown by the sap of the saplings you rake obsessively. Your neck swells. Your appetite vanishes. Every doe on the wind is a signal you cannot ignore, every other buck a threat that must be confronted. ${readyNarrative} The rut has begun.`,
-      actionDetail: `Your velvet peels away in bloody strips, revealing polished bone. Your neck swells. Your appetite vanishes. ${readyNarrative} The rut has begun.`,
+      text: `The velvet dries, cracks, and peels away in bloody strips. The bone beneath is polished ivory stained brown by sap from the saplings you rake. Your neck swells. Your appetite vanishes. Every doe scent on the wind pulls at you. Every buck scent raises the hair along your spine. ${readyNarrative}`,
+      actionDetail: `Your velvet peels away. The bone beneath is hard. Your neck swells. Your appetite vanishes. ${readyNarrative}`,
       clinicalDetail: `Rut onset. Photoperiod-triggered testosterone surge. Velvet shedding, cervical muscle hypertrophy, behavioral shift to breeding mode. BCS: ${bcs}/5.`,
       intensity: 'high',
       emotionalTone: 'aggression',
@@ -259,8 +259,8 @@ export const WINTER_YARD_CONFIG: SeasonalTriggerConfig = {
   consequences: [],
 
   narrative: () => ({
-    text: 'The snow is belly-deep now, and every step is a labor that costs more calories than it earns. But ahead, through the grey curtain of falling snow, you see the dark shapes of hemlocks and cedars — the traditional winter yard, known to generations of deer through your mother\'s mother\'s memory. The trails are already packed by earlier arrivals, hard-beaten paths between bedding areas and browse. Other deer are here — does and fawns mostly, their body heat warming the sheltered spaces between the evergreens. The yard is safety, but it is also confinement. The browse within reach will be stripped bare within weeks, and then the real test begins.',
-    actionDetail: 'The traditional winter yard — hemlock and cedar shelter, packed trails, other deer. Safety, but also confinement. The browse will be stripped bare within weeks.',
+    text: 'The snow is belly-deep. Every step costs more than it earns. Ahead, through falling snow, you see dark hemlocks and cedars. The trails are already packed by earlier arrivals. Other deer are here, does and fawns mostly. The air between the evergreens is warmer. The browse within reach will be stripped bare within weeks.',
+    actionDetail: 'Hemlock and cedar shelter ahead, packed trails, other deer. The browse will thin fast.',
     clinicalDetail: 'Winter deer yard (traditional conifer shelter). Communal wintering site with packed trail network. Browse competition will intensify as winter progresses.',
     intensity: 'medium' as const,
     emotionalTone: 'cold',
@@ -273,7 +273,7 @@ export const WINTER_YARD_CONFIG: SeasonalTriggerConfig = {
       label: 'Join the winter yard',
       description: 'Safety in numbers and shared warmth, but limited food.',
       style: 'default' as const,
-      narrativeResult: 'You push through the last of the deep snow and onto the packed trail. A doe lifts her head, watches you approach, then returns to stripping bark from a hemlock bough. You are accepted — another body in the communal shelter, another mouth competing for the dwindling browse.',
+      narrativeResult: 'You push through the last deep snow onto a packed trail. A doe lifts her head, watches you, then goes back to stripping bark. You are one more body in the shelter, one more mouth on the browse.',
       modifyOutcome(base) {
         return {
           ...base,
@@ -288,7 +288,7 @@ export const WINTER_YARD_CONFIG: SeasonalTriggerConfig = {
       label: 'Stay independent',
       description: 'More browse, but no shelter and no herd warmth.',
       style: 'default' as const,
-      narrativeResult: 'You turn away from the yard and push back into the open forest. The browse here is untouched — low-hanging hemlock boughs heavy with needles, red maple twigs still carrying their dried buds. But the wind cuts through you without the buffer of other bodies, and the snow is unbroken, each step a battle.',
+      narrativeResult: 'You turn away from the yard and push back into open forest. The browse here is untouched. Hemlock boughs heavy with needles, red maple twigs with dried buds. But the wind cuts through you and the snow is unbroken.',
       modifyOutcome(base, innerCtx) {
         const exposure = resolveExposure(innerCtx, {
           type: 'cold',
@@ -343,12 +343,12 @@ export const RUT_ENDS_CONFIG: SeasonalTriggerConfig = {
   narrative: (ctx) => {
     const bcs = ctx.animal.physiologyState?.bodyConditionScore ?? 3;
     const exhaustionNarrative = bcs <= 2
-      ? 'You are gaunt — ribs visible, hip bones jutting, the muscle that swelled your neck during the rut consumed by weeks of obsessive breeding. You have perhaps spent too much.'
-      : 'You are thinner than autumn left you, but the reserves hold. The rut took its toll, but you entered it strong enough to pay the price.';
+      ? 'You are gaunt. Ribs visible, hip bones jutting, neck muscle wasted.'
+      : 'You are thinner than autumn left you, but the reserves hold.';
 
     return {
-      text: `The fire is gone. One morning you simply wake up and the obsessive urgency that ruled your every thought for weeks has vanished, replaced by a hollowed-out exhaustion. Your antlers feel heavy and wrong — the bone at the pedicle is being dissolved from within, weakened by the same hormonal shift that ended the rut. They will fall soon, sometimes one at a time, leaving you lopsided and vulnerable until the second drops. ${exhaustionNarrative} Winter stretches ahead, long and hungry, and you must survive it on whatever reserves remain.`,
-      actionDetail: `The fire is gone. The obsessive urgency has vanished. Your antlers feel heavy and wrong — bone dissolving at the pedicle. ${exhaustionNarrative}`,
+      text: `The drive drains out of your muscles. You are gaunt. Your antlers feel heavy and wrong. The bone at the pedicle is softening. They will fall soon. ${exhaustionNarrative} Winter stretches ahead.`,
+      actionDetail: `The drive is gone. Your antlers are heavy, the pedicle softening. ${exhaustionNarrative}`,
       clinicalDetail: `Post-rut exhaustion. Testosterone declining, pedicle osteoclast activity increasing (antler drop imminent). BCS: ${bcs}/5. ${bcs <= 2 ? 'Significant body mass depleted during breeding.' : 'Adequate reserves maintained.'}`,
       intensity: bcs <= 2 ? 'high' : 'medium',
       emotionalTone: bcs <= 2 ? 'pain' : 'calm',

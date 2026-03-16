@@ -18,7 +18,7 @@ export const DECISION_ARC_STORYLINES: StorylineDefinition[] = [
         id: 'wounded-stranger-discover',
         delayMin: 0,
         delayMax: 0,
-        narrativeText: 'You discover a creature of your kind, badly injured and unable to move. It watches you with desperate eyes.',
+        narrativeText: 'The smell hits first: blood, urine, stress. One of your kind lies in the dirt ahead, breathing fast and shallow, unable to stand.',
         statEffects: [],
         consequences: [],
         completionFlag: 'storyline-wounded-stranger-discovered',
@@ -26,8 +26,8 @@ export const DECISION_ARC_STORYLINES: StorylineDefinition[] = [
           {
             id: 'help',
             label: 'Help the stranger',
-            description: 'Approach carefully and offer what aid you can.',
-            narrativeResult: 'You approach cautiously, lowering your guard. The wounded creature tenses, then relaxes as it senses your intent. You stay close, sharing warmth and vigilance through the long hours.',
+            description: 'Move closer. Stay near.',
+            narrativeResult: 'You step closer. The injured one flinches, then goes still as your scent registers. You settle nearby, body heat bleeding across the gap between you.',
             statEffects: [
               { stat: StatId.ADV, amount: -3, duration: 6, label: '-ADV (reduced vigilance)' },
               { stat: StatId.HEA, amount: -3, duration: 4, label: '-HEA (exhausting care)' },
@@ -39,8 +39,8 @@ export const DECISION_ARC_STORYLINES: StorylineDefinition[] = [
           {
             id: 'ignore',
             label: 'Move on',
-            description: 'The harsh reality of survival leaves no room for charity.',
-            narrativeResult: 'You turn away. The wounded creature watches you go, its eyes dimming with resignation. You press on, the weight of the moment settling behind you like a stone.',
+            description: 'Keep moving. Do not stop.',
+            narrativeResult: 'You turn and walk. Behind you, the injured one\'s breathing continues, rapid and wet. The sound fades as the distance grows.',
             statEffects: [
               { stat: StatId.ADV, amount: 3, duration: 4, label: '+ADV (self-preservation)' },
             ],
@@ -56,7 +56,7 @@ export const DECISION_ARC_STORYLINES: StorylineDefinition[] = [
         id: 'wounded-stranger-forgotten',
         delayMin: 2,
         delayMax: 4,
-        narrativeText: 'The memory of the wounded creature fades, replaced by the demands of survival. You wonder briefly whether it found help elsewhere, or whether the forest reclaimed it in silence.',
+        narrativeText: 'Days pass. The smell of that place does not return to you. Whatever happened there is behind you now.',
         statEffects: [],
         consequences: [],
         completionFlag: 'storyline-wounded-stranger-ignore',
@@ -66,7 +66,7 @@ export const DECISION_ARC_STORYLINES: StorylineDefinition[] = [
         id: 'wounded-stranger-reunion',
         delayMin: 3,
         delayMax: 6,
-        narrativeText: 'The creature you helped has recovered. You encounter it again on a familiar trail — it recognizes you, approaching without fear. A bond has formed, quiet but unmistakable. In this harsh world, you have gained something rare: an ally.',
+        narrativeText: 'A familiar scent on a trail you use often. The one you stayed with is moving again, upright and feeding. It approaches without alarm, its body relaxed. You tolerate the closeness.',
         statEffects: [
           { stat: StatId.ADV, amount: -5, duration: 8, label: '-ADV (familiar ally nearby)' },
         ],
@@ -95,7 +95,7 @@ export const DECISION_ARC_STORYLINES: StorylineDefinition[] = [
         id: 'territorial-dispute-start',
         delayMin: 0,
         delayMax: 0,
-        narrativeText: 'A rival has been encroaching on your territory with increasing boldness. Fresh scent marks overlay your own along the boundary. Each day the intruder pushes deeper, testing your resolve.',
+        narrativeText: 'Fresh scent marks overlay your own along the boundary, hours old at most. A rival is pushing into your range, marking over your marks, each pass bolder than the last.',
         statEffects: [],
         consequences: [],
         completionFlag: 'storyline-territorial-dispute-started',
@@ -103,8 +103,8 @@ export const DECISION_ARC_STORYLINES: StorylineDefinition[] = [
           {
             id: 'confront',
             label: 'Confront the rival',
-            description: 'Drive the intruder out with a direct display of force.',
-            narrativeResult: 'You charge toward the boundary with all the ferocity you can muster. The rival meets your challenge head-on, and for a tense, violent moment the outcome is uncertain.',
+            description: 'Charge. Drive it out.',
+            narrativeResult: 'You rush the boundary. The rival does not retreat. Contact is sudden, hard, and loud. For several seconds neither of you gives ground.',
             statEffects: [
               { stat: StatId.ADV, amount: 5, duration: 4, label: '+ADV (territorial aggression)' },
             ],
@@ -116,8 +116,8 @@ export const DECISION_ARC_STORYLINES: StorylineDefinition[] = [
           {
             id: 'yield',
             label: 'Yield ground',
-            description: 'Cede the contested area and avoid conflict.',
-            narrativeResult: 'You withdraw from the boundary, surrendering the contested ground. The rival claims it immediately, marking it with impunity. Your territory shrinks, but you are unharmed.',
+            description: 'Pull back. Avoid contact.',
+            narrativeResult: 'You move off the boundary. The rival marks over your scent within the hour. Your usable range contracts, but your body is intact.',
             statEffects: [
               { stat: StatId.HOM, amount: -3, duration: 4, label: '-HOM (lost ground)' },
             ],
@@ -130,8 +130,8 @@ export const DECISION_ARC_STORYLINES: StorylineDefinition[] = [
           {
             id: 'negotiate',
             label: 'Establish a shared boundary',
-            description: 'Attempt to coexist by defining a clear border through displays and patience.',
-            narrativeResult: 'You approach the boundary not with aggression but with deliberate, measured signals — marking, watching, retreating in turn. The rival hesitates, then mirrors your restraint.',
+            description: 'Mark carefully. Hold position without charging.',
+            narrativeResult: 'You approach the boundary and mark. Wait. The rival marks in return, holds position, does not advance. You repeat. A pattern forms: mark, pause, withdraw.',
             statEffects: [
               { stat: StatId.WIS, amount: 5, duration: 6, label: '+WIS (diplomatic instinct)' },
               { stat: StatId.NOV, amount: 3, duration: 4, label: '+NOV (novel strategy)' },
@@ -148,7 +148,7 @@ export const DECISION_ARC_STORYLINES: StorylineDefinition[] = [
         id: 'territorial-dispute-confront',
         delayMin: 1,
         delayMax: 2,
-        narrativeText: 'Your display of strength has driven the intruder away — for now. The boundary is yours again, and the scent of the rival fades with each passing day. Your territory feels more secure than before.',
+        narrativeText: 'The rival\'s scent fades from the boundary over the following days. Your marks go unchallenged. The range is yours again.',
         statEffects: [],
         consequences: [
           { type: 'modify_territory', qualityChange: 10 },
@@ -160,7 +160,7 @@ export const DECISION_ARC_STORYLINES: StorylineDefinition[] = [
         id: 'territorial-dispute-yield',
         delayMin: 1,
         delayMax: 2,
-        narrativeText: 'You have ceded part of your territory. The rival patrols its new range openly, and you must learn to subsist on less. The reduced space presses in around you, a constant reminder of what was lost.',
+        narrativeText: 'The rival patrols the lost ground openly. Your range is smaller now. Food and cover are harder to find in what remains.',
         statEffects: [],
         consequences: [],
         completionFlag: 'storyline-territorial-dispute-yield',
@@ -170,7 +170,7 @@ export const DECISION_ARC_STORYLINES: StorylineDefinition[] = [
         id: 'territorial-dispute-negotiate',
         delayMin: 2,
         delayMax: 4,
-        narrativeText: 'An uneasy truce holds. You and the rival have established a shared boundary, each respecting the other\'s marks. The arrangement is fragile, but it endures. Your territory is smaller, yet richer for the peace.',
+        narrativeText: 'The boundary holds. You smell the rival on the far side; the rival smells you. Neither crosses. The range is smaller but the marking pattern is stable.',
         statEffects: [],
         consequences: [
           { type: 'modify_territory', qualityChange: 5 },

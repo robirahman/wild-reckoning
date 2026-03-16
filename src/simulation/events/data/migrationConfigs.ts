@@ -78,13 +78,13 @@ export const WINTER_YARD_SCOUT_CONFIG: MigrationTriggerConfig = {
       ],
       consequences: [],
       narrativeText: hasFawns
-        ? 'The first killing frost settles in overnight, rimming the grass with white crystal. Something deep in your memory stirs — not a thought exactly, but a pull, a directional certainty inherited from your mother. The winter yard lies to the southwest, in the hemlock valley where generations of does have sheltered their fawns through the worst of winter. Your fawns are strong enough to travel now. The time has come to scout the route.'
-        : 'The nights are growing cold with a speed that your body registers before your mind does. You find yourself drifting southwest during your daily wanderings, drawn by a memory that is not quite yours — a scent trail laid down by your mother, and her mother before her, leading to the traditional wintering grounds. The urge to scout the route is becoming difficult to ignore.',
+        ? 'Frost rims the grass white overnight. Something pulls you southwest, toward the hemlock valley. Your fawns are strong enough to travel now.'
+        : 'The nights are growing cold. You find yourself drifting southwest during your daily wanderings, pulled by a scent trail you did not learn but know.',
       emotionalTone: 'tension',
       eventType: 'winter-yard-scout',
       actionNarrative: hasFawns
-        ? 'Something deep in your memory stirs — a pull toward the hemlock valley. Your fawns are strong enough to travel. The time has come to scout the route.'
-        : 'You find yourself drifting southwest, drawn by inherited memory. The urge to scout the route is becoming difficult to ignore.',
+        ? 'A pull toward the hemlock valley. Your fawns are strong enough to travel.'
+        : 'You drift southwest, pulled by a scent trail you did not learn but know.',
       clinicalDetail: `Autumn migration scouting initiated. ${hasFawns ? 'Female with fawns seeking traditional wintering grounds.' : 'Seasonal migration instinct onset, following matrilineal scent trail to traditional deer yard.'}`,
       urgency: 'low',
     };
@@ -97,7 +97,7 @@ export const WINTER_YARD_SCOUT_CONFIG: MigrationTriggerConfig = {
         label: 'Follow the ancestral route',
         description: 'The traditional path is known. Safer, but may be degraded.',
         style: 'default' as const,
-        narrativeResult: 'You follow the scent-memory southwest, tracing paths beaten by generations of hooves. The route is familiar even though you may never have walked it — buried in the inherited map of your kind. The journey takes you through familiar territory, past landmarks your body recognizes even if your mind does not.',
+        narrativeResult: 'You follow the scent trail southwest, tracing paths beaten by generations of hooves. The route feels known even if you have never walked it.',
         modifyOutcome(base) {
           return {
             ...base,
@@ -116,7 +116,7 @@ export const WINTER_YARD_SCOUT_CONFIG: MigrationTriggerConfig = {
         label: 'Scout a new route',
         description: 'Unknown territory. Riskier, but might find better shelter.',
         style: 'default' as const,
-        narrativeResult: 'You break from the ancestral trail and push into unfamiliar ground. The forest here is different — the trees taller, the undergrowth thicker, the scent of other deer faint and old. You are mapping new territory, building your own knowledge. It is exhilarating and terrifying in equal measure.',
+        narrativeResult: 'You break from the ancestral trail into unfamiliar ground. The trees are taller here, the undergrowth thicker. The scent of other deer is faint and old. Everything is new.',
         modifyOutcome(base, innerCtx) {
           // Exploring unfamiliar territory has risks
           const roadCrossing = innerCtx.rng.chance(0.15);
@@ -179,13 +179,13 @@ export const TRAVEL_HAZARDS_CONFIG: MigrationTriggerConfig = {
       ],
       consequences: [],
       narrativeText: isNight
-        ? 'The road appears suddenly — a flat, pale scar cutting through the forest. You can smell the asphalt, the rubber, the exhaust fumes that linger like a toxic fog. Headlights sweep through the trees at irregular intervals, each pair a fast-moving predator with no scent and no sound until it is upon you. The other side is twenty meters away. It might as well be twenty miles.'
-        : 'The highway is a river of metal and noise. You stand at the tree line, every instinct screaming to cross — the wintering grounds are on the other side, you can smell the hemlocks from here — but the traffic is relentless. Cars, trucks, an eighteen-wheeler that shakes the ground as it passes. The gap between vehicles is your window, and it is closing fast.',
+        ? 'The road appears suddenly. You smell asphalt, rubber, exhaust. Headlights sweep through the trees at irregular intervals. The other side is twenty meters away.'
+        : 'You smell the hemlocks from here, past the road. Cars, trucks. The ground shakes when the big ones pass. The gap between them is short.',
       emotionalTone: 'fear',
       eventType: 'travel-hazard-road',
       actionNarrative: isNight
-        ? 'The road appears suddenly. Headlights sweep through the trees at irregular intervals. The other side is twenty meters away. It might as well be twenty miles.'
-        : 'The highway is a river of metal and noise. The gap between vehicles is your window, and it is closing fast.',
+        ? 'The road appears suddenly. Headlights sweep through the trees. The other side is twenty meters away.'
+        : 'The road smells of asphalt and exhaust. The gap between vehicles is short.',
       clinicalDetail: `Road crossing hazard during ${ctx.animal.flags.has('scouting-winter-yard') ? 'migration' : 'dispersal'}. ${isNight ? 'Night crossing — headlight disorientation risk.' : 'Daytime — heavy traffic volume.'}`,
       urgency: 'high',
     };
@@ -201,7 +201,7 @@ export const TRAVEL_HAZARDS_CONFIG: MigrationTriggerConfig = {
         label: 'Cross during the next gap',
         description: 'Sprint across. Speed is everything.',
         style: 'danger' as const,
-        narrativeResult: 'You launch yourself forward the moment the road clears, hooves striking asphalt with a sound like gunshots. The far side seems impossibly far away. Headlights appear on the horizon, growing with terrifying speed. Your muscles burn, your lungs heave, and then — grass under your hooves, darkness around you, the road behind you. You made it. Barely.',
+        narrativeResult: 'You launch forward the moment the road clears. Hooves strike asphalt, loud and hard. Headlights appear on the horizon, growing fast. Then grass under your hooves. The road is behind you.',
         modifyOutcome(base, innerCtx) {
           // Crossing success depends on locomotion and vision (timing)
           const crossSpeed = locomotion / 100;
@@ -247,7 +247,7 @@ export const TRAVEL_HAZARDS_CONFIG: MigrationTriggerConfig = {
         label: 'Wait for a quieter time',
         description: 'Patience. The traffic will thin.',
         style: 'default' as const,
-        narrativeResult: 'You settle into the brush at the road\'s edge and wait. Hours pass. The traffic thins as the night deepens, and finally — a long, silent gap. You cross in the dark, quickly but not desperately, and reach the far side without incident. The delay cost time and warmth, but you are alive and unbroken.',
+        narrativeResult: 'You settle into brush at the road\'s edge and wait. Hours pass. The traffic thins. A long silent gap opens. You cross in the dark and reach the far side.',
         modifyOutcome(base, innerCtx) {
           // Waiting is safer but costs calories from cold exposure
           const exposure = resolveExposure(innerCtx, {
@@ -318,10 +318,10 @@ export const SPRING_RETURN_CONFIG: MigrationTriggerConfig = {
     const bcs = ctx.animal.physiologyState?.bodyConditionScore ?? 3;
 
     const conditionNarrative = bcs >= 3
-      ? 'You are thinner than autumn, but the core of your strength survived the winter. The journey home will restore what the yard took.'
+      ? 'You are thinner than autumn, but the core of your strength survived the winter.'
       : bcs >= 2
-        ? 'Winter has hollowed you out. Your ribs are visible, your haunches gaunt. But the green is calling, and with it, the promise of recovery.'
-        : 'You are barely alive. The winter yard\'s browse ran out weeks ago, and you have been surviving on bark and dry leaves. The walk north may be the last thing you do — but staying is certain death.';
+        ? 'Your ribs are visible, your haunches gaunt. But you smell green on the wind.'
+        : 'You are barely standing. The browse ran out weeks ago. You have been eating bark and dry leaves.';
 
     return {
       statEffects: [
@@ -334,10 +334,10 @@ export const SPRING_RETURN_CONFIG: MigrationTriggerConfig = {
         { type: 'remove_flag', flag: 'wintering-in-yard' as any },
         { type: 'remove_flag', flag: 'scouting-winter-yard' as any },
       ],
-      narrativeText: `The snow is retreating. What was belly-deep a month ago is now patchy and grey, undermined by the warming earth. The packed trails of the winter yard, trodden by dozens of hooves into hard-packed ice, are turning to slush. And from the north, carried on a warm wind, comes the scent of green — new growth, tender shoots, the first herbs pushing through the thawing soil. The pull is irresistible. One by one, the deer begin to drift away from the yard, following the retreating snow line northward to the summer range. ${conditionNarrative}`,
+      narrativeText: `The snow is patchy and grey. The packed trails are turning to slush. From the north, on a warm wind, comes the smell of green. New growth, tender shoots, herbs pushing through thawing soil. One by one, the deer drift away from the yard, following the retreating snow line. ${conditionNarrative}`,
       emotionalTone: bcs <= 1 ? 'tension' : 'relief',
       eventType: 'spring-return',
-      actionNarrative: `The snow is retreating. From the north comes the scent of green. The pull is irresistible. ${conditionNarrative}`,
+      actionNarrative: `The snow is retreating. Green on the wind from the north. ${conditionNarrative}`,
       clinicalDetail: `Spring migration from winter yard to summer range. BCS: ${bcs}/5. ${bcs <= 1 ? 'Critical condition — may not survive journey.' : bcs <= 2 ? 'Poor condition — recovery dependent on spring forage.' : 'Adequate condition for return journey.'}`,
       urgency: bcs <= 1 ? 'high' : 'low',
     };

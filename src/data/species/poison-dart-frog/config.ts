@@ -6,7 +6,7 @@ export const POISON_DART_FROG_CONFIG: SpeciesConfig = {
   name: 'Strawberry Poison Dart Frog',
   scientificName: 'Oophaga pumilio',
   description:
-    'A thumbnail-sized frog whose brilliant red-and-blue coloration warns predators of the alkaloid poisons sequestered in its skin. You are not born toxic — you earn it, one ant at a time, concentrating the chemical defenses of your prey into a living arsenal. Males call from the leaf litter to attract mates, wrestle rivals for territory, and carry tadpoles on their backs to bromeliad pools high in the canopy. Females return to feed each tadpole unfertilized eggs — one of the most devoted forms of parental care in the amphibian world. Your life plays out in a vertical cathedral of green, from the forest floor to the treetops.',
+    'A thumbnail-sized frog whose brilliant red-and-blue coloration warns predators of the alkaloid poisons sequestered in its skin. You are not born toxic — you earn it, one ant at a time, concentrating the chemical defenses of your prey into a living arsenal. Males call from the leaf litter to attract mates, wrestle rivals for territory, and carry tadpoles on their backs to bromeliad pools high in the canopy. Females return to feed each tadpole unfertilized eggs — one of the most devoted forms of parental care in the amphibian world. Your life plays out vertically, from the forest floor to the treetops.',
   diet: 'carnivore',
   defaultRegion: 'costa-rican-rainforest',
   defaultRegionDisplayName: 'Costa Rican Rainforest',

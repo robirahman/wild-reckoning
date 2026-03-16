@@ -129,7 +129,7 @@ export const HERD_ALARM_CONFIG: SocialTriggerConfig = {
     return {
       text,
       entities: [{ perceivedAs: `${allyName}'s alarm snort`, actualIdentity: `${allyName} (herd member) alarm signaling`, wisdomThreshold: 0, primarySense: 'sound', archetype: 'conspecific' as const }],
-      actionDetail: `${allyName} snorts — a sharp, percussive exhalation. The white flag of her tail goes up and she bolts. The signal cascades through every deer within earshot.`,
+      actionDetail: `${allyName} snorts. Tail up, white flash. She bolts. Every deer within earshot reacts.`,
       clinicalDetail: `Herd alarm response initiated by ${allyName}. Conspecific alarm snort detected; flight response triggered.`,
       intensity: 'high',
       emotionalTone: 'fear',
@@ -144,9 +144,9 @@ export const HERD_ALARM_CONFIG: SocialTriggerConfig = {
       {
         id: 'follow-alarm',
         label: 'Follow the alarm and bolt',
-        description: 'Trust the signal. Run first, assess later.',
+        description: 'Run first.',
         style: 'default' as const,
-        narrativeResult: 'You launch yourself into motion without thought, matching the herd\'s trajectory through the trees. The alarm was real — behind you, something large crashes through the brush where you stood moments ago. The herd\'s collective vigilance saved you the critical seconds you needed.',
+        narrativeResult: 'You launch into motion, matching the herd through the trees. Behind you, something large crashes through the brush where you stood.',
         modifyOutcome(base: SimulationOutcome, innerCtx: SimulationContext) {
           // resolveSocial is imported in the factory module
           const social = resolveSocial(innerCtx, {
@@ -166,9 +166,9 @@ export const HERD_ALARM_CONFIG: SocialTriggerConfig = {
       {
         id: 'assess-alarm',
         label: 'Pause and assess the threat',
-        description: 'Sometimes alarms are false. But sometimes they aren\'t.',
+        description: 'Freeze. Scan the tree line.',
         style: 'default' as const,
-        narrativeResult: 'You freeze rather than flee, scanning the tree line for the source of the alarm. Long seconds tick past. Your heart hammers. The other deer are already gone, their white tails vanishing into the undergrowth. You are alone, exposed, trying to read the forest for whatever triggered the panic.',
+        narrativeResult: 'You freeze. Heart hammering. The other deer are already gone, white tails vanishing. You scan the tree line, alone and exposed.',
         modifyOutcome(base: SimulationOutcome, innerCtx: SimulationContext) {
           // 20% chance the threat was real and you're now exposed
           const threatened = innerCtx.rng.chance(0.2);
@@ -221,7 +221,7 @@ export const BACHELOR_GROUP_CONFIG: SocialTriggerConfig = {
     return {
       text,
       entities: [{ perceivedAs: 'three other bucks with velvet antlers', actualIdentity: 'bachelor group of 3 male deer', wisdomThreshold: 0, primarySense: 'sight', archetype: 'conspecific' as const }],
-      actionDetail: 'Three other bucks grazing in a clearing. Summer brotherhood — no aggression. One assesses you and returns to feeding. You are accepted.',
+      actionDetail: 'Three bucks grazing in a clearing. One lifts his head, looks at you, returns to feeding.',
       clinicalDetail: 'Joined bachelor group. Non-agonistic male social bonding during summer antler growth period.',
       intensity: 'low',
       emotionalTone: 'calm',
@@ -263,7 +263,7 @@ export const DOE_HIERARCHY_CONFIG: SocialTriggerConfig = {
     return {
       text,
       entities: [{ perceivedAs: 'an older doe with scars, posture broadcasting challenge', actualIdentity: 'dominant doe, hierarchical challenge for fawning territory', wisdomThreshold: 0, primarySense: 'sight', archetype: 'conspecific' as const }],
-      actionDetail: 'She stops three body lengths away and stares, ears pinned back, one hoof pawing the ground. Yield, or be made to yield.',
+      actionDetail: 'She stops three body lengths away. Ears pinned back, one hoof pawing the ground. Staring.',
       clinicalDetail: 'Female dominance challenge. Intraspecific competition for fawning territory access.',
       intensity: 'medium',
       emotionalTone: 'aggression',
@@ -275,9 +275,9 @@ export const DOE_HIERARCHY_CONFIG: SocialTriggerConfig = {
       {
         id: 'challenge-doe',
         label: 'Stand your ground and challenge',
-        description: 'Contest the hierarchy. Winner gets prime fawning territory.',
+        description: 'Hold your ground.',
         style: 'default' as const,
-        narrativeResult: 'You mirror her posture — ears back, head high, weight forward. For a long, tense moment you stare at each other. Then she lunges, rearing up on hind legs, forelegs striking. You meet her, hooves clashing, and the contest becomes a shoving, kicking scramble for dominance.',
+        narrativeResult: 'Ears back, weight forward. She lunges, rearing, forelegs striking. You meet her. Hooves clashing, shoving, kicking.',
         modifyOutcome(base: SimulationOutcome, innerCtx: SimulationContext) {
           const social = resolveSocial(innerCtx, {
             interactionType: 'dominance-display',
@@ -300,9 +300,9 @@ export const DOE_HIERARCHY_CONFIG: SocialTriggerConfig = {
       {
         id: 'yield-doe',
         label: 'Yield to the dominant doe',
-        description: 'Accept subordinate status. Safer, but poorer fawning ground.',
+        description: 'Give way. Find fawning cover elsewhere.',
         style: 'default' as const,
-        narrativeResult: 'You break eye contact and turn aside, ceding the ground. The dominant doe watches you go, satisfied, and reclaims the clearing with a proprietary air. You will find fawning cover elsewhere — not the best, but adequate. Some fights are not worth the injuries.',
+        narrativeResult: 'You break eye contact and turn aside. She watches you go. You will find fawning cover elsewhere.',
         modifyOutcome(base: SimulationOutcome) {
           return {
             ...base,
@@ -353,7 +353,7 @@ export const FAWN_PLAY_CONFIG: SocialTriggerConfig = {
     return {
       text,
       entities: [{ perceivedAs: 'your fawns chasing each other through tall grass', actualIdentity: 'offspring play behavior', wisdomThreshold: 0, primarySense: 'sight', archetype: 'conspecific' as const }],
-      actionDetail: 'Your fawns chase each other in looping sprints, white spots flashing in dappled light. They are alive, and they are yours.',
+      actionDetail: 'Your fawns chase each other in looping sprints. White spots flashing in dappled light.',
       clinicalDetail: 'Fawn play behavior observed. Locomotive play bouts indicating healthy development and adequate nutrition.',
       intensity: 'low',
       emotionalTone: 'relief',
@@ -402,7 +402,7 @@ export const TERRITORIAL_SCRAPE_CONFIG: SocialTriggerConfig = {
     return {
       text,
       entities: [],
-      actionDetail: 'You find a low-hanging branch and work it with your antlers. Then paw the earth into a bare oval. Every buck within half a mile will know you were here.',
+      actionDetail: 'You find a low-hanging branch and work it with your antlers. Then paw the earth into a bare oval.',
       clinicalDetail: 'Territorial marking behavior. Antler rub on overhanging branch, ground scrape with tarsal gland scent deposition. Chemical signaling to conspecific males.',
       intensity: 'low',
       emotionalTone: 'aggression',
@@ -447,9 +447,9 @@ export const RIVAL_RETURNS_CONFIG: SocialTriggerConfig = {
   narrative(ctx) {
     const rivalName = ctx.npcs?.find((n) => n.type === 'rival' && n.alive)?.name ?? 'The rival buck';
     return {
-      text: `You smell ${rivalName} before you see the buck — that distinctive musk, sharp and aggressive, carried on the wind like a declaration of war. Then the shape materializes between the trees: familiar scarred rack, thick neck, the same contemptuous stare. The buck has been here before. This is not the first time, and something in the set of the rival's shoulders says it won't be the last.`,
+      text: `You smell ${rivalName} before you see the buck. That musk, sharp and aggressive, on the wind. Then the shape between the trees: familiar scarred rack, thick neck.`,
       entities: [], // rivalBuckEntity is handled in the factory
-      actionDetail: `${rivalName} materializes between the trees: familiar scarred rack, thick neck, the same contemptuous stare. This is not the first time.`,
+      actionDetail: `${rivalName} between the trees. Scarred rack, thick neck. You have seen this buck before.`,
       clinicalDetail: `Recurring rival encounter. ${rivalName} returning to contested territory during rut.`,
       intensity: 'high',
       emotionalTone: 'aggression',
@@ -465,9 +465,9 @@ export const RIVAL_RETURNS_CONFIG: SocialTriggerConfig = {
       {
         id: 'confront-rival',
         label: 'Charge and confront',
-        description: `Meet ${rivalName} head-on.${ctx.animal.weight > rivalWeight ? ' You outweigh the rival.' : ''}`,
+        description: `Close the distance.${ctx.animal.weight > rivalWeight ? ' You outweigh this buck.' : ''}`,
         style: (ctx.animal.weight < rivalWeight * 0.8 ? 'danger' : 'default') as 'default' | 'danger',
-        narrativeResult: `You lower your antlers and close the distance. ${rivalName} meets you without flinching — the crack of antler on antler echoes through the forest. This is personal now.`,
+        narrativeResult: `You lower your antlers and close the distance. ${rivalName} meets you. The crack of antler on antler echoes through the trees.`,
         modifyOutcome(base: SimulationOutcome, innerCtx: SimulationContext) {
           const fight = resolveFight(innerCtx, {
             opponentStrength: rivalStrength,
@@ -499,9 +499,9 @@ export const RIVAL_RETURNS_CONFIG: SocialTriggerConfig = {
       {
         id: 'display-rival',
         label: 'Posture and display',
-        description: 'Show your size without committing to combat.',
+        description: 'Turn broadside. Show the full rack.',
         style: 'default' as const,
-        narrativeResult: `You turn broadside, presenting the full span of your rack, muscles tensed, neck arched. ${rivalName} evaluates you with cold calculation.`,
+        narrativeResult: `You turn broadside. Full span of your rack visible, muscles tensed, neck arched. ${rivalName} looks.`,
         modifyOutcome(base: SimulationOutcome, innerCtx: SimulationContext) {
           const social = resolveSocial(innerCtx, {
             interactionType: 'dominance-display',
@@ -521,9 +521,9 @@ export const RIVAL_RETURNS_CONFIG: SocialTriggerConfig = {
       {
         id: 'yield-rival',
         label: 'Yield the ground',
-        description: 'Turn away. Live to fight another day.',
+        description: 'Turn away.',
         style: 'default' as const,
-        narrativeResult: `You break eye contact and drift back into the trees. ${rivalName} watches you go, claiming the clearing without a blow. Discretion. Not cowardice. That's what you tell yourself.`,
+        narrativeResult: `You break eye contact and drift back into the trees. ${rivalName} watches you go.`,
         modifyOutcome(base: SimulationOutcome) {
           return {
             ...base,
@@ -576,9 +576,9 @@ export const ALLY_WARNS_CONFIG: SocialTriggerConfig = {
   narrative(ctx) {
     const allyName = ctx.npcs?.find((n) => n.type === 'ally' && n.alive)?.name ?? 'Your companion';
     return {
-      text: `${allyName} freezes mid-step, head cocked, one ear swiveled hard to the left. You know this posture. You've learned to trust it. The doe's body language is subtle but unmistakable to anyone who has traveled with her: danger, that direction, close. She doesn't bolt — not yet — but the slight shift of her weight onto her hind legs tells you she's ready. Without the warning, you would have walked straight into whatever she's detected.`,
+      text: `${allyName} freezes mid-step. One ear swiveled hard left. Weight shifting onto hind legs. You know this posture.`,
       entities: [{ perceivedAs: `${allyName} frozen mid-step, ear swiveled`, actualIdentity: `${allyName} (ally) early warning signal`, wisdomThreshold: 0, primarySense: 'sight', archetype: 'conspecific' as const }],
-      actionDetail: `${allyName} freezes mid-step, body language unmistakable: danger, that direction, close. Without the warning, you would have walked straight into it.`,
+      actionDetail: `${allyName} freezes. Ear swiveled, weight back. Something that direction.`,
       clinicalDetail: `Ally early warning. ${allyName} detected threat and communicated via body language, preventing direct encounter.`,
       intensity: 'medium',
       emotionalTone: 'tension',
@@ -633,7 +633,7 @@ export const YEARLING_DISPERSAL_CONFIG: SocialTriggerConfig = {
 
     let text: string;
     if (hasDispersalPressure) {
-      text = 'The dominant buck finds you in the cedar thicket and there is nothing casual about the approach. Head low, ears pinned, moving with the coiled deliberation of an animal about to attack. The message has moved beyond chemical signals and body language — this is a physical eviction. You are not welcome here anymore. The home range that sheltered you since birth has become hostile territory.';
+      text = 'The dominant buck finds you in the cedar thicket. Head low, ears pinned, moving directly at you. This is not posturing.';
     } else {
       const env = buildEnvironment(ctx);
       const fragmentCtx = toFragmentContext(env);
@@ -661,9 +661,9 @@ export const YEARLING_DISPERSAL_CONFIG: SocialTriggerConfig = {
         {
           id: 'resist-dispersal',
           label: 'Resist the urge to leave',
-          description: 'Cling to the familiar. The pressure will only grow.',
+          description: 'Stay. The pressure will grow.',
           style: 'default' as const,
-          narrativeResult: 'You press yourself deeper into the thicket, refusing to acknowledge the chemical imperative in your blood. This is home. You were born here. Every trail, every bedding site, every water source is mapped in your memory. Leaving feels like dying.',
+          narrativeResult: 'You press deeper into the thicket. Every trail here, every bedding site, every water source is familiar. You stay.',
           modifyOutcome(base: SimulationOutcome) {
             return {
               ...base,
@@ -676,9 +676,9 @@ export const YEARLING_DISPERSAL_CONFIG: SocialTriggerConfig = {
         {
           id: 'accept-dispersal',
           label: 'Accept the restlessness',
-          description: 'Begin to scout unfamiliar territory.',
+          description: 'Go. Scout unfamiliar ground.',
           style: 'default' as const,
-          narrativeResult: 'You stop fighting it. The next morning, instead of following the familiar trails, you turn north — into country you have never explored. Every step takes you further from everything you know. The forest smells different here. The fear is real, but so is the exhilaration.',
+          narrativeResult: 'You turn north, away from the familiar trails. The forest smells different here. Everything unfamiliar.',
           modifyOutcome(base: SimulationOutcome, innerCtx: SimulationContext) {
             const social = resolveSocial(innerCtx, {
               interactionType: 'dispersal',
@@ -704,9 +704,9 @@ export const YEARLING_DISPERSAL_CONFIG: SocialTriggerConfig = {
       {
         id: 'leave-home',
         label: 'Leave your home range',
-        description: 'The dominant buck leaves you no choice.',
+        description: 'He is bigger. Go.',
         style: 'default' as const,
-        narrativeResult: 'The charge catches you off-guard — a blur of antlers and fury that sends you stumbling backwards. You don\'t fight. You can\'t. This is a full-grown buck in rut, and you are a yearling who weighs thirty pounds less. You run, and you keep running, past the boundary markers you\'ve known your whole life, into unfamiliar forest.',
+        narrativeResult: 'The charge hits. Antlers and weight slamming you backwards. You run past the boundary markers, into unfamiliar forest.',
         modifyOutcome(base: SimulationOutcome, innerCtx: SimulationContext) {
           const social = resolveSocial(innerCtx, {
             interactionType: 'dispersal',
@@ -737,9 +737,9 @@ export const YEARLING_DISPERSAL_CONFIG: SocialTriggerConfig = {
       {
         id: 'fight-dominant',
         label: 'Stand and fight the dominant buck',
-        description: 'A desperate, likely futile stand.',
+        description: 'He is bigger. You face him anyway.',
         style: 'danger' as const,
-        narrativeResult: 'Something snaps inside you — not courage exactly, but a refusal to be driven like prey. You wheel to face the charging buck, lowering your small antlers. The impact is devastating.',
+        narrativeResult: 'You wheel to face the charging buck. Lower your antlers. The impact is heavy.',
         modifyOutcome(base: SimulationOutcome, innerCtx: SimulationContext) {
           const fight = resolveFight(innerCtx, {
             opponentStrength: 60,

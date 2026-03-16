@@ -11,7 +11,7 @@ const wolfEvents: GameEvent[] = [
     type: 'active',
     category: 'foraging',
     narrativeText:
-      'A white-tailed deer bursts from the undergrowth ahead — a doe, heavy with autumn fat, her white flag flashing as she bounds through the aspens. Your muscles lock, your ears flatten, and the ancient calculus begins: distance, terrain, snow depth, her speed versus yours. She is fast, but she is running uphill, and the snow is deep enough to slow her more than it slows you. The chase will cost energy you may not have to spare.',
+      'A white-tailed doe bursts from the undergrowth. The scent of autumn fat hits your nose. She is running uphill through deep snow. Your muscles lock.',
     statEffects: [
       { stat: StatId.HOM, amount: 5, label: '+HOM' },
       { stat: StatId.ADV, amount: 3, label: '+ADV' },
@@ -20,7 +20,7 @@ const wolfEvents: GameEvent[] = [
       {
         id: 'pursue-deer',
         label: 'Pursue at full speed',
-        description: 'Commit everything to the chase — if you catch her, you eat for days',
+        description: 'Commit everything to the chase',
         statEffects: [
           { stat: StatId.HOM, amount: 8, label: '+HOM' },
         ],
@@ -33,7 +33,7 @@ const wolfEvents: GameEvent[] = [
       {
         id: 'stalk-deer',
         label: 'Stalk and wait for a better angle',
-        description: 'Circle downwind and try to cut her off at the creek crossing',
+        description: 'Circle downwind and cut her off at the creek crossing',
         statEffects: [
           { stat: StatId.WIS, amount: 3, label: '+WIS' },
         ],
@@ -46,7 +46,7 @@ const wolfEvents: GameEvent[] = [
       {
         id: 'abandon-deer',
         label: 'Abandon the chase',
-        description: 'Save your energy — failed chases in winter can be fatal',
+        description: 'Save your energy. Failed chases in winter can be fatal.',
         statEffects: [
           { stat: StatId.HOM, amount: -3, label: '-HOM' },
         ],
@@ -68,7 +68,7 @@ const wolfEvents: GameEvent[] = [
     type: 'active',
     category: 'foraging',
     narrativeText:
-      'The bull moose stands in the shallows of the beaver pond, water streaming from his beard, his rack wide enough to shelter a grown man beneath it. He is old, massive — over a thousand pounds of bone and muscle and fury. He has seen wolves before and he is not afraid. He turns to face you, lowering that enormous head, and the antler tines swing toward you like a forest of spears. A moose can kill a wolf with a single kick. But a moose can also feed a pack for two weeks.',
+      'The bull moose stands in the shallows. The smell hits you first: wet hide, rut musk, fermenting browse. His rack is wide. He turns to face you and lowers his head. A moose can kill with a single kick.',
     statEffects: [
       { stat: StatId.ADV, amount: 10, label: '+ADV' },
       { stat: StatId.TRA, amount: 5, label: '+TRA' },
@@ -76,8 +76,8 @@ const wolfEvents: GameEvent[] = [
     choices: [
       {
         id: 'attack-moose',
-        label: 'Attack — go for the hamstrings',
-        description: 'If you can cripple him, the pack eats for weeks. If you misjudge, you die.',
+        label: 'Attack. Go for the hamstrings.',
+        description: 'If you cripple him, the pack eats for weeks.',
         statEffects: [
           { stat: StatId.HOM, amount: 12, label: '+HOM' },
         ],
@@ -88,13 +88,13 @@ const wolfEvents: GameEvent[] = [
         style: 'danger',
         deathChance: {
           probability: 0.10,
-          cause: 'The moose caught you with a front hoof. The blow crushed your skull instantly.',
+          cause: 'Front hoof to the skull. Killed instantly.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.004 }],
         },
       },
       {
         id: 'test-moose',
-        label: 'Test him — feint and gauge his strength',
+        label: 'Test him. Feint and gauge his strength.',
         description: 'Circle and probe for weakness. If he stands firm, back off.',
         statEffects: [
           { stat: StatId.WIS, amount: 4, label: '+WIS' },
@@ -105,14 +105,14 @@ const wolfEvents: GameEvent[] = [
         style: 'default',
         deathChance: {
           probability: 0.03,
-          cause: 'The moose charged without warning. You were too close to dodge.',
+          cause: 'The moose charged without warning. Too close to dodge.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.003 }],
         },
       },
       {
         id: 'retreat-moose',
-        label: 'Retreat — this one is too strong',
-        description: 'A wise wolf knows when prey is too dangerous',
+        label: 'Retreat. This one is too strong.',
+        description: 'A healthy moose is not worth the risk.',
         statEffects: [
           { stat: StatId.WIS, amount: 5, label: '+WIS' },
           { stat: StatId.ADV, amount: -3, label: '-ADV' },
@@ -135,7 +135,7 @@ const wolfEvents: GameEvent[] = [
     type: 'active',
     category: 'foraging',
     narrativeText:
-      'The elk herd is bedded down in the meadow at dawn, steam rising from their warm bodies into the cold air. You have been watching from the tree line for an hour, reading the herd — the cow with the limp on the left side, the calf that keeps drifting to the edge of the group, the bull that is facing the wrong direction. The wind is in your favor. The snow is firm enough to run on. This is the moment your ancestors perfected over a hundred thousand years: the ambush, the burst, the chase, the takedown.',
+      'The elk herd is bedded down in the meadow. Steam rises from their bodies. You smell the cow with the limp, the calf drifting to the edge, the bull facing the wrong direction. Wind in your favor. Snow firm.',
     statEffects: [
       { stat: StatId.HOM, amount: 6, label: '+HOM' },
       { stat: StatId.WIS, amount: 3, label: '+WIS' },
@@ -158,7 +158,7 @@ const wolfEvents: GameEvent[] = [
     type: 'active',
     category: 'foraging',
     narrativeText:
-      'The ravens led you here — a dozen of them circling above the pines in the lazy, deliberate spirals that mean only one thing. Below, half-buried in snow, lies the carcass of a deer that died in the night. The ribs are still red, the meat still frozen. No other predator has claimed it yet. The ravens drop down and begin tearing at the eyes and tongue, impatient for you to open the hide they cannot breach themselves. This is the ancient partnership: they find, you open, both eat.',
+      'Ravens circling above the pines. Below, a deer carcass half-buried in snow. Ribs still red, meat frozen. No other predator scent on it yet.',
     statEffects: [
       { stat: StatId.HOM, amount: -4, label: '-HOM' },
       { stat: StatId.ADV, amount: -3, label: '-ADV' },
@@ -179,7 +179,7 @@ const wolfEvents: GameEvent[] = [
     type: 'passive',
     category: 'foraging',
     narrativeText:
-      'The snow is waist-deep and crusted just enough to support the deer but not you. Every stride punches through the crust, the sharp edges cutting your legs, while the deer floats across the surface like a ghost. You chase for two hundred yards before your lungs are burning and your legs are bleeding and the deer is a white tail vanishing into the birch stand. You stop, panting, steam pouring from your open mouth, and the cold truth settles: you have burned more calories than you will replace today. The hunt has failed, and winter does not forgive failed hunts.',
+      'The snow crust supports the deer but not you. Every stride punches through, the sharp edges cutting your legs. The deer floats across the surface ahead of you. After two hundred yards your lungs burn. The deer is gone. You stop, panting, legs bleeding. You burned more than you will replace today.',
     statEffects: [
       { stat: StatId.HOM, amount: 10, label: '+HOM' },
       { stat: StatId.ADV, amount: 6, label: '+ADV' },
@@ -202,7 +202,7 @@ const wolfEvents: GameEvent[] = [
     type: 'passive',
     category: 'foraging',
     narrativeText:
-      'The pack works as a single mind. Two wolves drive the deer toward the frozen lake edge. A third cuts off the escape route through the willows. You and the alpha close from behind, matching the deer\'s panicked zigzags with the calm, metronomic efficiency of predators who have done this a thousand times. The deer stumbles on the ice, its hooves sliding, and in that instant the pack converges. It is over in seconds. You eat in order of rank — alpha pair first, then the betas, then you — tearing into the hot viscera with a hunger that is beyond thought, beyond pleasure, beyond anything but the pure, ancient relief of a successful hunt.',
+      'Two wolves drive the deer toward the frozen lake edge. A third cuts the escape route. You and the alpha close from behind. The deer stumbles on the ice. The pack converges. You eat in order of rank, tearing into the hot viscera.',
     statEffects: [
       { stat: StatId.HOM, amount: -6, label: '-HOM' },
       { stat: StatId.ADV, amount: -5, label: '-ADV' },
@@ -224,7 +224,7 @@ const wolfEvents: GameEvent[] = [
     type: 'active',
     category: 'foraging',
     narrativeText:
-      'The hunt has gone better than expected. Two deer are down — the pack caught them in deep snow where the crust gave way beneath their hooves and they could not run. The first was killed quickly. The second is still warm, barely touched. Your belly is full, distended, the meat sitting heavy and satisfying in your gut. But there is more here than you can eat. The question is what to do with the surplus.',
+      'Two deer down. Deep snow trapped them. Your belly is full and distended. The second carcass is barely touched. More meat than you can eat.',
     statEffects: [
       { stat: StatId.HOM, amount: -5, label: '-HOM' },
     ],
@@ -232,7 +232,7 @@ const wolfEvents: GameEvent[] = [
       {
         id: 'cache-kill',
         label: 'Cache the remains under snow',
-        description: 'Bury the carcass for later — a survival strategy for lean times ahead',
+        description: 'Bury the carcass for later',
         statEffects: [
           { stat: StatId.WIS, amount: 4, label: '+WIS' },
         ],
@@ -246,7 +246,7 @@ const wolfEvents: GameEvent[] = [
       {
         id: 'gorge-kill',
         label: 'Gorge on everything you can hold',
-        description: 'Eat until you cannot eat more — a wolf can consume 20 pounds in one sitting',
+        description: 'A wolf can consume twenty pounds in one sitting',
         statEffects: [
           { stat: StatId.HOM, amount: 5, label: '+HOM' },
         ],
@@ -271,7 +271,7 @@ const wolfEvents: GameEvent[] = [
     type: 'passive',
     category: 'foraging',
     narrativeText:
-      'A snowshoe hare explodes from beneath a spruce bough in a white blur of fur and panic. You lunge, jaws snapping, and catch it mid-leap — a quick crunch of bone, a brief kick, and then stillness. It is not much — barely two pounds of meat and fur — but in the dead of winter, every calorie is a small victory against the cold. You swallow it in three bites, bones and all, and lick the blood from your muzzle. The hare was easy. The deer are not.',
+      'A snowshoe hare explodes from under a spruce bough. You lunge and catch it mid-leap. A quick crunch of bone. Barely two pounds. You swallow it in three bites, bones and all, and lick blood from your muzzle.',
     statEffects: [
       { stat: StatId.HOM, amount: -2, label: '-HOM' },
     ],
@@ -295,7 +295,7 @@ const wolfEvents: GameEvent[] = [
     type: 'active',
     category: 'social',
     narrativeText:
-      'The alpha stands over the kill, lips curled back to expose the long canines, a low growl vibrating in his chest like distant thunder. He is eating first, as he always does, and the rest of the pack waits in a tense semicircle, ears back, tails low. You are hungry — hungrier than you have ever been — and something in you, something reckless and ancient, does not want to wait any longer. You feel your own hackles rise, your own lips pull back. The pack is watching. Everything could change in the next thirty seconds.',
+      'The alpha stands over the kill, lips curled, canines exposed, a growl vibrating in his chest. The pack waits in a semicircle, ears back, tails low. You are hungrier than you have ever been. Your hackles rise.',
     statEffects: [
       { stat: StatId.ADV, amount: 8, label: '+ADV' },
       { stat: StatId.NOV, amount: 5, label: '+NOV' },
@@ -304,7 +304,7 @@ const wolfEvents: GameEvent[] = [
       {
         id: 'challenge-alpha',
         label: 'Challenge the alpha',
-        description: 'Rise to full height, lock eyes, and advance. Win or lose, there is no going back.',
+        description: 'Rise to full height, lock eyes, and advance.',
         statEffects: [
           { stat: StatId.HOM, amount: 8, label: '+HOM' },
           { stat: StatId.TRA, amount: 5, label: '+TRA' },
@@ -317,14 +317,14 @@ const wolfEvents: GameEvent[] = [
         style: 'danger',
         deathChance: {
           probability: 0.04,
-          cause: 'The alpha\'s jaws closed on your throat. The pack watched in silence.',
+          cause: 'The alpha\'s jaws closed on your throat.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.003 }],
         },
       },
       {
         id: 'submit-alpha',
-        label: 'Submit — roll onto your back',
-        description: 'Expose your belly and throat. Accept your place. Live to eat after the alpha finishes.',
+        label: 'Submit. Roll onto your back.',
+        description: 'Expose your belly and throat. Accept your place.',
         statEffects: [
           { stat: StatId.TRA, amount: 5, label: '+TRA' },
           { stat: StatId.WIS, amount: 3, label: '+WIS' },
@@ -347,7 +347,7 @@ const wolfEvents: GameEvent[] = [
     type: 'active',
     category: 'social',
     narrativeText:
-      'The tension has been building for weeks — in the way the beta holds your gaze a beat too long at the kill site, in the stiffness of his legs when you pass, in the low rumble that lives permanently in his chest now like a second heartbeat. Today he does not look away. He approaches you stiff-legged across the clearing, his hackles raised in a dark ridge from skull to tail, his ears pinned forward, his amber eyes locked on yours with an intensity that admits no ambiguity. He stops three body-lengths away and stands tall, every muscle rigid, every tooth visible behind curled lips. The rest of the pack has gone silent. They form a loose circle, ears pricked, tails tucked, watching the geometry of power rearrange itself. This is not about food. This is about who leads, who breeds, who eats first for the rest of your lives. The next move belongs to you.',
+      'The beta approaches you stiff-legged, hackles raised from skull to tail, ears pinned forward. He stops three body-lengths away and stands rigid. Every tooth visible. The pack has gone silent.',
     statEffects: [
       { stat: StatId.ADV, amount: 10, label: '+ADV' },
       { stat: StatId.NOV, amount: 5, label: '+NOV' },
@@ -355,9 +355,9 @@ const wolfEvents: GameEvent[] = [
     choices: [
       {
         id: 'assert-dominance',
-        label: 'Assert dominance — pin them',
-        description: 'Meet the challenge head-on. Stiff-legged advance, direct stare, and if it comes to it, teeth. Win this and you eat first, breed first, lead the pack.',
-        narrativeResult: 'You rise to your full height and advance, every step deliberate, every muscle telegraphing controlled violence. He does not back down. The two of you collide in a blur of fur and teeth — muzzle bites, shoulder slams, a desperate scramble for the throat grip that will end it. You feel his jaws clamp on your foreleg and you twist, driving your weight onto his shoulders, forcing him down. For a terrible, straining moment he resists, his body rigid beneath yours, and then something breaks in him — not bone, but will. He goes limp. He rolls. His throat is exposed, his belly offered to the sky. You stand over him, breathing hard, blood on your muzzle, and the pack watches you with new eyes.',
+        label: 'Assert dominance. Pin them.',
+        description: 'Stiff-legged advance, direct stare, and if needed, teeth.',
+        narrativeResult: 'You advance. He does not back down. You collide. Muzzle bites, shoulder slams. His jaws clamp on your foreleg. You twist, driving your weight onto his shoulders. He goes limp. He rolls. Throat exposed. You stand over him, blood on your muzzle.',
         statEffects: [
           { stat: StatId.HOM, amount: 10, label: '+HOM' },
           { stat: StatId.TRA, amount: 5, label: '+TRA' },
@@ -370,15 +370,15 @@ const wolfEvents: GameEvent[] = [
         style: 'danger',
         deathChance: {
           probability: 0.02,
-          cause: 'His jaws found your throat and did not let go. The grip crushed your trachea. You drowned in your own blood while the pack watched in silence.',
+          cause: 'His jaws found your throat and crushed the trachea.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
         },
       },
       {
         id: 'submit-expose-throat',
-        label: 'Submit — roll over and expose throat',
-        description: 'Drop your gaze, lower your body, roll onto your back. Accept subordinate status. You will eat last and will not breed this season — but you will live.',
-        narrativeResult: 'You break eye contact first. Your ears flatten, your tail tucks, and you lower your body until your belly nearly touches the ground. Then you roll, offering your throat and your belly to the sky — the most vulnerable parts of you, presented without defense. The challenger stands over you, his breath hot on your exposed neck, and for one long moment the decision is his. Then he steps back. The ritual is complete. You are subordinate now. Last to eat, last to drink, no breeding rights. But the pack still needs you, and you are still alive.',
+        label: 'Submit. Roll over and expose throat.',
+        description: 'Accept subordinate status. You will eat last and not breed this season.',
+        narrativeResult: 'You break eye contact. Ears flatten, tail tucks. You roll, offering throat and belly. He stands over you, breath hot on your neck. Then steps back. You are subordinate now.',
         statEffects: [
           { stat: StatId.TRA, amount: 8, label: '+TRA' },
           { stat: StatId.WIS, amount: 3, label: '+WIS' },
@@ -395,7 +395,7 @@ const wolfEvents: GameEvent[] = [
         eventId: 'dominance-bite-sub',
         chance: 0.20,
         conditions: [],
-        narrativeText: 'In the chaos of the fight, jaws found flesh. A bite landed hard — the kind that splits skin and grinds against bone. You feel the wound throbbing now, hot and wet beneath your fur, a souvenir of the challenge that will take days to close.',
+        narrativeText: 'Jaws found flesh in the fight. A bite that splits skin and grinds against bone. The wound throbs, hot and wet beneath your fur.',
         footnote: 'Dominance fights in wolf packs are usually ritualized and resolved through posturing, but approximately 10-20% escalate to physical contact resulting in bite wounds, most commonly to the muzzle, throat, and forelegs.',
         statEffects: [
           { stat: StatId.HEA, amount: -4, label: '-HEA' },
@@ -421,7 +421,7 @@ const wolfEvents: GameEvent[] = [
     type: 'passive',
     category: 'social',
     narrativeText:
-      'It begins with the alpha — a single, low note that rises from the depths of his chest and spirals upward into the night sky like smoke from a fire. One by one, the others join: the alpha female a third higher, the yearlings adding their wavering harmonics, until the entire pack is singing in a chord that no human instrument has ever replicated. You add your voice to the chorus, feeling the vibration in your ribs, in your teeth, in the marrow of your bones. The howl carries for miles through the cold air, crossing ridgelines and frozen lakes, telling every living thing within earshot: we are here, we are together, this land is ours.',
+      'The alpha begins. A single low note from his chest rising into the cold air. The others join: the alpha female a third higher, the yearlings adding wavering harmonics. You add your voice. The vibration fills your ribs, your teeth, your bones. The sound carries for miles.',
     statEffects: [
       { stat: StatId.WIS, amount: 4, label: '+WIS' },
       { stat: StatId.TRA, amount: -6, label: '-TRA' },
@@ -440,7 +440,7 @@ const wolfEvents: GameEvent[] = [
     type: 'passive',
     category: 'social',
     narrativeText:
-      'The pups are old enough to learn. You bring back a half-eaten rabbit and drop it at the rendezvous site, then step back and watch as they tear into it with clumsy enthusiasm — growling, tugging, tumbling over each other in a chaos of oversized paws and milk teeth. One pup tries to carry the entire carcass away and falls over sideways. Another buries its face in the ribcage and emerges with a bewildered expression and a mouthful of fur. You watch them with the patient, alert attention of a teacher. They are learning hierarchy, competition, and the taste of meat. Everything a wolf needs to know begins here.',
+      'You drop a half-eaten rabbit at the rendezvous site. The pups tear into it, growling, tumbling over each other. One tries to carry the whole carcass and falls sideways. They are learning rank, competition, and the taste of meat.',
     statEffects: [
       { stat: StatId.WIS, amount: 3, label: '+WIS' },
       { stat: StatId.TRA, amount: -4, label: '-TRA' },
@@ -461,7 +461,7 @@ const wolfEvents: GameEvent[] = [
     type: 'passive',
     category: 'social',
     narrativeText:
-      'The pack moves in single file along the territory boundary, each wolf stepping precisely in the tracks of the one ahead — an energy-saving trick perfected over millennia. You pause at a scent post, a spruce stump blackened with years of urine marks, and add your own. The scent is a chemical fence, a declaration of ownership written in hormones and metabolites that any wolf can read: this territory is occupied, the pack is strong, trespassers will be met with teeth. You mark seven more posts before the patrol is done, your bladder emptied in precisely rationed installments along fifteen miles of boundary.',
+      'The pack moves single file along the territory boundary, each wolf stepping in the tracks ahead. You pause at a scent post, a spruce stump saturated with years of urine marks, and add your own. You mark seven more posts along fifteen miles of boundary.',
     statEffects: [
       { stat: StatId.HOM, amount: 4, label: '+HOM' },
       { stat: StatId.WIS, amount: 2, label: '+WIS' },
@@ -483,7 +483,7 @@ const wolfEvents: GameEvent[] = [
     type: 'active',
     category: 'social',
     narrativeText:
-      'A lone wolf stands at the edge of your territory, head low, tail tucked, its coat ragged and thin. It is a disperser — a young wolf that left or was driven from its natal pack and is now wandering the spaces between territories, looking for a place to belong. It sees you and freezes. You see the desperation in its posture, the hunger in its ribs. Lone wolves are killed by resident packs more often than they are accepted. The stranger knows this. So do you.',
+      'A lone wolf at the edge of your territory. Head low, tail tucked, coat ragged. The smell is unfamiliar: different prey, different soil, no pack-scent. A disperser. Ribs showing through the fur.',
     statEffects: [
       { stat: StatId.NOV, amount: 6, label: '+NOV' },
       { stat: StatId.ADV, amount: 4, label: '+ADV' },
@@ -492,7 +492,7 @@ const wolfEvents: GameEvent[] = [
       {
         id: 'fight-stranger',
         label: 'Attack the intruder',
-        description: 'Defend your territory with violence — the ancient law of wolves',
+        description: 'Defend your territory',
         statEffects: [
           { stat: StatId.HOM, amount: 6, label: '+HOM' },
           { stat: StatId.TRA, amount: 4, label: '+TRA' },
@@ -504,14 +504,14 @@ const wolfEvents: GameEvent[] = [
         style: 'danger',
         deathChance: {
           probability: 0.02,
-          cause: 'The stranger was more desperate — and more dangerous — than it appeared.',
+          cause: 'The stranger was more dangerous than it appeared.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
         },
       },
       {
         id: 'flee-stranger',
         label: 'Retreat and avoid confrontation',
-        description: 'Back away slowly — not worth the risk of injury',
+        description: 'Back away slowly',
         statEffects: [
           { stat: StatId.TRA, amount: 3, label: '+TRA' },
         ],
@@ -522,7 +522,7 @@ const wolfEvents: GameEvent[] = [
       {
         id: 'posture-stranger',
         label: 'Posture and assert dominance',
-        description: 'Stand tall, hackles raised, teeth bared. Make it clear who owns this land.',
+        description: 'Stand tall, hackles raised, teeth bared.',
         statEffects: [
           { stat: StatId.WIS, amount: 3, label: '+WIS' },
           { stat: StatId.NOV, amount: -3, label: '-NOV' },
@@ -547,7 +547,7 @@ const wolfEvents: GameEvent[] = [
     type: 'passive',
     category: 'social',
     narrativeText:
-      'The hunt scattered the pack across three miles of forest, but now, as dusk settles over the ridge, the howls begin to converge. One by one they appear from the timber — the alpha pair first, then the yearlings, then the omega, limping slightly but alive. The greeting is ecstatic: tails wagging, muzzles pushed together, high-pitched whines of relief and recognition. The pack circles, sniffs, licks each other\'s faces in the ancient ritual of reunion. Everyone is accounted for. Everyone survived. The pack is whole, and in the arithmetic of wolf survival, wholeness is everything.',
+      'The pack converges at dusk. One by one they appear from the timber. Tails wagging, muzzles pushed together, high-pitched whines. You press your face against the alpha\'s neck. Everyone is accounted for.',
     statEffects: [
       { stat: StatId.TRA, amount: -8, label: '-TRA' },
       { stat: StatId.ADV, amount: -5, label: '-ADV' },
@@ -571,7 +571,7 @@ const wolfEvents: GameEvent[] = [
     type: 'active',
     category: 'predator',
     narrativeText:
-      'The black bear appeared from nowhere — a dark, massive shape rising from the berry thicket beside your kill, jaws stained purple, small eyes fixing on the carcass with the flat, calculating stare of an animal that takes what it wants. It is twice your weight and equipped with claws that can peel bark from a living tree. It wants your deer. The growl that comes from its chest is not a warning — it is a statement of intent. You can smell the sour, musky reek of it on the wind.',
+      'A black bear rises from the berry thicket beside your kill. The sour, musky reek hits your nose before you see it. Twice your weight. It wants the deer. The growl from its chest is not a warning.',
     statEffects: [
       { stat: StatId.TRA, amount: 8, label: '+TRA' },
       { stat: StatId.ADV, amount: 6, label: '+ADV' },
@@ -580,7 +580,7 @@ const wolfEvents: GameEvent[] = [
       {
         id: 'defend-kill',
         label: 'Defend the kill',
-        description: 'Stand your ground, snarl, and bluff. Bears sometimes back down from determined wolves.',
+        description: 'Stand your ground, snarl, and bluff. Bears sometimes back down.',
         statEffects: [
           { stat: StatId.HOM, amount: 6, label: '+HOM' },
           { stat: StatId.WIS, amount: 3, label: '+WIS' },
@@ -590,14 +590,14 @@ const wolfEvents: GameEvent[] = [
         style: 'danger',
         deathChance: {
           probability: 0.04,
-          cause: 'The bear did not bluff. A single swipe of its paw broke your spine.',
+          cause: 'A single swipe of the bear\'s paw broke your spine.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.003 }],
         },
       },
       {
         id: 'abandon-kill',
         label: 'Abandon the kill',
-        description: 'Yield the carcass. You can hunt again; you cannot survive a bear.',
+        description: 'Yield the carcass. You can hunt again.',
         statEffects: [
           { stat: StatId.TRA, amount: 4, label: '+TRA' },
         ],
@@ -622,7 +622,7 @@ const wolfEvents: GameEvent[] = [
     type: 'active',
     category: 'predator',
     narrativeText:
-      'The scent is wrong. Metal and rubber and something chemical that burns the inside of your nose. You find it half-buried in the trail: a steel leg-hold trap, its jaws spread wide, concealed under a thin layer of leaves and sprinkled with coyote urine. The trapper set it on the game trail you use every night, exactly where your front paw would land. The chain leads to a drag anchor hidden in the brush. Everything about this place screams danger, but the trail is the fastest route to the hunting grounds.',
+      'The scent is wrong. Metal, rubber, and something chemical that burns the inside of your nose. Half-buried in the trail: steel jaws, spread wide, under a thin layer of leaves. The trap is set exactly where your front paw would land.',
     statEffects: [
       { stat: StatId.TRA, amount: 10, label: '+TRA' },
       { stat: StatId.NOV, amount: 8, label: '+NOV' },
@@ -631,7 +631,7 @@ const wolfEvents: GameEvent[] = [
       {
         id: 'avoid-trap',
         label: 'Circle wide around the trap',
-        description: 'Leave the trail and push through deep brush — slower but safe',
+        description: 'Leave the trail and push through deep brush',
         statEffects: [
           { stat: StatId.WIS, amount: 5, label: '+WIS' },
           { stat: StatId.HOM, amount: 4, label: '+HOM' },
@@ -643,7 +643,7 @@ const wolfEvents: GameEvent[] = [
       {
         id: 'risk-trail',
         label: 'Try to step over the trap and continue',
-        description: 'You can see it — you think you can avoid it. The trail is the only efficient path.',
+        description: 'The trail is the only efficient path',
         statEffects: [
           { stat: StatId.NOV, amount: 3, label: '+NOV' },
         ],
@@ -652,7 +652,7 @@ const wolfEvents: GameEvent[] = [
         style: 'danger',
         deathChance: {
           probability: 0.08,
-          cause: 'The trap snapped shut on your leg. The trapper returned at dawn and did not release you.',
+          cause: 'The trap snapped shut on your leg. The trapper returned at dawn.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.003 }],
         },
       },
@@ -665,7 +665,7 @@ const wolfEvents: GameEvent[] = [
           { type: 'has_flag', flag: 'risk-trail-taken' },
         ],
         narrativeText:
-          'The trap closed on your paw. You fought it for hours, twisting and biting at the steel, before wrenching free — but the damage is done.',
+          'The trap closed on your paw. You wrenched free after hours of biting at the steel, but the damage is done.',
         footnote: '(Caught in leg-hold trap)',
         statEffects: [
           { stat: StatId.TRA, amount: 12, label: '+TRA' },
@@ -688,7 +688,7 @@ const wolfEvents: GameEvent[] = [
     type: 'active',
     category: 'predator',
     narrativeText:
-      'The cattle are close. You can smell them on the night wind — warm, bovine, helpless. They stand in the pasture behind a wire fence that would not slow you for a second, their eyes blank, their instincts dulled by generations of domestication. A calf stands apart from the herd, bawling for its mother. It would be the easiest kill you have ever made. But the farmhouse lights are on, and the last pack that raided this ranch was tracked down and shot by federal wildlife agents within a week.',
+      'Cattle scent on the night wind. Warm, bovine. They stand behind a wire fence, eyes blank. A calf stands apart from the herd, bawling. The farmhouse lights are on.',
     statEffects: [
       { stat: StatId.ADV, amount: 5, label: '+ADV' },
       { stat: StatId.NOV, amount: 4, label: '+NOV' },
@@ -709,14 +709,14 @@ const wolfEvents: GameEvent[] = [
         style: 'danger',
         deathChance: {
           probability: 0.12,
-          cause: 'Wildlife Services tracked you with GPS collar data. A helicopter crew shot you from the air.',
+          cause: 'Tracked by GPS collar data. Shot from a helicopter.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
         },
       },
       {
         id: 'avoid-livestock',
         label: 'Turn away and hunt wild prey',
-        description: 'Stay wild. The risk is not worth the easy meal.',
+        description: 'Stay wild.',
         statEffects: [
           { stat: StatId.WIS, amount: 5, label: '+WIS' },
         ],
@@ -739,7 +739,7 @@ const wolfEvents: GameEvent[] = [
     type: 'active',
     category: 'predator',
     narrativeText:
-      'The rival pack appeared on the ridge at first light — six wolves in a tight formation, the alpha at the front, their hackles raised in a bristling line of aggression. They have been encroaching on your territory for weeks, and now they have come to take it. The two packs face each other across the frozen meadow, thirty yards apart, every wolf stiff-legged and snarling. The air vibrates with overlapping growls. One side will charge. The other will either hold or break. There is no negotiation between wolf packs. There is only war.',
+      'Six wolves on the ridge at first light. Tight formation. Their scent is wrong: different territory, different prey. Hackles raised. The two packs face each other across the frozen meadow, thirty yards apart. Every wolf snarling.',
     statEffects: [
       { stat: StatId.TRA, amount: 12, label: '+TRA' },
       { stat: StatId.ADV, amount: 10, label: '+ADV' },
@@ -748,7 +748,7 @@ const wolfEvents: GameEvent[] = [
       {
         id: 'fight-rival-pack',
         label: 'Charge with your pack',
-        description: 'Meet them head-on. Territory is worth dying for.',
+        description: 'Meet them head-on.',
         statEffects: [
           { stat: StatId.HOM, amount: 10, label: '+HOM' },
         ],
@@ -760,14 +760,14 @@ const wolfEvents: GameEvent[] = [
         style: 'danger',
         deathChance: {
           probability: 0.08,
-          cause: 'The rival pack overwhelmed you. Multiple wolves pinned you down and the alpha tore your throat.',
+          cause: 'The rival pack overwhelmed you. Multiple wolves pinned you and the alpha tore your throat.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.004 }],
         },
       },
       {
         id: 'retreat-rival-pack',
         label: 'Retreat and cede the ground',
-        description: 'Fall back to the core territory. Losing ground is better than losing lives.',
+        description: 'Fall back. Losing ground is better than losing lives.',
         statEffects: [
           { stat: StatId.TRA, amount: 8, label: '+TRA' },
           { stat: StatId.WIS, amount: 3, label: '+WIS' },
@@ -797,7 +797,7 @@ const wolfEvents: GameEvent[] = [
     type: 'passive',
     category: 'seasonal',
     narrativeText:
-      'The alpha female has chosen the den site — a hillside burrow beneath the roots of an old-growth white pine, the entrance facing south to catch the spring sun, the chamber deep enough to stay above freezing even on the coldest nights. She has been excavating for days, her claws black with packed earth, the tunnel now extending six feet into the hillside. The pack gathers around the den in a protective perimeter. Hunting will intensify now — the pregnant female needs more food, not less, and when the pups arrive, the entire pack will shift to the work of feeding them.',
+      'The alpha female has chosen the den site: a hillside burrow beneath old-growth white pine roots, entrance facing south. She has been digging for days, claws black with packed earth. The pack circles in a protective perimeter.',
     statEffects: [
       { stat: StatId.NOV, amount: -4, label: '-NOV' },
       { stat: StatId.WIS, amount: 3, label: '+WIS' },
@@ -817,7 +817,7 @@ const wolfEvents: GameEvent[] = [
     type: 'passive',
     category: 'seasonal',
     narrativeText:
-      'The rendezvous site is alive with pups. They tumble over each other in the tall grass, chasing grasshoppers, ambushing each other from behind logs, play-fighting with the ferocious intensity of animals rehearsing for a life of real violence. The babysitter — a yearling wolf pressed into service while the hunters are away — watches with exhausted vigilance, intercepting the pup that tries to wander toward the road and retrieving the one that falls into the creek. You regurgitate a meal of half-digested deer meat for them, and they mob you with frantic tail-wagging and high-pitched begging cries. This is the most demanding season of the year.',
+      'The rendezvous site smells of pups: milk, urine, the warm musk of fur. They tumble over each other chasing grasshoppers. You regurgitate a meal of half-digested deer meat. They mob you with whining and tail-wagging.',
     statEffects: [
       { stat: StatId.HOM, amount: 5, label: '+HOM' },
       { stat: StatId.TRA, amount: -3, label: '-TRA' },
@@ -841,7 +841,7 @@ const wolfEvents: GameEvent[] = [
     type: 'passive',
     category: 'seasonal',
     narrativeText:
-      'The yearlings are restless. You can see it in the way they linger at the territory boundaries, staring into the unknown forest beyond the scent posts with a hunger that has nothing to do with food. One of them — a large male with a grey-brown coat — has been sleeping apart from the pack for a week now, eating last, avoiding eye contact with the alpha. The dispersal urge is ancient and irresistible: leave, or be driven out. Find new territory, new genes, a new pack. Most dispersers die within the first year. But the ones that survive become the founders of new packs, and the cycle begins again.',
+      'The yearlings linger at the territory boundaries, staring into unfamiliar forest beyond the scent posts. One of them, a large male, has been sleeping apart from the pack for a week. Eating last. Avoiding the alpha\'s gaze.',
     statEffects: [
       { stat: StatId.NOV, amount: 5, label: '+NOV' },
       { stat: StatId.ADV, amount: 4, label: '+ADV' },
@@ -861,7 +861,7 @@ const wolfEvents: GameEvent[] = [
     type: 'passive',
     category: 'seasonal',
     narrativeText:
-      'Three weeks without a successful hunt. The pack is gaunt, ribs showing through dull winter coats, eyes sunken, movements slow. You chew on a frozen moose bone from a kill made weeks ago, cracking it open to reach the marrow — the last calories in a carcass picked clean by ravens and jays. The snow is four feet deep and still falling. The deer have yarded up in dense spruce stands where wolves cannot maneuver. Every failed hunt costs more energy than the pack has to spare. You can feel your body consuming itself — muscle first, then fat reserves that are already dangerously low.',
+      'Three weeks without a kill. Ribs showing through dull coats. You chew on a frozen moose bone, cracking it for the marrow. Snow four feet deep and still falling. The deer have yarded up in dense spruce where you cannot maneuver. Your body is consuming itself.',
     statEffects: [
       { stat: StatId.HOM, amount: 10, label: '+HOM' },
       { stat: StatId.ADV, amount: 8, label: '+ADV' },
@@ -889,7 +889,7 @@ const wolfEvents: GameEvent[] = [
     type: 'active',
     category: 'environmental',
     narrativeText:
-      'The smoke appeared at noon — a grey-brown column rising above the ridge to the west, thickening by the hour until the sun was a red disc and the air tasted of charcoal. By evening the glow was visible, a flickering orange line advancing through the jack pines with a sound like a freight train. The fire is moving with the wind, crowning from tree to tree, and the entire forest is evacuating: deer, moose, bears, all fleeing east in a panicked, interspecies exodus. The pack must move.',
+      'Smoke. You smell it before you see it: charcoal, resin, scorched earth. The air thickens. An orange glow advances through the jack pines. Every animal in the forest is running east. The pack must move.',
     statEffects: [
       { stat: StatId.TRA, amount: 12, label: '+TRA' },
       { stat: StatId.ADV, amount: 8, label: '+ADV' },
@@ -899,7 +899,7 @@ const wolfEvents: GameEvent[] = [
       {
         id: 'flee-fire-river',
         label: 'Flee toward the river',
-        description: 'Water is the only firebreak. The river is two miles east.',
+        description: 'Water is the only firebreak. Two miles east.',
         statEffects: [
           { stat: StatId.HOM, amount: 8, label: '+HOM' },
         ],
@@ -910,14 +910,14 @@ const wolfEvents: GameEvent[] = [
         style: 'default',
         deathChance: {
           probability: 0.03,
-          cause: 'The fire crowned and cut off your escape route to the river.',
+          cause: 'The fire crowned and cut off the escape route to the river.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
         },
       },
       {
         id: 'flee-fire-road',
         label: 'Follow the logging road north',
-        description: 'The cleared road may act as a firebreak, but it leads into unknown territory',
+        description: 'The cleared road may act as a firebreak, but leads into unknown territory',
         statEffects: [
           { stat: StatId.HOM, amount: 10, label: '+HOM' },
           { stat: StatId.NOV, amount: 5, label: '+NOV' },
@@ -929,7 +929,7 @@ const wolfEvents: GameEvent[] = [
         style: 'danger',
         deathChance: {
           probability: 0.05,
-          cause: 'The fire jumped the road. Smoke and heat overwhelmed you in the ditch.',
+          cause: 'The fire jumped the road. Smoke and heat overwhelmed you.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
         },
       },
@@ -948,7 +948,7 @@ const wolfEvents: GameEvent[] = [
     type: 'passive',
     category: 'environmental',
     narrativeText:
-      'The blizzard buried the forest in three feet of fresh powder overnight. The trails are gone. The scent posts are gone. The world has been erased and rewritten in white. You push through the snow with your chest, plowing a trench that the rest of the pack follows in single file — the alpha breaks trail, then rotates to the back when exhausted, and the next wolf takes the lead. It is brutal, energy-intensive travel that burns calories faster than you can replace them. Your paws are balled with ice between the toes, and every step sinks to your belly.',
+      'Three feet of fresh powder overnight. Trails gone. Scent posts buried. You push through with your chest, plowing a trench the pack follows in single file. The alpha breaks trail, then rotates to the back when spent. Your paws are balled with ice between the toes. Every step sinks to the belly.',
     statEffects: [
       { stat: StatId.CLI, amount: 8, label: '+CLI' },
       { stat: StatId.HOM, amount: 8, label: '+HOM' },
@@ -971,7 +971,7 @@ const wolfEvents: GameEvent[] = [
     type: 'active',
     category: 'environmental',
     narrativeText:
-      'The lake stretches before you, a vast white plain of ice and snow that would cut three miles off the journey to the deer yard on the far shore. The ice boomed and cracked through the night — the deep, resonant groaning of a frozen body of water adjusting to temperature changes. You can see the dark lines of pressure cracks radiating from the center. The ice might be two feet thick and solid. It might be six inches and rotten. From the shore, there is no way to tell.',
+      'The lake stretches ahead. Ice and snow. It would cut three miles off the route to the deer yard. The ice groaned and cracked through the night. Dark pressure cracks radiate from the center. From the shore, there is no way to judge thickness.',
     statEffects: [
       { stat: StatId.NOV, amount: 5, label: '+NOV' },
       { stat: StatId.ADV, amount: 4, label: '+ADV' },
@@ -989,14 +989,14 @@ const wolfEvents: GameEvent[] = [
         style: 'danger',
         deathChance: {
           probability: 0.05,
-          cause: 'The ice gave way beneath you a hundred yards from shore. The water was black and infinite.',
+          cause: 'The ice gave way a hundred yards from shore.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.003 }],
         },
       },
       {
         id: 'detour-lake',
         label: 'Take the long way around the shore',
-        description: 'Slower and more tiring, but the ground is solid',
+        description: 'Slower and more tiring, but solid ground',
         statEffects: [
           { stat: StatId.HOM, amount: 6, label: '+HOM' },
         ],
@@ -1021,7 +1021,7 @@ const wolfEvents: GameEvent[] = [
     type: 'active',
     category: 'environmental',
     narrativeText:
-      'Highway 53 cuts through the forest like a scar, four lanes of asphalt and death. The pack needs to cross — the territory spans both sides, and the deer are on the far side this week. You stand in the ditch at the tree line, watching the headlights sweep past in the darkness, each one a two-ton projectile traveling at seventy miles per hour. The gap between vehicles is never quite long enough. A dead wolf lies on the shoulder a quarter mile north, its body flattened and frozen, a reminder of the cost of miscalculation.',
+      'Four lanes of asphalt cut through the forest. The smell is acrid: rubber, exhaust, heated metal. Headlights sweep past. You stand in the ditch at the tree line. The deer are on the far side. A dead wolf lies frozen on the shoulder a quarter mile north.',
     statEffects: [
       { stat: StatId.TRA, amount: 8, label: '+TRA' },
       { stat: StatId.NOV, amount: 6, label: '+NOV' },
@@ -1030,7 +1030,7 @@ const wolfEvents: GameEvent[] = [
       {
         id: 'cross-highway',
         label: 'Sprint across during a gap',
-        description: 'Wait for the longest gap and run. Do not hesitate.',
+        description: 'Wait for the longest gap and run.',
         statEffects: [
           { stat: StatId.HOM, amount: 4, label: '+HOM' },
         ],
@@ -1039,14 +1039,14 @@ const wolfEvents: GameEvent[] = [
         style: 'danger',
         deathChance: {
           probability: 0.07,
-          cause: 'A truck crested the hill at the wrong moment. You never saw the headlights.',
+          cause: 'A truck crested the hill. You never saw the headlights.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.003 }],
         },
       },
       {
         id: 'find-underpass',
         label: 'Search for a culvert or underpass',
-        description: 'Wolves have learned to use drainage culverts. There may be one nearby.',
+        description: 'Wolves have learned to use drainage culverts.',
         statEffects: [
           { stat: StatId.WIS, amount: 4, label: '+WIS' },
           { stat: StatId.HOM, amount: 3, label: '+HOM' },
@@ -1074,7 +1074,7 @@ const wolfEvents: GameEvent[] = [
     type: 'active',
     category: 'social',
     narrativeText:
-      'The alpha female stands over you, her lips curled back, her body rigid with dominance. She has been increasingly aggressive as the breeding season approaches — pinning you, standing over you, snarling when you show any sign of hormonal readiness. In wolf packs, only the alpha female breeds. Subordinate females are suppressed through constant psychological and physical intimidation until their very hormones obey the hierarchy. Your body wants to breed. Her body says you will not. You can challenge her for breeding rights — but if you lose, you may be driven from the pack entirely.',
+      'The alpha female stands over you, lips curled, body rigid. She has been pinning you, snarling when you show any sign of hormonal readiness. In this pack, only the alpha female breeds.',
     statEffects: [
       { stat: StatId.ADV, amount: 8, label: '+ADV' },
       { stat: StatId.TRA, amount: 4, label: '+TRA' },
@@ -1083,9 +1083,9 @@ const wolfEvents: GameEvent[] = [
       {
         id: 'challenge-alpha-female',
         label: 'Challenge the alpha female',
-        description: 'Win breeding rights and the best den site for your pups',
+        description: 'Win breeding rights and the best den site',
         narrativeResult:
-          'You stare directly into her eyes — the ultimate challenge. She lunges and you meet her, jaws snapping, bodies twisting in a violent, snarling tangle of fur and teeth. You fight with the desperate intensity of an animal whose bloodline depends on this moment. She is experienced, but you are younger and stronger, and when you finally pin her — your jaws locked around her muzzle, your body pressing hers into the snow — she goes still. She submits. The pack watches in silence. You are the breeding female now, and the best den site is yours.',
+          'You stare into her eyes. She lunges. You meet her, jaws snapping, bodies twisting. You pin her, jaws locked around her muzzle, body pressing hers into the snow. She goes still. You are the breeding female now.',
         statEffects: [
           { stat: StatId.HOM, amount: 8, label: '+HOM' },
           { stat: StatId.ADV, amount: -8, label: '-ADV' },
@@ -1101,7 +1101,7 @@ const wolfEvents: GameEvent[] = [
         label: 'Submit and accept suppression',
         description: 'Stay in the pack but accept subordinate breeding status',
         narrativeResult:
-          'You roll onto your back, exposing your throat and belly. She stands over you, teeth bared, and you feel her breath hot on your neck. The submission is total. Your hormones will dampen, your body will not cycle properly, and if you do manage to breed, your pups will be raised in the worst den site — the shallow, exposed scrape at the pack territory\'s edge where rival packs and predators are most likely to find them.',
+          'You roll onto your back. She stands over you, teeth bared, breath hot on your neck. Your hormones will dampen. If you breed at all, your pups will be raised in the worst den site.',
         statEffects: [
           { stat: StatId.TRA, amount: 5, label: '+TRA' },
           { stat: StatId.WIS, amount: 3, label: '+WIS' },
@@ -1119,7 +1119,7 @@ const wolfEvents: GameEvent[] = [
         eventId: 'wolf-breeding-suppression-bite-sub',
         chance: 0.15,
         narrativeText:
-          'The alpha female\'s jaws clamp down on your muzzle during the challenge — a dominance bite that leaves deep punctures across the bridge of your nose. Blood runs into your mouth.',
+          'The alpha female\'s jaws clamp on your muzzle. Deep punctures across the bridge of your nose. Blood runs into your mouth.',
         footnote: '(Dominance bite from alpha challenge)',
         statEffects: [
           { stat: StatId.HEA, amount: -4, label: '-HEA' },
@@ -1152,7 +1152,7 @@ const wolfEvents: GameEvent[] = [
     type: 'active',
     category: 'reproduction',
     narrativeText:
-      'The alpha male approaches you at dusk, his tail held high, his ears forward. The pack is quiet, watching from the edges of the clearing. The winter air is sharp, and the hormone-scented wind tells the story: it is time for the pack to renew itself. Mating ensures the future of your bloodline within the pack, but it also means a season of extreme physical demand ahead.',
+      'The alpha male approaches at dusk, tail high, ears forward. The winter air carries his hormone scent. The pack watches from the clearing edges.',
     statEffects: [
       { stat: StatId.NOV, amount: 4, label: '+NOV' },
     ],
@@ -1160,8 +1160,8 @@ const wolfEvents: GameEvent[] = [
       {
         id: 'wolf-accept-mate',
         label: 'Accept the alpha male',
-        description: 'Mate and prepare for spring denning. Gestation is ~9 weeks.',
-        narrativeResult: 'The ritual is complete. You and the alpha male are bonded for the season. The pack will now prioritize your protection and nutrition as the embryos develop. In two months, the den will be your world.',
+        description: 'Mate and prepare for spring denning. Gestation is approximately nine weeks.',
+        narrativeResult: 'The pack will now prioritize your protection and nutrition. In two months, the den will be your world.',
         statEffects: [
           { stat: StatId.WIS, amount: 2, label: '+WIS' },
         ],
@@ -1174,8 +1174,8 @@ const wolfEvents: GameEvent[] = [
       {
         id: 'wolf-reject-mate',
         label: 'Submit but avoid mating',
-        description: 'Stay subordinate. Preserves your strength but limits your legacy.',
-        narrativeResult: 'You roll onto your back, offering submission but avoiding the physical act. The alpha male lingers for a moment, then turns away. You have avoided the burden of pregnancy, but the pack\u2019s focus may shift to another female.',
+        description: 'Preserves your strength but limits your legacy.',
+        narrativeResult: 'You roll onto your back, offering submission but avoiding the act. The alpha male lingers, then turns away.',
         statEffects: [
           { stat: StatId.TRA, amount: 5, label: '+TRA' },
         ],
@@ -1205,7 +1205,7 @@ const wolfEvents: GameEvent[] = [
     type: 'passive',
     category: 'reproduction',
     narrativeText:
-      'The courtship begins with a duet. The alpha pair separates from the pack at dusk and stands together on the ridge, their bodies pressed flank to flank, and they begin to howl in perfect unison — a sound that is not the full-throated territorial chorus of the pack but something more intimate, more tender, a private conversation pitched for two voices. Their harmonics interweave, rise, fall, and resolve in chords that carry across the frozen lake. The other wolves listen from the rendezvous site, ears pricked, tails still. This is the bond that holds the pack together, renewed each winter in song.',
+      'The alpha pair separates from the pack at dusk. They stand together on the ridge, flanks pressed, and howl in unison. Not the full territorial chorus. Something quieter. Two voices interweaving, carrying across the frozen lake.',
     statEffects: [
       { stat: StatId.TRA, amount: -5, label: '-TRA' },
       { stat: StatId.ADV, amount: -3, label: '-ADV' },
@@ -1226,7 +1226,7 @@ const wolfEvents: GameEvent[] = [
     type: 'passive',
     category: 'reproduction',
     narrativeText:
-      'The den must be ready. You excavate with a focus that borders on obsession, claws scraping through frozen soil and tangled roots, hauling mouthfuls of earth from the narrowing tunnel and spitting them outside in growing piles. The chamber at the end must be large enough for a wolf to turn around in, high enough to prevent flooding, deep enough to hold warmth. You line it with fur shed from your own winter coat, pulling out tufts with your teeth and pressing them into the floor. Every instinct says the pups are coming soon, and the den is the difference between life and death for newborns in a Minnesota spring.',
+      'You dig. Claws scraping through frozen soil and tangled roots. Mouthfuls of earth hauled from the narrowing tunnel. The chamber at the end must be large enough to turn around in, deep enough to hold warmth. You line it with fur pulled from your own winter coat.',
     statEffects: [
       { stat: StatId.HOM, amount: 6, label: '+HOM' },
       { stat: StatId.WIS, amount: 3, label: '+WIS' },
@@ -1251,7 +1251,7 @@ const wolfEvents: GameEvent[] = [
     type: 'active',
     category: 'reproduction',
     narrativeText:
-      'The smallest pup is not thriving. While its siblings grow fat on regurgitated meat and wrestle with increasing strength, this one hangs back, thin and quiet, its eyes dull, its movements listless. It was the runt from birth — last to nurse, weakest in the litter pile, always pushed aside when food arrives. Nature is not sentimental. In a wild wolf pack, not every pup survives, and the pack\'s resources are finite. The question is whether to invest more in a pup that may not make it, or focus on the strong ones.',
+      'The smallest pup is not thriving. Thin, quiet, eyes dull. Last to nurse, always pushed aside when food arrives. The others are growing fat.',
     statEffects: [
       { stat: StatId.ADV, amount: 6, label: '+ADV' },
       { stat: StatId.TRA, amount: 4, label: '+TRA' },
@@ -1260,7 +1260,7 @@ const wolfEvents: GameEvent[] = [
       {
         id: 'feed-runt',
         label: 'Give the runt extra food',
-        description: 'Regurgitate a private meal for the weakest pup. It may still pull through.',
+        description: 'Regurgitate a private meal for the weakest pup',
         statEffects: [
           { stat: StatId.WIS, amount: 2, label: '+WIS' },
           { stat: StatId.HOM, amount: 3, label: '+HOM' },
@@ -1274,7 +1274,7 @@ const wolfEvents: GameEvent[] = [
       {
         id: 'focus-strong',
         label: 'Focus resources on the healthy pups',
-        description: 'The strong survive. This is the arithmetic of the wild.',
+        description: 'The strong survive.',
         statEffects: [
           { stat: StatId.TRA, amount: 3, label: '+TRA' },
           { stat: StatId.WIS, amount: 3, label: '+WIS' },
@@ -1299,7 +1299,7 @@ const wolfEvents: GameEvent[] = [
     type: 'passive',
     category: 'reproduction',
     narrativeText:
-      'The pups are no longer pups. They are rangy, long-legged yearlings with adult teeth and the restless energy of wolves that have outgrown the rendezvous site. They join the hunts now, running at the edges of the formation, learning the geometry of the chase, making mistakes that the older wolves correct with a snap or a body-check. One of them brought down a snowshoe hare on its own last week — a small kill, but the pack celebrated it with the same ecstatic greeting ritual reserved for any returning hunter. They are becoming wolves. Soon they will face the choice that defines every wolf\'s life: stay with the pack, or disperse into the unknown.',
+      'The pups are rangy, long-legged yearlings with adult teeth. They join the hunts now, running at the edges of the formation, learning the chase. One brought down a snowshoe hare on its own last week. The pack greeted it the same as any returning hunter.',
     statEffects: [
       { stat: StatId.WIS, amount: 5, label: '+WIS' },
       { stat: StatId.TRA, amount: -4, label: '-TRA' },
@@ -1327,15 +1327,15 @@ const wolfEvents: GameEvent[] = [
     id: 'wolf-coordinated-elk-hunt',
     type: 'active',
     category: 'foraging',
-    narrativeText: 'A herd of elk grazes in the valley below. {{npc.ally.name}} is with you, and together you can attempt a coordinated hunt — one driving, one ambushing. Alone, an elk hunt is nearly suicidal. Together, it is how wolves survive winter.',
+    narrativeText: 'Elk herd grazing in the valley below. The scent of them fills the air. {{npc.ally.name}} is with you. Together you can drive and ambush.',
     statEffects: [],
     consequences: [],
     choices: [
       {
         id: 'wolf-elk-ambush',
         label: 'Drive to ambush',
-        description: 'You drive the elk toward {{npc.ally.name}}\'s ambush point. High reward, risky.',
-        narrativeResult: 'You burst from cover and the elk scatter. A cow stumbles on the icy slope and {{npc.ally.name}} hits her from behind. The takedown is messy but successful. You feed together.',
+        description: 'Drive the elk toward {{npc.ally.name}}\'s ambush point.',
+        narrativeResult: 'You burst from cover. The elk scatter. A cow stumbles on the icy slope and {{npc.ally.name}} hits her from behind. You feed together.',
         statEffects: [{ stat: StatId.ADV, amount: 3, label: '+ADV' }],
         consequences: [{ type: 'modify_weight', amount: 8 }],
         revocable: false,
@@ -1344,8 +1344,8 @@ const wolfEvents: GameEvent[] = [
       {
         id: 'wolf-elk-chase-weakest',
         label: 'Pursue the weakest',
-        description: 'Target a calf or injured animal. Safer but less food.',
-        narrativeResult: 'You and {{npc.ally.name}} single out a lagging calf and run it down through deep snow. The chase is long but the outcome inevitable. A smaller meal, but a guaranteed one.',
+        description: 'Target a calf or injured animal. Safer, less food.',
+        narrativeResult: 'You and {{npc.ally.name}} single out a lagging calf and run it down through deep snow. A smaller meal, but a certain one.',
         statEffects: [],
         consequences: [{ type: 'modify_weight', amount: 5 }],
         revocable: false,
@@ -1355,7 +1355,7 @@ const wolfEvents: GameEvent[] = [
         id: 'wolf-elk-abort',
         label: 'Call off the hunt',
         description: 'The elk are too alert. Save your energy.',
-        narrativeResult: 'You exchange a glance with {{npc.ally.name}} and slink back into the timber. Not every hunt succeeds.',
+        narrativeResult: 'You and {{npc.ally.name}} slink back into the timber.',
         statEffects: [{ stat: StatId.HOM, amount: 2, label: '+HOM' }],
         consequences: [],
         revocable: false,
@@ -1367,7 +1367,7 @@ const wolfEvents: GameEvent[] = [
         eventId: 'wolf-elk-kick',
         chance: 0.15,
         conditions: [],
-        narrativeText: 'The elk cow kicks as you close in. A hoof catches you in the ribs with bone-cracking force.',
+        narrativeText: 'The elk cow kicks as you close in. A hoof catches your ribs.',
         statEffects: [{ stat: StatId.HEA, amount: -6, label: '-HEA' }],
         consequences: [{ type: 'add_injury', injuryId: 'elk-kick', severity: 0 }],
       },
@@ -1375,7 +1375,7 @@ const wolfEvents: GameEvent[] = [
         eventId: 'wolf-ally-wounded',
         chance: 0.10,
         conditions: [],
-        narrativeText: '{{npc.ally.name}} takes a glancing blow from an elk hoof. They limp but continue — the wound is not fatal, but the pack is weaker for it.',
+        narrativeText: '{{npc.ally.name}} takes a glancing hoof-blow. They limp but continue.',
         statEffects: [{ stat: StatId.TRA, amount: 3, label: '+TRA' }],
         consequences: [],
       },
@@ -1393,15 +1393,15 @@ const wolfEvents: GameEvent[] = [
     id: 'wolf-coordinated-moose-hunt',
     type: 'active',
     category: 'foraging',
-    narrativeText: 'Desperation has driven you and {{npc.ally.name}} to attempt the most dangerous hunt: a bull moose. The animal stands in a frozen streambed, massive and alert, lowering its antlers as you approach. A moose can kill a wolf with a single kick. But the reward — weeks of food — justifies the risk when you are starving.',
+    narrativeText: 'A bull moose in a frozen streambed. The smell of it is overwhelming: rut, browse, wet hide. You and {{npc.ally.name}} are starving. A moose can kill a wolf with a single kick. But the reward is weeks of food.',
     statEffects: [],
     consequences: [],
     choices: [
       {
         id: 'wolf-moose-attack',
         label: 'Attack together',
-        description: 'Coordinate the assault. One distracts, one hamstrings.',
-        narrativeResult: 'The fight lasts twenty minutes. The moose kicks, stomps, and swings its antlers. But you and {{npc.ally.name}} are relentless, alternating attacks. Finally the moose stumbles, and you bring it down. The kill will feed you for weeks.',
+        description: 'One distracts, one hamstrings.',
+        narrativeResult: 'The fight lasts twenty minutes. The moose kicks, stomps, and swings its antlers. You and {{npc.ally.name}} alternate attacks. The moose stumbles. You bring it down. Weeks of food.',
         statEffects: [{ stat: StatId.ADV, amount: 5, label: '+ADV' }],
         consequences: [{ type: 'modify_weight', amount: 15 }],
         revocable: false,
@@ -1416,7 +1416,7 @@ const wolfEvents: GameEvent[] = [
         id: 'wolf-moose-retreat',
         label: 'It is too dangerous',
         description: 'A moose this size could kill you both.',
-        narrativeResult: 'You back away. The moose snorts and stands its ground. Wisdom keeps you alive, but hunger remains.',
+        narrativeResult: 'You back away. The moose snorts and holds its ground. Hunger remains.',
         statEffects: [{ stat: StatId.HOM, amount: 4, label: '+HOM' }],
         consequences: [],
         revocable: false,
@@ -1428,7 +1428,7 @@ const wolfEvents: GameEvent[] = [
         eventId: 'wolf-moose-stomp',
         chance: 0.20,
         conditions: [],
-        narrativeText: 'The moose rears and brings both front hooves down. You dodge, but not fast enough.',
+        narrativeText: 'The moose rears and brings both front hooves down. You dodge, but not far enough.',
         statEffects: [{ stat: StatId.HEA, amount: -10, label: '-HEA' }],
         consequences: [{ type: 'add_injury', injuryId: 'elk-kick', severity: 1 }],
       },
@@ -1447,7 +1447,7 @@ const wolfEvents: GameEvent[] = [
     id: 'wolf-lone-hunt-penalty',
     type: 'passive',
     category: 'foraging',
-    narrativeText: 'Hunting alone is brutally inefficient. Without packmates to drive prey or take turns at the chase, you expend enormous energy for meager returns. You manage to catch a snowshoe hare — a few mouthfuls for an animal that needs elk. The simple mathematics of survival as a lone wolf are grim.',
+    narrativeText: 'Hunting alone. No packmates to drive prey or take turns at the chase. You catch a snowshoe hare. A few mouthfuls for an animal that needs elk.',
     statEffects: [{ stat: StatId.HOM, amount: 3, label: '+HOM' }],
     consequences: [{ type: 'modify_weight', amount: -1 }],
     choices: [],
@@ -1470,7 +1470,7 @@ const wolfEvents: GameEvent[] = [
     id: 'wolf-new-alpha-pup-threat',
     type: 'active',
     category: 'social',
-    narrativeText: 'A rival wolf has been challenging the pack hierarchy for weeks. Today, it makes its move — directly threatening the den where the pups shelter. In wolf packs, a new dominant individual sometimes kills the previous alpha\'s offspring to make room for its own future litters. The rival stands over the den entrance, lips curled back.',
+    narrativeText: 'A rival wolf stands over the den entrance, lips curled. It has been challenging the hierarchy for weeks. The rival\'s scent is thick with aggression hormones. The pups are inside.',
     statEffects: [{ stat: StatId.TRA, amount: 6, label: '+TRA' }],
     consequences: [],
     choices: [
@@ -1478,7 +1478,7 @@ const wolfEvents: GameEvent[] = [
         id: 'wolf-pup-defend',
         label: 'Defend the pups',
         description: 'Fight the rival to protect your offspring.',
-        narrativeResult: 'You throw yourself at the rival with a fury that surprises even you. Teeth flash and blood sprays across the snow. The rival backs down — for now. But the challenge to the hierarchy is not over.',
+        narrativeResult: 'You throw yourself at the rival. Teeth flash. Blood sprays across the snow. The rival backs down. For now.',
         statEffects: [{ stat: StatId.ADV, amount: 5, label: '+ADV' }],
         consequences: [],
         revocable: false,
@@ -1488,7 +1488,7 @@ const wolfEvents: GameEvent[] = [
         id: 'wolf-pup-submit',
         label: 'Submit to the rival',
         description: 'Accept the new hierarchy. The pups may not survive.',
-        narrativeResult: 'You roll onto your back, exposing your throat. The rival sniffs you once and turns toward the den. You hear the pups\' cries change pitch. When the rival emerges, its muzzle is dark.',
+        narrativeResult: 'You roll onto your back, exposing your throat. The rival sniffs you and turns toward the den. The pups\' cries change pitch. When the rival emerges, its muzzle is dark.',
         statEffects: [{ stat: StatId.TRA, amount: 10, label: '+TRA' }],
         consequences: [{ type: 'set_flag', flag: 'infanticide-occurred' }],
         revocable: false,
@@ -1498,7 +1498,7 @@ const wolfEvents: GameEvent[] = [
         id: 'wolf-pup-flee',
         label: 'Flee with the pups',
         description: 'Grab a pup and run. You cannot save them all.',
-        narrativeResult: 'You snatch the nearest pup by the scruff and bolt into the forest. The rival does not follow — it has what it wanted: control of the den. You have one pup. The others are lost.',
+        narrativeResult: 'You snatch the nearest pup by the scruff and bolt into the forest. The rival does not follow. You have one pup. The others are lost.',
         statEffects: [{ stat: StatId.TRA, amount: 8, label: '+TRA' }],
         consequences: [{ type: 'modify_territory', qualityChange: -15 }],
         revocable: false,
@@ -1510,7 +1510,7 @@ const wolfEvents: GameEvent[] = [
         eventId: 'wolf-pup-defend-injury',
         chance: 0.20,
         conditions: [],
-        narrativeText: 'The rival fight draws blood. Deep bite wounds mark your shoulder and neck.',
+        narrativeText: 'Deep bite wounds on your shoulder and neck from the fight.',
         statEffects: [{ stat: StatId.HEA, amount: -8, label: '-HEA' }],
         consequences: [{ type: 'add_injury', injuryId: 'dominance-bite', severity: 1 }],
       },
@@ -1528,7 +1528,7 @@ const wolfEvents: GameEvent[] = [
     id: 'wolf-dispersal-pressure',
     type: 'passive',
     category: 'social',
-    narrativeText: 'Something has shifted in the pack dynamics. The alpha pair tolerates your presence less — a hard stare when you approach the kill, a growl when you sleep too close. You find yourself sleeping at the pack\'s edge, restless, waking before dawn to pace the territory boundary. The urge to leave is growing.',
+    narrativeText: 'The alpha pair tolerates you less. A hard stare when you approach the kill. A growl when you sleep too close. You find yourself sleeping at the pack\'s edge, pacing the territory boundary before dawn.',
     statEffects: [{ stat: StatId.NOV, amount: 5, label: '+NOV' }, { stat: StatId.TRA, amount: 3, label: '+TRA' }],
     consequences: [{ type: 'set_flag', flag: 'dispersal-pressure' }],
     choices: [],
@@ -1549,15 +1549,15 @@ const wolfEvents: GameEvent[] = [
     id: 'wolf-dispersal-decision',
     type: 'active',
     category: 'social',
-    narrativeText: 'You stand at the boundary of your natal territory at dawn, looking out across unfamiliar ridges. The pack is behind you — family, safety, shared hunts. But there is no place for you here anymore. The alpha female snapped at you yesterday when you approached the pups. If you stay, you will always be subordinate, always eating last, never breeding.',
+    narrativeText: 'You stand at the boundary of your natal territory at dawn. Unfamiliar ridges ahead. The pack\'s scent behind you. The alpha female snapped at you yesterday when you approached the pups.',
     statEffects: [],
     consequences: [],
     choices: [
       {
         id: 'wolf-disperse-leave',
         label: 'Leave the pack',
-        description: 'Step across the boundary and into the unknown.',
-        narrativeResult: 'You cross the scent line without looking back. The familiar howls of the pack fade behind you as you enter territory that belongs to no one — or to someone who will try to kill you for trespassing.',
+        description: 'Step across the scent line.',
+        narrativeResult: 'You cross without looking back. The familiar howls fade. You enter territory that belongs to no one, or to someone who will try to kill you.',
         statEffects: [{ stat: StatId.NOV, amount: 8, label: '+NOV' }, { stat: StatId.TRA, amount: 5, label: '+TRA' }],
         consequences: [{ type: 'set_flag', flag: 'dispersal-begun' }, { type: 'remove_flag', flag: 'dispersal-pressure' }],
         revocable: false,
@@ -1566,8 +1566,8 @@ const wolfEvents: GameEvent[] = [
       {
         id: 'wolf-disperse-stay',
         label: 'Stay with the pack',
-        description: 'Accept subordination. Safety in numbers.',
-        narrativeResult: 'You turn back. The pack accepts your return with indifference — you are tolerated, not welcomed. You eat last and sleep alone, but you are alive.',
+        description: 'Accept subordination.',
+        narrativeResult: 'You turn back. The pack accepts your return with indifference. You eat last and sleep alone.',
         statEffects: [{ stat: StatId.TRA, amount: 3, label: '+TRA' }],
         consequences: [{ type: 'remove_flag', flag: 'dispersal-pressure' }],
         revocable: false,
@@ -1588,15 +1588,15 @@ const wolfEvents: GameEvent[] = [
     id: 'wolf-dispersal-journey-danger',
     type: 'active',
     category: 'environmental',
-    narrativeText: 'The road cuts through the forest like a river of hard stone. Vehicles roar past at terrifying speed — steel predators with blinding eyes. You must cross to continue your journey. There is no way around.',
+    narrativeText: 'A road cuts through the forest. The smell of asphalt and exhaust. Vehicles roar past. You must cross to continue.',
     statEffects: [{ stat: StatId.TRA, amount: 4, label: '+TRA' }],
     consequences: [],
     choices: [
       {
         id: 'wolf-road-dash',
         label: 'Dash across',
-        description: 'Sprint across the highway during a gap in traffic.',
-        narrativeResult: 'You bolt across four lanes of asphalt, claws scrabbling for purchase. A horn blares. Wind buffets you from a passing truck. Then you are across, heart hammering, alive.',
+        description: 'Sprint across during a gap in traffic.',
+        narrativeResult: 'You bolt across four lanes. Claws scrabbling on asphalt. A horn blares. Wind from a passing truck buffets you. Then you are across.',
         statEffects: [{ stat: StatId.ADV, amount: 5, label: '+ADV' }],
         consequences: [],
         revocable: false,
@@ -1610,8 +1610,8 @@ const wolfEvents: GameEvent[] = [
       {
         id: 'wolf-road-wait',
         label: 'Wait for nightfall',
-        description: 'Traffic thins after dark. Safer, but you lose time.',
-        narrativeResult: 'You lie in the ditch until deep night, when the road falls silent. You cross in darkness, guided by smell and hearing. Safer, but the delay cost you a day of travel.',
+        description: 'Traffic thins after dark. Safer, but costs time.',
+        narrativeResult: 'You lie in the ditch until deep night. You cross in darkness, guided by smell and hearing.',
         statEffects: [{ stat: StatId.HOM, amount: 3, label: '+HOM' }],
         consequences: [{ type: 'modify_weight', amount: -1 }],
         revocable: false,
@@ -1632,7 +1632,7 @@ const wolfEvents: GameEvent[] = [
     id: 'wolf-dispersal-rival-territory',
     type: 'active',
     category: 'social',
-    narrativeText: 'The scent marks are unmistakable — fresh urine and scratches on every prominent tree. You have entered another pack\'s territory. In the distance, you hear howling — a territorial call. They know you are here. A lone wolf caught in another pack\'s territory is often killed.',
+    narrativeText: 'Fresh urine and scratches on every prominent tree. Another pack\'s territory. In the distance, howling: a territorial call. They know you are here.',
     statEffects: [{ stat: StatId.TRA, amount: 5, label: '+TRA' }],
     consequences: [],
     choices: [
@@ -1640,7 +1640,7 @@ const wolfEvents: GameEvent[] = [
         id: 'wolf-rival-sneak',
         label: 'Move through quietly',
         description: 'Travel at night, avoid the pack\'s core area.',
-        narrativeResult: 'You travel through the darkest hours, hugging ravines and streambeds to mask your scent. By dawn, you have crossed the territory without being intercepted. Your heart does not slow for hours.',
+        narrativeResult: 'You travel through the darkest hours, hugging ravines and streambeds to mask your scent. By dawn, you have crossed the territory.',
         statEffects: [{ stat: StatId.NOV, amount: 4, label: '+NOV' }],
         consequences: [{ type: 'modify_weight', amount: -1 }],
         revocable: false,
@@ -1649,8 +1649,8 @@ const wolfEvents: GameEvent[] = [
       {
         id: 'wolf-rival-fight',
         label: 'Stand your ground',
-        description: 'If they find you, fight. You are strong enough.',
-        narrativeResult: 'A patrol wolf finds you at dusk — younger than you, but fierce. You fight in the snow, snapping and circling, until you pin it by the throat. It submits, and you release it. The message is clear: you are passing through, not staying.',
+        description: 'If they find you, fight.',
+        narrativeResult: 'A patrol wolf finds you at dusk. You fight in the snow, snapping and circling, until you pin it by the throat. It submits. You release it and move on.',
         statEffects: [{ stat: StatId.ADV, amount: 5, label: '+ADV' }],
         consequences: [],
         revocable: false,
@@ -1662,7 +1662,7 @@ const wolfEvents: GameEvent[] = [
         eventId: 'wolf-rival-pack-attack',
         chance: 0.12,
         conditions: [],
-        narrativeText: 'The patrol was not alone. Two more wolves emerge from the trees and the fight becomes a desperate retreat.',
+        narrativeText: 'The patrol was not alone. Two more wolves emerge from the trees. The fight becomes a retreat.',
         statEffects: [{ stat: StatId.HEA, amount: -8, label: '-HEA' }],
         consequences: [{ type: 'add_injury', injuryId: 'dominance-bite', severity: 1 }],
       },
@@ -1680,7 +1680,7 @@ const wolfEvents: GameEvent[] = [
     id: 'wolf-dispersal-settlement',
     type: 'active',
     category: 'environmental',
-    narrativeText: 'After weeks of wandering, you have found it — a valley with no fresh wolf scent marks, rich with elk sign and clean water. The terrain is defensible, with ridges that funnel prey and provide denning sites. This could be home. But claiming it means scent-marking, howling your presence, and defending it alone.',
+    narrativeText: 'A valley with no fresh wolf scent. Elk sign everywhere. Clean water. Ridges that funnel prey and provide denning sites.',
     statEffects: [],
     consequences: [],
     choices: [
@@ -1688,7 +1688,7 @@ const wolfEvents: GameEvent[] = [
         id: 'wolf-settle-claim',
         label: 'Claim this territory',
         description: 'Begin scent-marking and establish your claim.',
-        narrativeResult: 'You spend days urinating on every prominent feature, scratching trees, and howling from the ridgeline. The territory is yours — a lonely kingdom, but yours. Now you need to find a mate.',
+        narrativeResult: 'You spend days urinating on every prominent feature, scratching trees, howling from the ridgeline. The territory is yours. Now you need a mate.',
         statEffects: [{ stat: StatId.NOV, amount: -5, label: '-NOV' }, { stat: StatId.WIS, amount: 5, label: '+WIS' }],
         consequences: [
           { type: 'set_flag', flag: 'dispersal-settled' },
@@ -1702,7 +1702,7 @@ const wolfEvents: GameEvent[] = [
         id: 'wolf-settle-continue',
         label: 'Keep searching',
         description: 'This valley is good, but there might be better.',
-        narrativeResult: 'You move on. The perfect territory is always over the next ridge — at least, that is what you tell yourself as winter approaches and you are still alone.',
+        narrativeResult: 'You move on. Winter approaches and you are still alone.',
         statEffects: [{ stat: StatId.HOM, amount: 3, label: '+HOM' }],
         consequences: [{ type: 'modify_weight', amount: -2 }],
         revocable: false,
@@ -1724,7 +1724,7 @@ const wolfEvents: GameEvent[] = [
     id: 'wolf-deep-freeze',
     type: 'passive',
     category: 'environmental',
-    narrativeText: 'The blizzard has been blowing for three days. Temperatures have dropped to -40°C and the wind chill makes it feel far worse. You and the pack huddle in a depression behind a fallen spruce, noses tucked under tails, fur thick with rime ice. Even wolves — among the most cold-adapted predators on Earth — burn enormous calories just staying warm in conditions like these. Hunting is impossible until the storm breaks.',
+    narrativeText: 'Three-day blizzard. Minus forty. You and the pack huddle behind a fallen spruce, noses tucked under tails, fur thick with rime ice. Hunting is impossible until the storm breaks.',
     statEffects: [
       { stat: StatId.CLI, amount: 5, label: '+CLI' },
       { stat: StatId.HOM, amount: 3, label: '+HOM' },

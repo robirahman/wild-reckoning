@@ -8,7 +8,7 @@ export const HUMAN_ENCOUNTER_EVENTS: GameEvent[] = [
     id: 'human-road-crossing',
     type: 'active',
     category: 'environmental',
-    narrativeText: 'A strip of asphalt cuts through the landscape — hot, black, and smelling of tar. Machines roar past at terrifying speed, their lights sweeping the darkness. The far side holds better habitat, but the crossing is deadly.',
+    narrativeText: 'A strip of hard black ground stretches across your path, hot and smelling of tar. Machines roar past, their lights sweeping the darkness. The far side has trees and browse, but the open strip between is lethal.',
     statEffects: [
       { stat: StatId.TRA, amount: 8, label: '+TRA' },
       { stat: StatId.ADV, amount: 6, label: '+ADV' },
@@ -18,7 +18,7 @@ export const HUMAN_ENCOUNTER_EVENTS: GameEvent[] = [
         id: 'cross-road',
         label: 'Cross now',
         description: 'Sprint across during a gap in traffic.',
-        narrativeResult: 'You dash across the road, the heat of the asphalt burning your feet. A vehicle passes seconds after you reach the far side, its horn blaring into the night.',
+        narrativeResult: 'You sprint across the hot black surface. A machine passes seconds after you reach the far side, its blaring noise filling the air.',
         statEffects: [
           { stat: StatId.TRA, amount: -5, label: '-TRA' },
         ],
@@ -58,7 +58,7 @@ export const HUMAN_ENCOUNTER_EVENTS: GameEvent[] = [
     id: 'human-habitat-fragmentation',
     type: 'passive',
     category: 'environmental',
-    narrativeText: 'Where forest once stood, a raw wound of cleared earth stretches to the horizon. Machines have stripped the land bare, leaving stumps and rutted mud. The home range you knew is shrinking, squeezed between development on every side.',
+    narrativeText: 'Where forest once stood, bare earth stretches to the horizon. Machines have stripped the land down to stumps and rutted mud. The smells of soil, diesel, and cut wood fill the air.',
     statEffects: [
       { stat: StatId.HOM, amount: 10, duration: 4, label: '+HOM (habitat loss)' },
       { stat: StatId.TRA, amount: 8, duration: 4, label: '+TRA (displacement)' },
@@ -79,7 +79,7 @@ export const HUMAN_ENCOUNTER_EVENTS: GameEvent[] = [
     id: 'human-conservation-ranger',
     type: 'active',
     category: 'environmental',
-    narrativeText: 'A human approaches slowly, speaking softly, carrying strange equipment — a long tube with a feathered dart. You sense no immediate threat, but the scent of human is always unsettling.',
+    narrativeText: 'A human approaches slowly, speaking softly, carrying strange equipment, a long tube with a feathered dart. You sense no immediate threat, but the scent of human is always unsettling.',
     statEffects: [
       { stat: StatId.ADV, amount: 5, label: '+ADV' },
     ],
@@ -87,7 +87,7 @@ export const HUMAN_ENCOUNTER_EVENTS: GameEvent[] = [
       {
         id: 'flee-ranger',
         label: 'Flee immediately',
-        description: 'Run — humans are never safe.',
+        description: 'Run. Humans are never safe.',
         narrativeResult: 'You bolt for cover, vanishing into the underbrush. The dart thuds into the ground where you stood. Whatever the human intended, it will not happen today.',
         statEffects: [
           { stat: StatId.TRA, amount: 5, label: '+TRA' },
@@ -99,8 +99,8 @@ export const HUMAN_ENCOUNTER_EVENTS: GameEvent[] = [
       {
         id: 'hold-still',
         label: 'Freeze and observe',
-        description: 'Stay still — maybe it will pass.',
-        narrativeResult: 'A sting in your flank, then drowsiness. You wake with a strange band around your leg and a sore spot where the dart struck. The humans are gone. You feel... the same, mostly. Perhaps slightly better — the dull ache from an old infection seems to have faded.',
+        description: 'Stay still. Maybe it will pass.',
+        narrativeResult: 'A sting in your flank, then drowsiness. You wake with a strange band around your leg and a sore spot where the dart struck. The humans are gone. The dull ache from an old infection seems to have faded.',
         statEffects: [
           { stat: StatId.HEA, amount: 5, duration: 6, label: '+HEA (medical treatment)' },
           { stat: StatId.NOV, amount: 5, label: '+NOV' },
@@ -126,7 +126,7 @@ export const HUMAN_ENCOUNTER_EVENTS: GameEvent[] = [
     id: 'human-camera-trap',
     type: 'passive',
     category: 'environmental',
-    narrativeText: 'A small box strapped to a tree blinks with a red light as you pass. A faint click sounds — the box has taken your picture. You sniff it cautiously. It smells of metal, plastic, and faintly of human hands, but it poses no threat. Your image will join a research database you will never know exists.',
+    narrativeText: 'A small box strapped to a tree blinks with a red light as you pass. A faint click sounds. You sniff it cautiously. It smells of metal, plastic, and faintly of human hands. It does not move or follow you.',
     statEffects: [
       { stat: StatId.NOV, amount: 3, label: '+NOV' },
     ],
@@ -143,7 +143,7 @@ export const HUMAN_ENCOUNTER_EVENTS: GameEvent[] = [
     id: 'human-pesticide-drift',
     type: 'passive',
     category: 'health',
-    narrativeText: 'A bitter chemical tang drifts on the wind from nearby farmland. The vegetation at the edge of your range is wilting, and the insects that feed on it are dying or gone. The poison is invisible, but your body knows something is wrong — a creeping nausea, a dullness behind the eyes.',
+    narrativeText: 'A bitter chemical tang drifts on the wind from nearby farmland. The vegetation at the edge of your range is wilting, and the insects that feed on it are dying or gone. The poison is invisible, but your body knows something is wrong. A creeping nausea, a dullness behind the eyes.',
     statEffects: [
       { stat: StatId.HEA, amount: -8, duration: 4, label: '-HEA (pesticide exposure)' },
       { stat: StatId.IMM, amount: 8, duration: 4, label: '+IMM (toxin stress)' },
@@ -164,7 +164,7 @@ export const HUMAN_ENCOUNTER_EVENTS: GameEvent[] = [
     id: 'human-fence-encounter',
     type: 'active',
     category: 'environmental',
-    narrativeText: 'A wire fence blocks your path — barbed at the top, its metal strands humming faintly in the wind. Beyond it, the habitat continues unbroken. The fence is a human boundary that means nothing to you, except as an obstacle.',
+    narrativeText: 'A wire fence blocks your path, barbed at the top, its metal strands humming faintly in the wind. Beyond it, the trees and brush continue. The wire is sharp and smells of rust.',
     statEffects: [
       { stat: StatId.TRA, amount: 5, label: '+TRA' },
     ],
@@ -207,7 +207,7 @@ export const HUMAN_ENCOUNTER_EVENTS: GameEvent[] = [
     id: 'human-noise-pollution',
     type: 'passive',
     category: 'environmental',
-    narrativeText: 'A low, persistent rumble penetrates the air — construction, traffic, or machinery beyond the tree line. The sound never stops. Your ability to hear predators, calls, and the subtle sounds of the environment is degraded. You feel exposed in a way you cannot identify.',
+    narrativeText: 'A low, persistent rumble penetrates the air from beyond the tree line. The sound never stops. You cannot hear the subtle sounds you rely on. You feel exposed.',
     statEffects: [
       { stat: StatId.ADV, amount: 8, duration: 3, label: '+ADV (noise stress)' },
       { stat: StatId.TRA, amount: 5, duration: 3, label: '+TRA (anxiety)' },
@@ -225,7 +225,7 @@ export const HUMAN_ENCOUNTER_EVENTS: GameEvent[] = [
     id: 'human-light-pollution',
     type: 'passive',
     category: 'environmental',
-    narrativeText: 'An orange glow stains the horizon — not sunrise, but the accumulated light of a distant city. The stars are dim, and the darkness that you depend on for navigation, hunting, or hiding is diluted. The night no longer belongs entirely to the wild.',
+    narrativeText: 'An orange glow sits on the horizon, not sunrise but something constant. The stars are dim. The darkness you rely on for cover is weak. Shadows that should be deep are pale.',
     statEffects: [
       { stat: StatId.NOV, amount: 5, duration: 3, label: '+NOV (disorientation)' },
       { stat: StatId.WIS, amount: -3, duration: 3, label: '-WIS (navigation confused)' },
@@ -243,7 +243,7 @@ export const HUMAN_ENCOUNTER_EVENTS: GameEvent[] = [
     id: 'human-fishing-boat',
     type: 'active',
     category: 'environmental',
-    narrativeText: 'A human vessel passes through the water above — or beside — you, trailing nets, lines, and the acrid taste of engine exhaust. The disturbance scatters prey and fills the water with alien noise.',
+    narrativeText: 'A large shape passes through the water above, trailing nets and lines. The taste of engine exhaust spreads through the current. The noise scatters prey.',
     statEffects: [
       { stat: StatId.TRA, amount: 6, label: '+TRA' },
     ],
@@ -264,8 +264,8 @@ export const HUMAN_ENCOUNTER_EVENTS: GameEvent[] = [
       {
         id: 'stay-course-boat',
         label: 'Hold your position',
-        description: 'Let the boat pass — it may not notice you.',
-        narrativeResult: 'The vessel churns past, its wake rocking you. A net trails dangerously close, but you are small enough — or lucky enough — to escape entanglement.',
+        description: 'Let the boat pass. It may not notice you.',
+        narrativeResult: 'The vessel churns past, its wake rocking you. A net trails dangerously close, but you slip past the mesh.',
         statEffects: [],
         consequences: [],
         revocable: false,
@@ -289,7 +289,7 @@ export const HUMAN_ENCOUNTER_EVENTS: GameEvent[] = [
     id: 'human-power-line',
     type: 'active',
     category: 'environmental',
-    narrativeText: 'Cables stretch across your flight path, nearly invisible against the sky. Other birds perch on them harmlessly, but in poor visibility or during migration, these wires are silent killers.',
+    narrativeText: 'Cables stretch across your flight path, nearly invisible against the sky. Other birds perch on them, but in poor visibility the thin wires are hard to see until you are close.',
     statEffects: [
       { stat: StatId.ADV, amount: 5, label: '+ADV' },
     ],
@@ -309,8 +309,8 @@ export const HUMAN_ENCOUNTER_EVENTS: GameEvent[] = [
       {
         id: 'fly-between-lines',
         label: 'Thread through the gap',
-        description: 'Pass between the wires — risky in low light.',
-        narrativeResult: 'You angle your wings and shoot between the cables. A wire brushes your tail feathers — close, too close.',
+        description: 'Pass between the wires. Risky in low light.',
+        narrativeResult: 'You angle your wings and shoot between the cables. A wire brushes your tail feathers. Close.',
         statEffects: [],
         consequences: [],
         revocable: false,
@@ -335,7 +335,7 @@ export const HUMAN_ENCOUNTER_EVENTS: GameEvent[] = [
     id: 'human-plastic-debris',
     type: 'passive',
     category: 'environmental',
-    narrativeText: 'Fragments of plastic drift past — bottle caps, shredded bags, tangles of fishing line. Some are encrusted with algae, mimicking food. The ocean is laced with human refuse, and the smaller pieces are indistinguishable from the plankton and prey you depend on.',
+    narrativeText: 'Fragments of plastic drift past. Bottle caps, shredded bags, tangles of line. Some are encrusted with algae, looking like food. The smaller pieces mix with the plankton and prey you depend on.',
     statEffects: [
       { stat: StatId.HEA, amount: -4, duration: 3, label: '-HEA (microplastic ingestion)' },
       { stat: StatId.NOV, amount: 3, label: '+NOV' },

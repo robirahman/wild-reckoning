@@ -26,7 +26,7 @@ export const MONARCH_BUTTERFLY_BACKSTORIES: Backstory[] = [
   {
     type: 'generation-4',
     label: 'The Migratory Generation',
-    description: 'You are the fourth generation born this year — the special one. Your parents, grandparents, and great-grandparents each lived only weeks, breeding and dying in the meadows where they hatched. But something is different about you. The shortening days triggered a change: your reproductive organs remain dormant, your body stores fat instead of making eggs, and deep in your cells, an ancient compass is switching on. You will live eight months instead of four weeks. You will fly to a place you have never been. You carry the memory of a forest in Mexico that no living monarch has ever seen.',
+    description: 'You are the fourth generation born this year — the special one. Your parents, grandparents, and great-grandparents each lived only weeks, breeding and dying in the meadows where they hatched. But something is different about you. The shortening days triggered a change: your reproductive organs remain dormant, your body stores fat instead of making eggs, and deep in your cells, a compass encoded in your cells is switching on. You will live eight months instead of four weeks. You will fly to a place you have never been. You carry the memory of a forest in Mexico that no living monarch has ever seen.',
     monthsSinceEvent: 0,
     statAdjustments: [
       { stat: 'WIS', amount: 10 },

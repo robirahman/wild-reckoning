@@ -214,9 +214,9 @@ export const BLIZZARD_EXPOSURE_CONFIG: EnvironmentalHazardConfig = {
       {
         id: 'seek-shelter',
         label: 'Fight toward the tree line',
-        description: 'The wind is weaker in dense forest.',
+        description: 'Wind drops in dense trees.',
         style: 'default',
-        narrativeResult: 'You lower your head and push into the wind, step by agonizing step, until the dark mass of the tree line swallows you. The wind drops instantly — still cold, brutally cold, but no longer stripping the life from your skin. You wedge yourself between two fallen trunks and wait.',
+        narrativeResult: 'You lower your head and push into the wind. Step by step the dark mass of the tree line grows closer. Inside, the wind drops. Still cold, but the air is not tearing at your hide. You wedge between two fallen trunks.',
         modifyOutcome(base) {
           return {
             ...base,
@@ -234,9 +234,9 @@ export const BLIZZARD_EXPOSURE_CONFIG: EnvironmentalHazardConfig = {
       {
         id: 'hunker-down',
         label: 'Hunker down where you are',
-        description: 'Conserve energy. Curl tight. Endure.',
+        description: 'Curl tight where you are.',
         style: 'danger',
-        narrativeResult: 'You fold your legs beneath you, pressing your belly to the ground, tucking your nose against your flank. The snow begins to accumulate on your back. It is, paradoxically, insulating — but beneath it, the cold works its way inward, and your body burns its reserves fighting it.',
+        narrativeResult: 'You fold your legs beneath you, belly to the ground, nose tucked against your flank. Snow accumulates on your back. Beneath it the cold works inward and your body burns its reserves.',
         modifyOutcome(base) {
           return {
             ...base,
@@ -306,11 +306,11 @@ export const VEHICLE_STRIKE_CONFIG: EnvironmentalHazardConfig = {
       {
         id: 'leap-forward',
         label: 'Leap forward across',
-        description: `Commit to the crossing.${locomotion < 60 ? ' Your legs are sluggish.' : ''}`,
+        description: `Cross now.${locomotion < 60 ? ' Your legs are slow.' : ''}`,
         style: locomotion < 50 ? 'danger' : 'default',
         narrativeResult: locomotion >= 60
-          ? 'You launch yourself forward, muscles firing, legs a blur of motion. The roaring light passes behind you close enough that the wind of it ruffles your tail. You clear the far edge of the hard ground and crash into the brush, alive, heart exploding in your chest.'
-          : 'You try to leap but your body is slow — the damaged leg hesitates, and the monster of light is upon you.',
+          ? 'You launch forward. The roaring light passes behind you, close enough to feel the wind of it. Your hooves hit soft ground on the far side.'
+          : 'You try to leap but the bad leg hesitates. The light and noise are on top of you.',
         modifyOutcome(base, innerCtx) {
           const clearance = 0.6 + locomotion * 0.003;
           const hit = !innerCtx.rng.chance(clearance);
@@ -326,9 +326,9 @@ export const VEHICLE_STRIKE_CONFIG: EnvironmentalHazardConfig = {
       {
         id: 'freeze-road',
         label: 'Freeze in the lights',
-        description: 'The lights paralyze you.',
+        description: 'The lights hold you still.',
         style: 'danger',
-        narrativeResult: 'The lights pin you in place. Your legs lock. Your mind empties. The roar fills the world. Then impact.',
+        narrativeResult: 'The lights hold you. Your legs lock. The roar fills everything. Then impact.',
         modifyOutcome(base, innerCtx) {
           const hit = innerCtx.rng.chance(0.75);
           return {
@@ -348,7 +348,7 @@ export const VEHICLE_STRIKE_CONFIG: EnvironmentalHazardConfig = {
         label: 'Whirl back the way you came',
         description: 'Retreat to the tree line.',
         style: 'default',
-        narrativeResult: 'Instinct overcomes the paralysis. You spin on your haunches and spring back toward the trees, the roaring light screaming past behind you. The hard ground shakes beneath your hooves. Then darkness and silence close around you, and the familiar smell of pine replaces the stench of burning air.',
+        narrativeResult: 'You spin on your haunches and spring back toward the trees. The roaring light passes behind you. The hard ground shakes under your hooves. Then darkness, silence, and the smell of pine.',
         modifyOutcome(base, innerCtx) {
           const clipped = innerCtx.rng.chance(0.1);
           return {
@@ -410,9 +410,9 @@ export const FOREST_FIRE_CONFIG: EnvironmentalHazardConfig = {
       {
         id: 'downhill-creek',
         label: 'Run downhill toward the creek',
-        description: 'Fire runs uphill. Water is safety.',
+        description: 'Downhill. Toward the water smell.',
         style: 'default',
-        narrativeResult: 'You plunge downhill, crashing through brush, leaping fallen logs. The smoke thickens but the air is cooler here, the ground damper. The creek appears — shallow, muddy, but wet — and you wade in, standing chest-deep as the fire roars overhead through the canopy above.',
+        narrativeResult: 'You plunge downhill through brush. Smoke thickens but the air is cooler, the ground damper. Water. You wade in chest-deep. Heat roars through the canopy above you.',
         modifyOutcome(base, innerCtx) {
           const burnChance = 0.15;
           const harmEvents: HarmEvent[] = [];
@@ -445,9 +445,9 @@ export const FOREST_FIRE_CONFIG: EnvironmentalHazardConfig = {
       {
         id: 'crosswind-flank',
         label: 'Run crosswind to flank the fire',
-        description: `Outrun the fire's edge. Faster but riskier.`,
+        description: `Run sideways past the fire's edge.`,
         style: locomotion < 70 ? 'danger' : 'default',
-        narrativeResult: 'You bolt perpendicular to the wind, legs pumping, lungs burning from the smoke. The fire\'s edge is a wall of heat to your left, embers swirling around you.',
+        narrativeResult: 'You bolt sideways to the wind. Your lungs burn from the smoke. Heat on your left side, embers swirling around you.',
         modifyOutcome(base, innerCtx) {
           const escapeChance = 0.4 + locomotion * 0.004;
           const escaped = innerCtx.rng.chance(escapeChance);
@@ -533,9 +533,9 @@ export const FLOODING_CREEK_CONFIG: EnvironmentalHazardConfig = {
       {
         id: 'swim-across',
         label: 'Swim across',
-        description: `The current is strong.${locomotion < 70 ? ' Your legs are compromised.' : ''}`,
+        description: `The current is strong.${locomotion < 70 ? ' Your legs are wrong.' : ''}`,
         style: locomotion < 60 ? 'danger' : 'default',
-        narrativeResult: 'You wade in and the current hits you like a moving wall. The water is shockingly cold — snowmelt, not rain — and it grabs your legs and pulls downstream. You swim with desperate, churning strokes, head barely above the surface.',
+        narrativeResult: 'You wade in. The current grabs your legs and pulls downstream. Cold, snowmelt cold. You kick hard, head barely above the surface.',
         modifyOutcome(base, innerCtx) {
           const swimStrength = locomotion * 0.6 + weight * 0.2;
           const drownChance = Math.max(0.02, 0.15 - swimStrength * 0.001);
@@ -584,9 +584,9 @@ export const FLOODING_CREEK_CONFIG: EnvironmentalHazardConfig = {
       {
         id: 'wait-recede',
         label: 'Wait for the water to recede',
-        description: 'Patience costs calories, not life.',
+        description: 'Wait on this side. The water will drop.',
         style: 'default',
-        narrativeResult: 'You bed down in the brush on this side, watching the water. By evening the flood has subsided to something manageable — still high, still fast, but no longer lethal.',
+        narrativeResult: 'You bed down in the brush and watch the water. By evening it has dropped. Still fast, but crossable.',
         modifyOutcome(base) {
           return {
             ...base,
@@ -651,11 +651,11 @@ export const BARBED_WIRE_CONFIG: EnvironmentalHazardConfig = {
     const isNight = ctx.time.timeOfDay === 'night' || ctx.time.timeOfDay === 'dusk';
     let text: string;
     if (loco < 60) {
-      text = 'The fence appears without warning — a line of thin, vicious wire strung between wooden posts. You try to jump, but your damaged legs betray you. The wire catches your belly and legs, biting deep, and for a terrible moment you are tangled, thrashing, the barbs tearing new wounds with every panicked movement. When you finally wrench free, you leave tufts of fur and streaks of blood on the wire behind you.';
+      text = 'Wire between posts. You try to jump but your legs are wrong. The wire catches your belly, biting deep. You thrash. The barbs tear with every movement. When you wrench free, fur and blood stay on the wire.';
     } else if (isNight) {
-      text = 'In the darkness, the fence is invisible until you are upon it. The wire catches you mid-stride, barbs raking across your chest and forelegs in a line of fire. You scramble backward, then forward, then over — clearing it with a desperate lunge that leaves a long gash along your flank.';
+      text = 'In the dark the wire is invisible. It catches you mid-stride, barbs raking across your chest and forelegs. You scramble over with a lunge that opens a long gash along your flank.';
     } else {
-      text = 'The fence line stretches across the meadow — a human boundary invisible in intent but brutally physical in execution. You leap, but the top wire catches your belly, the twisted barbs finding skin beneath the fur. You clear it, but the price is a stinging line of blood that will attract flies for days.';
+      text = 'Wire strung across the meadow between posts. You leap, but the top wire catches your belly. Barbs find skin beneath fur. You clear it. Blood drips, stinging, and the flies will come.';
     }
 
     return {
@@ -675,9 +675,9 @@ export const BARBED_WIRE_CONFIG: EnvironmentalHazardConfig = {
       {
         id: 'force-through',
         label: 'Force through the fence',
-        description: 'Power through. The wire will cut, but you will be free.',
+        description: 'Push through. The wire will cut.',
         style: 'danger',
-        narrativeResult: 'You lower your head and charge. The wire screams against your hide, barbs tearing furrows in your skin. But momentum carries you through. On the other side, you stand bleeding and panting, but free.',
+        narrativeResult: 'You lower your head and push through. Wire drags across your hide, barbs tearing furrows. Momentum carries you. On the other side you stand bleeding and panting.',
         modifyOutcome(base) {
           return base; // Default harm applies
         },
@@ -685,9 +685,9 @@ export const BARBED_WIRE_CONFIG: EnvironmentalHazardConfig = {
       {
         id: 'find-gap',
         label: 'Search for a gap or low point',
-        description: 'There may be a place where the fence sags or the bottom wire is loose.',
+        description: 'The wire may sag or loosen somewhere.',
         style: 'default',
-        narrativeResult: 'You walk the fence line, testing, until you find a place where the bottom wire has pulled loose from its staple. You wriggle under, belly pressed to the earth, and emerge on the other side with only minor scratches.',
+        narrativeResult: 'You walk the wire until the bottom strand hangs loose. You press your belly to the earth and wriggle under. Minor scratches only.',
         modifyOutcome(base, innerCtx) {
           const foundGap = innerCtx.rng.chance(0.6);
           if (foundGap) {
@@ -749,8 +749,8 @@ export const ICE_FALL_THROUGH_CONFIG: EnvironmentalHazardConfig = {
 
   narrative: (_ctx) => {
     return {
-      text: 'The ice looks solid — it held your weight yesterday, held it the day before. But today, something is different. The crack comes first — a sharp, gunshot report that freezes you mid-stride. Then the surface tilts beneath you and you are in the water, the cold so intense it stops your breath, stops your heart, stops your thoughts. Your legs churn against nothing. The edges of the hole crumble when you try to climb out. The cold is eating you alive.',
-      actionDetail: 'The ice cracks and gives way. You are in the water, the cold so intense it stops your breath. The edges crumble when you try to climb out.',
+      text: 'A crack under your hoof. The surface tilts. You are in the water. The cold stops your breath. Your legs churn against nothing. The edges of the hole crumble when you try to climb out.',
+      actionDetail: 'The ice cracks and drops you in. Cold stops your breath. The edges crumble when you try to climb out.',
       clinicalDetail: 'Ice fall-through into sub-zero water. Acute cold water immersion. Hypothermia onset within minutes. Drowning risk if animal cannot self-rescue.',
       intensity: 'extreme',
       emotionalTone: 'fear',
@@ -764,9 +764,9 @@ export const ICE_FALL_THROUGH_CONFIG: EnvironmentalHazardConfig = {
       {
         id: 'break-ice-forward',
         label: 'Break the ice forward toward shore',
-        description: `Use your chest to smash a path through the ice toward the bank.${loco < 60 ? ' Your legs are weak.' : ''}`,
+        description: `Smash through the ice toward the bank.${loco < 60 ? ' Your legs are weak.' : ''}`,
         style: loco < 50 ? 'danger' : 'default',
-        narrativeResult: 'You throw yourself forward, chest crashing against the ice edge. It breaks. You surge forward. More ice breaks. Step by agonizing step, you smash a channel toward the bank, the cold sapping your strength with every second. When your hooves finally touch bottom and you drag yourself onto solid ground, you collapse, shaking violently, steam rising from your soaked hide.',
+        narrativeResult: 'You throw your chest against the ice edge. It breaks. You surge forward. More ice breaks. Each surge costs more. Your hooves find bottom. You drag yourself onto solid ground, shaking, steam rising from your soaked hide.',
         modifyOutcome(base, innerCtx) {
           const escapeChance = 0.5 + loco * 0.004;
           const escaped = innerCtx.rng.chance(escapeChance);
@@ -795,7 +795,7 @@ export const ICE_FALL_THROUGH_CONFIG: EnvironmentalHazardConfig = {
         label: 'Scramble back the way you came',
         description: 'The ice behind you held. Try to climb back onto it.',
         style: 'default',
-        narrativeResult: 'You twist in the water and fling your forelegs onto the ice behind you. It groans but holds. You kick, hauling yourself up, belly scraping against the wet surface. For a long moment you are half in, half out, hooves scrabbling for purchase. Then you are up, sliding, crawling away from the hole on your belly until you reach solid ground.',
+        narrativeResult: 'You twist and fling your forelegs onto the ice behind you. It groans but holds. You kick, hauling yourself up, belly scraping the wet surface. Half in, half out, hooves scrabbling. Then up, sliding on your belly away from the hole.',
         modifyOutcome(base, innerCtx) {
           const holdChance = 0.65;
           const held = innerCtx.rng.chance(holdChance);
@@ -863,8 +863,8 @@ export const MUD_TRAP_CONFIG: EnvironmentalHazardConfig = {
 
   narrative: (_ctx) => {
     return {
-      text: 'The ground looks solid — dark earth covered in last year\'s dead grass. But when you step forward, your leg sinks to the knee in cold, sucking mud. The more you pull, the deeper you go. Your other legs begin to sink too, the mud gripping with a patient, mindless hunger. Panic rises in your chest as you realize you cannot simply walk out of this.',
-      actionDetail: 'Your legs sink into cold, sucking mud. The more you pull, the deeper you go. Panic rises as you realize you cannot simply walk out.',
+      text: 'Dead grass over dark earth. Your leg sinks to the knee in cold mud. You pull and sink deeper. Your other legs begin to sink too. You cannot walk out of this.',
+      actionDetail: 'Your leg sinks to the knee in cold mud. You pull and sink deeper. You cannot walk out.',
       clinicalDetail: 'Animal mired in deep mud (spring thaw bog). Risk of exhaustion, muscle strain, joint injury, and hypothermia from prolonged immersion. Predation risk critically elevated while immobile.',
       intensity: 'high',
       emotionalTone: 'fear',
@@ -878,9 +878,9 @@ export const MUD_TRAP_CONFIG: EnvironmentalHazardConfig = {
       {
         id: 'thrash-free',
         label: 'Thrash and lunge toward solid ground',
-        description: `Brute force. Exhausting but direct.${loco < 60 ? ' Your injured legs make this harder.' : ''}`,
+        description: `Lunge for solid ground.${loco < 60 ? ' Your legs are wrong.' : ''}`,
         style: loco < 50 ? 'danger' : 'default',
-        narrativeResult: 'You throw yourself forward with everything you have, legs churning in the muck. Mud sprays. Your muscles scream. For a terrible moment you sink deeper — then your front hooves find something solid. You haul yourself forward, belly dragging through the slime, until at last you are free, gasping, coated in black mud, trembling with exhaustion.',
+        narrativeResult: 'You throw yourself forward. Legs churn in the muck. You sink deeper, then your front hooves find something solid. You haul forward, belly dragging through the slime, until you are free. Coated in black mud, trembling.',
         modifyOutcome(base, innerCtx) {
           const freeChance = 0.6 + loco * 0.003;
           const freed = innerCtx.rng.chance(freeChance);
@@ -912,9 +912,9 @@ export const MUD_TRAP_CONFIG: EnvironmentalHazardConfig = {
       {
         id: 'calm-and-shift',
         label: 'Stop struggling and work free slowly',
-        description: 'Calm yourself. Shift weight carefully. Let the suction break naturally.',
+        description: 'Shift weight carefully. Let the suction break.',
         style: 'default',
-        narrativeResult: 'You force yourself to stop thrashing. The mud settles around your legs, holding but no longer pulling. Slowly, carefully, you rock your weight forward, lifting one leg at a time, breaking the suction with small, patient movements. It takes a long time. But eventually, covered in mud and shaking, you are free.',
+        narrativeResult: 'You stop thrashing. The mud settles, holding but no longer pulling. You rock your weight forward, one leg at a time, breaking the suction. Slow. Eventually you are free, covered in mud and shaking.',
         modifyOutcome(base) {
           return {
             ...base,
@@ -964,14 +964,14 @@ export const DISPERSAL_NEW_RANGE_CONFIG: EnvironmentalHazardConfig = {
     const quality = (cover + food) / 2;
 
     const qualityNarrative = quality >= 60
-      ? 'This is good ground — thick cedar cover along a south-facing slope, a creek with clean water, abundant browse in every direction.'
+      ? 'Thick cedar cover on a south-facing slope. Clean water. Browse everywhere you look.'
       : quality >= 40
-        ? 'The territory is adequate — scattered cover, decent browse, water within reach. Not the richest ground, but livable.'
-        : 'The land here is marginal — thin cover, sparse browse, a seasonal creek that may run dry. But you are exhausted from traveling.';
+        ? 'Scattered cover, some browse, water within reach. Livable ground.'
+        : 'Thin cover, sparse browse, a creek bed that smells dry. Your legs ache from traveling.';
 
     return {
-      text: `After days of wandering through unfamiliar woods, crossing roads and fences and fields that smelled of humans, you find it — a creek bottom with potential. ${qualityNarrative}`,
-      actionDetail: `After days of wandering, you find a creek bottom with potential. ${qualityNarrative}`,
+      text: `Days of unfamiliar ground, wrong smells, hard surfaces underfoot. Now a creek bottom. ${qualityNarrative}`,
+      actionDetail: `A creek bottom after days of wandering. ${qualityNarrative}`,
       clinicalDetail: `Yearling dispersal: potential home range identified. Territory quality: ${quality >= 60 ? 'good' : quality >= 40 ? 'adequate' : 'marginal'}.`,
       intensity: 'low',
       emotionalTone: 'calm',
@@ -984,7 +984,7 @@ export const DISPERSAL_NEW_RANGE_CONFIG: EnvironmentalHazardConfig = {
       label: 'Claim this range',
       description: 'Make this your home territory.',
       style: 'default',
-      narrativeResult: 'You begin to mark — rubbing your forehead glands on low branches, scraping the earth at trail junctions. The wandering is over. You are home.',
+      narrativeResult: 'You rub your forehead glands on low branches, scrape the earth at trail junctions. The wandering stops. This ground holds your smell now.',
       modifyOutcome(base) {
         return {
           ...base,
@@ -1005,9 +1005,9 @@ export const DISPERSAL_NEW_RANGE_CONFIG: EnvironmentalHazardConfig = {
     {
       id: 'keep-searching',
       label: 'Keep searching',
-      description: 'There might be better ground ahead.',
+      description: 'The smell is not right here.',
       style: 'default',
-      narrativeResult: 'Something about this place doesn\'t feel right. You push on, legs heavy but will unbroken, searching for ground that matches the image burned into your genes.',
+      narrativeResult: 'The smell is not right here. You push on, legs heavy, searching for ground that fits.',
       modifyOutcome(base) {
         return {
           ...base,

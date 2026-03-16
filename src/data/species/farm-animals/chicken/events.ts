@@ -7,7 +7,7 @@ export const CHICKEN_EVENTS: GameEvent[] = [
     id: 'chicken-industrial-feeding',
     type: 'passive',
     category: 'foraging',
-    narrativeText: 'Feed flows continuously from overhead hoppers into long metal troughs. The pellets are formulated for maximum growth — corn, soybean meal, animal fat, antibiotics, coccidiostats. You eat because there is nothing else to do. The lights are kept on 23 hours a day to encourage constant feeding. Your body converts feed to flesh at a rate that would have been biologically impossible fifty years ago.',
+    narrativeText: 'Pellets rattle into the trough. The light never changes. You eat, because eating is the only thing to do here.',
     statEffects: [
       { stat: StatId.HOM, amount: -1, label: '-HOM' },
     ],
@@ -22,7 +22,7 @@ export const CHICKEN_EVENTS: GameEvent[] = [
     id: 'chicken-rapid-growth-strain',
     type: 'passive',
     category: 'health',
-    narrativeText: 'Your body is gaining weight so fast that your heart and lungs cannot keep pace. You pant in the heated shed, your breast muscles so heavy that standing is an effort. Modern broilers have been bred to reach slaughter weight in six weeks — a growth rate that would be lethal if it continued. Your skeleton, your cardiovascular system, your organs are all running behind your muscles in a race none of them can win.',
+    narrativeText: 'Standing is harder each day. Your breast pulls you forward. You pant in the warm air. Your legs tremble under the new weight.',
     statEffects: [
       { stat: StatId.HEA, amount: -5, label: '-HEA' },
       { stat: StatId.STR, amount: 4, label: '+STR' },
@@ -42,10 +42,10 @@ export const CHICKEN_EVENTS: GameEvent[] = [
     id: 'chicken-male-culling',
     type: 'active',
     category: 'health',
-    narrativeText: 'You were born male in a facility that only has use for hens. As you reach your second day of life, you are scooped up with the other cockerels and tossed into a high-speed grinder.',
+    narrativeText: 'Hands lift you from the sorting belt. Bright light, loud noise, a rush of air.',
     statEffects: [],
     consequences: [
-      { type: 'death', cause: 'Culled as a male chick' }
+      { type: 'death', cause: 'Culled at hatchery, day two.' }
     ],
     conditions: [
       { type: 'sex', sex: 'male' },
@@ -58,7 +58,7 @@ export const CHICKEN_EVENTS: GameEvent[] = [
     id: 'chicken-ammonia-burn',
     type: 'passive',
     category: 'environmental',
-    narrativeText: 'The air in the shed is thick with the stench of ammonia from the accumulated waste of thousands of birds. It burns your eyes and lungs.',
+    narrativeText: 'The air stings your eyes. Each breath burns in your throat. The smell from the litter below is sharp and constant.',
     statEffects: [
       { stat: StatId.HEA, amount: -5, label: '-HEA' },
       { stat: StatId.IMM, amount: -2, label: '-IMM' }
@@ -73,7 +73,7 @@ export const CHICKEN_EVENTS: GameEvent[] = [
     id: 'chicken-beak-trimming',
     type: 'passive',
     category: 'health',
-    narrativeText: 'To prevent you from pecking at others in the crowded shed, your sensitive beak is seared off with a hot blade. No anesthesia is provided.',
+    narrativeText: 'Hands hold your head still. Heat on your beak, then searing pain. The tip is gone. The raw end throbs.',
     statEffects: [
       { stat: StatId.TRA, amount: 20, label: '+TRA' },
       { stat: StatId.HEA, amount: -10, label: '-HEA' }
@@ -89,7 +89,7 @@ export const CHICKEN_EVENTS: GameEvent[] = [
     id: 'chicken-lameness',
     type: 'passive',
     category: 'health',
-    narrativeText: 'Your breast muscle has grown so rapidly that your immature leg bones are buckling under the weight. Each step is an agonizing struggle.',
+    narrativeText: 'Your legs bend wrong under the weight of your body. Each step sends pain up through the joints. You sit more than you stand now.',
     statEffects: [
       { stat: StatId.HEA, amount: -8, label: '-HEA' },
       { stat: StatId.ADV, amount: -10, label: '-ADV' }
@@ -104,7 +104,7 @@ export const CHICKEN_EVENTS: GameEvent[] = [
     id: 'chicken-feather-pecking',
     type: 'passive',
     category: 'social',
-    narrativeText: 'Driven by stress and the inability to forage, your shed-mates have begun to peck at your feathers, leaving raw, bleeding patches on your skin.',
+    narrativeText: 'Sharp pecks at your back and flanks. Other birds pull at your feathers. Raw patches sting where the skin is exposed.',
     statEffects: [
       { stat: StatId.HEA, amount: -3, label: '-HEA' },
       { stat: StatId.TRA, amount: 5, label: '+TRA' }
@@ -119,7 +119,7 @@ export const CHICKEN_EVENTS: GameEvent[] = [
     id: 'chicken-frustrated-perching',
     type: 'passive',
     category: 'psychological',
-    narrativeText: 'As dusk falls, your instinct to seek a high perch for safety is overwhelming. But there are no branches or roosts here, only the wire floor or the crowded ground. You spend the night in a state of hyper-vigilance, unable to rest properly.',
+    narrativeText: 'The light dims slightly. The urge to climb pulls at your feet but there is nothing to grip, no height to reach. You crouch on the wire, alert all night.',
     statEffects: [
       { stat: StatId.STR, amount: 8, label: '+STR' },
       { stat: StatId.HEA, amount: -2, label: '-HEA' }
@@ -134,7 +134,7 @@ export const CHICKEN_EVENTS: GameEvent[] = [
     id: 'chicken-frustrated-dustbathing',
     type: 'passive',
     category: 'psychological',
-    narrativeText: 'Your skin is itchy and your feathers are oily, but there is no dirt to perform a dust bath. You perform the motions of bathing against the wire cage, fruitlessly scraping at the metal while the irritation only grows.',
+    narrativeText: 'Your skin crawls. You crouch and work your wings against the wire floor, going through the motions. No dust rises. The itch does not stop.',
     statEffects: [
       { stat: StatId.TRA, amount: 5, label: '+TRA' },
       { stat: StatId.STR, amount: 5, label: '+STR' }
@@ -151,7 +151,7 @@ export const CHICKEN_EVENTS: GameEvent[] = [
     id: 'chicken-broiler-slaughter',
     type: 'active',
     category: 'health',
-    narrativeText: 'You have reached market weight. Workers move through the shed in the dark, grabbing birds by the legs — four or five in each hand — and stuffing them into plastic transport crates. The ride to the processing plant takes hours. You arrive terrified, dehydrated, and covered in the feces of the birds stacked above you. At the plant, you are shackled upside down on a moving line and dragged through an electrified water bath meant to stun you. Then a mechanical blade cuts your throat.',
+    narrativeText: 'Hands grab your legs in the dark. You are upside down, then inside a crate. Hours of noise and motion. Then bright light, cold metal on your feet, and water that jolts through your whole body.',
     statEffects: [],
     consequences: [
       { type: 'death', cause: 'Slaughtered at processing plant after reaching market weight of approximately 6 lbs in 42 days.' },
@@ -169,7 +169,7 @@ export const CHICKEN_EVENTS: GameEvent[] = [
     id: 'chicken-mite-infestation',
     type: 'passive',
     category: 'health',
-    narrativeText: 'At night, the red mites emerge from cracks in the housing infrastructure — tiny vampires that feed on your blood while you sleep. By morning your comb is pale and you feel weak. The mites retreat into the woodwork before the lights come on, invisible to the workers who never look closely enough.',
+    narrativeText: 'In the dim hours, pinprick bites along your skin. By morning your comb is pale. Something feeds on you in the dark and is gone when the lights return.',
     statEffects: [
       { stat: StatId.HEA, amount: -2, label: '-HEA' },
       { stat: StatId.IMM, amount: -3, label: '-IMM' },
@@ -189,7 +189,7 @@ export const CHICKEN_EVENTS: GameEvent[] = [
     id: 'chicken-scaly-leg',
     type: 'passive',
     category: 'health',
-    narrativeText: 'Your legs itch constantly. The scales are lifting, thickening, crusting over with a chalky white residue. Burrowing mites have colonized the skin beneath your leg scales, tunneling through the tissue and leaving behind debris that deforms the keratin above. Walking becomes painful.',
+    narrativeText: 'Your leg scales lift and crust over with white residue. The itch is constant. Walking sends sharp pain up through both feet.',
     statEffects: [
       { stat: StatId.HEA, amount: -3, label: '-HEA' },
     ],
