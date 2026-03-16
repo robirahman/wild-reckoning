@@ -8,7 +8,19 @@ export function ActiveEvents() {
 
   const activeEvents = currentEvents.filter((e) => e.definition.type === 'active');
 
-  if (activeEvents.length === 0) return null;
+  if (activeEvents.length === 0) {
+    // Show fallback only when there are no events at all (active or passive)
+    if (currentEvents.length === 0) {
+      return (
+        <section className={styles.eventsSection}>
+          <p className={styles.narrative} style={{ fontStyle: 'italic', opacity: 0.7 }}>
+            Nothing new happens. You go through yesterday's motions.
+          </p>
+        </section>
+      );
+    }
+    return null;
+  }
 
   return (
     <section className={styles.eventsSection}>
@@ -44,7 +56,21 @@ export function ActiveEvents() {
               : undefined
           }
           choiceMade={event.choiceMade}
-          onChoiceSelect={(choiceId) => makeChoice(event.definition.id, choiceId)}
+          onChoiceSelect={(choiceId) => {
+            if (event.choiceMade === choiceId) {
+              // Deselect: clear choice and add back to pending
+              useGameStore.setState((s) => ({
+                currentEvents: s.currentEvents.map((e) =>
+                  e.definition.id === event.definition.id
+                    ? { ...e, choiceMade: undefined }
+                    : e
+                ),
+                pendingChoices: [...s.pendingChoices, event.definition.id],
+              }));
+            } else {
+              makeChoice(event.definition.id, choiceId);
+            }
+          }}
         />
       ))}
     </section>

@@ -117,25 +117,30 @@
 }
 
 .choiceDefault {
-  border-color: var(--color-positive);
-  color: var(--color-positive);
+  border-color: #4a7aa0;
+  color: #4a7aa0;
 }
 
 .choiceDefault:hover {
-  background: var(--color-positive-light);
+  background: rgba(74, 122, 160, 0.1);
 }
 
 .choiceDanger {
-  border-color: var(--color-danger);
-  color: var(--color-danger);
+  border-color: #8a5aa0;
+  color: #8a5aa0;
 }
 
 .choiceDanger:hover {
-  background: var(--color-negative-light);
+  background: rgba(138, 90, 160, 0.1);
 }
 
 .choiceSelected {
   font-weight: 700;
+  background: rgba(74, 122, 160, 0.15);
+}
+
+.choiceDanger.choiceSelected {
+  background: rgba(138, 90, 160, 0.15);
 }
 
 .revocableNote {

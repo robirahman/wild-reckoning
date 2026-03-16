@@ -18,7 +18,7 @@ export const HUMAN_STORYLINES: StorylineDefinition[] = [
         delayMax: 0,
         narrativeText: 'Strange sounds carry on the wind — the growl of engines and the crack of falling trees. On the horizon, a yellow machine crawls across the earth, scraping the ground bare. Humans are building something at the edge of {{region.name}}.',
         statEffects: [
-          { stat: StatId.TRA, amount: 8, duration: 4, label: '+TRA (construction noise)' },
+          { stat: StatId.NOV, amount: 8, duration: 4, label: '+NOV (unfamiliar machinery)' },
           { stat: StatId.ADV, amount: 5, duration: 3, label: '+ADV (new threat)' },
         ],
         consequences: [
@@ -33,7 +33,7 @@ export const HUMAN_STORYLINES: StorylineDefinition[] = [
         narrativeText: 'The construction has transformed the landscape. Where meadow and forest once stood, there are now rectangular structures, paved surfaces, and fences. The usable habitat has shrunk noticeably. Other animals crowd into the remaining space, increasing competition for food and shelter.',
         statEffects: [
           { stat: StatId.HOM, amount: 12, duration: 6, label: '+HOM (habitat loss)' },
-          { stat: StatId.TRA, amount: 6, duration: 4, label: '+TRA (crowding)' },
+          { stat: StatId.ADV, amount: 6, duration: 4, label: '+ADV (overcrowding)' },
         ],
         consequences: [
           { type: 'modify_weight', amount: -3 },

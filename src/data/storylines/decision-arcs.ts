@@ -29,7 +29,7 @@ export const DECISION_ARC_STORYLINES: StorylineDefinition[] = [
             description: 'Approach carefully and offer what aid you can.',
             narrativeResult: 'You approach cautiously, lowering your guard. The wounded creature tenses, then relaxes as it senses your intent. You stay close, sharing warmth and vigilance through the long hours.',
             statEffects: [
-              { stat: StatId.WIS, amount: 5, duration: 6, label: '+WIS (compassion)' },
+              { stat: StatId.ADV, amount: -3, duration: 6, label: '-ADV (reduced vigilance)' },
               { stat: StatId.HEA, amount: -3, duration: 4, label: '-HEA (exhausting care)' },
             ],
             consequences: [],
@@ -68,7 +68,7 @@ export const DECISION_ARC_STORYLINES: StorylineDefinition[] = [
         delayMax: 6,
         narrativeText: 'The creature you helped has recovered. You encounter it again on a familiar trail — it recognizes you, approaching without fear. A bond has formed, quiet but unmistakable. In this harsh world, you have gained something rare: an ally.',
         statEffects: [
-          { stat: StatId.WIS, amount: 5, duration: 8, label: '+WIS (kindness repaid)' },
+          { stat: StatId.ADV, amount: -5, duration: 8, label: '-ADV (familiar ally nearby)' },
         ],
         consequences: [
           { type: 'introduce_npc', npcType: 'ally' },
