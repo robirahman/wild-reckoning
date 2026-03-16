@@ -16,21 +16,24 @@ export function createAmbientDrone(
   const gain = ctx.createGain();
   osc.frequency.value = SEASON_FREQUENCIES[season];
   osc.type = 'sine';
-  gain.gain.value = 0.03; // Very quiet
+  gain.gain.value = 0.02;
   osc.connect(gain).connect(ctx.destination);
   return { osc, gain };
 }
 
-/** Creates a secondary harmonic layer for depth */
+/** Creates a secondary harmonic layer for depth.
+ *  Uses octave (2×) instead of fifth (1.5×) to avoid audible beat
+ *  frequencies — two sines at a 3:2 ratio produce a beat at baseFreq/2
+ *  (~100 Hz), which was perceived as a constant drone. */
 export function createHarmonicLayer(
   ctx: AudioContext,
   baseFreq: number,
 ): { osc: OscillatorNode; gain: GainNode } {
   const osc = ctx.createOscillator();
   const gain = ctx.createGain();
-  osc.frequency.value = baseFreq * 1.5; // Fifth harmonic
+  osc.frequency.value = baseFreq * 2; // Octave — fuses perceptually, no beat frequency
   osc.type = 'sine';
-  gain.gain.value = 0.015;
+  gain.gain.value = 0.008;
   osc.connect(gain).connect(ctx.destination);
   return { osc, gain };
 }
