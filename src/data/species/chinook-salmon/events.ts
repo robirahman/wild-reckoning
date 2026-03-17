@@ -97,7 +97,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
         revocable: false,
         style: 'default',
         deathChance: {
-          probability: 0.08,
+          probability: 0.03,
           cause: 'Caught by a harbor seal.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
         },
@@ -113,7 +113,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
         revocable: false,
         style: 'danger',
         deathChance: {
-          probability: 0.12,
+          probability: 0.03,
           cause: 'The seal followed you into the darkness.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
         },
@@ -143,7 +143,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
         revocable: false,
         style: 'default',
         deathChance: {
-          probability: 0.05,
+          probability: 0.02,
           cause: 'An orca picked you out of the scattering school.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
         },
@@ -157,7 +157,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
         revocable: false,
         style: 'danger',
         deathChance: {
-          probability: 0.10,
+          probability: 0.04,
           cause: 'The orca drove through the school and took you.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.003 }],
         },
@@ -189,7 +189,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
         revocable: false,
         style: 'danger',
         deathChance: {
-          probability: 0.15,
+          probability: 0.03,
           cause: 'Tangled in the net. Hauled aboard.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
         },
@@ -203,7 +203,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
         revocable: false,
         style: 'default',
         deathChance: {
-          probability: 0.25,
+          probability: 0.04,
           cause: "Could not escape the net. Hauled aboard with the rest.",
           statModifiers: [{ stat: StatId.HEA, factor: -0.003 }],
         },
@@ -253,7 +253,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
         revocable: false,
         style: 'danger',
         deathChance: {
-          probability: 0.12,
+          probability: 0.02,
           cause: "A paw slammed down. Over in an instant.",
           statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
         },
@@ -267,7 +267,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
         revocable: false,
         style: 'default',
         deathChance: {
-          probability: 0.08,
+          probability: 0.03,
           cause: 'Caught while holding in the shallows.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
         },
@@ -456,7 +456,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
         revocable: false,
         style: 'default',
         deathChance: {
-          probability: 0.05,
+          probability: 0.02,
           cause: 'Plucked from the shallows before reaching deep water.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
         },
@@ -471,7 +471,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
         revocable: false,
         style: 'danger',
         deathChance: {
-          probability: 0.08,
+          probability: 0.03,
           cause: 'Caught mid-leap between pools.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
         },
@@ -701,7 +701,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
         revocable: false,
         style: 'default',
         deathChance: {
-          probability: 0.06,
+          probability: 0.02,
           cause: 'Cornered in the kelp. Nowhere left to turn.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
         },
@@ -717,7 +717,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
         revocable: false,
         style: 'danger',
         deathChance: {
-          probability: 0.10,
+          probability: 0.04,
           cause: 'In open water, the sea lion was faster. It caught you from below.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
         },
@@ -869,7 +869,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
         revocable: false,
         style: 'danger',
         deathChance: {
-          probability: 0.05,
+          probability: 0.02,
           cause: 'Could not reach deep water. Dried out on the gravel.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
         },
@@ -1496,7 +1496,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
         revocable: false,
         style: 'default',
         deathChance: {
-          probability: 0.05,
+          probability: 0.02,
           cause: 'The surge never came. Dried out on the gravel bar.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
         },
@@ -1650,7 +1650,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
         revocable: false,
         style: 'danger',
         deathChance: {
-          probability: 0.08,
+          probability: 0.03,
           cause: 'Caught while leaping the cascade',
           statModifiers: [{ stat: StatId.HEA, factor: -0.0005 }],
         },
@@ -1739,7 +1739,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
         revocable: false,
         style: 'danger',
         deathChance: {
-          probability: 0.05,
+          probability: 0.02,
           cause: 'Snatched from the water during the sprint.',
         },
       },

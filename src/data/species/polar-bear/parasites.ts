@@ -22,9 +22,9 @@ export const POLAR_BEAR_PARASITES: Record<string, ParasiteDefinition> = {
         secondaryEffects: [],
         turnDuration: { min: 3, max: 8 },
         // Real: most polar bears carry Trichinella asymptomatically.
-        // Progression is slow and remission common.
-        progressionChance: 0.06,
-        remissionChance: 0.20,
+        // Nearly all infections self-resolve or remain subclinical.
+        progressionChance: 0.04,
+        remissionChance: 0.30,
       },
       {
         severity: 'moderate',
@@ -36,8 +36,8 @@ export const POLAR_BEAR_PARASITES: Record<string, ParasiteDefinition> = {
         ],
         secondaryEffects: ['reduced hunting efficiency', 'muscle inflammation'],
         turnDuration: { min: 4, max: 10 },
-        progressionChance: 0.04,
-        remissionChance: 0.12,
+        progressionChance: 0.03,
+        remissionChance: 0.18,
       },
       {
         severity: 'severe',
@@ -45,13 +45,13 @@ export const POLAR_BEAR_PARASITES: Record<string, ParasiteDefinition> = {
           'Massive larval migration has inflamed your diaphragm and intercostal muscles. Breathing is labored, especially during exertion. Long-distance swimming, essential for reaching distant floes, is now dangerously exhausting.',
         statEffects: [
           { stat: StatId.HOM, amount: 20 },
-          { stat: StatId.HEA, amount: -8 },
+          { stat: StatId.HEA, amount: -5 },
           { stat: StatId.IMM, amount: 10 },
         ],
         secondaryEffects: ['respiratory compromise', 'cardiac inflammation risk', 'swimming impairment'],
         turnDuration: { min: 3, max: 7 },
         progressionChance: 0,
-        remissionChance: 0.06,
+        remissionChance: 0.12,
       },
     ],
   },

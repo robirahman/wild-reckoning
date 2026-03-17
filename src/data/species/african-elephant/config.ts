@@ -40,9 +40,11 @@ export const AFRICAN_ELEPHANT_CONFIG: SpeciesConfig = {
   },
 
   age: {
-    oldAgeOnsetMonths: 540,
-    oldAgeBaseChance: 0.08,   // Scaled for monthly turns (was 0.02 at weekly)
-    oldAgeEscalation: 1.3,
+    // Real: elephants have 6 sets of molars; last set wears out at ~60-65yr,
+    // leading to starvation. Onset at 55yr matches tooth-wear timeline.
+    oldAgeOnsetMonths: 660,
+    oldAgeBaseChance: 0.06,
+    oldAgeEscalation: 1.4,
     maxOldAgeChance: 0.95,
   },
 

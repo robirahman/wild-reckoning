@@ -91,12 +91,12 @@ export const GREEN_SEA_TURTLE_PARASITES: Record<string, ParasiteDefinition> = {
         statEffects: [
           { stat: StatId.IMM, amount: 12 },
           { stat: StatId.WIS, amount: -5 },
-          { stat: StatId.HEA, amount: -6 },
+          { stat: StatId.HEA, amount: -3 },
         ],
         secondaryEffects: ['vascular inflammation', 'mild neurological impairment'],
         turnDuration: { min: 4, max: 12 },
-        progressionChance: 0.08,
-        remissionChance: 0.06,
+        progressionChance: 0.05,
+        remissionChance: 0.12,
       },
       {
         severity: 'severe',
@@ -139,13 +139,13 @@ export const GREEN_SEA_TURTLE_PARASITES: Record<string, ParasiteDefinition> = {
         severity: 'moderate',
         description: 'The fluke burden in your intestines is growing. Inflammation along your gut lining is causing persistent discomfort, and your body is losing weight despite regular grazing. Your shell growth has slowed.',
         statEffects: [
-          { stat: StatId.HEA, amount: -8 },
+          { stat: StatId.HEA, amount: -3 },
           { stat: StatId.HOM, amount: 10 },
         ],
         secondaryEffects: ['intestinal inflammation', 'impaired nutrient absorption'],
         turnDuration: { min: 6, max: 16 },
-        progressionChance: 0.06,
-        remissionChance: 0.04,
+        progressionChance: 0.04,
+        remissionChance: 0.10,
       },
       {
         severity: 'severe',
@@ -188,12 +188,12 @@ export const GREEN_SEA_TURTLE_PARASITES: Record<string, ParasiteDefinition> = {
         description: 'A growing colony of leeches clusters around your flippers, eyes, and cloaca. The constant blood loss is weakening you, and the bite wounds are becoming inflamed. Cleaning fish at the reef station pick off a few, but more keep coming.',
         statEffects: [
           { stat: StatId.IMM, amount: 10 },
-          { stat: StatId.HEA, amount: -5 },
+          { stat: StatId.HEA, amount: -2 },
         ],
         secondaryEffects: ['increased susceptibility to fibropapillomatosis', 'blood loss'],
         turnDuration: { min: 3, max: 8 },
-        progressionChance: 0.08,
-        remissionChance: 0.15,
+        progressionChance: 0.05,
+        remissionChance: 0.20,
       },
       {
         severity: 'severe',
