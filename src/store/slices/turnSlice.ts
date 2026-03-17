@@ -757,6 +757,26 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
         }
       }
 
+      // Weight-based health recovery: long-lived species with high body condition
+      // can trade weight for health recovery (biological: immune investment from
+      // fat reserves). This prevents slow HEA drain from parasites killing animals
+      // that are otherwise healthy and well-fed.
+      if (config.weightBasedHealing) {
+        const { minWeight, healPerTurn, weightCostPerHeal } = config.weightBasedHealing;
+        const currentHEA = computeEffectiveValue(tickedStats[StatId.HEA]);
+        const baseHEA = config.baseStats[StatId.HEA];
+        if (currentHEA < baseHEA && currentAnimal.weight > minWeight) {
+          tickedStats = addModifier(tickedStats, {
+            id: 'weight-healing',
+            source: 'weight-healing',
+            sourceType: 'condition' as const,
+            stat: StatId.HEA,
+            amount: healPerTurn,
+          });
+          currentAnimal = { ...currentAnimal, weight: currentAnimal.weight - weightCostPerHeal };
+        }
+      }
+
       const newFlags = new Set(currentAnimal.flags);
       if (currentReproduction.type === 'iteroparous') {
         const reproResult = tickReproduction(currentReproduction, currentAnimal, newTime, config, state.rng);

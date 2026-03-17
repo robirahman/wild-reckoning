@@ -29,7 +29,7 @@ export const DEER_METABOLISM: MetabolismConfig = {
   // slow weight gain (~0.5-1 lb/week). Base rate = 1100 → quality 0.3 = 330 intake
   // → 330 vs 255 BMR = +75 surplus. That's too high. Quality 0.25 = 275 → deficit
   // of 20 ≈ 0.6 lb/week loss. Reasonable for healthy deer with browse available.
-  baseForagingRate: 1100,           // kcal-units/turn at quality=1.0, foraging=3
+  baseForagingRate: 1200,           // kcal-units/turn at quality=1.0, foraging=3
   foragingBehaviorMultiplier: 0.15, // Each foraging level above/below 3 adds ±15%
 
   // ── Thermoregulation ──
@@ -37,8 +37,10 @@ export const DEER_METABOLISM: MetabolismConfig = {
   // Below LCT, each degree costs ~5 units → at -20°F (34 below), cost = 170 units
   lowerCriticalTemp: 14,            // F — with winter coat
   upperCriticalTemp: 86,            // F
-  coldCostPerDegree: 3,             // kcal-units per degree below LCT (with winter coat insulation)
-  winterMetabolicReduction: 0.25,  // 25% BMR reduction in winter (reduced thyroid, behavioral torpor)
+  // Real deer with full winter coat: thermally neutral down to -20F in still air.
+  // Reduced from 3: deer are among the best-insulated ungulates.
+  coldCostPerDegree: 1.5,           // kcal-units per degree below LCT (with winter coat insulation)
+  winterMetabolicReduction: 0.30,  // 30% BMR reduction in winter (reduced thyroid, behavioral torpor)
   insulationLossPerDamagePoint: 0.012, // 1.2% increase in cold cost per skin damage point
 
   // ── Immune ──

@@ -45,7 +45,7 @@ export const CHINOOK_SALMON_CONFIG: SpeciesConfig = {
     maxOldAgeChance: 0.95,
   },
 
-  diseaseDeathChanceAtCritical: 0.10,
+  diseaseDeathChanceAtCritical: 0.05,  // Reduced: wild salmon more resistant than farmed
   attentionBudget: 14,
 
   predationVulnerability: {

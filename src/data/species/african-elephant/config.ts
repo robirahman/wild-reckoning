@@ -61,6 +61,14 @@ export const AFRICAN_ELEPHANT_CONFIG: SpeciesConfig = {
 
   turnUnit: 'month',
   naturalHealingRate: 40,  // Must outpace cumulative event HEA drain over 500+ monthly turns
+
+  // Well-fed elephants invest body reserves into immune recovery.
+  // Real: elephants carry substantial fat (especially females) that fuels immune function.
+  weightBasedHealing: {
+    minWeight: 5000,        // Only when above healthy adult weight
+    healPerTurn: 8,         // HEA restored per month
+    weightCostPerHeal: 20,  // lbs lost per healing turn
+  },
   attentionBudget: 22,
 
   seasonalWeight: {

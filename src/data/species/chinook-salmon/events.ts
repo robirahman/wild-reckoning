@@ -559,7 +559,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     subEvents: [
       {
         eventId: 'sea-lice-infection',
-        chance: 0.25,
+        chance: 0.10, // Real wild salmon: ~5-15% prevalence (reduced from 0.25)
         conditions: [
           { type: 'no_parasite', parasiteId: 'sea-lice' },
         ],
@@ -574,8 +574,8 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     conditions: [
       { type: 'season', seasons: ['spring', 'summer'] },
     ],
-    weight: 12,
-    cooldown: 5,
+    weight: 6,
+    cooldown: 10,
     tags: ['health'],
   },
 
@@ -1076,7 +1076,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     subEvents: [
       {
         eventId: 'net-scar-lice',
-        chance: 0.3,
+        chance: 0.12,
         conditions: [
           { type: 'no_parasite', parasiteId: 'sea-lice' },
         ],

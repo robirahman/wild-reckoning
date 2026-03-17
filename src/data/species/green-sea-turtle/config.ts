@@ -60,6 +60,15 @@ export const GREEN_SEA_TURTLE_CONFIG: SpeciesConfig = {
   naturalHealingRate: 35,  // Must outpace cumulative event HEA drain over 800+ monthly turns
   attentionBudget: 16,
 
+  // Well-fed turtles invest fat reserves into immune recovery.
+  // Trades 2 lbs/month for +10 HEA when above adult weight (250 lbs).
+  // Real: healthy green turtles carry substantial fat that fuels immune function.
+  weightBasedHealing: {
+    minWeight: 250,         // Only heals when above standard adult weight
+    healPerTurn: 10,        // HEA restored per turn
+    weightCostPerHeal: 2,   // lbs lost per healing turn
+  },
+
   thermalProfile: {
     type: 'ectotherm',
     heatPenalty: 3.0,
