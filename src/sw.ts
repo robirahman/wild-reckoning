@@ -1,4 +1,6 @@
 /// <reference lib="webworker" />
+/// <reference types="vite/client" />
+/// <reference types="vite-plugin-pwa/client" />
 import { GameAPI } from './api/GameAPI';
 import { createGameStore } from './store/gameStore';
 import { serializeState, deserializeState } from './store/persistence';
