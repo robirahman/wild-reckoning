@@ -101,7 +101,7 @@ const wolfInjuries: Record<string, InjuryDefinition> = {
       },
       {
         severity: 'moderate',
-        description: 'A deep throat grip from a dominance fight that tore through muscle and compressed the trachea. You cough blood for hours afterward. Breathing is labored, especially at a run, and swallowing food sends pain radiating through your neck. The bruising is hidden beneath your fur but the damage runs deep — crushed cartilage, torn fascia, a windpipe that whistles faintly with every breath.',
+        description: 'A deep throat grip from a dominance fight that tore through muscle and compressed the trachea. You cough blood for hours afterward. Breathing is labored, especially at a run, and swallowing food sends pain radiating through your neck. The bruising is hidden beneath your fur but the damage runs deep: crushed cartilage, torn fascia, a windpipe that whistles faintly with every breath.',
         statEffects: [
           { stat: StatId.HEA, amount: -10 },
           { stat: StatId.HOM, amount: 10 },

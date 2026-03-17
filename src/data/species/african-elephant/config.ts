@@ -62,10 +62,10 @@ export const AFRICAN_ELEPHANT_CONFIG: SpeciesConfig = {
   attentionBudget: 22,
 
   seasonalWeight: {
-    spring: 6.0,    // Wet season start — good grazing (scaled for monthly turns)
-    summer: 4.0,    // Wet season — moderate
-    autumn: 0.0,    // Dry season approach — neutral
-    winter: -8.0,   // Dry season — significant scarcity
+    spring: 6.0,    // Wet season start, good grazing (scaled for monthly turns)
+    summer: 4.0,    // Wet season, moderate
+    autumn: 0.0,    // Dry season approach, neutral
+    winter: -8.0,   // Dry season, significant scarcity
     foragingBonus: 1.6,
   },
 

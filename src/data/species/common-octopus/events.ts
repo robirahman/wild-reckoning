@@ -168,7 +168,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
     weight: 18,
     cooldown: 8,
     tags: ['environmental'],
-    footnote: 'Octopuses in Indonesia have been observed carrying coconut shell halves and using them as portable shelters — a clear example of tool use, previously thought to be limited to vertebrates.',
+    footnote: 'Octopuses in Indonesia have been observed carrying coconut shell halves and using them as portable shelters, a clear example of tool use, previously thought to be limited to vertebrates.',
   },
 
   {
@@ -438,7 +438,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
     ],
     weight: 20,
     tags: ['environmental'],
-    footnote: 'Octopuses are prolific builders. They arrange rocks, shells, and debris around their den entrances, and some species create "octopus gardens" — middens of shells and construction materials that become reef microhabitats.',
+    footnote: 'Octopuses are prolific builders. They arrange rocks, shells, and debris around their den entrances, and some species create "octopus gardens," middens of shells and construction materials that become reef microhabitats.',
   },
 
   // ════════════════════════════════════════════════
@@ -633,7 +633,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
     weight: 11,
     cooldown: 5,
     tags: ['danger'],
-    footnote: 'Octopuses can create "pseudomorphs" — ink decoys that maintain their shape in the water due to a mucus binder. Predators attack the decoy while the octopus escapes, often turning white to maximize the contrast.',
+    footnote: 'Octopuses can create "pseudomorphs," ink decoys that maintain their shape in the water due to a mucus binder. Predators attack the decoy while the octopus escapes, often turning white to maximize the contrast.',
   },
 
   // ════════════════════════════════════════════════
@@ -760,7 +760,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
     weight: 10,
     cooldown: 3,
     tags: ['social', 'rival', 'territory'],
-    footnote: 'Male common octopuses (Octopus vulgaris) engage in ritualized arm-wrestling contests over dens and mating access. Fights involve intertwining arms and attempting to overpower the opponent through grip strength. Smaller males frequently adopt a "sneaker" strategy, mimicking female coloration to bypass aggressive guarder males — a tactic documented across many cephalopod and fish species.',
+    footnote: 'Male common octopuses (Octopus vulgaris) engage in ritualized arm-wrestling contests over dens and mating access. Fights involve intertwining arms and attempting to overpower the opponent through grip strength. Smaller males frequently adopt a "sneaker" strategy, mimicking female coloration to bypass aggressive guarder males, a tactic documented across many cephalopod and fish species.',
   },
 
   // ════════════════════════════════════════════════
@@ -819,7 +819,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
     ],
     weight: 22,
     tags: ['social', 'reproduction'],
-    footnote: 'Male octopuses have been observed mimicking female color patterns to sneak past rival males and mate — a "sneaker male" strategy also seen in fish and insects.',
+    footnote: 'Male octopuses have been observed mimicking female color patterns to sneak past rival males and mate, a "sneaker male" strategy also seen in fish and insects.',
   },
 
   {
@@ -931,7 +931,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
     weight: 16,
     cooldown: 8,
     tags: ['reproduction', 'female-competition'],
-    footnote: 'Female octopuses compete for optimal brooding dens. Water flow through the den is critical — it delivers oxygen to the developing eggs and prevents fungal growth. Poorly ventilated dens can lose 50% or more of eggs to suffocation.',
+    footnote: 'Female octopuses compete for optimal brooding dens. Water flow through the den is critical: it delivers oxygen to the developing eggs and prevents fungal growth. Poorly ventilated dens can lose 50% or more of eggs to suffocation.',
   },
 
   {
@@ -1008,7 +1008,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
     weight: 25,
     cooldown: 2,
     tags: ['health'],
-    footnote: 'Female octopuses stop eating entirely after laying eggs and brood their clutch for months, aerating and cleaning the eggs until they hatch. The mother dies shortly after — her optic gland triggers a cascade of self-destruction. This is not a choice but a biological program.',
+    footnote: 'Female octopuses stop eating entirely after laying eggs and brood their clutch for months, aerating and cleaning the eggs until they hatch. The mother dies shortly after. Her optic gland triggers a cascade of self-destruction. This is not a choice but a biological program.',
   },
 
   {
@@ -1033,7 +1033,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
     weight: 22,
     cooldown: 2,
     tags: ['health'],
-    footnote: 'Male octopuses also die after mating, though less dramatically than females. The optic gland triggers senescence — a programmed deterioration of the body. Researchers who removed the optic gland in lab octopuses found the animals lived significantly longer and resumed eating.',
+    footnote: 'Male octopuses also die after mating, though less dramatically than females. The optic gland triggers senescence, a programmed deterioration of the body. Researchers who removed the optic gland in lab octopuses found the animals lived significantly longer and resumed eating.',
   },
 
   {
@@ -1235,7 +1235,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
     weight: 8,
     cooldown: 8,
     tags: ['danger'],
-    footnote: 'Octopuses are among the few marine animals that can reliably escape fishing nets by squeezing through the mesh. Their only rigid structure is the beak — everything else is compressible soft tissue.',
+    footnote: 'Octopuses are among the few marine animals that can reliably escape fishing nets by squeezing through the mesh. Their only rigid structure is the beak. Everything else is compressible soft tissue.',
   },
 
   {
@@ -1300,7 +1300,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
     weight: 10,
     cooldown: 12,
     tags: ['health'],
-    footnote: 'Octopus arms can regenerate fully after amputation, though the process takes weeks to months. Each arm contains about two-thirds of the octopus\'s neurons, and each arm can act semi-independently — a severed arm will continue to grasp and explore for hours.',
+    footnote: 'Octopus arms can regenerate fully after amputation, though the process takes weeks to months. Each arm contains about two-thirds of the octopus\'s neurons, and each arm can act semi-independently. A severed arm will continue to grasp and explore for hours.',
   },
   {
     id: 'octopus-vibrio-exposure',

@@ -6,7 +6,7 @@ export const POISON_DART_FROG_PARASITES: Record<string, ParasiteDefinition> = {
     id: 'chytrid-fungus',
     name: 'Chytrid Fungus',
     scientificName: 'Batrachochytrium dendrobatidis',
-    description: 'The most devastating amphibian pathogen on Earth. Bd infects the keratinized skin cells that amphibians rely on for respiration and osmoregulation. In frogs, the skin is not just a barrier — it is a lung, a kidney, and a chemical defense system. Chytrid disrupts all three. Global declines of hundreds of frog species trace directly to this fungus, spread by human trade in amphibians.',
+    description: 'The most devastating amphibian pathogen on Earth. Bd infects the keratinized skin cells that amphibians rely on for respiration and osmoregulation. In frogs, the skin is not just a barrier. It is a lung, a kidney, and a chemical defense system. Chytrid disrupts all three. Global declines of hundreds of frog species trace directly to this fungus, spread by human trade in amphibians.',
     transmissionMethod: 'Waterborne zoospores contact permeable skin during pool visits or rain',
     affectedSpecies: ['poison-dart-frog'],
     stages: [

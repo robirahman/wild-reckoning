@@ -14,7 +14,7 @@ export const HONEYBEE_WORKER_INJURIES: Record<string, InjuryDefinition> = {
     severityLevels: [
       {
         severity: 'minor',
-        description: 'A small tear in one wing membrane. Flight is slightly less efficient — you burn more energy per trip.',
+        description: 'A small tear in one wing membrane. Flight is slightly less efficient, and you burn more energy per trip.',
         statEffects: [
           { stat: StatId.HEA, amount: -3 },
           { stat: StatId.HOM, amount: 4 },
@@ -37,7 +37,7 @@ export const HONEYBEE_WORKER_INJURIES: Record<string, InjuryDefinition> = {
       },
       {
         severity: 'severe',
-        description: 'Your wings are shredded. You cannot generate enough lift to fly. You are grounded — a forager who cannot forage, a worker who cannot work. The colony has no use for you.',
+        description: 'Your wings are shredded. You cannot generate enough lift to fly. You are grounded, a forager who cannot forage, a worker who cannot work. The colony has no use for you.',
         statEffects: [
           { stat: StatId.HEA, amount: -15 },
           { stat: StatId.HOM, amount: 16 },
@@ -75,7 +75,7 @@ export const HONEYBEE_WORKER_INJURIES: Record<string, InjuryDefinition> = {
       },
       {
         severity: 'moderate',
-        description: 'A leg is partially crushed — bent at an unnatural angle. Your pollen baskets on the hind legs are compromised. You can walk but your foraging capacity is reduced.',
+        description: 'A leg is partially crushed, bent at an unnatural angle. Your pollen baskets on the hind legs are compromised. You can walk but your foraging capacity is reduced.',
         statEffects: [
           { stat: StatId.HEA, amount: -8 },
           { stat: StatId.HOM, amount: 8 },
@@ -86,7 +86,7 @@ export const HONEYBEE_WORKER_INJURIES: Record<string, InjuryDefinition> = {
       },
       {
         severity: 'severe',
-        description: 'An entire leg is gone — torn off by a predator or caught in a mechanism. Insects cannot regenerate limbs. You will compensate with your remaining five legs, but your balance and carrying capacity are permanently diminished.',
+        description: 'An entire leg is gone, torn off by a predator or caught in a mechanism. Insects cannot regenerate limbs. You will compensate with your remaining five legs, but your balance and carrying capacity are permanently diminished.',
         statEffects: [
           { stat: StatId.HEA, amount: -12 },
           { stat: StatId.HOM, amount: 14 },
@@ -130,7 +130,7 @@ export const HONEYBEE_WORKER_INJURIES: Record<string, InjuryDefinition> = {
       },
       {
         severity: 'severe',
-        description: 'Your sting apparatus is destroyed. You have already stung once — the barbed sting pulled free from your abdomen, taking your venom sac and part of your digestive tract with it. This is fatal. Every honeybee who stings a mammal dies for the colony.',
+        description: 'Your sting apparatus is destroyed. You have already stung once. The barbed sting pulled free from your abdomen, taking your venom sac and part of your digestive tract with it. This is fatal. Every honeybee who stings a mammal dies for the colony.',
         statEffects: [
           { stat: StatId.HEA, amount: -30 },
         ],

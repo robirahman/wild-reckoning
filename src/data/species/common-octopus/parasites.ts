@@ -6,7 +6,7 @@ export const COMMON_OCTOPUS_PARASITES: Record<string, ParasiteDefinition> = {
     id: 'dicyemid-parasite',
     name: 'Dicyemid Parasite',
     scientificName: 'Dicyema typus',
-    description: 'A bizarre, simple organism found exclusively in cephalopod kidneys. Dicyemids are among the most anatomically simple multicellular animals — just 10-40 cells arranged in a worm-like body. They are so common in octopuses that some researchers consider them commensals rather than parasites, but heavy infections can impair kidney function and osmoregulation.',
+    description: 'A bizarre, simple organism found exclusively in cephalopod kidneys. Dicyemids are among the most anatomically simple multicellular animals, just 10-40 cells arranged in a worm-like body. They are so common in octopuses that some researchers consider them commensals rather than parasites, but heavy infections can impair kidney function and osmoregulation.',
     transmissionMethod: 'Waterborne infusoriform larvae invade the renal appendages',
     affectedSpecies: ['common-octopus'],
     stages: [
@@ -55,7 +55,7 @@ export const COMMON_OCTOPUS_PARASITES: Record<string, ParasiteDefinition> = {
     id: 'aggregata-coccidian',
     name: 'Coccidian Parasite',
     scientificName: 'Aggregata octopiana',
-    description: 'A protozoan parasite transmitted through infected crabs — the octopus\'s primary prey. The parasite invades the intestinal wall, forming cysts that destroy the gut lining and severely impair nutrient absorption. In the Mediterranean, infection rates in wild octopuses can exceed 90%.',
+    description: 'A protozoan parasite transmitted through infected crabs, the octopus\'s primary prey. The parasite invades the intestinal wall, forming cysts that destroy the gut lining and severely impair nutrient absorption. In the Mediterranean, infection rates in wild octopuses can exceed 90%.',
     transmissionMethod: 'Ingestion of infected crustacean intermediate hosts',
     affectedSpecies: ['common-octopus'],
     stages: [
@@ -121,7 +121,7 @@ export const COMMON_OCTOPUS_PARASITES: Record<string, ParasiteDefinition> = {
       },
       {
         severity: 'moderate',
-        description: 'The infection has spread along the arm. Necrotic tissue is visible — pale patches where the skin is dying. You are holding the affected arm curled against your body.',
+        description: 'The infection has spread along the arm. Necrotic tissue is visible, pale patches where the skin is dying. You are holding the affected arm curled against your body.',
         statEffects: [
           { stat: StatId.IMM, amount: 14 },
           { stat: StatId.HEA, amount: -10 },

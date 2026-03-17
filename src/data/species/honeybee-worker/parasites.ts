@@ -73,7 +73,7 @@ export const HONEYBEE_WORKER_PARASITES: Record<string, ParasiteDefinition> = {
       },
       {
         severity: 'moderate',
-        description: 'The Nosema spores have multiplied dramatically. Your midgut lining is badly damaged and you are losing nutrients faster than you can absorb them. Your navigation is becoming unreliable — you sometimes forget the way back to the hive.',
+        description: 'The Nosema spores have multiplied dramatically. Your midgut lining is badly damaged and you are losing nutrients faster than you can absorb them. Your navigation is becoming unreliable. You sometimes forget the way back to the hive.',
         statEffects: [
           { stat: StatId.IMM, amount: 14 },
           { stat: StatId.HEA, amount: -10 },
@@ -86,7 +86,7 @@ export const HONEYBEE_WORKER_PARASITES: Record<string, ParasiteDefinition> = {
       },
       {
         severity: 'severe',
-        description: 'Your gut is destroyed. You defecate inside the hive — a sign of terminal infection that alarms your nestmates. Your flight muscles are atrophying. You will not survive another week.',
+        description: 'Your gut is destroyed. You defecate inside the hive, a sign of terminal infection that alarms your nestmates. Your flight muscles are atrophying. You will not survive another week.',
         statEffects: [
           { stat: StatId.IMM, amount: 22 },
           { stat: StatId.HEA, amount: -22 },

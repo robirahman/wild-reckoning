@@ -64,10 +64,10 @@ export const GRAY_WOLF_CONFIG: SpeciesConfig = {
   },
 
   seasonalWeight: {
-    spring: 0.8,     // Good gain — prey abundant after winter die-off
-    summer: 0.4,     // Moderate gain — pup rearing demands energy
-    autumn: 0.6,     // Good gain — prey fattened for winter
-    winter: -0.8,    // Loss — prey scarce and difficult to catch
+    spring: 0.8,     // Good gain, prey abundant after winter die-off
+    summer: 0.4,     // Moderate gain, pup rearing demands energy
+    autumn: 0.6,     // Good gain, prey fattened for winter
+    winter: -0.8,    // Loss, prey scarce and difficult to catch
     foragingBonus: 0.4,  // +0.4 to +2.0 based on hunting setting
   },
 

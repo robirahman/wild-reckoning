@@ -49,7 +49,7 @@ export const MONARCH_BUTTERFLY_PARASITES: Record<string, ParasiteDefinition> = {
       },
       {
         severity: 'critical',
-        description: 'Your body is riddled with OE spores. Your wings are too deformed to achieve sustained flight. You cling to milkweed stems, unable to migrate, unable to feed effectively. Every movement sheds thousands of spores onto the plants below — infecting the next generation.',
+        description: 'Your body is riddled with OE spores. Your wings are too deformed to achieve sustained flight. You cling to milkweed stems, unable to migrate, unable to feed effectively. Every movement sheds thousands of spores onto the plants below, infecting the next generation.',
         statEffects: [
           { stat: StatId.HEA, amount: -35 },
         ],
@@ -83,7 +83,7 @@ export const MONARCH_BUTTERFLY_PARASITES: Record<string, ParasiteDefinition> = {
       },
       {
         severity: 'moderate',
-        description: 'The tachinid larva has hatched and burrowed into your body. It is feeding on your non-vital tissues, growing steadily. You feel a deep wrongness — a presence inside you, consuming you slowly.',
+        description: 'The tachinid larva has hatched and burrowed into your body. It is feeding on your non-vital tissues, growing steadily. You feel a deep wrongness, a presence inside you, consuming you slowly.',
         statEffects: [
           { stat: StatId.HEA, amount: -12 },
           { stat: StatId.HOM, amount: 18 },
@@ -96,7 +96,7 @@ export const MONARCH_BUTTERFLY_PARASITES: Record<string, ParasiteDefinition> = {
       },
       {
         severity: 'severe',
-        description: 'The tachinid larvae are consuming your vital tissues. Your body is being hollowed out from the inside. There is no recovery from this — the parasitoid will emerge from your body to continue its own life cycle. You are dying.',
+        description: 'The tachinid larvae are consuming your vital tissues. Your body is being hollowed out from the inside. There is no recovery from this. The parasitoid will emerge from your body to continue its own life cycle. You are dying.',
         statEffects: [
           { stat: StatId.HEA, amount: -30 },
           { stat: StatId.HOM, amount: 30 },

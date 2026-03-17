@@ -39,7 +39,7 @@ export const POISON_DART_FROG_INJURIES: Record<string, InjuryDefinition> = {
       },
       {
         severity: 'severe',
-        description: 'The leg is broken or the joint is shattered. You cannot jump at all — only drag yourself through the leaf litter. Hunting is nearly impossible. Without the ability to leap, you are vulnerable to every ground predator in the forest.',
+        description: 'The leg is broken or the joint is shattered. You cannot jump at all, only drag yourself through the leaf litter. Hunting is nearly impossible. Without the ability to leap, you are vulnerable to every ground predator in the forest.',
         statEffects: [
           { stat: StatId.HEA, amount: -15 },
           { stat: StatId.HOM, amount: 14 },
@@ -154,7 +154,7 @@ export const POISON_DART_FROG_INJURIES: Record<string, InjuryDefinition> = {
       },
       {
         severity: 'severe',
-        description: 'The eye is destroyed — ruptured by impact or infection. You are blind on one side. Predators can approach from your blind spot, and the tiny ants and mites you depend on are nearly impossible to catch with monocular vision alone.',
+        description: 'The eye is destroyed, ruptured by impact or infection. You are blind on one side. Predators can approach from your blind spot, and the tiny ants and mites you depend on are nearly impossible to catch with monocular vision alone.',
         statEffects: [
           { stat: StatId.HEA, amount: -14 },
           { stat: StatId.WIS, amount: -14 },

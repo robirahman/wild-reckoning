@@ -14,7 +14,7 @@ export const HONEYBEE_WORKER_BACKSTORIES: Backstory[] = [
   {
     type: 'summer-brood',
     label: 'Summer Brood',
-    description: 'You emerged in the peak of summer when the colony is at maximum strength — 60,000 workers. But summer broods live hard and die fast. The foragers before you wore their wings to translucent stubs in three weeks. The flowers are abundant but so are the pesticides, the predators, and the heat.',
+    description: 'You emerged in the peak of summer when the colony is at maximum strength, 60,000 workers. But summer broods live hard and die fast. The foragers before you wore their wings to translucent stubs in three weeks. The flowers are abundant but so are the pesticides, the predators, and the heat.',
     monthsSinceEvent: 0,
     statAdjustments: [
       { stat: 'HOM', amount: 8 },
@@ -25,7 +25,7 @@ export const HONEYBEE_WORKER_BACKSTORIES: Backstory[] = [
   {
     type: 'winter-brood',
     label: 'Winter Brood',
-    description: 'You are a winter bee — born in October when the colony is preparing for the cold months. Unlike your summer sisters who live six weeks, you may survive five months. Your body is packed with fat reserves and vitellogenin. The colony needs you to form the winter cluster, vibrating your flight muscles to keep the queen warm through the frozen months ahead.',
+    description: 'You are a winter bee, born in October when the colony is preparing for the cold months. Unlike your summer sisters who live six weeks, you may survive five months. Your body is packed with fat reserves and vitellogenin. The colony needs you to form the winter cluster, vibrating your flight muscles to keep the queen warm through the frozen months ahead.',
     monthsSinceEvent: 0,
     statAdjustments: [
       { stat: 'CLI', amount: 10 },

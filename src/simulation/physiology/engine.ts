@@ -302,10 +302,18 @@ export function tickPhysiologyEngine(input: PhysiologyTickInput): PhysiologyTick
 
   if (physio.negativeEnergyBalance && physio.avgCaloricBalance < -50) {
     if (bodyCondition <= 1) {
-      narratives.push('Your ribs press against your hide like a cage too small for what\'s inside. Every step costs more than the last.');
+      narratives.push('Your ribs press out against your hide. Standing takes effort. The hunger is constant, a hollow ache behind your sternum that eating does not fix.');
     } else if (bodyCondition <= 2) {
-      narratives.push('The persistent ache of hunger has become a companion. Your body is drawing on its last reserves.');
+      narratives.push('Your hip bones jut. The hunger sharpens each morning, fades to a dull weight by midday, sharpens again at dusk.');
     }
+  }
+
+  // Near-starvation sensory warnings (before death threshold)
+  const projWeight = animal.weight + weightChange;
+  const starvThresh = config.weight.starvationDeath;
+  const warnThresh = starvThresh * 1.3; // ~45 lbs for deer (starvationDeath=35)
+  if (projWeight <= warnThresh && projWeight > starvThresh && !deathCause) {
+    narratives.push('Your legs tremble when you stand. The ground tilts. You lower your head to browse but your jaw moves slowly, as if the muscles have forgotten their work.');
   }
 
   if (physio.coreTemperatureDeviation < -3 && !deathCause) {
@@ -323,7 +331,7 @@ export function tickPhysiologyEngine(input: PhysiologyTickInput): PhysiologyTick
   const projectedWeight = animal.weight + weightChange;
   if (projectedWeight <= config.weight.starvationDeath) {
     deathCause = 'Starvation';
-    narratives.push('Your body has nothing left to burn. The hunger that has been gnawing at you for weeks finally wins.');
+    narratives.push('You fold your legs under you. The ground is cold. Your breathing slows. The hunger is gone now, replaced by a stillness that spreads from your core outward.');
   }
 
   return {

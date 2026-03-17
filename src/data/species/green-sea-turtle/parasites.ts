@@ -13,7 +13,7 @@ export const GREEN_SEA_TURTLE_PARASITES: Record<string, ParasiteDefinition> = {
     stages: [
       {
         severity: 'minor',
-        description: 'A few small, pale tumors have appeared on your skin — rubbery growths no larger than a coin. They do not yet impair your movement or vision, but your immune system is responding to the viral invasion.',
+        description: 'A few small, pale tumors have appeared on your skin, rubbery growths no larger than a coin. They do not yet impair your movement or vision, but your immune system is responding to the viral invasion.',
         statEffects: [
           { stat: StatId.IMM, amount: 5 },
         ],
@@ -195,7 +195,7 @@ export const GREEN_SEA_TURTLE_PARASITES: Record<string, ParasiteDefinition> = {
       },
       {
         severity: 'severe',
-        description: 'Your body is covered with leeches — dozens of them clustered on every patch of exposed skin. The blood loss is significant, and the wounds they leave behind are inflamed and infected. Your immune system is critically taxed, leaving you vulnerable to every pathogen in the water.',
+        description: 'Your body is covered with leeches, dozens of them clustered on every patch of exposed skin. The blood loss is significant, and the wounds they leave behind are inflamed and infected. Your immune system is critically taxed, leaving you vulnerable to every pathogen in the water.',
         statEffects: [
           { stat: StatId.IMM, amount: 18 },
           { stat: StatId.HEA, amount: -12 },
@@ -231,7 +231,7 @@ export const GREEN_SEA_TURTLE_PARASITES: Record<string, ParasiteDefinition> = {
       },
       {
         severity: 'moderate',
-        description: 'Barnacles encrust nearly every surface of your shell and have colonized the soft skin of your neck and flippers. Swimming is noticeably harder — you must work your flippers more vigorously to maintain speed. The constant drag is exhausting and you find yourself resting more often.',
+        description: 'Barnacles encrust nearly every surface of your shell and have colonized the soft skin of your neck and flippers. Swimming is noticeably harder. You must work your flippers more vigorously to maintain speed. The constant drag is exhausting and you find yourself resting more often.',
         statEffects: [
           { stat: StatId.HEA, amount: -6 },
           { stat: StatId.HOM, amount: 10 },

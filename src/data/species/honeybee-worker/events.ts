@@ -29,7 +29,7 @@ export const HONEYBEE_WORKER_EVENTS: GameEvent[] = [
       {
         id: 'quick-clean',
         label: 'Clean quickly',
-        description: 'Move fast — there are thousands of cells to prepare.',
+        description: 'Move fast. There are thousands of cells to prepare.',
         narrativeResult: 'You move through the cells fast. The queen skips one. Not clean enough. You move on to the next row.',
         statEffects: [
           { stat: StatId.ADV, amount: 3, label: '+ADV' },
@@ -72,7 +72,7 @@ export const HONEYBEE_WORKER_EVENTS: GameEvent[] = [
       {
         id: 'feed-standard',
         label: 'Feed standard portions',
-        description: 'Conserve your energy — there are many mouths to feed.',
+        description: 'Conserve your energy. There are many mouths to feed.',
         narrativeResult: 'Standard rations in each cell. Sufficient. Hundreds more cells to visit today.',
         statEffects: [
           { stat: StatId.WIS, amount: 2, label: '+WIS' },
@@ -154,7 +154,7 @@ export const HONEYBEE_WORKER_EVENTS: GameEvent[] = [
     weight: 14,
     cooldown: 4,
     tags: ['environmental'],
-    footnote: 'Beeswax hexagons are the most efficient structure for storing honey — they use the minimum amount of wax to create maximum storage volume. Bees produce about 8 pounds of honey to make 1 pound of wax.',
+    footnote: 'Beeswax hexagons are the most efficient structure for storing honey: they use the minimum amount of wax to create maximum storage volume. Bees produce about 8 pounds of honey to make 1 pound of wax.',
   },
 
   {
@@ -203,7 +203,7 @@ export const HONEYBEE_WORKER_EVENTS: GameEvent[] = [
     weight: 14,
     cooldown: 4,
     tags: ['danger'],
-    footnote: 'Japanese honeybees have evolved a remarkable defense against giant hornets: they form a "hot defensive bee ball" around the invader, raising the temperature to 47°C — above the hornet\'s lethal threshold but below the bees\'.',
+    footnote: 'Japanese honeybees have evolved a remarkable defense against giant hornets: they form a "hot defensive bee ball" around the invader, raising the temperature to 47°C, above the hornet\'s lethal threshold but below the bees\'.',
   },
 
   {
@@ -380,7 +380,7 @@ export const HONEYBEE_WORKER_EVENTS: GameEvent[] = [
       {
         id: 'round-dance',
         label: 'Simple round dance',
-        description: 'The source is close — just tell them it\'s nearby.',
+        description: 'The source is close. Just tell them it\'s nearby.',
         narrativeResult: 'You circle on the comb. Your sisters fan out in all directions from the hive. Some find the source. Others do not.',
         statEffects: [
           { stat: StatId.WIS, amount: 2, label: '+WIS' },
@@ -694,7 +694,7 @@ export const HONEYBEE_WORKER_EVENTS: GameEvent[] = [
     weight: 12,
     cooldown: 5,
     tags: ['health'],
-    footnote: 'Some honeybee populations have evolved "Varroa-sensitive hygiene" (VSH) — the ability to detect and remove mite-infested pupae from brood cells. This grooming behavior is one of the few natural defenses bees have against Varroa.',
+    footnote: 'Some honeybee populations have evolved "Varroa-sensitive hygiene" (VSH), the ability to detect and remove mite-infested pupae from brood cells. This grooming behavior is one of the few natural defenses bees have against Varroa.',
   },
 
   {

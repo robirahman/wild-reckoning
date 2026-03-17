@@ -29,7 +29,7 @@ export const COMMON_OCTOPUS_INJURIES: Record<string, InjuryDefinition> = {
       },
       {
         severity: 'moderate',
-        description: 'Half an arm is gone — torn away in a struggle. The wound has sealed itself with a clamp of muscle, but you have lost dozens of suckers and their chemoreceptors. Hunting and manipulating objects is noticeably harder.',
+        description: 'Half an arm is gone, torn away in a struggle. The wound has sealed itself with a clamp of muscle, but you have lost dozens of suckers and their chemoreceptors. Hunting and manipulating objects is noticeably harder.',
         statEffects: [
           { stat: StatId.HEA, amount: -8 },
           { stat: StatId.WIS, amount: -5 },
@@ -41,7 +41,7 @@ export const COMMON_OCTOPUS_INJURIES: Record<string, InjuryDefinition> = {
       },
       {
         severity: 'severe',
-        description: 'An entire arm has been ripped from the base. The wound is a raw crater of white muscle. This will take months to regenerate — if it regenerates at all. You are down to seven arms, and the missing one held your strongest suckers.',
+        description: 'An entire arm has been ripped from the base. The wound is a raw crater of white muscle. This will take months to regenerate, if it regenerates at all. You are down to seven arms, and the missing one held your strongest suckers.',
         statEffects: [
           { stat: StatId.HEA, amount: -15 },
           { stat: StatId.WIS, amount: -10 },
@@ -66,7 +66,7 @@ export const COMMON_OCTOPUS_INJURIES: Record<string, InjuryDefinition> = {
     severityLevels: [
       {
         severity: 'minor',
-        description: 'The distal third of one arm is torn and ragged — bitten during a grappling contest with another male. The suckers at the tip are gone, ripped away along with a strip of pale muscle. You can still taste and grip with the remaining length, but the precision is reduced. The arm will regenerate in time. Your kind has that luxury. But for now, every hunt is slightly clumsier, every grip slightly weaker.',
+        description: 'The distal third of one arm is torn and ragged, bitten during a grappling contest with another male. The suckers at the tip are gone, ripped away along with a strip of pale muscle. You can still taste and grip with the remaining length, but the precision is reduced. The arm will regenerate in time. Your kind has that luxury. But for now, every hunt is slightly clumsier, every grip slightly weaker.',
         statEffects: [
           { stat: StatId.HEA, amount: -3 },
           { stat: StatId.HOM, amount: 4 },
@@ -77,7 +77,7 @@ export const COMMON_OCTOPUS_INJURIES: Record<string, InjuryDefinition> = {
       },
       {
         severity: 'moderate',
-        description: 'Half the arm is gone — severed by the beak of a rival male during a vicious territorial grapple. The wound sealed itself within seconds, the muscles clamping shut with the same reflex that allows a severed arm to keep crawling on its own. But the loss is significant. Dozens of chemoreceptive suckers are gone, and with them a substantial portion of your ability to taste the water, manipulate objects, and anchor yourself during a jet escape. Regeneration will take weeks, and the replacement tissue is never quite as sensitive as the original.',
+        description: 'Half the arm is gone, severed by the beak of a rival male during a vicious territorial grapple. The wound sealed itself within seconds, the muscles clamping shut with the same reflex that allows a severed arm to keep crawling on its own. But the loss is significant. Dozens of chemoreceptive suckers are gone, and with them a substantial portion of your ability to taste the water, manipulate objects, and anchor yourself during a jet escape. Regeneration will take weeks, and the replacement tissue is never quite as sensitive as the original.',
         statEffects: [
           { stat: StatId.HEA, amount: -7 },
           { stat: StatId.WIS, amount: -4 },
@@ -123,7 +123,7 @@ export const COMMON_OCTOPUS_INJURIES: Record<string, InjuryDefinition> = {
       },
       {
         severity: 'severe',
-        description: 'Your beak is shattered. The chitin has split in multiple places and the underlying tissue is exposed. You cannot bite through crab shells at all. You are reduced to hunting soft-bodied prey — if you can find any.',
+        description: 'Your beak is shattered. The chitin has split in multiple places and the underlying tissue is exposed. You cannot bite through crab shells at all. You are reduced to hunting soft-bodied prey, if you can find any.',
         statEffects: [
           { stat: StatId.HEA, amount: -18 },
           { stat: StatId.HOM, amount: 16 },
@@ -157,7 +157,7 @@ export const COMMON_OCTOPUS_INJURIES: Record<string, InjuryDefinition> = {
       },
       {
         severity: 'moderate',
-        description: 'A deep tear in your mantle cavity. Water leaks in and out with every breath. Your jet propulsion is compromised — you can\'t generate enough pressure for a proper escape jet. Every predator encounter is now more dangerous.',
+        description: 'A deep tear in your mantle cavity. Water leaks in and out with every breath. Your jet propulsion is compromised. You can\'t generate enough pressure for a proper escape jet. Every predator encounter is now more dangerous.',
         statEffects: [
           { stat: StatId.HEA, amount: -12 },
           { stat: StatId.ADV, amount: 12 },

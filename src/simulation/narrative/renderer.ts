@@ -104,7 +104,7 @@ export function toDebriefingEntry(
   } else if (entityNames.length > 0) {
     summaryLine = entityNames.join(', ');
     if (effectSummaries.length > 0) {
-      summaryLine += ` — ${effectSummaries.join('; ')}`;
+      summaryLine += ` -- ${effectSummaries.join('; ')}`;
     }
   } else if (effectSummaries.length > 0) {
     summaryLine = effectSummaries.join('; ');
@@ -157,7 +157,7 @@ function composeOpening(
     }
 
     // Default: describe the entity directly
-    return `You become aware of ${name}.`;
+    return `A scent. ${name}, close.`;
   }
 
   // No entities: use atmospheric detail

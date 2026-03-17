@@ -85,7 +85,7 @@ export const FIG_WASP_PARASITES: Record<string, ParasiteDefinition> = {
       },
       {
         severity: 'severe',
-        description: 'The parasitoid has consumed most of your body. A non-pollinating wasp will emerge from your gall instead of you — another free-rider in a system built on cooperation.',
+        description: 'The parasitoid has consumed most of your body. A non-pollinating wasp will emerge from your gall instead of you, another free-rider in a system built on cooperation.',
         statEffects: [
           { stat: StatId.HEA, amount: -30 },
         ],

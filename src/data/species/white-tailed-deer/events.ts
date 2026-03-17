@@ -508,7 +508,7 @@ const deerEvents: GameEvent[] = [
         eventId: 'deer-doe-foreleg-strike-sub',
         chance: 0.15,
         narrativeText:
-          'Her foreleg comes down hard on your ribs — a sharp, cracking impact that drives the air from your lungs. You feel something give beneath the blow, cartilage or bone flexing past its limit.',
+          'Her foreleg comes down hard on your ribs. A sharp, cracking impact that drives the air from your lungs. You feel something give beneath the blow, cartilage or bone flexing past its limit.',
         footnote: '(Foreleg strike injury)',
         statEffects: [
           { stat: StatId.HEA, amount: -3, label: '-HEA' },
@@ -722,7 +722,7 @@ const deerEvents: GameEvent[] = [
     tags: ['seasonal', 'weather', 'herd'],
   },
 
-  // Rut ends — clears rut flags so the cycle resets each year
+  // Rut ends: clears rut flags so the cycle resets each year
   {
     id: 'deer-rut-ends',
     type: 'passive',
@@ -1010,7 +1010,7 @@ const deerEvents: GameEvent[] = [
   //  REPRODUCTION EVENTS
   // ══════════════════════════════════════════════
 
-  // Rut competition — healthy antlers
+  // Rut competition, healthy antlers
   {
     id: 'deer-rut-competition',
     type: 'active',
@@ -1099,7 +1099,7 @@ const deerEvents: GameEvent[] = [
         ],
     narrativeText:
           'A tine rakes across your face and catches the edge of your eye. White flash. Blood and fluid close the eye. You stagger sideways, half your field of vision gone. When the swelling eases enough to open it, what comes through is a smeared blur.',
-        footnote: '(Eye injured by antler tine — a common rut injury in mature bucks)',
+        footnote: '(Eye injured by antler tine, a common rut injury in mature bucks)',
         statEffects: [
           { stat: StatId.HEA, amount: -8, label: '-HEA' },
           { stat: StatId.TRA, amount: 8, label: '+TRA' },
@@ -1136,7 +1136,7 @@ const deerEvents: GameEvent[] = [
     tags: ['mating', 'social', 'danger', 'rut'],
   },
 
-  // Rut competition — fighting with a broken antler (higher risk, worse odds)
+  // Rut competition: fighting with a broken antler (higher risk, worse odds)
   {
     id: 'deer-rut-competition-injured',
     type: 'active',
@@ -1151,7 +1151,7 @@ const deerEvents: GameEvent[] = [
     choices: [
       {
         id: 'fight-rival-buck-injured',
-        label: 'Fight anyway — lopsided rack and all',
+        label: 'Fight anyway, lopsided rack and all',
         description: 'Your broken side cannot hold against his full rack.',
         statEffects: [
           { stat: StatId.HOM, amount: 15, label: '+HOM' },
@@ -1170,7 +1170,7 @@ const deerEvents: GameEvent[] = [
       },
       {
         id: 'bluff-rival-buck-injured',
-        label: 'Bluff — angle your good side toward him',
+        label: 'Bluff: angle your good side toward him',
         description: 'Show the intact side. He may not see the break.',
         statEffects: [
           { stat: StatId.WIS, amount: 5, label: '+WIS' },
@@ -1223,7 +1223,7 @@ const deerEvents: GameEvent[] = [
         ],
         narrativeText:
           'A tine drives into the muscle of your neck from the open side. Full force of his charge behind it. You wrench free. The hole is deep, already hot.',
-        footnote: '(Puncture wound — broken antler left an opening)',
+        footnote: '(Puncture wound: broken antler left an opening)',
         statEffects: [
           { stat: StatId.HEA, amount: -7, label: '-HEA' },
           { stat: StatId.HOM, amount: 6, label: '+HOM' },
@@ -1240,7 +1240,7 @@ const deerEvents: GameEvent[] = [
         ],
         narrativeText:
           'His tine slips past the broken side and rakes across your eye. White-hot pain, then the vision on that side goes dark. Blood sheets down your face. You stumble sideways, half your world gone.',
-        footnote: '(Eye gouged — the broken antler could not protect your face)',
+        footnote: '(Eye gouged: the broken antler could not protect your face)',
         statEffects: [
           { stat: StatId.HEA, amount: -10, label: '-HEA' },
           { stat: StatId.TRA, amount: 10, label: '+TRA' },

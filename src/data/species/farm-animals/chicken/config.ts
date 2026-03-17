@@ -31,7 +31,7 @@ export const CHICKEN_CONFIG: SpeciesConfig = {
   },
 
   weight: {
-    starvationDeath: 0.05,  // Below starting weight — chicks are tiny but fed immediately
+    starvationDeath: 0.05,  // Below starting weight; chicks are tiny but fed immediately
     starvationDebuff: 0.08,
     vulnerabilityThreshold: 3.5,
     minFloor: 0.05,
@@ -72,7 +72,7 @@ export const CHICKEN_CONFIG: SpeciesConfig = {
     summer: 0.030,  // Heat stress in packed sheds
     autumn: 0.035,
     winter: 0.033,
-    foragingBonus: 0,  // No foraging in confinement — all feed is delivered
+    foragingBonus: 0,  // No foraging in confinement; all feed is delivered
   },
 
   agePhases: [

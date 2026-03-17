@@ -4,7 +4,7 @@ export const ARCTIC_TERN_BACKSTORIES: Backstory[] = [
   {
     type: 'colony-fledged',
     label: 'Colony Fledged',
-    description: 'You fledged from a large, healthy colony on the Icelandic coast, raised by attentive parents who took turns guarding the nest and fishing. The colony\'s collective defense against skuas kept you safe during your most vulnerable weeks. You are strong, well-fed, and about to face the first great challenge of your life — the southward migration.',
+    description: 'You fledged from a large, healthy colony on the Icelandic coast, raised by attentive parents who took turns guarding the nest and fishing. The colony\'s collective defense against skuas kept you safe during your most vulnerable weeks. You are strong, well-fed, and about to face the first great challenge of your life: the southward migration.',
     monthsSinceEvent: 0,
     statAdjustments: [
       { stat: 'HEA', amount: 8 },
@@ -14,7 +14,7 @@ export const ARCTIC_TERN_BACKSTORIES: Backstory[] = [
   {
     type: 'first-year-migrant',
     label: 'First-Year Migrant',
-    description: 'You survived your first migration south — a harrowing journey of 12,000 miles over open ocean. You arrived at the Antarctic feeding grounds thin and exhausted but alive. The journey taught you to read wind patterns, find fish in the open sea, and endure storms that would kill most birds. You are a year old and have already traveled farther than most animals will in a lifetime.',
+    description: 'You survived your first migration south, a harrowing journey of 12,000 miles over open ocean. You arrived at the Antarctic feeding grounds thin and exhausted but alive. The journey taught you to read wind patterns, find fish in the open sea, and endure storms that would kill most birds. You are a year old and have already traveled farther than most animals will in a lifetime.',
     monthsSinceEvent: 0,
     statAdjustments: [
       { stat: 'TRA', amount: 8 },

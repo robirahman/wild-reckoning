@@ -242,7 +242,7 @@ export const AFRICAN_ELEPHANT_INJURIES: Record<string, InjuryDefinition> = {
       {
         severity: 'minor',
         description:
-          'His tusk caught you glancing as you twisted away — a shallow furrow gouged through your thick hide, weeping a slow line of blood. The wound burns in the savanna dust but has not penetrated the muscle wall. It will scar into another pale line among many, a record written in skin of what it costs to compete.',
+          'His tusk caught you glancing as you twisted away, leaving a shallow furrow gouged through your thick hide, weeping a slow line of blood. The wound burns in the savanna dust but has not penetrated the muscle wall. It will scar into another pale line among many, a record written in skin of what it costs to compete.',
         statEffects: [
           { stat: StatId.HEA, amount: -5 },
           { stat: StatId.TRA, amount: 4 },
@@ -254,7 +254,7 @@ export const AFRICAN_ELEPHANT_INJURIES: Record<string, InjuryDefinition> = {
       {
         severity: 'moderate',
         description:
-          'He drove his tusk into you with the full force of a six-ton body behind it. The ivory penetrated deep into the muscle, and when he wrenched his head sideways the wound tore open wide — a gaping puncture that pulses blood with every heartbeat. Flies find it within minutes. The heat will breed infection in the torn tissue, and each step sends a sickening throb through the wound. You have been opened by a weapon that elephants have wielded against each other for thirty million years.',
+          'He drove his tusk into you with the full force of a six-ton body behind it. The ivory penetrated deep into the muscle, and when he wrenched his head sideways the wound tore open wide, a gaping puncture that pulses blood with every heartbeat. Flies find it within minutes. The heat will breed infection in the torn tissue, and each step sends a sickening throb through the wound. You have been opened by a weapon that elephants have wielded against each other for thirty million years.',
         statEffects: [
           { stat: StatId.HEA, amount: -14 },
           { stat: StatId.HOM, amount: 12 },
@@ -276,7 +276,7 @@ export const AFRICAN_ELEPHANT_INJURIES: Record<string, InjuryDefinition> = {
       {
         severity: 'minor',
         description:
-          'The impact chipped the tip of your tusk — a wedge of ivory snapped clean off when it struck the bony plate of his skull. The break is cosmetic more than functional, but the exposed dentin aches with a dull, persistent throb. A tusk tip lost is a tusk tip gone forever. Ivory does not regenerate.',
+          'The impact chipped the tip of your tusk. A wedge of ivory snapped clean off when it struck the bony plate of his skull. The break is cosmetic more than functional, but the exposed dentin aches with a dull, persistent throb. A tusk tip lost is a tusk tip gone forever. Ivory does not regenerate.',
         statEffects: [
           { stat: StatId.HEA, amount: -4 },
           { stat: StatId.HOM, amount: 5 },
@@ -288,7 +288,7 @@ export const AFRICAN_ELEPHANT_INJURIES: Record<string, InjuryDefinition> = {
       {
         severity: 'moderate',
         description:
-          'A sickening crack split the air as your tusks locked and twisted — and then the resistance vanished as your tusk fractured deep, near the base where ivory meets skull. The broken end is a jagged, splintered ruin, the nerve inside exposed and screaming. Blood and pulp ooze from the fracture line. You have lost your primary weapon and digging tool in a single catastrophic moment. The tusk will never regrow. The nerve may never stop aching. Every future fight, every stripped bark, every dug waterhole will be harder for the rest of your life.',
+          'A sickening crack split the air as your tusks locked and twisted, and then the resistance vanished as your tusk fractured deep, near the base where ivory meets skull. The broken end is a jagged, splintered ruin, the nerve inside exposed and screaming. Blood and pulp ooze from the fracture line. You have lost your primary weapon and digging tool in a single catastrophic moment. The tusk will never regrow. The nerve may never stop aching. Every future fight, every stripped bark, every dug waterhole will be harder for the rest of your life.',
         statEffects: [
           { stat: StatId.HEA, amount: -12 },
           { stat: StatId.HOM, amount: 15 },
@@ -310,7 +310,7 @@ export const AFRICAN_ELEPHANT_INJURIES: Record<string, InjuryDefinition> = {
       {
         severity: 'minor',
         description:
-          'He grabbed your ear in his trunk and wrenched sideways, tearing a ragged notch through the thin cartilage. The pain was sharp and immediate — ears are laced with blood vessels, and the tear bleeds freely down the side of your head, attracting clouds of flies. The wound itself is not dangerous, but every elephant who sees you will read the torn edge like a page from your history. It will never grow back smooth.',
+          'He grabbed your ear in his trunk and wrenched sideways, tearing a ragged notch through the thin cartilage. The pain was sharp and immediate, as ears are laced with blood vessels, and the tear bleeds freely down the side of your head, attracting clouds of flies. The wound itself is not dangerous, but every elephant who sees you will read the torn edge like a page from your history. It will never grow back smooth.',
         statEffects: [
           { stat: StatId.HEA, amount: -3 },
           { stat: StatId.TRA, amount: 3 },

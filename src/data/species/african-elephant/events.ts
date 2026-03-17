@@ -512,7 +512,7 @@ export const AFRICAN_ELEPHANT_EVENTS: GameEvent[] = [
         chance: 0.10,
         narrativeText:
           'Your tusks lock. You twist against each other, thousands of pounds of torque on the ivory. A percussive crack travels through your skull. Your tusk has fractured. The broken end drops into the churned earth. The exposed nerve screams.',
-        footnote: '(Tusk breakage — tusks do not regrow)',
+        footnote: '(Tusk breakage, tusks do not regrow)',
         statEffects: [
           { stat: StatId.HEA, amount: -5, label: '-HEA' },
           { stat: StatId.TRA, amount: 5, label: '+TRA' },
@@ -1481,7 +1481,7 @@ export const AFRICAN_ELEPHANT_EVENTS: GameEvent[] = [
         chance: 0.10,
         narrativeText:
           'Your tusks slam together. Neither yields. The angle shifts and force concentrates along a fault line in the ivory. A crack. Half your tusk shears away and drops to the ground, trailing blood from the exposed pulp cavity.',
-        footnote: '(Tusk breakage — tusks do not regrow)',
+        footnote: '(Tusk breakage, tusks do not regrow)',
         statEffects: [
           { stat: StatId.HEA, amount: -5, label: '-HEA' },
           { stat: StatId.TRA, amount: 5, label: '+TRA' },
@@ -1540,7 +1540,7 @@ export const AFRICAN_ELEPHANT_EVENTS: GameEvent[] = [
       {
         id: 'tighten-formation',
         label: 'Tighten the herd formation',
-        description: 'Keep the calves in the center — deny them an opening',
+        description: 'Keep the calves in the center. Deny them an opening',
         statEffects: [
           { stat: StatId.TRA, amount: 5, label: '+TRA' },
           { stat: StatId.WIS, amount: 3, label: '+WIS' },

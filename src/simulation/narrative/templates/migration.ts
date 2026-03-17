@@ -13,10 +13,10 @@ export interface MigrationUrgeFragment {
 }
 
 export const MIGRATION_URGES: MigrationUrgeFragment[] = [
-  { season: 'autumn', text: 'Something deep in your body stirs. Not a thought, but a pull, a directional certainty inherited from your mother and her mother before her.' },
-  { season: 'autumn', text: 'The first killing frost settles in overnight, and with it comes a restlessness you cannot name. Your body knows the way even if your mind does not.' },
+  { season: 'autumn', text: 'Something deep in your body stirs. A pull southwest, below thought, below intention. Your legs angle that direction when you stop paying attention.' },
+  { season: 'autumn', text: 'The first killing frost settles overnight. A restlessness settles with it. You pace the tree line, circling back southwest each time.' },
   { season: 'autumn', text: 'You find yourself drifting southwest during your daily wanderings, drawn by a scent trail laid down by generations of hooves before yours.' },
-  { season: 'spring', text: 'The snow is retreating and something in you is retreating with it. The huddled, enduring patience of winter giving way to a northward pull.' },
+  { season: 'spring', text: 'The snow is retreating. Your legs carry you north without deciding to. The tight, still posture of winter loosens in your shoulders.' },
   { season: 'spring', text: 'A warm wind from the north carries the scent of green. New growth, tender shoots, the first herbs pushing through the thawing soil. The pull is irresistible.' },
   { season: 'spring', text: 'One by one, the deer begin to drift away from the yard, following the retreating snow line northward. The herd instinct says: follow.' },
   { season: 'autumn', text: 'The first frost silvers the grass at dawn and something tightens in your chest, a cold-triggered urgency that says: move now, or the snow will bury you where you stand.' },
@@ -35,11 +35,11 @@ export const ROUTE_DESCRIPTIONS: RouteFragment[] = [
   { routeType: 'ancestral', text: 'You follow the scent-memory southwest, tracing paths beaten by generations of hooves. The route feels familiar even though you may never have walked it.' },
   { routeType: 'ancestral', text: 'The trail is worn deep. Bark is rubbed smooth on the trees that mark the turns, and the ground is packed hard where thousands of hooves have passed before yours.' },
   { routeType: 'new', text: 'You break from the ancestral trail and push into unfamiliar ground. The forest here is different. The trees taller, the undergrowth thicker, the scent of other deer faint and old.' },
-  { routeType: 'new', text: 'The terrain is unmapped by your blood memory. Every ridge, every stream crossing, every open meadow is a decision you must make yourself.' },
+  { routeType: 'new', text: 'Nothing smells familiar here. Every ridge, every stream crossing, every open meadow is new. You stop often, nose working.' },
   { routeType: 'any', text: 'The journey stretches ahead of you, measured in ridgelines and stream crossings, in safe resting spots and exposed stretches.' },
   { routeType: 'ancestral', text: 'The mountain pass narrows to a thread of trail between granite walls. Wind funnels through the gap, carrying the faint musk of deer who crossed here weeks before you. The footing is treacherous, loose shale and ice, but the path is certain.' },
   { routeType: 'any', text: 'The valley route follows the river southward, the water a constant murmur at your flank. The terrain is gentle here, the browse plentiful along the banks, but the open ground leaves you exposed to anything watching from the ridges above.' },
-  { routeType: 'new', text: 'You follow the river where it bends through unfamiliar bottomland, the current your only compass. The bank is soft and muddy, sucking at your hooves, but the water knows where it is going and you trust its direction.' },
+  { routeType: 'new', text: 'You follow the river where it bends through unfamiliar bottomland. The bank is soft and muddy, sucking at your hooves. The water smell stays constant, so you keep it at your flank.' },
 ];
 
 // ── Road Crossing ──
@@ -54,7 +54,7 @@ export const ROAD_CROSSINGS: RoadCrossingFragment[] = [
   { timeOfDay: 'night', text: 'In the darkness, the road is marked only by the hiss of tires and the sweep of light. You stand at the edge, muscles coiled, waiting for a gap that may not come.' },
   { timeOfDay: 'day', text: 'The highway is a river of metal and noise. Cars, trucks, an eighteen-wheeler that shakes the ground as it passes. The gap between vehicles is your window, and it is closing fast.' },
   { timeOfDay: 'day', text: 'Traffic streams past in both directions. The asphalt radiates heat and stinks of rubber and exhaust. Twenty meters of open ground stand between you and the forest on the other side.' },
-  { timeOfDay: 'any', text: 'The road lies ahead. Flat, exposed, lethal. Every instinct screams that this is a killing ground. But the other side is where you need to be.' },
+  { timeOfDay: 'any', text: 'The road lies ahead. Flat, exposed. The ground vibrates under your hooves when the metal shapes pass. The forest on the other side is where the pull leads.' },
   { timeOfDay: 'night', text: 'Rain hammers the asphalt, turning headlights into smeared halos that give no warning of speed or distance. The hiss of tires on wet pavement sounds like the whole road is breathing.' },
   { timeOfDay: 'any', text: 'Fog sits heavy on the road, reducing the world to a gray wall twenty meters deep. You cannot see the vehicles, but you can feel them. The vibration in the ground, the pressure wave of displaced air arriving seconds before the metal does.' },
   { timeOfDay: 'day', text: 'A cold rain slicks the highway, and the vehicles move faster than they should, throwing up curtains of spray. Visibility is poor for you and worse for the drivers. Timing a crossing in this is a matter of sound as much as sight.' },

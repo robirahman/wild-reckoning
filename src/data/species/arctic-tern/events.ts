@@ -75,7 +75,7 @@ export const ARCTIC_TERN_EVENTS: GameEvent[] = [
       {
         id: 'skim-surface',
         label: 'Skim the surface',
-        description: 'Snatch from the surface — safer but smaller fish.',
+        description: 'Snatch from the surface, safer but smaller fish.',
         narrativeResult: 'You dip your beak and snag a small fish from the surface. Your breast feathers stay dry. The fish is thin and goes down fast.',
         statEffects: [],
         consequences: [
@@ -240,7 +240,7 @@ export const ARCTIC_TERN_EVENTS: GameEvent[] = [
       {
         id: 'evasive-dive',
         label: 'Dive toward the water',
-        description: 'Drop altitude — peregrines lose their advantage close to the surface.',
+        description: 'Drop altitude. Peregrines lose their advantage close to the surface.',
         narrativeResult: 'You fold and drop toward the waves. The peregrine overshoots, pulling up hard near the surface. You level off just above the water, wing tips skimming spray.',
         statEffects: [
           { stat: StatId.TRA, amount: -5, label: '-TRA' },
@@ -316,7 +316,7 @@ export const ARCTIC_TERN_EVENTS: GameEvent[] = [
       {
         id: 'fly-through',
         label: 'Fly through it',
-        description: 'Push straight through — storms pass quickly at sea.',
+        description: 'Push straight through. Storms pass quickly at sea.',
         narrativeResult: 'Rain batters your feathers. Wind throws you sideways. You fight for heading, wings straining. When it passes, you are on course but spent.',
         statEffects: [
           { stat: StatId.STR, amount: -6, label: '-STR' },
@@ -652,7 +652,7 @@ export const ARCTIC_TERN_EVENTS: GameEvent[] = [
     weight: 12,
     cooldown: 6,
     tags: ['reproduction', 'colony', 'female-competition'],
-    footnote: 'Nest position within a tern colony strongly predicts breeding success. Central nests benefit from the "selfish herd" effect — surrounded by vigilant neighbors who collectively mob predators. Edge nests suffer 2-3 times higher predation from skuas and gulls.',
+    footnote: 'Nest position within a tern colony strongly predicts breeding success. Central nests benefit from the "selfish herd" effect, surrounded by vigilant neighbors who collectively mob predators. Edge nests suffer 2-3 times higher predation from skuas and gulls.',
   },
 
   {

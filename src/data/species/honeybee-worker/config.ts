@@ -6,7 +6,7 @@ export const HONEYBEE_WORKER_CONFIG: SpeciesConfig = {
   name: 'Honeybee Worker',
   scientificName: 'Apis mellifera',
   description:
-    'You are one among 50,000. You will never reproduce — that privilege belongs to the queen alone. Instead, you will spend your brief life in service to the colony: cleaning cells, feeding larvae, building comb, guarding the entrance, and finally venturing out into a world of flowers, pesticides, and predators. You will fly 500 miles in your lifetime, visit 2 million flowers, and produce one-twelfth of a teaspoon of honey. You will die in six weeks. The colony will not notice.',
+    'You are one among 50,000. You will never reproduce. That privilege belongs to the queen alone. Instead, you will spend your brief life in service to the colony: cleaning cells, feeding larvae, building comb, guarding the entrance, and finally venturing out into a world of flowers, pesticides, and predators. You will fly 500 miles in your lifetime, visit 2 million flowers, and produce one-twelfth of a teaspoon of honey. You will die in six weeks. The colony will not notice.',
   diet: 'herbivore',
   defaultRegion: 'midwest-prairie-apiary',
   defaultRegionDisplayName: 'Midwest Prairie',

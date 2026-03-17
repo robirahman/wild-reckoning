@@ -6,7 +6,7 @@ export const FIG_WASP_CONFIG: SpeciesConfig = {
   name: 'Fig Pollinator Wasp',
   scientificName: 'Pegoscapus mexicanus',
   description:
-    'A creature so small it is invisible to most of the world, performing an obligate mutualism 80 million years old — without you, the strangler fig cannot reproduce. Without the fig, you cannot exist. Your entire adult life lasts less than 48 hours. In that time, you must find a fig, enter it, pollinate it, lay your eggs, and die. You are not just an insect. You are a key that fits exactly one lock in the living world.',
+    'A creature so small it is invisible to most of the world, performing an obligate mutualism 80 million years old. Without you, the strangler fig cannot reproduce. Without the fig, you cannot exist. Your entire adult life lasts less than 48 hours. In that time, you must find a fig, enter it, pollinate it, lay your eggs, and die. You are not just an insect. You are a key that fits exactly one lock in the living world.',
   diet: 'herbivore',
   massType: 'micro',
   defaultRegion: 'florida-fig-hammock',
@@ -14,7 +14,7 @@ export const FIG_WASP_CONFIG: SpeciesConfig = {
 
   startingWeight: { male: 0.000000030, female: 0.000000040 },
   startingAge: {
-    // Adults emerge fully formed — start at adult age phase
+    // Adults emerge fully formed; start at adult age phase
     'healthy-fig': 1,
     'stressed-fig': 1,
     'crowded-gall': 1,
@@ -59,7 +59,7 @@ export const FIG_WASP_CONFIG: SpeciesConfig = {
   },
 
   seasonalWeight: {
-    // Adults don't eat — they burn finite larval fat reserves each turn (6 hours).
+    // Adults don't eat; they burn finite larval fat reserves each turn (6 hours).
     // Starting weight ~0.000000040, starvation at 0.000000008.
     // Budget: 0.000000032 lbs of reserves ÷ ~8 turns = ~0.000000004/turn burn.
     spring: -0.000000004,
@@ -143,7 +143,7 @@ export const FIG_WASP_CONFIG: SpeciesConfig = {
 
   phases: [
     { id: 'natal-fig', label: 'Natal Fig', regionId: 'florida-fig-hammock', description: 'Developing inside a gall in your natal fig syconium' },
-    { id: 'emergence', label: 'Emergence Inside Fig', entryFlag: 'emerged-from-gall', regionId: 'florida-fig-hammock', description: 'Adult life inside the fig — mating, tunnel-chewing, pollen collection' },
+    { id: 'emergence', label: 'Emergence Inside Fig', entryFlag: 'emerged-from-gall', regionId: 'florida-fig-hammock', description: 'Adult life inside the fig: mating, tunnel-chewing, pollen collection' },
     { id: 'dispersal-flight', label: 'Dispersal Flight', entryFlag: 'exited-fig', regionId: 'florida-fig-hammock', description: 'Free flight searching for a new receptive fig' },
     { id: 'new-fig', label: 'Inside New Fig', entryFlag: 'entered-new-fig', regionId: 'florida-fig-hammock', description: 'Pollinating and ovipositing inside a new fig' },
   ],

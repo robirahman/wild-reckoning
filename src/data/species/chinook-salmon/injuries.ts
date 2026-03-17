@@ -49,7 +49,7 @@ export const CHINOOK_SALMON_INJURIES: Record<string, InjuryDefinition> = {
     severityLevels: [
       {
         severity: 'minor',
-        description: 'Shallow claw marks rake across your body — a near miss from a bear swipe. The wounds are bloody but not deep.',
+        description: 'Shallow claw marks rake across your body, a near miss from a bear swipe. The wounds are bloody but not deep.',
         statEffects: [
           { stat: StatId.HEA, amount: -4 },
           { stat: StatId.HOM, amount: 6 },
@@ -130,7 +130,7 @@ export const CHINOOK_SALMON_INJURIES: Record<string, InjuryDefinition> = {
       },
       {
         severity: 'moderate',
-        description: 'The caudal fin is badly damaged — half its surface area torn away or collapsed into useless tatters. Swimming is labored and inefficient, each stroke producing less thrust than the last. Holding station in the current requires constant effort.',
+        description: 'The caudal fin is badly damaged, half its surface area torn away or collapsed into useless tatters. Swimming is labored and inefficient, each stroke producing less thrust than the last. Holding station in the current requires constant effort.',
         statEffects: [
           { stat: StatId.HEA, amount: -7 },
           { stat: StatId.HOM, amount: 10 },

@@ -69,10 +69,19 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
     const turnUnit = config.turnUnit ?? 'week';
     const statScale = turnUnit === 'day' ? 0.25 : 1;
 
+    // Stats that naturally decay (TRA, ADV, NOV) have their event contributions
+    // halved. The original values were calibrated without any decay system, so they
+    // overwhelm the stat space when decay pulls them back toward baseline.
+    const decayingStats = new Set([StatId.TRA, StatId.ADV, StatId.NOV]);
+
     for (const effect of effects) {
-      const scaledAmount = effect.amount < 0
+      let scaledAmount = effect.amount < 0
         ? Math.round(effect.amount * statScale)
-        : effect.amount; // Don't scale positive effects (buffs feel better unscaled)
+        : effect.amount;
+      // Halve contributions to stats that have natural decay
+      if (decayingStats.has(effect.stat) && scaledAmount > 0) {
+        scaledAmount = Math.max(1, Math.round(scaledAmount * 0.5));
+      }
       if (scaledAmount === 0) continue;
       const modifier = {
         id: `effect-${state.time.turn}-${effect.stat}-${Math.random().toString(36).slice(2, 6)}`,
@@ -427,7 +436,7 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
           turn: newTime.turn,
           season: newTime.season,
           rng: state.rng,
-          ffMult: state.fastForward ? 12 : 1,
+          ffMult: 1, // Loop already iterates 12x in FF; don't double-scale
           behaviorStates: currentNPCBehaviorStates,
         });
         currentNPCs = behaviorResult.npcs;
@@ -466,6 +475,33 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
         if (newTime.dayInMonth === 1 && prevDay !== 1) ageIncrement = 1;
       }
       const newAge = currentAnimal.age + ageIncrement;
+
+      // ── TRA / ADV / NOV natural decay ──
+      // These stats heal over time toward baseline. Decay is proportional to
+      // distance from baseline (further from baseline = faster recovery).
+      // This creates equilibrium: incoming events raise the stat, but decay
+      // pulls it back, preventing permanent saturation at 100.
+      for (const decayCfg of [
+        { stat: StatId.TRA, rate: 0.30, min: 5, source: 'Recovery' },       // 30% per turn
+        { stat: StatId.ADV, rate: 0.45, min: 8, source: 'Conditions easing' }, // 45% per turn
+        { stat: StatId.NOV, rate: 0.35, min: 5, source: 'Adaptation' },     // 35% per turn
+      ] as const) {
+        const decayId = `${decayCfg.stat}-decay`;
+        tickedStats = removeModifiersBySource(tickedStats, decayId);
+        const current = computeEffectiveValue(tickedStats[decayCfg.stat]);
+        const base = config.baseStats[decayCfg.stat] ?? 20;
+        if (current > base) {
+          const excess = current - base;
+          const decay = Math.max(decayCfg.min, Math.round(excess * decayCfg.rate));
+          tickedStats = addModifier(tickedStats, {
+            id: decayId,
+            source: decayId,
+            sourceType: 'condition' as const,
+            stat: decayCfg.stat,
+            amount: -Math.min(decay, excess),
+          });
+        }
+      }
 
       // Starvation debuffs
       tickedStats = removeModifiersBySource(tickedStats, 'starvation-debuff');
@@ -611,7 +647,7 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
           isPregnant,
           isLactating,
           rng: state.rng,
-          ffMult: state.fastForward ? 12 : 1,
+          ffMult: 1, // The advanceTurn loop already iterates 12x in FF; don't double-scale
         });
 
         seasonalWeightChange = physResult.weightChange;

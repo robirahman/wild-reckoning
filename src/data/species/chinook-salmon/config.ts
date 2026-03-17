@@ -6,7 +6,7 @@ export const CHINOOK_SALMON_CONFIG: SpeciesConfig = {
   name: 'Chinook Salmon',
   scientificName: 'Oncorhynchus tshawytscha',
   description:
-    'The largest of the Pacific salmon species. Born in freshwater, they migrate to the ocean to feed and grow before returning to their natal streams to spawn and die — a single, all-consuming act of reproduction.',
+    'The largest of the Pacific salmon species. Born in freshwater, they migrate to the ocean to feed and grow before returning to their natal streams to spawn and die. A single, all-consuming act of reproduction.',
   diet: 'carnivore',
   defaultRegion: 'pacific-northwest-ocean',
   defaultRegionDisplayName: 'Pacific Northwest Ocean',

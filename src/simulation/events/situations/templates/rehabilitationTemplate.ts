@@ -55,7 +55,7 @@ export const rehabilitationTemplate: InteractionTemplate = {
 
 function resolveRelease(ctx: SimulationContext): SimulationOutcome {
   const env = buildEnvironment(ctx);
-  const narrative = 'The enclosure gate swings open — not the way it usually does, when a figure in heavy gloves brings food and checks your leg. This time it stays open. The figure stands to one side, very still, watching. Beyond the gate is a world you have only ever seen through wire mesh: the treeline dark and close, the ground uneven and damp, the air carrying a thousand scents that have no name. Your legs, healed now but stiff from months of confinement, carry you forward. The gravel gives way to soil. The soil gives way to leaf litter. Behind you, the gate closes. The sound it makes is very final.';
+  const narrative = 'The enclosure gate swings open -- not the way it usually does, when a figure in heavy gloves brings food and checks your leg. This time it stays open. The figure stands to one side, very still, watching. Beyond the gate is a world you have only ever seen through wire mesh: the treeline dark and close, the ground uneven and damp, the air carrying a thousand scents that have no name. Your legs, healed now but stiff from months of confinement, carry you forward. The gravel gives way to soil. The soil gives way to leaf litter. Behind you, the gate closes. The sound it makes is very final.';
   return {
     harmEvents: [],
     statEffects: [
@@ -87,7 +87,7 @@ function getReleaseChoices(): SimulationChoice[] {
       label: 'Bolt into the trees',
       description: 'Instinct screams: run. Put distance between yourself and the enclosure.',
       style: 'default',
-      narrativeResult: 'You run. Your hooves find their rhythm on the forest floor — clumsy at first, then steadier, muscles remembering what wire mesh had made them forget. You run until the smell of antiseptic and processed grain is gone, replaced by moss and rotting wood and the cold mineral scent of a stream somewhere ahead. When you stop, your flanks heaving, the enclosure is nowhere behind you. You are alone in a way you have never been.',
+      narrativeResult: 'You run. Your hooves find their rhythm on the forest floor -- clumsy at first, then steadier, muscles remembering what wire mesh had made them forget. You run until the smell of antiseptic and processed grain is gone, replaced by moss and rotting wood and the cold mineral scent of a stream somewhere ahead. When you stop, your flanks heaving, the enclosure is nowhere behind you. You are alone in a way you have never been.',
       modifyOutcome(base) {
         return {
           ...base,
@@ -107,7 +107,7 @@ function getReleaseChoices(): SimulationChoice[] {
       label: 'Step out cautiously',
       description: 'The world outside the gate is enormous. Take it slowly.',
       style: 'default',
-      narrativeResult: 'You cross the threshold with deliberate care, testing each step. The ground feels different under your hooves — softer, less predictable. You lower your nose to the leaf litter and breathe in: fungal decay, earthworm casings, the distant musk of something that might be another deer. You drift toward the nearest cover, a stand of young hemlocks, and stand there for a long time. Ears turning, nostrils working, testing each smell.',
+      narrativeResult: 'You cross the threshold with deliberate care, testing each step. The ground feels different under your hooves -- softer, less predictable. You lower your nose to the leaf litter and breathe in: fungal decay, earthworm casings, the distant musk of something that might be another deer. You drift toward the nearest cover, a stand of young hemlocks, and stand there for a long time. Ears turning, nostrils working, testing each smell.',
       modifyOutcome(base) {
         return {
           ...base,
@@ -161,13 +161,13 @@ function resolveFirstForage(ctx: SimulationContext): SimulationOutcome {
 
   if (isWinter) {
     weightChange = -1;
-    narrative = 'Hunger drives you to eat, but eating in the wild is nothing like the grain and alfalfa pellets of the rehabilitation center. The browse is sparse — dry twigs, frozen lichen, bark stripped from saplings by others before you. You chew on cedar needles and find them bitter, resinous, barely worth the effort. Your rumen, accustomed to processed feed, cramps around the unfamiliar roughage. You will have to learn what the forest offers, and quickly. Winter does not wait.';
+    narrative = 'The browse is sparse. Dry twigs, frozen lichen, bark stripped from saplings by others before you. You chew cedar needles and find them bitter, resinous, barely worth the effort. Your rumen cramps around the unfamiliar roughage. Your flanks are thinner than yesterday.';
   } else if (isSummer) {
     weightChange = 1;
-    narrative = 'The rehabilitation center fed you on schedule — pellets in a trough, hay in a rack, water in a steel basin. The forest feeds you on its own terms. You nose through the undergrowth and discover abundance you did not expect: clover in the clearings, tender maple shoots, mushrooms pushing through the damp litter. Your instincts, dormant through months of confinement, begin to surface. You know which leaves to take without being taught. The knowledge is older than you are.';
+    narrative = 'Clover in the clearings. Tender maple shoots. Mushrooms pushing through damp litter. You nose through the undergrowth and your mouth fills with saliva before you decide to bite. Your legs carry you from patch to patch without hesitation. The green smell pulls you forward and you follow it.';
   } else {
     weightChange = 0;
-    narrative = 'Your first real forage is tentative and clumsy. You nose at plants you have never seen before, tasting and spitting, tasting and swallowing. Some of it is good — your body knows, even if your mind does not, which greens carry the nutrients you need. The processed feed of the rehabilitation center is already a fading memory. Out here, eating is work: walking, searching, testing, chewing through tough stems for the soft growth inside. But with each mouthful, something is waking up — an instinct that was always there, waiting for the wire mesh to open.';
+    narrative = 'You nose at plants you have never tasted, spitting some, swallowing others. Your tongue knows before you do which greens to take. Eating is work now: walking, searching, chewing through tough stems for the soft growth inside.';
   }
 
   const env = buildEnvironment(ctx);
@@ -203,7 +203,7 @@ function getForageChoices(): SimulationChoice[] {
       label: 'Eat whatever you find',
       description: 'You are hungry. Caution is a luxury.',
       style: 'default',
-      narrativeResult: 'You eat indiscriminately — leaves, shoots, bark, berries whose color you do not recognize. Most of it sits well enough. Your stomach is full for the first time since the gate opened, and the fullness feels like safety.',
+      narrativeResult: 'You eat indiscriminately -- leaves, shoots, bark, berries whose color you do not recognize. Most of it sits well enough. Your stomach is full for the first time since the gate opened, and the fullness feels like safety.',
       modifyOutcome(base) {
         const nonWeightConsequences = base.consequences.filter(c => c.type !== 'modify_weight');
         return {

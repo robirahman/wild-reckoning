@@ -210,12 +210,24 @@ export class GameAPI {
 
     let state = useGameStore.getState();
 
-    // 2. Introduce NPCs on early turns
+    // 2. Introduce NPCs on early turns (assign map positions)
     if (state.npcs.length === 0 && state.time.turn >= NPC_INTRODUCTION_MIN_TURN) {
       const npcs = [...state.npcs];
+      const mapNodes = state.map?.nodes ?? [];
+      const playerNodeId = state.map?.currentLocationId;
       for (const type of ['rival', 'ally', 'predator'] as const) {
         const npc = introduceNPC(state.animal.speciesId, type, state.time.turn, npcs, state.rng);
-        if (npc) npcs.push(npc);
+        if (npc && mapNodes.length > 0) {
+          // Place predators/rivals on a random non-player node; allies near the player
+          const candidates = type === 'ally'
+            ? mapNodes.filter(n => n.id === playerNodeId || (playerNodeId && n.connections.includes(playerNodeId)))
+            : mapNodes.filter(n => n.id !== playerNodeId);
+          const startNode = candidates.length > 0 ? state.rng.pick(candidates) : mapNodes[0];
+          npc.currentNodeId = startNode.id;
+          npcs.push(npc);
+        } else if (npc) {
+          npcs.push(npc);
+        }
       }
       if (npcs.length > 0) store.setNPCs(npcs);
     }
@@ -232,7 +244,12 @@ export class GameAPI {
           state.animal.flags.has(reproConfig.spawningMigrationFlag));
       if (isMating) {
         const mateNPC = introduceNPC(state.animal.speciesId, 'mate', state.time.turn, state.npcs, state.rng);
-        if (mateNPC) store.setNPCs([...state.npcs, mateNPC]);
+        if (mateNPC) {
+          // Place mate near the player
+          const playerNodeId = state.map?.currentLocationId;
+          if (playerNodeId) mateNPC.currentNodeId = playerNodeId;
+          store.setNPCs([...state.npcs, mateNPC]);
+        }
       }
     }
 
@@ -288,10 +305,14 @@ export class GameAPI {
         rng: state.rng,
         difficulty: state.difficulty,
         npcs: state.npcs,
+        npcBehaviorStates: state.npcBehaviorStates,
         regionDef: getRegionDefinition(state.animal.region),
         currentWeather: state.currentWeather ?? undefined,
         ecosystem: state.ecosystem,
+        currentNodeId: state.map?.currentLocationId,
         currentNodeType: mapNode?.type,
+        currentNodeResources: mapNode?.resources,
+        worldMemory: state.worldMemory,
         calibratedRates: getCalibratedRates(config.id),
         fastForward: state.fastForward,
       };
@@ -677,12 +698,12 @@ export class GameAPI {
     }
 
     if (computeEffectiveValue(animal.stats[StatId.HEA]) <= 0) {
-      state.killAnimal('Systemic Failure — health completely depleted.');
+      state.killAnimal('Systemic Failure -- health completely depleted.');
       return;
     }
 
     if (animal.weight < config.weight.starvationDeath) {
-      state.killAnimal('Starvation — body weight dropped below survival threshold.');
+      state.killAnimal('Starvation -- body weight dropped below survival threshold.');
       return;
     }
 
@@ -711,7 +732,7 @@ export class GameAPI {
     }
 
     if (state.reproduction.type === 'semelparous' && state.reproduction.spawned) {
-      state.killAnimal('Post-spawning death — the cycle is complete.');
+      state.killAnimal('Post-spawning death -- the cycle is complete.');
       return;
     }
   }

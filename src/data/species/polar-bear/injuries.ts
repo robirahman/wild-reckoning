@@ -23,7 +23,7 @@ export const POLAR_BEAR_INJURIES: Record<string, InjuryDefinition> = {
       {
         severity: 'moderate',
         description:
-          'A bearded seal — much larger and stronger than a ringed seal — bit deeply into your flesh before you could pin it. The wound is ragged and inflamed, and you favor the injured limb when walking. Hunting efficiency is reduced until it heals.',
+          'A bearded seal, much larger and stronger than a ringed seal, bit deeply into your flesh before you could pin it. The wound is ragged and inflamed, and you favor the injured limb when walking. Hunting efficiency is reduced until it heals.',
         statEffects: [
           { stat: StatId.HEA, amount: -8 },
           { stat: StatId.HOM, amount: 10 },
@@ -138,7 +138,7 @@ export const POLAR_BEAR_INJURIES: Record<string, InjuryDefinition> = {
       {
         severity: 'moderate',
         description:
-          'His claws caught you full across the hide and tore deep — four parallel gashes that part the skin and expose the dark red muscle beneath. Blood streams freely down your fur, steaming in the Arctic air. The wounds are ragged and will take weeks to close. Each time you move, the torn edges pull apart and fresh pain lances through the muscle.',
+          'His claws caught you full across the hide and tore deep. Four parallel gashes part the skin and expose the dark red muscle beneath. Blood streams freely down your fur, steaming in the Arctic air. The wounds are ragged and will take weeks to close. Each time you move, the torn edges pull apart and fresh pain lances through the muscle.',
         statEffects: [
           { stat: StatId.HEA, amount: -10 },
           { stat: StatId.HOM, amount: 8 },
@@ -171,7 +171,7 @@ export const POLAR_BEAR_INJURIES: Record<string, InjuryDefinition> = {
       {
         severity: 'moderate',
         description:
-          'His canines sank deep into your flesh and held. You felt the teeth grind against muscle fiber before you wrenched free, tearing the wound wider in the process. The punctures are deep and ragged, weeping blood and serum. Infection is a near certainty in wounds this deep — the bacteria from a bear\'s mouth are vicious colonizers of torn tissue.',
+          'His canines sank deep into your flesh and held. You felt the teeth grind against muscle fiber before you wrenched free, tearing the wound wider in the process. The punctures are deep and ragged, weeping blood and serum. Infection is a near certainty in wounds this deep. The bacteria from a bear\'s mouth are vicious colonizers of torn tissue.',
         statEffects: [
           { stat: StatId.HEA, amount: -12 },
           { stat: StatId.HOM, amount: 10 },
@@ -185,7 +185,7 @@ export const POLAR_BEAR_INJURIES: Record<string, InjuryDefinition> = {
       {
         severity: 'severe',
         description:
-          'He locked his jaws around your limb and bore down with the full crushing force of a polar bear\'s bite — over eight hundred pounds per square inch. You heard the bone crack before you felt it. The pain was white and absolute. The limb is swollen grotesquely, the skin purpled and split where the canines drove through to the bone. Walking is agony. Healing will be slow, incomplete, and haunted by the memory of that sound.',
+          'He locked his jaws around your limb and bore down with the full crushing force of a polar bear\'s bite, over eight hundred pounds per square inch. You heard the bone crack before you felt it. The pain was white and absolute. The limb is swollen grotesquely, the skin purpled and split where the canines drove through to the bone. Walking is agony. Healing will be slow, incomplete, and haunted by the memory of that sound.',
         statEffects: [
           { stat: StatId.HEA, amount: -22 },
           { stat: StatId.HOM, amount: 18 },

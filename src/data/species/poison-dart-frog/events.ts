@@ -253,7 +253,7 @@ export const POISON_DART_FROG_EVENTS: GameEvent[] = [
         chance: 0.10,
         conditions: [],
         narrativeText: 'Your throat is swollen and hot. When you try to call, the sound comes out thin and reedy. The membrane pulses with each heartbeat.',
-        footnote: 'Prolonged aggressive calling can damage the delicate vocal sac membrane in dart frogs, temporarily reducing call quality and volume — directly impacting both territorial defense and mate attraction.',
+        footnote: 'Prolonged aggressive calling can damage the delicate vocal sac membrane in dart frogs, temporarily reducing call quality and volume, directly impacting both territorial defense and mate attraction.',
         statEffects: [
           { stat: StatId.HEA, amount: -3, label: '-HEA' },
           { stat: StatId.HOM, amount: 5, label: '+HOM' },

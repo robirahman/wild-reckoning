@@ -33,7 +33,7 @@ export const DIFFICULTY_PRESETS: Record<Difficulty, DifficultyMultipliers> = {
 };
 
 export const DIFFICULTY_DESCRIPTIONS: Record<Difficulty, string> = {
-  easy: 'Gentler survival — lower death chances, slower weight loss, more foraging.',
-  normal: 'The intended experience — balanced challenge.',
-  hard: 'Brutal wilderness — more predators, harsher winters, faster disease.',
+  easy: 'Gentler survival: lower death chances, slower weight loss, more foraging.',
+  normal: 'The intended experience, balanced challenge.',
+  hard: 'Brutal wilderness: more predators, harsher winters, faster disease.',
 };

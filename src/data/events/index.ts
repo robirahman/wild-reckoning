@@ -319,7 +319,7 @@ export const allEvents: GameEvent[] = [
     choices: [
       {
         id: 'bolt-cougar',
-        label: 'Bolt — run as fast as you can',
+        label: 'Bolt: run as fast as you can',
         narrativeResult: 'You launch yourself away in a burst of speed, zigzagging through the trees. You hear it give chase, but it falls behind. After a minute of flat-out running, the sounds stop. Your legs tremble.',
         statEffects: [
           { stat: StatId.HOM, amount: 12, label: '+HOM' },

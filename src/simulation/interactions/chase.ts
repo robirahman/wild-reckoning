@@ -50,16 +50,18 @@ export function resolveChase(ctx: SimulationContext, params: ChaseParams): Chase
   const coverEscapeBonus = terrain.coverDensity * 0.2; // 0 to 0.16
 
   // ── Escape probability ──
-  // Core formula: based on speed differential, modified by endurance, detection, cover
+  // Calibrated to produce ~20% lethality per encounter (matching calibration data).
+  // A healthy deer in good terrain escapes ~75% of the time; an injured/starving
+  // deer in open ground may only escape 30-40%.
   const speedRatio = preyEffectiveSpeed / Math.max(1, predatorEffectiveSpeed + params.packBonus);
-  const baseEscapeChance = 0.3 + (speedRatio - 1) * 0.5; // 0.3 at equal speed, higher if faster
+  const baseEscapeChance = 0.2 + (speedRatio - 1) * 0.4; // 0.2 at equal speed
 
-  const escapeChance = Math.min(0.95, Math.max(0.02,
+  const escapeChance = Math.min(0.85, Math.max(0.05,
     baseEscapeChance
     + detectionBonus
     + coverEscapeBonus
-    + (preyEndurance - 70) * 0.003 // endurance bonus
-    - (params.predatorEndurance - 70) * 0.002 // predator endurance penalty
+    + (preyEndurance - 70) * 0.003
+    - (params.predatorEndurance - 70) * 0.003 // predator endurance matters more
   ));
 
   const escaped = rng.chance(escapeChance);
@@ -131,10 +133,11 @@ export function resolveChase(ctx: SimulationContext, params: ChaseParams): Chase
   let deathCause: string | undefined;
 
   if (!escaped) {
-    // Failed escape: pack predators may finish the kill
+    // Failed escape: predator has caught up. Pack predators almost always finish.
+    // Solo predators may lose grip. Calibrated for ~20% overall lethality per encounter.
     const killChance = params.packBonus > 0
-      ? 0.25 + params.packBonus * 0.01 // pack hunting is more lethal
-      : 0.15; // solo predator may not finish the job
+      ? 0.60 + params.packBonus * 0.02 // pack hunting is highly lethal once caught
+      : 0.40; // solo predator: ~40% chance of completing kill
     if (rng.chance(killChance)) {
       deathCause = `Killed by ${params.strikeLabel.replace(/ during chase| bite| strike| attack/g, '')}`;
     }

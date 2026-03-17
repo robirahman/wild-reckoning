@@ -252,7 +252,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
       {
         id: 'crawl-carefully',
         label: 'Crawl on your belly to spread your weight',
-        description: 'Slow and careful — maximize surface area',
+        description: 'Slow and careful. Maximize surface area.',
         statEffects: [
           { stat: StatId.WIS, amount: 2, label: '+WIS' },
         ],
@@ -559,7 +559,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
       {
         id: 'back-away-breeding',
         label: 'Back away',
-        description: 'Yield the female — there will be other springs, other chances',
+        description: 'Yield the female. There will be other springs, other chances.',
         narrativeResult:
           'You lower your head and turn sideways. He watches you go. You walk away across the ice, uninjured.',
         statEffects: [
@@ -652,7 +652,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
     weight: 10,
     cooldown: 12,
     tags: ['social', 'denning', 'seasonal'],
-    footnote: 'Pregnant female polar bears enter maternity dens in late October or November and may not emerge until March or April — a fast of up to 8 months, the longest of any mammal.',
+    footnote: 'Pregnant female polar bears enter maternity dens in late October or November and may not emerge until March or April, a fast of up to 8 months, the longest of any mammal.',
   },
 
   {
@@ -835,7 +835,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
     weight: 15,
     cooldown: 3,
     tags: ['seasonal', 'fasting'],
-    footnote: 'During the ice-free period, polar bears enter a state called "walking hibernation" — metabolically similar to a denning bear but while remaining active. They can lose up to 1 kg per day.',
+    footnote: 'During the ice-free period, polar bears enter a state called "walking hibernation," metabolically similar to a denning bear but while remaining active. They can lose up to 1 kg per day.',
   },
 
   {
@@ -960,7 +960,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
     weight: 20,
     cooldown: 12,
     tags: ['reproduction', 'denning'],
-    footnote: 'Polar bear cubs weigh only 600-700 grams at birth — one of the smallest offspring-to-mother ratios of any placental mammal. The mother may lose over 40% of her body weight during the denning period.',
+    footnote: 'Polar bear cubs weigh only 600-700 grams at birth, one of the smallest offspring-to-mother ratios of any placental mammal. The mother may lose over 40% of her body weight during the denning period.',
   },
 
   {
@@ -1089,7 +1089,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
     weight: 5,
     cooldown: 12,
     tags: ['predator', 'social'],
-    footnote: 'Male polar bears (Ursus maritimus) are well-documented infanticidal predators. Females with cubs avoid large males, but encounters on the sea ice are inevitable. Infanticide is a reproductive strategy — by killing cubs, males can bring females back into estrus months earlier.',
+    footnote: 'Male polar bears (Ursus maritimus) are well-documented infanticidal predators. Females with cubs avoid large males, but encounters on the sea ice are inevitable. Infanticide is a reproductive strategy: by killing cubs, males can bring females back into estrus months earlier.',
   },
   {
     id: 'pb-infanticide-aftermath',

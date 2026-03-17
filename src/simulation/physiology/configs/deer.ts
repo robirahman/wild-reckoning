@@ -23,9 +23,13 @@ export const DEER_METABOLISM: MetabolismConfig = {
   maxFatDeposition: 5,              // Max lbs/turn gain from caloric surplus (real: ~0.7 lb/day = 5/wk in autumn)
 
   // ── Foraging ──
-  // At quality=1.0 and foraging=3 (neutral), intake ≈ 400 → surplus of ~60 → slow gain
-  // At quality=0.3 (harsh winter) and foraging=3, intake ≈ 120 → deficit of ~220 → rapid loss
-  baseForagingRate: 900,            // kcal-units/turn at quality=1.0, foraging=3
+  // Real deer: winter deficit produces ~1 lb/week loss. With 25% BMR reduction,
+  // BMR in winter ≈ 255. We need winter intake (quality ~0.3) ≈ 220-240 to produce
+  // a mild deficit. At quality=1.0 in summer, intake should give ~60-80 surplus for
+  // slow weight gain (~0.5-1 lb/week). Base rate = 1100 → quality 0.3 = 330 intake
+  // → 330 vs 255 BMR = +75 surplus. That's too high. Quality 0.25 = 275 → deficit
+  // of 20 ≈ 0.6 lb/week loss. Reasonable for healthy deer with browse available.
+  baseForagingRate: 1100,           // kcal-units/turn at quality=1.0, foraging=3
   foragingBehaviorMultiplier: 0.15, // Each foraging level above/below 3 adds ±15%
 
   // ── Thermoregulation ──

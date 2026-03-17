@@ -413,7 +413,7 @@ const wolfEvents: GameEvent[] = [
     weight: 8,
     cooldown: 6,
     tags: ['social', 'pack', 'hierarchy', 'danger', 'rival'],
-    footnote: 'Wolf pack dominance hierarchies are maintained through ritualized challenges — stiff-legged approaches, direct stares, standing over, and pinning. Most challenges are resolved without serious injury, but escalation to biting (especially throat holds) occurs in roughly one in five encounters and can occasionally prove fatal.',
+    footnote: 'Wolf pack dominance hierarchies are maintained through ritualized challenges: stiff-legged approaches, direct stares, standing over, and pinning. Most challenges are resolved without serious injury, but escalation to biting (especially throat holds) occurs in roughly one in five encounters and can occasionally prove fatal.',
   },
 
   {
@@ -1522,7 +1522,7 @@ const wolfEvents: GameEvent[] = [
     weight: 4,
     cooldown: 12,
     tags: ['social', 'confrontation'],
-    footnote: 'Infanticide by rival wolves has been documented in wild populations. When pack leadership changes, the new dominant pair may kill the previous alpha\'s offspring — a behavior shared with many social mammals including lions and langur monkeys.',
+    footnote: 'Infanticide by rival wolves has been documented in wild populations. When pack leadership changes, the new dominant pair may kill the previous alpha\'s offspring, a behavior shared with many social mammals including lions and langur monkeys.',
   },
   {
     id: 'wolf-dispersal-pressure',

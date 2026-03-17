@@ -40,7 +40,7 @@ export const POLAR_BEAR_PARASITES: Record<string, ParasiteDefinition> = {
       {
         severity: 'severe',
         description:
-          'Massive larval migration has inflamed your diaphragm and intercostal muscles. Breathing is labored, especially during exertion. Long-distance swimming — essential for reaching distant floes — is now dangerously exhausting.',
+          'Massive larval migration has inflamed your diaphragm and intercostal muscles. Breathing is labored, especially during exertion. Long-distance swimming, essential for reaching distant floes, is now dangerously exhausting.',
         statEffects: [
           { stat: StatId.HOM, amount: 20 },
           { stat: StatId.HEA, amount: -18 },
@@ -79,7 +79,7 @@ export const POLAR_BEAR_PARASITES: Record<string, ParasiteDefinition> = {
       {
         severity: 'moderate',
         description:
-          'Large patches of fur have fallen out, exposing raw, thickened skin to the Arctic wind. Your insulation is compromised and you burn more calories just staying warm. The itching is maddening — you scratch until you bleed.',
+          'Large patches of fur have fallen out, exposing raw, thickened skin to the Arctic wind. Your insulation is compromised and you burn more calories just staying warm. The itching is maddening. You scratch until you bleed.',
         statEffects: [
           { stat: StatId.CLI, amount: 10 },
           { stat: StatId.IMM, amount: 10 },
@@ -132,7 +132,7 @@ export const POLAR_BEAR_PARASITES: Record<string, ParasiteDefinition> = {
       {
         severity: 'severe',
         description:
-          'Neurological symptoms have appeared: muscle twitching, uncoordinated movements, and episodes of disorientation on the sea ice. Swimming is dangerous — you struggle to coordinate your strokes.',
+          'Neurological symptoms have appeared: muscle twitching, uncoordinated movements, and episodes of disorientation on the sea ice. Swimming is dangerous. You struggle to coordinate your strokes.',
         statEffects: [
           { stat: StatId.HEA, amount: -18 },
           { stat: StatId.IMM, amount: 20 },

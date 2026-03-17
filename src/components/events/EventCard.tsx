@@ -79,6 +79,7 @@ export function EventCard({
                 description={choice.description}
                 style={choice.style}
                 selected={choiceMade === choice.id}
+                dimmed={!!choiceMade && choiceMade !== choice.id}
                 onClick={() => onChoiceSelect?.(choice.id)}
               />
             ))}

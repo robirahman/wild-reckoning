@@ -53,7 +53,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
     weight: 18,
     cooldown: 2,
     tags: ['foraging', 'food', 'development'],
-    footnote: 'Fig wasp larvae develop inside individual galls — modified fig ovules that the mother wasp induced the fig to grow. Each gall is a single-occupancy nursery, perfectly sized for one developing wasp.',
+    footnote: 'Fig wasp larvae develop inside individual galls, modified fig ovules that the mother wasp induced the fig to grow. Each gall is a single-occupancy nursery, perfectly sized for one developing wasp.',
   },
 
   {
@@ -95,7 +95,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
     weight: 8,
     cooldown: 6,
     tags: ['health', 'parasite', 'nematode'],
-    footnote: 'Parasitodiplogaster nematodes are phoretic on fig wasps — they ride inside the foundress wasp into the fig, then parasitize her offspring. Some species have co-speciated with their fig wasp hosts for tens of millions of years.',
+    footnote: 'Parasitodiplogaster nematodes are phoretic on fig wasps. They ride inside the foundress wasp into the fig, then parasitize her offspring. Some species have co-speciated with their fig wasp hosts for tens of millions of years.',
   },
 
   {
@@ -145,7 +145,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
     weight: 25,
     cooldown: 99,
     tags: ['health', 'metamorphosis', 'lifecycle'],
-    footnote: 'Like all holometabolous insects, fig wasps undergo complete metamorphosis — a radical restructuring of the body inside a pupal case. The larval tissues are broken down by digestive enzymes and rebuilt from clusters of undifferentiated cells called imaginal discs.',
+    footnote: 'Like all holometabolous insects, fig wasps undergo complete metamorphosis, a radical restructuring of the body inside a pupal case. The larval tissues are broken down by digestive enzymes and rebuilt from clusters of undifferentiated cells called imaginal discs.',
   },
 
   {
@@ -168,7 +168,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
   },
 
   // ══════════════════════════════════════════════
-  //  ADULT INSIDE FIG — MALE EVENTS
+  //  ADULT INSIDE FIG - MALE EVENTS
   // ══════════════════════════════════════════════
 
   {
@@ -249,7 +249,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
     weight: 18,
     cooldown: 2,
     tags: ['social', 'combat', 'male', 'mating'],
-    footnote: 'Male fig wasp combat is often lethal. Males of some species have been observed decapitating rivals with their mandibles. The interior of a ripe fig can contain the dismembered bodies of several males — casualties of battles no human ever witnesses.',
+    footnote: 'Male fig wasp combat is often lethal. Males of some species have been observed decapitating rivals with their mandibles. The interior of a ripe fig can contain the dismembered bodies of several males, casualties of battles no human ever witnesses.',
   },
 
   {
@@ -328,7 +328,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
     weight: 22,
     cooldown: 99,
     tags: ['social', 'sacrifice', 'male', 'tunnel'],
-    footnote: 'Male fig wasps chew exit tunnels cooperatively — multiple males may work on the same tunnel. The males gain no direct benefit from the tunnel, as they die inside the fig regardless. The tunnel enables the females to escape and disperse.',
+    footnote: 'Male fig wasps chew exit tunnels cooperatively. Multiple males may work on the same tunnel. The males gain no direct benefit from the tunnel, as they die inside the fig regardless. The tunnel enables the females to escape and disperse.',
   },
 
   {
@@ -352,7 +352,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
   },
 
   // ══════════════════════════════════════════════
-  //  ADULT INSIDE FIG — FEMALE EVENTS
+  //  ADULT INSIDE FIG - FEMALE EVENTS
   // ══════════════════════════════════════════════
 
   {
@@ -412,7 +412,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
       {
         id: 'collect-thoroughly',
         label: 'Collect pollen thoroughly',
-        description: 'Pack your corbiculae full — ensure good pollination at the next fig.',
+        description: 'Pack your corbiculae full. Ensure good pollination at the next fig.',
         narrativeResult: 'You visit every accessible anther, packing the pollen pockets dense. The next fig will be well-pollinated.',
         statEffects: [
           { stat: StatId.WIS, amount: 3, label: '+WIS' },
@@ -427,7 +427,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
       {
         id: 'collect-quickly',
         label: 'Collect quickly and move on',
-        description: 'Gather minimal pollen — save energy for the flight ahead.',
+        description: 'Gather minimal pollen. Save energy for the flight ahead.',
         narrativeResult: 'A cursory dusting of pollen. Enough. You turn toward the exit.',
         statEffects: [
           { stat: StatId.HOM, amount: 3, label: '+HOM' },
@@ -448,7 +448,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
     weight: 20,
     cooldown: 99,
     tags: ['foraging', 'pollination', 'female', 'mutualism'],
-    footnote: 'Fig wasps are active pollinators — unlike most insect pollinators that transfer pollen passively on their bodies, fig wasps have evolved specialized structures (corbiculae) to deliberately collect and transport pollen. This is thought to be an adaptation driven by the enclosed structure of the fig, where passive pollen transfer is impossible.',
+    footnote: 'Fig wasps are active pollinators. Unlike most insect pollinators that transfer pollen passively on their bodies, fig wasps have evolved specialized structures (corbiculae) to deliberately collect and transport pollen. This is thought to be an adaptation driven by the enclosed structure of the fig, where passive pollen transfer is impossible.',
   },
 
   // ══════════════════════════════════════════════
@@ -467,7 +467,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
       {
         id: 'exit-quickly',
         label: 'Push through quickly',
-        description: 'Speed over caution — get out before the tunnel collapses.',
+        description: 'Speed over caution. Get out before the tunnel collapses.',
         narrativeResult: 'You force through at speed. A wing catches and tears slightly. But you are outside. Air moves. Your wings unfold.',
         statEffects: [
           { stat: StatId.ADV, amount: 5, label: '+ADV' },
@@ -482,7 +482,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
       {
         id: 'exit-carefully',
         label: 'Navigate carefully',
-        description: 'Take your time — protect your wings.',
+        description: 'Take your time. Protect your wings.',
         narrativeResult: 'You fold your wings tight and guide yourself with your antennae. The passage is tight, but you emerge intact. Air and light hit you. Wings unfurl, whole.',
         statEffects: [
           { stat: StatId.HOM, amount: 4, label: '+HOM' },
@@ -540,7 +540,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
       {
         id: 'follow-scent',
         label: 'Follow this scent signal',
-        description: 'Fly toward the source — it could be the fig you need.',
+        description: 'Fly toward the source. It could be the fig you need.',
         narrativeResult: 'You bank into the wind, following the concentration gradient. The chemical signal strengthens with each wingbeat.',
         statEffects: [
           { stat: StatId.NOV, amount: -3, label: '-NOV' },
@@ -553,7 +553,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
       {
         id: 'search-stronger',
         label: 'Search for a stronger signal',
-        description: 'This scent is faint — there may be a closer fig.',
+        description: 'This scent is faint. There may be a closer fig.',
         narrativeResult: 'You ignore the faint trace and keep searching. Your adult life is measured in hours. Every minute spent searching is a minute closer to depletion.',
         statEffects: [
           { stat: StatId.HOM, amount: 5, label: '+HOM' },
@@ -760,7 +760,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
     weight: 8,
     cooldown: 99,
     tags: ['foraging', 'danger', 'wrong-host'],
-    footnote: 'The fig-fig wasp mutualism is highly species-specific: each of the ~750 fig species is typically pollinated by only one or a few wasp species. Wasps that enter the wrong fig species waste their reproductive effort — they cannot successfully oviposit, and their pollination effort is wasted.',
+    footnote: 'The fig-fig wasp mutualism is highly species-specific: each of the ~750 fig species is typically pollinated by only one or a few wasp species. Wasps that enter the wrong fig species waste their reproductive effort. They cannot successfully oviposit, and their pollination effort is wasted.',
   },
 
   // ══════════════════════════════════════════════
@@ -816,7 +816,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
     weight: 22,
     cooldown: 99,
     tags: ['migration', 'lifecycle', 'ostiole', 'female'],
-    footnote: 'The ostiole passage is so traumatic that foundress wasps routinely lose their wings, antennae tips, and parts of their legs. The fig has evolved this narrow entrance as a quality filter — only healthy, well-developed wasps can successfully enter. This is a form of natural selection mediated by architecture.',
+    footnote: 'The ostiole passage is so traumatic that foundress wasps routinely lose their wings, antennae tips, and parts of their legs. The fig has evolved this narrow entrance as a quality filter: only healthy, well-developed wasps can successfully enter. This is a form of natural selection mediated by architecture.',
   },
 
   {
@@ -865,7 +865,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
     weight: 22,
     cooldown: 99,
     tags: ['foraging', 'pollination', 'mutualism', 'female'],
-    footnote: 'The conflict between the fig and its pollinator is a classic example of mutualism with competing interests. The fig "wants" maximum pollination and minimum seed destruction by wasp larvae. The wasp "wants" maximum egg-laying and minimum pollination effort. The fig constrains cheating by having some flowers with styles too long for the wasp\'s ovipositor — these can only be pollinated, never parasitized.',
+    footnote: 'The conflict between the fig and its pollinator is a classic example of mutualism with competing interests. The fig "wants" maximum pollination and minimum seed destruction by wasp larvae. The wasp "wants" maximum egg-laying and minimum pollination effort. The fig constrains cheating by having some flowers with styles too long for the wasp\'s ovipositor. These can only be pollinated, never parasitized.',
   },
 
   {

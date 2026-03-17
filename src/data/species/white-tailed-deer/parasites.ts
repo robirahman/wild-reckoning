@@ -76,7 +76,7 @@ const deerParasites: Record<string, ParasiteDefinition> = {
     name: 'Deer Tick',
     scientificName: 'Ixodes scapularis',
     description:
-      'The black-legged tick, commonly called the deer tick, is a three-host tick that feeds on white-tailed deer as its preferred adult host. Its bite is nearly painless, but the pathogens it carries — Borrelia burgdorferi (Lyme disease), Anaplasma phagocytophilum, and Babesia microti — can cause debilitating systemic illness. Heavy infestations weaken the host through chronic blood loss and immune suppression.',
+      'The black-legged tick, commonly called the deer tick, is a three-host tick that feeds on white-tailed deer as its preferred adult host. Its bite is nearly painless, but the pathogens it carries, including Borrelia burgdorferi (Lyme disease), Anaplasma phagocytophilum, and Babesia microti, can cause debilitating systemic illness. Heavy infestations weaken the host through chronic blood loss and immune suppression.',
     transmissionMethod: 'Contact with questing ticks on vegetation during warm months',
     affectedSpecies: ['white-tailed-deer'],
     stages: [
@@ -96,7 +96,7 @@ const deerParasites: Record<string, ParasiteDefinition> = {
       {
         severity: 'moderate',
         description:
-          'Dozens of engorged ticks feeding simultaneously. Chronic blood loss and early signs of tick-borne illness — lethargy, joint stiffness, mild fever.',
+          'Dozens of engorged ticks feeding simultaneously. Chronic blood loss and early signs of tick-borne illness: lethargy, joint stiffness, mild fever.',
         statEffects: [
           { stat: StatId.HEA, amount: -6 },
           { stat: StatId.IMM, amount: 8 },
@@ -188,7 +188,7 @@ const deerParasites: Record<string, ParasiteDefinition> = {
     name: 'Epizootic Hemorrhagic Disease',
     scientificName: 'Orbivirus (EHDV)',
     description:
-      'A viral hemorrhagic disease transmitted by biting midges (Culicoides). Causes fever, tissue swelling, and hemorrhaging. Outbreaks occur in late summer and autumn when midge populations peak. Can kill quickly or resolve within weeks — outcome is unpredictable.',
+      'A viral hemorrhagic disease transmitted by biting midges (Culicoides). Causes fever, tissue swelling, and hemorrhaging. Outbreaks occur in late summer and autumn when midge populations peak. Can kill quickly or resolve within weeks. Outcome is unpredictable.',
     transmissionMethod: 'Bite from infected Culicoides midges during warm months',
     affectedSpecies: ['white-tailed-deer'],
     stages: [
@@ -222,7 +222,7 @@ const deerParasites: Record<string, ParasiteDefinition> = {
       {
         severity: 'severe',
         description:
-          'Massive internal hemorrhaging and organ failure. You are found dead or dying near water — the classic presentation of EHD. The body temperature is so high the meat will spoil within hours.',
+          'Massive internal hemorrhaging and organ failure. You are found dead or dying near water, the classic presentation of EHD. The body temperature is so high the meat will spoil within hours.',
         statEffects: [
           { stat: StatId.HEA, amount: -28 },
           { stat: StatId.IMM, amount: 25 },

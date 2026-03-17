@@ -5,15 +5,17 @@ interface EventChoiceProps {
   description?: string;
   style: 'default' | 'danger';
   selected?: boolean;
+  dimmed?: boolean;
   onClick: () => void;
 }
 
-export function EventChoice({ label, description, style, selected, onClick }: EventChoiceProps) {
+export function EventChoice({ label, description, style, selected, dimmed, onClick }: EventChoiceProps) {
   const className = [
     styles.choiceButton,
     style === 'danger' ? styles.choiceDanger : styles.choiceDefault,
     selected ? styles.choiceSelected : '',
-  ].join(' ');
+    dimmed ? styles.choiceDimmed : '',
+  ].filter(Boolean).join(' ');
 
   return (
     <button

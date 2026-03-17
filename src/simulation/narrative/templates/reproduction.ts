@@ -92,7 +92,7 @@ export const FAWN_DEFENSE_OPENINGS: FawnDefenseFragment[] = [
 ];
 
 export const FAWN_DEFENSE_CHARGES: string[] = [
-  'You lower your head and charge, front hooves striking hard. The fury in you is total, a chemical certainty that you will kill or die to protect the small thing behind you.',
+  'You lower your head and charge, front hooves striking hard. Heat floods your muscles. Your ears flatten and your hooves connect with the predator before you register the decision to move.',
   'You launch yourself between the predator and your fawn, rearing up and striking with your forelegs. The hooves connect with a crack that sends the hunter stumbling backward.',
   'You rush forward with a snort of rage, ears flat, every line of your body a promise of violence. The predator hesitates, and in that hesitation you close the distance.',
 ];

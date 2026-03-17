@@ -31,7 +31,7 @@ export const PIG_CONFIG: SpeciesConfig = {
   },
 
   weight: {
-    starvationDeath: 10,   // Below starting weight — piglets are small but not starving
+    starvationDeath: 10,   // Below starting weight; piglets are small but not starving
     starvationDebuff: 12,
     vulnerabilityThreshold: 120,
     minFloor: 5,
@@ -72,7 +72,7 @@ export const PIG_CONFIG: SpeciesConfig = {
     summer: 0.33,  // Heat stress reduces feed conversion
     autumn: 0.4,
     winter: 0.38,
-    foragingBonus: 0,  // No foraging in confinement — all feed is delivered
+    foragingBonus: 0,  // No foraging in confinement; all feed is delivered
   },
 
   agePhases: [

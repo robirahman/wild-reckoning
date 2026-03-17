@@ -118,7 +118,7 @@ const deerInjuries: Record<string, InjuryDefinition> = {
     severityLevels: [
       {
         severity: 'minor',
-        description: 'A tine punched through the hide and into the muscle beneath, leaving a deep, narrow wound that bleeds freely but missed anything vital. The puncture will close over quickly — too quickly, trapping bacteria inside.',
+        description: 'A tine punched through the hide and into the muscle beneath, leaving a deep, narrow wound that bleeds freely but missed anything vital. The puncture will close over quickly, too quickly, trapping bacteria inside.',
         statEffects: [
           { stat: StatId.HEA, amount: -5 },
           { stat: StatId.HOM, amount: 6 },
@@ -196,7 +196,7 @@ const deerInjuries: Record<string, InjuryDefinition> = {
     severityLevels: [
       {
         severity: 'minor',
-        description: 'Long, shallow scrapes where antler tines dragged across the hide during the grappling. The cuts are raw and weeping but superficial — more painful than dangerous.',
+        description: 'Long, shallow scrapes where antler tines dragged across the hide during the grappling. The cuts are raw and weeping but superficial, more painful than dangerous.',
         statEffects: [
           { stat: StatId.HEA, amount: -2 },
           { stat: StatId.HOM, amount: 3 },

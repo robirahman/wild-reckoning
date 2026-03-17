@@ -142,7 +142,7 @@ const wolfParasites: Record<string, ParasiteDefinition> = {
       {
         severity: 'moderate',
         description:
-          'Furious phase: unprovoked aggression, snapping at the air, attempting to bite anything nearby. Hydrophobia — throat spasms at the sight of water.',
+          'Furious phase: unprovoked aggression, snapping at the air, attempting to bite anything nearby. Hydrophobia, throat spasms at the sight of water.',
         statEffects: [
           { stat: StatId.WIS, amount: -12 },
           { stat: StatId.ADV, amount: 10 },

@@ -188,7 +188,7 @@ export const ARCTIC_TERN_PARASITES: Record<string, ParasiteDefinition> = {
       {
         severity: 'severe',
         description:
-          'Convulsions and collapse. Avian cholera kills fast — most birds are dead within 24 hours of severe onset. The colony ground is littered with carcasses.',
+          'Convulsions and collapse. Avian cholera kills fast. Most birds are dead within 24 hours of severe onset. The colony ground is littered with carcasses.',
         statEffects: [
           { stat: StatId.HEA, amount: -30 },
           { stat: StatId.IMM, amount: 28 },

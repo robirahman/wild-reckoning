@@ -198,7 +198,7 @@ export const PREDATOR_SPECIES: Record<string, PredatorSpeciesProfile> = {
         label: 'Freeze and watch',
         description: 'Hold perfectly still. Wolves track movement.',
         style: 'danger',
-        narrativeResult: 'You freeze. Every instinct screams at you to run, but you lock your joints and hold, trembling, as the gray shapes circle. Their yellow eyes sweep across the clearing. One raises its nose, testing the air. For a long, terrible moment, the world is silent except for the sound of your own heartbeat hammering in your skull.',
+        narrativeResult: 'You freeze. Your joints lock. Trembling runs through your whole body but your legs hold. The gray shapes circle. One raises its nose, testing the air. Your heartbeat fills your skull. They pass.',
         resolutionType: 'freeze',
         statEffects: [
           { stat: StatId.TRA, amount: 5, duration: 6, label: '+TRA' },

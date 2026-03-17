@@ -12,6 +12,11 @@ interface StatBarProps {
   highlighted?: boolean;
 }
 
+// Stat color: red for negative-polarity stats (higher=worse), green for positive (higher=better)
+function getStatColor(polarity: 'positive' | 'negative'): string {
+  return polarity === 'negative' ? '#c04040' : '#4a8a4a';
+}
+
 export function StatBar({ statId, value, trend, modifiers, highlighted }: StatBarProps) {
   const [showTooltip, setShowTooltip] = useState(false);
   const name = STAT_NAMES[statId];
@@ -22,10 +27,6 @@ export function StatBar({ statId, value, trend, modifiers, highlighted }: StatBa
   const sign = statId === StatId.STR
     ? (value > 50 ? '-' : '+')
     : '+';
-
-  const barColorClass = polarity === 'negative'
-    ? styles.barFillNegative
-    : styles.barFillPositive;
 
   // Trend arrow
   let trendArrow = '';
@@ -39,7 +40,17 @@ export function StatBar({ statId, value, trend, modifiers, highlighted }: StatBa
   }
 
   const activeModifiers = modifiers?.filter((m) => m.stat === statId) ?? [];
-  const polarityLabel = polarity === 'negative' ? 'Higher is worse' : 'Higher is better';
+
+  // Gradient bar: gray on left → stat color on right.
+  // The bar fills to value%, and opacity encodes the magnitude.
+  const statColor = getStatColor(polarity);
+  // Opacity ranges from 0.15 (at value=0) to 1.0 (at value=100)
+  const fillOpacity = 0.15 + (value / 100) * 0.85;
+  const barStyle = {
+    width: '100%',
+    background: `linear-gradient(to right, var(--color-bar-bg), ${statColor})`,
+    opacity: fillOpacity,
+  };
 
   return (
     <div
@@ -60,8 +71,8 @@ export function StatBar({ statId, value, trend, modifiers, highlighted }: StatBa
       </div>
       <div className={styles.barContainer}>
         <div
-          className={`${styles.barFill} ${barColorClass}`}
-          style={{ width: `${value}%` }}
+          className={styles.barFill}
+          style={barStyle}
         />
       </div>
       <span className={styles.statLevel}>{sign} {level}</span>
@@ -69,7 +80,6 @@ export function StatBar({ statId, value, trend, modifiers, highlighted }: StatBa
       {showTooltip && (
         <div className={styles.tooltip}>
           <p className={styles.tooltipDesc}>{description}</p>
-          <p className={styles.tooltipPolarity}>{polarityLabel}</p>
           {activeModifiers.length > 0 && (
             <div className={styles.tooltipModifiers}>
               <p className={styles.tooltipModTitle}>Active modifiers:</p>

@@ -73,7 +73,7 @@ const HERD_ALARM: SocialProfile = {
 
   statEffects: [],
   narratives: [
-    { text: 'A sharp snort from your companion — the kind that makes every muscle lock. Her tail rises like a white flag, and she bolts. The alarm ripples through the group like an electric current: heads up, ears forward, bodies coiled to run. Something is wrong. You cannot see what, but every deer around you is already moving.', terrain: 'open' },
+    { text: 'A sharp snort from your companion. Every muscle locks. Her tail rises white and she bolts. Heads up, ears forward, bodies coiled to run. You cannot see what spooked her, but every deer around you is already moving.', terrain: 'open' },
     { text: 'The doe beside you freezes mid-step, one foreleg raised, head swiveled toward the tree line. Then the alarm snort — explosive, urgent — and the herd erupts into motion around you.' },
   ],
   clinicalDetail: 'Herd alarm response triggered by conspecific detection of threat.',
@@ -167,7 +167,7 @@ const DOE_HIERARCHY: SocialProfile = {
         label: 'Challenge her',
         description: 'Meet her display with your own. Winner gets the prime territory.',
         style: 'danger' as const,
-        narrativeResult: 'You lower your head and step forward, matching her posture. For a long moment you stand nose to nose, the air electric with tension—',
+        narrativeResult: 'You lower your head and step forward, matching her posture. Nose to nose. Neither moves. Her breath is hot on your muzzle.',
         modifyOutcome: (base, innerCtx) => {
           const result = resolveSocial(innerCtx, {
             interactionType: 'dominance-display',

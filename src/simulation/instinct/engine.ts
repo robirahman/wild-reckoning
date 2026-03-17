@@ -207,7 +207,7 @@ function checkWeather(ctx: SimulationContext, nudges: InstinctNudge[]): void {
     nudges.push({
       id: 'heat-lethargy',
       label: 'Heat Lethargy',
-      description: 'Heat on your body, pressing. You pant. Your legs want shade and stillness.',
+      description: 'Heat on your body, pressing. You pant. Your legs drag toward shade.',
       suggestedBehavior: 'foraging',
       suggestedDirection: 'decrease',
       priority: 'low',
@@ -299,7 +299,7 @@ function checkPredatorProximity(ctx: SimulationContext, nudges: InstinctNudge[])
         nudges.push({
           id: 'death-scent',
           label: 'Death Scent',
-          description: 'Old blood smell on the ground here. Something died recently. Your body wants to be somewhere else.',
+          description: 'Old blood smell on the ground here. Something died recently. Your legs angle away from the spot.',
           suggestedBehavior: 'exploration',
           suggestedDirection: 'increase',
           priority: 'medium',

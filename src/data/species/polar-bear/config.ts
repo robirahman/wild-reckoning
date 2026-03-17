@@ -68,10 +68,10 @@ export const POLAR_BEAR_CONFIG: SpeciesConfig = {
   },
 
   seasonalWeight: {
-    spring: 2.5,    // Sea ice still holds — prime seal hunting
-    summer: -3.5,   // Ice breakup — forced ashore, fasting begins
+    spring: 2.5,    // Sea ice still holds, prime seal hunting
+    summer: -3.5,   // Ice breakup, forced ashore, fasting begins
     autumn: -1.0,   // Waiting for freeze-up, limited terrestrial foraging
-    winter: 1.5,    // Ice returns — hunting resumes but daylight is scarce
+    winter: 1.5,    // Ice returns, hunting resumes but daylight is scarce
     foragingBonus: 0.8,
   },
 

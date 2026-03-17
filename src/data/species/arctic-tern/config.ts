@@ -6,7 +6,7 @@ export const ARCTIC_TERN_CONFIG: SpeciesConfig = {
   name: 'Arctic Tern',
   scientificName: 'Sterna paradisaea',
   description:
-    'A small seabird that undertakes the longest migration of any animal — pole to pole and back again, up to 44,000 miles per year. You live in perpetual summer, chasing the sun from Arctic breeding colonies to Antarctic pack ice and back. Your life is measured in ocean crossings, and your body is built for endurance: long, narrow wings, a forked tail for agile flight, and a fierce disposition that drives you to dive-bomb anything that threatens your nest. You may live thirty years, and in that time you will see more of the Earth than almost any other creature.',
+    'A small seabird that undertakes the longest migration of any animal, pole to pole and back again, up to 44,000 miles per year. You live in perpetual summer, chasing the sun from Arctic breeding colonies to Antarctic pack ice and back. Your life is measured in ocean crossings, and your body is built for endurance: long, narrow wings, a forked tail for agile flight, and a fierce disposition that drives you to dive-bomb anything that threatens your nest. You may live thirty years, and in that time you will see more of the Earth than almost any other creature.',
   diet: 'carnivore',
   defaultRegion: 'arctic-breeding-colony',
   defaultRegionDisplayName: 'Arctic Breeding Colony',
@@ -179,7 +179,7 @@ export const ARCTIC_TERN_CONFIG: SpeciesConfig = {
     offspringDeathCauses: [
       'Taken by a great skua',
       'Starved during a storm',
-      'Failed first migration — lost over open ocean',
+      'Failed first migration, lost over open ocean',
       'Hypothermia during an early autumn gale',
       'Predated by a gull at the colony',
     ],

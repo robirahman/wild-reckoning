@@ -6,7 +6,7 @@ export const COMMON_OCTOPUS_CONFIG: SpeciesConfig = {
   name: 'Common Octopus',
   scientificName: 'Octopus vulgaris',
   description:
-    'Eight arms, three hearts, blue blood, and a brain that wraps around your esophagus. You are among the most intelligent invertebrates on Earth — capable of solving puzzles, using tools, and changing color in milliseconds. Your life is tragically short: one to two years, ending inevitably after you mate. Females brood their eggs for months without eating, wasting away as their offspring develop. Males wander after mating, their bodies slowly shutting down in a programmed senescence. You are brilliant, brief, and alone.',
+    'Eight arms, three hearts, blue blood, and a brain that wraps around your esophagus. You are among the most intelligent invertebrates on Earth, capable of solving puzzles, using tools, and changing color in milliseconds. Your life is tragically short: one to two years, ending inevitably after you mate. Females brood their eggs for months without eating, wasting away as their offspring develop. Males wander after mating, their bodies slowly shutting down in a programmed senescence. You are brilliant, brief, and alone.',
   diet: 'carnivore',
   defaultRegion: 'mediterranean-reef',
   defaultRegionDisplayName: 'Mediterranean Reef',
@@ -146,7 +146,7 @@ export const COMMON_OCTOPUS_CONFIG: SpeciesConfig = {
     { id: 'planktonic', label: 'Planktonic Phase', regionId: 'mediterranean-reef', description: 'Drifting in open water as a tiny paralarva' },
     { id: 'settlement', label: 'Reef Settlement', entryFlag: 'settled-on-reef', regionId: 'mediterranean-reef', description: 'Settled on the reef and learning to hunt' },
     { id: 'adult-life', label: 'Adult Life', entryFlag: 'first-hunt-success', regionId: 'mediterranean-reef', description: 'Hunting, denning, and navigating the reef' },
-    { id: 'brooding', label: 'Brooding / Senescence', entryFlag: 'eggs-laid', regionId: 'mediterranean-reef', description: 'Guarding eggs until they hatch — or wandering toward death' },
+    { id: 'brooding', label: 'Brooding / Senescence', entryFlag: 'eggs-laid', regionId: 'mediterranean-reef', description: 'Guarding eggs until they hatch, or wandering toward death' },
   ],
 
   templateVars: {

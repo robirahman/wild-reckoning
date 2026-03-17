@@ -34,10 +34,12 @@ export const WHITE_TAILED_DEER_CONFIG: SpeciesConfig = {
   },
 
   weight: {
-    starvationDeath: 35,
+    // Real deer die at ~50-55% of lean body mass. Female starts at 84 lbs,
+    // male at 110 lbs. 40 lbs represents severe emaciation for either sex.
+    starvationDeath: 40,
     starvationDebuff: 60,
     vulnerabilityThreshold: 80,
-    minFloor: 20,
+    minFloor: 40,
     debuffMaxPenalty: 15,
     maximumBiologicalWeight: 300,
   },
@@ -49,7 +51,9 @@ export const WHITE_TAILED_DEER_CONFIG: SpeciesConfig = {
     maxOldAgeChance: 0.95,
   },
 
-  diseaseDeathChanceAtCritical: 0.08,
+  // Reduced from 0.08: deer are adapted to most regional parasites.
+  // Lethal disease accounts for ~3% annual mortality in real populations.
+  diseaseDeathChanceAtCritical: 0.03,
 
   predationVulnerability: {
     injuryProbIncrease: 0.05,
@@ -68,11 +72,13 @@ export const WHITE_TAILED_DEER_CONFIG: SpeciesConfig = {
   },
 
   seasonalWeight: {
-    spring: 0.5,    // Moderate gain — new growth
-    summer: 1.0,    // Good gain — abundant food
-    autumn: 0.8,    // Good gain — acorn mast
-    winter: -1.5,   // Significant loss — food scarcity
-    foragingBonus: 0.3,  // +0.3 to +1.5 based on foraging setting
+    // Calibrated to real deer: ~+15-20 lbs spring-fall, ~-10-13 lbs winter.
+    // A 130-lb doe cycles between ~105 (late winter) and ~140 (late fall).
+    spring: 0.4,    // +5.2 lbs over 13 weeks. New growth emerging.
+    summer: 0.8,    // +10.4 lbs over 13 weeks. Peak forage abundance.
+    autumn: 0.5,    // +6.5 lbs over 13 weeks. Acorn mast, pre-winter fat.
+    winter: -0.8,   // -10.4 lbs over 13 weeks. Real deer lose ~15-20% body weight.
+    foragingBonus: 0.15,  // +0.15 to +0.75 based on foraging setting (1-5)
   },
 
   agePhases: [

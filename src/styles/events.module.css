@@ -105,7 +105,7 @@
   border: 2px solid;
   border-radius: 4px;
   background: var(--color-panel-bg);
-  transition: background 0.15s, border-color 0.15s;
+  transition: background 0.15s, border-color 0.15s, opacity 0.15s;
 }
 
 .choiceDescription {
@@ -116,31 +116,44 @@
   margin-top: 2px;
 }
 
+/* Safe/cautious choices: blue */
 .choiceDefault {
   border-color: #4a7aa0;
   color: #4a7aa0;
 }
 
 .choiceDefault:hover {
-  background: rgba(74, 122, 160, 0.1);
+  background: rgba(74, 122, 160, 0.12);
 }
 
+/* Aggressive/risky choices: hot pink */
 .choiceDanger {
-  border-color: #8a5aa0;
-  color: #8a5aa0;
+  border-color: #d4477a;
+  color: #d4477a;
 }
 
 .choiceDanger:hover {
-  background: rgba(138, 90, 160, 0.1);
+  background: rgba(212, 71, 122, 0.10);
 }
 
+/* Selected state: lighter version of hover highlight, persistent */
 .choiceSelected {
   font-weight: 700;
-  background: rgba(74, 122, 160, 0.15);
+}
+
+.choiceDefault.choiceSelected {
+  background: rgba(74, 122, 160, 0.18);
+  border-color: #3a6a90;
 }
 
 .choiceDanger.choiceSelected {
-  background: rgba(138, 90, 160, 0.15);
+  background: rgba(212, 71, 122, 0.15);
+  border-color: #c03868;
+}
+
+/* Dimmed state: when another choice is selected, non-selected choices dim */
+.choiceDimmed {
+  opacity: 0.4;
 }
 
 .revocableNote {

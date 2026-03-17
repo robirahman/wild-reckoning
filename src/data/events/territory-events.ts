@@ -8,7 +8,7 @@ export const TERRITORY_EVENTS: GameEvent[] = [
     id: 'territory-marking',
     type: 'active',
     category: 'social',
-    narrativeText: 'You patrol the boundaries of your range, leaving scent marks and signs of your presence. The familiar landmarks reassure you — this ground is yours.',
+    narrativeText: 'You patrol the boundaries of your range, leaving scent marks and signs of your presence. The familiar landmarks reassure you. This ground is yours.',
     statEffects: [
       { stat: StatId.HOM, amount: 4, label: '+HOM' },
       { stat: StatId.TRA, amount: -2, label: '-TRA' },
@@ -29,7 +29,7 @@ export const TERRITORY_EVENTS: GameEvent[] = [
     id: 'territory-intruder',
     type: 'active',
     category: 'social',
-    narrativeText: 'Fresh signs of another {{species}} appear within your territory. The scent is unfamiliar — an outsider testing your boundaries.',
+    narrativeText: 'Fresh signs of another {{species}} appear within your territory. The scent is unfamiliar, an outsider testing your boundaries.',
     statEffects: [
       { stat: StatId.ADV, amount: 5, label: '+ADV' },
     ],
@@ -48,12 +48,12 @@ export const TERRITORY_EVENTS: GameEvent[] = [
         ],
         revocable: false,
         style: 'default',
-        deathChance: { probability: 0.02, cause: 'Killed defending territory from an intruder.' },
+        deathChance: { probability: 0.003, cause: 'Killed defending territory from an intruder.' },
       },
       {
         id: 'avoid',
         label: 'Avoid confrontation',
-        description: 'Let them pass — fighting is risky',
+        description: 'Let them pass. Fighting is risky.',
         narrativeResult: 'You keep your distance. The intruder wanders through and eventually moves on, but your territory feels less secure.',
         statEffects: [
           { stat: StatId.HOM, amount: -4, label: '-HOM' },
@@ -67,8 +67,8 @@ export const TERRITORY_EVENTS: GameEvent[] = [
     conditions: [
       { type: 'has_flag', flag: 'territory-established' },
     ],
-    weight: 4,
-    cooldown: 5,
+    weight: 2,
+    cooldown: 12,
     tags: ['territory', 'social', 'rival'],
     footnote: 'Territorial disputes are among the most common causes of injury in wildlife. Many animals have ritualized contests to reduce the risk of lethal combat.',
   },
@@ -77,7 +77,7 @@ export const TERRITORY_EVENTS: GameEvent[] = [
     id: 'territory-expansion',
     type: 'active',
     category: 'social',
-    narrativeText: 'The area beyond your current range looks promising — good foraging grounds and sheltered resting spots. You could expand your territory.',
+    narrativeText: 'The area beyond your current range looks promising: good foraging grounds and sheltered resting spots. You could expand your territory.',
     statEffects: [],
     choices: [
       {
@@ -141,7 +141,7 @@ export const TERRITORY_EVENTS: GameEvent[] = [
         consequences: [],
         revocable: false,
         style: 'danger',
-        deathChance: { probability: 0.03, cause: 'Killed in a territorial boundary dispute.' },
+        deathChance: { probability: 0.005, cause: 'Killed in a territorial boundary dispute.' },
       },
       {
         id: 'yield',
@@ -168,14 +168,14 @@ export const TERRITORY_EVENTS: GameEvent[] = [
     id: 'territory-establish',
     type: 'active',
     category: 'social',
-    narrativeText: 'You have been ranging through this area long enough to know its contours — the good foraging patches, the safe resting spots, the water sources. It feels like home. Perhaps it is time to claim it.',
+    narrativeText: 'You have been ranging through this area long enough to know its contours: the good foraging patches, the safe resting spots, the water sources. It feels like home. Perhaps it is time to claim it.',
     statEffects: [],
     choices: [
       {
         id: 'establish',
         label: 'Establish a territory',
         description: 'Claim this range as your own',
-        narrativeResult: 'You begin the work of marking boundaries — scent, sound, presence. This ground is yours now.',
+        narrativeResult: 'You begin the work of marking boundaries: scent, sound, presence. This ground is yours now.',
         statEffects: [
           { stat: StatId.HOM, amount: 8, label: '+HOM' },
           { stat: StatId.ADV, amount: -3, label: '-ADV' },
@@ -207,7 +207,7 @@ export const TERRITORY_EVENTS: GameEvent[] = [
     weight: 4,
     cooldown: 10,
     tags: ['territory', 'social'],
-    footnote: 'Establishing a territory is a major life decision for many animals. A good territory provides reliable food, shelter, and mating opportunities — but must be constantly defended.',
+    footnote: 'Establishing a territory is a major life decision for many animals. A good territory provides reliable food, shelter, and mating opportunities, but must be constantly defended.',
   },
 
   {
@@ -259,6 +259,6 @@ export const TERRITORY_EVENTS: GameEvent[] = [
     weight: 2,
     cooldown: 12,
     tags: ['territory', 'predator'],
-    footnote: 'Animals fighting on their home ground — the "resident advantage" — tend to win territorial contests more often than intruders, even against larger opponents.',
+    footnote: 'Animals fighting on their home ground, the "resident advantage," tend to win territorial contests more often than intruders, even against larger opponents.',
   },
 ];

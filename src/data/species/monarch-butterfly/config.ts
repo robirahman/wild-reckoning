@@ -6,7 +6,7 @@ export const MONARCH_BUTTERFLY_CONFIG: SpeciesConfig = {
   name: 'Monarch Butterfly',
   scientificName: 'Danaus plexippus',
   description:
-    'A creature of impossible fragility performing an impossible journey. No single monarch completes the full migration cycle — the knowledge to navigate thousands of miles is written in their genes, not their memory. You are not just an animal. You are a lineage.',
+    'A creature of impossible fragility performing an impossible journey. No single monarch completes the full migration cycle. The knowledge to navigate thousands of miles is written in their genes, not their memory. You are not just an animal. You are a lineage.',
   diet: 'herbivore',
   defaultRegion: 'great-lakes-milkweed',
   defaultRegionDisplayName: 'Great Lakes Milkweed Corridor',

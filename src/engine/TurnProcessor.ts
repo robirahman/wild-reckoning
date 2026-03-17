@@ -145,9 +145,14 @@ export function resolveTurn(state: GameState): {
 
           // Apply difficulty multiplier to death chance
           prob *= DIFFICULTY_PRESETS[state.difficulty ?? 'normal'].deathChanceFactor;
-          
-          // Apply Fast-Forward multiplier
-          prob *= ffMult;
+
+          // Fast-forward compresses 12 turns into 1 (3x events, 4x consequences).
+          // To get correct 12x death risk: with 3x events we need each event's
+          // death prob scaled so (1-p')^3 = (1-p)^12, i.e. p' = 1-(1-p)^4.
+          // This compounds survival probability correctly without overshooting.
+          if (ffMult > 1) {
+            prob = 1 - Math.pow(1 - prob, ffMult);
+          }
 
           prob = Math.max(predVuln.deathChanceMin, Math.min(predVuln.deathChanceMax, prob));
           deathRollProbability = prob;

@@ -363,7 +363,7 @@ function getTransitionNarrative(
   }
 
   if (to === 'septic') {
-    return 'The infection has spread beyond the wound. Your whole body feels wrong — trembling, burning, sluggish. The fever is climbing. You can feel yourself weakening.';
+    return 'The infection has spread beyond the wound. Your whole body feels wrong -- trembling, burning, sluggish. The fever is climbing. You can feel yourself weakening.';
   }
 
   if (from === 'infected' && to === 'recovering') {
@@ -376,7 +376,7 @@ function getTransitionNarrative(
 
   if (to === 'chronic') {
     if (woundCategory === 'closed') {
-      return 'The old injury has left its mark. The area is stiff and weak — it may never fully recover.';
+      return 'The old injury has left its mark. The area is stiff and weak -- it may never fully recover.';
     }
     return 'The wound has closed, but the scar tissue is thick and tight. A permanent reminder.';
   }

@@ -26,7 +26,7 @@ export const MONARCH_BUTTERFLY_EVENTS: GameEvent[] = [
     weight: 18,
     cooldown: 2,
     tags: ['foraging', 'food', 'milkweed'],
-    footnote: 'Monarchs are obligate milkweed specialists as larvae. The cardiac glycosides (cardenolides) they sequester from milkweed make them unpalatable to most bird predators — a defense that persists through metamorphosis into adulthood.',
+    footnote: 'Monarchs are obligate milkweed specialists as larvae. The cardiac glycosides (cardenolides) they sequester from milkweed make them unpalatable to most bird predators, a defense that persists through metamorphosis into adulthood.',
   },
 
   {
@@ -123,7 +123,7 @@ export const MONARCH_BUTTERFLY_EVENTS: GameEvent[] = [
     weight: 12,
     cooldown: 3,
     tags: ['foraging', 'habitat-loss'],
-    footnote: 'Herbicide-resistant crops and the widespread use of glyphosate have eliminated an estimated 1.3 billion milkweed stems from the US Midwest since 1999 — roughly a 58% decline in the monarch\'s primary larval food source.',
+    footnote: 'Herbicide-resistant crops and the widespread use of glyphosate have eliminated an estimated 1.3 billion milkweed stems from the US Midwest since 1999, roughly a 58% decline in the monarch\'s primary larval food source.',
   },
 
   {

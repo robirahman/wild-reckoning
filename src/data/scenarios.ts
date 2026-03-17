@@ -6,7 +6,7 @@ export const SCENARIOS: ScenarioDefinition[] = [
   {
     id: 'the-last-winter',
     name: 'The Last Winter',
-    description: 'An unusually harsh winter has left you emaciated and weak. Survive 20 turns to see spring — if your body can hold together.',
+    description: 'An unusually harsh winter has left you emaciated and weak. Survive 20 turns to see spring, if your body can hold together.',
     speciesId: 'white-tailed-deer',
     difficulty: 'hard',
     sex: 'female',

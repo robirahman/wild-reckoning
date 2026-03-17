@@ -37,7 +37,7 @@ export const FIG_WASP_INJURIES: Record<string, InjuryDefinition> = {
       },
       {
         severity: 'severe',
-        description: 'Your wings are gone. Torn off completely as you squeezed through the ostiole into the fig. This is normal — this is how it is supposed to work. You will never fly again. You will never leave this fig. You are where you need to be.',
+        description: 'Your wings are gone. Torn off completely as you squeezed through the ostiole into the fig. This is normal. This is how it is supposed to work. You will never fly again. You will never leave this fig. You are where you need to be.',
         statEffects: [
           { stat: StatId.HEA, amount: -5 },
           { stat: StatId.HOM, amount: 8 },

@@ -6,7 +6,7 @@ export const POISON_DART_FROG_CONFIG: SpeciesConfig = {
   name: 'Strawberry Poison Dart Frog',
   scientificName: 'Oophaga pumilio',
   description:
-    'A thumbnail-sized frog whose brilliant red-and-blue coloration warns predators of the alkaloid poisons sequestered in its skin. You are not born toxic — you earn it, one ant at a time, concentrating the chemical defenses of your prey into a living arsenal. Males call from the leaf litter to attract mates, wrestle rivals for territory, and carry tadpoles on their backs to bromeliad pools high in the canopy. Females return to feed each tadpole unfertilized eggs — one of the most devoted forms of parental care in the amphibian world. Your life plays out vertically, from the forest floor to the treetops.',
+    'A thumbnail-sized frog whose brilliant red-and-blue coloration warns predators of the alkaloid poisons sequestered in its skin. You are not born toxic. You earn it, one ant at a time, concentrating the chemical defenses of your prey into a living arsenal. Males call from the leaf litter to attract mates, wrestle rivals for territory, and carry tadpoles on their backs to bromeliad pools high in the canopy. Females return to feed each tadpole unfertilized eggs, one of the most devoted forms of parental care in the amphibian world. Your life plays out vertically, from the forest floor to the treetops.',
   diet: 'carnivore',
   defaultRegion: 'costa-rican-rainforest',
   defaultRegionDisplayName: 'Costa Rican Rainforest',
@@ -114,7 +114,7 @@ export const POISON_DART_FROG_CONFIG: SpeciesConfig = {
     matingOnsetAge: 8,
     matingSeasons: 'any',
     matingSeasonResetMonth: 'January',
-    autoMatingProbability: 0.008,  // Year-round, moderate freq — 58% survival means fewer needed
+    autoMatingProbability: 0.008,  // Year-round, moderate freq; 58% survival means fewer needed
     maleCompetition: {
       enabled: true,
       baseWinProb: 0.40,
@@ -160,7 +160,7 @@ export const POISON_DART_FROG_CONFIG: SpeciesConfig = {
     offspringDeathCauses: [
       'Bromeliad pool dried out',
       'Eaten by a predatory insect larva',
-      'Starved — mother stopped returning with eggs',
+      'Starved, mother stopped returning with eggs',
       'Washed out of pool by heavy rain',
       'Killed by a tadpole-eating spider',
     ],

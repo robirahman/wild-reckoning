@@ -37,7 +37,7 @@ export const MONARCH_BUTTERFLY_INJURIES: Record<string, InjuryDefinition> = {
       },
       {
         severity: 'severe',
-        description: 'Your wing is shredded — large portions of the membrane are gone, and the veins are damaged. Flight is barely possible. Without functional wings, you cannot feed, migrate, or escape predators. Butterfly wings do not heal.',
+        description: 'Your wing is shredded. Large portions of the membrane are gone, and the veins are damaged. Flight is barely possible. Without functional wings, you cannot feed, migrate, or escape predators. Butterfly wings do not heal.',
         statEffects: [
           { stat: StatId.HEA, amount: -20 },
           { stat: StatId.HOM, amount: 22 },
@@ -73,7 +73,7 @@ export const MONARCH_BUTTERFLY_INJURIES: Record<string, InjuryDefinition> = {
       },
       {
         severity: 'moderate',
-        description: 'A bird grabbed you and bit down before the cardiac glycosides in your body made it spit you out. Your thorax is bruised, a wing is crumpled, and hemolymph is leaking from puncture wounds. You survived because you are toxic — but the damage is real.',
+        description: 'A bird grabbed you and bit down before the cardiac glycosides in your body made it spit you out. Your thorax is bruised, a wing is crumpled, and hemolymph is leaking from puncture wounds. You survived because you are toxic, but the damage is real.',
         statEffects: [
           { stat: StatId.HEA, amount: -12 },
           { stat: StatId.TRA, amount: 15 },
