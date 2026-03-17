@@ -160,12 +160,18 @@ export class GameAPI {
   static readonly speciesIds = getAllSpeciesIds();
   static readonly backstoryOptions = BACKSTORY_OPTIONS;
 
+  private _store: any; // Using any to avoid complex Zustand type issues in constructor for now
+
+  constructor(customStore?: any) {
+    this._store = customStore || useGameStore;
+  }
+
   private get store() {
-    return useGameStore.getState();
+    return this._store.getState();
   }
 
   private set(partial: Partial<GameState>) {
-    useGameStore.setState(partial);
+    this._store.setState(partial);
   }
 
   // ── Lifecycle ──────────────────────────────────────────────────────────
@@ -178,7 +184,7 @@ export class GameAPI {
         `Unknown backstory "${opts.backstory}". Valid: ${BACKSTORY_OPTIONS.map(b => b.type).join(', ')}`
       );
     }
-    this.store.startGame(
+    this._store.getState().startGame(
       opts.species,
       backstory,
       opts.sex,
@@ -190,7 +196,7 @@ export class GameAPI {
 
   /** Reset the store to menu state (ends any in-progress game). */
   reset(): void {
-    this.store.returnToMenu();
+    this._store.getState().returnToMenu();
   }
 
   // ── Turn flow ──────────────────────────────────────────────────────────
@@ -203,12 +209,12 @@ export class GameAPI {
    * every active event that has choices, then call `endTurn()`.
    */
   generateTurn(): TurnInfo {
-    const store = this.store;
+    const store = this._store.getState();
 
     // 1. Advance physical simulation (time, weather, physiology, etc.)
     store.advanceTurn();
 
-    let state = useGameStore.getState();
+    let state = this._store.getState();
 
     // 2. Introduce NPCs on early turns (assign map positions)
     if (state.npcs.length === 0 && state.time.turn >= NPC_INTRODUCTION_MIN_TURN) {
@@ -233,7 +239,7 @@ export class GameAPI {
     }
 
     // Introduce mate NPC at mating season
-    state = useGameStore.getState();
+    state = this._store.getState();
     const hasMate = state.npcs.some(n => n.type === 'mate' && n.alive);
     if (!hasMate && state.time.turn >= NPC_INTRODUCTION_MIN_TURN) {
       const reproConfig = state.speciesBundle.config.reproduction;
@@ -253,7 +259,7 @@ export class GameAPI {
       }
     }
 
-    state = useGameStore.getState();
+    state = this._store.getState();
 
     // 3. Ambient text
     const ambientText = generateAmbientText({
@@ -280,14 +286,14 @@ export class GameAPI {
           animal: { ...state.animal, flags },
         });
       }
-      state = useGameStore.getState();
+      state = this._store.getState();
       if (state.territory.established) {
         const newTerritory = tickTerritory(state.territory, state.animal.speciesId, state.rng);
         this.set({ territory: newTerritory });
       }
     }
 
-    state = useGameStore.getState();
+    state = this._store.getState();
 
     // 6. Generate events synchronously (no Web Worker)
     const generatedEvents = generateTurnEvents(state);
@@ -323,7 +329,7 @@ export class GameAPI {
 
       const newEntries = drainDebriefingEntries();
       if (newEntries.length > 0) {
-        const animal = useGameStore.getState().animal;
+        const animal = this._store.getState().animal;
         const log = [...(animal.debriefingLog ?? []), ...newEntries];
         this.set({ animal: { ...animal, debriefingLog: log } });
       }
@@ -366,7 +372,7 @@ export class GameAPI {
     const allEvents = [...events, ...storylineResult.injectedEvents];
     store.setEvents(allEvents);
 
-    state = useGameStore.getState();
+    state = this._store.getState();
 
     return {
       turn: state.time.turn,
@@ -383,7 +389,7 @@ export class GameAPI {
 
   /** Make a choice for an active event. */
   makeChoice(eventId: string, choiceId: string): void {
-    this.store.makeChoice(eventId, choiceId);
+    this._store.getState().makeChoice(eventId, choiceId);
   }
 
   /**
@@ -392,13 +398,13 @@ export class GameAPI {
    * Returns the choices that were made.
    */
   autoChoose(): Array<{ eventId: string; choiceId: string }> {
-    const state = useGameStore.getState();
+    const state = this._store.getState();
     const made: Array<{ eventId: string; choiceId: string }> = [];
     for (const eventId of [...state.pendingChoices]) {
       const event = state.currentEvents.find(e => e.definition.id === eventId);
       const firstChoice = event?.definition.choices?.[0];
       if (firstChoice) {
-        this.store.makeChoice(eventId, firstChoice.id);
+        this._store.getState().makeChoice(eventId, firstChoice.id);
         made.push({ eventId, choiceId: firstChoice.id });
       }
     }
@@ -414,7 +420,7 @@ export class GameAPI {
    * Throws if there are still pending choices.
    */
   endTurn(): TurnResultSummary {
-    const state = useGameStore.getState();
+    const state = this._store.getState();
     if (state.pendingChoices.length > 0) {
       throw new Error(
         `Cannot end turn: ${state.pendingChoices.length} pending choices remain. ` +
@@ -451,10 +457,10 @@ export class GameAPI {
     // Apply to state
     this.set({ animal: result.animal });
     if (result.statEffects.length > 0) {
-      useGameStore.getState().applyStatEffects(result.statEffects);
+      this._store.getState().applyStatEffects(result.statEffects);
     }
     for (const consequence of result.consequences) {
-      useGameStore.getState().applyConsequence(consequence);
+      this._store.getState().applyConsequence(consequence);
     }
 
     // Compute stat deltas
@@ -466,7 +472,7 @@ export class GameAPI {
     result.turnResult.statDelta = statDelta;
 
     // NPC encounter tracking + lifetime stats (mirrors useGameEngine)
-    const encounterState = useGameStore.getState();
+    const encounterState = this._store.getState();
     let updatedNPCs = encounterState.npcs;
     let predatorsEvaded = 0;
     let preyEaten = 0;
@@ -508,11 +514,11 @@ export class GameAPI {
     const newFriendsMade = Math.max(0, currentFriends - previousFriends);
 
     if (updatedNPCs !== encounterState.npcs) {
-      useGameStore.getState().setNPCs(updatedNPCs);
+      this._store.getState().setNPCs(updatedNPCs);
     }
 
     // Update lifetime stats
-    const latestAnimal = useGameStore.getState().animal;
+    const latestAnimal = this._store.getState().animal;
     const currentFoodSources = { ...latestAnimal.lifetimeStats.foodSources };
     for (const [id, count] of Object.entries(foodSourceHits)) {
       currentFoodSources[id] = (currentFoodSources[id] || 0) + count;
@@ -520,9 +526,9 @@ export class GameAPI {
     if (predatorsEvaded > 0 || preyEaten > 0 || rivalsDefeated > 0 || newFriendsMade > 0 || Object.keys(foodSourceHits).length > 0) {
       this.set({
         animal: {
-          ...useGameStore.getState().animal,
+          ...this._store.getState().animal,
           lifetimeStats: {
-            ...useGameStore.getState().animal.lifetimeStats,
+            ...this._store.getState().animal.lifetimeStats,
             predatorsEvaded: latestAnimal.lifetimeStats.predatorsEvaded + predatorsEvaded,
             preyEaten: latestAnimal.lifetimeStats.preyEaten + preyEaten,
             rivalsDefeated: latestAnimal.lifetimeStats.rivalsDefeated + rivalsDefeated,
@@ -534,7 +540,7 @@ export class GameAPI {
     }
 
     // Show results + check death
-    useGameStore.getState().setTurnResult(result.turnResult);
+    this._store.getState().setTurnResult(result.turnResult);
     this.checkDeathConditions();
 
     return summarizeTurnResult(result.turnResult, statDelta);
@@ -545,10 +551,10 @@ export class GameAPI {
    * `endTurn()` returned `pendingDeathRolls`.
    */
   resolveDeathRoll(eventId: string, escapeOptionId: string): { survived: boolean } {
-    const stateBefore = useGameStore.getState();
+    const stateBefore = this._store.getState();
     const wasDead = stateBefore.phase === 'dead';
-    this.store.resolveDeathRoll(eventId, escapeOptionId);
-    const stateAfter = useGameStore.getState();
+    this._store.getState().resolveDeathRoll(eventId, escapeOptionId);
+    const stateAfter = this._store.getState();
     return { survived: stateAfter.phase !== 'dead' && !wasDead };
   }
 
@@ -556,19 +562,19 @@ export class GameAPI {
 
   /** Set a behavioral slider (1–5). */
   setBehavior(key: keyof BehavioralSettings, value: BehaviorLevel): void {
-    this.store.updateBehavioralSetting(key, value);
+    this._store.getState().updateBehavioralSetting(key, value);
   }
 
   // ── Movement ───────────────────────────────────────────────────────────
 
   /** Move to an adjacent map node. */
   moveTo(nodeId: string): void {
-    this.store.moveLocation(nodeId);
+    this._store.getState().moveLocation(nodeId);
   }
 
   /** Get available map nodes the animal can move to. */
   getAdjacentNodes(): Array<{ id: string; type: string; name?: string }> {
-    const state = useGameStore.getState();
+    const state = this._store.getState();
     if (!state.map) return [];
     const current = state.map.nodes.find(n => n.id === state.map!.currentLocationId);
     if (!current) return [];
@@ -582,7 +588,7 @@ export class GameAPI {
 
   /** Get a compact snapshot of the current game state. */
   getSnapshot(): GameSnapshot {
-    const state = useGameStore.getState();
+    const state = this._store.getState();
     const a = state.animal;
     return {
       phase: state.phase,
@@ -608,7 +614,7 @@ export class GameAPI {
 
   /** Get computed (effective) stat values. */
   getStatSnapshot(): StatSnapshot {
-    const stats = useGameStore.getState().animal.stats;
+    const stats = this._store.getState().animal.stats;
     const snap = {} as StatSnapshot;
     for (const id of Object.values(StatId)) {
       snap[id] = computeEffectiveValue(stats[id]);
@@ -618,17 +624,17 @@ export class GameAPI {
 
   /** Whether the game is still in progress. */
   get isAlive(): boolean {
-    return useGameStore.getState().phase === 'playing';
+    return this._store.getState().phase === 'playing';
   }
 
   /** Current phase: 'menu' | 'playing' | 'dead' | 'evolving'. */
   get phase(): string {
-    return useGameStore.getState().phase;
+    return this._store.getState().phase;
   }
 
   /** Access the raw Zustand store for advanced use. */
   get rawState(): GameState {
-    return useGameStore.getState();
+    return this._store.getState();
   }
 
   // ── Convenience: play N turns automatically ────────────────────────────
@@ -672,7 +678,7 @@ export class GameAPI {
       }
 
       // Dismiss results (updates store state)
-      useGameStore.getState().dismissResults();
+      this._store.getState().dismissResults();
 
       log.push({
         turn: turnInfo.turn,
@@ -687,7 +693,7 @@ export class GameAPI {
   // ── Death check (mirrors useGameEngine.checkDeathConditions) ───────────
 
   private checkDeathConditions(): void {
-    const state = useGameStore.getState();
+    const state = this._store.getState();
     const animal = state.animal;
     const config = state.speciesBundle.config;
     const parasiteDefs = state.speciesBundle.parasites;

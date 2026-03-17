@@ -9,12 +9,15 @@ import { createTurnSlice } from './slices/turnSlice';
 
 export interface GameState extends UISlice, GameSystemSlice, AnimalSlice, WorldSlice, TurnSlice {}
 
-export const useGameStore = create<GameState>()(
+export const createGameStore = (initialState?: Partial<GameState>) => create<GameState>()(
   devtools((...a) => ({
     ...createUISlice(...a),
     ...createGameSystemSlice(...a),
     ...createAnimalSlice(...a),
     ...createWorldSlice(...a),
     ...createTurnSlice(...a),
+    ...initialState,
   }))
 );
+
+export const useGameStore = createGameStore();

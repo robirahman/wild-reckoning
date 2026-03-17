@@ -4,9 +4,15 @@ import { StartScreen } from './components/StartScreen';
 import { DeathScreen } from './components/DeathScreen';
 import { EvolutionSelection } from './components/EvolutionSelection';
 import { VisceralEffects } from './components/VisceralEffects';
+import { WebAPIDoc } from './components/WebAPIDoc';
 
 function App() {
   const phase = useGameStore((s) => s.phase);
+  const isAPIDoc = window.location.pathname.endsWith('/api') || window.location.pathname.endsWith('/api/');
+
+  if (isAPIDoc) {
+    return <WebAPIDoc />;
+  }
 
   return (
     <>
