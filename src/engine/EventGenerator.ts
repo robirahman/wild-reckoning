@@ -316,7 +316,7 @@ export function generateEvents(ctx: GenerationContext): ResolvedEvent[] {
 
   // Select 1-3 active events
   const baseActiveCount = ctx.rng.int(1, Math.min(3, activePool.length));
-  const activeCount = ctx.fastForward ? Math.min(baseActiveCount * 3, activePool.length) : baseActiveCount;
+  const activeCount = baseActiveCount; // FF uses 1x events with 12x consequences
   const selectedActiveIndices = new Set<number>();
 
   for (let i = 0; i < activeCount && selectedActiveIndices.size < activePool.length; i++) {
@@ -339,7 +339,7 @@ export function generateEvents(ctx: GenerationContext): ResolvedEvent[] {
       (e) => e.weight * contextMultiplier(e, ctx)
     );
     const basePassiveCount = ctx.rng.int(0, Math.min(2, passivePool.length));
-    const passiveCount = ctx.fastForward ? Math.min(basePassiveCount * 3, passivePool.length) : basePassiveCount;
+    const passiveCount = basePassiveCount; // FF uses 1x events with 12x consequences
     const selectedPassiveIndices = new Set<number>();
 
     for (let i = 0; i < passiveCount && selectedPassiveIndices.size < passivePool.length; i++) {

@@ -55,7 +55,7 @@ export function resolveTurn(state: GameState): {
   const eventOutcomes: EventOutcome[] = [];
   const pendingDeathRolls: PendingDeathRoll[] = [];
   
-  const ffMult = state.fastForward ? 4 : 1;
+  const ffMult = state.fastForward ? 12 : 1;
 
   // Capture pre-resolution stat snapshot for delta computation
   const preStats: Record<StatId, number> = {} as Record<StatId, number>;
@@ -146,9 +146,9 @@ export function resolveTurn(state: GameState): {
           // Apply difficulty multiplier to death chance
           prob *= DIFFICULTY_PRESETS[state.difficulty ?? 'normal'].deathChanceFactor;
 
-          // Fast-forward compresses 12 turns into 1 (3x events, 4x consequences).
-          // To get correct 12x death risk: with 3x events we need each event's
-          // death prob scaled so (1-p')^3 = (1-p)^12, i.e. p' = 1-(1-p)^4.
+          // Fast-forward compresses 12 turns into 1 (1x events, 12x consequences).
+          // To get correct 12x death risk: with 1x events we need each event's
+          // death prob scaled so (1-p') = (1-p)^12, i.e. p' = 1-(1-p)^12.
           // This compounds survival probability correctly without overshooting.
           if (ffMult > 1) {
             prob = 1 - Math.pow(1 - prob, ffMult);

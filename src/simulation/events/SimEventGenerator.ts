@@ -164,7 +164,7 @@ export function generateSimulationEvents(ctx: SimulationContext): ResolvedEvent[
   const totalWeight = weights.reduce((a, b) => a + b, 0);
   if (totalWeight <= 0) return results;
 
-  const maxEvents = ctx.fastForward ? 2 : 1;
+  const maxEvents = 1; // FF uses 1x events with 12x consequences
   const maxProbEvents = Math.max(0, maxEvents - results.length);
 
   for (let j = 0; j < maxProbEvents && selectedIndices.size < templateMatches.length; j++) {
