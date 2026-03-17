@@ -113,7 +113,7 @@ const deerParasites: Record<string, ParasiteDefinition> = {
         description:
           'Massive tick burden with systemic tick-borne disease. Swollen joints, persistent fever, neurological symptoms from Borrelia infection.',
         statEffects: [
-          { stat: StatId.HEA, amount: -14 },
+          { stat: StatId.HEA, amount: -7 },
           { stat: StatId.IMM, amount: 16 },
           { stat: StatId.HOM, amount: 12 },
           { stat: StatId.ADV, amount: 8 },
@@ -121,8 +121,9 @@ const deerParasites: Record<string, ParasiteDefinition> = {
         ],
         secondaryEffects: ['severe anemia', 'Lyme arthritis', 'neurological impairment'],
         turnDuration: { min: 3, max: 8 },
+        // Real: deer tolerate heavy tick loads better than moose. Most survive.
         progressionChance: 0,
-        remissionChance: 0.10,
+        remissionChance: 0.15,
       },
     ],
   },
@@ -169,7 +170,7 @@ const deerParasites: Record<string, ParasiteDefinition> = {
         description:
           'Massive infestation, severe anemia, large patches of bare skin.',
         statEffects: [
-          { stat: StatId.HEA, amount: -15 },
+          { stat: StatId.HEA, amount: -7 },
           { stat: StatId.IMM, amount: 18 },
           { stat: StatId.HOM, amount: 15 },
           { stat: StatId.ADV, amount: 10 },

@@ -1049,6 +1049,121 @@ const turtleEvents: GameEvent[] = [
     tags: ['environmental', 'danger'],
     footnote: 'Cold-stunning events kill thousands of sea turtles annually. In January 2010, over 4,600 green sea turtles were cold-stunned in Florida alone during an unusual cold snap.',
   },
+
+  // ══════════════════════════════════════════════
+  //  TRAWL BYCATCH (missing: #1 real-world cause, ~30-40% of deaths)
+  // ══════════════════════════════════════════════
+
+  {
+    id: 'turtle-trawl-bycatch',
+    type: 'active',
+    category: 'predator',
+    narrativeText: 'A wall of mesh sweeps through the water, dragging the sea floor. Fish and debris tumble past. The net is closing around you, heavy with catch.',
+    statEffects: [
+      { stat: StatId.TRA, amount: 8, label: '+TRA' },
+    ],
+    choices: [
+      {
+        id: 'dive-under-net',
+        label: 'Dive beneath the net',
+        statEffects: [
+          { stat: StatId.HEA, amount: -3, label: '-HEA' },
+        ],
+        consequences: [],
+        revocable: false,
+        style: 'default',
+        deathChance: {
+          probability: 0.04,
+          cause: 'Caught in a shrimp trawl. Drowned before the net was hauled.',
+          statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
+        },
+      },
+      {
+        id: 'swim-sideways',
+        label: 'Try to swim around the edge',
+        statEffects: [],
+        consequences: [],
+        revocable: false,
+        style: 'danger',
+        deathChance: {
+          probability: 0.08,
+          cause: 'Tangled in the trawl. Held under until the air was gone.',
+          statModifiers: [{ stat: StatId.HEA, factor: -0.003 }],
+        },
+      },
+    ],
+    conditions: [],
+    weight: 6,
+    cooldown: 12,
+    tags: ['predator', 'danger', 'human'],
+    footnote: 'Commercial fishing bycatch is the #1 cause of sea turtle mortality worldwide. Shrimp trawls alone kill an estimated 50,000 sea turtles annually in U.S. waters.',
+  },
+
+  // ══════════════════════════════════════════════
+  //  LONGLINE HOOK (additional bycatch variant)
+  // ══════════════════════════════════════════════
+
+  {
+    id: 'turtle-longline-hook',
+    type: 'passive',
+    category: 'predator',
+    narrativeText: 'A line trails through the water, baited hooks dangling at intervals. The smell of squid. You reach for the bait.',
+    statEffects: [
+      { stat: StatId.TRA, amount: 6, label: '+TRA' },
+    ],
+    consequences: [],
+    subEvents: [
+      {
+        eventId: 'turtle-longline-drown',
+        chance: 0.06,
+        conditions: [],
+        narrativeText: 'The hook sets deep. The line holds you under. You cannot surface to breathe.',
+        footnote: '(Drowned on longline)',
+        statEffects: [],
+        consequences: [
+          { type: 'death', cause: 'Hooked on a longline. Drowned tethered to the gear.' },
+        ],
+      },
+    ],
+    conditions: [],
+    weight: 8,
+    cooldown: 10,
+    tags: ['predator', 'danger', 'human'],
+    footnote: 'Pelagic longline fisheries are a major source of sea turtle bycatch. Green turtles are attracted to the bait and become hooked, often drowning when unable to surface.',
+  },
+
+  // ══════════════════════════════════════════════
+  //  BOAT CHANNEL (increased boat strike frequency - real: ~10-15%)
+  // ══════════════════════════════════════════════
+
+  {
+    id: 'turtle-boat-channel',
+    type: 'passive',
+    category: 'environmental',
+    narrativeText: 'The water vibrates with engine noise. Propeller wash churns the surface above. You are in the shipping channel, grazing on the seagrass beds that grow in the shallows here.',
+    statEffects: [
+      { stat: StatId.TRA, amount: 6, label: '+TRA' },
+    ],
+    consequences: [],
+    subEvents: [
+      {
+        eventId: 'turtle-channel-strike',
+        chance: 0.05,
+        conditions: [],
+        narrativeText: 'A hull shadow passes over you. Then the propeller. The blades catch your carapace.',
+        footnote: '(Killed by vessel strike)',
+        statEffects: [],
+        consequences: [
+          { type: 'death', cause: 'Struck by a vessel propeller in the shipping channel.' },
+        ],
+      },
+    ],
+    conditions: [],
+    weight: 5,
+    cooldown: 10,
+    tags: ['environmental', 'danger', 'human'],
+    footnote: 'Boat strikes are a leading cause of sea turtle mortality in coastal waters. Turtles surface to breathe and are vulnerable to fast-moving vessels.',
+  },
 ];
 
 export const GREEN_SEA_TURTLE_EVENTS: GameEvent[] = [...turtleEvents];

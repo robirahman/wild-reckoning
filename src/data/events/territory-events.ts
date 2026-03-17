@@ -159,8 +159,8 @@ export const TERRITORY_EVENTS: GameEvent[] = [
     conditions: [
       { type: 'has_flag', flag: 'territory-established' },
     ],
-    weight: 3,
-    cooldown: 8,
+    weight: 1,
+    cooldown: 16,
     tags: ['territory', 'social', 'rival'],
   },
 

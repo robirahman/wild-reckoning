@@ -1655,4 +1655,111 @@ export const AFRICAN_ELEPHANT_EVENTS: GameEvent[] = [
     tags: ['predator', 'social'],
     footnote: 'Musth bulls have been observed killing calves, though this is relatively rare in wild populations. The behavior is more common in areas where bull age structure is disrupted by poaching, leaving younger, less socially experienced bulls to enter musth without the moderating presence of older males.',
   },
+
+  // ══════════════════════════════════════════════
+  //  DROUGHT EVENT (missing real-world cause: ~15-20% of deaths)
+  // ══════════════════════════════════════════════
+
+  {
+    id: 'elephant-drought',
+    type: 'active',
+    category: 'environmental',
+    narrativeText: 'The waterhole is a cracked basin of gray mud. You dig with your forefeet, trunk scooping earth. Water seeps in, brown and warm. Barely enough to wet your mouth. The herd stands in the open sun, waiting.',
+    statEffects: [
+      { stat: StatId.HOM, amount: 10, label: '+HOM' },
+      { stat: StatId.CLI, amount: 5, label: '+CLI' },
+    ],
+    choices: [
+      {
+        id: 'dig-deeper',
+        label: 'Dig deeper into the dry riverbed',
+        statEffects: [],
+        consequences: [
+          { type: 'modify_weight', amount: -40 },
+        ],
+        revocable: false,
+        style: 'default',
+        deathChance: {
+          probability: 0.03,
+          cause: 'Collapsed from dehydration while digging for water.',
+          statModifiers: [{ stat: StatId.HEA, factor: -0.003 }],
+        },
+      },
+      {
+        id: 'march-to-river',
+        label: 'March toward the distant river',
+        description: 'Two days of walking through open savanna',
+        statEffects: [
+          { stat: StatId.TRA, amount: 10, label: '+TRA' },
+        ],
+        consequences: [
+          { type: 'modify_weight', amount: -60 },
+        ],
+        revocable: false,
+        style: 'danger',
+        deathChance: {
+          probability: 0.05,
+          cause: 'The river was dry. You walked until your legs would not carry you.',
+          statModifiers: [{ stat: StatId.HEA, factor: -0.004 }],
+        },
+      },
+    ],
+    conditions: [
+      { type: 'season', seasons: ['summer', 'autumn'] },
+    ],
+    weight: 6,
+    cooldown: 12,
+    tags: ['environmental', 'danger', 'drought'],
+    footnote: 'Drought is one of the leading natural causes of elephant mortality, particularly for calves and elderly animals. Extended dry seasons force herds to travel long distances between water sources.',
+  },
+
+  // ══════════════════════════════════════════════
+  //  POACHING PATROL (increased frequency - real: ~15-25% of deaths)
+  // ══════════════════════════════════════════════
+
+  {
+    id: 'elephant-poacher-ambush',
+    type: 'active',
+    category: 'predator',
+    narrativeText: 'A sharp crack echoes across the plain. Not thunder. The herd freezes. Another crack. A matriarch staggers. The smell of cordite drifts downwind.',
+    statEffects: [
+      { stat: StatId.TRA, amount: 10, label: '+TRA' },
+      { stat: StatId.ADV, amount: 6, label: '+ADV' },
+    ],
+    choices: [
+      {
+        id: 'flee-with-herd',
+        label: 'Run with the herd',
+        statEffects: [],
+        consequences: [],
+        revocable: false,
+        style: 'default',
+        deathChance: {
+          probability: 0.06,
+          cause: 'A bullet found you as the herd scattered.',
+          statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
+        },
+      },
+      {
+        id: 'charge-threat',
+        label: 'Charge toward the noise',
+        statEffects: [
+          { stat: StatId.ADV, amount: 8, label: '+ADV' },
+        ],
+        consequences: [],
+        revocable: false,
+        style: 'danger',
+        deathChance: {
+          probability: 0.12,
+          cause: 'You charged. They were waiting. A heavy-caliber round stopped you mid-stride.',
+          statModifiers: [{ stat: StatId.HEA, factor: -0.003 }],
+        },
+      },
+    ],
+    conditions: [],
+    weight: 8,
+    cooldown: 10,
+    tags: ['predator', 'danger', 'human'],
+    footnote: 'Poaching remains one of the greatest threats to African elephants. An estimated 20,000-30,000 elephants are killed annually for the ivory trade.',
+  },
 ];

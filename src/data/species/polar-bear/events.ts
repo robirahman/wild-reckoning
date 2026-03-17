@@ -1284,4 +1284,137 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
     cooldown: 8,
     tags: ['foraging', 'food', 'danger'],
   },
+
+  // ══════════════════════════════════════════════
+  //  SEA ICE BREAKUP (missing: #1 modern threat, ~20-30% of deaths)
+  // ══════════════════════════════════════════════
+
+  {
+    id: 'pb-ice-breakup-swim',
+    type: 'active',
+    category: 'environmental',
+    narrativeText: 'The floe you are resting on cracks. A widening lead of dark water separates you from the main ice sheet. The nearest solid ice is a long swim through open ocean. Your fat reserves will determine whether you reach it.',
+    statEffects: [
+      { stat: StatId.CLI, amount: 12, label: '+CLI' },
+      { stat: StatId.HOM, amount: 10, label: '+HOM' },
+    ],
+    choices: [
+      {
+        id: 'swim-for-ice',
+        label: 'Swim for the distant ice',
+        description: 'A long-distance swim through open water',
+        statEffects: [
+          { stat: StatId.HEA, amount: -5, label: '-HEA' },
+        ],
+        consequences: [
+          { type: 'modify_weight', amount: -20 },
+        ],
+        revocable: false,
+        style: 'default',
+        deathChance: {
+          probability: 0.04,
+          cause: 'Drowned during a long-distance swim between ice floes.',
+          statModifiers: [{ stat: StatId.HEA, factor: -0.004 }],
+        },
+      },
+      {
+        id: 'swim-to-shore',
+        label: 'Swim to the distant shore',
+        description: 'Land is farther but certain. No seals there.',
+        statEffects: [
+          { stat: StatId.HOM, amount: 15, label: '+HOM' },
+        ],
+        consequences: [
+          { type: 'modify_weight', amount: -30 },
+        ],
+        revocable: false,
+        style: 'danger',
+        deathChance: {
+          probability: 0.06,
+          cause: 'Exhaustion during the swim to shore. The water was too cold and the distance too great.',
+          statModifiers: [{ stat: StatId.HEA, factor: -0.005 }],
+        },
+      },
+    ],
+    conditions: [
+      { type: 'season', seasons: ['spring', 'summer'] },
+    ],
+    weight: 6,
+    cooldown: 10,
+    tags: ['environmental', 'danger'],
+    footnote: 'As Arctic sea ice declines, polar bears are forced to swim longer distances between floes. Swims of over 100 km have been documented, with significant mortality among cubs and weakened adults.',
+  },
+
+  // ══════════════════════════════════════════════
+  //  SUBSISTENCE HUNTING (missing: #1 known cause of mortality, ~25-35%)
+  // ══════════════════════════════════════════════
+
+  {
+    id: 'pb-subsistence-hunter',
+    type: 'active',
+    category: 'predator',
+    narrativeText: 'The flat crack of a rifle carries across the ice. You smell humans and machine oil. Snowmobiles sit at the edge of the pressure ridge.',
+    statEffects: [
+      { stat: StatId.TRA, amount: 18, label: '+TRA' },
+      { stat: StatId.ADV, amount: 12, label: '+ADV' },
+    ],
+    choices: [
+      {
+        id: 'retreat-downwind',
+        label: 'Retreat downwind',
+        statEffects: [],
+        consequences: [],
+        revocable: false,
+        style: 'default',
+        deathChance: {
+          probability: 0.05,
+          cause: 'Shot by a subsistence hunter.',
+          statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
+        },
+      },
+      {
+        id: 'stand-ground-hunter',
+        label: 'Stand your ground',
+        description: 'You are the largest predator on the ice',
+        statEffects: [],
+        consequences: [],
+        revocable: false,
+        style: 'danger',
+        deathChance: {
+          probability: 0.12,
+          cause: 'You stood your ground. The hunter did not miss.',
+          statModifiers: [{ stat: StatId.HEA, factor: -0.003 }],
+        },
+      },
+    ],
+    conditions: [],
+    weight: 8,
+    cooldown: 12,
+    tags: ['predator', 'danger', 'human'],
+    footnote: 'Subsistence hunting by Indigenous Arctic communities is currently the greatest known single cause of polar bear mortality, with an average of 800+ bears taken annually across the circumpolar range.',
+  },
+
+  // ══════════════════════════════════════════════
+  //  EXTENDED FASTING (starvation from reduced hunting access)
+  // ══════════════════════════════════════════════
+
+  {
+    id: 'pb-extended-fast',
+    type: 'passive',
+    category: 'environmental',
+    narrativeText: 'Another day on shore with nothing to eat. You chew kelp washed up on the beach. It does nothing. Your body is consuming its own fat and muscle. The ice will not return for weeks.',
+    statEffects: [
+      { stat: StatId.HOM, amount: 8, label: '+HOM' },
+    ],
+    consequences: [
+      { type: 'modify_weight', amount: -15 },
+    ],
+    conditions: [
+      { type: 'season', seasons: ['summer', 'autumn'] },
+    ],
+    weight: 4,
+    cooldown: 12,
+    tags: ['environmental', 'starvation'],
+    footnote: 'Polar bears can fast for months during ice-free periods, surviving on stored fat. However, as ice-free seasons lengthen, bears face longer fasting periods that can be fatal, particularly for subadults.',
+  },
 ];

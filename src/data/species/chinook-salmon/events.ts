@@ -1752,4 +1752,122 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     cooldown: 8,
     tags: ['predator', 'danger'],
   },
+
+  // ══════════════════════════════════════════════
+  //  DAM PASSAGE (missing: ~5-15% mortality per dam, real major threat)
+  // ══════════════════════════════════════════════
+
+  {
+    id: 'salmon-dam-passage',
+    type: 'active',
+    category: 'environmental',
+    narrativeText: 'Concrete across the entire river. The water piles up against the wall and spills over in a deafening curtain. Other fish mill in the turbulence below. A narrow channel along the bank carries a thin stream of water upward, step by step.',
+    statEffects: [
+      { stat: StatId.TRA, amount: 12, label: '+TRA' },
+      { stat: StatId.ADV, amount: 8, label: '+ADV' },
+    ],
+    choices: [
+      {
+        id: 'fish-ladder',
+        label: 'Enter the fish ladder',
+        description: 'A narrow concrete channel with baffled steps',
+        statEffects: [
+          { stat: StatId.HEA, amount: -3, label: '-HEA' },
+        ],
+        consequences: [
+          { type: 'modify_weight', amount: -2 },
+        ],
+        revocable: false,
+        style: 'default',
+        deathChance: {
+          probability: 0.03,
+          cause: 'Exhausted in the fish ladder. The current pushed you back and held you against the grate.',
+          statModifiers: [{ stat: StatId.HEA, factor: -0.003 }],
+        },
+      },
+      {
+        id: 'leap-spillway',
+        label: 'Leap the spillway',
+        description: 'A desperate attempt over the dam face',
+        statEffects: [
+          { stat: StatId.HOM, amount: 12, label: '+HOM' },
+        ],
+        consequences: [
+          { type: 'modify_weight', amount: -3 },
+        ],
+        revocable: false,
+        style: 'danger',
+        deathChance: {
+          probability: 0.08,
+          cause: 'Struck the concrete face and tumbled back into the tailrace. The turbines pulled you under.',
+          statModifiers: [{ stat: StatId.HEA, factor: -0.004 }],
+        },
+      },
+    ],
+    conditions: [
+      { type: 'has_flag', flag: 'spawning-migration-begun' },
+    ],
+    weight: 14,
+    cooldown: 6,
+    tags: ['environmental', 'danger', 'human'],
+    footnote: 'Dams are a major cause of salmon mortality. The Columbia River system has 14 dams on the main stem and major tributaries. Even with fish ladders, 5-15% of adults die at each dam passage.',
+  },
+
+  // ══════════════════════════════════════════════
+  //  WARM WATER STRESS (real: increasing cause of pre-spawn mortality)
+  // ══════════════════════════════════════════════
+
+  {
+    id: 'salmon-thermal-barrier',
+    type: 'active',
+    category: 'environmental',
+    narrativeText: 'The river water is warm. Too warm. Your gills strain for oxygen that the heated water cannot hold. Other fish hold in the shade of overhanging banks, mouths gaping.',
+    statEffects: [
+      { stat: StatId.HEA, amount: -6, label: '-HEA' },
+      { stat: StatId.CLI, amount: 8, label: '+CLI' },
+    ],
+    choices: [
+      {
+        id: 'hold-in-pool',
+        label: 'Hold in the deepest pool',
+        description: 'Wait for cooler water. The oxygen is thin here.',
+        statEffects: [],
+        consequences: [
+          { type: 'modify_weight', amount: -2 },
+        ],
+        revocable: false,
+        style: 'default',
+        deathChance: {
+          probability: 0.03,
+          cause: 'The warm water overwhelmed your body. Heart stopped in the thermal refuge.',
+          statModifiers: [{ stat: StatId.HEA, factor: -0.004 }],
+        },
+      },
+      {
+        id: 'push-through-warm',
+        label: 'Push upstream through the warm reach',
+        statEffects: [
+          { stat: StatId.HOM, amount: 10, label: '+HOM' },
+        ],
+        consequences: [
+          { type: 'modify_weight', amount: -4 },
+        ],
+        revocable: false,
+        style: 'danger',
+        deathChance: {
+          probability: 0.06,
+          cause: 'Cardiac arrest in overheated water. Your body drifted downstream.',
+          statModifiers: [{ stat: StatId.HEA, factor: -0.005 }],
+        },
+      },
+    ],
+    conditions: [
+      { type: 'has_flag', flag: 'spawning-migration-begun' },
+      { type: 'season', seasons: ['summer'] },
+    ],
+    weight: 10,
+    cooldown: 6,
+    tags: ['environmental', 'danger'],
+    footnote: 'Water temperatures above 21C (70F) cause physiological stress in chinook salmon. Pre-spawn mortality rates of 40-80% have been documented in rivers with elevated summer temperatures.',
+  },
 ];
