@@ -25,7 +25,7 @@ export const STORYLINES: StorylineDefinition[] = [
         id: 'drought-1',
         delayMin: 0,
         delayMax: 0,
-        narrativeText: 'The creek bed is dry, soil cracked and powdery underfoot. The remaining water sources smell of concentrated mud and crowded bodies.',
+        narrativeText: 'The creek bed is dry. Cracked soil shifts under your feet. The remaining water smells of mud and too many bodies.',
         statEffects: [
           { stat: StatId.TRA, amount: 5, duration: 4, label: '+TRA (drought stress)' },
         ],
@@ -36,7 +36,7 @@ export const STORYLINES: StorylineDefinition[] = [
         id: 'drought-2',
         delayMin: 3,
         delayMax: 6,
-        narrativeText: 'Vegetation across {{region.name}} is brown and brittle. Your sides feel hollow, ribs prominent. Every feeding spot has others already there.',
+        narrativeText: 'Vegetation across {{region.name}} is brown and brittle. Your sides feel hollow, gaps between your ribs when you breathe. Every feeding spot has others already there.',
         statEffects: [
           { stat: StatId.HEA, amount: -8, duration: 4, label: '-HEA (drought)' },
         ],
@@ -92,7 +92,7 @@ export const STORYLINES: StorylineDefinition[] = [
         id: 'poacher-2',
         delayMin: 2,
         delayMax: 5,
-        narrativeText: 'A sharp crack echoes through the trees, close. An engine growls where no road runs. Another of your kind lies dead nearby, body still warm, part of it cut away.',
+        narrativeText: 'A sharp crack echoes through the trees, close. An engine growls where no road runs. Another of your kind lies nearby, body still warm, blood smell thick. The head is gone.',
         statEffects: [
           { stat: StatId.TRA, amount: 10, duration: 6, label: '+TRA (poacher threat)' },
           { stat: StatId.ADV, amount: 8, duration: 4, label: '+ADV (hypervigilance)' },
@@ -222,7 +222,7 @@ export const STORYLINES: StorylineDefinition[] = [
         id: 'winter-survival-2',
         delayMin: 3,
         delayMax: 6,
-        narrativeText: 'The {{species.groupNoun}} packs into sheltered ground, stripping bark from every reachable stem. Your body burns its own reserves. Some of the group no longer stand in the morning.',
+        narrativeText: 'The {{species.groupNoun}} packs into sheltered ground, stripping bark from every reachable stem. Your body burns its own reserves. In the morning, bodies on the ground. Cold. No breath smell.',
         statEffects: [
           { stat: StatId.HEA, amount: -10, duration: 4, label: '-HEA (starvation)' },
           { stat: StatId.HOM, amount: 10, duration: 4, label: '+HOM (yarding bond)' },
@@ -336,7 +336,7 @@ export const STORYLINES: StorylineDefinition[] = [
         id: 'elephant-drought-2',
         delayMin: 3,
         delayMax: 7,
-        narrativeText: 'The oldest female raises her trunk, sampling the dry wind. She turns and walks. The {{species.groupNoun}} follows, moving across parched ground on a route none of you have traveled before.',
+        narrativeText: 'The oldest female raises her trunk, sampling the dry wind. She turns and walks. The {{species.groupNoun}} follows, moving across parched ground across ground with no scent marks, no familiar smells.',
         statEffects: [
           { stat: StatId.HEA, amount: -8, duration: 4, label: '-HEA (exhausting march)' },
           { stat: StatId.HOM, amount: 12, duration: 4, label: '+HOM (far from home)' },
@@ -351,7 +351,7 @@ export const STORYLINES: StorylineDefinition[] = [
         id: 'elephant-drought-3',
         delayMin: 4,
         delayMax: 8,
-        narrativeText: 'In a rocky gorge, water seeps from the stone, cool and clean. The {{species.groupNoun}} drinks. The youngest ones splash and wade for the first time in weeks.',
+        narrativeText: 'In a rocky gorge, water seeps from the stone, cold, tasting of minerals. The {{species.groupNoun}} drinks. The youngest ones splash and wade for the first time in weeks.',
         statEffects: [
           { stat: StatId.HOM, amount: -15, duration: 4, label: '-HOM (sanctuary found)' },
           { stat: StatId.TRA, amount: -8, duration: 4, label: '-TRA (peace restored)' },
@@ -394,7 +394,7 @@ export const STORYLINES: StorylineDefinition[] = [
         id: 'elephant-poaching-2',
         delayMin: 2,
         delayMax: 5,
-        narrativeText: 'A sharp crack at dawn. One of the older bulls drops. The {{species.groupNoun}} trumpets, high and loud, then runs in a tight cluster, bodies pressing together.',
+        narrativeText: 'A crack splits the air. A body hits the ground ahead of you, dust rising, blood smell instant. The {{species.groupNoun}} trumpets, high and loud, then runs in a tight cluster, bodies pressing together.',
         statEffects: [
           { stat: StatId.TRA, amount: 15, duration: 6, label: '+TRA (herd member killed)' },
           { stat: StatId.ADV, amount: 12, duration: 4, label: '+ADV (mortal danger)' },
@@ -472,7 +472,7 @@ export const STORYLINES: StorylineDefinition[] = [
         id: 'spawning-grounds-1',
         delayMin: 0,
         delayMax: 0,
-        narrativeText: 'The gravel bed is packed with bodies, red and battered, pushing for position. You need clean gravel with steady current. Others keep shoving into the same spot.',
+        narrativeText: 'The gravel bed is packed with bodies, skin torn, fins ragged. Current pushes against you from every side. Others shove into the same spot.',
         statEffects: [
           { stat: StatId.ADV, amount: 8, duration: 3, label: '+ADV (nest competition)' },
           { stat: StatId.HOM, amount: 10, duration: 3, label: '+HOM (spawning drive)' },
@@ -484,7 +484,7 @@ export const STORYLINES: StorylineDefinition[] = [
         id: 'spawning-grounds-2',
         delayMin: 1,
         delayMax: 3,
-        narrativeText: 'The redd is yours. Your tail sweeps gravel aside, hollowing a depression in the streambed. Eggs release into the cool, oxygen-rich current. Your body is spent.',
+        narrativeText: 'The redd is yours. Your tail sweeps gravel aside, hollowing a depression in the streambed. Eggs release into the cold current. Your muscles barely respond.',
         statEffects: [
           { stat: StatId.WIS, amount: 10, duration: 4, label: '+WIS (purpose fulfilled)' },
           { stat: StatId.TRA, amount: -5, duration: 3, label: '-TRA (journey complete)' },

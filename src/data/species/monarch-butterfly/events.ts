@@ -107,7 +107,7 @@ export const MONARCH_BUTTERFLY_EVENTS: GameEvent[] = [
     id: 'monarch-degraded-habitat',
     type: 'passive',
     category: 'foraging',
-    narrativeText: "Monoculture cropland in every direction. No milkweed breaks the rows. You fly on, burning reserves, searching for a chemical signature that does not come.",
+    narrativeText: "The same plant in every direction, row after row. No milkweed scent. You fly on, burning reserves, searching for a chemical signature that does not come.",
     statEffects: [
       { stat: StatId.HOM, amount: 10, label: '+HOM' },
       { stat: StatId.ADV, amount: 8, label: '+ADV' },
@@ -463,7 +463,7 @@ export const MONARCH_BUTTERFLY_EVENTS: GameEvent[] = [
     id: 'monarch-magnetic-navigation',
     type: 'passive',
     category: 'migration',
-    narrativeText: "The days shorten. Something in your antennae responds to the magnetic field, building an internal bearing. Combined with the sun compass in your compound eyes, a direction registers: south-southwest. It pulls.",
+    narrativeText: "The days shorten. Something in your antennae responds to the magnetic field, building an internal bearing. Combined with the sun compass in your compound eyes, a direction registers: south-southwest. Your body turns toward it.",
     statEffects: [
       { stat: StatId.WIS, amount: 5, label: '+WIS' },
       { stat: StatId.NOV, amount: -8, label: '-NOV' },
@@ -681,7 +681,7 @@ export const MONARCH_BUTTERFLY_EVENTS: GameEvent[] = [
     id: 'monarch-citizen-scientist',
     type: 'passive',
     category: 'social',
-    narrativeText: "Something catches you mid-flight and holds you by the thorax. A small adhesive disc is pressed to your hindwing. Then you are released and flying again, with a weight on one wing that was not there before.",
+    narrativeText: "Something catches you mid-flight and pins your thorax. A small disc presses onto your hindwing. You are released. One wing pulls heavier than the other now.",
     statEffects: [
       { stat: StatId.TRA, amount: 5, label: '+TRA' },
       { stat: StatId.NOV, amount: 5, label: '+NOV' },
@@ -698,7 +698,7 @@ export const MONARCH_BUTTERFLY_EVENTS: GameEvent[] = [
     weight: 6,
     cooldown: 99,
     tags: ['social', 'citizen-science', 'human'],
-    footnote: 'Monarch Watch, based at the University of Kansas, has tagged over 1.8 million monarchs since 1992. Tag recoveries at the Mexican overwintering sites provide crucial data on migration routes, timing, and survival rates.',
+    footnote: 'Tagging programs have marked over 1.8 million monarchs since 1992. Recovered tags at the Mexican overwintering sites provide data on migration routes, timing, and survival rates.',
   },
 
   {

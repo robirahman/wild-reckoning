@@ -84,7 +84,7 @@ export const STARVATION_PRESSURE_CONFIG: PressureConfig = {
 
     let narrative: string;
     if (bcs <= 1) {
-      narrative = 'The muscles along your spine have gone ropy and thin. Your haunches are hollow. Each step costs more than the last. The hunger is constant, a pull from inside your gut that never stops.';
+      narrative = 'The muscles along your spine are wasted, skin loose over bone. Your haunches are hollow. Each step costs more than the last. The hunger is constant, a clench in your gut that never stops.';
     } else {
       narrative = 'Your ribs show through the thinning coat. A tremor has settled into your legs. The understory browse is picked over, barely worth chewing. Beyond the tree line, you smell richer forage on the wind.';
     }
@@ -221,7 +221,7 @@ export const HYPOTHERMIA_PRESSURE_CONFIG: PressureConfig = {
 
     let narrative: string;
     if (severity > 5) {
-      narrative = 'The cold is in your core. Your shivering has gone violent, whole-body convulsions that you cannot stop. Your legs buckle and catch. Everything is slow. You need shelter or you will not get up again.';
+      narrative = 'Shivering through your whole body, convulsions you cannot stop. Your legs buckle. Everything is slow. You need shelter or you will not get up again.';
     } else {
       narrative = 'The chill will not leave. Hours of shivering and you are still cold. Your ears, muzzle, and hoof-tips have gone numb. The wind finds every gap in your fur where the coat has thinned. You are losing heat faster than you can make it.';
     }
@@ -362,7 +362,7 @@ export const IMMUNE_PRESSURE_CONFIG: PressureConfig = {
     } else if (hasInfection) {
       narrative = 'The wound is hot and swollen, weeping thin fluid that smells wrong. Fever has taken hold. You shiver and burn at the same time. The infection is spreading.';
     } else if (parasiteCount > 0) {
-      narrative = 'Something is draining you from inside. Your coat has thinned in patches. You eat constantly but stay hungry. The itch and pull never stops.';
+      narrative = 'Your coat has thinned in patches. You eat but stay hungry. The itch never stops.';
     } else {
       narrative = 'Everything heals slowly now. Small scratches stay red and swollen. Your coat is dull, your eyes sunken. You are tired in a way that sleep does not fix.';
     }

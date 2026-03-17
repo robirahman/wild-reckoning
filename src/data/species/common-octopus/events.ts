@@ -10,7 +10,7 @@ export const COMMON_OCTOPUS_EVENTS: GameEvent[] = [
     id: 'octopus-planktonic-drift',
     type: 'passive',
     category: 'environmental',
-    narrativeText: 'The current pushes you through clouds of copepods. Your arms taste salt and chitin. Everything is larger than you.',
+    narrativeText: 'The current pushes you through clouds of copepods. Your arms taste salt and chitin. Shadows pass above and below, each one many times your size.',
     statEffects: [
       { stat: StatId.NOV, amount: 5, label: '+NOV' },
       { stat: StatId.ADV, amount: 3, label: '+ADV' },

@@ -47,7 +47,7 @@ export const SEASONAL_STORYLINES: StorylineDefinition[] = [
         id: 'rival-return-3',
         delayMin: 2,
         delayMax: 5,
-        narrativeText: 'The boundary is fixed now. One of you holds the better ground. Your reactions are faster than they were before the contest, your awareness of scent and sound sharper.',
+        narrativeText: 'The boundary is fixed now. One of you holds the better ground. Every scent on the wind hits sharper now. Sounds snap your head around before you think.',
         statEffects: [
           { stat: StatId.WIS, amount: 8, duration: 6, label: '+WIS (hard-won wisdom)' },
           { stat: StatId.TRA, amount: -6, duration: 4, label: '-TRA (settled borders)' },
@@ -87,7 +87,7 @@ export const SEASONAL_STORYLINES: StorylineDefinition[] = [
         id: 'flood-2',
         delayMin: 2,
         delayMax: 4,
-        narrativeText: 'Familiar paths are gone, submerged under brown water. Animals crowd the remaining high ground. The smell of mud and rot is everywhere. Food is scarce on the shrinking dry patches.',
+        narrativeText: 'The ground smells different. Water covers the trails you used. Animals crowd the remaining high ground. The smell of mud and rot is everywhere. Food is scarce on the shrinking dry patches.',
         statEffects: [
           { stat: StatId.HOM, amount: 12, duration: 4, label: '+HOM (displaced)' },
           { stat: StatId.HEA, amount: -8, duration: 3, label: '-HEA (exposure)' },
@@ -143,7 +143,7 @@ export const SEASONAL_STORYLINES: StorylineDefinition[] = [
         id: 'outbreak-2',
         delayMin: 3,
         delayMax: 6,
-        narrativeText: 'Dead bodies lie in the open, stiff and bloating. The smell of decay is constant. Your own body feels heavy and slow, joints aching, appetite gone.',
+        narrativeText: 'The smell hits first, thick and sweet. Then you see them: stiff bodies in the open, bellies swollen. Your own body feels heavy and slow, joints aching, appetite gone.',
         statEffects: [
           { stat: StatId.HEA, amount: -10, duration: 4, label: '-HEA (disease peak)' },
           { stat: StatId.HOM, amount: 8, duration: 4, label: '+HOM (population crash)' },
@@ -214,7 +214,7 @@ export const SEASONAL_STORYLINES: StorylineDefinition[] = [
         id: 'great-dry-3',
         delayMin: 4,
         delayMax: 8,
-        narrativeText: 'The smell of rain reaches you before the first drops fall. Water hits the hot ground and hisses into steam. Then the sky opens. Within hours, the dry channels are running full again.',
+        narrativeText: 'The smell of rain reaches you before the first drops fall. Water hits the hot ground, vapor rising off the dirt. Then the sky opens. Within hours, the dry channels are running full again.',
         statEffects: [
           { stat: StatId.HEA, amount: 12, duration: 4, label: '+HEA (rain at last)' },
           { stat: StatId.TRA, amount: -10, duration: 4, label: '-TRA (relief)' },

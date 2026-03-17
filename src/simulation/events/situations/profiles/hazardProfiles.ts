@@ -277,7 +277,7 @@ const FOREST_FIRE: HazardProfile = {
     { stat: StatId.ADV, amount: 10, duration: 3, label: '+ADV' },
   ],
   narratives: [
-    { text: 'The air turns acrid and orange. Through the trees, a wall of light advances — not the gentle light of dawn, but a roaring, consuming brightness that devours everything it touches. The smoke thickens until every breath is a struggle, and the heat radiates through the forest like an open furnace.', terrain: 'forest' },
+    { text: 'The air turns acrid and orange. Heat presses through the trees. A crackling roar builds ahead, and through the smoke you see it — a wall of orange light advancing between the trunks. The smoke thickens until every breath burns.', terrain: 'forest' },
     { text: 'A crackling sound fills the air, growing louder by the second. The sky above the canopy glows an angry orange, and embers drift down like burning snow. The forest is on fire, and the fire is moving faster than you expected anything could move.' },
   ],
   clinicalDetail: 'Wildfire event. Thermal and smoke exposure risk.',

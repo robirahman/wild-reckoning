@@ -83,10 +83,10 @@ export const FAWN_BIRTH_PROFILE: ReproductionProfile = {
     const cover = ctx.currentNodeResources?.cover ?? 50;
 
     const viableNarrative = bcs >= 3
-      ? 'The birth is swift. Two fawns — twins, as is common for a well-nourished doe. They are perfect: damp, trembling, their spotted coats already drying in the warm air. Within an hour, they are nursing, their tiny mouths finding the teat with an instinct older than consciousness.'
+      ? 'The birth is swift. Two fawns — twins. They come out wet, trembling, spotted coats steaming in the warm air. Within an hour, small mouths find the teat and latch.'
       : bcs >= 2
-        ? 'The labor is hard — harder than it should be. Your depleted body struggles to complete what it started months ago. A single fawn emerges, small but alive, its breath coming in quick, shallow gasps. You lick it clean with desperate urgency, willing it to stand.'
-        : 'The fawn is born too small. You lick it, nudge it, but its legs fold under every attempt to stand. The spotted coat seems too large for the body beneath it, and its breathing is labored. Your body had too little to give.';
+        ? 'The labor is hard. A single fawn emerges, small but breathing, quick shallow gasps. You lick it clean. It wobbles upright, legs fold, wobbles again.'
+        : 'The fawn is born too small. You lick it, nudge it, but its legs fold under every attempt to stand. The spotted coat seems too large for the body beneath it, and its breathing is labored.';
 
     const coverNarrative = cover >= 50
       ? 'The thicket provides excellent cover — tall ferns and dense undergrowth that will hide the fawn during its first vulnerable days.'
@@ -199,7 +199,7 @@ export const FAWN_DEFENSE_PROFILE: ReproductionProfile = {
         label: 'Charge the predator',
         description: 'Attack with your hooves. Does are fierce defenders.',
         style: 'danger' as const,
-        narrativeResult: 'You explode from cover, front hooves raised like hammers. The maternal fury that drives you is absolute — every fiber of your being is focused on destroying the threat to your fawn. You strike downward with bone-cracking force.',
+        narrativeResult: 'You charge from cover, front hooves raised. You strike downward at the predator with bone-cracking force, placing yourself between it and the fawn.',
         modifyOutcome(base: SimulationOutcome, innerCtx: SimulationContext) {
           const fight = resolveFight(innerCtx, {
             opponentStrength: 25,

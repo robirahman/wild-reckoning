@@ -285,7 +285,7 @@ export const ARCTIC_TERN_EVENTS: GameEvent[] = [
     id: 'tern-departure-south',
     type: 'passive',
     category: 'migration',
-    narrativeText: 'The light is shortening. Something pulls at you, below thought. Other terns lift from the colony and turn south. You follow.',
+    narrativeText: 'The light is shortening. A tension builds in your breast muscles, a restlessness that does not ease. Other terns lift from the colony and turn south. You follow.',
     statEffects: [
       { stat: StatId.HOM, amount: 8, duration: 3, label: '+HOM' },
       { stat: StatId.NOV, amount: 5, label: '+NOV' },
@@ -1006,7 +1006,7 @@ export const ARCTIC_TERN_EVENTS: GameEvent[] = [
     id: 'tern-colony-foraging-info',
     type: 'passive',
     category: 'foraging',
-    narrativeText: '{{npc.ally.name}} returns from the south, beak full of sand eels. Other terns notice the direction and launch one by one, heading south. You follow. A dense school of sand eels just below the surface.',
+    narrativeText: '{{npc.ally.name}} returns from the south, beak full of sand eels. Other terns notice the direction and launch one by one, heading south. You follow. A dense school of sand eels churns just below the surface.',
     statEffects: [{ stat: StatId.WIS, amount: 2, label: '+WIS' }],
     consequences: [{ type: 'modify_weight', amount: 1 }],
     choices: [],
@@ -1147,7 +1147,7 @@ export const ARCTIC_TERN_EVENTS: GameEvent[] = [
     id: 'tern-feather-lice-colony',
     type: 'passive',
     category: 'health',
-    narrativeText: 'Close quarters in the colony. Something crawls along your flight feathers. Lice, transferred from neighboring birds, chewing at the feather barbs.',
+    narrativeText: 'Close quarters in the colony. Something crawls along your flight feathers. Lice, transferred from neighboring birds, gnawing the barbs.',
     statEffects: [
       { stat: StatId.HEA, amount: -2, label: '-HEA' },
     ],

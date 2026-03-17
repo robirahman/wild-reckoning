@@ -134,7 +134,7 @@ const BACHELOR_GROUP: SocialProfile = {
     { stat: StatId.WIS, amount: 2, label: '+WIS' },
   ],
   narratives: [
-    { text: 'Three other bucks graze in the clearing ahead — young, like you, their velvet antlers catching the light. They lift their heads as you approach but do not flee. There is no challenge here, no posturing, just the quiet companionship of shared vulnerability. For a little while, the forest feels less vast.' },
+    { text: 'Three other bucks graze in the clearing ahead — young, velvet antlers catching the light. They lift their heads as you approach but do not flee. You lower your head and feed. Their body heat is close. The sound of four mouths pulling at grass. Ears relaxed, turning only at wind shifts.' },
   ],
   clinicalDetail: 'Bachelor group social bonding. Stress reduction through conspecific proximity.',
   emotionalTone: 'calm',
@@ -217,7 +217,7 @@ const FAWN_PLAY: SocialProfile = {
     { stat: StatId.NOV, amount: -2, label: '-NOV' },
   ],
   narratives: [
-    { text: 'Your fawns chase each other through the tall grass, leaping and twisting with the reckless energy of creatures who do not yet know what the world holds. Their spots catch the dappled light. For a moment, watching them, the weight of survival lifts from your shoulders.' },
+    { text: 'Your fawns chase each other through the tall grass, leaping and twisting, crashing through the stems. One trips, rolls, springs up again. You watch from the meadow edge, ears turning.' },
   ],
   clinicalDetail: 'Fawn play behavior. Maternal stress reduction through offspring observation.',
   emotionalTone: 'joy',
@@ -268,7 +268,7 @@ const RIVAL_RETURNS: SocialProfile = {
     { stat: StatId.TRA, amount: 3, duration: 2, label: '+TRA' },
   ],
   narratives: [
-    { text: 'A familiar musk on the wind — the rival. He materializes from the timber with stiff-legged deliberation, antlers lowered just enough to signal intent. His flanks bear the scars of previous encounters, and his eyes hold the flat, unblinking focus of a buck who has fought before and is willing to fight again.' },
+    { text: 'A familiar musk on the wind — the rival. He steps from the timber with stiff-legged deliberation, antlers lowered just enough to signal intent. Scarred flanks, head low, weight forward.' },
   ],
   clinicalDetail: 'Rival buck return. Intraspecific confrontation during rut.',
   emotionalTone: 'aggression',

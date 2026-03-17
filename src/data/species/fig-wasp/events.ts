@@ -328,7 +328,7 @@ export const FIG_WASP_EVENTS: GameEvent[] = [
     weight: 22,
     cooldown: 99,
     tags: ['social', 'sacrifice', 'male', 'tunnel'],
-    footnote: 'Male fig wasps chew exit tunnels cooperatively — multiple males may work on the same tunnel. This is one of the clearest examples of altruism in insects: the males gain no direct benefit from the tunnel, as they die inside the fig regardless. Their sacrifice enables the females to escape and continue the species.',
+    footnote: 'Male fig wasps chew exit tunnels cooperatively — multiple males may work on the same tunnel. The males gain no direct benefit from the tunnel, as they die inside the fig regardless. The tunnel enables the females to escape and disperse.',
   },
 
   {

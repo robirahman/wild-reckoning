@@ -107,7 +107,7 @@ function getReleaseChoices(): SimulationChoice[] {
       label: 'Step out cautiously',
       description: 'The world outside the gate is enormous. Take it slowly.',
       style: 'default',
-      narrativeResult: 'You cross the threshold with deliberate care, testing each step. The ground feels different under your hooves — softer, less predictable. You lower your nose to the leaf litter and breathe in: fungal decay, earthworm casings, the distant musk of something that might be another deer. You drift toward the nearest cover, a stand of young hemlocks, and stand there for a long time, ears turning, watching the world assemble itself around you.',
+      narrativeResult: 'You cross the threshold with deliberate care, testing each step. The ground feels different under your hooves — softer, less predictable. You lower your nose to the leaf litter and breathe in: fungal decay, earthworm casings, the distant musk of something that might be another deer. You drift toward the nearest cover, a stand of young hemlocks, and stand there for a long time. Ears turning, nostrils working, testing each smell.',
       modifyOutcome(base) {
         return {
           ...base,
@@ -224,7 +224,7 @@ function getForageChoices(): SimulationChoice[] {
       label: 'Follow your instincts carefully',
       description: 'Something inside you knows which plants are safe. Trust it.',
       style: 'default',
-      narrativeResult: 'You let your nose lead. There is a quiet intelligence in the way you test each plant — a sniff, a tentative bite, then either acceptance or rejection. The knowledge is not learned; it is inherited, encoded in the same genes that tell your heart to beat. You eat less but eat well.',
+      narrativeResult: 'You let your nose lead. Sniff, bite, spit or swallow. Each plant gets the same test. You eat less but eat well.',
       modifyOutcome(base) {
         return {
           ...base,

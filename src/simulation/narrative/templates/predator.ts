@@ -48,7 +48,7 @@ export const FELID_DETECTIONS: DetectionOpening[] = [
 
 export const HUMAN_DETECTIONS: DetectionOpening[] = [
   { sense: 'smell', text: 'Strange smells drift between the trees, acrid, chemical, wrong. The air is heavy with something that makes your nostrils burn.' },
-  { sense: 'sound', text: 'A sharp, flat crack splits the air and sends every bird screaming upward. The thunder rolls from the direction of the ridge.' },
+  { sense: 'sound', text: 'A sharp, flat crack splits the air and birds scatter upward. The thunder rolls from the direction of the ridge.' },
   { sense: 'sight', text: 'Bright shapes move where there should be stillness. Upright shapes that don\'t belong among the trees, colored in impossible oranges that nature never makes.' },
   { sense: 'sound', text: 'Dry leaves crunch in a pattern too regular for any four-legged thing. Something walks on two legs, slowly, pausing often.' },
   // Autumn / hunting season variants
@@ -156,7 +156,7 @@ export const WOLF_ENCOUNTER_NARRATIVES: ContextualFragment[] = [
   },
   {
     timeOfDay: 'night',
-    text: 'You cannot see them, but you can hear them. The soft, rhythmic padding of many feet, the occasional click of claw on stone. The darkness is absolute beneath the canopy, and every sound is magnified. A branch snaps to your left. Breathing, low and steady, to your right. They have surrounded you without ever being seen.',
+    text: 'You cannot see them, but you can hear them. The soft, rhythmic padding of many feet, the occasional click of claw on stone. Dark under the canopy, sounds carry far. A branch snaps to your left. Breathing, low and steady, to your right. They have surrounded you without ever being seen.',
   },
   // Open terrain
   {

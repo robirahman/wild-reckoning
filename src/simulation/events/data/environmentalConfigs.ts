@@ -216,7 +216,7 @@ export const BLIZZARD_EXPOSURE_CONFIG: EnvironmentalHazardConfig = {
         label: 'Fight toward the tree line',
         description: 'Wind drops in dense trees.',
         style: 'default',
-        narrativeResult: 'You lower your head and push into the wind. Step by step the dark mass of the tree line grows closer. Inside, the wind drops. Still cold, but the air is not tearing at your hide. You wedge between two fallen trunks.',
+        narrativeResult: 'You lower your head and push into the wind. Step by step the tree line grows closer. Inside, the wind drops. Still cold, but the air is not tearing at your hide. You wedge between two fallen trunks.',
         modifyOutcome(base) {
           return {
             ...base,
@@ -348,7 +348,7 @@ export const VEHICLE_STRIKE_CONFIG: EnvironmentalHazardConfig = {
         label: 'Whirl back the way you came',
         description: 'Retreat to the tree line.',
         style: 'default',
-        narrativeResult: 'You spin on your haunches and spring back toward the trees. The roaring light passes behind you. The hard ground shakes under your hooves. Then darkness, silence, and the smell of pine.',
+        narrativeResult: 'You spin on your haunches and spring back toward the trees. The roaring light passes behind you. Ground vibrates under your hooves. Then darkness, silence, pine smell.',
         modifyOutcome(base, innerCtx) {
           const clipped = innerCtx.rng.chance(0.1);
           return {

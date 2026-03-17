@@ -100,7 +100,7 @@ function checkHunger(ctx: SimulationContext, nudges: InstinctNudge[]): void {
     nudges.push({
       id: 'starving',
       label: 'Starving',
-      description: 'Your body is eating itself. The hollowness under your ribs overrides everything. You will walk into the open for food.',
+      description: 'Your ribs press against your hide. Haunches hollow. Each step is slower than the last. You smell food on the wind and your legs move toward it.',
       suggestedBehavior: 'foraging',
       suggestedDirection: 'increase',
       priority: 'high',
@@ -110,7 +110,7 @@ function checkHunger(ctx: SimulationContext, nudges: InstinctNudge[]): void {
     nudges.push({
       id: 'hunger-drive',
       label: 'Hunger Drive',
-      description: 'Persistent ache below your ribs. Your attention keeps pulling toward food-smell. The open ground feels less dangerous than the hunger.',
+      description: 'Persistent ache below your ribs. You smell food on the wind. The open ground is there.',
       suggestedBehavior: 'foraging',
       suggestedDirection: 'increase',
       priority: 'medium',
@@ -127,7 +127,7 @@ function checkCold(ctx: SimulationContext, nudges: InstinctNudge[]): void {
     nudges.push({
       id: 'freezing',
       label: 'Freezing',
-      description: 'Deep cold in your core. Your legs are numb. Moving burns what little you have left, but standing still the cold gets worse.',
+      description: 'Your legs are numb. Moving hurts. Standing still, the shivering deepens.',
       suggestedBehavior: 'exploration',
       suggestedDirection: 'decrease',
       priority: 'high',
@@ -154,7 +154,7 @@ function checkImmune(ctx: SimulationContext, nudges: InstinctNudge[]): void {
     nudges.push({
       id: 'sickly',
       label: 'Sickly',
-      description: 'Your body feels heavy and wrong. Deep fatigue. Your legs want to fold. Everything says lie down.',
+      description: 'Your body is heavy. Deep fatigue. Your legs buckle. You lie down.',
       suggestedBehavior: 'caution',
       suggestedDirection: 'increase',
       priority: 'medium',
@@ -197,7 +197,7 @@ function checkWeather(ctx: SimulationContext, nudges: InstinctNudge[]): void {
     nudges.push({
       id: 'storm-dread',
       label: 'Storm Dread',
-      description: 'Wind and ice, constant. You cannot smell, cannot hear over it. Your body says find shelter and stop moving.',
+      description: 'Wind and ice, constant. Wind fills your nose, fills your ears. You turn away from it and push toward the trees.',
       suggestedBehavior: 'exploration',
       suggestedDirection: 'decrease',
       priority: 'high',

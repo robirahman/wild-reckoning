@@ -73,7 +73,7 @@ export const WOUND_DETERIORATION_CONFIG: HealthTriggerConfig = {
     const isNearWater = ctx.currentNodeType === 'water';
 
     const narrative = isNearWater
-      ? 'The wound edges are swollen. Fluid weeping from them, acrid smell. The sound of running water nearby.'
+      ? 'The wound edges are swollen. Fluid drains from the edges. Sharp smell. Running water nearby.'
       : 'The wound edges are swollen. Heat radiating from under the skin. Each step sends a deep pulse through the area.';
 
     return {
@@ -185,7 +185,7 @@ export const FEVER_EVENT_CONFIG: HealthTriggerConfig = {
     const isHighFever = fever > 4;
 
     const narrative = isHighFever
-      ? 'Colors too bright. Sounds too sharp. Your legs do not feel connected to you. Heat from inside, not from the sun. You stop and cannot remember why you were walking.'
+      ? 'Colors too bright. Sounds too sharp. Your legs buckle, do not respond. Heat from inside, not from the sun. You stop mid-stride.'
       : 'Heat inside you that is not the weather. Muscles ache. Every few steps, shivering despite the warmth radiating from your core.';
 
     return {
@@ -204,7 +204,7 @@ export const FEVER_EVENT_CONFIG: HealthTriggerConfig = {
         entities: [],
         actions: [action(
           isHighFever
-            ? 'Colors wrong. Legs not connected. Heat from inside. Cannot remember why you were walking.'
+            ? 'Colors wrong. Legs buckling. Heat from inside. Stopped mid-stride.'
             : 'Heat inside. Muscles ache. Shivering despite the warmth.',
           isHighFever
             ? `High fever (${fever.toFixed(1)}° deviation). Cognitive impairment, dehydration risk. Immune system in crisis.`
@@ -289,7 +289,7 @@ export const SEPSIS_EVENT_CONFIG: HealthTriggerConfig = {
         { stat: StatId.WIS, amount: -10, duration: 3, label: '-WIS' },
       ],
       consequences: [],
-      narrativeText: 'Uncontrollable shaking. Vision dims, then too bright, then dims again. The ground feels far away. Your legs buckle and catch. The heat is everywhere now, not just the wound.',
+      narrativeText: 'Uncontrollable shaking. Vision dims, then too bright, then dims again. Your legs buckle. The heat is everywhere now, not just the wound.',
       footnote: '(Systemic infection — sepsis)',
       narrativeContext: buildNarrativeContext({
         eventCategory: 'health',

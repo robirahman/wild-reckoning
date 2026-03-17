@@ -19,7 +19,7 @@ export const SPECIES_STORYLINES: StorylineDefinition[] = [
         id: 'ink-cloud-1',
         delayMin: 0,
         delayMax: 0,
-        narrativeText: 'A green head protrudes from a crevice near your den, jaws open, tasting the current. A moray eel. It does not leave. Its patrol loop passes your entrance.',
+        narrativeText: 'A green head protrudes from a crevice near your den, jaws open, tongue flicking. A moray eel. It does not leave. Its patrol loop passes your entrance.',
         statEffects: [
           { stat: StatId.ADV, amount: 10, duration: 4, label: '+ADV (moray nearby)' },
           { stat: StatId.TRA, amount: 8, duration: 3, label: '+TRA (predator threat)' },
@@ -45,7 +45,7 @@ export const SPECIES_STORYLINES: StorylineDefinition[] = [
         id: 'ink-cloud-3',
         delayMin: 4,
         delayMax: 7,
-        narrativeText: 'You know the moray\'s schedule now. When it hunts, where it rests, which crevices it uses. You forage when it is still. You have packed shells and stones around your den entrance.',
+        narrativeText: 'The moray moves, you stay still. The moray wedges into its crevice, you move. You forage when it is still. You have packed shells and stones around your den entrance.',
         statEffects: [
           { stat: StatId.WIS, amount: 8, duration: 6, label: '+WIS (predator knowledge)' },
           { stat: StatId.ADV, amount: -6, duration: 4, label: '-ADV (adapted)' },
@@ -71,7 +71,7 @@ export const SPECIES_STORYLINES: StorylineDefinition[] = [
         id: 'colony-siege-1',
         delayMin: 0,
         delayMax: 0,
-        narrativeText: 'Wasps probe the entrance, darting in and pulling back. Foraging flights take longer, returning with less. The colony\'s hum has shifted pitch, lower and uneven.',
+        narrativeText: 'Wasps at the entrance, darting in and pulling back. Foraging flights take longer, returning with less. The colony\'s hum has shifted pitch, lower and uneven.',
         statEffects: [
           { stat: StatId.TRA, amount: 8, duration: 3, label: '+TRA (colony stressed)' },
           { stat: StatId.HOM, amount: 8, duration: 3, label: '+HOM (hive anxiety)' },
@@ -166,7 +166,7 @@ export const SPECIES_STORYLINES: StorylineDefinition[] = [
         id: 'golden-frog-1',
         delayMin: 0,
         delayMax: 0,
-        narrativeText: 'In the leaf litter, a frog you have never encountered. Not your color. Gold, bright against the dark soil. It smells like your species but different. Its call is slightly off.',
+        narrativeText: 'In the leaf litter, a frog you have never encountered. Not your color. Gold. It smells like your species but different. Its call is slightly off.',
         statEffects: [
           { stat: StatId.NOV, amount: 10, duration: 3, label: '+NOV (new morph)' },
           { stat: StatId.WIS, amount: 5, duration: 3, label: '+WIS (species diversity)' },

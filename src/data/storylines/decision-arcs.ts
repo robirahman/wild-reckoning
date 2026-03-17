@@ -40,7 +40,7 @@ export const DECISION_ARC_STORYLINES: StorylineDefinition[] = [
             id: 'ignore',
             label: 'Move on',
             description: 'Keep moving. Do not stop.',
-            narrativeResult: 'You turn and walk. Behind you, the injured one\'s breathing continues, rapid and wet. The sound fades as the distance grows.',
+            narrativeResult: 'You turn and walk. Behind you, the injured one\'s breathing: fast, gurgling. Each step you take, quieter.',
             statEffects: [
               { stat: StatId.ADV, amount: 3, duration: 4, label: '+ADV (self-preservation)' },
             ],
@@ -66,7 +66,7 @@ export const DECISION_ARC_STORYLINES: StorylineDefinition[] = [
         id: 'wounded-stranger-reunion',
         delayMin: 3,
         delayMax: 6,
-        narrativeText: 'A familiar scent on a trail you use often. The one you stayed with is moving again, upright and feeding. It approaches without alarm, its body relaxed. You tolerate the closeness.',
+        narrativeText: 'A familiar scent on a trail you use often. The one you stayed with is moving again, upright and feeding. It approaches without alarm, no tension in its gait, no stress smell. You tolerate the closeness.',
         statEffects: [
           { stat: StatId.ADV, amount: -5, duration: 8, label: '-ADV (familiar ally nearby)' },
         ],
@@ -95,7 +95,7 @@ export const DECISION_ARC_STORYLINES: StorylineDefinition[] = [
         id: 'territorial-dispute-start',
         delayMin: 0,
         delayMax: 0,
-        narrativeText: 'Fresh scent marks overlay your own along the boundary, hours old at most. A rival is pushing into your range, marking over your marks, each pass bolder than the last.',
+        narrativeText: 'Fresh scent marks overlay your own along the boundary, still sharp. A rival is pushing into your range, marking over your marks, each pass bolder than the last.',
         statEffects: [],
         consequences: [],
         completionFlag: 'storyline-territorial-dispute-started',

@@ -635,7 +635,7 @@ const turtleEvents: GameEvent[] = [
     type: 'passive',
     category: 'health',
     narrativeText:
-      'Tiny snails cling to the seagrass blades, no larger than grains of rice. You swallow several with each mouthful.',
+      'Tiny snails cling to the seagrass blades. You swallow several with each mouthful.',
     statEffects: [
       { stat: StatId.HOM, amount: -3, label: '-HOM' },
     ],
@@ -949,7 +949,7 @@ const turtleEvents: GameEvent[] = [
     type: 'passive',
     category: 'social',
     narrativeText:
-      'Hands grip your shell and lift you out of the water. The air hits you. Something pinches your rear flipper. Then you are back in the water, diving immediately, heart hammering.',
+      'Hands grip your shell and hoist you into air. Wind dries your skin. A sharp pinch on your rear flipper, then pressure releases. Water hits your plastron. You dive, heart hammering, and do not surface again for a long time.',
     statEffects: [
       { stat: StatId.TRA, amount: 6, label: '+TRA' },
       { stat: StatId.NOV, amount: 5, label: '+NOV' },
@@ -967,7 +967,7 @@ const turtleEvents: GameEvent[] = [
     id: 'turtle-fibropapilloma-exposure',
     type: 'passive',
     category: 'health',
-    narrativeText: 'Another green turtle shares your foraging patch. Its body is covered in pale, cauliflower-like growths. You graze side by side, breathing the same water.',
+    narrativeText: 'Another green turtle shares your foraging patch. Its body is covered in lumpy pale masses, some the size of your eye. You graze side by side, breathing the same water.',
     statEffects: [{ stat: StatId.IMM, amount: 2, label: '+IMM' }],
     consequences: [],
     choices: [],

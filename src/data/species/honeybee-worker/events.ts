@@ -95,7 +95,7 @@ export const HONEYBEE_WORKER_EVENTS: GameEvent[] = [
     id: 'bee-queen-attendance',
     type: 'passive',
     category: 'social',
-    narrativeText: 'You are pressed into the queen\'s retinue. Her mandibular pheromone saturates the air around her, thick and absolute. Your ovaries shrink. You feed her, groom her, and pass her chemical signal outward through the hive.',
+    narrativeText: 'You are pressed into the queen\'s retinue. Her mandibular pheromone saturates the air around her, thick and heavy. Your ovaries shrink. You feed her, groom her, and pass her chemical signal outward through the hive.',
     statEffects: [
       { stat: StatId.HOM, amount: -5, duration: 3, label: '-HOM' },
       { stat: StatId.WIS, amount: 5, label: '+WIS' },
@@ -170,7 +170,7 @@ export const HONEYBEE_WORKER_EVENTS: GameEvent[] = [
         id: 'mob-the-wasp',
         label: 'Join the defense mob',
         description: 'Surround the wasp and heat-ball it to death.',
-        narrativeResult: 'You and thirty sisters swarm it, wrapping your bodies tight. You vibrate your flight muscles. The temperature inside the ball climbs past 45 degrees. The wasp stops moving.',
+        narrativeResult: 'You and thirty sisters swarm it, wrapping your bodies tight. You vibrate your flight muscles. The heat inside the ball builds until your own body is near its limit. The wasp stops moving.',
         statEffects: [
           { stat: StatId.WIS, amount: 3, label: '+WIS' },
           { stat: StatId.HEA, amount: -2, label: '-HEA' },
@@ -219,8 +219,8 @@ export const HONEYBEE_WORKER_EVENTS: GameEvent[] = [
       {
         id: 'sting-bear',
         label: 'Sting the bear',
-        description: 'Fly at its face and drive your sting into its skin. You will die, but the colony needs every stinger.',
-        narrativeResult: 'You launch at the bear\'s face. Your sting drives into the skin around its nose. The barb catches. As you pull away, your venom sac tears free from your abdomen. Venom pumps into the wound as you spiral to the ground. The bear swats at its face and retreats.',
+        description: 'Fly at its face and drive your sting into its skin.',
+        narrativeResult: 'You launch at the bear\'s face. Your sting drives into the skin around its nose. The barb catches in flesh. You pull away. Your venom sac tears free from your abdomen, trailing viscera. Venom pumps into the wound. You spiral to the ground. The bear swats at its face and retreats.',
         statEffects: [],
         consequences: [
           { type: 'set_flag', flag: 'sting-defense-triggered' },

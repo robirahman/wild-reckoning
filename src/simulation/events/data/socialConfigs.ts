@@ -146,7 +146,7 @@ export const HERD_ALARM_CONFIG: SocialTriggerConfig = {
         label: 'Follow the alarm and bolt',
         description: 'Run first.',
         style: 'default' as const,
-        narrativeResult: 'You launch into motion, matching the herd through the trees. Behind you, something large crashes through the brush where you stood.',
+        narrativeResult: 'You launch into motion. You run with the others through the trees. Behind you, something large crashes through the brush where you stood.',
         modifyOutcome(base: SimulationOutcome, innerCtx: SimulationContext) {
           // resolveSocial is imported in the factory module
           const social = resolveSocial(innerCtx, {
@@ -353,7 +353,7 @@ export const FAWN_PLAY_CONFIG: SocialTriggerConfig = {
     return {
       text,
       entities: [{ perceivedAs: 'your fawns chasing each other through tall grass', actualIdentity: 'offspring play behavior', wisdomThreshold: 0, primarySense: 'sight', archetype: 'conspecific' as const }],
-      actionDetail: 'Your fawns chase each other in looping sprints. White spots flashing in dappled light.',
+      actionDetail: 'Your fawns chase each other in looping sprints through the grass. White spots visible.',
       clinicalDetail: 'Fawn play behavior observed. Locomotive play bouts indicating healthy development and adequate nutrition.',
       intensity: 'low',
       emotionalTone: 'relief',
@@ -402,7 +402,7 @@ export const TERRITORIAL_SCRAPE_CONFIG: SocialTriggerConfig = {
     return {
       text,
       entities: [],
-      actionDetail: 'You find a low-hanging branch and work it with your antlers. Then paw the earth into a bare oval.',
+      actionDetail: 'You find a low-hanging branch and work it with your antlers. Then paw the earth until dirt is exposed.',
       clinicalDetail: 'Territorial marking behavior. Antler rub on overhanging branch, ground scrape with tarsal gland scent deposition. Chemical signaling to conspecific males.',
       intensity: 'low',
       emotionalTone: 'aggression',

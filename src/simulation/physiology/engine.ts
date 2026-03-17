@@ -142,9 +142,16 @@ export function tickPhysiologyEngine(input: PhysiologyTickInput): PhysiologyTick
       mc.maxFatDeposition * ffMult,
       caloricBalance / mc.caloricDensityPerLb
     );
-    // Asymptotic growth: harder to gain weight near maximum
-    const growthSaturation = Math.pow(animal.weight / config.weight.maximumBiologicalWeight, 2);
-    weightChange *= Math.max(0, 1 - growthSaturation);
+    // Asymptotic growth: harder to gain weight near maximum, but no penalty when underweight.
+    // Below the healthy minimum, saturation does not apply — recovery should be easy.
+    // Between healthy min and max, use a gentler exponent (4) so the cap only bites near max.
+    const healthyMin = config.weight.starvationDebuff * 1.2;
+    const maxW = config.weight.maximumBiologicalWeight;
+    if (animal.weight >= healthyMin) {
+      const growthSaturation = Math.pow(animal.weight / maxW, 4);
+      weightChange *= Math.max(0, 1 - growthSaturation);
+    }
+    // else: underweight — no saturation penalty, full weight recovery rate
   } else {
     // Deficit → weight loss, capped by fat mobilization rate
     weightChange = -Math.min(

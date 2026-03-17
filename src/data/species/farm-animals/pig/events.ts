@@ -140,7 +140,7 @@ export const PIG_EVENTS: GameEvent[] = [
     id: 'pig-frustrated-rooting',
     type: 'passive',
     category: 'psychological',
-    narrativeText: 'Your snout pushes at the concrete. The urge to root is overwhelming but there is nothing to turn over, nothing to smell under. You scrape until the skin on your nose is raw.',
+    narrativeText: 'Your snout pushes at the concrete. You press harder, working side to side, but there is nothing to turn over, nothing to smell under. You scrape until the skin on your nose bleeds.',
     statEffects: [
       { stat: StatId.TRA, amount: 8, label: '+TRA' },
       { stat: StatId.HEA, amount: -2, label: '-HEA' }

@@ -119,7 +119,7 @@ export const CHICKEN_EVENTS: GameEvent[] = [
     id: 'chicken-frustrated-perching',
     type: 'passive',
     category: 'psychological',
-    narrativeText: 'The light dims slightly. The urge to climb pulls at your feet but there is nothing to grip, no height to reach. You crouch on the wire, alert all night.',
+    narrativeText: 'The light dims slightly. Your feet grip and release the wire, grip and release. There is nothing higher to stand on. You crouch on the wire. Your eyes do not close.',
     statEffects: [
       { stat: StatId.STR, amount: 8, label: '+STR' },
       { stat: StatId.HEA, amount: -2, label: '-HEA' }

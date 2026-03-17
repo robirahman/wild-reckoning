@@ -154,7 +154,7 @@ export const SEASONAL_BROWSE_CONFIG: SeasonalBrowseConfig = {
       season: 'spring',
       bonusCalories: 50,
       homChange: -5,
-      narrative: 'New buds on every branch. Green shoots pushing through leaf litter. You graze on dandelion, fresh clover, young maple leaves. The taste is sharp and wet after months of bark.',
+      narrative: 'New buds on every branch. Green shoots pushing through leaf litter. You graze on dandelion, fresh clover, young maple leaves. The taste is sharp and wet.',
       clinicalDetail: 'Spring green-up foraging. +50 bonus kcal.',
     },
     // Summer
@@ -171,7 +171,7 @@ export const SEASONAL_BROWSE_CONFIG: SeasonalBrowseConfig = {
       chance: 0.4,
       bonusCalories: 100,
       homChange: -6,
-      narrative: 'Acorns everywhere on the forest floor. You crunch through them steadily. The bitter tannin taste, then the dense fat of the nut. Your ribs are padding over.',
+      narrative: 'Acorns everywhere on the forest floor. You crunch through them steadily. Bitter taste first, then rich and oily. Your ribs are padding over.',
       clinicalDetail: 'Mast year acorn crop. +100 bonus kcal.',
     },
     // Autumn — normal
@@ -254,7 +254,7 @@ export const RISKY_FORAGING_CONFIG: RiskyForagingConfig = {
     // Cornfield
     (_ctx) => ({
       id: 'cornfield',
-      narrativeText: 'Rustling stalks in moonlight, tall enough to hide you. Ears fat with ripe kernels. You hear other deer inside already, the soft tearing of husks, the wet crunch of feeding.',
+      narrativeText: 'Rustling stalks in moonlight, above your head. Ears fat with ripe kernels. You hear other deer inside already, the soft tearing of husks, the wet crunch of feeding.',
       clinicalDetail: 'Deer near agricultural cornfield. Risk of ruminal acidosis from high-starch diet.',
       statEffects: [],
       consequences: [],
@@ -367,7 +367,7 @@ export const TOXIC_PLANT_CONFIG: ToxicPlantConfig = {
   ],
   caloryCost: 3 * KCAL_PER_LB,
 
-  narrativeText: 'You were already chewing before the taste turned wrong. Bitter, astringent, a chemical bite numbing your tongue. You spit. Some already swallowed. Your stomach cramps.',
+  narrativeText: 'You were already chewing before the taste turned wrong. Bitter, astringent, a sharp burning on your tongue. You spit. Some already swallowed. Your stomach cramps.',
   clinicalDetail: 'Ingestion of toxic plant (likely water hemlock or similar). Chemical poisoning causing gastrointestinal distress and metabolic disruption.',
   emotionalTone: 'pain',
 };

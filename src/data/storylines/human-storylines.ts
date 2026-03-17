@@ -16,7 +16,7 @@ export const HUMAN_STORYLINES: StorylineDefinition[] = [
         id: 'development-1',
         delayMin: 0,
         delayMax: 0,
-        narrativeText: 'A low grinding sound carries from the edge of {{region.name}}. Trees crack and fall. A large yellow shape moves across the ground, scraping soil bare. The smell is diesel and raw earth.',
+        narrativeText: 'A low grinding sound carries from the edge of {{region.name}}. Trees crack and fall. A large yellow shape moves across the ground, scraping soil bare. The smell is diesel and dirt.',
         statEffects: [
           { stat: StatId.NOV, amount: 8, duration: 4, label: '+NOV (unfamiliar machinery)' },
           { stat: StatId.ADV, amount: 5, duration: 3, label: '+ADV (new threat)' },
@@ -30,10 +30,10 @@ export const HUMAN_STORYLINES: StorylineDefinition[] = [
         id: 'development-2',
         delayMin: 3,
         delayMax: 6,
-        narrativeText: 'Where open ground and trees stood, hard flat surfaces and straight barriers now block your path. The usable range has shrunk. Other animals press into what remains, and food is harder to find.',
+        narrativeText: 'Where open ground and trees stood, hard flat surfaces now block your path. You push against them. They do not give. The usable range has shrunk. Other animals press into what remains, and food is harder to find.',
         statEffects: [
           { stat: StatId.HOM, amount: 12, duration: 6, label: '+HOM (habitat loss)' },
-          { stat: StatId.ADV, amount: 6, duration: 4, label: '+ADV (overcrowding)' },
+          { stat: StatId.IMM, amount: 6, duration: 4, label: '+IMM (overcrowding disease pressure)' },
         ],
         consequences: [
           { type: 'modify_weight', amount: -3 },

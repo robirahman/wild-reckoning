@@ -210,7 +210,7 @@ export const HUMAN_ENCOUNTER_EVENTS: GameEvent[] = [
     narrativeText: 'A low, persistent rumble penetrates the air from beyond the tree line. The sound never stops. You cannot hear the subtle sounds you rely on. You feel exposed.',
     statEffects: [
       { stat: StatId.ADV, amount: 8, duration: 3, label: '+ADV (noise stress)' },
-      { stat: StatId.TRA, amount: 5, duration: 3, label: '+TRA (anxiety)' },
+      { stat: StatId.NOV, amount: 5, duration: 3, label: '+NOV (lost acoustic cues)' },
     ],
     conditions: [
       { type: 'species', speciesIds: ['white-tailed-deer', 'gray-wolf', 'african-elephant'] },
@@ -228,7 +228,7 @@ export const HUMAN_ENCOUNTER_EVENTS: GameEvent[] = [
     narrativeText: 'An orange glow sits on the horizon, not sunrise but something constant. The stars are dim. The darkness you rely on for cover is weak. Shadows that should be deep are pale.',
     statEffects: [
       { stat: StatId.NOV, amount: 5, duration: 3, label: '+NOV (disorientation)' },
-      { stat: StatId.WIS, amount: -3, duration: 3, label: '-WIS (navigation confused)' },
+      { stat: StatId.ADV, amount: 3, duration: 3, label: '+ADV (reduced cover of darkness)' },
     ],
     conditions: [
       { type: 'species', speciesIds: ['white-tailed-deer', 'gray-wolf', 'african-elephant', 'monarch-butterfly', 'honeybee-worker'] },

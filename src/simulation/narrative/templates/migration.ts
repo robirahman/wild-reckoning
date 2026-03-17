@@ -70,7 +70,7 @@ export interface CrossingOutcome {
 export const CROSSING_OUTCOMES: CrossingOutcome[] = [
   { result: 'safe', text: 'You launch forward, hooves striking asphalt, and reach the far side without incident. Grass under your hooves, darkness around you, the road behind you.' },
   { result: 'safe', text: 'You cross in the dark, quickly but not desperately, and reach the far side. The delay cost time, but you are alive and unbroken.' },
-  { result: 'near-miss', text: 'A horn blares. Wind slams your flank as metal passes close enough to touch. Your heart hammers as you reach the far side, alive by a margin measured in inches.' },
+  { result: 'near-miss', text: 'A horn blares. Wind from the vehicle hits you as it passes, close enough to touch. You scramble to the far side, legs shaking.' },
   { result: 'near-miss', text: 'Headlights pin you mid-crossing. The vehicle swerves, tires screaming, and passes so close you feel its heat. You scramble to the far ditch, trembling.' },
   { result: 'hit', text: 'The impact comes without warning. A wall of force that lifts you off your hooves and spins the world into a blur of pain and light and darkness.' },
   { result: 'hit', text: 'Metal meets bone. The sound is smaller than you\'d expect. Then the ground rushes up, and the pain arrives, and the night goes very quiet.' },

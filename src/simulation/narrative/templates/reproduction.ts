@@ -59,8 +59,8 @@ export const BIRTH_DESCRIPTIONS: BirthFragment[] = [
 // ── Fawn Rearing ──
 
 export const FAWN_HIDING: string[] = [
-  'You leave the fawn in a patch of tall grass, its spotted coat blending perfectly with the dappled light. It lies motionless, the instinct to freeze already stronger than the instinct to follow you.',
-  'The fawn presses itself against the earth, chin down, ears flat, breathing shallow. You back away, every maternal instinct screaming to stay, but you know the pattern: your presence would draw attention the fawn\'s camouflage is designed to avoid.',
+  'You leave the fawn in a patch of tall grass. It lies still, spotted coat against the stems.',
+  'The fawn presses itself against the earth, chin down, ears flat, breathing shallow. You move away, stop, listen, move again.',
   'You settle the fawn in a hollow between two fallen logs, hidden from above and downwind of the main trail. It blinks at you once, then goes perfectly still.',
   'The meadow grass is tall enough to cover the fawn. You guide it to a spot where the stems are thickest, where the wildflowers break up any outline. It sinks into the green and vanishes.',
   'You tuck the fawn beneath a low-hanging spruce, its branches sweeping the ground like a curtain. The forest floor here is soft with needles, and the fawn curls into them, its spots mimicking the fragments of light that filter through the canopy.',

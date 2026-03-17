@@ -84,9 +84,7 @@ export const VOLUNTARY_ACTIONS: VoluntaryAction[] = [
         narrative: foundFood
           ? (override?.narrative ?? 'You push into unfamiliar terrain and discover a rich patch of forage hidden in a hollow.')
           : 'You wander through unfamiliar ground but find nothing of note.',
-        statEffects: [
-          { stat: StatId.NOV, amount: 5, duration: 2, label: '+NOV' },
-        ],
+        statEffects: [],
         consequences: foundFood
           ? [{ type: 'modify_weight', amount: weightGain }]
           : [],
