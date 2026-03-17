@@ -96,6 +96,7 @@ function runSpecies(species: string, ff: boolean, count: number): SpeciesResult 
     if (ff) game.rawState.toggleFastForward();
 
     for (let t = 0; t < maxTurns; t++) {
+      // isAlive checks phase === 'playing'; 'evolving' means animal died but lineage continues
       if (!game.isAlive) break;
       try {
         const turn = game.generateTurn();
@@ -113,14 +114,26 @@ function runSpecies(species: string, ff: boolean, count: number): SpeciesResult 
     }
 
     const snap = game.getSnapshot();
+    const rawState = game.rawState;
     lifespans.push(snap.turn);
     weights.push(snap.weight);
 
-    const repro = game.rawState.reproduction;
-    offspringBorn.push(repro?.offspring?.length ?? 0);
-    offspringMatured.push(repro?.totalFitness ?? 0);
+    const repro = rawState.reproduction;
+    if (repro?.type === 'semelparous') {
+      offspringBorn.push((repro as Record<string, unknown>).eggCount as number ?? 0);
+      offspringMatured.push(repro.totalFitness ?? 0);
+    } else {
+      offspringBorn.push((repro as Record<string, unknown>)?.offspring
+        ? ((repro as Record<string, unknown>).offspring as unknown[]).length
+        : 0);
+      offspringMatured.push(repro?.totalFitness ?? 0);
+    }
 
-    const cause = snap.causeOfDeath ?? 'survived';
+    // 'evolving' phase means animal died but lineage continues (semelparous + lineageMode)
+    const phase = rawState.phase;
+    const cause = snap.causeOfDeath
+      ?? rawState.animal?.causeOfDeath
+      ?? (phase === 'evolving' ? 'spawned-and-died (lineage)' : 'survived');
     causes[cause] = (causes[cause] ?? 0) + 1;
     game.reset();
   }

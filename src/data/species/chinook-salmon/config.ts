@@ -80,8 +80,8 @@ export const CHINOOK_SALMON_CONFIG: SpeciesConfig = {
 
   reproduction: {
     type: 'semelparous',
-    spawningMinAge: 24,  // Chinook spawn at 2-5 years; earlier min lets more reach it
-    spawningSeasons: ['autumn', 'summer'],  // Wider window for spawning runs
+    spawningMinAge: 42,  // Real chinook spawn at 3-7 years; min 3.5yr
+    spawningSeasons: ['autumn'],  // Peak spawning is late summer/autumn
     baseEggCount: 4000,
     eggCountHeaFactor: 30,
     eggCountWeightFactor: 100,

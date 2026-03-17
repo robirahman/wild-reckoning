@@ -17,12 +17,14 @@ export const POLAR_BEAR_PARASITES: Record<string, ParasiteDefinition> = {
           'A mild intestinal infection has established. You experience occasional nausea and loose stools after feeding, but can still hunt effectively.',
         statEffects: [
           { stat: StatId.HOM, amount: 5 },
-          { stat: StatId.HEA, amount: -3 },
+          { stat: StatId.HEA, amount: -2 },
         ],
         secondaryEffects: [],
         turnDuration: { min: 3, max: 8 },
-        progressionChance: 0.12,
-        remissionChance: 0.10,
+        // Real: most polar bears carry Trichinella asymptomatically.
+        // Progression is slow and remission common.
+        progressionChance: 0.06,
+        remissionChance: 0.20,
       },
       {
         severity: 'moderate',
@@ -30,12 +32,12 @@ export const POLAR_BEAR_PARASITES: Record<string, ParasiteDefinition> = {
           'The larvae have migrated from your gut into your muscle tissue. Your limbs ache with every step, and your jaw is stiff and sore. Hunting requires more energy than it should.',
         statEffects: [
           { stat: StatId.HOM, amount: 12 },
-          { stat: StatId.HEA, amount: -8 },
+          { stat: StatId.HEA, amount: -5 },
         ],
         secondaryEffects: ['reduced hunting efficiency', 'muscle inflammation'],
         turnDuration: { min: 4, max: 10 },
-        progressionChance: 0.08,
-        remissionChance: 0.05,
+        progressionChance: 0.04,
+        remissionChance: 0.12,
       },
       {
         severity: 'severe',
@@ -43,13 +45,13 @@ export const POLAR_BEAR_PARASITES: Record<string, ParasiteDefinition> = {
           'Massive larval migration has inflamed your diaphragm and intercostal muscles. Breathing is labored, especially during exertion. Long-distance swimming, essential for reaching distant floes, is now dangerously exhausting.',
         statEffects: [
           { stat: StatId.HOM, amount: 20 },
-          { stat: StatId.HEA, amount: -18 },
+          { stat: StatId.HEA, amount: -8 },
           { stat: StatId.IMM, amount: 10 },
         ],
         secondaryEffects: ['respiratory compromise', 'cardiac inflammation risk', 'swimming impairment'],
         turnDuration: { min: 3, max: 7 },
         progressionChance: 0,
-        remissionChance: 0.02,
+        remissionChance: 0.06,
       },
     ],
   },

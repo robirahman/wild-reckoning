@@ -39,9 +39,12 @@ export const HONEYBEE_WORKER_CONFIG: SpeciesConfig = {
   },
 
   age: {
-    oldAgeOnsetMonths: 1.5, // ~6 weeks in summer
-    oldAgeBaseChance: 0.05,  // Daily check (scaled)
-    oldAgeEscalation: 1.1,
+    // Age is an integer (increments at month boundary). Onset 0.5 triggers at age=1 (~28 days).
+    // Real workers: ~42 days (summer), ~180 days (winter). At 1.5% per 6-hr turn,
+    // median survival from onset is ~46 turns (~11 days), giving ~39 day median total.
+    oldAgeOnsetMonths: 0.5,
+    oldAgeBaseChance: 0.015,
+    oldAgeEscalation: 2.0,
     maxOldAgeChance: 0.90,
   },
 

@@ -776,7 +776,10 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
         newAge >= config.reproduction.spawningMinAge &&
         config.reproduction.spawningSeasons.includes(newTime.season as 'spring' | 'summer' | 'autumn' | 'winter')
       ) {
-        const autoSpawnProb = 0.08; // ~8% per turn once eligible
+        // Lower probability so spawning isn't immediate upon eligibility.
+        // For weekly-turn species (salmon): ~3% per week = spawns within ~8 months avg.
+        // For daily-turn species: season check limits frequency naturally.
+        const autoSpawnProb = 0.03;
         if (state.rng.chance(autoSpawnProb)) {
           const hea = computeEffectiveValue(tickedStats[StatId.HEA]);
           const wis = computeEffectiveValue(tickedStats[StatId.WIS]);
