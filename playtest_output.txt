@@ -1,0 +1,258 @@
+=== Wild Reckoning CLI Playtest ===
+Date: 2026-03-17T21:14:45.974Z
+Species: white-tailed-deer
+Sex: male
+Backstory: wild-born
+
+--- Turn 0 (summer 1, Age: 12mo, Weight: 110.0 lbs) ---
+Stats: IMM:40.0 CLI:20.0 HEA:60.0 STR:35.0
+[Ambient] Many scent-trails converging on the water source.
+
+JOURNAL: Dense shade under the heavy canopy. Cooler in the dark patches.
+
+
+--- Turn 2 (summer 1, Age: 12mo, Weight: 108.7 lbs) ---
+Stats: IMM:40.0 CLI:23.0 HEA:60.0 STR:35.0
+[Ambient] Pollen in the air. Sweet rot from fallen fruit somewhere nearby.
+
+EVENT: [foraging] The browse here is dense, but the ground smells of humans and machines. Your body leans forward. Your legs stay planted. The smell of food and the smell of danger come from the same direction....
+
+EVENT: [environmental] A crackling sound fills the air, growing louder by the second. The sky above the canopy glows an angry orange, and embers drift down like burning snow. The forest is on fire, and the fire is moving faster than you expected anything could move.
+
+EVENT: [social] Another deer is already at the browse patch, the one with tender young growth and the sheltering overhang. It sees you and lowers its head, ears flattened, one forehoof stamping. The muscles in its neck bunch tight.
+CHOICE: Selected "Yield and move on"
+
+EVENT: [social] You have been ranging through this area long enough to know its contours: the good foraging patches, the safe resting spots, the water sources. It feels like home. Perhaps it is time to claim it.
+CHOICE: Selected "Establish a territory"
+
+EVENT: [seasonal] The sky darkens. The wind shifts and the trees bend sideways, their leaves flashing silver undersides. Then the rain hits in sheets, blinding and deafening. Lightning splits a birch tree nearby with a crack you feel in your chest. You press yourself against a boulder and wait, trembling.
+
+OUTCOMES:
+- The browse here is dense, but the ground smells of humans and machines. Your body leans forward. Your legs stay planted. The smell of food and the smell of danger come from the same direction....
+- A crackling sound fills the air, growing louder by the second. The sky above the canopy glows an angry orange, and embers drift down like burning snow. The forest is on fire, and the fire is moving faster than you expected anything could move.
+- Another deer is already at the browse patch, the one with tender young growth and the sheltering overhang. It sees you and lowers its head, ears flattened, one forehoof stamping. The muscles in its neck bunch tight.
+  > You turn and walk away. There are other patches further on.
+- You have been ranging through this area long enough to know its contours: the good foraging patches, the safe resting spots, the water sources. It feels like home. Perhaps it is time to claim it.
+  > You begin the work of marking boundaries: scent, sound, presence. This ground is yours now.
+- The sky darkens. The wind shifts and the trees bend sideways, their leaves flashing silver undersides. Then the rain hits in sheets, blinding and deafening. Lightning splits a birch tree nearby with a crack you feel in your chest. You press yourself against a boulder and wait, trembling.
+
+JOURNAL: Heat rising off the ground. The air shimmers.
+
+
+--- Turn 4 (summer 1, Age: 13mo, Weight: 107.5 lbs) ---
+Stats: IMM:40.0 CLI:29.0 HEA:60.0 STR:35.0
+[Ambient] The light shifts. For a moment the shapes around you look different.
+
+EVENT: [foraging] The tall plant with its red-purple stem and heavy berry clusters looks substantial. You eat a mouthful of leaves and the nausea hits almost immediately. Your knees buckle. Your stomach heaves....
+
+EVENT: [social] The dominant buck finds you again at the edge of the cedar stand. He approaches with lowered head and flattened ears, his body a wall of intent. There is no room for you here anymore — this territory belongs to him, and his tolerance has run out. The message is as old as the species: leave, or be driven out.
+
+EVENT: [environmental] A human approaches slowly, speaking softly, carrying strange equipment, a long tube with a feathered dart. You sense no immediate threat, but the scent of human is always unsettling.
+CHOICE: Selected "Flee immediately"
+
+EVENT: [predator] Your ears lock forward. Something in the branches, motionless. Cat-smell, faint. You freeze and your nostrils open wide. A spotted shape on a low limb, flat against the bark, its eyes fixed on you. You stomp once. It does not move. You stomp again. Its gaze shifts to something smaller in the brush below, and the pressure in your chest releases. You blow out hard through your nose and back away.
+
+EVENT: [environmental] A low, persistent rumble penetrates the air from beyond the tree line. The sound never stops. You cannot hear the subtle sounds you rely on. You feel exposed.
+
+EVENT: [environmental] A low grinding sound carries from the edge of Northern Minnesota. Trees crack and fall. A large yellow shape moves across the ground, scraping soil bare. The smell is diesel and dirt.
+
+OUTCOMES:
+- The tall plant with its red-purple stem and heavy berry clusters looks substantial. You eat a mouthful of leaves and the nausea hits almost immediately. Your knees buckle. Your stomach heaves....
+- The dominant buck finds you again at the edge of the cedar stand. He approaches with lowered head and flattened ears, his body a wall of intent. There is no room for you here anymore — this territory belongs to him, and his tolerance has run out. The message is as old as the species: leave, or be driven out.
+- A human approaches slowly, speaking softly, carrying strange equipment, a long tube with a feathered dart. You sense no immediate threat, but the scent of human is always unsettling.
+  > You bolt for cover, vanishing into the underbrush. The dart thuds into the ground where you stood. Whatever the human intended, it will not happen today.
+- Your ears lock forward. Something in the branches, motionless. Cat-smell, faint. You freeze and your nostrils open wide. A spotted shape on a low limb, flat against the bark, its eyes fixed on you. You stomp once. It does not move. You stomp again. Its gaze shifts to something smaller in the brush below, and the pressure in your chest releases. You blow out hard through your nose and back away.
+- A low, persistent rumble penetrates the air from beyond the tree line. The sound never stops. You cannot hear the subtle sounds you rely on. You feel exposed.
+- A low grinding sound carries from the edge of Northern Minnesota. Trees crack and fall. A large yellow shape moves across the ground, scraping soil bare. The smell is diesel and dirt.
+
+JOURNAL: Pollen in the air. Sweet rot from fallen fruit somewhere nearby.
+
+
+--- Turn 6 (summer 1, Age: 13mo, Weight: 105.1 lbs) ---
+Stats: IMM:40.0 CLI:29.0 HEA:60.0 STR:35.0
+[Ambient] Steady droning from the branches, unbroken, filling the air.
+
+JOURNAL: Heavy cloud-shapes building, dark undersides. The air pressure shifts.
+
+
+--- Turn 8 (summer 1, Age: 14mo, Weight: 103.0 lbs) ---
+Stats: IMM:40.0 CLI:26.0 HEA:60.0 STR:35.0
+[Ambient] Rain drumming on the leaves overhead. All ground-scent amplified.
+
+EVENT: [social] The dominant buck finds you again at the edge of the cedar stand. He approaches with lowered head and flattened ears, his body a wall of intent. There is no room for you here anymore — this territory belongs to him, and his tolerance has run out. The message is as old as the species: leave, or be driven out.
+
+EVENT: [foraging] The food is abundant, richer than anything the forest provides. But the smells here are wrong. Metal, chemicals, the lingering scent of humans. Your stomach pulls you forward. Your nose holds you back...
+
+EVENT: [environmental] A strip of hard black ground stretches across your path, hot and smelling of tar. Machines roar past, their lights sweeping the darkness. The far side has trees and browse, but the open strip between is lethal.
+CHOICE: Selected "Wait for a safer moment"
+
+EVENT: [environmental] Fresh scent marks overlay your own along the boundary, still sharp. A rival is pushing into your range, marking over your marks, each pass bolder than the last.
+CHOICE: Selected "Yield ground"
+
+EVENT: [environmental] Smoke hangs in the air over Northern Minnesota, acrid and thickening. Other animals move past you in the same direction, away from something. The air burns in your nostrils.
+
+OUTCOMES:
+- The dominant buck finds you again at the edge of the cedar stand. He approaches with lowered head and flattened ears, his body a wall of intent. There is no room for you here anymore — this territory belongs to him, and his tolerance has run out. The message is as old as the species: leave, or be driven out.
+- The food is abundant, richer than anything the forest provides. But the smells here are wrong. Metal, chemicals, the lingering scent of humans. Your stomach pulls you forward. Your nose holds you back...
+- A strip of hard black ground stretches across your path, hot and smelling of tar. Machines roar past, their lights sweeping the darkness. The far side has trees and browse, but the open strip between is lethal.
+  > You follow the roadside ditch until you find a drainage culvert. The dark tunnel smells of rust and stale water, but it passes beneath the road safely.
+- Fresh scent marks overlay your own along the boundary, still sharp. A rival is pushing into your range, marking over your marks, each pass bolder than the last.
+  > You move off the boundary. The rival marks over your scent within the hour. Your usable range contracts, but your body is intact.
+- Smoke hangs in the air over Northern Minnesota, acrid and thickening. Other animals move past you in the same direction, away from something. The air burns in your nostrils.
+
+JOURNAL: Wet everywhere. Water dripping from every surface.
+
+
+--- Turn 10 (summer 1, Age: 14mo, Weight: 100.3 lbs) ---
+Stats: IMM:40.0 CLI:26.0 HEA:60.0 STR:35.0
+[Ambient] Heat rising off the ground. The air shimmers.
+
+EVENT: [physiology] The muscles along your spine are wasted, skin loose over bone. Your haunches are hollow. Each step costs more than the last. The hunger is constant, a clench in your gut that never stops.
+CHOICE: Selected "Risk the open ground for better browse"
+
+EVENT: [social] The dominant buck finds you again at the edge of the cedar stand. He approaches with lowered head and flattened ears, his body a wall of intent. There is no room for you here anymore — this territory belongs to him, and his tolerance has run out. The message is as old as the species: leave, or be driven out.
+
+EVENT: [environmental] A wire fence blocks your path, barbed at the top, its metal strands humming faintly in the wind. Beyond it, the trees and brush continue. The wire is sharp and smells of rust.
+CHOICE: Selected "Crawl under"
+
+EVENT: [health] Two hard, hot knobs of bone are pushing through the skin above your eyes, sheathed in velvet that itches. You rub them against every tree you pass, leaving smears of blood and fuzz on the bark. They are small, barely more than spikes, but the pressure and heat of their growth is constant.
+
+EVENT: [environmental] A small box strapped to a tree blinks with a red light as you pass. A faint click sounds. You sniff it cautiously. It smells of metal, plastic, and faintly of human hands. It does not move or follow you.
+
+EVENT: [environmental] The rival's scent fades from the boundary over the following days. Your marks go unchallenged. The range is yours again.
+
+EVENT: [environmental] Heat and noise hit at once. The fire is a wall of orange across Northern Minnesota. Embers fall from a dark sky. You run through choking smoke, every familiar path blocked or burning.
+
+OUTCOMES:
+- The muscles along your spine are wasted, skin loose over bone. Your haunches are hollow. Each step costs more than the last. The hunger is constant, a clench in your gut that never stops.
+  > You step past the tree line. The grass is thick here, the browse untouched. Wind hits you from every direction. You are a silhouette against the sky. You eat anyway.
+- The dominant buck finds you again at the edge of the cedar stand. He approaches with lowered head and flattened ears, his body a wall of intent. There is no room for you here anymore — this territory belongs to him, and his tolerance has run out. The message is as old as the species: leave, or be driven out.
+- A wire fence blocks your path, barbed at the top, its metal strands humming faintly in the wind. Beyond it, the trees and brush continue. The wire is sharp and smells of rust.
+  > You press yourself flat and wriggle beneath the bottom wire. A barb catches your hide, leaving a thin scratch, but you pull free.
+- Two hard, hot knobs of bone are pushing through the skin above your eyes, sheathed in velvet that itches. You rub them against every tree you pass, leaving smears of blood and fuzz on the bark. They are small, barely more than spikes, but the pressure and heat of their growth is constant.
+- A small box strapped to a tree blinks with a red light as you pass. A faint click sounds. You sniff it cautiously. It smells of metal, plastic, and faintly of human hands. It does not move or follow you.
+- The rival's scent fades from the boundary over the following days. Your marks go unchallenged. The range is yours again.
+- Heat and noise hit at once. The fire is a wall of orange across Northern Minnesota. Embers fall from a dark sky. You run through choking smoke, every familiar path blocked or burning.
+
+JOURNAL: Dense shade under the heavy canopy. Cooler in the dark patches. Hunger is a constant companion; he grew noticeably thinner.
+
+
+--- Turn 12 (autumn 1, Age: 15mo, Weight: 97.6 lbs) ---
+Stats: IMM:40.0 CLI:34.0 HEA:60.0 STR:32.0
+[Ambient] Calls overhead, many, moving in one direction. Fading.
+
+EVENT: [foraging] The food is abundant, richer than anything the forest provides. But the smells here are wrong. Metal, chemicals, the lingering scent of humans. Your stomach pulls you forward. Your nose holds you back...
+
+EVENT: [seasonal] You wake and the ground crunches underfoot. Every blade of grass is sheathed in white crystal and your breath steams. The first hard frost. The insects are gone. The air is sharp and still.
+
+EVENT: [social] The area beyond your current range looks promising: good foraging grounds and sheltered resting spots. You could expand your territory.
+CHOICE: Selected "Expand your range"
+
+EVENT: [social] Another deer is already at the browse patch, the one with tender young growth and the sheltering overhang. It sees you and lowers its head, ears flattened, one forehoof stamping. The muscles in its neck bunch tight.
+CHOICE: Selected "Yield and move on"
+
+EVENT: [environmental] A howl rises from the ridge, long and wavering. Then another answers, and another. Every muscle in your body locks. Your hind legs coil. The sound vibrates in your chest and your nostrils flare wide, searching the wind.
+
+EVENT: [social] You come across a small group of does grazing together. They regard you cautiously at first, ears swiveling, noses twitching, but after a few minutes of mutual sniffing and circling, they accept your presence. You graze alongside them for the rest of the day. Your breathing slows. The alertness loosens in your muscles.
+
+EVENT: [environmental] Humans appear in Northern Minnesota, moving slowly, carrying objects that click and hum. They attach small boxes to trees and leave without chasing anything. They smell of metal and plastic.
+
+EVENT: [environmental] Where open ground and trees stood, hard flat surfaces now block your path. You push against them. They do not give. The usable range has shrunk. Other animals press into what remains, and food is harder to find.
+
+OUTCOMES:
+- The food is abundant, richer than anything the forest provides. But the smells here are wrong. Metal, chemicals, the lingering scent of humans. Your stomach pulls you forward. Your nose holds you back...
+- You wake and the ground crunches underfoot. Every blade of grass is sheathed in white crystal and your breath steams. The first hard frost. The insects are gone. The air is sharp and still.
+- The area beyond your current range looks promising: good foraging grounds and sheltered resting spots. You could expand your territory.
+  > You push outward, marking new boundaries. The expanded range offers more resources but is harder to defend.
+- Another deer is already at the browse patch, the one with tender young growth and the sheltering overhang. It sees you and lowers its head, ears flattened, one forehoof stamping. The muscles in its neck bunch tight.
+  > You turn and walk away. There are other patches further on.
+- A howl rises from the ridge, long and wavering. Then another answers, and another. Every muscle in your body locks. Your hind legs coil. The sound vibrates in your chest and your nostrils flare wide, searching the wind.
+- You come across a small group of does grazing together. They regard you cautiously at first, ears swiveling, noses twitching, but after a few minutes of mutual sniffing and circling, they accept your presence. You graze alongside them for the rest of the day. Your breathing slows. The alertness loosens in your muscles.
+- Humans appear in Northern Minnesota, moving slowly, carrying objects that click and hum. They attach small boxes to trees and leave without chasing anything. They smell of metal and plastic.
+- Where open ground and trees stood, hard flat surfaces now block your path. You push against them. They do not give. The usable range has shrunk. Other animals press into what remains, and food is harder to find.
+
+JOURNAL: Thick layer of dry leaves on the ground, deep, noisy to walk through. Hunger is a constant companion; he grew noticeably thinner.
+
+
+--- Turn 14 (autumn 1, Age: 15mo, Weight: 92.7 lbs) ---
+Stats: IMM:46.0 CLI:42.0 HEA:60.0 STR:32.0
+[Ambient] Wet air in the low places at dawn. Sound muffled. Visibility short.
+
+EVENT: [physiology] The muscles along your spine are wasted, skin loose over bone. Your haunches are hollow. Each step costs more than the last. The hunger is constant, a clench in your gut that never stops.
+CHOICE: Selected "Risk the open ground for better browse"
+
+EVENT: [social] You patrol the boundaries of your range, leaving scent marks and signs of your presence. The familiar landmarks reassure you. This ground is yours.
+
+EVENT: [environmental] The smell hits first: blood, urine, stress. One of your kind lies in the dirt ahead, breathing fast and shallow, unable to stand.
+CHOICE: Selected "Help the stranger"
+
+EVENT: [environmental] The rival patrols the lost ground openly. Your range is smaller now. Food and cover are harder to find in what remains.
+
+OUTCOMES:
+- The muscles along your spine are wasted, skin loose over bone. Your haunches are hollow. Each step costs more than the last. The hunger is constant, a clench in your gut that never stops.
+  > You step past the tree line. The grass is thick here, the browse untouched. Wind hits you from every direction. You are a silhouette against the sky. You eat anyway.
+- You patrol the boundaries of your range, leaving scent marks and signs of your presence. The familiar landmarks reassure you. This ground is yours.
+- The smell hits first: blood, urine, stress. One of your kind lies in the dirt ahead, breathing fast and shallow, unable to stand.
+  > You step closer. The injured one flinches, then goes still as your scent registers. You settle nearby, body heat bleeding across the gap between you.
+- The rival patrols the lost ground openly. Your range is smaller now. Food and cover are harder to find in what remains.
+
+JOURNAL: The light shifts. For a moment the shapes around you look different.
+
+
+--- Turn 16 (autumn 1, Age: 16mo, Weight: 92.8 lbs) ---
+Stats: IMM:46.0 CLI:34.0 HEA:60.0 STR:32.0
+[Ambient] Calls overhead, many, moving in one direction. Fading.
+
+EVENT: [foraging] The mountain ash berries are ripe, hanging in heavy clusters. You strip them from the branches with your lips, the tart juice running down your chin. At this altitude, the cold is already sharpening.
+
+EVENT: [reproduction] Your neck has swollen thick with muscle and your antlers are hard and polished. The does are close. You smell them on the wind and your whole body tightens. Other bucks are rubbing trees, pawing the ground. You cannot hold still.
+
+EVENT: [social] Fresh signs of another {{species}} appear within your territory. The scent is unfamiliar, an outsider testing your boundaries.
+CHOICE: Selected "Confront the intruder"
+
+EVENT: [environmental] A strip of hard black ground stretches across your path, hot and smelling of tar. Machines roar past, their lights sweeping the darkness. The far side has trees and browse, but the open strip between is lethal.
+CHOICE: Selected "Wait for a safer moment"
+
+EVENT: [health] A bitter chemical tang drifts on the wind from nearby farmland. The vegetation at the edge of your range is wilting, and the insects that feed on it are dying or gone. The poison is invisible, but your body knows something is wrong. A creeping nausea, a dullness behind the eyes.
+
+EVENT: [environmental] Where forest once stood, bare earth stretches to the horizon. Machines have stripped the land down to stumps and rutted mud. The smells of soil, diesel, and cut wood fill the air.
+
+OUTCOMES:
+- The mountain ash berries are ripe, hanging in heavy clusters. You strip them from the branches with your lips, the tart juice running down your chin. At this altitude, the cold is already sharpening.
+- Your neck has swollen thick with muscle and your antlers are hard and polished. The does are close. You smell them on the wind and your whole body tightens. Other bucks are rubbing trees, pawing the ground. You cannot hold still.
+- Fresh signs of another {{species}} appear within your territory. The scent is unfamiliar, an outsider testing your boundaries.
+  > You track down the intruder and assert your dominance through aggressive display. They retreat, but may return.
+  !!! FAILED DEATH ROLL !!!
+- A strip of hard black ground stretches across your path, hot and smelling of tar. Machines roar past, their lights sweeping the darkness. The far side has trees and browse, but the open strip between is lethal.
+  > You follow the roadside ditch until you find a drainage culvert. The dark tunnel smells of rust and stale water, but it passes beneath the road safely.
+- A bitter chemical tang drifts on the wind from nearby farmland. The vegetation at the edge of your range is wilting, and the insects that feed on it are dying or gone. The poison is invisible, but your body knows something is wrong. A creeping nausea, a dullness behind the eyes.
+- Where forest once stood, bare earth stretches to the horizon. Machines have stripped the land down to stumps and rutted mud. The smells of soil, diesel, and cut wood fill the air.
+
+JOURNAL: Cold edge to the air. Smoke smell from somewhere. Frost at dawn. Hunger is a constant companion; he grew noticeably thinner.
+
+
+=== Playtest End ===
+Final Turn: 18
+Status: DEAD
+
+=== RUN SUMMARY ===
+Species: White-Tailed Deer
+Sex: male
+Survived: 18 turns (16 months)
+Survival Grade: F
+Total Fitness (Matured Offspring): 0
+Cause of Death: Killed defending territory from an intruder.
+
+=== LIFETIME STATS ===
+Max Weight: 109.4 lbs
+Predators Evaded: 0
+Prey Eaten: 0
+Friends Made: 0
+Rivals Defeated: 0
+Distance Traveled: 0
+Weather Events Survived: 0
+
+=== LIFE TIMELINE ===
+[Turn 18: October Yr 1] (DEATH) Killed defending territory from an intruder.
+
+Transcript saved to /mnt/chromeos/MyFiles/Documents/wild-reckoning/playtests/playtest-white-tailed-deer-2026-03-17T21-14-46-028Z.txt

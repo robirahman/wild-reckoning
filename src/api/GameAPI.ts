@@ -110,6 +110,28 @@ export interface GameSnapshot {
   energy: number;
 }
 
+/** Detailed timeline entry for the run summary. */
+export interface TimelineEntry {
+  turn: number;
+  month: string;
+  year: number;
+  text: string;
+  category: 'injury' | 'parasite' | 'offspring' | 'migration' | 'milestone' | 'death';
+}
+
+/** Comprehensive end-of-run summary. */
+export interface RunSummary {
+  speciesName: string;
+  sex: string;
+  turnsLived: number;
+  ageMonths: number;
+  causeOfDeath?: string;
+  totalFitness: number;
+  grade: string;
+  lifetimeStats: any; // LifetimeStats type from stats.ts
+  timeline: TimelineEntry[];
+}
+
 /** Returned by endTurn(). */
 export interface TurnResultSummary {
   eventOutcomes: {
@@ -635,6 +657,156 @@ export class GameAPI {
   /** Access the raw Zustand store for advanced use. */
   get rawState(): GameState {
     return this._store.getState();
+  }
+
+  /**
+   * Generates a comprehensive summary of the run, typically called after death.
+   * Mirrors the logic used in the UI RunSummary and DeathScreen components.
+   */
+  getRunSummary(): RunSummary {
+    const state = this._store.getState();
+    const config = state.speciesBundle.config;
+    const animal = state.animal;
+    const reproduction = state.reproduction;
+
+    // 1. Calculate Grade (mirrors DeathScreen.tsx)
+    const getGrade = (fitness: number, type: 'iteroparous' | 'semelparous'): string => {
+      if (fitness === 0) return 'F';
+      if (type === 'iteroparous') {
+        if (fitness === 1) return 'D';
+        if (fitness === 2) return 'C';
+        if (fitness <= 4) return 'B';
+        return 'A';
+      } else {
+        if (fitness <= 2) return 'D';
+        if (fitness <= 5) return 'C';
+        if (fitness <= 12) return 'B';
+        return 'A';
+      }
+    };
+
+    const grade = getGrade(reproduction.totalFitness, reproduction.type);
+
+    // 2. Extract Timeline (mirrors RunSummary.tsx)
+    const timeline: TimelineEntry[] = [];
+    const seenFlags = new Set<string>();
+    const seenParasites = new Set<string>();
+    const seenInjuries = new Set<string>();
+
+    for (const record of state.turnHistory) {
+      for (const event of record.events) {
+        const def = event.definition;
+        const tags = def.tags;
+
+        // Milestones & Migrations
+        if (def.consequences) {
+          for (const c of def.consequences) {
+            if (c.type === 'set_flag' && !seenFlags.has(c.flag)) {
+              seenFlags.add(c.flag);
+              if (tags.includes('milestone') || tags.includes('migration')) {
+                timeline.push({
+                  turn: record.turn,
+                  month: record.month,
+                  year: record.year,
+                  text: def.narrativeText.slice(0, 150),
+                  category: tags.includes('migration') ? 'migration' : 'milestone',
+                });
+              }
+            }
+            if (c.type === 'add_parasite' && !seenParasites.has(c.parasiteId)) {
+              seenParasites.add(c.parasiteId);
+              timeline.push({
+                turn: record.turn,
+                month: record.month,
+                year: record.year,
+                text: `Contracted ${c.parasiteId.replace(/-/g, ' ')}`,
+                category: 'parasite',
+              });
+            }
+            if (c.type === 'add_injury' && !seenInjuries.has(c.injuryId + (c.bodyPart ?? ''))) {
+              seenInjuries.add(c.injuryId + (c.bodyPart ?? ''));
+              timeline.push({
+                turn: record.turn,
+                month: record.month,
+                year: record.year,
+                text: `Suffered ${c.injuryId.replace(/-/g, ' ')}${c.bodyPart ? ` (${c.bodyPart})` : ''}`,
+                category: 'injury',
+              });
+            }
+            if (c.type === 'start_pregnancy' || c.type === 'sire_offspring' || c.type === 'spawn') {
+              timeline.push({
+                turn: record.turn,
+                month: record.month,
+                year: record.year,
+                text: c.type === 'spawn' ? 'Spawned' : c.type === 'start_pregnancy' ? 'Became pregnant' : 'Sired offspring',
+                category: 'offspring',
+              });
+            }
+          }
+        }
+
+        // Also check choices for consequences
+        if (event.choiceMade && def.choices) {
+          const choice = def.choices.find(ch => ch.id === event.choiceMade);
+          if (choice?.consequences) {
+            for (const c of choice.consequences) {
+              if (c.type === 'add_parasite' && !seenParasites.has(c.parasiteId)) {
+                seenParasites.add(c.parasiteId);
+                timeline.push({
+                  turn: record.turn,
+                  month: record.month,
+                  year: record.year,
+                  text: `Contracted ${c.parasiteId.replace(/-/g, ' ')}`,
+                  category: 'parasite',
+                });
+              }
+              if (c.type === 'add_injury' && !seenInjuries.has(c.injuryId + (c.bodyPart ?? ''))) {
+                seenInjuries.add(c.injuryId + (c.bodyPart ?? ''));
+                timeline.push({
+                  turn: record.turn,
+                  month: record.month,
+                  year: record.year,
+                  text: `Suffered ${c.injuryId.replace(/-/g, ' ')}${c.bodyPart ? ` (${c.bodyPart})` : ''}`,
+                  category: 'injury',
+                });
+              }
+              if (c.type === 'start_pregnancy' || c.type === 'sire_offspring' || c.type === 'spawn') {
+                timeline.push({
+                  turn: record.turn,
+                  month: record.month,
+                  year: record.year,
+                  text: c.type === 'spawn' ? 'Spawned' : c.type === 'start_pregnancy' ? 'Became pregnant' : 'Sired offspring',
+                  category: 'offspring',
+                });
+              }
+            }
+          }
+        }
+      }
+    }
+
+    if (animal.causeOfDeath) {
+      const last = state.turnHistory[state.turnHistory.length - 1];
+      timeline.push({
+        turn: state.time.turn,
+        month: last?.month || state.time.monthIndex.toString(),
+        year: state.time.year,
+        text: animal.causeOfDeath,
+        category: 'death',
+      });
+    }
+
+    return {
+      speciesName: config.name,
+      sex: animal.sex,
+      turnsLived: state.time.turn,
+      ageMonths: animal.age,
+      causeOfDeath: animal.causeOfDeath,
+      totalFitness: reproduction.totalFitness,
+      grade,
+      lifetimeStats: { ...animal.lifetimeStats },
+      timeline,
+    };
   }
 
   // ── Convenience: play N turns automatically ────────────────────────────
