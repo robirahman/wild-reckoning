@@ -39,6 +39,96 @@ The game ends when the animal dies. The player's score is their **inclusive gene
 
 ---
 
+## 1b. Biological Realism Standards
+
+Wild Reckoning's simulation targets real-world biological accuracy. Causes of death, body weight, lifespan, and reproductive output should reflect what happens to real wild animals. This section explains the standards and how to verify them.
+
+### Principle: Death Distributions Should Match Reality
+
+Every species has a calibrated mortality profile. The proportion of animals dying from each cause in automated playtesting should approximate the real-world breakdown. When they diverge, the simulation needs tuning.
+
+**Example — African elephant:** Real elephants die primarily from tooth wear and senescence (~40-50%), drought/starvation (~15-20%), poaching (~15-25%), and disease (~10-15%). Parasites almost never kill healthy adults. Early playtesting showed 29% of elephants dying from roundworm and 36% from health depletion — far too much disease, not enough old age. Fixes included:
+- Reducing roundworm HEA drain at all stages (severe -15 → -6, critical -25 → -10)
+- Tripling remission rates so most infections self-resolve (matching real elephant parasite tolerance)
+- Pushing old age onset from 45 years to 55 years (matching the tooth-wear timeline at 60-65)
+- Adding a `weightBasedHealing` mechanic so well-fed elephants invest fat reserves into immune recovery
+- Adding drought and poacher ambush events (previously missing causes of death)
+
+After tuning: elephant lifespan reached 50.7 years (real: 50-70), with 84% dying of old age.
+
+**Example — Polar bear:** Trichinella was killing 75% of bears. Real polar bears carry Trichinella asymptomatically. After halving progression rates, tripling remission, and reducing HEA drain, Trichinella deaths dropped to 12%. New events for subsistence hunting, sea ice loss, and extended fasting were added to match the real leading causes. Final lifespan: 18.4 years (real: 15-25).
+
+### Principle: Lifespan Should Match Species Biology
+
+Each species has a target lifespan range based on published ecological data. Automated headless playtesting (100+ games) validates that average lifespan falls within the expected range.
+
+| Species | Target Lifespan | Achieved | Key Constraint |
+|---------|----------------|----------|----------------|
+| African Elephant | 50-70 years | 50.7yr | Tooth wear → starvation at 60-65yr |
+| Green Sea Turtle | 60-80+ years | 36.5yr | Bycatch, FP disease (most recover in wild) |
+| Polar Bear | 15-25 years | 18.4yr | Starvation from sea ice loss, hunting |
+| White-Tailed Deer | 3-5 years | 2.2yr | Predation, hunting, winter starvation |
+| Arctic Tern | 15-30 years | 18.6yr | Exhaustion, predation |
+| Poison Dart Frog | 3-8 years | 6.0yr | Predation, desiccation |
+| Chinook Salmon | 3-7 years | 1.7yr | Semelparous; must survive to spawning age |
+| Common Octopus | 1-2 years | 0.6yr | Semelparous; spawns and dies |
+| Monarch Butterfly | 2-8 months | 0.26yr | Predation, exhaustion |
+| Honeybee Worker | 6 weeks-6 months | 0.38yr | Wing wear, old age |
+| Fig Wasp | 1-2 days (adult) | ~7 days | Starvation after oviposition |
+
+When a species' lifespan is too short, the most common fix is reducing parasite lethality (HEA drain and progression rates) and increasing remission. Parasites in the wild are rarely the primary cause of death for healthy adults in most species.
+
+### Principle: Weight Should Track Real Adult Ranges
+
+Body weight is continuously simulated through caloric balance (intake vs. expenditure). Seasonal cycling, foraging quality, thermoregulation costs, and activity levels all affect weight. Target weight ranges come from published wildlife data.
+
+**Example — White-tailed deer:** Playtesting showed average final weight of 77 lbs (real: 100-200 lbs). Investigation revealed that winter cold cost was too high: the `coldCostPerDegree` of 3 kcal per degree below the lower critical temperature created a weekly deficit of -117 kcal-units, causing rapid winter starvation. Real deer with full winter coats are well-insulated. Reducing cold cost to 1.5 and increasing winter metabolic reduction from 25% to 30% brought the average weight up to 89 lbs and reduced starvation deaths from 34% to 24%.
+
+### Principle: Reproduction Should Match Species Ecology
+
+Offspring count, survival rates, and reproductive timing should reflect published data.
+
+**Iteroparous species** (deer, elephant, bear, tern, frog, turtle) track individual offspring through dependence, independence, and maturation phases. Each offspring has per-turn survival rolls calibrated to produce realistic survival-to-adulthood rates.
+
+**Semelparous species** (salmon, octopus, butterfly, wasp) produce large numbers of eggs with very low survival rates. The `eggSurvivalBase` parameter is calibrated so that the expected number of surviving adults per spawning event matches published data (e.g., chinook salmon: ~0.1-0.3% of 4000+ eggs survive).
+
+### Principle: Missing Causes of Death Should Be Added
+
+If a major real-world cause of death has no in-game representation, it should be added as an event. Events should have weight, cooldown, and death probabilities calibrated so that the resulting death distribution approximates reality.
+
+**Causes added based on real-world research:**
+
+| Species | Event Added | Real-world cause it represents |
+|---------|------------|-------------------------------|
+| Elephant | Drought (dig/march choices) | Drought/starvation (~15-20% of deaths) |
+| Elephant | Poacher ambush (flee/charge) | Poaching (~15-25%) |
+| Sea Turtle | Trawl bycatch (dive/swim) | Fishing bycatch (#1 cause, ~30-40%) |
+| Sea Turtle | Longline hook (passive) | Longline bycatch |
+| Sea Turtle | Boat channel (passive) | Vessel strikes (~10-15%) |
+| Salmon | Dam passage (ladder/leap) | Dam mortality (~5-15% per dam) |
+| Salmon | Thermal barrier (hold/push) | Pre-spawn thermal stress |
+| Polar Bear | Ice breakup swim | Drowning from sea ice loss |
+| Polar Bear | Subsistence hunter | Hunting (#1 known cause, ~25-35%) |
+| Polar Bear | Extended fasting (passive) | Starvation during ice-free season |
+
+### How to Verify: Headless Playtesting
+
+Run `npx tsx scripts/playtest-all-species.ts` to execute 100 automated games per flagged species. The script reports:
+- Average and median lifespan (compare to real-world range)
+- Death cause breakdown (compare to real-world proportions)
+- Average final weight (compare to adult weight range)
+- Offspring born and matured (compare to reproductive data)
+
+When a species is out of range, the most effective levers are:
+1. **Parasite HEA drain** — the single largest source of premature death for long-lived species
+2. **Parasite remission rates** — higher remission means infections self-resolve (realistic for most species)
+3. **Event death probabilities** — should be low enough that cumulative risk over a lifetime matches real annual mortality
+4. **Old age onset** — should match the species' real senescence timeline
+5. **Caloric balance** — seasonal weight cycling should produce realistic winter weight loss without triggering starvation
+6. **weightBasedHealing** — for long-lived species, allows well-fed animals to invest fat into immune recovery
+
+---
+
 ## 2. Advanced Systems
 
 ### Evolution and Mutations
@@ -428,6 +518,8 @@ Clamped to [0.90, 0.998]
 
 ## 8. Death Causes
 
+See also §1b (Biological Realism Standards) for calibration methodology and real-world mortality targets.
+
 ### 1. Event-Triggered Death (Predation)
 
 Choices on predator events can include a `deathChance` field:
@@ -458,16 +550,16 @@ Clamped to [1%, 80%]
 ### 2. Starvation
 
 Checked in `useGameEngine.checkDeathConditions()`:
-- **Death threshold:** weight < 35 lbs
+- **Death threshold:** weight < 40 lbs (species-specific; see config)
 - **Starvation debuffs:** Applied in `advanceTurn` when weight < 60: temporary HEA modifier of `-round(severity × 15)` where `severity = (60 - weight) / 25`
 
 ### 3. Disease
 
-For each active parasite at its **final (critical) stage**: 8% death chance per turn.
+For each active parasite at its **final (critical) stage**: species-specific death chance per turn (deer: 3%, elephant: 0.3%, salmon: 5%, turtle: 0.5%). See §1b for calibration rationale.
 
 ### 4. Old Age
 
-After 96 months (8 years):
+After 96 months (8 years) for deer; species-specific onset (elephant: 55yr, turtle: 60yr, bear: 20yr):
 
 ```
 yearsOver8 = (age - 96) / 12
@@ -593,8 +685,8 @@ The largest living land animal. Lives in matriarchal herds on the East African s
 | Starvation death | < 2000 lbs |
 | Starvation debuff | < 3500 lbs |
 | Vulnerability threshold | 3000 lbs |
-| Old age onset | 540 months (45 years) |
-| Old age escalation | 1.3× per year |
+| Old age onset | 660 months (55 years) |
+| Old age escalation | 1.4× per year |
 | Gestation | 88 turns (22 months) |
 | Calf dependence | 144 turns (~3 years) |
 | Calf maturation | 480 turns (~10 years) |
@@ -640,7 +732,7 @@ An anadromous Pacific salmon with a **semelparous** lifecycle — it spawns once
 | Old age escalation | 2.0× per year |
 | Base egg count | 4000 |
 | Egg survival base | 0.1% |
-| Spawning min age | 36 months |
+| Spawning min age | 42 months (3.5 years) |
 | Male competition base win | 30% (max 60%) |
 
 ### Semelparous Lifecycle
