@@ -789,7 +789,7 @@ export class GameAPI {
       const last = state.turnHistory[state.turnHistory.length - 1];
       timeline.push({
         turn: state.time.turn,
-        month: last?.month || state.time.monthIndex.toString(),
+        month: last?.month || state.time.month.toString(),
         year: state.time.year,
         text: animal.causeOfDeath,
         category: 'death',
@@ -948,8 +948,8 @@ function summarizeTurnResult(tr: TurnResult, statDelta: StatSnapshot): TurnResul
       deathRollSurvived: o.deathRollSurvived,
       deathRollProbability: o.deathRollProbability,
       weightChange: o.consequences
-        .filter((c: { type: string }) => c.type === 'modify_weight')
-        .reduce((sum: number, c: { type: string; amount?: number }) => sum + ((c as { amount: number }).amount ?? 0), 0),
+        .filter((c: any) => c.type === 'modify_weight')
+        .reduce((sum: number, c: any) => sum + (c.amount ?? 0), 0),
     })),
     healthNarratives: tr.healthNarratives,
     weightChange: tr.weightChange,

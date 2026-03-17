@@ -56,12 +56,14 @@ async function runWithAPI(fn: (api: GameAPI) => any) {
   return result;
 }
 
+declare let self: ServiceWorkerGlobalScope;
+
 self.addEventListener('install', () => {
-  (self as any).skipWaiting();
+  self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {
-  event.waitUntil((self as any).clients.claim());
+  event.waitUntil(self.clients.claim());
 });
 
 self.addEventListener('fetch', (event: FetchEvent) => {
