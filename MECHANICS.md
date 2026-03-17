@@ -92,6 +92,35 @@ Offspring count, survival rates, and reproductive timing should reflect publishe
 
 **Semelparous species** (salmon, octopus, butterfly, wasp) produce large numbers of eggs with very low survival rates. The `eggSurvivalBase` parameter is calibrated so that the expected number of surviving adults per spawning event matches published data (e.g., chinook salmon: ~0.1-0.3% of 4000+ eggs survive).
 
+### Principle: Mean Surviving Offspring Must Equal 2 (Population Stability)
+
+For any sexually reproducing species, a stable population requires that each individual produces, on average, exactly **2 surviving offspring** over its lifetime (with each parent contributing 50% of the genes to each child). This is the demographic replacement rate for a diploid organism. If the mean is above 2, the simulated population is growing exponentially; if below 2, it is declining toward extinction. Neither is realistic for a species at ecological equilibrium.
+
+This constraint applies across a **large number of playthroughs**. Animals that die before reproducing have fitness 0, and other members of the species (i.e. other playthroughs) must have more surviving offspring to compensate, so that the average is 2.
+
+**How to calibrate:** Adjust per-turn fawn/cub/chick survival probability, egg survival base rate, or reproductive frequency until the mean surviving offspring across 100+ reproducing games converges on 2.0. The relevant parameters:
+- Iteroparous: `fawnSurvivalBase` (or equivalent per-turn survival roll), mating frequency, litter size
+- Semelparous: `eggSurvivalBase`, `eggSurvivalWisFactor`, egg count formula
+
+### Principle: Offspring Variance Should Reflect r/K Selection and Sex
+
+The **distribution** of surviving offspring (not just the mean) should differ by reproductive strategy and sex:
+
+**r-selected species** (salmon, octopus, sea turtle, frog, insects) produce many offspring with high mortality. Most individuals have 0 surviving offspring; a few have many. The distribution should have **wide variance and large right skew** — a long tail of rare high-fitness outcomes. This reflects the lottery-like nature of r-selection: most reproductive investment is lost, but occasional jackpots sustain the population.
+
+**K-selected species** (elephant, polar bear, deer, tern) produce few offspring with high parental investment and relatively high per-offspring survival. The distribution should have **lower variance and less skew** — most reproducing individuals end up near the mean of 2, with few extreme outliers. This reflects the predictable, investment-heavy nature of K-selection.
+
+**Males vs. females** within a species should also differ:
+- **Females** (especially K-selected) have relatively constrained reproductive output — limited by gestation, lactation, and maternal care. Variance is low; most reproducing females produce a similar number of surviving young.
+- **Males** have higher variance due to mate competition. A dominant buck or bull may sire many offspring across multiple females, while most males sire none. The male distribution should have **wider variance and stronger right skew** than the female distribution for the same species. This reflects the reality of sexual selection: male reproductive success is a high-stakes, winner-take-more contest.
+
+| Strategy | Mean | Variance | Skew | Example |
+|----------|------|----------|------|---------|
+| K-selected female | 2.0 | Low | Mild right | Elephant cow: 2-4 calves, most survive |
+| K-selected male | 2.0 | High | Strong right | Elephant bull: 0 or 5-10+ depending on dominance |
+| r-selected female | 2.0 | Very high | Extreme right | Sea turtle: 0 or 50+ from thousands of eggs |
+| r-selected male | 2.0 | Very high | Extreme right | Salmon: 0 or 4-8 from thousands of eggs |
+
 ### Principle: Missing Causes of Death Should Be Added
 
 If a major real-world cause of death has no in-game representation, it should be added as an event. Events should have weight, cooldown, and death probabilities calibrated so that the resulting death distribution approximates reality.
