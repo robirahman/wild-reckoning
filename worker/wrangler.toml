@@ -1,0 +1,7 @@
+name = "wild-reckoning-api"
+main = "src/index.ts"
+compatibility_date = "2025-01-01"
+
+[[kv_namespaces]]
+binding = "GAME_STATE"
+id = "PLACEHOLDER_NAMESPACE_ID"
