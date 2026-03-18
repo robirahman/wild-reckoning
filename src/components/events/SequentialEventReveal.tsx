@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useGameStore } from '../../store/gameStore';
 import { EventCard } from './EventCard';
 import { TurnControls } from '../TurnControls';
@@ -19,10 +19,22 @@ export function SequentialEventReveal() {
 
   // Track how many events have been "revealed" to the player
   const [revealedCount, setRevealedCount] = useState(0);
+  const prevLengthRef = useRef(currentEvents.length);
 
-  // Reset when events change (new turn)
+  // Reset only on new turn (length shrinks or goes to 0→N); auto-reveal appended events
   useEffect(() => {
-    setRevealedCount(currentEvents.length > 0 ? 1 : 0);
+    const prevLen = prevLengthRef.current;
+    prevLengthRef.current = currentEvents.length;
+
+    if (currentEvents.length === 0) {
+      setRevealedCount(0);
+    } else if (prevLen === 0 || currentEvents.length <= prevLen) {
+      // New turn: reset to show first event
+      setRevealedCount(1);
+    } else {
+      // Events were appended (e.g. action performed) — auto-reveal them
+      setRevealedCount(currentEvents.length);
+    }
   }, [currentEvents]);
 
   if (currentEvents.length === 0) {

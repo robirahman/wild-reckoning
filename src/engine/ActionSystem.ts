@@ -66,6 +66,7 @@ export const VOLUNTARY_ACTIONS: VoluntaryAction[] = [
         ],
         consequences: [
           { type: 'set_flag', flag: 'resting' },
+          { type: 'restore_energy', amount: 25 },
         ],
       };
     },

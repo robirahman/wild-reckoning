@@ -195,6 +195,11 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
         }
         break;
       }
+      case 'restore_energy': {
+        animal.energy = Math.min(100, animal.energy + consequence.amount);
+        set({ animal });
+        break;
+      }
       case 'apply_harm': {
         if (animal.bodyState && animal.anatomyIndex) {
           const harmResult = resolveHarm(

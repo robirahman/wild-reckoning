@@ -79,7 +79,8 @@ export type Consequence =
   | { type: 'establish_den'; nodeId?: string }
   | { type: 'modify_territory'; sizeChange?: number; qualityChange?: number }
   | { type: 'apply_harm'; harm: HarmEvent }
-  | { type: 'add_calories'; amount: number; source?: string };
+  | { type: 'add_calories'; amount: number; source?: string }
+  | { type: 'restore_energy'; amount: number };
 
 // ── Sub-Events ──
 

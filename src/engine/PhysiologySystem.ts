@@ -60,6 +60,10 @@ export function tickPhysiology(
     });
   }
 
+  // Passive energy recovery (partial recovery each turn from food/rest)
+  const baseRecovery = scaling.metabolicRate * 0.6;
+  newAnimal.energy = Math.min(100, newAnimal.energy + baseRecovery);
+
   // --- 2. ENVIRONMENTAL STRESS ---
 
   // Hypothermia (linked to CLI and weather)
