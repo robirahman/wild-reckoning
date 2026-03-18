@@ -37,7 +37,8 @@ import { BACKSTORY_OPTIONS } from '../types/species';
 import { getAllSpeciesIds } from '../data/species';
 import type { SimulationContext } from '../simulation/events/types';
 import type { CalibratedRates } from '../simulation/calibration/types';
-import type { ResolvedEvent } from '../types/events';
+import type { ResolvedEvent, EventChoice } from '../types/events';
+import type { ActiveParasite, ActiveInjury, ActiveCondition } from '../types/health';
 import type { TurnResult } from '../types/turnResult';
 import type { BehavioralSettings, BehaviorLevel } from '../types/behavior';
 import type { MapNode } from '../types/map';
@@ -596,10 +597,10 @@ export class GameAPI {
   getAdjacentNodes(): Array<{ id: string; type: string; name?: string }> {
     const state = this._store.getState();
     if (!state.map) return [];
-    const current = state.map.nodes.find(n => n.id === state.map!.currentLocationId);
+    const current = state.map.nodes.find((n: MapNode) => n.id === state.map!.currentLocationId);
     if (!current) return [];
     return current.connections.map((connId: string) => {
-      const node = state.map!.nodes.find(n => n.id === connId);
+      const node = state.map!.nodes.find((n: MapNode) => n.id === connId);
       return node ? { id: node.id, type: node.type, name: (node as { name?: string }).name } : { id: connId, type: 'unknown' };
     });
   }
@@ -623,9 +624,9 @@ export class GameAPI {
       alive: a.alive,
       causeOfDeath: a.causeOfDeath,
       stats: this.getStatSnapshot(),
-      parasites: a.parasites.map(p => p.definitionId),
-      injuries: a.injuries.map(i => i.definitionId),
-      conditions: (a.conditions ?? []).map(c => c.definitionId),
+      parasites: a.parasites.map((p: ActiveParasite) => p.definitionId),
+      injuries: a.injuries.map((i: ActiveInjury) => i.definitionId),
+      conditions: (a.conditions ?? []).map((c: ActiveCondition) => c.definitionId),
       flags: Array.from(a.flags),
       behavioralSettings: { ...state.behavioralSettings },
       energy: a.energy,
@@ -745,7 +746,7 @@ export class GameAPI {
 
         // Also check choices for consequences
         if (event.choiceMade && def.choices) {
-          const choice = def.choices.find(ch => ch.id === event.choiceMade);
+          const choice = def.choices.find((ch: EventChoice) => ch.id === event.choiceMade);
           if (choice?.consequences) {
             for (const c of choice.consequences) {
               if (c.type === 'add_parasite' && !seenParasites.has(c.parasiteId)) {
