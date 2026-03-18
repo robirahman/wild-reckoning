@@ -40,6 +40,8 @@ import type { CalibratedRates } from '../simulation/calibration/types';
 import type { ResolvedEvent } from '../types/events';
 import type { TurnResult } from '../types/turnResult';
 import type { BehavioralSettings, BehaviorLevel } from '../types/behavior';
+import type { MapNode } from '../types/map';
+import type { NPC } from '../types/npc';
 
 // ---------------------------------------------------------------------------
 // Types exposed by the API
@@ -188,10 +190,6 @@ export class GameAPI {
     this._store = customStore || useGameStore;
   }
 
-  private get store() {
-    return this._store.getState();
-  }
-
   private set(partial: Partial<GameState>) {
     this._store.setState(partial);
   }
@@ -248,8 +246,8 @@ export class GameAPI {
         if (npc && mapNodes.length > 0) {
           // Place predators/rivals on a random non-player node; allies near the player
           const candidates = type === 'ally'
-            ? mapNodes.filter(n => n.id === playerNodeId || (playerNodeId && n.connections.includes(playerNodeId)))
-            : mapNodes.filter(n => n.id !== playerNodeId);
+            ? mapNodes.filter((n: MapNode) => n.id === playerNodeId || (playerNodeId && n.connections.includes(playerNodeId)))
+            : mapNodes.filter((n: MapNode) => n.id !== playerNodeId);
           const startNode = candidates.length > 0 ? state.rng.pick(candidates) : mapNodes[0];
           npc.currentNodeId = startNode.id;
           npcs.push(npc);
@@ -262,7 +260,7 @@ export class GameAPI {
 
     // Introduce mate NPC at mating season
     state = this._store.getState();
-    const hasMate = state.npcs.some(n => n.type === 'mate' && n.alive);
+    const hasMate = state.npcs.some((n: NPC) => n.type === 'mate' && n.alive);
     if (!hasMate && state.time.turn >= NPC_INTRODUCTION_MIN_TURN) {
       const reproConfig = state.speciesBundle.config.reproduction;
       const isMating =
@@ -324,7 +322,7 @@ export class GameAPI {
     let simEvents: ResolvedEvent[] = [];
     const config = state.speciesBundle.config;
     if (isSimulationMode(config)) {
-      const mapNode = state.map?.nodes.find(n => n.id === state.map!.currentLocationId);
+      const mapNode = state.map?.nodes.find((n: MapNode) => n.id === state.map!.currentLocationId);
       const simCtx: SimulationContext = {
         animal: state.animal,
         time: state.time,
@@ -423,7 +421,7 @@ export class GameAPI {
     const state = this._store.getState();
     const made: Array<{ eventId: string; choiceId: string }> = [];
     for (const eventId of [...state.pendingChoices]) {
-      const event = state.currentEvents.find(e => e.definition.id === eventId);
+      const event = state.currentEvents.find((e: ResolvedEvent) => e.definition.id === eventId);
       const firstChoice = event?.definition.choices?.[0];
       if (firstChoice) {
         this._store.getState().makeChoice(eventId, firstChoice.id);
@@ -502,7 +500,7 @@ export class GameAPI {
     const foodSourceHits: Record<string, number> = {};
 
     for (const outcome of result.turnResult.eventOutcomes) {
-      const event = state.currentEvents.find(e => e.definition.id === outcome.eventId);
+      const event = state.currentEvents.find((e: ResolvedEvent) => e.definition.id === outcome.eventId);
       if (!event) continue;
       const tags = event.definition.tags;
 
@@ -525,14 +523,14 @@ export class GameAPI {
         : tags.includes('mate') ? 'mate'
         : null;
       if (npcType) {
-        const npc = updatedNPCs.find(n => n.type === npcType && n.alive);
+        const npc = updatedNPCs.find((n: NPC) => n.type === npcType && n.alive);
         if (npc) updatedNPCs = incrementEncounter(updatedNPCs, npc.id, encounterState.time.turn);
       }
     }
 
-    const previousFriends = encounterState.npcs.filter(n => n.relationship === 'friendly' || n.relationship === 'bonded').length;
+    const previousFriends = encounterState.npcs.filter((n: NPC) => n.relationship === 'friendly' || n.relationship === 'bonded').length;
     updatedNPCs = progressRelationship(updatedNPCs);
-    const currentFriends = updatedNPCs.filter(n => n.relationship === 'friendly' || n.relationship === 'bonded').length;
+    const currentFriends = updatedNPCs.filter((n: NPC) => n.relationship === 'friendly' || n.relationship === 'bonded').length;
     const newFriendsMade = Math.max(0, currentFriends - previousFriends);
 
     if (updatedNPCs !== encounterState.npcs) {
