@@ -766,39 +766,55 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
         }
       }
 
-      // Natural healing: fully restore HEA toward base each turn for species
-      // with naturalHealingRate. This counteracts the unbounded accumulation of
-      // permanent negative HEA modifiers from events over long lifespans.
-      // Animals recover between insults — cumulative damage shouldn't stack
-      // indefinitely across decades.
+      // Natural healing: gradually erase accumulated HEA damage each turn.
+      // Removes permanent negative HEA modifiers up to naturalHealingRate per turn.
+      // Gated: no healing while starving or severely dehydrated.
+      const isStarving = currentAnimal.weight <= config.weight.starvationDebuff;
+      const isDehydrated = !!(config.hydration &&
+        currentAnimal.physiologicalStress.dehydration >= config.hydration.debuffThreshold);
+
       tickedStats = removeModifiersBySource(tickedStats, 'natural-healing');
-      if (config.naturalHealingRate && config.naturalHealingRate > 0) {
+      if (config.naturalHealingRate && config.naturalHealingRate > 0 && !isStarving && !isDehydrated) {
         const currentHEA = computeEffectiveValue(tickedStats[StatId.HEA]);
         const baseHEA = config.baseStats[StatId.HEA];
         if (currentHEA < baseHEA) {
-          // Heal the full deficit — events still matter per-turn (they reduce
-          // HEA before healing kicks in next turn) but damage doesn't accumulate
-          // across turns. This is biologically accurate: animals heal between insults.
-          const healAmount = baseHEA - currentHEA;
-          tickedStats = addModifier(tickedStats, {
-            id: 'natural-healing',
-            source: 'natural-healing',
-            sourceType: 'condition' as const,
-            stat: StatId.HEA,
-            amount: healAmount,
-          });
+          // Erase permanent negative HEA modifiers (from events/parasites)
+          // up to the healing rate. This prevents unbounded accumulation
+          // of damage across long lifespans.
+          let healBudget = config.naturalHealingRate;
+          const heaStat = tickedStats[StatId.HEA];
+          const newModifiers = [...heaStat.modifiers];
+          for (let j = newModifiers.length - 1; j >= 0 && healBudget > 0; j--) {
+            const mod = newModifiers[j];
+            // Only erase permanent negative modifiers from events
+            if (mod.amount < 0 && mod.duration === undefined && mod.sourceType === 'event') {
+              const absAmount = Math.abs(mod.amount);
+              if (absAmount <= healBudget) {
+                // Fully erase this modifier
+                healBudget -= absAmount;
+                newModifiers.splice(j, 1);
+              } else {
+                // Partially erase: reduce the negative amount
+                newModifiers[j] = { ...mod, amount: mod.amount + healBudget };
+                healBudget = 0;
+              }
+            }
+          }
+          tickedStats = {
+            ...tickedStats,
+            [StatId.HEA]: { ...heaStat, modifiers: newModifiers },
+          };
         }
       }
 
       // Weight-based health recovery: long-lived species with high body condition
       // can trade weight for health recovery (biological: immune investment from
-      // fat reserves). This prevents slow HEA drain from parasites killing animals
-      // that are otherwise healthy and well-fed.
+      // fat reserves). Also gated on hydration status.
       if (config.weightBasedHealing) {
         const { minWeight, healPerTurn, weightCostPerHeal } = config.weightBasedHealing;
         const currentHEA = computeEffectiveValue(tickedStats[StatId.HEA]);
         const baseHEA = config.baseStats[StatId.HEA];
-        if (currentHEA < baseHEA && currentAnimal.weight > minWeight) {
+        if (currentHEA < baseHEA && currentAnimal.weight > minWeight && !isDehydrated) {
           tickedStats = addModifier(tickedStats, {
             id: 'weight-healing',
             source: 'weight-healing',

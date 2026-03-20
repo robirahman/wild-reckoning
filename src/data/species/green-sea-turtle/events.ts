@@ -199,7 +199,7 @@ const turtleEvents: GameEvent[] = [
     subEvents: [
       {
         eventId: 'turtle-net-drowning',
-        chance: 0.08,
+        chance: 0.12,
         conditions: [],
         narrativeText:
           'The mesh holds you under. You strain upward but each movement pulls tighter. Your lungs burn. The light above dims.',
@@ -213,8 +213,8 @@ const turtleEvents: GameEvent[] = [
     conditions: [
       { type: 'species', speciesIds: ['green-sea-turtle'] },
     ],
-    weight: 2,
-    cooldown: 60,
+    weight: 6,
+    cooldown: 20,
     tags: ['conservation', 'fishing', 'injury'],
     footnote: 'Bycatch in fishing gear is one of the greatest threats to sea turtles. Thousands drown in nets every year.',
   },
@@ -352,7 +352,7 @@ const turtleEvents: GameEvent[] = [
       },
       {
         eventId: 'turtle-tiger-shark-kill',
-        chance: 0.04,
+        chance: 0.06,
         conditions: [],
         narrativeText:
           'It strikes from below. Its jaws close around your midsection and the shell cracks apart.',
@@ -366,7 +366,7 @@ const turtleEvents: GameEvent[] = [
     conditions: [
       { type: 'species', speciesIds: ['green-sea-turtle'] },
     ],
-    weight: 6,
+    weight: 8,
     cooldown: 36,
     tags: ['predator', 'shark'],
   },
@@ -394,6 +394,17 @@ const turtleEvents: GameEvent[] = [
         ],
         consequences: [
           { type: 'add_injury', injuryId: 'shark-bite', severity: 0 },
+        ],
+      },
+      {
+        eventId: 'turtle-bull-shark-kill',
+        chance: 0.03,
+        conditions: [],
+        narrativeText: 'The bull shark hit from below. Its jaws closed around your neck.',
+        footnote: '(Killed by bull shark)',
+        statEffects: [],
+        consequences: [
+          { type: 'death', cause: 'Killed by bull shark in murky water.' },
         ],
       },
     ],
@@ -658,7 +669,7 @@ const turtleEvents: GameEvent[] = [
       { type: 'species', speciesIds: ['green-sea-turtle'] },
       { type: 'season', seasons: ['summer', 'autumn'] },
     ],
-    weight: 10,
+    weight: 6,
     cooldown: 8,
     tags: ['health', 'parasite', 'foraging'],
     footnote: 'Spirorchid blood flukes (family Spirorchiidae) are among the most common parasites of sea turtles worldwide. Their complex life cycle involves marine snails as intermediate hosts.',
@@ -691,7 +702,7 @@ const turtleEvents: GameEvent[] = [
     conditions: [
       { type: 'species', speciesIds: ['green-sea-turtle'] },
     ],
-    weight: 10,
+    weight: 6,
     cooldown: 8,
     tags: ['health', 'parasite', 'foraging'],
     footnote: 'Intestinal trematodes are common in green sea turtles, acquired through contaminated seagrass and algae. Heavy burdens can significantly impair nutrient absorption.',
@@ -724,7 +735,7 @@ const turtleEvents: GameEvent[] = [
     conditions: [
       { type: 'species', speciesIds: ['green-sea-turtle'] },
     ],
-    weight: 10,
+    weight: 6,
     cooldown: 6,
     tags: ['health', 'parasite', 'rest'],
     footnote: 'Ozobranchus branchiatus is a marine leech that feeds exclusively on sea turtles. It is strongly suspected as a vector for the fibropapillomatosis virus that devastates green sea turtle populations.',
@@ -984,7 +995,7 @@ const turtleEvents: GameEvent[] = [
       { type: 'species', speciesIds: ['green-sea-turtle'] },
       { type: 'no_parasite', parasiteId: 'fibropapillomatosis' },
     ],
-    weight: 5,
+    weight: 3,
     cooldown: 10,
     tags: ['health'],
   },
@@ -1073,7 +1084,7 @@ const turtleEvents: GameEvent[] = [
         revocable: false,
         style: 'default',
         deathChance: {
-          probability: 0.04,
+          probability: 0.06,
           cause: 'Caught in a shrimp trawl. Drowned before the net was hauled.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
         },
@@ -1086,15 +1097,15 @@ const turtleEvents: GameEvent[] = [
         revocable: false,
         style: 'danger',
         deathChance: {
-          probability: 0.08,
+          probability: 0.12,
           cause: 'Tangled in the trawl. Held under until the air was gone.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.003 }],
         },
       },
     ],
     conditions: [],
-    weight: 6,
-    cooldown: 12,
+    weight: 10,
+    cooldown: 8,
     tags: ['predator', 'danger', 'human'],
     footnote: 'Commercial fishing bycatch is the #1 cause of sea turtle mortality worldwide. Shrimp trawls alone kill an estimated 50,000 sea turtles annually in U.S. waters.',
   },
@@ -1115,7 +1126,7 @@ const turtleEvents: GameEvent[] = [
     subEvents: [
       {
         eventId: 'turtle-longline-drown',
-        chance: 0.06,
+        chance: 0.10,
         conditions: [],
         narrativeText: 'The hook sets deep. The line holds you under. You cannot surface to breathe.',
         footnote: '(Drowned on longline)',
@@ -1126,8 +1137,8 @@ const turtleEvents: GameEvent[] = [
       },
     ],
     conditions: [],
-    weight: 8,
-    cooldown: 10,
+    weight: 12,
+    cooldown: 6,
     tags: ['predator', 'danger', 'human'],
     footnote: 'Pelagic longline fisheries are a major source of sea turtle bycatch. Green turtles are attracted to the bait and become hooked, often drowning when unable to surface.',
   },
@@ -1148,7 +1159,7 @@ const turtleEvents: GameEvent[] = [
     subEvents: [
       {
         eventId: 'turtle-channel-strike',
-        chance: 0.05,
+        chance: 0.08,
         conditions: [],
         narrativeText: 'A hull shadow passes over you. Then the propeller. The blades catch your carapace.',
         footnote: '(Killed by vessel strike)',
@@ -1159,7 +1170,7 @@ const turtleEvents: GameEvent[] = [
       },
     ],
     conditions: [],
-    weight: 5,
+    weight: 8,
     cooldown: 10,
     tags: ['environmental', 'danger', 'human'],
     footnote: 'Boat strikes are a leading cause of sea turtle mortality in coastal waters. Turtles surface to breathe and are vulnerable to fast-moving vessels.',

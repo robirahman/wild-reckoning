@@ -25,7 +25,7 @@ export const POISON_DART_FROG_CONFIG: SpeciesConfig = {
     [StatId.ADV]: 25,
     [StatId.NOV]: 30,
     [StatId.WIS]: 35,
-    [StatId.HEA]: 80,
+    [StatId.HEA]: 95,
     [StatId.STR]: 25,
   },
 
@@ -76,7 +76,7 @@ export const POISON_DART_FROG_CONFIG: SpeciesConfig = {
   },
 
   turnUnit: 'week',
-  naturalHealingRate: 3,
+  naturalHealingRate: 15,  // Must outpace chytrid (~12 at moderate) + event damage
   attentionBudget: 14,
 
   weightUnit: 'g',

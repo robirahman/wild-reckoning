@@ -48,6 +48,7 @@ export const FIG_WASP_CONFIG: SpeciesConfig = {
   },
 
   diseaseDeathChanceAtCritical: 0.20,
+  naturalHealingRate: 5,
 
   predationVulnerability: {
     injuryProbIncrease: 0.12,

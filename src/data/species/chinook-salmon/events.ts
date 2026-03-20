@@ -518,6 +518,7 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     statEffects: [],
     consequences: [
       { type: 'spawn' },
+      { type: 'set_flag', flag: 'spawning-complete' },
     ],
     conditions: [
       { type: 'has_flag', flag: 'reached-spawning-grounds' },
@@ -525,6 +526,26 @@ export const CHINOOK_SALMON_EVENTS: GameEvent[] = [
     ],
     weight: 30,
     tags: ['mating'],
+  },
+
+  {
+    id: 'salmon-post-spawn-death',
+    type: 'passive',
+    category: 'health',
+    narrativeText: 'Your body is finished. Skin sloughing in gray sheets. Fungus advancing across open wounds. Organs consuming themselves. You drift sideways in the current, tail barely moving. The eggs are buried in clean gravel behind you. The river will do the rest.',
+    statEffects: [
+      { stat: StatId.HEA, amount: -30, label: '-HEA' },
+    ],
+    consequences: [
+      { type: 'death', cause: 'Post-spawning senescence. Your body gave everything to the eggs.' },
+    ],
+    conditions: [
+      { type: 'has_flag', flag: 'spawning-complete' },
+    ],
+    weight: 50,
+    cooldown: 1,
+    tags: ['health', 'death', 'spawning'],
+    footnote: 'All Pacific salmon species (genus Oncorhynchus) are semelparous: they spawn once and die. The programmed senescence is triggered by hormonal changes during the spawning migration and is irreversible.',
   },
 
   // ══════════════════════════════════════════════

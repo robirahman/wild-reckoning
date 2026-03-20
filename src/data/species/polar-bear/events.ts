@@ -382,7 +382,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
     type: 'passive',
     category: 'environmental',
     narrativeText:
-      'The ice formed late. It will melt early. The seal-hunting season is shorter than last year. Your body burns through fat faster than you can replace it.',
+      'The ice feels wrong. It came late and already the edges are soft, giving way underfoot. You hunt, but the solid ice where seals haul out is farther away each day. Your body burns through fat faster than you can replace it.',
     statEffects: [
       { stat: StatId.ADV, amount: 6, label: '+ADV' },
       { stat: StatId.HOM, amount: 4, label: '+HOM' },
@@ -476,7 +476,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
         revocable: false,
         style: 'danger',
         deathChance: {
-          probability: 0.02,
+          probability: 0.06,
           cause: 'Killed by rival male polar bear',
           statModifiers: [{ stat: StatId.HEA, factor: -0.003 }],
         },
@@ -530,7 +530,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
         revocable: false,
         style: 'danger',
         deathChance: {
-          probability: 0.03,
+          probability: 0.08,
           cause: 'His canines found your throat during the grapple.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.003 }],
         },
@@ -551,7 +551,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
         revocable: false,
         style: 'default',
         deathChance: {
-          probability: 0.005,
+          probability: 0.02,
           cause: 'He charged without warning and bit into your neck.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
         },
@@ -1367,7 +1367,7 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
         revocable: false,
         style: 'default',
         deathChance: {
-          probability: 0.05,
+          probability: 0.08,
           cause: 'Shot by a subsistence hunter.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
         },
@@ -1381,15 +1381,15 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
         revocable: false,
         style: 'danger',
         deathChance: {
-          probability: 0.12,
+          probability: 0.18,
           cause: 'You stood your ground. The hunter did not miss.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.003 }],
         },
       },
     ],
     conditions: [],
-    weight: 8,
-    cooldown: 12,
+    weight: 12,
+    cooldown: 8,
     tags: ['predator', 'danger', 'human'],
     footnote: 'Subsistence hunting by Indigenous Arctic communities is currently the greatest known single cause of polar bear mortality, with an average of 800+ bears taken annually across the circumpolar range.',
   },
@@ -1402,19 +1402,34 @@ export const POLAR_BEAR_EVENTS: GameEvent[] = [
     id: 'pb-extended-fast',
     type: 'passive',
     category: 'environmental',
-    narrativeText: 'Another day on shore with nothing to eat. You chew kelp washed up on the beach. It does nothing. Your body is consuming its own fat and muscle. The ice will not return for weeks.',
+    narrativeText: 'The ice is gone. You have not eaten in weeks. Your fat reserves are depleted. Your muscles are consuming themselves. You walk the shore, searching for anything.',
     statEffects: [
-      { stat: StatId.HOM, amount: 8, label: '+HOM' },
+      { stat: StatId.HOM, amount: 15, label: '+HOM' },
+      { stat: StatId.HEA, amount: -12, label: '-HEA' },
     ],
     consequences: [
-      { type: 'modify_weight', amount: -15 },
+      { type: 'modify_weight', amount: -40 },
+    ],
+    subEvents: [
+      {
+        eventId: 'pb-starvation-death',
+        chance: 0.06,
+        conditions: [],
+        narrativeText: 'Your body has nothing left to burn. You lie down on the gravel and do not stand again.',
+        footnote: '(Starvation)',
+        statEffects: [],
+        consequences: [
+          { type: 'death', cause: 'Starvation. The ice did not return in time.' },
+        ],
+      },
     ],
     conditions: [
+      { type: 'species', speciesIds: ['polar-bear'] },
       { type: 'season', seasons: ['summer', 'autumn'] },
     ],
-    weight: 4,
-    cooldown: 12,
-    tags: ['environmental', 'starvation'],
-    footnote: 'Polar bears can fast for months during ice-free periods, surviving on stored fat. However, as ice-free seasons lengthen, bears face longer fasting periods that can be fatal, particularly for subadults.',
+    weight: 14,
+    cooldown: 3,
+    tags: ['environmental', 'starvation', 'ice'],
+    footnote: 'Polar bears depend on sea ice to hunt seals. As ice-free periods lengthen, bears face extended fasts that deplete their fat reserves. Starvation is an increasing cause of mortality.',
   },
 ];

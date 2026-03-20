@@ -46,6 +46,7 @@ export const MONARCH_BUTTERFLY_CONFIG: SpeciesConfig = {
   },
 
   diseaseDeathChanceAtCritical: 0.15,
+  naturalHealingRate: 2,  // Weekly turns; fragile but recovers between events
   attentionBudget: 12,
 
   predationVulnerability: {

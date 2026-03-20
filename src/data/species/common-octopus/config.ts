@@ -45,7 +45,8 @@ export const COMMON_OCTOPUS_CONFIG: SpeciesConfig = {
     maxOldAgeChance: 0.95,
   },
 
-  diseaseDeathChanceAtCritical: 0.12,
+  diseaseDeathChanceAtCritical: 0.08,
+  naturalHealingRate: 2,  // Weekly turns; limited recovery
   attentionBudget: 20,
 
   predationVulnerability: {

@@ -25,7 +25,7 @@ export const POLAR_BEAR_CONFIG: SpeciesConfig = {
     [StatId.ADV]: 30,
     [StatId.NOV]: 35,
     [StatId.WIS]: 30,
-    [StatId.HEA]: 65,
+    [StatId.HEA]: 85,
     [StatId.STR]: 30,
   },
 
@@ -57,7 +57,7 @@ export const POLAR_BEAR_CONFIG: SpeciesConfig = {
   },
 
   turnUnit: 'month',
-  naturalHealingRate: 3,
+  naturalHealingRate: 30,  // Must outpace 2 parasites at moderate (~15 HEA drain) + event damage
   attentionBudget: 20,
 
   thermalProfile: {

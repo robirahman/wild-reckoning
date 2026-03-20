@@ -26,7 +26,7 @@ export const AFRICAN_ELEPHANT_CONFIG: SpeciesConfig = {
     [StatId.ADV]: 30,
     [StatId.NOV]: 40,
     [StatId.WIS]: 25,
-    [StatId.HEA]: 90,
+    [StatId.HEA]: 100,
     [StatId.STR]: 35,
   },
 
@@ -60,7 +60,7 @@ export const AFRICAN_ELEPHANT_CONFIG: SpeciesConfig = {
   },
 
   turnUnit: 'month',
-  naturalHealingRate: 40,  // Must outpace cumulative event HEA drain over 500+ monthly turns
+  naturalHealingRate: 65,  // Must outpace 2+ parasites at moderate (~15 drain) + event damage
 
   // Well-fed elephants invest body reserves into immune recovery.
   // Real: elephants carry substantial fat (especially females) that fuels immune function.

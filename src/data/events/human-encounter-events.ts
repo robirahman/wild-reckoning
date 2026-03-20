@@ -26,7 +26,7 @@ export const HUMAN_ENCOUNTER_EVENTS: GameEvent[] = [
         revocable: false,
         style: 'danger',
         deathChance: {
-          probability: 0.08,
+          probability: 0.04,
           cause: 'You misjudged the speed of an oncoming vehicle. The impact was instantaneous.',
           statModifiers: [{ stat: StatId.WIS, factor: -0.001 }],
         },
@@ -48,8 +48,8 @@ export const HUMAN_ENCOUNTER_EVENTS: GameEvent[] = [
     conditions: [
       { type: 'species', speciesIds: ['white-tailed-deer', 'gray-wolf', 'african-elephant'] },
     ],
-    weight: 6,
-    cooldown: 8,
+    weight: 4,
+    cooldown: 14,
     tags: ['human', 'environmental', 'danger'],
   },
 
@@ -346,5 +346,111 @@ export const HUMAN_ENCOUNTER_EVENTS: GameEvent[] = [
     weight: 5,
     cooldown: 8,
     tags: ['human', 'environmental', 'pollution'],
+  },
+
+  // ── Deer Hunting: Rifle Season ──
+  {
+    id: 'deer-hunting-season',
+    type: 'active',
+    category: 'predator',
+    narrativeText: 'Orange flickers between the trees. Boots crunch on frozen leaves. The sharp chemical smell of gun oil. Several shapes, moving in a line through the timber.',
+    statEffects: [
+      { stat: StatId.TRA, amount: 12, label: '+TRA' },
+      { stat: StatId.ADV, amount: 10, label: '+ADV' },
+    ],
+    choices: [
+      {
+        id: 'freeze-hide',
+        label: 'Freeze and hide',
+        description: 'Drop into cover and stay absolutely still.',
+        narrativeResult: 'You drop behind a deadfall. Your heart hammers. Boots pass within yards. The orange shapes move on.',
+        statEffects: [
+          { stat: StatId.TRA, amount: -5, label: '-TRA' },
+          { stat: StatId.WIS, amount: 3, label: '+WIS' },
+        ],
+        consequences: [],
+        revocable: false,
+        style: 'default',
+        deathChance: {
+          probability: 0.06,
+          cause: 'Shot by a hunter during rifle season.',
+          statModifiers: [{ stat: StatId.WIS, factor: -0.0005 }],
+        },
+      },
+      {
+        id: 'bolt-run',
+        label: 'Bolt',
+        description: 'Run. Now. Flag up, crashing through brush.',
+        narrativeResult: 'You explode from cover, white flag raised, crashing through the underbrush. A crack splits the air behind you.',
+        statEffects: [
+          { stat: StatId.ADV, amount: -5, label: '-ADV' },
+        ],
+        consequences: [],
+        revocable: false,
+        style: 'danger',
+        deathChance: {
+          probability: 0.10,
+          cause: 'A rifle shot. The round struck behind the shoulder. You ran fifty yards before your legs folded.',
+          statModifiers: [{ stat: StatId.HEA, factor: -0.001 }],
+        },
+      },
+    ],
+    conditions: [
+      { type: 'species', speciesIds: ['white-tailed-deer'] },
+      { type: 'season', seasons: ['autumn', 'winter'] },
+      { type: 'age_range', min: 6 },
+    ],
+    weight: 14,
+    cooldown: 4,
+    tags: ['predator', 'danger', 'human', 'hunting'],
+    footnote: 'In managed deer populations, regulated hunting is the #1 cause of mortality for adult deer, accounting for 30-45% of all deaths.',
+  },
+
+  // ── Deer Hunting: Bow Season ──
+  {
+    id: 'deer-bow-season',
+    type: 'active',
+    category: 'predator',
+    narrativeText: 'Something wrong in the oak flat. A shape that does not belong, motionless in the canopy. The wind carries no scent. A faint mechanical sound.',
+    statEffects: [
+      { stat: StatId.TRA, amount: 8, label: '+TRA' },
+    ],
+    choices: [
+      {
+        id: 'circle-downwind',
+        label: 'Circle downwind',
+        description: 'Get the wind in your favor.',
+        narrativeResult: 'You circle wide, testing the air. The wind brings the smell: sweat, rubber, chemical cover scent. You melt back into the timber.',
+        statEffects: [
+          { stat: StatId.WIS, amount: 5, label: '+WIS' },
+          { stat: StatId.TRA, amount: -5, label: '-TRA' },
+        ],
+        consequences: [],
+        revocable: false,
+        style: 'default',
+      },
+      {
+        id: 'continue-feeding',
+        label: 'Continue feeding',
+        description: 'The acorns are thick here. Ignore the unease.',
+        narrativeResult: 'You lower your head to the acorns. A whisper of displaced air.',
+        statEffects: [],
+        consequences: [],
+        revocable: false,
+        style: 'default',
+        deathChance: {
+          probability: 0.08,
+          cause: 'An arrow through the lungs. You ran a hundred yards before collapsing in the creek bottom.',
+          statModifiers: [{ stat: StatId.WIS, factor: -0.0008 }],
+        },
+      },
+    ],
+    conditions: [
+      { type: 'species', speciesIds: ['white-tailed-deer'] },
+      { type: 'season', seasons: ['autumn'] },
+    ],
+    weight: 12,
+    cooldown: 6,
+    tags: ['predator', 'danger', 'human', 'hunting'],
   },
 ];

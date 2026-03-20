@@ -46,6 +46,7 @@ export const GRAY_WOLF_CONFIG: SpeciesConfig = {
   },
 
   diseaseDeathChanceAtCritical: 0.10,
+  naturalHealingRate: 2,
 
   predationVulnerability: {
     injuryProbIncrease: 0.04,
@@ -64,10 +65,10 @@ export const GRAY_WOLF_CONFIG: SpeciesConfig = {
   },
 
   hydration: {
-    baseDehydrationRate: 2,
+    baseDehydrationRate: 0.8,
     heatMultiplier: 1.5,
     waterNodeRecovery: 40,
-    passiveMoistureRecovery: 1.5,
+    passiveMoistureRecovery: 0.6,
     debuffThreshold: 50,
     movementPenaltyThreshold: 70,
     lethalThreshold: 92,

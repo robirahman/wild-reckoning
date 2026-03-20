@@ -10,7 +10,7 @@ export const WHITE_TAILED_DEER_CONFIG: SpeciesConfig = {
   diet: 'herbivore',
   anatomyId: 'white-tailed-deer',
   metabolismId: 'white-tailed-deer',
-  naturalHealingRate: 1,
+  naturalHealingRate: 3,
   attentionBudget: 18,
   defaultRegion: 'northern-minnesota',
   defaultRegionDisplayName: 'Northern Minnesota',
@@ -72,13 +72,13 @@ export const WHITE_TAILED_DEER_CONFIG: SpeciesConfig = {
   },
 
   hydration: {
-    baseDehydrationRate: 2,
+    baseDehydrationRate: 0.8,
     heatMultiplier: 1.5,
     waterNodeRecovery: 40,
-    passiveMoistureRecovery: 1,
-    debuffThreshold: 50,
+    passiveMoistureRecovery: 0.5,
+    debuffThreshold: 45,
     movementPenaltyThreshold: 70,
-    lethalThreshold: 92,
+    lethalThreshold: 90,
     heaPenalty: -8,
   },
 

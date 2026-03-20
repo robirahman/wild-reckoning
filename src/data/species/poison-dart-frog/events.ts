@@ -298,7 +298,7 @@ export const POISON_DART_FROG_EVENTS: GameEvent[] = [
         revocable: false,
         style: 'default',
         deathChance: {
-          probability: 0.03,
+          probability: 0.06,
           cause: 'The snake was resistant to your skin compounds. It swallowed you.',
           statModifiers: [{ stat: StatId.IMM, factor: -0.0003 }],
         },
@@ -346,6 +346,7 @@ export const POISON_DART_FROG_EVENTS: GameEvent[] = [
         consequences: [],
         revocable: false,
         style: 'default',
+        deathChance: { probability: 0.03, cause: 'The spider was faster than your legs.' },
       },
       {
         id: 'toxic-defense',
@@ -359,7 +360,7 @@ export const POISON_DART_FROG_EVENTS: GameEvent[] = [
         revocable: false,
         style: 'default',
         deathChance: {
-          probability: 0.05,
+          probability: 0.08,
           cause: 'Toxin reserves depleted. The spider bit and did not let go.',
           statModifiers: [{ stat: StatId.IMM, factor: -0.0005 }],
         },
@@ -371,6 +372,95 @@ export const POISON_DART_FROG_EVENTS: GameEvent[] = [
     weight: 8,
     cooldown: 6,
     tags: ['predator'],
+  },
+
+  {
+    id: 'frog-bird-attack',
+    type: 'passive',
+    category: 'predator',
+    narrativeText: 'A shadow flickers across the leaf. Something drops from above, fast and precise. A beak, open.',
+    statEffects: [
+      { stat: StatId.TRA, amount: 12, label: '+TRA' },
+      { stat: StatId.ADV, amount: 8, label: '+ADV' },
+    ],
+    subEvents: [
+      {
+        eventId: 'frog-bird-kill',
+        chance: 0.06,
+        conditions: [],
+        narrativeText: 'The beak closed around your body before you could leap.',
+        footnote: '(Killed by bird)',
+        statEffects: [],
+        consequences: [
+          { type: 'death', cause: 'Snatched by a bird. Your colors meant nothing to this one.' },
+        ],
+      },
+    ],
+    conditions: [
+      { type: 'age_range', min: 3 },
+    ],
+    weight: 10,
+    cooldown: 5,
+    tags: ['predator', 'danger'],
+    footnote: 'Some bird species have evolved resistance to poison dart frog toxins. The fire-bellied snake (Leimadophis epinephelus) is immune to their alkaloids.',
+  },
+  {
+    id: 'frog-crab-encounter',
+    type: 'passive',
+    category: 'predator',
+    narrativeText: 'Near the stream edge, pincers clamp down on your hind leg. A land crab, half-buried in mud, pulling you toward its burrow.',
+    statEffects: [
+      { stat: StatId.TRA, amount: 10, label: '+TRA' },
+    ],
+    subEvents: [
+      {
+        eventId: 'frog-crab-kill',
+        chance: 0.04,
+        conditions: [],
+        narrativeText: 'The pincer held. You were dragged into the burrow.',
+        footnote: '(Killed by land crab)',
+        statEffects: [],
+        consequences: [
+          { type: 'death', cause: 'Dragged into a crab burrow. The toxins in your skin could not save you.' },
+        ],
+      },
+    ],
+    conditions: [
+      { type: 'age_range', min: 3 },
+    ],
+    weight: 8,
+    cooldown: 6,
+    tags: ['predator'],
+  },
+  {
+    id: 'frog-desiccation-crisis',
+    type: 'passive',
+    category: 'environmental',
+    narrativeText: 'The air is dry and still. Your skin tightens, cracking at the joints. The moisture is leaving you faster than you can absorb it from the ground.',
+    statEffects: [
+      { stat: StatId.HEA, amount: -8, label: '-HEA' },
+      { stat: StatId.CLI, amount: 10, label: '+CLI' },
+    ],
+    subEvents: [
+      {
+        eventId: 'frog-desiccation-death',
+        chance: 0.05,
+        conditions: [],
+        narrativeText: 'Your skin has dried to paper. You cannot move. The sun finds you.',
+        footnote: '(Desiccation)',
+        statEffects: [],
+        consequences: [
+          { type: 'death', cause: 'Desiccation. The dry spell lasted too long.' },
+        ],
+      },
+    ],
+    conditions: [
+      { type: 'season', seasons: ['winter'] },
+    ],
+    weight: 10,
+    cooldown: 4,
+    tags: ['environmental', 'danger'],
+    footnote: 'Amphibians breathe through their skin and are highly vulnerable to desiccation. Extended dry periods can be lethal, especially for small species like poison dart frogs.',
   },
 
   // ══════════════════════════════════════════════

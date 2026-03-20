@@ -189,8 +189,8 @@ export const AFRICAN_ELEPHANT_EVENTS: GameEvent[] = [
         revocable: false,
         style: 'default',
         deathChance: {
-          probability: 0.06,
-          cause: 'Shot by poachers',
+          probability: 0.12,
+          cause: 'Shot by poachers while fleeing. They tracked you by blood trail.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
         },
       },
@@ -203,16 +203,16 @@ export const AFRICAN_ELEPHANT_EVENTS: GameEvent[] = [
         revocable: false,
         style: 'danger',
         deathChance: {
-          probability: 0.15,
+          probability: 0.25,
           cause: 'Poachers found you. They took your tusks.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.003 }],
         },
       },
     ],
     conditions: [],
-    weight: 10,
+    weight: 14,
     cooldown: 8,
-    tags: ['predator', 'danger', 'human'],
+    tags: ['predator', 'danger', 'human', 'poaching'],
   },
 
   {
@@ -1735,7 +1735,7 @@ export const AFRICAN_ELEPHANT_EVENTS: GameEvent[] = [
         revocable: false,
         style: 'default',
         deathChance: {
-          probability: 0.06,
+          probability: 0.10,
           cause: 'A bullet found you as the herd scattered.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
         },
@@ -1750,16 +1750,16 @@ export const AFRICAN_ELEPHANT_EVENTS: GameEvent[] = [
         revocable: false,
         style: 'danger',
         deathChance: {
-          probability: 0.12,
+          probability: 0.20,
           cause: 'You charged. They were waiting. A heavy-caliber round stopped you mid-stride.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.003 }],
         },
       },
     ],
     conditions: [],
-    weight: 12,
-    cooldown: 8,
-    tags: ['predator', 'danger', 'human'],
+    weight: 16,
+    cooldown: 6,
+    tags: ['predator', 'danger', 'human', 'poaching'],
     footnote: 'Poaching remains one of the greatest threats to African elephants. An estimated 20,000-30,000 elephants are killed annually for the ivory trade.',
   },
 
@@ -1789,7 +1789,7 @@ export const AFRICAN_ELEPHANT_EVENTS: GameEvent[] = [
       { type: 'no_flag', flag: 'matriarch-killed' },
       { type: 'age_range', min: 60 },
     ],
-    weight: 0.5,
+    weight: 3,
     cooldown: 9999,
     tags: ['predator', 'danger', 'human', 'poaching'],
     footnote: 'When poachers kill a matriarch for ivory, the herd loses decades of accumulated knowledge about water sources, safe migration routes, and predator avoidance. Orphaned herds have significantly higher mortality, especially during drought years.',
@@ -1824,5 +1824,72 @@ export const AFRICAN_ELEPHANT_EVENTS: GameEvent[] = [
     cooldown: 9999,
     tags: ['social', 'milestone'],
     footnote: 'After a matriarch is killed, the next-oldest female gradually assumes leadership. She has less experience — fewer drought memories, fewer safe-route memories — but can slowly rebuild the herd\'s knowledge base over years of exploration.',
+  },
+
+  // ══════════════════════════════════════════════
+  //  DROUGHT CRISIS (severe drought starvation event)
+  // ══════════════════════════════════════════════
+
+  {
+    id: 'elephant-drought-crisis',
+    type: 'active',
+    category: 'environmental',
+    narrativeText: 'The dry season stretches past all memory. The waterhole is a cracked basin. The herd stands in the sun, ribs showing through dust-coated skin. Calves stumble and do not rise.',
+    statEffects: [
+      { stat: StatId.HOM, amount: 15, label: '+HOM' },
+      { stat: StatId.ADV, amount: 10, label: '+ADV' },
+      { stat: StatId.HEA, amount: -10, label: '-HEA' },
+    ],
+    consequences: [
+      { type: 'modify_weight', amount: -80 },
+    ],
+    choices: [
+      {
+        id: 'trek-to-distant-water',
+        label: 'Trek to a distant water source',
+        description: 'Days of walking across parched land.',
+        narrativeResult: 'The herd walks for three days. Two calves fall behind and do not follow. You reach a muddy seep. Barely enough.',
+        statEffects: [
+          { stat: StatId.HEA, amount: -8, label: '-HEA' },
+        ],
+        consequences: [
+          { type: 'modify_weight', amount: -40 },
+        ],
+        revocable: false,
+        style: 'danger',
+        deathChance: {
+          probability: 0.04,
+          cause: 'Collapsed during drought migration. The herd walked on without you.',
+          statModifiers: [{ stat: StatId.HEA, factor: -0.001 }],
+        },
+      },
+      {
+        id: 'wait-for-rain',
+        label: 'Dig for water and wait',
+        description: 'Use your tusks to dig wells in the dry riverbed.',
+        narrativeResult: 'You dig. Brown water seeps in, barely enough to drink. The herd waits. Days pass. Vultures circle.',
+        statEffects: [
+          { stat: StatId.WIS, amount: 5, label: '+WIS' },
+        ],
+        consequences: [
+          { type: 'modify_weight', amount: -60 },
+        ],
+        revocable: false,
+        style: 'default',
+        deathChance: {
+          probability: 0.03,
+          cause: 'Starvation during prolonged drought. Your body gave out at the dry riverbed.',
+          statModifiers: [{ stat: StatId.HEA, factor: -0.001 }],
+        },
+      },
+    ],
+    conditions: [
+      { type: 'species', speciesIds: ['african-elephant'] },
+      { type: 'season', seasons: ['winter', 'autumn'] },
+    ],
+    weight: 12,
+    cooldown: 6,
+    tags: ['environmental', 'drought', 'danger'],
+    footnote: 'Drought is a major cause of elephant mortality. During severe droughts in Kenya and Tanzania, elephant mortality rates can spike to 10-20% in a single season.',
   },
 ];

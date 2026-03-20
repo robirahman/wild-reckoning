@@ -25,7 +25,7 @@ export const ARCTIC_TERN_CONFIG: SpeciesConfig = {
     [StatId.ADV]: 35,
     [StatId.NOV]: 30,
     [StatId.WIS]: 40,
-    [StatId.HEA]: 75,
+    [StatId.HEA]: 90,
     [StatId.STR]: 45,
   },
 
@@ -83,7 +83,7 @@ export const ARCTIC_TERN_CONFIG: SpeciesConfig = {
   },
 
   turnUnit: 'month',
-  naturalHealingRate: 6,
+  naturalHealingRate: 35,  // Must outpace 2 parasites at moderate (~15 HEA drain) + event damage
   attentionBudget: 18,
 
   weightUnit: 'g',

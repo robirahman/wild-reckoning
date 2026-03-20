@@ -45,7 +45,7 @@ export const GREEN_SEA_TURTLE_CONFIG: SpeciesConfig = {
     maxOldAgeChance: 0.90,
   },
 
-  diseaseDeathChanceAtCritical: 0.005, // Turtles have robust immune systems; parasites rarely lethal
+  diseaseDeathChanceAtCritical: 0.0008, // Turtles have robust immune systems; parasites rarely lethal
 
   predationVulnerability: {
     injuryProbIncrease: 0.02,
@@ -57,7 +57,7 @@ export const GREEN_SEA_TURTLE_CONFIG: SpeciesConfig = {
   },
 
   turnUnit: 'month',
-  naturalHealingRate: 35,  // Must outpace cumulative event HEA drain over 800+ monthly turns
+  naturalHealingRate: 50,  // Must outpace cumulative event HEA drain over 800+ monthly turns
   attentionBudget: 16,
 
   // Well-fed turtles invest fat reserves into immune recovery.

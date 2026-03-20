@@ -18,7 +18,7 @@ export const DECISION_ARC_STORYLINES: StorylineDefinition[] = [
         id: 'wounded-stranger-discover',
         delayMin: 0,
         delayMax: 0,
-        narrativeText: 'The smell hits first: blood, urine, stress. One of your kind lies in the dirt ahead, breathing fast and shallow, unable to stand.',
+        narrativeText: 'The signs of distress reach you before the sight. One of your kind, ahead, struggling. Its body labors with each breath.',
         statEffects: [],
         consequences: [],
         completionFlag: 'storyline-wounded-stranger-discovered',

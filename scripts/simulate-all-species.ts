@@ -260,6 +260,8 @@ function runOne(
   for (let t = 0; t < ref.maxTurns; t++) {
     if (!game.isAlive) break;
 
+    game.autoMove();
+
     let turnInfo;
     try {
       turnInfo = game.generateTurn();

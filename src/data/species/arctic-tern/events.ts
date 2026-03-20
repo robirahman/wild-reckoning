@@ -158,6 +158,10 @@ export const ARCTIC_TERN_EVENTS: GameEvent[] = [
         consequences: [],
         revocable: false,
         style: 'default',
+        deathChance: {
+          probability: 0.03,
+          cause: 'The skua caught you on a low pass. Its heavy beak crushed your skull.',
+        },
       },
       {
         id: 'guard-nest',
@@ -1120,6 +1124,71 @@ export const ARCTIC_TERN_EVENTS: GameEvent[] = [
     weight: 15,
     cooldown: 10,
     tags: ['foraging', 'food'],
+  },
+
+  {
+    id: 'tern-ocean-storm-death',
+    type: 'passive',
+    category: 'environmental',
+    narrativeText: 'The storm hits with no warning. Wind tears at your feathers. Rain drives horizontally. The ocean below is white chaos. You cannot maintain altitude.',
+    statEffects: [
+      { stat: StatId.CLI, amount: 15, label: '+CLI' },
+      { stat: StatId.TRA, amount: 12, label: '+TRA' },
+      { stat: StatId.HEA, amount: -8, label: '-HEA' },
+    ],
+    subEvents: [
+      {
+        eventId: 'tern-storm-death',
+        chance: 0.06,
+        conditions: [],
+        narrativeText: 'A gust slammed you into the waves. Your feathers waterlogged instantly. You could not lift off.',
+        footnote: '(Killed by storm)',
+        statEffects: [],
+        consequences: [
+          { type: 'death', cause: 'Driven into the sea by a storm. Waterlogged feathers. Could not take off.' },
+        ],
+      },
+    ],
+    conditions: [
+      { type: 'weather', weatherTypes: ['storm', 'blizzard'] },
+    ],
+    weight: 10,
+    cooldown: 4,
+    tags: ['environmental', 'weather', 'danger'],
+    footnote: 'Storms are a significant cause of seabird mortality, especially during migration over open ocean where there is no shelter.',
+  },
+  {
+    id: 'tern-starvation-lean-period',
+    type: 'passive',
+    category: 'environmental',
+    narrativeText: 'The fish are gone. The water below is clear and empty. You fly wider circles, scanning endlessly. Your wing muscles ache with each beat.',
+    statEffects: [
+      { stat: StatId.HEA, amount: -6, label: '-HEA' },
+      { stat: StatId.HOM, amount: 8, label: '+HOM' },
+    ],
+    consequences: [
+      { type: 'modify_weight', amount: -0.010 },
+    ],
+    subEvents: [
+      {
+        eventId: 'tern-starvation-death',
+        chance: 0.04,
+        conditions: [],
+        narrativeText: 'Your wings folded mid-flight. You dropped into the water and did not surface.',
+        footnote: '(Starvation)',
+        statEffects: [],
+        consequences: [
+          { type: 'death', cause: 'Starvation over open ocean. No fish. No strength to fly.' },
+        ],
+      },
+    ],
+    conditions: [
+      { type: 'season', seasons: ['winter', 'spring'] },
+    ],
+    weight: 10,
+    cooldown: 4,
+    tags: ['environmental', 'starvation'],
+    footnote: 'Prey collapse events caused by ocean warming increasingly affect seabird populations. Arctic terns depend on predictable fish stocks along their migration route.',
   },
 
   // ── Parasite Events ──
