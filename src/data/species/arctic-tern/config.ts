@@ -45,7 +45,7 @@ export const ARCTIC_TERN_CONFIG: SpeciesConfig = {
     maxOldAgeChance: 0.80,
   },
 
-  diseaseDeathChanceAtCritical: 0.002, // Parasites cause chronic drain but very rarely kill
+  diseaseDeathChanceAtCritical: 0.0008, // Parasites cause chronic drain but very rarely kill
 
   predationVulnerability: {
     injuryProbIncrease: 0.06,
@@ -61,6 +61,17 @@ export const ARCTIC_TERN_CONFIG: SpeciesConfig = {
     heatPenalty: 0.003,
     coldPenalty: 0.002,
     coldBenefit: 0,
+  },
+
+  hydration: {
+    baseDehydrationRate: 0.8,
+    heatMultiplier: 1.3,
+    waterNodeRecovery: 40,
+    passiveMoistureRecovery: 1,
+    debuffThreshold: 50,
+    movementPenaltyThreshold: 70,
+    lethalThreshold: 92,
+    heaPenalty: -7,
   },
 
   seasonalWeight: {

@@ -29,7 +29,7 @@ export const TERRITORY_EVENTS: GameEvent[] = [
     id: 'territory-intruder',
     type: 'active',
     category: 'social',
-    narrativeText: 'Fresh signs of another {{species}} appear within your territory. The scent is unfamiliar, an outsider testing your boundaries.',
+    narrativeText: 'Fresh signs of another {{animal.species}} appear within your territory. The scent is unfamiliar, an outsider testing your boundaries.',
     statEffects: [
       { stat: StatId.ADV, amount: 5, label: '+ADV' },
     ],
@@ -48,7 +48,7 @@ export const TERRITORY_EVENTS: GameEvent[] = [
         ],
         revocable: false,
         style: 'default',
-        deathChance: { probability: 0.003, cause: 'Killed defending territory from an intruder.' },
+        deathChance: { probability: 0.0005, cause: 'Killed defending territory from an intruder.' },
       },
       {
         id: 'avoid',
@@ -141,7 +141,7 @@ export const TERRITORY_EVENTS: GameEvent[] = [
         consequences: [],
         revocable: false,
         style: 'danger',
-        deathChance: { probability: 0.005, cause: 'Killed in a territorial boundary dispute.' },
+        deathChance: { probability: 0.001, cause: 'Killed in a territorial boundary dispute.' },
       },
       {
         id: 'yield',
@@ -232,7 +232,7 @@ export const TERRITORY_EVENTS: GameEvent[] = [
         revocable: false,
         style: 'danger',
         deathChance: {
-          probability: 0.04,
+          probability: 0.01,
           cause: 'Killed defending your den from a predator.',
           statModifiers: [{ stat: StatId.HOM, factor: -0.3 }],
         },

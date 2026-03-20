@@ -210,8 +210,8 @@ export const AFRICAN_ELEPHANT_EVENTS: GameEvent[] = [
       },
     ],
     conditions: [],
-    weight: 5,
-    cooldown: 12,
+    weight: 10,
+    cooldown: 8,
     tags: ['predator', 'danger', 'human'],
   },
 
@@ -256,8 +256,8 @@ export const AFRICAN_ELEPHANT_EVENTS: GameEvent[] = [
     conditions: [
       { type: 'has_flag', flag: 'raided-crops' },
     ],
-    weight: 6,
-    cooldown: 10,
+    weight: 10,
+    cooldown: 6,
     tags: ['predator', 'danger', 'human'],
   },
 
@@ -1707,8 +1707,8 @@ export const AFRICAN_ELEPHANT_EVENTS: GameEvent[] = [
     conditions: [
       { type: 'season', seasons: ['summer', 'autumn'] },
     ],
-    weight: 6,
-    cooldown: 12,
+    weight: 10,
+    cooldown: 8,
     tags: ['environmental', 'danger', 'drought'],
     footnote: 'Drought is one of the leading natural causes of elephant mortality, particularly for calves and elderly animals. Extended dry seasons force herds to travel long distances between water sources.',
   },
@@ -1757,9 +1757,72 @@ export const AFRICAN_ELEPHANT_EVENTS: GameEvent[] = [
       },
     ],
     conditions: [],
-    weight: 8,
-    cooldown: 10,
+    weight: 12,
+    cooldown: 8,
     tags: ['predator', 'danger', 'human'],
     footnote: 'Poaching remains one of the greatest threats to African elephants. An estimated 20,000-30,000 elephants are killed annually for the ivory trade.',
+  },
+
+  // ══════════════════════════════════════════════
+  //  MATRIARCH POACHING (unique devastating event)
+  // ══════════════════════════════════════════════
+
+  {
+    id: 'elephant-matriarch-killed',
+    type: 'passive',
+    category: 'predator',
+    narrativeText:
+      'A sound splits the air — not thunder, sharper, flatter. The matriarch stumbles. She falls to her knees, trunk reaching for the ground. ' +
+      'The herd circles her, touching her with their trunks, pushing at her flanks with their foreheads. She does not rise. ' +
+      'Hours pass. The herd will not leave. Then the humans come with saws and axes. They take her face. They leave the rest. ' +
+      'The herd stands over what remains, swaying, rumbling at frequencies too low for the killers to hear. ' +
+      'She knew where the water was. She knew the safe paths. She knew which seasons brought the rains. That knowledge is gone.',
+    statEffects: [
+      { stat: StatId.TRA, amount: 25, label: '+TRA (grief)' },
+      { stat: StatId.HOM, amount: 20, label: '+HOM (disruption)' },
+      { stat: StatId.WIS, amount: -15, label: '-WIS (lost knowledge)' },
+    ],
+    consequences: [
+      { type: 'set_flag', flag: 'matriarch-killed' },
+    ],
+    conditions: [
+      { type: 'no_flag', flag: 'matriarch-killed' },
+      { type: 'age_range', min: 60 },
+    ],
+    weight: 0.5,
+    cooldown: 9999,
+    tags: ['predator', 'danger', 'human', 'poaching'],
+    footnote: 'When poachers kill a matriarch for ivory, the herd loses decades of accumulated knowledge about water sources, safe migration routes, and predator avoidance. Orphaned herds have significantly higher mortality, especially during drought years.',
+  },
+
+  // ══════════════════════════════════════════════
+  //  NEW MATRIARCH EMERGES (recovery after loss)
+  // ══════════════════════════════════════════════
+
+  {
+    id: 'elephant-new-matriarch',
+    type: 'passive',
+    category: 'social',
+    narrativeText:
+      'The oldest cow has been walking at the front for months now. When the herd hesitates at a fork in the trail, she does not. ' +
+      'She tests the wind, turns, and walks. The others follow. She is not the one who was lost — she is smaller, her tusks shorter, her memory shallower. ' +
+      'But she remembers some things. A waterhole from three dry seasons ago. A path that avoids the place where the guns were. ' +
+      'It is not enough. It will have to be enough.',
+    statEffects: [
+      { stat: StatId.TRA, amount: -8, label: '-TRA (stability)' },
+      { stat: StatId.WIS, amount: 5, label: '+WIS (new leadership)' },
+    ],
+    consequences: [
+      { type: 'set_flag', flag: 'new-matriarch-emerged' },
+    ],
+    conditions: [
+      { type: 'has_flag', flag: 'matriarch-killed' },
+      { type: 'no_flag', flag: 'new-matriarch-emerged' },
+      { type: 'age_range', min: 120 },
+    ],
+    weight: 0.8,
+    cooldown: 9999,
+    tags: ['social', 'milestone'],
+    footnote: 'After a matriarch is killed, the next-oldest female gradually assumes leadership. She has less experience — fewer drought memories, fewer safe-route memories — but can slowly rebuild the herd\'s knowledge base over years of exploration.',
   },
 ];

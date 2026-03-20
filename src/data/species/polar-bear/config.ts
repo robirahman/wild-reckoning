@@ -45,7 +45,7 @@ export const POLAR_BEAR_CONFIG: SpeciesConfig = {
     maxOldAgeChance: 0.95,
   },
 
-  diseaseDeathChanceAtCritical: 0.04,
+  diseaseDeathChanceAtCritical: 0.015,
 
   predationVulnerability: {
     injuryProbIncrease: 0.03,
@@ -65,6 +65,17 @@ export const POLAR_BEAR_CONFIG: SpeciesConfig = {
     heatPenalty: 8.0,
     coldPenalty: 0,
     coldBenefit: 0,
+  },
+
+  hydration: {
+    baseDehydrationRate: 0.5,
+    heatMultiplier: 1.2,
+    waterNodeRecovery: 40,
+    passiveMoistureRecovery: 1.5,
+    debuffThreshold: 55,
+    movementPenaltyThreshold: 75,
+    lethalThreshold: 95,
+    heaPenalty: -6,
   },
 
   seasonalWeight: {

@@ -53,7 +53,7 @@ export const WHITE_TAILED_DEER_CONFIG: SpeciesConfig = {
 
   // Reduced from 0.08: deer are adapted to most regional parasites.
   // Lethal disease accounts for ~3% annual mortality in real populations.
-  diseaseDeathChanceAtCritical: 0.03,
+  diseaseDeathChanceAtCritical: 0.015,
 
   predationVulnerability: {
     injuryProbIncrease: 0.05,
@@ -69,6 +69,17 @@ export const WHITE_TAILED_DEER_CONFIG: SpeciesConfig = {
     heatPenalty: 0.4,
     coldPenalty: 0.5,
     coldBenefit: 0,
+  },
+
+  hydration: {
+    baseDehydrationRate: 2,
+    heatMultiplier: 1.5,
+    waterNodeRecovery: 40,
+    passiveMoistureRecovery: 1,
+    debuffThreshold: 50,
+    movementPenaltyThreshold: 70,
+    lethalThreshold: 92,
+    heaPenalty: -8,
   },
 
   seasonalWeight: {

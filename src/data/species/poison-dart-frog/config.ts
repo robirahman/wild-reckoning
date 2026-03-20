@@ -45,7 +45,7 @@ export const POISON_DART_FROG_CONFIG: SpeciesConfig = {
     maxOldAgeChance: 0.80,
   },
 
-  diseaseDeathChanceAtCritical: 0.002, // Parasites cause chronic drain but very rarely kill
+  diseaseDeathChanceAtCritical: 0.001, // Parasites cause chronic drain but very rarely kill
 
   predationVulnerability: {
     injuryProbIncrease: 0.05,
@@ -54,6 +54,17 @@ export const POISON_DART_FROG_CONFIG: SpeciesConfig = {
     underweightThreshold: 0.000018,
     deathChanceMin: 0.003,
     deathChanceMax: 0.008,  // Toxin-protected; few predators risk eating them
+  },
+
+  hydration: {
+    baseDehydrationRate: 1,
+    heatMultiplier: 2.5,
+    waterNodeRecovery: 50,
+    passiveMoistureRecovery: 1,
+    debuffThreshold: 45,
+    movementPenaltyThreshold: 65,
+    lethalThreshold: 88,
+    heaPenalty: -12,
   },
 
   seasonalWeight: {

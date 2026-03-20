@@ -332,6 +332,22 @@ function detectPhysiologySituations(ctx: SimulationContext, out: Situation[]): v
       params: { feverLevel: ps.feverLevel },
     });
   }
+
+  // Dehydration (from physiologicalStress, not PhysiologyState)
+  const hydrationConfig = ctx.config.hydration;
+  if (hydrationConfig) {
+    const dehydration = ctx.animal.physiologicalStress.dehydration;
+    if (dehydration > hydrationConfig.debuffThreshold) {
+      const severity = dehydration >= hydrationConfig.lethalThreshold ? 'critical'
+        : dehydration >= hydrationConfig.movementPenaltyThreshold ? 'severe' : 'moderate';
+      out.push({
+        type: 'physiological-state',
+        source: 'dehydration',
+        weight: dehydration / 100,
+        params: { dehydration, severity },
+      });
+    }
+  }
 }
 
 // ── Seasonal Phase Detection ──

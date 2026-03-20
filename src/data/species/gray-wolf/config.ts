@@ -63,6 +63,17 @@ export const GRAY_WOLF_CONFIG: SpeciesConfig = {
     coldBenefit: 0,
   },
 
+  hydration: {
+    baseDehydrationRate: 2,
+    heatMultiplier: 1.5,
+    waterNodeRecovery: 40,
+    passiveMoistureRecovery: 1.5,
+    debuffThreshold: 50,
+    movementPenaltyThreshold: 70,
+    lethalThreshold: 92,
+    heaPenalty: -8,
+  },
+
   seasonalWeight: {
     spring: 0.8,     // Good gain, prey abundant after winter die-off
     summer: 0.4,     // Moderate gain, pup rearing demands energy

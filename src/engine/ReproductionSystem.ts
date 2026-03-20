@@ -257,6 +257,34 @@ export function tickReproduction(
     }
   }
 
+  // 3b. Male auto-siring: if a male has the mated-this-season flag but no
+  // offspring were created this season (e.g. mating succeeded via courtship
+  // display but sire_offspring consequence wasn't processed), create them now.
+  if (
+    animal.sex === 'male' &&
+    reproConfig.maleCompetition.enabled &&
+    !updated.matedThisSeason &&
+    animal.flags.has(reproConfig.maleCompetition.matedFlag) &&
+    animal.age >= reproConfig.matingOnsetAge &&
+    (reproConfig.matingSeasons === 'any' || reproConfig.matingSeasons.includes(time.season as Season))
+  ) {
+    const hea = computeEffectiveValue(animal.stats[StatId.HEA]);
+    const wis = computeEffectiveValue(animal.stats[StatId.WIS]);
+    const count = determineOffspringCount(animal.weight, hea, config, rng);
+    if (count > 0) {
+      const siredOffspring = createOffspring(count, time.turn, time.year, wis, true, config, rng);
+      updated = {
+        ...updated,
+        offspring: [...updated.offspring, ...siredOffspring],
+        matedThisSeason: true,
+      };
+      narratives.push(
+        'Somewhere in the forest, a doe you pursued this season is carrying your genetic legacy. ' +
+        'The rut has served its purpose.',
+      );
+    }
+  }
+
   // Season reset: reset mating flags for new season
   if (time.month === reproConfig.matingSeasonResetMonth && time.week === 1) {
     updated = { ...updated, matedThisSeason: false };

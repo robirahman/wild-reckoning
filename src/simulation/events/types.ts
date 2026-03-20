@@ -78,6 +78,8 @@ export interface SimulationOutcome {
    * is used directly (backward-compatible with hardcoded text).
    */
   narrativeContext?: NarrativeContext;
+  /** Additional tags to merge with the template's base tags */
+  extraTags?: string[];
 }
 
 // ── Simulation Trigger ──

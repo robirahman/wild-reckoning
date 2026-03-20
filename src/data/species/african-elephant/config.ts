@@ -48,7 +48,7 @@ export const AFRICAN_ELEPHANT_CONFIG: SpeciesConfig = {
     maxOldAgeChance: 0.95,
   },
 
-  diseaseDeathChanceAtCritical: 0.003,  // Elephants rarely die from infections; robust immune system
+  diseaseDeathChanceAtCritical: 0.001,  // Elephants rarely die from infections; robust immune system
 
   predationVulnerability: {
     injuryProbIncrease: 0.03,
@@ -70,6 +70,17 @@ export const AFRICAN_ELEPHANT_CONFIG: SpeciesConfig = {
     weightCostPerHeal: 20,  // lbs lost per healing turn
   },
   attentionBudget: 22,
+
+  hydration: {
+    baseDehydrationRate: 0.3,
+    heatMultiplier: 2.0,
+    waterNodeRecovery: 50,
+    passiveMoistureRecovery: 0.3,
+    debuffThreshold: 50,
+    movementPenaltyThreshold: 70,
+    lethalThreshold: 92,
+    heaPenalty: -10,
+  },
 
   seasonalWeight: {
     spring: 6.0,    // Wet season start, good grazing (scaled for monthly turns)

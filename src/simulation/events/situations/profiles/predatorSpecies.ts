@@ -419,7 +419,7 @@ export const PREDATOR_SPECIES: Record<string, PredatorSpeciesProfile> = {
     calibrationCauseId: 'hunting',
     threatMapKey: 'Human Hunter',
     rateFraction: 1.0,
-    fallbackWeight: 0.01,
+    fallbackWeight: 0.06,
     tags: ['predator', 'danger', 'human'],
 
     seasons: ['autumn', 'winter'],

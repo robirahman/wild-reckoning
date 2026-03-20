@@ -134,6 +134,7 @@ export interface AnimalState {
     hypothermia: number; // 0-100
     starvation: number; // 0-100
     panic: number; // 0-100
+    dehydration: number; // 0-100
   };
   lifetimeStats: LifetimeStats;
 

@@ -395,7 +395,10 @@ export const RUT_DISPLAY_PROFILE: ReproductionProfile = {
                 ],
             consequences: [
               { type: 'add_calories' as const, amount: -caloriesCost, source: 'mating chase' },
-              ...(mated ? [{ type: 'set_flag' as any, flag: 'mated-this-season' as any }] : []),
+              ...(mated ? [
+                { type: 'set_flag' as any, flag: 'mated-this-season' as any },
+                { type: 'sire_offspring' as any, offspringCount: 0 },
+              ] : []),
             ],
             footnote: mated ? '(Mating successful)' : '(Doe rejected pursuit)',
           };
@@ -520,7 +523,7 @@ export const RUT_COMBAT_PROFILE: ReproductionProfile = {
                 { stat: StatId.HOM, amount: 6, duration: 2, label: '+HOM' },
               ],
               consequences: [
-                { type: 'set_flag', flag: 'rut-challenge-won' as any },
+                { type: 'set_flag', flag: 'attempted-buck-challenge' as any },
                 ...(fight.caloriesCost > 0 ? [{ type: 'add_calories' as const, amount: -fight.caloriesCost, source: 'rut combat' }] : []),
                 ...(fight.deathCause ? [{ type: 'death' as const, cause: fight.deathCause }] : []),
               ],

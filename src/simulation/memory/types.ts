@@ -93,6 +93,19 @@ export interface SeasonalTotals {
 
 // ── World Memory ──
 
+/** Known water source for elephant matriarch memory */
+export interface WaterSourceKnowledge {
+  nodeId: string;
+  reliability: 'permanent' | 'seasonal' | 'drought-only';
+  lastVisitedTurn: number;
+}
+
+/** Elephant herd water knowledge, lost when matriarch is killed */
+export interface WaterKnowledge {
+  knownSources: Record<string, WaterSourceKnowledge>;
+  matriarchAlive: boolean;
+}
+
 /** Persistent world state that accumulates across turns */
 export interface WorldMemory {
   /** Rolling event log (ring buffer, most recent first) */
@@ -103,6 +116,8 @@ export interface WorldMemory {
   threatMap: Record<string, ThreatAssessment>;
   /** Current season aggregated stats */
   seasonalTotals: SeasonalTotals;
+  /** Elephant matriarch water source knowledge (undefined for non-elephants) */
+  waterKnowledge?: WaterKnowledge;
 }
 
 // ── Constants ──

@@ -61,7 +61,9 @@ export function tickPhysiology(
   }
 
   // Passive energy recovery (partial recovery each turn from food/rest)
-  const baseRecovery = scaling.metabolicRate * 0.6;
+  // At 1.1× metabolic rate, net energy is ~0 at default foraging (3),
+  // positive at low foraging, negative at high — creating real tradeoffs.
+  const baseRecovery = scaling.metabolicRate * 1.1;
   newAnimal.energy = Math.min(100, newAnimal.energy + baseRecovery);
 
   // --- 2. ENVIRONMENTAL STRESS ---
@@ -84,6 +86,60 @@ export function tickPhysiology(
 
   // Panic (decays slowly)
   newAnimal.physiologicalStress.panic = Math.max(0, newAnimal.physiologicalStress.panic - 20);
+
+  // Dehydration (linked to hydration config and weather)
+  const hydrationConfig = config.hydration;
+  if (hydrationConfig) {
+    let dehydrationRate = hydrationConfig.baseDehydrationRate;
+
+    // Heat amplifies water loss
+    if (weather?.type === 'heat_wave') {
+      dehydrationRate *= hydrationConfig.heatMultiplier;
+    }
+
+    // Rain/snow provide some moisture
+    if (weather?.type === 'rain' || weather?.type === 'heavy_rain') {
+      dehydrationRate = Math.max(0, dehydrationRate - hydrationConfig.passiveMoistureRecovery);
+    }
+    if (time.season === 'winter' && (weather?.type === 'snow' || weather?.type === 'blizzard')) {
+      dehydrationRate = Math.max(0, dehydrationRate - 1);
+    }
+
+    // Food contains some moisture (scaled by foraging intensity)
+    const foragingMoisture = hydrationConfig.passiveMoistureRecovery * (behavior.foraging / 3);
+    dehydrationRate = Math.max(0, dehydrationRate - foragingMoisture);
+
+    newAnimal.physiologicalStress.dehydration = Math.min(
+      100,
+      Math.max(0, newAnimal.physiologicalStress.dehydration + dehydrationRate)
+    );
+
+    // HEA debuff when dehydrated
+    if (newAnimal.physiologicalStress.dehydration > hydrationConfig.debuffThreshold) {
+      const intensity = (newAnimal.physiologicalStress.dehydration - hydrationConfig.debuffThreshold) /
+                        (100 - hydrationConfig.debuffThreshold);
+      modifiers.push({
+        id: `dehydration-hea-${time.turn}`,
+        source: 'Dehydration',
+        sourceType: 'condition',
+        stat: StatId.HEA,
+        amount: Math.round(hydrationConfig.heaPenalty * intensity),
+        duration: 1,
+      });
+    }
+
+    // HOM increase when severely dehydrated
+    if (newAnimal.physiologicalStress.dehydration > hydrationConfig.movementPenaltyThreshold) {
+      modifiers.push({
+        id: `dehydration-hom-${time.turn}`,
+        source: 'Dehydration',
+        sourceType: 'condition',
+        stat: StatId.HOM,
+        amount: 8,
+        duration: 1,
+      });
+    }
+  }
 
   // --- 3. MENTAL STRESS & BEHAVIORAL PRESSURE ---
 

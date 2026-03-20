@@ -537,6 +537,7 @@ export const predatorEncounterTemplate: InteractionTemplate = {
       consequences: [],
       narrativeText: composedNarrative,
       footnote: `(Locomotion: ${getLocomotion(ctx)}%)`,
+      extraTags: profile.tags.filter(t => t !== 'predator' && t !== 'danger'),
       narrativeContext: buildNarrativeContext({
         eventCategory: 'predator',
         eventType: profile.narrativeEventType,

@@ -20,7 +20,8 @@
 import { useGameStore, type GameState } from '../store/gameStore';
 import { generateTurnEvents, resolveTurn } from '../engine/TurnProcessor';
 import { StatId, computeEffectiveValue } from '../types/stats';
-import { introduceNPC, incrementEncounter, progressRelationship } from '../engine/NPCSystem';
+import { getSpeciesBundle } from '../data/species';
+import { introduceNPC, introduceAllOfType, incrementEncounter, progressRelationship } from '../engine/NPCSystem';
 import { tickStorylines } from '../engine/StorylineSystem';
 import { generateAmbientText, synthesizeJournalEntry } from '../engine/AmbientTextGenerator';
 import { tickEcosystem } from '../engine/EcosystemSystem';
@@ -111,6 +112,7 @@ export interface GameSnapshot {
   flags: string[];
   behavioralSettings: BehavioralSettings;
   energy: number;
+  dehydration: number;
 }
 
 /** Detailed timeline entry for the run summary. */
@@ -199,10 +201,14 @@ export class GameAPI {
 
   /** Start a new game. Returns the initial snapshot. */
   start(opts: StartOptions): GameSnapshot {
-    const backstory = BACKSTORY_OPTIONS.find(b => b.type === opts.backstory);
+    // Look up species-specific backstories first, fall back to shared defaults
+    const bundle = getSpeciesBundle(opts.species);
+    const backstory = bundle.backstories.find(b => b.type === opts.backstory)
+      ?? BACKSTORY_OPTIONS.find(b => b.type === opts.backstory);
     if (!backstory) {
+      const valid = bundle.backstories.map(b => b.type);
       throw new Error(
-        `Unknown backstory "${opts.backstory}". Valid: ${BACKSTORY_OPTIONS.map(b => b.type).join(', ')}`
+        `Unknown backstory "${opts.backstory}" for ${opts.species}. Valid: ${valid.join(', ')}`
       );
     }
     this._store.getState().startGame(
@@ -243,16 +249,18 @@ export class GameAPI {
       const mapNodes = state.map?.nodes ?? [];
       const playerNodeId = state.map?.currentLocationId;
       for (const type of ['rival', 'ally', 'predator'] as const) {
-        const npc = introduceNPC(state.animal.speciesId, type, state.time.turn, npcs, state.rng);
-        if (npc && mapNodes.length > 0) {
-          // Place predators/rivals on a random non-player node; allies near the player
-          const candidates = type === 'ally'
-            ? mapNodes.filter((n: MapNode) => n.id === playerNodeId || (playerNodeId && n.connections.includes(playerNodeId)))
-            : mapNodes.filter((n: MapNode) => n.id !== playerNodeId);
-          const startNode = candidates.length > 0 ? state.rng.pick(candidates) : mapNodes[0];
-          npc.currentNodeId = startNode.id;
-          npcs.push(npc);
-        } else if (npc) {
+        // For predators, introduce all unique species (e.g. wolf + hunter)
+        const newNPCs = type === 'predator'
+          ? introduceAllOfType(state.animal.speciesId, type, state.time.turn, npcs, state.rng)
+          : [introduceNPC(state.animal.speciesId, type, state.time.turn, npcs, state.rng)].filter(Boolean) as any[];
+        for (const npc of newNPCs) {
+          if (mapNodes.length > 0) {
+            const candidates = type === 'ally'
+              ? mapNodes.filter((n: MapNode) => n.id === playerNodeId || (playerNodeId && n.connections.includes(playerNodeId)))
+              : mapNodes.filter((n: MapNode) => n.id !== playerNodeId);
+            const startNode = candidates.length > 0 ? state.rng.pick(candidates) : mapNodes[0];
+            npc.currentNodeId = startNode.id;
+          }
           npcs.push(npc);
         }
       }
@@ -416,18 +424,36 @@ export class GameAPI {
   /**
    * Auto-resolve all pending choices by picking the first available choice
    * for each event. Useful for automated testing / fast-forwarding.
-   * Returns the choices that were made.
+   *
+   * @param strategy
+   *   - `'first'`  – always pick the first choice (legacy default)
+   *   - `'cautious'` – weighted random: danger choices picked ~25% of the
+   *      time, safe choices ~75%.  Uses the game's seeded RNG so results
+   *      are deterministic per seed.
    */
-  autoChoose(): Array<{ eventId: string; choiceId: string }> {
+  autoChoose(strategy: 'first' | 'cautious' = 'cautious'): Array<{ eventId: string; choiceId: string }> {
     const state = this._store.getState();
+    const rng = state.rng;
     const made: Array<{ eventId: string; choiceId: string }> = [];
     for (const eventId of [...state.pendingChoices]) {
       const event = state.currentEvents.find((e: ResolvedEvent) => e.definition.id === eventId);
-      const firstChoice = event?.definition.choices?.[0];
-      if (firstChoice) {
-        this._store.getState().makeChoice(eventId, firstChoice.id);
-        made.push({ eventId, choiceId: firstChoice.id });
+      const choices = event?.definition.choices;
+      if (!choices || choices.length === 0) continue;
+
+      let picked: EventChoice;
+      if (strategy === 'first' || choices.length === 1) {
+        picked = choices[0];
+      } else {
+        // Weighted random: danger choices get 25% relative weight, safe get 75%
+        const weights = choices.map((c: EventChoice) =>
+          c.style === 'danger' ? 0.25 : 0.75
+        );
+        const idx = rng.weightedSelect(weights);
+        picked = choices[idx];
       }
+
+      this._store.getState().makeChoice(eventId, picked.id);
+      made.push({ eventId, choiceId: picked.id });
     }
     return made;
   }
@@ -630,6 +656,7 @@ export class GameAPI {
       flags: Array.from(a.flags),
       behavioralSettings: { ...state.behavioralSettings },
       energy: a.energy,
+      dehydration: a.physiologicalStress.dehydration,
     };
   }
 
@@ -810,6 +837,74 @@ export class GameAPI {
 
   // ── Convenience: play N turns automatically ────────────────────────────
 
+  // ── Automated movement (for simulate loop) ───────────────────────────
+
+  /**
+   * Need-driven automated movement. ~60% chance of moving per turn.
+   * Prefers water when thirsty, food when hungry, unexplored otherwise.
+   * Respects the energy >= 10 gate — exhausted animals cannot move.
+   */
+  private autoMove(): void {
+    const state = this._store.getState();
+    if (!state.map) return;
+
+    const rng = state.rng;
+    const config = state.speciesBundle.config;
+    const animal = state.animal;
+
+    // Energy gate (same as MapPanel UI)
+    if (animal.energy < 10) return;
+
+    // Base movement probability, scaled by turn unit (monthly species move less per turn)
+    // and reduced by locomotion impairment
+    const turnUnit = config.turnUnit ?? 'week';
+    const baseMoveProb = turnUnit === 'day' ? 0.3 : turnUnit === 'month' ? 0.25 : 0.5;
+    const locomotion = animal.bodyState?.capabilities['locomotion'] ?? 100;
+    const moveProb = baseMoveProb * Math.min(1, locomotion / 100);
+    // Override: always try to move if severely dehydrated and have energy
+    const hydrationConfig = config.hydration;
+    const urgentThirst = hydrationConfig && animal.physiologicalStress.dehydration > hydrationConfig.movementPenaltyThreshold;
+    if (!urgentThirst && !rng.chance(moveProb)) return;
+
+    const adjacent = this.getAdjacentNodes();
+    if (adjacent.length === 0) return;
+
+    const scores = adjacent.map(node => {
+      let score = 1.0;
+      const fullNode = state.map!.nodes.find((n: MapNode) => n.id === node.id);
+
+      // Thirst drive: strongly prefer water nodes when dehydrated
+      const hydrationConfig = config.hydration;
+      if (hydrationConfig && animal.physiologicalStress.dehydration > hydrationConfig.debuffThreshold) {
+        if (node.type === 'water') {
+          const urgency = animal.physiologicalStress.dehydration / 100;
+          score += 5 * urgency;
+        }
+      }
+
+      // Hunger drive: prefer food-rich nodes when starving
+      if (animal.physiologicalStress.starvation > 30 || animal.weight < config.weight.starvationDebuff) {
+        const food = fullNode?.resources?.food ?? 50;
+        score += (food / 100) * 2;
+      }
+
+      // Exploration bonus for unvisited nodes
+      if (fullNode && !fullNode.visited) {
+        score += 0.5;
+      }
+
+      // Avoid expensive terrain when low energy
+      if (animal.energy < 30 && fullNode) {
+        score -= (fullNode.movementCost ?? 10) / 20;
+      }
+
+      return Math.max(0.1, score);
+    });
+
+    const idx = rng.weightedSelect(scores);
+    this.moveTo(adjacent[idx].id);
+  }
+
   /**
    * Run the game for up to `maxTurns` turns (or until death), auto-choosing
    * the first option for every event. Optionally pass a `choiceStrategy`
@@ -825,6 +920,9 @@ export class GameAPI {
 
     for (let i = 0; i < maxTurns; i++) {
       if (!this.isAlive) break;
+
+      // Automated movement before generating events (location affects event pool)
+      this.autoMove();
 
       const turnInfo = this.generateTurn();
 
@@ -848,8 +946,10 @@ export class GameAPI {
         }
       }
 
-      // Dismiss results (updates store state)
-      this._store.getState().dismissResults();
+      // Clear turn result state without triggering another advanceTurn()
+      // (dismissResults() calls advanceTurn() via the UI slice, which would
+      // double-tick physiology and corrupt map node types)
+      this.set({ showingResults: false, turnResult: null });
 
       log.push({
         turn: turnInfo.turn,
@@ -882,6 +982,15 @@ export class GameAPI {
     if (animal.weight < config.weight.starvationDeath) {
       state.killAnimal('Starvation -- body weight dropped below survival threshold.');
       return;
+    }
+
+    // Dehydration death
+    const hydrationConfig = config.hydration;
+    if (hydrationConfig && animal.physiologicalStress.dehydration >= hydrationConfig.lethalThreshold) {
+      if (state.rng.chance(0.15)) {
+        state.killAnimal('Dehydration -- organ function failed without water.');
+        return;
+      }
     }
 
     for (const parasite of animal.parasites) {

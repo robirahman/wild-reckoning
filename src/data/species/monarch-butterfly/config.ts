@@ -57,6 +57,17 @@ export const MONARCH_BUTTERFLY_CONFIG: SpeciesConfig = {
     deathChanceMax: 0.90,
   },
 
+  hydration: {
+    baseDehydrationRate: 2,
+    heatMultiplier: 2.0,
+    waterNodeRecovery: 40,
+    passiveMoistureRecovery: 1,
+    debuffThreshold: 45,
+    movementPenaltyThreshold: 65,
+    lethalThreshold: 88,
+    heaPenalty: -10,
+  },
+
   seasonalWeight: {
     spring: 0.00003,
     summer: 0.00004,

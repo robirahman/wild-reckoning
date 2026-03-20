@@ -1,5 +1,6 @@
 import type { SimulationContext } from '../events/types';
 import type { InstinctNudge } from './types';
+import { StatId, computeEffectiveValue } from '../../types/stats';
 
 /**
  * Compute the animal's instinct nudges for this turn.
@@ -19,6 +20,7 @@ export function computeInstincts(ctx: SimulationContext): InstinctNudge[] {
 
   // ── Physiological state ──
   checkHunger(ctx, nudges);
+  checkThirst(ctx, nudges);
   checkCold(ctx, nudges);
   checkImmune(ctx, nudges);
 
@@ -48,6 +50,9 @@ export function computeInstincts(ctx: SimulationContext): InstinctNudge[] {
 
   // ── Weight / body condition ──
   checkWeightCondition(ctx, nudges);
+
+  // ── Migration urge ──
+  checkMigrationUrge(ctx, nudges);
 
   // Sort by priority (high first), then take top 3
   const priorityOrder = { high: 0, medium: 1, low: 2 };
@@ -112,6 +117,45 @@ function checkHunger(ctx: SimulationContext, nudges: InstinctNudge[]): void {
       label: 'Hunger Drive',
       description: 'Persistent ache below your ribs. You smell food on the wind. The open ground is there.',
       suggestedBehavior: 'foraging',
+      suggestedDirection: 'increase',
+      priority: 'medium',
+      source: 'physiology',
+    });
+  }
+}
+
+function checkThirst(ctx: SimulationContext, nudges: InstinctNudge[]): void {
+  const hydrationConfig = ctx.config.hydration;
+  if (!hydrationConfig) return;
+
+  const dehydration = ctx.animal.physiologicalStress.dehydration;
+
+  if (dehydration >= hydrationConfig.lethalThreshold) {
+    nudges.push({
+      id: 'dying-of-thirst',
+      label: 'Dying of Thirst',
+      description: 'Your tongue is swollen. Your vision narrows. Water. The smell of it, the memory of it, fills everything.',
+      suggestedBehavior: 'exploration',
+      suggestedDirection: 'increase',
+      priority: 'high',
+      source: 'physiology',
+    });
+  } else if (dehydration >= hydrationConfig.movementPenaltyThreshold) {
+    nudges.push({
+      id: 'severe-thirst',
+      label: 'Parched',
+      description: 'Your mouth is dry. Thick saliva. The pull toward water overrides the pull toward food.',
+      suggestedBehavior: 'exploration',
+      suggestedDirection: 'increase',
+      priority: 'high',
+      source: 'physiology',
+    });
+  } else if (dehydration >= hydrationConfig.debuffThreshold) {
+    nudges.push({
+      id: 'thirst',
+      label: 'Thirsty',
+      description: 'A dry ache at the back of your throat. You smell water somewhere on the wind.',
+      suggestedBehavior: 'exploration',
       suggestedDirection: 'increase',
       priority: 'medium',
       source: 'physiology',
@@ -404,5 +448,76 @@ function checkWeightCondition(ctx: SimulationContext, nudges: InstinctNudge[]): 
       priority: 'low',
       source: 'physiology',
     });
+  }
+}
+
+function checkMigrationUrge(ctx: SimulationContext, nudges: InstinctNudge[]): void {
+  const species = ctx.config.id;
+  const season = ctx.time.season;
+  const flags = ctx.animal.flags;
+  const wis = ctx.animal.stats ? computeEffectiveValue(ctx.animal.stats[StatId.WIS]) : 30;
+
+  // Monarch butterfly — genetic navigation (sun angle + magnetic field)
+  if (species === 'monarch-butterfly') {
+    if (season === 'autumn' && !flags.has('reached-overwintering-site')) {
+      nudges.push({
+        id: 'monarch-south',
+        label: 'The Pull South',
+        description: 'Something in your body tilts. The sun is lower, the days shorter. A pull below thought draws you south-southwest. You did not learn this. You know it.',
+        suggestedBehavior: 'exploration',
+        suggestedDirection: 'increase',
+        priority: 'high',
+        source: 'physiology',
+      });
+    } else if (season === 'spring' && flags.has('reached-overwintering-site')) {
+      nudges.push({
+        id: 'monarch-north',
+        label: 'The Pull North',
+        description: 'The warmth shifts something deep. You feel the magnetic lines of the earth tilting you northward. Milkweed. Somewhere ahead, milkweed.',
+        suggestedBehavior: 'exploration',
+        suggestedDirection: 'increase',
+        priority: 'high',
+        source: 'physiology',
+      });
+    }
+  }
+
+  // Arctic tern — learned routes (wisdom-gated)
+  if (species === 'arctic-tern') {
+    if (season === 'autumn' && !flags.has('has-migrated')) {
+      if (wis > 60) {
+        nudges.push({
+          id: 'tern-south-experienced',
+          label: 'The Long Flight',
+          description: 'You know this route. The coastline bends, the river mouths, the wind patterns over open ocean — all confirm you are on course. The younger birds follow your line.',
+          suggestedBehavior: 'exploration',
+          suggestedDirection: 'increase',
+          priority: 'high',
+          source: 'physiology',
+        });
+      } else {
+        nudges.push({
+          id: 'tern-south-young',
+          label: 'Follow the Flock',
+          description: 'An urge to follow the others. The flock streams southward and your wings follow. You do not know where you are going. You trust the ones ahead.',
+          suggestedBehavior: 'exploration',
+          suggestedDirection: 'increase',
+          priority: 'high',
+          source: 'physiology',
+        });
+      }
+    } else if (season === 'spring' && flags.has('has-migrated')) {
+      nudges.push({
+        id: 'tern-north',
+        label: 'The Return',
+        description: wis > 60
+          ? 'You turn north. The breeding grounds are weeks of flying away, but you feel the pull in your wings. You have done this before. You will do it again.'
+          : 'The flock wheels northward. Something in the lengthening days compels you to follow.',
+        suggestedBehavior: 'exploration',
+        suggestedDirection: 'increase',
+        priority: 'high',
+        source: 'physiology',
+      });
+    }
   }
 }

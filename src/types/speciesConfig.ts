@@ -177,6 +177,18 @@ export interface SpeciesConfig {
     coldBenefit: number;
   };
 
+  /** Hydration profile. If absent, species does not track thirst (aquatic/enclosed). */
+  hydration?: {
+    baseDehydrationRate: number;
+    heatMultiplier: number;
+    waterNodeRecovery: number;
+    passiveMoistureRecovery: number;
+    debuffThreshold: number;
+    movementPenaltyThreshold: number;
+    lethalThreshold: number;
+    heaPenalty: number;
+  };
+
   /** Classification of body size for mathematical scaling. */
   massType?: 'micro' | 'macro' | 'mega';
 

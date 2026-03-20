@@ -5,7 +5,7 @@ import { StatId, computeEffectiveValue } from '../types/stats';
 import { saveGame } from '../store/persistence';
 import { checkAchievements } from '../engine/AchievementChecker';
 import { useAchievementStore } from '../store/achievementStore';
-import { introduceNPC, incrementEncounter, progressRelationship } from '../engine/NPCSystem';
+import { introduceNPC, introduceAllOfType, incrementEncounter, progressRelationship } from '../engine/NPCSystem';
 import { tickStorylines } from '../engine/StorylineSystem';
 import { generateAmbientText, synthesizeJournalEntry } from '../engine/AmbientTextGenerator';
 import { tickEcosystem } from '../engine/EcosystemSystem';
@@ -49,8 +49,13 @@ export function useGameEngine() {
     if (state.npcs.length === 0 && state.time.turn >= NPC_INTRODUCTION_MIN_TURN) {
       const npcs = [...state.npcs];
       for (const type of ['rival', 'ally', 'predator'] as const) {
-        const npc = introduceNPC(state.animal.speciesId, type, state.time.turn, npcs, state.rng);
-        if (npc) npcs.push(npc);
+        if (type === 'predator') {
+          const predNPCs = introduceAllOfType(state.animal.speciesId, type, state.time.turn, npcs, state.rng);
+          npcs.push(...predNPCs);
+        } else {
+          const npc = introduceNPC(state.animal.speciesId, type, state.time.turn, npcs, state.rng);
+          if (npc) npcs.push(npc);
+        }
       }
       if (npcs.length > 0) {
         store.setNPCs(npcs);
@@ -235,6 +240,17 @@ export function useGameEngine() {
         'Starvation -- your body weight dropped below the threshold your organs could sustain.'
       );
       return;
+    }
+
+    // 1b. Dehydration
+    const hydrationConfig = config.hydration;
+    if (hydrationConfig && animal.physiologicalStress.dehydration >= hydrationConfig.lethalThreshold) {
+      if (state.rng.chance(0.15)) {
+        store.killAnimal(
+          'Dehydration -- your body could no longer sustain organ function without water.'
+        );
+        return;
+      }
     }
 
     // 2. Disease death: parasites at final (critical) stage

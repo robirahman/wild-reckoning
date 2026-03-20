@@ -200,7 +200,50 @@ export const createAnimalSlice: GameSlice<AnimalSlice> = (set, get) => {
         };
       }
 
-      set({ map: newMap, animal: updatedAnimal });
+      // Drinking at water nodes
+      const hydrationConfig = state.speciesBundle.config.hydration;
+      if (hydrationConfig && targetNode.type === 'water') {
+        updatedAnimal = {
+          ...updatedAnimal,
+          physiologicalStress: {
+            ...updatedAnimal.physiologicalStress,
+            dehydration: Math.max(0, updatedAnimal.physiologicalStress.dehydration - hydrationConfig.waterNodeRecovery),
+          },
+        };
+      }
+
+      // Update elephant water knowledge when discovering water nodes
+      let updatedWorldMemory = state.worldMemory;
+      if (targetNode.type === 'water' && updatedWorldMemory.waterKnowledge) {
+        // Water sources discovered by the original matriarch are 'permanent'.
+        // Sources found after the matriarch's death start as 'seasonal' —
+        // the new matriarch hasn't confirmed them through enough drought cycles.
+        // They upgrade to 'permanent' only after being revisited many times.
+        const existing = updatedWorldMemory.waterKnowledge.knownSources[nodeId];
+        const wasMatriarchKilled = state.animal.flags.has('matriarch-killed' as any);
+        const reliability = existing?.reliability === 'permanent'
+          ? 'permanent' as const
+          : wasMatriarchKilled
+            ? 'seasonal' as const
+            : 'permanent' as const;
+
+        updatedWorldMemory = {
+          ...updatedWorldMemory,
+          waterKnowledge: {
+            ...updatedWorldMemory.waterKnowledge,
+            knownSources: {
+              ...updatedWorldMemory.waterKnowledge.knownSources,
+              [nodeId]: {
+                nodeId,
+                reliability,
+                lastVisitedTurn: state.time.turn,
+              },
+            },
+          },
+        };
+      }
+
+      set({ map: newMap, animal: updatedAnimal, worldMemory: updatedWorldMemory });
     },
 
     sniff: () => {

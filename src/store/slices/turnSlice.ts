@@ -171,6 +171,34 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
         newFlags.add(consequence.flag as GameFlag);
         animal.flags = newFlags;
         set({ animal });
+
+        // Matriarch killed → erase herd water knowledge
+        if (consequence.flag === 'matriarch-killed' && state.worldMemory.waterKnowledge) {
+          set({
+            worldMemory: {
+              ...state.worldMemory,
+              waterKnowledge: {
+                ...state.worldMemory.waterKnowledge,
+                knownSources: {},
+                matriarchAlive: false,
+              },
+            },
+          });
+        }
+
+        // New matriarch emerges → restore matriarch status (but NOT the lost water knowledge;
+        // the new matriarch must rebuild it through exploration over many years)
+        if (consequence.flag === 'new-matriarch-emerged' && state.worldMemory.waterKnowledge) {
+          set({
+            worldMemory: {
+              ...state.worldMemory,
+              waterKnowledge: {
+                ...state.worldMemory.waterKnowledge,
+                matriarchAlive: true,
+              },
+            },
+          });
+        }
         break;
       }
       case 'remove_flag': {

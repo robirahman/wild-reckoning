@@ -19,6 +19,11 @@ export const NPC_TEMPLATES: Record<string, NPCTemplate[]> = {
       namePool: ['The Gray Ghost', 'Black Fang', 'The Lone Hunter', 'One-Eye', 'Silvermane'],
     },
     {
+      type: 'predator',
+      speciesLabel: 'hunter',
+      namePool: ['The Rifle Blind', 'The Tree Stand', 'The Orange Jacket', 'The Morning Hunter', 'The Bow Hunter'],
+    },
+    {
       type: 'mate',
       speciesLabel: 'doe',
       namePool: ['Clover', 'Hazel', 'Birch', 'Fern', 'Cedar', 'Maple'],

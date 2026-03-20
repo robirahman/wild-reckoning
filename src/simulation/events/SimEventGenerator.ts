@@ -264,7 +264,7 @@ function convertTemplateToResolvedEvent(
     choices: eventChoices.length > 0 ? eventChoices : undefined,
     conditions: [],
     weight: 0,
-    tags: template.tags,
+    tags: outcome.extraTags ? [...template.tags, ...outcome.extraTags] : template.tags,
     footnote: outcome.footnote,
   };
 

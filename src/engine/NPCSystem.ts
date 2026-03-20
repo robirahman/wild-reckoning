@@ -55,10 +55,52 @@ export function introduceNPC(
   const templates = NPC_TEMPLATES[speciesId];
   if (!templates) return null;
 
-  const template = templates.find((t) => t.type === type);
-  if (!template) return null;
+  const matchingTemplates = templates.filter((t) => t.type === type);
+  if (matchingTemplates.length === 0) return null;
 
-  // Avoid duplicate names
+  // Pick a random template among matching types (e.g. wolf vs hunter for predator)
+  const template = rng.pick(matchingTemplates);
+
+  return spawnFromTemplate(template, type, speciesId, turn, existingNPCs, rng);
+}
+
+/**
+ * Introduce one NPC per unique template of a given type.
+ * For predators, this ensures both wolves and hunters get spawned.
+ */
+export function introduceAllOfType(
+  speciesId: string,
+  type: NPCType,
+  turn: number,
+  existingNPCs: NPC[],
+  rng: Rng,
+): NPC[] {
+  const templates = NPC_TEMPLATES[speciesId];
+  if (!templates) return [];
+
+  const matchingTemplates = templates.filter((t) => t.type === type);
+  const result: NPC[] = [];
+  let npcs = [...existingNPCs];
+
+  for (const template of matchingTemplates) {
+    const npc = spawnFromTemplate(template, type, speciesId, turn, npcs, rng);
+    if (npc) {
+      result.push(npc);
+      npcs.push(npc);
+    }
+  }
+
+  return result;
+}
+
+function spawnFromTemplate(
+  template: NPCTemplate,
+  type: NPCType,
+  speciesId: string,
+  turn: number,
+  existingNPCs: NPC[],
+  rng: Rng,
+): NPC | null {
   const usedNames = new Set(existingNPCs.map((n) => n.name));
   const availableNames = template.namePool.filter((n) => !usedNames.has(n));
   if (availableNames.length === 0) return null;
