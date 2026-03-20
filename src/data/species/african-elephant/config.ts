@@ -31,9 +31,9 @@ export const AFRICAN_ELEPHANT_CONFIG: SpeciesConfig = {
   },
 
   weight: {
-    starvationDeath: 2000,
-    starvationDebuff: 3500,
-    vulnerabilityThreshold: 3000,
+    starvationDeath: 1500,    // ~25% of female weight (6000lbs); was 2000
+    starvationDebuff: 2500,   // Healing gate; gives females 3500lbs buffer (was 3500 = only 2500)
+    vulnerabilityThreshold: 2200,
     minFloor: 1000,
     debuffMaxPenalty: 15,
     maximumBiologicalWeight: 15000,
@@ -60,13 +60,13 @@ export const AFRICAN_ELEPHANT_CONFIG: SpeciesConfig = {
   },
 
   turnUnit: 'month',
-  naturalHealingRate: 65,  // Must outpace 2+ parasites at moderate (~15 drain) + event damage
+  naturalHealingRate: 100,  // Must outpace 2+ parasites at moderate (~15 drain) + event damage; elephants have exceptionally robust immune systems
 
   // Well-fed elephants invest body reserves into immune recovery.
   // Real: elephants carry substantial fat (especially females) that fuels immune function.
   weightBasedHealing: {
-    minWeight: 5000,        // Only when above healthy adult weight
-    healPerTurn: 8,         // HEA restored per month
+    minWeight: 4500,        // Only when above healthy weight (lower threshold helps females at 6000lbs)
+    healPerTurn: 12,        // HEA restored per month — elephants invest heavily in immune recovery
     weightCostPerHeal: 20,  // lbs lost per healing turn
   },
   attentionBudget: 22,
@@ -83,11 +83,11 @@ export const AFRICAN_ELEPHANT_CONFIG: SpeciesConfig = {
   },
 
   seasonalWeight: {
-    spring: 6.0,    // Wet season start, good grazing (scaled for monthly turns)
-    summer: 4.0,    // Wet season, moderate
-    autumn: 0.0,    // Dry season approach, neutral
+    spring: 10.0,   // Wet season start, excellent grazing (scaled for monthly turns)
+    summer: 8.0,    // Wet season peak, abundant forage
+    autumn: 2.0,    // Dry season approach, still some forage
     winter: -8.0,   // Dry season, significant scarcity
-    foragingBonus: 1.6,
+    foragingBonus: 2.0,
   },
 
   agePhases: [
@@ -103,19 +103,19 @@ export const AFRICAN_ELEPHANT_CONFIG: SpeciesConfig = {
     matingOnsetAge: 144,
     matingSeasons: 'any',
     matingSeasonResetMonth: 'January',
-    autoMatingProbability: 0.01,
+    autoMatingProbability: 0.015,  // Real IBI ~4-5yr; dependency gate blocks mating while calves dependent (54mo)
     maleCompetition: {
       enabled: true,
-      baseWinProb: 0.20,
-      maxWinProb: 0.50,
-      minWinProb: 0.03,
-      heaFactor: 0.003,
-      weightReferencePoint: 8000,
-      weightFactor: 0.0001,
+      baseWinProb: 0.10,   // Low base: young/average bulls rarely win
+      maxWinProb: 0.55,    // Prime musth bulls in peak condition dominate
+      minWinProb: 0.01,    // Undersized/injured bulls almost never win
+      heaFactor: 0.004,    // Health matters more: musth is physically demanding
+      weightReferencePoint: 10000,  // Reference is prime adult male weight
+      weightFactor: 0.00004, // +0.20 at 15000lbs, -0.20 at 5000lbs — size is decisive
       lowStressThreshold: 30,
       lowStressFactor: 0.002,
-      injuryPenalty: 0.05,
-      parasitePenalty: 0.03,
+      injuryPenalty: 0.08,  // Injured bulls are at severe disadvantage
+      parasitePenalty: 0.05, // Parasitized bulls lose condition
       lossInjuryChance: 0.35,
       lossInjuryId: 'tusk-wound',
       lossInjuryBodyParts: [
@@ -143,7 +143,7 @@ export const AFRICAN_ELEPHANT_CONFIG: SpeciesConfig = {
     offspringLabelSingle: 'a single calf',
     offspringLabelTwin: 'twin calves',
     offspringLabelTriple: 'twin calves',
-    dependenceTurns: 36,
+    dependenceTurns: 54,  // Real: calves nurse 2yr but stay dependent 4-5yr; was 36
     maturationTurns: 120,
     offspringBaseSurvival: 0.998,
     offspringSurvivalWinterPenalty: 0.008,

@@ -229,10 +229,15 @@ export function tickReproduction(
   // 3. Automatic mating: if conditions are met and not already pregnant,
   // attempt mating. This ensures reproduction happens at biologically
   // realistic rates without depending on specific events firing.
+  const hasDependents = reproConfig.dependentFlag && (
+    animal.flags.has(reproConfig.dependentFlag) ||
+    flagsToAdd.includes(reproConfig.dependentFlag)
+  );
   if (
     animal.sex === 'female' &&
     !updated.pregnancy &&
     !updated.matedThisSeason &&
+    !hasDependents &&
     animal.age >= reproConfig.matingMinAge &&
     (reproConfig.matingSeasons === 'any' || reproConfig.matingSeasons.includes(time.season as Season))
   ) {
@@ -260,13 +265,16 @@ export function tickReproduction(
   // 3b. Male auto-siring: if a male has the mated-this-season flag but no
   // offspring were created this season (e.g. mating succeeded via courtship
   // display but sire_offspring consequence wasn't processed), create them now.
+  // Skip for year-round breeders ('any') — those species handle reproduction
+  // entirely through female pregnancy, and male siring would double-count.
   if (
     animal.sex === 'male' &&
     reproConfig.maleCompetition.enabled &&
+    reproConfig.matingSeasons !== 'any' &&
     !updated.matedThisSeason &&
     animal.flags.has(reproConfig.maleCompetition.matedFlag) &&
     animal.age >= reproConfig.matingOnsetAge &&
-    (reproConfig.matingSeasons === 'any' || reproConfig.matingSeasons.includes(time.season as Season))
+    (reproConfig.matingSeasons.includes(time.season as Season))
   ) {
     const hea = computeEffectiveValue(animal.stats[StatId.HEA]);
     const wis = computeEffectiveValue(animal.stats[StatId.WIS]);

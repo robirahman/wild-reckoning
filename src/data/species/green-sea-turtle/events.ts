@@ -199,7 +199,7 @@ const turtleEvents: GameEvent[] = [
     subEvents: [
       {
         eventId: 'turtle-net-drowning',
-        chance: 0.12,
+        chance: 0.15,
         conditions: [],
         narrativeText:
           'The mesh holds you under. You strain upward but each movement pulls tighter. Your lungs burn. The light above dims.',
@@ -213,8 +213,8 @@ const turtleEvents: GameEvent[] = [
     conditions: [
       { type: 'species', speciesIds: ['green-sea-turtle'] },
     ],
-    weight: 6,
-    cooldown: 20,
+    weight: 10,
+    cooldown: 10,
     tags: ['conservation', 'fishing', 'injury'],
     footnote: 'Bycatch in fishing gear is one of the greatest threats to sea turtles. Thousands drown in nets every year.',
   },
@@ -235,7 +235,7 @@ const turtleEvents: GameEvent[] = [
     subEvents: [
       {
         eventId: 'turtle-boat-strike-fatal',
-        chance: 0.06,
+        chance: 0.08,
         conditions: [],
         narrativeText:
           'The propeller strikes across your spine. The shell shatters. You sink through water that reddens around you.',
@@ -249,8 +249,8 @@ const turtleEvents: GameEvent[] = [
     conditions: [
       { type: 'species', speciesIds: ['green-sea-turtle'] },
     ],
-    weight: 4,
-    cooldown: 12,
+    weight: 7,
+    cooldown: 8,
     tags: ['conservation', 'boat', 'injury'],
     footnote: 'Boat strikes are a significant source of sea turtle mortality, particularly in shallow coastal waters with heavy boat traffic.',
   },
@@ -995,8 +995,8 @@ const turtleEvents: GameEvent[] = [
       { type: 'species', speciesIds: ['green-sea-turtle'] },
       { type: 'no_parasite', parasiteId: 'fibropapillomatosis' },
     ],
-    weight: 3,
-    cooldown: 10,
+    weight: 2,
+    cooldown: 12,
     tags: ['health'],
   },
   {
@@ -1084,7 +1084,7 @@ const turtleEvents: GameEvent[] = [
         revocable: false,
         style: 'default',
         deathChance: {
-          probability: 0.06,
+          probability: 0.10,
           cause: 'Caught in a shrimp trawl. Drowned before the net was hauled.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.002 }],
         },
@@ -1097,15 +1097,15 @@ const turtleEvents: GameEvent[] = [
         revocable: false,
         style: 'danger',
         deathChance: {
-          probability: 0.12,
+          probability: 0.18,
           cause: 'Tangled in the trawl. Held under until the air was gone.',
           statModifiers: [{ stat: StatId.HEA, factor: -0.003 }],
         },
       },
     ],
     conditions: [],
-    weight: 10,
-    cooldown: 8,
+    weight: 14,
+    cooldown: 6,
     tags: ['predator', 'danger', 'human'],
     footnote: 'Commercial fishing bycatch is the #1 cause of sea turtle mortality worldwide. Shrimp trawls alone kill an estimated 50,000 sea turtles annually in U.S. waters.',
   },
@@ -1126,7 +1126,7 @@ const turtleEvents: GameEvent[] = [
     subEvents: [
       {
         eventId: 'turtle-longline-drown',
-        chance: 0.10,
+        chance: 0.14,
         conditions: [],
         narrativeText: 'The hook sets deep. The line holds you under. You cannot surface to breathe.',
         footnote: '(Drowned on longline)',
@@ -1137,8 +1137,8 @@ const turtleEvents: GameEvent[] = [
       },
     ],
     conditions: [],
-    weight: 12,
-    cooldown: 6,
+    weight: 16,
+    cooldown: 5,
     tags: ['predator', 'danger', 'human'],
     footnote: 'Pelagic longline fisheries are a major source of sea turtle bycatch. Green turtles are attracted to the bait and become hooked, often drowning when unable to surface.',
   },
@@ -1159,7 +1159,7 @@ const turtleEvents: GameEvent[] = [
     subEvents: [
       {
         eventId: 'turtle-channel-strike',
-        chance: 0.08,
+        chance: 0.10,
         conditions: [],
         narrativeText: 'A hull shadow passes over you. Then the propeller. The blades catch your carapace.',
         footnote: '(Killed by vessel strike)',
@@ -1170,8 +1170,8 @@ const turtleEvents: GameEvent[] = [
       },
     ],
     conditions: [],
-    weight: 8,
-    cooldown: 10,
+    weight: 12,
+    cooldown: 8,
     tags: ['environmental', 'danger', 'human'],
     footnote: 'Boat strikes are a leading cause of sea turtle mortality in coastal waters. Turtles surface to breathe and are vulnerable to fast-moving vessels.',
   },

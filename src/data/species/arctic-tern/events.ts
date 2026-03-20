@@ -174,6 +174,10 @@ export const ARCTIC_TERN_EVENTS: GameEvent[] = [
         consequences: [],
         revocable: false,
         style: 'default',
+        deathChance: {
+          probability: 0.02,
+          cause: 'The skua broke through the mob and took you off the nest.',
+        },
       },
     ],
     conditions: [
@@ -253,6 +257,11 @@ export const ARCTIC_TERN_EVENTS: GameEvent[] = [
         consequences: [],
         revocable: false,
         style: 'default',
+        deathChance: {
+          probability: 0.03,
+          cause: 'The peregrine adjusted its stoop and caught you just above the waves.',
+          statModifiers: [{ stat: StatId.STR, factor: -0.0005 }],
+        },
       },
       {
         id: 'tight-turn',
@@ -1189,6 +1198,104 @@ export const ARCTIC_TERN_EVENTS: GameEvent[] = [
     cooldown: 4,
     tags: ['environmental', 'starvation'],
     footnote: 'Prey collapse events caused by ocean warming increasingly affect seabird populations. Arctic terns depend on predictable fish stocks along their migration route.',
+  },
+
+  // ══════════════════════════════════════════════
+  //  PASSIVE PREDATION DEATHS
+  // ══════════════════════════════════════════════
+
+  {
+    id: 'tern-skua-ambush',
+    type: 'passive',
+    category: 'predator',
+    narrativeText: 'A great skua comes in low over the water, behind the sun. You do not see it until it strikes. The impact knocks you sideways into the waves.',
+    statEffects: [
+      { stat: StatId.TRA, amount: 12, label: '+TRA' },
+      { stat: StatId.HEA, amount: -6, label: '-HEA' },
+    ],
+    subEvents: [
+      {
+        eventId: 'tern-skua-ambush-kill',
+        chance: 0.07,
+        conditions: [],
+        narrativeText: 'The skua pinned you on the water and held you under with its feet.',
+        footnote: '(Killed by great skua)',
+        statEffects: [],
+        consequences: [
+          { type: 'death', cause: 'Killed by a great skua. Ambushed from behind and drowned.' },
+        ],
+      },
+    ],
+    conditions: [
+      { type: 'age_range', min: 3 },
+    ],
+    weight: 12,
+    cooldown: 4,
+    tags: ['predator', 'skua'],
+    footnote: 'Great skuas (Stercorarius skua) are major predators of adult arctic terns. They kill terns both by direct strikes in flight and by drowning them on the water surface.',
+  },
+
+  {
+    id: 'tern-fox-nest-raid',
+    type: 'passive',
+    category: 'predator',
+    narrativeText: 'An arctic fox moves through the colony at dusk, low and fast. Alarm calls erupt. Terns lift from their nests. The fox snaps at birds on the ground.',
+    statEffects: [
+      { stat: StatId.TRA, amount: 10, label: '+TRA' },
+      { stat: StatId.ADV, amount: 8, label: '+ADV' },
+    ],
+    subEvents: [
+      {
+        eventId: 'tern-fox-kill',
+        chance: 0.05,
+        conditions: [],
+        narrativeText: 'The fox caught you lifting off. Its jaws closed before your wings found air.',
+        footnote: '(Killed by arctic fox)',
+        statEffects: [],
+        consequences: [
+          { type: 'death', cause: 'Caught by an arctic fox raiding the colony.' },
+        ],
+      },
+    ],
+    conditions: [
+      { type: 'season', seasons: ['summer'] },
+      { type: 'region', regionIds: ['arctic-breeding-colony'] },
+    ],
+    weight: 10,
+    cooldown: 4,
+    tags: ['predator', 'fox', 'colony'],
+    footnote: 'Arctic foxes are significant predators at tern colonies, taking both eggs and adult birds. A single fox can destroy dozens of nests in one raid.',
+  },
+
+  {
+    id: 'tern-raptor-migration-attack',
+    type: 'passive',
+    category: 'predator',
+    narrativeText: 'A merlin appears from nowhere over the open ocean, fast and direct. It has been trailing the migrating flock, picking off stragglers.',
+    statEffects: [
+      { stat: StatId.TRA, amount: 10, label: '+TRA' },
+      { stat: StatId.HEA, amount: -4, label: '-HEA' },
+    ],
+    subEvents: [
+      {
+        eventId: 'tern-merlin-kill',
+        chance: 0.06,
+        conditions: [],
+        narrativeText: 'The merlin hit you from above at full speed. Its talons pierced your body.',
+        footnote: '(Killed by merlin)',
+        statEffects: [],
+        consequences: [
+          { type: 'death', cause: 'Taken by a merlin during migration. Struck from above at speed.' },
+        ],
+      },
+    ],
+    conditions: [
+      { type: 'has_flag', flag: 'will-migrate' },
+    ],
+    weight: 10,
+    cooldown: 4,
+    tags: ['predator', 'raptor', 'migration'],
+    footnote: 'Merlins and other small falcons follow seabird migration routes, predating terns and other small shorebirds in flight over open ocean.',
   },
 
   // ── Parasite Events ──

@@ -272,14 +272,14 @@ export const MONARCH_BUTTERFLY_EVENTS: GameEvent[] = [
       { type: 'no_flag', flag: 'is-chrysalis' },
       { type: 'season', seasons: ['summer', 'autumn'] },
     ],
-    weight: 8,
-    cooldown: 4,
+    weight: 5,
+    cooldown: 6,
     tags: ['predator', 'mantis'],
     footnote: 'Praying mantises are ambush predators that are immune to monarch cardenolides. They are a significant predator of adult monarchs, especially in gardens and meadows.',
     subEvents: [
       {
         eventId: 'monarch-mantis-kill',
-        chance: 0.20,
+        chance: 0.15,
         narrativeText: 'Its serrated forelegs hold you immobile. It begins feeding on your thorax. Your wings beat but you cannot break the grip.',
         footnote: 'Mantises consume monarchs headfirst, a process that can take over an hour.',
         statEffects: [],
@@ -320,6 +320,136 @@ export const MONARCH_BUTTERFLY_EVENTS: GameEvent[] = [
       },
     ],
     footnote: 'Paper wasps (Polistes spp.) are among the most significant predators of monarch caterpillars. A single wasp colony can consume dozens of caterpillars in a season.',
+  },
+
+  {
+    id: 'monarch-mouse-attack',
+    type: 'passive',
+    category: 'predator',
+    narrativeText: 'At the overwintering site, a black-eared mouse climbs the fir trunk and works through the cluster of dormant butterflies, biting off wings and abdomens.',
+    statEffects: [
+      { stat: StatId.TRA, amount: 10, label: '+TRA' },
+      { stat: StatId.HEA, amount: -5, label: '-HEA' },
+    ],
+    consequences: [],
+    conditions: [
+      { type: 'species', speciesIds: ['monarch-butterfly'] },
+      { type: 'has_flag', flag: 'reached-overwintering-site' },
+      { type: 'season', seasons: ['winter'] },
+    ],
+    weight: 8,
+    cooldown: 3,
+    tags: ['predator', 'mouse', 'overwintering'],
+    subEvents: [
+      {
+        eventId: 'monarch-mouse-kill',
+        chance: 0.12,
+        narrativeText: 'The mouse found you in the cluster. Its teeth closed on your thorax before you could open your wings.',
+        statEffects: [],
+        consequences: [
+          { type: 'death', cause: 'Eaten by a black-eared mouse at the overwintering colony.' },
+        ],
+      },
+    ],
+    footnote: 'Black-eared mice (Peromyscus melanotis) are significant predators at Mexican overwintering sites, consuming thousands of torpid monarchs per night.',
+  },
+
+  {
+    id: 'monarch-robber-fly',
+    type: 'passive',
+    category: 'predator',
+    narrativeText: 'A large gray fly intercepts you in flight. It strikes from below, its spiny legs locking around your body. A proboscis stabs through your exoskeleton.',
+    statEffects: [
+      { stat: StatId.TRA, amount: 8, label: '+TRA' },
+      { stat: StatId.HEA, amount: -6, label: '-HEA' },
+    ],
+    consequences: [],
+    conditions: [
+      { type: 'species', speciesIds: ['monarch-butterfly'] },
+      { type: 'no_flag', flag: 'is-caterpillar' },
+      { type: 'no_flag', flag: 'is-chrysalis' },
+      { type: 'season', seasons: ['summer', 'autumn'] },
+    ],
+    weight: 7,
+    cooldown: 4,
+    tags: ['predator', 'fly'],
+    subEvents: [
+      {
+        eventId: 'monarch-robber-fly-kill',
+        chance: 0.15,
+        narrativeText: 'The robber fly injected digestive enzymes and drained your body fluids in flight. Your empty exoskeleton tumbled to the ground.',
+        statEffects: [],
+        consequences: [
+          { type: 'death', cause: 'Killed by a robber fly. Seized mid-flight and drained.' },
+        ],
+      },
+    ],
+    footnote: 'Robber flies (Asilidae) are aggressive aerial predators capable of taking insects their own size or larger. They are immune to monarch toxins.',
+  },
+
+  {
+    id: 'monarch-ant-attack-caterpillar',
+    type: 'passive',
+    category: 'predator',
+    narrativeText: 'Fire ants swarm up the milkweed stem. Dozens reach your body simultaneously. Their mandibles cut into your soft skin and their stingers inject venom.',
+    statEffects: [
+      { stat: StatId.TRA, amount: 12, label: '+TRA' },
+      { stat: StatId.HEA, amount: -8, label: '-HEA' },
+    ],
+    consequences: [],
+    conditions: [
+      { type: 'species', speciesIds: ['monarch-butterfly'] },
+      { type: 'has_flag', flag: 'is-caterpillar' },
+      { type: 'season', seasons: ['spring', 'summer'] },
+    ],
+    weight: 8,
+    cooldown: 4,
+    tags: ['predator', 'ant', 'caterpillar'],
+    subEvents: [
+      {
+        eventId: 'monarch-ant-kill',
+        chance: 0.18,
+        narrativeText: 'The ants overwhelmed you. They dismembered your body and carried the pieces back to the colony.',
+        statEffects: [],
+        consequences: [
+          { type: 'death', cause: 'Killed by fire ants as a caterpillar.' },
+        ],
+      },
+    ],
+    footnote: 'Invasive fire ants (Solenopsis invicta) are a major predator of monarch caterpillars in the southern US, capable of stripping a milkweed plant of all larvae in minutes.',
+  },
+
+  {
+    id: 'monarch-dragonfly-pursuit',
+    type: 'passive',
+    category: 'predator',
+    narrativeText: 'A green darner dragonfly tracks you across the meadow. It matches every turn, closing the gap with each wingbeat. Its compound eyes lock onto you.',
+    statEffects: [
+      { stat: StatId.TRA, amount: 8, label: '+TRA' },
+      { stat: StatId.HEA, amount: -4, label: '-HEA' },
+    ],
+    consequences: [],
+    conditions: [
+      { type: 'species', speciesIds: ['monarch-butterfly'] },
+      { type: 'no_flag', flag: 'is-caterpillar' },
+      { type: 'no_flag', flag: 'is-chrysalis' },
+      { type: 'season', seasons: ['summer', 'autumn'] },
+    ],
+    weight: 6,
+    cooldown: 4,
+    tags: ['predator', 'dragonfly'],
+    subEvents: [
+      {
+        eventId: 'monarch-dragonfly-kill',
+        chance: 0.10,
+        narrativeText: 'The dragonfly caught you from behind. Its basket-legs trapped your wings and its mandibles crushed your head.',
+        statEffects: [],
+        consequences: [
+          { type: 'death', cause: 'Caught and killed by a green darner dragonfly.' },
+        ],
+      },
+    ],
+    footnote: 'Large dragonflies like green darners are effective aerial predators of butterflies. They are unaffected by monarch cardenolides.',
   },
 
   {

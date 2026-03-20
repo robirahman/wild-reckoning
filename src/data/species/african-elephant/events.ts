@@ -612,7 +612,7 @@ export const AFRICAN_ELEPHANT_EVENTS: GameEvent[] = [
     subEvents: [
       {
         eventId: 'tick-pickup',
-        chance: 0.25,
+        chance: 0.15,
         conditions: [
           { type: 'no_parasite', parasiteId: 'elephant-tick' },
         ],
@@ -1757,8 +1757,8 @@ export const AFRICAN_ELEPHANT_EVENTS: GameEvent[] = [
       },
     ],
     conditions: [],
-    weight: 16,
-    cooldown: 6,
+    weight: 12,
+    cooldown: 8,
     tags: ['predator', 'danger', 'human', 'poaching'],
     footnote: 'Poaching remains one of the greatest threats to African elephants. An estimated 20,000-30,000 elephants are killed annually for the ivory trade.',
   },
