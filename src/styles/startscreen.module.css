@@ -56,6 +56,33 @@
   margin-bottom: 12px;
 }
 
+/* ── Collapsible extras below Begin ── */
+
+.disclosure {
+  margin-bottom: 16px;
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+}
+
+.disclosure summary {
+  cursor: pointer;
+  color: var(--color-text-muted);
+  padding: 4px 0;
+}
+
+.lockedList {
+  margin: 8px 0 0;
+  padding-left: 20px;
+  color: var(--color-text-muted);
+  font-style: italic;
+  line-height: 1.6;
+}
+
+.seedLabel {
+  display: block;
+  margin: 8px 0 6px;
+}
+
 /* ── Section layout ── */
 
 .section {

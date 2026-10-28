@@ -2,6 +2,15 @@
   margin-bottom: var(--space-lg);
 }
 
+.pressingNeed {
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  margin: 0 0 var(--space-sm);
+  padding: 6px 10px;
+  border-left: 3px solid var(--color-danger);
+  background: var(--color-panel-bg);
+}
+
 .eventProgress {
   font-family: var(--font-ui);
   font-size: 0.75rem;

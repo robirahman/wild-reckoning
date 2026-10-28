@@ -102,6 +102,7 @@ export function resolveTurn(state: GameState): {
     }
 
     const eventEffects: StatEffect[] = [];
+    const choiceEffects: StatEffect[] = [];
     const eventConsequences: Consequence[] = [];
     let deathRollSurvived: boolean | undefined;
     let deathRollProbability: number | undefined;
@@ -147,8 +148,9 @@ export function resolveTurn(state: GameState): {
         narrativeResult = choice.narrativeResult;
         
         for (const eff of choice.statEffects) {
-          eventEffects.push({ ...eff, amount: eff.amount * ffMult });
+          choiceEffects.push({ ...eff, amount: eff.amount * ffMult });
         }
+        eventEffects.push(...choiceEffects);
         for (const cons of choice.consequences) {
           if (cons.type === 'modify_weight') {
             eventConsequences.push({ ...cons, amount: cons.amount * ffMult });
@@ -226,6 +228,7 @@ export function resolveTurn(state: GameState): {
       choiceId,
       narrativeResult,
       statEffects: eventEffects,
+      choiceStatEffects: choiceEffects,
       consequences: eventConsequences,
       deathRollSurvived,
       deathRollProbability,

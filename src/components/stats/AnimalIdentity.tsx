@@ -16,6 +16,15 @@ export function AnimalIdentity() {
     ? reproduction.pregnancy.turnsRemaining
     : null;
 
+  // Short-term stamina vs. long-term fat reserves: two different things, shown as words
+  const stamina = animal.energy >= 70 ? 'Rested'
+    : animal.energy >= 35 ? 'Tired'
+    : animal.energy >= 10 ? 'Worn out'
+    : 'Exhausted';
+  const bodyCondition = animal.physiologyState
+    ? ['Emaciated', 'Thin', 'Good', 'Well fed', 'Fat'][animal.physiologyState.bodyConditionScore - 1]
+    : null;
+
   // The backstory's event recedes as the animal ages
   const monthsSinceBackstory = animal.backstory.monthsSinceEvent
     + Math.max(0, animal.age - (animal.startAge ?? animal.age));
@@ -49,6 +58,15 @@ export function AnimalIdentity() {
           <>
             <span className={styles.separator}>|</span>
             <span>{agePhase.label}</span>
+          </>
+        )}
+      </div>
+      <div className={styles.statusNote}>
+        <span title="Short-term energy for moving and acting. It comes back with rest.">Stamina: {stamina}</span>
+        {bodyCondition && (
+          <>
+            <span className={styles.separator}>|</span>
+            <span title="Fat reserves built up over weeks of eating well, or burned by going hungry.">Body condition: {bodyCondition}</span>
           </>
         )}
       </div>

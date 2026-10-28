@@ -7,7 +7,10 @@ export interface EventOutcome {
   choiceLabel?: string;
   choiceId?: string;
   narrativeResult?: string;
+  /** Every stat effect from this event: the encounter itself plus the choice */
   statEffects: StatEffect[];
+  /** The part of statEffects that came from the player's choice */
+  choiceStatEffects?: StatEffect[];
   consequences: Consequence[];
   deathRollSurvived?: boolean;
   deathRollProbability?: number;

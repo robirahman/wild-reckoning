@@ -64,16 +64,22 @@ export function Encyclopedia({ onBack }: Props) {
             <div
               key={entry.id}
               className={`${styles.entry} ${unlocked ? styles.unlocked : styles.locked}`}
-              onClick={() => unlocked && setExpandedId(expanded ? null : entry.id)}
             >
-              <div className={styles.entryHeader}>
+              <button
+                type="button"
+                className={styles.entryHeader}
+                onClick={() => setExpandedId(expanded ? null : entry.id)}
+                disabled={!unlocked}
+                aria-expanded={unlocked ? expanded : undefined}
+                aria-controls={unlocked ? `encyclopedia-entry-${entry.id}` : undefined}
+              >
                 <span className={styles.entryTitle}>
                   {unlocked ? entry.title : '???'}
                 </span>
                 <span className={styles.entryCategory}>{entry.category}</span>
-              </div>
+              </button>
               {unlocked && expanded && (
-                <div className={styles.entryContent}>{entry.content}</div>
+                <div id={`encyclopedia-entry-${entry.id}`} className={styles.entryContent}>{entry.content}</div>
               )}
               {!unlocked && (
                 <div className={styles.lockedHint}>

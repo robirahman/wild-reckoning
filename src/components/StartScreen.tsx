@@ -33,8 +33,10 @@ export function StartScreen() {
   const filteredBundles = allBundles.filter((b) => isCaptive(b.config) === (mode === 'farm'));
 
   const { isUnlocked: isSpeciesUnlocked } = useSpeciesUnlocks();
+  const unlockedBundles = filteredBundles.filter((b) => isSpeciesUnlocked(b.config.id));
+  const lockedBundles = filteredBundles.filter((b) => !isSpeciesUnlocked(b.config.id));
 
-  const [selectedSpeciesId, setSelectedSpeciesId] = useState(filteredBundles[0].config.id);
+  const [selectedSpeciesId, setSelectedSpeciesId] = useState((unlockedBundles[0] ?? filteredBundles[0]).config.id);
   const selectedBundle = allBundles.find((b) => b.config.id === selectedSpeciesId)!;
 
   const [selectedBackstoryType, setSelectedBackstoryType] = useState(selectedBundle.backstories[0].type);
@@ -131,45 +133,32 @@ export function StartScreen() {
         </div>
       )}
 
-      {/* ── Species Selector ── */}
+      {/* ── Species Selector (locked species are summarized below Begin) ── */}
       <div className={styles.section}>
         <h3 className={styles.sectionTitle}>{mode === 'farm' ? 'Farm Animals' : 'Wild Species'}</h3>
         <div className={styles.columnGroup}>
-          {filteredBundles.map((bundle) => {
-            const unlocked = isSpeciesUnlocked(bundle.config.id);
-            const hint = getUnlockHint(bundle.config.id);
-            const isSelected = selectedSpeciesId === bundle.config.id && unlocked;
-
+          {unlockedBundles.map((bundle) => {
+            const isSelected = selectedSpeciesId === bundle.config.id;
             return (
               <button
                 key={bundle.config.id}
-                onClick={() => unlocked && handleSpeciesChange(bundle)}
-                disabled={!unlocked}
+                onClick={() => handleSpeciesChange(bundle)}
+                aria-pressed={isSelected}
                 className={`${styles.speciesButton} ${isSelected ? styles.selected : ''}`}
               >
                 <div className={`${styles.speciesName} ${isSelected ? styles.selected : ''}`}>
-                  {unlocked ? bundle.config.name : '???'}
-                  {unlocked && (
-                    <span className={styles.scientificName}>
-                      ({bundle.config.scientificName})
-                    </span>
-                  )}
+                  {bundle.config.name}
+                  <span className={styles.scientificName}>
+                    ({bundle.config.scientificName})
+                  </span>
                 </div>
-                {unlocked ? (
-                  <>
-                    <div className={styles.speciesDescription}>
-                      {bundle.config.description}
-                    </div>
-                    <div className={styles.speciesRegion}>
-                      {bundle.config.defaultRegionDisplayName}
-                      {bundle.config.reproduction.type === 'semelparous' && ' — Semelparous lifecycle'}
-                    </div>
-                  </>
-                ) : (
-                  <div className={styles.lockedHint}>
-                    Locked — {hint}
-                  </div>
-                )}
+                <div className={styles.speciesDescription}>
+                  {bundle.config.description}
+                </div>
+                <div className={styles.speciesRegion}>
+                  {bundle.config.defaultRegionDisplayName}
+                  {bundle.config.reproduction.type === 'semelparous' && ' — Semelparous lifecycle'}
+                </div>
               </button>
             );
           })}
@@ -237,28 +226,36 @@ export function StartScreen() {
         </div>
       </div>
 
-      {/* ── Seed Input ── */}
-      <div className={styles.section}>
-        <h3 className={styles.sectionTitle}>World Seed (Optional)</h3>
-        <div className={styles.rowGroup}>
-          <input
-            type="text"
-            placeholder="Random"
-            value={seedInput}
-            onChange={(e) => setSeedInput(e.target.value)}
-            className={styles.seedInput}
-          />
-        </div>
-      </div>
-
-      <AchievementList />
-
       <button
         onClick={handleStartGame}
         className={styles.beginButton}
       >
         Begin
       </button>
+
+      {lockedBundles.length > 0 && (
+        <details className={styles.disclosure}>
+          <summary>Locked species ({lockedBundles.length})</summary>
+          <ul className={styles.lockedList}>
+            {lockedBundles.map((bundle) => (
+              <li key={bundle.config.id}>??? — {getUnlockHint(bundle.config.id)}</li>
+            ))}
+          </ul>
+        </details>
+      )}
+
+      <details className={styles.disclosure}>
+        <summary>Advanced options</summary>
+        <label className={styles.seedLabel} htmlFor="world-seed">World seed (optional)</label>
+        <input
+          id="world-seed"
+          type="text"
+          placeholder="Random"
+          value={seedInput}
+          onChange={(e) => setSeedInput(e.target.value)}
+          className={styles.seedInput}
+        />
+      </details>
 
       <div className={styles.navRow}>
         <button
@@ -287,6 +284,8 @@ export function StartScreen() {
           Compare Species
         </button>
       </div>
+
+      <AchievementList />
     </div>
   );
 }

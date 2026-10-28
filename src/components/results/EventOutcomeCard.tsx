@@ -8,9 +8,23 @@ interface EventOutcomeCardProps {
   index: number;
 }
 
+function EffectBadge({ label, amount }: { label: string; amount: number }) {
+  // For stress stats, going up is bad; for fitness stats, going up is good
+  const good = amount > 0 ? !isStressStat(label) : isStressStat(label);
+  return (
+    <span className={`${styles.badge} ${good ? styles.badgePositive : styles.badgeNegative}`}>
+      {label}
+    </span>
+  );
+}
+
 export function EventOutcomeCard({ outcome, index }: EventOutcomeCardProps) {
   const parasiteDefs = useGameStore((s) => s.speciesBundle.parasites);
   const injuryDefs = useGameStore((s) => s.speciesBundle.injuries);
+
+  // Effects that came from the encounter itself rather than the player's choice
+  const choiceCount = outcome.choiceStatEffects?.length ?? 0;
+  const encounterEffects = outcome.statEffects.slice(0, outcome.statEffects.length - choiceCount);
 
   // Truncate the event narrative for the summary view
   const shortNarrative = outcome.eventNarrative.length > 120
@@ -35,20 +49,23 @@ export function EventOutcomeCard({ outcome, index }: EventOutcomeCardProps) {
         </p>
       )}
 
+      {/* Separate what the encounter did from what the choice did */}
+      {outcome.choiceStatEffects && outcome.choiceStatEffects.length > 0 && encounterEffects.length > 0 && (
+        <div className={styles.outcomeBadges}>
+          <span className={styles.badgeGroupLabel}>The encounter:</span>
+          {encounterEffects.map((effect, i) => <EffectBadge key={i} label={effect.label} amount={effect.amount} />)}
+        </div>
+      )}
+
       <div className={styles.outcomeBadges}>
-        {/* Stat effect badges */}
-        {outcome.statEffects.map((effect, i) => (
-          <span
-            key={i}
-            className={`${styles.badge} ${
-              effect.amount > 0
-                ? isStressStat(effect.label) ? styles.badgeNegative : styles.badgePositive
-                : isStressStat(effect.label) ? styles.badgePositive : styles.badgeNegative
-            }`}
-          >
-            {effect.label}
-          </span>
-        ))}
+        {outcome.choiceStatEffects && outcome.choiceStatEffects.length > 0 ? (
+          <>
+            {encounterEffects.length > 0 && <span className={styles.badgeGroupLabel}>Your choice:</span>}
+            {outcome.choiceStatEffects.map((effect, i) => <EffectBadge key={i} label={effect.label} amount={effect.amount} />)}
+          </>
+        ) : (
+          outcome.statEffects.map((effect, i) => <EffectBadge key={i} label={effect.label} amount={effect.amount} />)
+        )}
 
         {/* Weight change badges */}
         {outcome.consequences
