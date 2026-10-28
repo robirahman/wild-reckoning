@@ -8,7 +8,7 @@ export const HUMAN_ENCOUNTER_EVENTS: GameEvent[] = [
     id: 'human-road-crossing',
     type: 'active',
     category: 'environmental',
-    narrativeText: 'A strip of hard black ground stretches across your path, smelling of tar and exhaust. Machines roar past, their lights sweeping the darkness. The far side has trees and browse, but the open strip between is lethal.',
+    narrativeText: 'A strip of hard black ground stretches across your path. It smells of tar and burning. Machines roar past, lights sweeping the dark. Trees and browse on the far side, and nothing to hide behind in between.',
     statEffects: [
       { stat: StatId.TRA, amount: 8, label: '+TRA' },
       { stat: StatId.ADV, amount: 6, label: '+ADV' },
@@ -17,8 +17,8 @@ export const HUMAN_ENCOUNTER_EVENTS: GameEvent[] = [
       {
         id: 'cross-road',
         label: 'Cross now',
-        description: 'Sprint across during a gap in traffic.',
-        narrativeResult: 'You sprint across the hard black surface. A machine passes seconds after you reach the far side, its blaring noise filling the air.',
+        description: 'Run when the roaring stops.',
+        narrativeResult: 'You sprint across the hard black surface. A machine roars past just behind you as you reach the far side.',
         statEffects: [
           { stat: StatId.TRA, amount: -5, label: '-TRA' },
         ],
@@ -34,8 +34,8 @@ export const HUMAN_ENCOUNTER_EVENTS: GameEvent[] = [
       {
         id: 'wait-road',
         label: 'Wait for a safer moment',
-        description: 'Find a culvert or wait for darkness.',
-        narrativeResult: 'You follow the roadside ditch until you find a drainage culvert. The dark tunnel smells of rust and stale water, but it passes beneath the road safely.',
+        description: 'Look for a way under, or wait for dark.',
+        narrativeResult: 'You follow the ditch until you find a hole running under the hard ground. It smells of rust and stale water. You come out on the far side.',
         statEffects: [
           { stat: StatId.WIS, amount: 3, label: '+WIS' },
           { stat: StatId.TRA, amount: -3, label: '-TRA' },
@@ -58,7 +58,7 @@ export const HUMAN_ENCOUNTER_EVENTS: GameEvent[] = [
     id: 'human-road-crossing-winter',
     type: 'active',
     category: 'environmental',
-    narrativeText: 'A strip of black ground cuts through the snow ahead, scraped bare and crusted white with salt. Machines hiss past through the slush, throwing up grit and brine. The far side has cover, but the open strip between is lethal.',
+    narrativeText: 'A strip of black ground cuts through the snow, scraped bare and crusted white. It smells of salt, and the salt pulls at you. Machines hiss past through the slush, throwing grit and brine. Cover on the far side, and nothing to hide behind in between.',
     statEffects: [
       { stat: StatId.TRA, amount: 8, label: '+TRA' },
       { stat: StatId.ADV, amount: 6, label: '+ADV' },
@@ -67,8 +67,8 @@ export const HUMAN_ENCOUNTER_EVENTS: GameEvent[] = [
       {
         id: 'cross-road',
         label: 'Cross now',
-        description: 'Sprint across during a gap in traffic.',
-        narrativeResult: 'Your feet skid on the salted ice halfway across, then catch. A machine passes seconds after you reach the snowbank on the far side.',
+        description: 'Run when the roaring stops.',
+        narrativeResult: 'Your hooves skid on the ice halfway across, then catch. A machine roars past just behind you as you reach the snowbank.',
         statEffects: [
           { stat: StatId.TRA, amount: -5, label: '-TRA' },
         ],
@@ -77,15 +77,15 @@ export const HUMAN_ENCOUNTER_EVENTS: GameEvent[] = [
         style: 'danger',
         deathChance: {
           probability: 0.05,
-          cause: 'You lost your footing on the icy road. The vehicle could not stop in time.',
+          cause: 'Your hooves went out from under you on the ice. The machine was on you before you could rise.',
           statModifiers: [{ stat: StatId.WIS, factor: -0.001 }],
         },
       },
       {
         id: 'wait-road',
         label: 'Wait for a safer moment',
-        description: 'Find a culvert or wait for darkness.',
-        narrativeResult: 'You wade the drifted ditch until you find a culvert half-choked with snow. You squeeze through the frozen dark and come out on the far side.',
+        description: 'Look for a way under, or wait for dark.',
+        narrativeResult: 'You wade the drifted ditch until you find a hole running under the hard ground, half-choked with snow. You squeeze through the frozen dark and come out on the far side.',
         statEffects: [
           { stat: StatId.WIS, amount: 3, label: '+WIS' },
           { stat: StatId.TRA, amount: -3, label: '-TRA' },
@@ -182,7 +182,7 @@ export const HUMAN_ENCOUNTER_EVENTS: GameEvent[] = [
     id: 'human-researcher-return-tagged',
     type: 'active',
     category: 'environmental',
-    narrativeText: 'The soft-voiced human again, the same sharp, chemical smell on its hands. The band on your leg itches, as if it remembers the last time.',
+    narrativeText: 'The soft-voiced human again, with the same sharp smell on its hands. The tight thing around your leg itches.',
     statEffects: [
       { stat: StatId.ADV, amount: 3, label: '+ADV' },
     ],
@@ -190,10 +190,10 @@ export const HUMAN_ENCOUNTER_EVENTS: GameEvent[] = [
       {
         id: 'allow-checkup',
         label: 'Let it come close',
-        description: 'Last time you woke up feeling better.',
-        narrativeResult: 'The sting, the heavy sleep. You wake with the band still in place and the humans gone. Your joints ache less than they did.',
+        description: 'Last time, you woke and the ache was less.',
+        narrativeResult: 'The sting, the heavy sleep. You wake with the tight thing still on your leg and the humans gone. Your joints ache less than they did.',
         statEffects: [
-          { stat: StatId.HEA, amount: 4, duration: 6, label: '+HEA (checkup)' },
+          { stat: StatId.HEA, amount: 4, duration: 6, label: '+HEA' },
           { stat: StatId.WIS, amount: 2, label: '+WIS' },
         ],
         consequences: [],
@@ -204,7 +204,7 @@ export const HUMAN_ENCOUNTER_EVENTS: GameEvent[] = [
         id: 'slip-away',
         label: 'Slip away',
         description: 'Once was enough.',
-        narrativeResult: 'You drift back into the trees before the human can raise the tube. It does not follow. It seems to know where to find you.',
+        narrativeResult: 'You drift back into the trees before the human can raise the long tube. It does not follow.',
         statEffects: [],
         consequences: [],
         revocable: false,
@@ -225,7 +225,7 @@ export const HUMAN_ENCOUNTER_EVENTS: GameEvent[] = [
     id: 'human-researcher-return-fled',
     type: 'active',
     category: 'environmental',
-    narrativeText: 'That scent again: the human who came with the long tube and the stinging dart. Your muscles bunch before you have decided anything.',
+    narrativeText: 'That scent again: the human with the long tube, and the sting that came out of it. Your muscles bunch to run.',
     statEffects: [
       { stat: StatId.TRA, amount: 4, label: '+TRA' },
     ],
@@ -246,7 +246,7 @@ export const HUMAN_ENCOUNTER_EVENTS: GameEvent[] = [
         id: 'hold-still',
         label: 'Hold your ground',
         description: 'It did not chase you before.',
-        narrativeResult: 'A sting in your flank, then drowsiness. You wake with a strange band around your leg and a sore spot where the dart struck. The humans are gone.',
+        narrativeResult: 'A sting in your flank, then heaviness. You wake with something tight around your leg and a sore spot where the sting went in. The humans are gone.',
         statEffects: [
           { stat: StatId.HEA, amount: 5, duration: 6, label: '+HEA (medical treatment)' },
           { stat: StatId.NOV, amount: 5, label: '+NOV' },

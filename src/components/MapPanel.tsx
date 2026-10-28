@@ -23,7 +23,7 @@ function ConfinementPanel() {
       <div className={styles.currentLocation}>
         <p className={styles.sensoryText}>{describeConfinement(habitat, turn)}</p>
       </div>
-      <p className={styles.tiredText}>There is no way out of here.</p>
+      <p className={styles.tiredText}>Whichever way you turn, something blocks you.</p>
     </div>
   );
 }

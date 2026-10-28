@@ -2,13 +2,15 @@
   margin-bottom: var(--space-lg);
 }
 
-.pressingNeed {
-  font-family: var(--font-ui);
-  font-size: 0.8rem;
+/* The animal's most urgent sensation, read like the rest of the narrative */
+.pressingSensation {
+  font-family: var(--font-narrative);
+  font-style: italic;
+  font-size: 0.95rem;
+  line-height: 1.5;
   margin: 0 0 var(--space-sm);
-  padding: 6px 10px;
+  padding: 4px 10px;
   border-left: 3px solid var(--color-danger);
-  background: var(--color-panel-bg);
 }
 
 .eventProgress {

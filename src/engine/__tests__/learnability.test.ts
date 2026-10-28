@@ -2,7 +2,7 @@ import { describe, it, expect, beforeAll } from 'vitest';
 import { installLocalStorage } from '../../test-utils/localStorage';
 import { createGameStore } from '../../store/gameStore';
 import { getSpeciesBundle } from '../../data/species';
-import { mostPressingNeed } from '../needs';
+import { mostPressingSensation } from '../needs';
 import { resolveTurn } from '../TurnProcessor';
 import { StatId, STAT_DESCRIPTIONS, STAT_POLARITY } from '../../types/stats';
 import type { ResolvedEvent } from '../../types/events';
@@ -16,21 +16,20 @@ function startWolf() {
   return store;
 }
 
-describe('most pressing need', () => {
-  it('surfaces the most urgent instinct with concrete advice', () => {
-    const s = startWolf().getState();
-    const need = mostPressingNeed(s.animal, s.speciesBundle.config, [
-      { id: 'cold', label: 'Cold', description: 'Shivering.', priority: 'medium', source: 'weather' },
-      { id: 'starving', label: 'Starving', description: 'Ribs.', suggestedBehavior: 'foraging', suggestedDirection: 'increase', priority: 'high', source: 'physiology' },
+describe('most pressing sensation', () => {
+  it('is what the animal feels, never advice about the game', () => {
+    const sensation = mostPressingSensation([
+      { id: 'cold', label: 'Cold', description: 'Constant low shivering.', priority: 'medium', source: 'weather' },
+      { id: 'starving', label: 'Starving', description: 'Your ribs press against your hide.', suggestedBehavior: 'foraging', suggestedDirection: 'increase', priority: 'high', source: 'physiology' },
     ]);
-    expect(need).toEqual({ label: 'Starving', advice: 'Raise Foraging in your behavioral settings.' });
+    expect(sensation).toBe('Your ribs press against your hide.');
   });
 
-  it('reads the basics for species without instincts, and stays quiet when all is well', () => {
-    const s = startWolf().getState();
-    expect(mostPressingNeed(s.animal, s.speciesBundle.config, [])).toBeNull();
-    const starving = { ...s.animal, weight: s.speciesBundle.config.weight.starvationDebuff - 1 };
-    expect(mostPressingNeed(starving, s.speciesBundle.config, [])?.label).toBe('Starving');
+  it('stays quiet when nothing presses', () => {
+    expect(mostPressingSensation([])).toBeNull();
+    expect(mostPressingSensation([
+      { id: 'sated', label: 'Well Fed', description: 'Your body feels solid.', priority: 'low', source: 'physiology' },
+    ])).toBeNull();
   });
 });
 

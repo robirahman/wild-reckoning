@@ -20,12 +20,12 @@ export interface AmbientTextEntry {
 
 export const AMBIENT_TEXTS: AmbientTextEntry[] = [
   // ── Captivity ──
-  { id: 'captive-1', text: 'The lights hum overhead. It is always the same hour in here.', settings: ['captive'] },
-  { id: 'captive-2', text: 'Fans roar against the heat of so many bodies.', settings: ['captive'] },
-  { id: 'captive-3', text: 'Ammonia hangs in the air, sharp enough to water your eyes.', settings: ['captive'] },
-  { id: 'captive-4', text: 'A feeder line rattles somewhere and every head turns toward it.', settings: ['captive'] },
-  { id: 'captive-chicken-1', text: 'Thousands of voices all around you, and none of them going anywhere.', settings: ['captive'], speciesIds: ['chicken'] },
-  { id: 'captive-pig-1', text: 'Your snout searches for earth and finds only concrete.', settings: ['captive'], speciesIds: ['pig'] },
+  { id: 'captive-1', text: 'The light hums overhead and never changes.', settings: ['captive'] },
+  { id: 'captive-2', text: 'Something overhead roars without stopping. The air it pushes is hot with bodies.', settings: ['captive'] },
+  { id: 'captive-3', text: 'A sharp smell hangs in the air, strong enough to water your eyes.', settings: ['captive'] },
+  { id: 'captive-4', text: 'A rattle overhead, and every head turns toward the food.', settings: ['captive'] },
+  { id: 'captive-chicken-1', text: 'Peeping on every side. The noise never stops.', settings: ['captive'], speciesIds: ['chicken'] },
+  { id: 'captive-pig-1', text: 'Your snout pushes at the ground and finds nothing to dig. Hard and cold everywhere.', settings: ['captive'], speciesIds: ['pig'] },
 
   // ── Spring ──
   { id: 'spring-1', text: 'Swelling buds on every branch. Wet bark smell, strong.', seasons: ['spring'] },

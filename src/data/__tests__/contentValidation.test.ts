@@ -3,6 +3,9 @@ import { getAllSpeciesBundles } from '../species';
 import { STORYLINES } from '../storylines';
 import { getRegionDefinition } from '../regions';
 import { TEMPLATE_VARIABLES, resolveTemplate, type GenerationContext } from '../../engine/EventGenerator';
+import { AMBIENT_TEXTS } from '../ambientText';
+import { describeConfinement } from '../../engine/captivity';
+import { timeSkipEvent } from '../../engine/FastForward';
 import { createRng } from '../../engine/RandomUtils';
 import { createInitialTime } from '../../engine/TimeSystem';
 import { createInitialAnimal } from '../../store/slices/helpers';
@@ -106,6 +109,41 @@ describe('template resolver', () => {
     const rendered = resolveTemplate('Fresh signs of another {{species}} appear.', contextFor(deer, 'female', false));
     expect(rendered).toBe('Fresh signs of another white-tailed deer appear.');
     warn.mockRestore();
+  });
+});
+
+describe('perspective', () => {
+  // The game speaks from inside the animal, which knows nothing about the
+  // game or its controls (see NARRATIVE_REWRITE.md)
+  const TALKS_TO_PLAYER = /\b(behaviou?ral settings?|settings|buttons?|click on|fast-forward|stat bars?|game over|the player)\b|\b(raise|lower|increase|decrease)\s+(your\s+)?(foraging|caution|exploration|belligerence|sociability|mating)\b/i;
+
+  it('never talks to the player about the game', () => {
+    const texts = [
+      ...sources.flatMap((src) => src.texts.map((text) => ({ where: src.where, text }))),
+      ...AMBIENT_TEXTS.map((a) => ({ where: `ambient ${a.id}`, text: a.text })),
+      ...['industrial shed', 'concrete pen', 'elsewhere'].flatMap((habitat) =>
+        [0, 1, 2].map((turn) => ({ where: `confinement ${habitat}`, text: describeConfinement(habitat, turn) }))),
+    ];
+    expect(texts.filter(({ text }) => TALKS_TO_PLAYER.test(text)).map(({ where, text }) => `${where}: ${text}`)).toEqual([]);
+  });
+
+  it('describes a fast-forward skip as the animal lived it', () => {
+    const deer = getAllSpeciesBundles().find((b) => b.config.id === 'white-tailed-deer')!;
+    const card = timeSkipEvent({
+      turnsAdvanced: 12,
+      turnsRequested: 12,
+      from: { month: 'June', year: 1, season: 'summer' },
+      to: { month: 'September', year: 1, season: 'autumn' },
+      startWeight: 84,
+      weightChange: 30,
+      temperatureChange: -12,
+      developments: ['The restless pull toward males has gone quiet. Something has changed inside you.'],
+      stoppedFor: 'a birth',
+    }, deer.config, 13).resolvedNarrative;
+    expect(card).toBe('The days run together. It is colder now. Your body is heavier and fuller than it was. '
+      + 'The restless pull toward males has gone quiet. Something has changed inside you.');
+    // No calendar, units, concepts the animal can't have, or talk of the game itself
+    expect(card).not.toMatch(/\d|June|September|weeks?\b|lbs?\b|pregnan|fast-forward|paused/i);
   });
 });
 

@@ -454,9 +454,12 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
     let currentNPCBehaviorStates = { ...state.npcBehaviorStates };
     let currentNPCs = [...state.npcs];
 
-    // What happened along the way, for the fast-forward summary
+    // What happened along the way, for the fast-forward summary. Developments
+    // are what the animal felt, in its own terms (no dates, numbers, or concepts
+    // it can't have, like pregnancy or migration as such).
     const startTime = currentTime;
     const startWeight = currentAnimal.weight;
+    const startRegion = currentAnimal.region;
     const developments: string[] = [];
     let stoppedFor: string | undefined;
     let turnsAdvanced = 0;
@@ -464,9 +467,6 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
     for (let i = 0; i < iterations; i++) {
       const newTime = advanceTime(currentTime, turnUnit);
       const heaBefore = computeEffectiveValue(currentAnimal.stats[StatId.HEA]);
-      if (newTime.season !== currentTime.season) {
-        developments.push(`${currentTime.season[0].toUpperCase()}${currentTime.season.slice(1)} turned to ${newTime.season}.`);
-      }
       let tickedStats = tickModifiers(currentAnimal.stats);
       
       // Advance weather
@@ -794,7 +794,7 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
         Math.max(config.weight.minFloor, currentAnimal.weight + seasonalWeightChange),
       );
       if (currentAnimal.weight >= config.weight.starvationDebuff && newWeight < config.weight.starvationDebuff) {
-        developments.push('Your body began to starve.');
+        developments.push('Hunger sits in you all the time now, and you are weaker for it.');
         stoppedFor ??= 'starvation';
       }
 
@@ -886,10 +886,11 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
           const born = currentReproduction.offspring.length - offspringBefore;
           const tv = config.templateVars;
           if (born > 0) {
-            developments.push(born === 1 ? `You gave birth to a ${tv.youngNoun}.` : `You gave birth to ${born} ${tv.youngNounPlural}.`);
+            developments.push(born === 1 ? `Your ${tv.youngNoun} has come.` : `Your ${tv.youngNounPlural} have come.`);
             stoppedFor ??= 'a birth';
           } else if (!wasPregnant && currentReproduction.pregnancy) {
-            developments.push('You became pregnant.');
+            // Conception isn't felt as such; the end of estrus is
+            developments.push('The restless pull toward males has gone quiet. Something has changed inside you.');
           }
         }
       }
@@ -922,7 +923,7 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
           const estimatedSurvivors = Math.round(eggCount * survivalRate);
 
           newFlags.add(reproConfig.spawningCompleteFlag as GameFlag);
-          developments.push('You spawned.');
+          developments.push(currentAnimal.sex === 'female' ? 'Your eggs have left your body.' : 'The urge that drove you is spent.');
           stoppedFor ??= 'spawning';
           currentReproduction = {
             ...currentReproduction,
@@ -939,12 +940,12 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
         if (newTime.season === mig.migrationSeason && newFlags.has(mig.migrationFlag as GameFlag) && !newFlags.has(mig.migratedFlag as GameFlag)) {
           newFlags.add(mig.migratedFlag as GameFlag);
           newFlags.delete(mig.migrationFlag as GameFlag);
-          developments.push('You completed your migration.');
+          developments.push('The pull that drove you onward has eased. You are where your body wanted to be.');
         }
         if (newTime.season === mig.returnSeason && newFlags.has(mig.migratedFlag as GameFlag)) {
           newFlags.delete(mig.migratedFlag as GameFlag);
           newFlags.add(mig.returnFlag as GameFlag);
-          developments.push('You made the return migration.');
+          developments.push('The pull has brought you back to ground you know.');
         } else if (newFlags.has(mig.returnFlag as GameFlag)) {
           newFlags.delete(mig.returnFlag as GameFlag);
         }
@@ -979,19 +980,28 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
       turnsAdvanced = i + 1;
 
       if (heaBefore >= 20 && computeEffectiveValue(tickedStats[StatId.HEA]) < 20) {
-        developments.push('Your health is failing.');
+        developments.push('Something inside you is going wrong, and you are weaker each day.');
         stoppedFor ??= 'failing health';
       }
       // Hand control back to the player as soon as something important happens
       if (stoppedFor) break;
     }
 
+    // How much warmer or colder it is where the animal ended up (no weather indoors)
+    const startClimate = captive ? undefined : getRegionDefinition(startRegion)?.climate;
+    const endClimate = captive ? undefined : getRegionDefinition(currentAnimal.region)?.climate;
+    const temperatureChange = startClimate && endClimate
+      ? endClimate.temperatureByMonth[currentTime.monthIndex] - startClimate.temperatureByMonth[startTime.monthIndex]
+      : undefined;
+
     const lastTimeSkip = iterations > 1 ? {
       turnsAdvanced,
       turnsRequested: iterations,
       from: { month: startTime.month, year: startTime.year, season: startTime.season },
       to: { month: currentTime.month, year: currentTime.year, season: currentTime.season },
+      startWeight,
       weightChange: currentAnimal.weight - startWeight,
+      temperatureChange,
       developments,
       stoppedFor,
     } : null;

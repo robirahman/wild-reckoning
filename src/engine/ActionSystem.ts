@@ -152,7 +152,7 @@ export const VOLUNTARY_ACTIONS: VoluntaryAction[] = [
   {
     id: 'rub-scrape',
     label: 'Make Rubs and Scrapes',
-    description: 'Thrash saplings with your antlers and paw scrapes under low branches, leaving your scent for does to find.',
+    description: 'Thrash saplings with your antlers and paw the ground bare under low branches.',
     isAvailable: (ctx) => {
       if (!ctx.config.actions?.rutSignposts || ctx.sex !== 'male' || ctx.captive) return false;
       const reproduction = ctx.config.reproduction;
@@ -162,11 +162,11 @@ export const VOLUNTARY_ACTIONS: VoluntaryAction[] = [
     execute: (ctx) => {
       // Does in estrus visit scrapes, so a buck's signposts can bring a mate to him
       const visited = ctx.rng.chance(0.35);
-      const marking = 'You shred the bark of a sapling with your antlers, paw a scrape beneath a low branch, and mark it.';
+      const marking = 'You shred the bark of a sapling with your antlers. Beneath a low branch you paw the ground bare and leave your scent on it.';
       return {
         narrative: visited
-          ? `${marking} By the next dawn a doe has stood over it; her scent hangs over yours.`
-          : `${marking} The woods carry your scent outward. No doe has answered yet.`,
+          ? `${marking} By the next dawn a doe has stood over the bare patch, and her scent lies over yours.`
+          : `${marking} Your scent hangs there alone.`,
         statEffects: [{ stat: StatId.ADV, amount: -2, label: '-ADV' }],
         consequences: [
           { type: 'restore_energy', amount: -8 },

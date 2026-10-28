@@ -16,22 +16,26 @@ export function fitsSetting(settings: readonly Setting[] | undefined, config: Pi
   return (settings ?? ['wild']).includes(settingOf(config));
 }
 
-/** What a confined animal perceives, keyed by its species' habitat */
+/**
+ * What a confined animal perceives, keyed by its species' habitat. Written from
+ * inside the animal: no fans, feeder lines or concrete, which it has no idea
+ * of, only the drone, the rattle, the hard cold ground.
+ */
 const CONFINEMENT_DESCRIPTIONS: Record<string, string[]> = {
   'industrial shed': [
-    'Fans drone overhead. The light never changes, never dims toward dusk. Bodies press against you on every side.',
-    'Ammonia stings your eyes. The litter underfoot is damp and packed hard. Somewhere a feeder line rattles and thousands of beaks turn toward it.',
-    'Warm bodies, noise, and the smell of droppings. There is nowhere to step that is not beside another bird.',
+    'A drone overhead that never stops. The light never changes and never dims. Bodies press against you on every side.',
+    'A sharp smell stings your eyes. The ground underfoot is damp and packed hard. Something overhead rattles, and every beak turns toward it.',
+    'Warm bodies, peeping, the smell of droppings. Nowhere to step without touching another body.',
   ],
   'concrete pen': [
-    'Concrete under your hooves, slatted where the waste falls through. Steel bars at your shoulder. The air is thick and sour.',
-    'A feeder clanks and the others shove toward it. There is no mud to root in, no corner without a neighbor.',
-    'Fans roar. Through the bars you can see the next pen, and the next, and the next.',
+    'Hard cold ground under your hooves, with gaps where the waste falls through. Cold metal at your shoulder. The air is thick and sour.',
+    'Something clanks, and the others shove toward the food smell. No mud to root in. No corner without another body in it.',
+    'Through the bars, the smell of more pigs, and more beyond them. A roar overhead pushes hot air down on all of you.',
   ],
 };
 
 const FALLBACK_CONFINEMENT = [
-  'Walls, bars, and the smell of too many animals in too little space.',
+  'Walls and bars, and the smell of many bodies close together.',
 ];
 
 /** A stable description for this turn (no game RNG, so re-renders don't change it) */

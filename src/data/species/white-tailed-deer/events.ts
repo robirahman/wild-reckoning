@@ -1711,7 +1711,7 @@ const deerEvents: GameEvent[] = [
     id: 'deer-home-range-known',
     type: 'passive',
     category: 'milestone',
-    narrativeText: 'You know this ground now: which hollow holds the wind shadow, where the cedar grows thick enough to vanish into, which field edge smells wrong after dark. It is not a territory to defend. It is a map you carry in your body.',
+    narrativeText: 'You know this ground now: which hollow holds the wind shadow, where the cedar grows thick enough to vanish into, which field edge smells wrong after dark. Your feet find the trails before your nose has to.',
     statEffects: [
       { stat: StatId.WIS, amount: 3, label: '+WIS' },
       { stat: StatId.NOV, amount: -6, label: '-NOV' },
@@ -1754,7 +1754,7 @@ const deerEvents: GameEvent[] = [
       {
         id: 'lead-away',
         label: 'Lead her away',
-        description: 'Walk out where she can see you, so she follows you instead of the scent.',
+        description: 'Step out into the open, away from the thicket.',
         narrativeResult: 'You step into the open and graze your way along the field edge. She drifts after you. The thicket behind you stays quiet.',
         statEffects: [
           { stat: StatId.WIS, amount: 2, label: '+WIS' },

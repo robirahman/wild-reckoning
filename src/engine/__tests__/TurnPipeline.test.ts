@@ -85,9 +85,10 @@ describe('turn advancement', () => {
     const before = store.getState().time.turn;
     beginTurn(store);
     const card = store.getState().currentEvents.find((e) => e.definition.tags.includes('time-skip'));
-    expect(card?.resolvedNarrative).toMatch(/weeks pass/);
+    expect(card?.resolvedNarrative).toMatch(/^The days run together\./);
     const advanced = store.getState().time.turn - before;
-    if (card?.resolvedNarrative.includes('paused early')) {
+    // Something important switches fast-forward off and ends the skip early
+    if (!store.getState().fastForward) {
       expect(advanced).toBeLessThan(FAST_FORWARD_TURNS);
     } else {
       expect(advanced).toBe(FAST_FORWARD_TURNS);
@@ -109,8 +110,9 @@ describe('turn advancement', () => {
     expect(store.getState().time.turn - before).toBe(3);
     expect(store.getState().fastForward).toBe(false);
     const card = store.getState().currentEvents.find((e) => e.definition.tags.includes('time-skip'));
-    expect(card?.resolvedNarrative).toMatch(/gave birth to 2 fawns/);
-    expect(card?.resolvedNarrative).toMatch(/paused early because of a birth/);
+    expect(card?.resolvedNarrative).toMatch(/Your fawns have come\./);
+    // The animal knows nothing of the game skipping ahead
+    expect(card?.resolvedNarrative).not.toMatch(/fast-forward|paused/i);
   });
 });
 

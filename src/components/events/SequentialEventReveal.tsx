@@ -4,7 +4,7 @@ import { EventCard } from './EventCard';
 import { TurnControls } from '../TurnControls';
 import { ActionPanel } from '../ActionPanel';
 import { eventSignature, nextRevealCount, type RevealState } from './revealProgress';
-import { mostPressingNeed } from '../../engine/needs';
+import { mostPressingSensation } from '../../engine/needs';
 import styles from '../../styles/events.module.css';
 
 /**
@@ -18,10 +18,8 @@ import styles from '../../styles/events.module.css';
 export function SequentialEventReveal() {
   const currentEvents = useGameStore((s) => s.currentEvents);
   const turn = useGameStore((s) => s.time.turn);
-  const animal = useGameStore((s) => s.animal);
-  const config = useGameStore((s) => s.speciesBundle.config);
   const nudges = useGameStore((s) => s.instinctNudges);
-  const need = mostPressingNeed(animal, config, nudges);
+  const sensation = mostPressingSensation(nudges);
   const makeChoice = useGameStore((s) => s.makeChoice);
   const clearChoice = useGameStore((s) => s.clearChoice);
 
@@ -67,11 +65,7 @@ export function SequentialEventReveal() {
 
   return (
     <div>
-      {need && (
-        <p className={styles.pressingNeed}>
-          <strong>Most pressing: {need.label}.</strong> {need.advice}
-        </p>
-      )}
+      {sensation && <p className={styles.pressingSensation}>{sensation}</p>}
       <div className={styles.eventProgress} aria-live="polite">
         {allRevealed
           ? `All ${currentEvents.length} events seen`

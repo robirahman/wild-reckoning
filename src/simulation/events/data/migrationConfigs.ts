@@ -180,7 +180,7 @@ export const TRAVEL_HAZARDS_CONFIG: MigrationTriggerConfig = {
       consequences: [],
       narrativeText: isNight
         ? 'The road appears suddenly. You smell asphalt, rubber, exhaust. Headlights sweep through the trees at irregular intervals. The other side is twenty meters away.'
-        : 'You smell the cedars from here, past the road. Cars, trucks. The ground shakes when the big ones pass. The gap between them is short.',
+        : 'You smell the cedars from here, past the road. Machines, small and huge. The ground shakes when the big ones pass. The gaps between them are short.',
       emotionalTone: 'fear',
       eventType: 'travel-hazard-road',
       actionNarrative: isNight

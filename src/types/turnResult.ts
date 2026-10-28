@@ -43,7 +43,11 @@ export interface TimeSkipSummary {
   turnsRequested: number;
   from: { month: string; year: number; season: string };
   to: { month: string; year: number; season: string };
+  startWeight: number;
   weightChange: number;
+  /** Degrees warmer (or colder, if negative) where the animal ended up; unknown indoors */
+  temperatureChange?: number;
+  /** What the animal felt happen along the way, in its own terms */
   developments: string[];
   /** Set when the skip stopped early because something important happened */
   stoppedFor?: string;

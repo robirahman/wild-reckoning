@@ -7,7 +7,7 @@ export const CHICKEN_EVENTS: GameEvent[] = [
     id: 'chicken-hatchery',
     type: 'active',
     category: 'environmental',
-    narrativeText: 'Light floods the incubator tray. You are wet, then dry, then tumbling down a chute onto a moving belt among thousands of other peeping chicks. Hands sort you quickly, turning you over, never really looking at you.',
+    narrativeText: 'Light, sudden and everywhere. You are wet, then dry, then sliding down onto ground that moves under you, with peeping bodies on every side. Huge warm hands grab you, turn you over, and let go.',
     statEffects: [
       { stat: StatId.NOV, amount: 10, label: '+NOV' },
     ],
