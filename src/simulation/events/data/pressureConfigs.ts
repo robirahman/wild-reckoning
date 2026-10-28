@@ -250,7 +250,7 @@ export const HYPOTHERMIA_PRESSURE_CONFIG: PressureConfig = {
         description: hasShelter ? 'Dense trees ahead. The wind might drop there.' : 'The ground here is open. Little cover.',
         style: hasShelter ? 'default' : 'danger',
         narrativeResult: hasShelter
-          ? 'You push into the trees until the wind drops. Between two fallen trunks, under hemlock boughs, the air is still. You fold your legs under you and press your belly to the ground. The shivering eases.'
+          ? 'You push into the trees until the wind drops. Between two fallen trunks, under spruce boughs, the air is still. You fold your legs under you and press your belly to the ground. The shivering eases.'
           : 'You stumble across the open ground, searching for a depression, a rock, anything. The wind strips heat from you with every step.',
         modifyOutcome(base, innerCtx) {
           const exposure = resolveExposure(innerCtx, {
@@ -394,7 +394,7 @@ export const IMMUNE_PRESSURE_CONFIG: PressureConfig = {
         label: 'Find a quiet place and rest',
         description: 'Lie still. Let the fever do its work.',
         style: 'default',
-        narrativeResult: 'You find a depression beneath a hemlock and lie still. The smell of resin fills your nose. You do not eat. Your body is hot and working hard at something you cannot see.',
+        narrativeResult: 'You find a depression beneath a balsam fir and lie still. The smell of resin fills your nose. You do not eat. Your body is hot and working hard at something you cannot see.',
         modifyOutcome(base) {
           return {
             ...base,

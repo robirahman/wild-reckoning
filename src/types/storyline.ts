@@ -1,3 +1,4 @@
+import type { Setting } from './speciesConfig';
 import type { EventCondition, StatEffect, Consequence, EventChoice } from './events';
 import type { GameFlag } from './flags';
 
@@ -27,6 +28,8 @@ export interface StorylineDefinition {
   name: string;
   /** Species this storyline applies to (empty = all species) */
   speciesIds: string[];
+  /** Settings it can happen in (default: wild only) */
+  settings?: Setting[];
   /** Conditions to start this storyline */
   startConditions: EventCondition[];
   /** Probability of starting per eligible turn */

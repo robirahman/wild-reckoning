@@ -446,7 +446,7 @@ export const allEvents: GameEvent[] = [
     ],
     conditions: [
       { type: 'species', speciesIds: ['white-tailed-deer'] },
-      { type: 'season', seasons: ['autumn'] },
+      { type: 'month', months: ['October', 'November'] },
       { type: 'sex', sex: 'female' },
       { type: 'age_range', min: 16 },
       { type: 'no_flag', flag: 'rut-seen' },
@@ -707,7 +707,7 @@ export const allEvents: GameEvent[] = [
     ],
     conditions: [
       { type: 'species', speciesIds: ['white-tailed-deer'] },
-      { type: 'season', seasons: ['autumn'] },
+      { type: 'month', months: ['October', 'November'] },
       { type: 'sex', sex: 'male' },
       { type: 'age_range', min: 16 },
       { type: 'no_flag', flag: 'rut-seen' },
@@ -759,7 +759,7 @@ export const allEvents: GameEvent[] = [
     ],
     conditions: [
       { type: 'species', speciesIds: ['white-tailed-deer'] },
-      { type: 'season', seasons: ['autumn'] },
+      { type: 'month', months: ['November', 'December'] },
       { type: 'sex', sex: 'female' },
       { type: 'age_range', min: 18 },
       { type: 'has_flag', flag: 'rut-seen' },
@@ -815,7 +815,7 @@ export const allEvents: GameEvent[] = [
     ],
     conditions: [
       { type: 'species', speciesIds: ['white-tailed-deer'] },
-      { type: 'season', seasons: ['autumn'] },
+      { type: 'month', months: ['November', 'December'] },
       { type: 'sex', sex: 'male' },
       { type: 'age_range', min: 18 },
       { type: 'no_flag', flag: 'mated-this-season' },
@@ -1025,6 +1025,7 @@ export const allEvents: GameEvent[] = [
     ],
     conditions: [
       { type: 'has_flag', flag: 'returned-from-migration' },
+      { type: 'season', seasons: ['spring'] },
     ],
     weight: 25,
     cooldown: 20,
@@ -1082,6 +1083,8 @@ export const allEvents: GameEvent[] = [
     conditions: [
       { type: 'age_range', min: 12, max: 24 },
       { type: 'sex', sex: 'male' },
+      // Antlers grow in velvet from spring through summer
+      { type: 'season', seasons: ['spring', 'summer'] },
     ],
     weight: 15,
     cooldown: 12,
@@ -1170,7 +1173,7 @@ export const allEvents: GameEvent[] = [
     type: 'passive',
     category: 'foraging',
     simulated: true,
-    narrativeText: "Your sprint carried you deeper into the forest than you have ever been, past old hemlocks, past mossy boulders, into a hollow. A spring bubbles up between two rocks, clear and cold. Wild mushrooms and fiddlehead ferns grow thick around it. The smell of cold water and green growth fills your nostrils.",
+    narrativeText: "Your sprint carried you deeper into the forest than you have ever been, past old white pines, past mossy boulders, into a hollow. A spring bubbles up between two rocks, clear and cold. Wild mushrooms and fiddlehead ferns grow thick around it. The smell of cold water and green growth fills your nostrils.",
     statEffects: [
       { stat: StatId.HOM, amount: -8, label: '-HOM' },
       { stat: StatId.ADV, amount: -6, label: '-ADV' },

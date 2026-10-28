@@ -5,9 +5,11 @@ import { DeathScreen } from './components/DeathScreen';
 import { EvolutionSelection } from './components/EvolutionSelection';
 import { VisceralEffects } from './components/VisceralEffects';
 import { WebAPIDoc } from './components/WebAPIDoc';
+import { ErrorBoundary } from './components/ErrorBoundary';
 
 function App() {
   const phase = useGameStore((s) => s.phase);
+  const returnToMenu = useGameStore((s) => s.returnToMenu);
   const isAPIDoc = window.location.pathname.endsWith('/api') || window.location.pathname.endsWith('/api/');
 
   if (isAPIDoc) {
@@ -15,7 +17,7 @@ function App() {
   }
 
   return (
-    <>
+    <ErrorBoundary onReset={returnToMenu}>
       <VisceralEffects />
       {(() => {
         switch (phase) {
@@ -34,7 +36,7 @@ function App() {
             );
         }
       })()}
-    </>
+    </ErrorBoundary>
   );
 }
 

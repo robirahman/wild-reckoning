@@ -1,8 +1,11 @@
 /** Phase 6: Territory/Home Range engine */
 
 import type { TerritoryState } from '../types/territory';
+import { INITIAL_TERRITORY } from '../types/territory';
 import type { Rng } from './RandomUtils';
 import {
+  TERRITORY_INITIAL_SIZE,
+  TERRITORY_INITIAL_QUALITY,
   TERRITORY_UNMARKED_THRESHOLD,
   TERRITORY_QUALITY_DECAY,
   TERRITORY_INTRUDER_CHANCE,
@@ -12,15 +15,25 @@ import {
   TERRITORY_INTRUDER_LEAVE_CHANCE,
 } from './constants';
 
-/** Territorial species IDs — others ignore territory mechanics */
+/**
+ * Territorial species IDs — others ignore territory mechanics. White-tailed
+ * deer aren't territorial: they keep overlapping home ranges, and does only
+ * defend the spot where their fawns are hidden.
+ */
 export const TERRITORIAL_SPECIES = new Set([
-  'white-tailed-deer',
   'gray-wolf',
   'african-elephant',
   'polar-bear',
   'common-octopus',
   'poison-dart-frog',
 ]);
+
+/** Territory state consistent with the animal's flags (e.g. a scenario or old save that starts established) */
+export function initialTerritoryFor(flags: ReadonlySet<string>): TerritoryState {
+  return flags.has('territory-established')
+    ? { ...INITIAL_TERRITORY, established: true, size: TERRITORY_INITIAL_SIZE, quality: TERRITORY_INITIAL_QUALITY }
+    : { ...INITIAL_TERRITORY };
+}
 
 export function tickTerritory(
   territory: TerritoryState,

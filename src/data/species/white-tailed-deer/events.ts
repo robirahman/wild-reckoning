@@ -565,7 +565,7 @@ const deerEvents: GameEvent[] = [
     ],
     conditions: [
       { type: 'sex', sex: 'male' },
-      { type: 'season', seasons: ['autumn'] },
+      { type: 'month', months: ['October', 'November'] },
     ],
     weight: 12,
     cooldown: 5,
@@ -691,7 +691,7 @@ const deerEvents: GameEvent[] = [
     ],
     conditions: [
       { type: 'sex', sex: 'male' },
-      { type: 'season', seasons: ['autumn'] },
+      { type: 'month', months: ['October', 'November'] },
       { type: 'no_flag', flag: 'rut-active' },
       { type: 'age_range', min: 18 },
     ],
@@ -1127,7 +1127,7 @@ const deerEvents: GameEvent[] = [
     ],
     conditions: [
       { type: 'sex', sex: 'male' },
-      { type: 'season', seasons: ['autumn'] },
+      { type: 'month', months: ['October', 'November'] },
       { type: 'has_flag', flag: 'rut-active' },
       { type: 'no_injury', injuryId: 'antler-break' },
     ],
@@ -1268,7 +1268,7 @@ const deerEvents: GameEvent[] = [
     ],
     conditions: [
       { type: 'sex', sex: 'male' },
-      { type: 'season', seasons: ['autumn'] },
+      { type: 'month', months: ['October', 'November'] },
       { type: 'has_flag', flag: 'rut-active' },
       { type: 'has_injury', injuryId: 'antler-break' },
     ],
@@ -1701,6 +1701,79 @@ const deerEvents: GameEvent[] = [
     weight: 10,
     cooldown: 6,
     tags: ['exploration'],
+  },
+
+  // ══════════════════════════════════════════════
+  //  HOME RANGE
+  // ══════════════════════════════════════════════
+
+  {
+    id: 'deer-home-range-known',
+    type: 'passive',
+    category: 'milestone',
+    narrativeText: 'You know this ground now: which hollow holds the wind shadow, where the cedar grows thick enough to vanish into, which field edge smells wrong after dark. Your feet find the trails before your nose has to.',
+    statEffects: [
+      { stat: StatId.WIS, amount: 3, label: '+WIS' },
+      { stat: StatId.NOV, amount: -6, label: '-NOV' },
+    ],
+    consequences: [
+      { type: 'set_flag', flag: 'home-range-known' },
+    ],
+    conditions: [
+      { type: 'turn_above', threshold: 12 },
+      { type: 'no_flag', flag: 'home-range-known' },
+    ],
+    weight: 20,
+    tags: ['milestone', 'home-range'],
+    footnote: 'White-tailed deer are not territorial. They keep home ranges, often under a square mile, that overlap with their neighbors\' ranges, and they learn them in fine detail.',
+  },
+
+  {
+    id: 'deer-birth-site-defense',
+    type: 'active',
+    category: 'social',
+    narrativeText: 'Another doe drifts toward the thicket where your fawn lies folded in the ferns, nose low, browsing. She has not found it. Yet.',
+    statEffects: [
+      { stat: StatId.ADV, amount: 4, label: '+ADV' },
+    ],
+    choices: [
+      {
+        id: 'drive-off',
+        label: 'Drive her off',
+        description: 'Rear up and strike at her with your forelegs.',
+        narrativeResult: 'You rise on your hind legs and flail at her, hooves cutting the air. She wheels away, snorting, and does not come back. Your fawn never stirs.',
+        statEffects: [
+          { stat: StatId.TRA, amount: -2, label: '-TRA' },
+        ],
+        consequences: [
+          { type: 'restore_energy', amount: -10 },
+        ],
+        revocable: false,
+        style: 'default',
+      },
+      {
+        id: 'lead-away',
+        label: 'Lead her away',
+        description: 'Step out into the open, away from the thicket.',
+        narrativeResult: 'You step into the open and graze your way along the field edge. She drifts after you. The thicket behind you stays quiet.',
+        statEffects: [
+          { stat: StatId.WIS, amount: 2, label: '+WIS' },
+          { stat: StatId.ADV, amount: 2, label: '+ADV' },
+        ],
+        consequences: [],
+        revocable: false,
+        style: 'default',
+      },
+    ],
+    conditions: [
+      { type: 'sex', sex: 'female' },
+      { type: 'has_flag', flag: 'fawns-dependent' },
+      { type: 'season', seasons: ['spring', 'summer'] },
+    ],
+    weight: 6,
+    cooldown: 8,
+    tags: ['social', 'fawn', 'home-range'],
+    footnote: 'Does are not territorial, but for a few weeks after giving birth they chase other deer away from the spot where their fawns are hidden.',
   },
 ];
 

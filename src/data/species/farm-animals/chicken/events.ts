@@ -2,6 +2,24 @@ import type { GameEvent } from '../../../../types/events';
 import { StatId } from '../../../../types/stats';
 
 export const CHICKEN_EVENTS: GameEvent[] = [
+  // ── Hatch day ──
+  {
+    id: 'chicken-hatchery',
+    type: 'active',
+    category: 'environmental',
+    narrativeText: 'Light, sudden and everywhere. You are wet, then dry, then sliding down onto ground that moves under you, with peeping bodies on every side. Huge warm hands grab you, turn you over, and let go.',
+    statEffects: [
+      { stat: StatId.NOV, amount: 10, label: '+NOV' },
+    ],
+    consequences: [
+      { type: 'set_flag', flag: 'chicken-hatched' },
+    ],
+    conditions: [
+      { type: 'no_flag', flag: 'chicken-hatched' },
+    ],
+    weight: 9999, // Every chick's first turn
+    tags: ['hatchery'],
+  },
   // ── Industrial Feeding Events ──
   {
     id: 'chicken-industrial-feeding',
@@ -14,7 +32,9 @@ export const CHICKEN_EVENTS: GameEvent[] = [
     consequences: [
       { type: 'add_calories', amount: 4, source: 'growth-optimized feed' },
     ],
-    conditions: [],
+    conditions: [
+      { type: 'turn_above', threshold: 4 }, // Placed in the shed after hatch day
+    ],
     weight: 80,
     tags: ['feeding', 'daily'],
   },
@@ -45,11 +65,14 @@ export const CHICKEN_EVENTS: GameEvent[] = [
     narrativeText: 'Hands lift you from the sorting belt. Bright light, loud noise, a rush of air.',
     statEffects: [],
     consequences: [
-      { type: 'death', cause: 'Culled at hatchery, day two.' }
+      { type: 'death', cause: 'Culled at the hatchery, hours after hatching.' }
     ],
     conditions: [
       { type: 'sex', sex: 'male' },
-      { type: 'turn_above', threshold: 4 } // Day 2
+      // Layer strains are bred for eggs, so their males are killed at sorting;
+      // broiler males are raised for meat like the hens
+      { type: 'backstory', backstoryTypes: ['layer'] },
+      { type: 'has_flag', flag: 'chicken-hatched' },
     ],
     weight: 9999, // Absolute priority
     tags: ['culling', 'death']
@@ -64,7 +87,8 @@ export const CHICKEN_EVENTS: GameEvent[] = [
       { stat: StatId.IMM, amount: -2, label: '-IMM' }
     ],
     conditions: [
-      { type: 'region', regionIds: ['farmstead'] }
+      { type: 'region', regionIds: ['farmstead'] },
+      { type: 'turn_above', threshold: 4 }
     ],
     weight: 20,
     tags: ['health', 'stress']
@@ -79,7 +103,10 @@ export const CHICKEN_EVENTS: GameEvent[] = [
       { stat: StatId.HEA, amount: -10, label: '-HEA' }
     ],
     conditions: [
-      { type: 'turn_above', threshold: 2 }
+      // Done to layer pullets at the hatchery
+      { type: 'backstory', backstoryTypes: ['layer'] },
+      { type: 'sex', sex: 'female' },
+      { type: 'has_flag', flag: 'chicken-hatched' },
     ],
     cooldown: 9999, // Once per lifetime
     weight: 30,
@@ -110,7 +137,8 @@ export const CHICKEN_EVENTS: GameEvent[] = [
       { stat: StatId.TRA, amount: 5, label: '+TRA' }
     ],
     conditions: [
-      { type: 'region', regionIds: ['farmstead'] }
+      { type: 'region', regionIds: ['farmstead'] },
+      { type: 'turn_above', threshold: 4 }
     ],
     weight: 10,
     tags: ['social', 'stress']
@@ -125,7 +153,8 @@ export const CHICKEN_EVENTS: GameEvent[] = [
       { stat: StatId.HEA, amount: -2, label: '-HEA' }
     ],
     conditions: [
-      { type: 'region', regionIds: ['farmstead'] }
+      { type: 'region', regionIds: ['farmstead'] },
+      { type: 'turn_above', threshold: 4 }
     ],
     weight: 15,
     tags: ['instinct', 'stress']
@@ -140,7 +169,8 @@ export const CHICKEN_EVENTS: GameEvent[] = [
       { stat: StatId.STR, amount: 5, label: '+STR' }
     ],
     conditions: [
-      { type: 'region', regionIds: ['farmstead'] }
+      { type: 'region', regionIds: ['farmstead'] },
+      { type: 'turn_above', threshold: 4 }
     ],
     weight: 15,
     tags: ['instinct', 'stress']
@@ -157,6 +187,7 @@ export const CHICKEN_EVENTS: GameEvent[] = [
       { type: 'death', cause: 'Slaughtered at processing plant after reaching market weight of approximately 6 lbs in 42 days.' },
     ],
     conditions: [
+      { type: 'backstory', backstoryTypes: ['broiler'] },
       { type: 'weight_above', threshold: 5.5 },
       { type: 'turn_above', threshold: 140 },
     ],

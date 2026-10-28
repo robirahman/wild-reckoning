@@ -21,6 +21,7 @@ function checkProfilePlausibility(
 ): boolean {
   if (profile.sex && ctx.animal.sex !== profile.sex) return false;
   if (profile.seasons && !profile.seasons.includes(ctx.time.season)) return false;
+  if (profile.months && !profile.months.includes(ctx.time.month)) return false;
   if (profile.minAge !== undefined && ctx.animal.age < profile.minAge) return false;
   if (profile.maxAge !== undefined && ctx.animal.age > profile.maxAge) return false;
   if (profile.requiredFlags) {

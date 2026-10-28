@@ -2,6 +2,25 @@
   margin-bottom: var(--space-lg);
 }
 
+/* The animal's most urgent sensation, read like the rest of the narrative */
+.pressingSensation {
+  font-family: var(--font-narrative);
+  font-style: italic;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0 0 var(--space-sm);
+  padding: 4px 10px;
+  border-left: 3px solid var(--color-danger);
+}
+
+.eventProgress {
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  text-align: right;
+  margin-bottom: var(--space-sm);
+}
+
 .sectionTitle {
   font-size: 1rem;
   font-weight: 700;

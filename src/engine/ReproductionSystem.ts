@@ -3,7 +3,16 @@ import type { AnimalState } from '../types/species';
 import type { TimeState, Season } from '../types/world';
 import { StatId, computeEffectiveValue } from '../types/stats';
 import type { Rng } from './RandomUtils';
-import type { SpeciesConfig } from '../types/speciesConfig';
+import type { IteroparousReproConfig, SpeciesConfig } from '../types/speciesConfig';
+
+/** Whether it's the time of year this species conceives (months when set, else seasons) */
+export function isMatingTime(
+  reproConfig: Pick<IteroparousReproConfig, 'matingSeasons' | 'matingMonths'>,
+  time: { month: TimeState['month']; season: string },
+): boolean {
+  if (reproConfig.matingMonths) return reproConfig.matingMonths.includes(time.month);
+  return reproConfig.matingSeasons === 'any' || reproConfig.matingSeasons.includes(time.season as Season);
+}
 
 /** Determine offspring count based on condition and formula */
 export function determineOffspringCount(
@@ -239,7 +248,7 @@ export function tickReproduction(
     !updated.matedThisSeason &&
     !hasDependents &&
     animal.age >= reproConfig.matingMinAge &&
-    (reproConfig.matingSeasons === 'any' || reproConfig.matingSeasons.includes(time.season as Season))
+    isMatingTime(reproConfig, time)
   ) {
     // Mating probability calibrated per-turn so that mean lifetime fitness ≈ 2
     // (demographic replacement rate for a stable population).
@@ -274,7 +283,7 @@ export function tickReproduction(
     !updated.matedThisSeason &&
     animal.flags.has(reproConfig.maleCompetition.matedFlag) &&
     animal.age >= reproConfig.matingOnsetAge &&
-    (reproConfig.matingSeasons.includes(time.season as Season))
+    isMatingTime(reproConfig, time)
   ) {
     const hea = computeEffectiveValue(animal.stats[StatId.HEA]);
     const wis = computeEffectiveValue(animal.stats[StatId.WIS]);

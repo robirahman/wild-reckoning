@@ -1,4 +1,4 @@
-import type { NPC, NPCType, NPCRelationship } from '../types/npc';
+import type { NPC, NPCType, NPCRelationship, NPCTemplate } from '../types/npc';
 import type { Rng } from './RandomUtils';
 import { NPC_TEMPLATES } from '../data/npcs';
 

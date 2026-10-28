@@ -166,7 +166,7 @@ export const WOLF_ENCOUNTER_NARRATIVES: ContextualFragment[] = [
   // Forest
   {
     terrain: 'forest',
-    text: 'The howl comes from deep in the timber, reverberating off trunks until it seems to come from everywhere. You freeze among the hemlocks, ears swiveling, trying to separate echo from source. A shape ghosts between two trees at the edge of your vision. Then another, on the opposite side. The forest that shelters you also shelters them, and they know it far better than you imagine.',
+    text: 'The howl comes from deep in the timber, reverberating off trunks until it seems to come from everywhere. You freeze among the spruce, ears swiveling, trying to separate echo from source. A shape ghosts between two trees at the edge of your vision. Then another, on the opposite side. The forest that shelters you also shelters them, and they know it far better than you imagine.',
   },
   // Generic / fallback
   {

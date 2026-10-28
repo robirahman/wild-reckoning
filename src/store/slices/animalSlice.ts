@@ -1,7 +1,7 @@
 import type { GameSlice, AnimalSlice } from './types';
-import { DEFAULT_BEHAVIORAL_SETTINGS } from '../../types/behavior';
+import { DEFAULT_BEHAVIORAL_SETTINGS, DEFAULT_ATTENTION_BUDGET, behaviorPointsUsed, fitBehaviorToBudget } from '../../types/behavior';
 import { getScaling } from '../../engine/SpeciesScale';
-import { VOLUNTARY_ACTIONS } from '../../engine/ActionSystem';
+import { VOLUNTARY_ACTIONS, buildActionContext } from '../../engine/ActionSystem';
 import { getAvailableMutations } from '../../engine/EvolutionSystem';
 import { addModifier } from '../../engine/StatCalculator';
 import { deleteSaveGame } from '../persistence';
@@ -11,6 +11,7 @@ import { getSpeciesBundle } from '../../data/species';
 import { INITIAL_LIFETIME_STATS } from '../../types/stats';
 import { computeMovementCost } from '../../simulation/spatial/movement';
 import { buildCausalChains } from '../../simulation/memory/causalChain';
+import { isCaptive } from '../../engine/captivity';
 
 export const createAnimalSlice: GameSlice<AnimalSlice> = (set, get) => {
   const defaultBundle = getSpeciesBundle('white-tailed-deer');
@@ -25,32 +26,25 @@ export const createAnimalSlice: GameSlice<AnimalSlice> = (set, get) => {
     lifetimeStats: { ...INITIAL_LIFETIME_STATS, regionsVisited: [defaultBundle.config.defaultRegion], maxGeneration: 1 },
 
     updateBehavioralSetting: (key, value) => {
-      set({
-        behavioralSettings: {
-          ...get().behavioralSettings,
-          [key]: value,
-        },
-      });
+      const state = get();
+      const next = { ...state.behavioralSettings, [key]: value };
+      const budget = state.speciesBundle.config.attentionBudget ?? DEFAULT_ATTENTION_BUDGET;
+      if (value > state.behavioralSettings[key] && behaviorPointsUsed(next) > budget) return;
+      set({ behavioralSettings: next });
+    },
+
+    loadBehavioralSettings: (settings) => {
+      const budget = get().speciesBundle.config.attentionBudget ?? DEFAULT_ATTENTION_BUDGET;
+      set({ behavioralSettings: fitBehaviorToBudget(settings, budget) });
     },
 
     performAction: (actionId) => {
       const state = get();
       const action = VOLUNTARY_ACTIONS.find((a) => a.id === actionId);
-      if (!action || state.actionsPerformed.includes(actionId)) return;
+      if (!action || state.actionsPerformed.includes(actionId) || state.turnPhase !== 'choosing') return;
 
-      const ctx = {
-        speciesId: state.animal.speciesId,
-        config: state.speciesBundle.config,
-        territory: state.territory,
-        reproductionType: state.speciesBundle.config.reproduction.type,
-        season: state.time.season,
-        matingSeasons:
-          state.speciesBundle.config.reproduction.type === 'iteroparous'
-            ? (state.speciesBundle.config.reproduction as Extract<typeof state.speciesBundle.config.reproduction, { type: 'iteroparous' }>).matingSeasons ?? 'any'
-            : [],
-        rng: state.rng,
-        nutrients: state.animal.nutrients,
-      };
+      const ctx = buildActionContext(state);
+      if (!action.isAvailable(ctx)) return;
 
       const result = action.execute(ctx);
 
@@ -76,6 +70,8 @@ export const createAnimalSlice: GameSlice<AnimalSlice> = (set, get) => {
         },
         resolvedNarrative: result.narrative,
         triggeredSubEvents: [],
+        // Its effects were applied above; turn resolution must not apply them again
+        preApplied: true,
       };
 
       set({
@@ -323,7 +319,11 @@ export const createAnimalSlice: GameSlice<AnimalSlice> = (set, get) => {
         currentEvents: [],
         pendingChoices: [],
         revocableChoices: {},
-        map: generateRegionMap(state.rng),
+        map: isCaptive(config) ? null : generateRegionMap(state.rng),
+        // The new generation starts a fresh turn rather than the parent's results
+        turnPhase: 'awaiting-start',
+        showingResults: false,
+        turnResult: null,
       });
     }
   };

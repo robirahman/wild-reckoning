@@ -9,6 +9,7 @@ export const PIG_CONFIG: SpeciesConfig = {
   diet: 'omnivore',
   defaultRegion: 'farmstead',
   defaultRegionDisplayName: 'Concentrated Animal Feeding Operation',
+  setting: 'captive',
 
   startingWeight: { male: 15, female: 15 }, // Weaned piglets
   startingAge: {

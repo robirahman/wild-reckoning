@@ -1,20 +1,25 @@
 import { describe, it, expect, beforeEach, beforeAll } from 'vitest';
 import { GameAPI } from '../GameAPI';
+import { createGameStore } from '../../store/gameStore';
+import { getAllSpeciesIds, getSpeciesBundle } from '../../data/species';
+import { installLocalStorage } from '../../test-utils/localStorage';
+import type { ResolvedEvent } from '../../types/events';
 
-// Polyfill localStorage for Node environment
-beforeAll(() => {
-  if (typeof globalThis.localStorage === 'undefined') {
-    const store: Record<string, string> = {};
-    (globalThis as Record<string, unknown>).localStorage = {
-      getItem: (key: string) => store[key] ?? null,
-      setItem: (key: string, value: string) => { store[key] = value; },
-      removeItem: (key: string) => { delete store[key]; },
-      clear: () => { for (const k of Object.keys(store)) delete store[k]; },
-      get length() { return Object.keys(store).length; },
-      key: (i: number) => Object.keys(store)[i] ?? null,
-    };
-  }
-});
+beforeAll(installLocalStorage);
+
+/** Every piece of player-visible text an event can show */
+function visibleText(event: ResolvedEvent): string[] {
+  return [
+    event.resolvedNarrative,
+    ...event.triggeredSubEvents.map((s) => s.narrativeText),
+    ...(event.definition.choices ?? []).flatMap((c) => [
+      c.label,
+      c.description ?? '',
+      c.narrativeResult ?? '',
+      c.deathChance?.cause ?? '',
+    ]),
+  ];
+}
 
 describe('GameAPI', () => {
   let game: GameAPI;
@@ -139,20 +144,32 @@ describe('GameAPI', () => {
     expect(game.phase).toBe('menu');
   });
 
-  it('works with different species', () => {
-    for (const speciesId of ['african-elephant', 'chinook-salmon', 'polar-bear']) {
-      const g = new GameAPI();
-      const snap = g.start({ species: speciesId, backstory: 'wild-born', sex: 'female', seed: 42 });
+  it('plays every registered species for several turns with fully rendered text', () => {
+    for (const speciesId of getAllSpeciesIds()) {
+      const store = createGameStore();
+      const g = new GameAPI(store);
+      const backstory = getSpeciesBundle(speciesId).backstories[0].type;
+      const snap = g.start({ species: speciesId, backstory, sex: 'female', seed: 42 });
       expect(snap.species).toBe(speciesId);
       expect(snap.alive).toBe(true);
 
-      // Should be able to generate at least one turn
-      const turn = g.generateTurn();
-      expect(turn.turn).toBeGreaterThan(0);
-
-      g.autoChoose();
-      const result = g.endTurn();
-      expect(result).toBeDefined();
+      for (let turn = 0; turn < 10 && store.getState().phase === 'playing'; turn++) {
+        const info = g.generateTurn();
+        expect(info.turn).toBeGreaterThan(0);
+        if (store.getState().phase !== 'playing') break; // died in the background
+        for (const event of store.getState().currentEvents) {
+          for (const text of visibleText(event)) {
+            expect(text, `${speciesId} / ${event.definition.id}`).not.toContain('{{');
+          }
+        }
+        g.autoChoose();
+        const result = g.endTurn();
+        expect(result).toBeDefined();
+        for (const roll of result.pendingDeathRolls ?? []) {
+          g.resolveDeathRoll(roll.eventId, roll.escapeOptions[0].id);
+        }
+        store.setState({ showingResults: false, turnResult: null });
+      }
     }
   });
 });

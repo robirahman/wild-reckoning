@@ -357,8 +357,8 @@ function detectSeasonalSituations(ctx: SimulationContext, out: Situation[]): voi
   const sex = ctx.animal.sex;
   const age = ctx.animal.age;
 
-  // Rut season (autumn, males)
-  if (season === 'autumn' && sex === 'male' && age >= 18) {
+  // Rut (pre-rut and peak, males)
+  if ((month === 'October' || month === 'November') && sex === 'male' && age >= 18) {
     out.push({
       type: 'seasonal-phase',
       source: 'rut',
@@ -485,15 +485,7 @@ function detectMemorySituations(ctx: SimulationContext, out: Situation[]): void 
     }
   }
 
-  // Rehabilitation intro (first few turns)
-  if (ctx.time.turn <= 3 && ctx.animal.backstory?.type === 'rehabilitated') {
-    out.push({
-      type: 'memory-trigger',
-      source: 'rehabilitation-intro',
-      weight: 1.0,
-      params: { turn: ctx.time.turn },
-    });
-  }
+  // (The rehabilitation intro is guaranteed by rehabilitationTemplate itself.)
 }
 
 // ── Activity Exposure Detection ──

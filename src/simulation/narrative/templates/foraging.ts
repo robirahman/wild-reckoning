@@ -20,7 +20,7 @@ export const BROWSE_OPENINGS: ForageOpening[] = [
   { season: 'summer', quality: 'any', text: 'You drift through the understory, browsing as you go, picking the tenderest leaves from each shrub and moving on. The routine of summer feeding is steady, your jaw grinding in a slow rhythm.' },
   { season: 'autumn', quality: 'good', text: 'The oaks and beeches are dropping their cargo. Acorns and beechnuts litter the forest floor, crunching beneath your hooves, and the smell of ripe fruit drifts from abandoned orchards.' },
   { season: 'autumn', quality: 'any', text: 'You forage with an urgency that builds with each shorter day. The fat you put on now will carry you through winter. Every calorie matters.' },
-  { season: 'winter', quality: 'poor', text: 'The snow covers everything. What browse remains is woody, dry, and bitter. Cedar twigs, stripped bark, frozen lichen pried from tree trunks. Each mouthful costs more energy to find than it returns.' },
+  { season: 'winter', quality: 'poor', text: 'The snow covers everything. What browse remains is woody, dry, and bitter. Stripped bark, the last twigs of balsam fir, frozen lichen pried from tree trunks. Each mouthful costs more energy to find than it returns.' },
   { season: 'winter', quality: 'poor', text: 'You paw through the snow crust, searching for anything beneath. Dried grass, frozen sedge, the shriveled remnants of autumn. The pickings are meager.' },
   { season: 'any', quality: 'good', text: 'Your nose leads you to a patch of browse so abundant your body floods with something like relief. You eat with steady, grinding efficiency, filling the rumen to capacity.' },
   { season: 'any', quality: 'poor', text: 'You have been walking for hours, and every promising patch turns out to be already stripped by other mouths or frozen beyond usefulness. Your stomach aches with emptiness.' },
@@ -101,7 +101,7 @@ export const CONTEXTUAL_BROWSE_OPENINGS: ContextualFragment[] = [
   { season: 'autumn', timeOfDay: 'dusk', text: 'The days are shortening, and you begin feeding earlier each evening. Dusk comes fast in autumn, and the urgency to eat does not ease.' },
 
   // ── Winter ──
-  { season: 'winter', terrain: 'forest', text: 'The cedars and hemlock still carry their needles, and you strip the lower branches with methodical efficiency. The browse is resinous and bitter, but it fills your rumen and keeps the worst of the hunger at bay.' },
+  { season: 'winter', terrain: 'forest', text: 'The cedar has been browsed bare as high as you can stretch. You strip the balsam fir instead, branch by branch. It is resinous and bitter, but it fills your rumen and keeps the worst of the hunger at bay.' },
   { season: 'winter', terrain: 'forest', text: 'You move through the bare hardwoods, pausing at each sapling to strip what bark remains. Each day the browse recedes further from reach.' },
   { season: 'winter', terrain: 'mountain', text: 'The browse is gone. Every twig within reach has been stripped, every bark surface gnawed to pale wood. You scrape at frozen lichen with your teeth, but the calories don\'t come close to what your body burns just staying warm.' },
   { season: 'winter', terrain: 'mountain', text: 'Wind scours the exposed ridge, and the snow is packed so hard your hooves barely break the crust. There is nothing here.' },
@@ -135,8 +135,8 @@ export const SEASONAL_BROWSE_NARRATIVES: ContextualFragment[] = [
   { season: 'winter', weather: 'snow', text: 'Fresh snowfall has erased your feeding craters from yesterday. You stand in the white silence, sides heaving, and begin again. Pawing, nosing, chewing. The same rhythm since the snows began.' },
 
   // ── Winter — forest (default winter) ──
-  { season: 'winter', terrain: 'forest', text: 'The cedars and hemlock still carry their needles, and you strip the lower branches with methodical efficiency. The browse is resinous and bitter, nutritionally poor, but it fills your rumen and keeps the worst of the hunger at bay.' },
-  { season: 'winter', terrain: 'forest', text: 'You work the hemlock stand with practiced economy, biting off needle clusters and stripping bark from the younger stems. The taste is sharp with tannin, but your gut has adapted to winter\'s bitter pharmacy. You chew and chew, the repetitive grinding steady and automatic.' },
+  { season: 'winter', terrain: 'forest', text: 'Every cedar here is browsed bare as high as you can stretch, a clean line under each one. You strip the balsam fir instead. It is resinous and bitter, poor food, but it fills your rumen and keeps the worst of the hunger at bay.' },
+  { season: 'winter', terrain: 'forest', text: 'A fallen cedar lies across the trail, its top flat on the snow, every sprig within reach. You eat fast, fragrant mouthful after mouthful, the best food in the frozen forest. Others will smell it soon.' },
   { season: 'winter', terrain: 'forest', text: 'Deep in the cedar swamp, the canopy holds back the worst of the snow. You browse here with other deer. You can see their tracks, smell their presence. All drawn to the same diminishing browse.' },
 
   // ── Winter — generic ──

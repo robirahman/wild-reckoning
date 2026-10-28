@@ -20,7 +20,15 @@ export const DEER_METABOLISM: MetabolismConfig = {
   metabolicScalingExponent: 0.75,    // Kleiber's law
   caloricDensityPerLb: 35,          // kcal-units per lb of body fat
   maxFatMobilization: 2,            // Max lbs/turn loss from fat reserves (real: ~0.4 lb/day = 2.8/wk)
+  // Northern deer lose ~0.2% of body mass a day through winter, 15-25% by spring
+  // (Verme & Ullrey 1984). A flat 2 lb/week took a 90 lb doe down 35-40%.
+  maxFatMobilizationFraction: 0.01,
   maxFatDeposition: 5,              // Max lbs/turn gain from caloric surplus (real: ~0.7 lb/day = 5/wk in autumn)
+  // Summer forage gives far more surplus than a deer turns into fat: day length
+  // governs appetite, so northern deer gain slowly through spring and summer
+  // (yearlings ~1-1.5 lb/wk) and fatten fastest in autumn before the winter loss
+  // (Verme & Ullrey 1984). Without these limits a summer doe gained 5 lb every week.
+  maxFatDepositionBySeason: { spring: 1.5, summer: 2, autumn: 2.5, winter: 0.5 },
 
   // ── Foraging ──
   // Real deer: winter deficit produces ~1 lb/week loss. With 25% BMR reduction,

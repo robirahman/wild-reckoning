@@ -4,13 +4,20 @@ import { createRng } from '../engine/RandomUtils';
 import { getSpeciesBundle } from '../data/species';
 import type { WorldMemory, SeasonalTotals } from '../simulation/memory/types';
 import { createWorldMemory } from '../simulation/memory/types';
+import { generateRegionMap } from '../engine/MapSystem';
+import { initializeEcosystem } from '../engine/EcosystemSystem';
+import { initialTerritoryFor } from '../engine/TerritorySystem';
+import { isCaptive } from '../engine/captivity';
+import { dehydrateAnimal, hydrateAnimal, type SerializedAnimal } from './slices/helpers';
 
 const STORAGE_KEY = 'wild-reckoning-save';
 
 /**
- * Serializable shape of game state stored in localStorage.
- * Differs from GameState: Set<string> → string[], Rng → number (internal state).
+ * Bump when the serialized shape changes. Saves without a version are v1,
+ * which predate the world fields below; they are backfilled on load.
  */
+export const SAVE_VERSION = 2;
+
 /** Serialized form of SeasonalTotals (Set → array) */
 interface SerializedSeasonalTotals extends Omit<SeasonalTotals, 'nodesVisited'> {
   nodesVisited: string[];
@@ -21,12 +28,18 @@ interface SerializedWorldMemory extends Omit<WorldMemory, 'seasonalTotals'> {
   seasonalTotals: SerializedSeasonalTotals;
 }
 
-interface SerializedState {
+/**
+ * JSON-safe snapshot of a game in progress. Differs from GameState:
+ * Sets become arrays, the Rng becomes its internal state, and derived
+ * structures (the anatomy index, the species bundle) are rebuilt on load.
+ */
+export interface SerializedState {
+  version?: number;
   phase: GameState['phase'];
   seed: number;
   rngState: number;
   difficulty: GameState['difficulty'];
-  animal: Omit<GameState['animal'], 'flags'> & { flags: string[] };
+  animal: SerializedAnimal;
   time: GameState['time'];
   behavioralSettings: GameState['behavioralSettings'];
   reproduction: GameState['reproduction'];
@@ -39,19 +52,33 @@ interface SerializedState {
   turnHistory: GameState['turnHistory'];
   eventCooldowns: GameState['eventCooldowns'];
   worldMemory?: SerializedWorldMemory;
+  // ── Added in v2 ──
+  map?: GameState['map'];
+  territory?: GameState['territory'];
+  ecosystem?: GameState['ecosystem'];
+  scenario?: GameState['scenario'];
+  scenarioOutcome?: GameState['scenarioOutcome'];
+  climateShift?: GameState['climateShift'];
+  npcBehaviorStates?: GameState['npcBehaviorStates'];
+  evolution?: GameState['evolution'];
+  lineage?: GameState['lineage'];
+  actionsPerformed?: GameState['actionsPerformed'];
+  ambientText?: GameState['ambientText'];
+  instinctNudges?: GameState['instinctNudges'];
+  showingResults?: GameState['showingResults'];
+  turnResult?: GameState['turnResult'];
+  turnPhase?: GameState['turnPhase'];
 }
 
 /** Convert live game state to a JSON-safe object */
 export function serializeState(state: GameState): SerializedState {
   return {
+    version: SAVE_VERSION,
     phase: state.phase,
     seed: state.seed,
     rngState: state.rng.getState(),
     difficulty: state.difficulty,
-    animal: {
-      ...state.animal,
-      flags: Array.from(state.animal.flags),
-    },
+    animal: dehydrateAnimal(state.animal),
     time: state.time,
     behavioralSettings: state.behavioralSettings,
     reproduction: state.reproduction,
@@ -70,15 +97,34 @@ export function serializeState(state: GameState): SerializedState {
         nodesVisited: Array.from(state.worldMemory.seasonalTotals.nodesVisited),
       },
     } : undefined,
+    map: state.map,
+    territory: state.territory,
+    ecosystem: state.ecosystem,
+    scenario: state.scenario,
+    scenarioOutcome: state.scenarioOutcome,
+    climateShift: state.climateShift,
+    npcBehaviorStates: state.npcBehaviorStates,
+    evolution: state.evolution,
+    lineage: state.lineage,
+    actionsPerformed: state.actionsPerformed,
+    ambientText: state.ambientText,
+    instinctNudges: state.instinctNudges,
+    // A save made on the results screen resumes there, so already-applied
+    // effects can't be resolved a second time
+    showingResults: state.showingResults,
+    turnResult: state.turnResult,
+    turnPhase: state.turnPhase,
   };
 }
 
 /** Restore live game state from a serialized object */
 export function deserializeState(data: SerializedState): Partial<GameState> {
+  const speciesBundle = getSpeciesBundle(data.animal.speciesId);
   const rng = createRng(data.seed);
   rng.setState(data.rngState);
-
-  const speciesBundle = getSpeciesBundle(data.animal.speciesId);
+  const animal = hydrateAnimal(speciesBundle.config, data.animal);
+  const isLegacy = (data.version ?? 1) < 2;
+  const showingResults = !!(data.showingResults && data.turnResult);
 
   return {
     phase: data.phase,
@@ -86,44 +132,64 @@ export function deserializeState(data: SerializedState): Partial<GameState> {
     rng,
     difficulty: data.difficulty,
     speciesBundle,
-    animal: {
-      ...data.animal,
-      flags: new Set(data.animal.flags),
-    } as GameState['animal'],
+    animal,
     time: data.time,
     behavioralSettings: data.behavioralSettings,
     reproduction: data.reproduction,
     currentEvents: data.currentEvents,
     pendingChoices: data.pendingChoices,
-    revocableChoices: data.revocableChoices,
+    revocableChoices: data.revocableChoices ?? {},
     npcs: data.npcs ?? [],
     activeStorylines: data.activeStorylines ?? [],
     currentWeather: data.currentWeather ?? null,
-    turnResult: null,
-    showingResults: false,
-    turnHistory: data.turnHistory,
-    eventCooldowns: data.eventCooldowns,
+    turnHistory: data.turnHistory ?? [],
+    eventCooldowns: data.eventCooldowns ?? {},
     worldMemory: data.worldMemory ? {
       ...data.worldMemory,
       seasonalTotals: {
         ...data.worldMemory.seasonalTotals,
         nodesVisited: new Set(data.worldMemory.seasonalTotals.nodesVisited),
       },
-    } : createWorldMemory('spring'),
+    } : createWorldMemory(data.time.season),
+    // v1 saves never stored the map; give wild animals a fresh one so movement works
+    map: isLegacy && !isCaptive(speciesBundle.config) ? generateRegionMap(rng) : data.map ?? null,
+    territory: data.territory ?? initialTerritoryFor(animal.flags),
+    ecosystem: data.ecosystem ?? initializeEcosystem(),
+    scenario: data.scenario ?? null,
+    scenarioOutcome: data.scenarioOutcome ?? null,
+    climateShift: data.climateShift ?? 0,
+    npcBehaviorStates: data.npcBehaviorStates ?? {},
+    evolution: data.evolution ?? {
+      activeMutations: animal.activeMutations,
+      availableChoices: [],
+      generationCount: 0,
+      lineageHistory: [],
+    },
+    lineage: data.lineage ?? null,
+    actionsPerformed: data.actionsPerformed ?? [],
+    ambientText: data.ambientText ?? null,
+    instinctNudges: data.instinctNudges ?? [],
+    showingResults,
+    turnResult: showingResults ? data.turnResult ?? null : null,
+    // Older saves didn't record the phase; infer it from what's on screen
+    turnPhase: data.turnPhase
+      ?? (showingResults ? 'results' : data.currentEvents.length > 0 ? 'choosing' : 'awaiting-start'),
   };
 }
 
-/** Save game state to localStorage */
-export function saveGame(state: GameState): void {
+/** Save game state to localStorage. Returns false if the browser refused it. */
+export function saveGame(state: GameState): boolean {
   try {
     const serialized = serializeState(state);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(serialized));
-  } catch {
-    // Silently fail if localStorage is full or unavailable
+    return true;
+  } catch (err) {
+    console.error('Could not save game:', err);
+    return false;
   }
 }
 
-/** Load game state from localStorage, returns null if no save exists */
+/** Load game state from localStorage, returns null if no usable save exists */
 export function loadGame(): Partial<GameState> | null {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -132,7 +198,8 @@ export function loadGame(): Partial<GameState> | null {
     // Basic validation
     if (!data.phase || !data.animal || !data.time) return null;
     return deserializeState(data);
-  } catch {
+  } catch (err) {
+    console.error('Could not load saved game:', err);
     return null;
   }
 }

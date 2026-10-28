@@ -1,6 +1,6 @@
 import { getAllSpeciesBundles } from '../data/species';
-import { useAchievementStore } from '../store/achievementStore';
-import { SPECIES_UNLOCKS } from '../data/speciesUnlocks';
+import { useSpeciesUnlocks } from '../hooks/useSpeciesUnlocks';
+import { isCaptive } from '../engine/captivity';
 import { StatId, STAT_NAMES } from '../types/stats';
 import styles from '../styles/comparison.module.css';
 
@@ -9,19 +9,8 @@ interface Props {
 }
 
 export function SpeciesComparison({ onBack }: Props) {
-  const unlockedIds = useAchievementStore((s) => s.unlockedIds);
-  const speciesPlayed = useAchievementStore((s) => s.speciesPlayed);
-  const FARM_SPECIES = ['chicken', 'pig'];
-  const bundles = getAllSpeciesBundles().filter((b) => !FARM_SPECIES.includes(b.config.id));
-
-  function isUnlocked(speciesId: string): boolean {
-    const req = SPECIES_UNLOCKS.find((u) => u.speciesId === speciesId);
-    if (!req) return true;
-    if (req.requirement.type === 'default') return true;
-    if (req.requirement.type === 'achievement') return unlockedIds.has(req.requirement.achievementId);
-    if (req.requirement.type === 'species_played') return speciesPlayed.has(req.requirement.speciesId);
-    return false;
-  }
+  const { isUnlocked } = useSpeciesUnlocks();
+  const bundles = getAllSpeciesBundles().filter((b) => !isCaptive(b.config));
 
   return (
     <div className={styles.container}>

@@ -78,12 +78,12 @@ export const WINTER_YARD_SCOUT_CONFIG: MigrationTriggerConfig = {
       ],
       consequences: [],
       narrativeText: hasFawns
-        ? 'Frost rims the grass white overnight. Something pulls you southwest, toward the hemlock valley. Your fawns are strong enough to travel now.'
+        ? 'Frost rims the grass white overnight. Something pulls you southwest, toward the cedar swamp. Your fawns are strong enough to travel now.'
         : 'The nights are growing cold. You find yourself drifting southwest during your daily wanderings, pulled by a scent trail you did not learn but know.',
       emotionalTone: 'tension',
       eventType: 'winter-yard-scout',
       actionNarrative: hasFawns
-        ? 'A pull toward the hemlock valley. Your fawns are strong enough to travel.'
+        ? 'A pull toward the cedar swamp. Your fawns are strong enough to travel.'
         : 'You drift southwest, pulled by a scent trail you did not learn but know.',
       clinicalDetail: `Autumn migration scouting initiated. ${hasFawns ? 'Female with fawns seeking traditional wintering grounds.' : 'Seasonal migration instinct onset, following matrilineal scent trail to traditional deer yard.'}`,
       urgency: 'low',
@@ -180,7 +180,7 @@ export const TRAVEL_HAZARDS_CONFIG: MigrationTriggerConfig = {
       consequences: [],
       narrativeText: isNight
         ? 'The road appears suddenly. You smell asphalt, rubber, exhaust. Headlights sweep through the trees at irregular intervals. The other side is twenty meters away.'
-        : 'You smell the hemlocks from here, past the road. Cars, trucks. The ground shakes when the big ones pass. The gap between them is short.',
+        : 'You smell the cedars from here, past the road. Machines, small and huge. The ground shakes when the big ones pass. The gaps between them are short.',
       emotionalTone: 'fear',
       eventType: 'travel-hazard-road',
       actionNarrative: isNight

@@ -3,6 +3,7 @@ import { AnimalIdentity } from './AnimalIdentity';
 import { StatCategory } from './StatCategory';
 import { useGameStore } from '../../store/gameStore';
 import { StatId, StatCategory as StatCategoryEnum, computeEffectiveValue } from '../../types';
+import { STAT_NAMES, STAT_DESCRIPTIONS } from '../../types/stats';
 import type { StatModifier } from '../../types/stats';
 import styles from '../../styles/stats.module.css';
 
@@ -55,19 +56,6 @@ function computeTrends(
 
   return trends;
 }
-
-// Player-facing stat descriptions (animal-perspective)
-const STAT_INFO: Record<string, string> = {
-  [StatId.IMM]: 'Immune load — the burden of parasites, infection, and disease on your body.',
-  [StatId.CLI]: 'Climate stress — how much the weather and temperature are wearing on you.',
-  [StatId.HOM]: 'Homeostatic strain — nutritional deficit, dehydration, and metabolic stress.',
-  [StatId.TRA]: 'Trauma — post-traumatic stress from extreme events like predator attacks and near-death experiences. These marks never fully fade.',
-  [StatId.ADV]: 'Adversity — the level of hardship in your environment. Overcrowding, competition, and scarcity make life harder; shelter and security make it easier.',
-  [StatId.NOV]: 'Novelty — exposure to unfamiliar situations you lack evolved instincts to navigate. Human structures, new environments, unprecedented stimuli.',
-  [StatId.WIS]: 'Wisdom — accumulated survival knowledge. Learned behaviors that help you find food, avoid danger, and navigate your world.',
-  [StatId.HEA]: 'Health — your overall physiological condition. When this reaches zero, your body gives out.',
-  [StatId.STR]: 'Composite stress — the aggregate load across all stress categories.',
-};
 
 export function StatsPanel() {
   const stats = useGameStore((s) => s.animal.stats);
@@ -131,9 +119,9 @@ export function StatsPanel() {
           />
         ))}
       </div>
-      {highlightedStat && STAT_INFO[highlightedStat] && (
+      {highlightedStat && highlightedStat in STAT_DESCRIPTIONS && (
         <div className={styles.statInfoBox}>
-          {STAT_INFO[highlightedStat]}
+          <strong>{STAT_NAMES[highlightedStat as StatId]}</strong>: {STAT_DESCRIPTIONS[highlightedStat as StatId]}
         </div>
       )}
     </div>

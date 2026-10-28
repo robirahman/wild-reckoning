@@ -9,6 +9,7 @@ export const createUISlice: GameSlice<UISlice> = (set, get) => ({
   turnResult: null,
   instinctNudges: [],
   highlightedStat: null,
+  lastTimeSkip: null,
 
   toggleFastForward: () => set({ fastForward: !get().fastForward }),
   
@@ -29,10 +30,9 @@ export const createUISlice: GameSlice<UISlice> = (set, get) => ({
     set({ tutorialStep: null });
   },
 
-  dismissResults: () => {
-    set({ showingResults: false, turnResult: null });
-    get().advanceTurn();
-  },
+  // Only clears the results screen. Starting the next turn (which advances
+  // time) is the turn pipeline's job, so time can't advance twice.
+  dismissResults: () => set({ showingResults: false, turnResult: null }),
 
   setTurnResult: (result) => set({ turnResult: result, showingResults: true }),
   setInstinctNudges: (nudges) => set({ instinctNudges: nudges }),

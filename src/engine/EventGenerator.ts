@@ -1,4 +1,4 @@
-import type { GameEvent, EventCondition, ResolvedEvent, ResolvedSubEvent } from '../types/events';
+import type { GameEvent, EventChoice, EventCondition, ResolvedEvent, ResolvedSubEvent } from '../types/events';
 import type { AnimalState } from '../types/species';
 import type { TimeState } from '../types/world';
 import type { BehavioralSettings } from '../types/behavior';
@@ -11,6 +11,7 @@ import type { RegionDefinition } from '../types/world';
 import type { WeatherState } from './WeatherSystem';
 import type { EcosystemState } from '../types/ecosystem';
 import { DIFFICULTY_PRESETS } from '../types/difficulty';
+import { pronounsFor } from '../utils/pronouns';
 import { weatherContextMultiplier } from './WeatherSystem';
 import { pickIllustration } from './IllustrationPicker';
 import { isSimulationMode } from '../simulation/mode';
@@ -22,7 +23,7 @@ import type { NPCBehaviorState } from '../simulation/npc/types';
 import { calibrate } from '../simulation/calibration/calibrator';
 import { DEER_MORTALITY } from '../simulation/calibration/data/deer';
 
-interface GenerationContext {
+export interface GenerationContext {
   animal: AnimalState;
   time: TimeState;
   behavior: BehavioralSettings;
@@ -46,7 +47,7 @@ interface GenerationContext {
 
 // ── Calibration cache ──
 let cachedRates: CalibratedRates | undefined;
-function getCalibratedRates(speciesId: string): CalibratedRates | undefined {
+export function getCalibratedRates(speciesId: string): CalibratedRates | undefined {
   if (speciesId === 'white-tailed-deer') {
     if (!cachedRates) cachedRates = calibrate(DEER_MORTALITY);
     return cachedRates;
@@ -55,10 +56,12 @@ function getCalibratedRates(speciesId: string): CalibratedRates | undefined {
 }
 
 /** Check if a single condition is met */
-function checkCondition(cond: EventCondition, ctx: GenerationContext): boolean {
+export function checkCondition(cond: EventCondition, ctx: GenerationContext): boolean {
   switch (cond.type) {
     case 'season':
       return cond.seasons.includes(ctx.time.season);
+    case 'month':
+      return cond.months.includes(ctx.time.month);
     case 'region':
       return cond.regionIds.includes(ctx.animal.region);
     case 'species':
@@ -121,6 +124,8 @@ function checkCondition(cond: EventCondition, ctx: GenerationContext): boolean {
       return cond.ranks.includes(ctx.animal.social.rank);
     case 'mutation_active':
       return ctx.animal.activeMutations.some(m => m.id === cond.mutationId);
+    case 'backstory':
+      return cond.backstoryTypes.includes(ctx.animal.backstory.type);
     default:
       return true;
   }
@@ -203,40 +208,79 @@ function contextMultiplier(event: GameEvent, ctx: GenerationContext): number {
   return mult;
 }
 
+/** Template variables resolveTemplate understands; content may only use these */
+export const TEMPLATE_VARIABLES = [
+  'animal.species', 'animal.sex_pronoun', 'animal.sex_object', 'animal.sex_possessive',
+  'animal.weight', 'animal.age',
+  'time.season', 'time.month',
+  'region.name', 'region.flora',
+  'species.youngNoun', 'species.youngNounPlural', 'species.maleNoun', 'species.femaleNoun',
+  'species.groupNoun', 'species.habitat',
+  'npc.rival.name', 'npc.rival.encounters', 'npc.ally.name', 'npc.ally.encounters',
+  'npc.predator.name', 'npc.predator.encounters', 'npc.mate.name', 'npc.mate.encounters',
+  'weather.type', 'weather.description',
+] as const;
+
+type TemplateVariable = typeof TEMPLATE_VARIABLES[number];
+
+function atSentenceStart(text: string, offset: number): boolean {
+  if (offset === 0) return true;
+  return /(^|[.!?]["')]?\s+|\n\s*)$/.test(text.slice(Math.max(0, offset - 4), offset));
+}
+
 /** Apply template variables to narrative text */
 export function resolveTemplate(text: string, ctx: GenerationContext): string {
   const tv = ctx.config.templateVars;
-  return text
-    .replace(/\{\{animal\.species\}\}/g, tv.speciesName)
-    .replace(/\{\{animal\.sex_pronoun\}\}/g, ctx.animal.sex === 'female' ? 'she' : 'he')
-    .replace(/\{\{animal\.sex_possessive\}\}/g, ctx.animal.sex === 'female' ? 'her' : 'his')
-    .replace(/\{\{animal\.weight\}\}/g, String(ctx.animal.weight))
-    .replace(/\{\{animal\.age\}\}/g, String(ctx.animal.age))
-    .replace(/\{\{time\.season\}\}/g, ctx.time.season)
-    .replace(/\{\{time\.month\}\}/g, ctx.time.month)
-    .replace(/\{\{region\.name\}\}/g, tv.regionName)
-    .replace(/\{\{species\.youngNoun\}\}/g, tv.youngNoun)
-    .replace(/\{\{species\.youngNounPlural\}\}/g, tv.youngNounPlural)
-    .replace(/\{\{species\.maleNoun\}\}/g, tv.maleNoun)
-    .replace(/\{\{species\.femaleNoun\}\}/g, tv.femaleNoun)
-    .replace(/\{\{species\.groupNoun\}\}/g, tv.groupNoun)
-    .replace(/\{\{species\.habitat\}\}/g, tv.habitat)
-    .replace(/\{\{npc\.rival\.name\}\}/g, ctx.npcs?.find((n) => n.type === 'rival' && n.alive)?.name ?? 'a rival')
-    .replace(/\{\{npc\.rival\.encounters\}\}/g, String(ctx.npcs?.find((n) => n.type === 'rival' && n.alive)?.encounters ?? 0))
-    .replace(/\{\{npc\.ally\.name\}\}/g, ctx.npcs?.find((n) => n.type === 'ally' && n.alive)?.name ?? 'a companion')
-    .replace(/\{\{npc\.ally\.encounters\}\}/g, String(ctx.npcs?.find((n) => n.type === 'ally' && n.alive)?.encounters ?? 0))
-    .replace(/\{\{npc\.predator\.name\}\}/g, ctx.npcs?.find((n) => n.type === 'predator' && n.alive)?.name ?? 'a predator')
-    .replace(/\{\{npc\.predator\.encounters\}\}/g, String(ctx.npcs?.find((n) => n.type === 'predator' && n.alive)?.encounters ?? 0))
-    .replace(/\{\{npc\.mate\.name\}\}/g, ctx.npcs?.find((n) => n.type === 'mate' && n.alive)?.name ?? 'a mate')
-    .replace(/\{\{npc\.mate\.encounters\}\}/g, String(ctx.npcs?.find((n) => n.type === 'mate' && n.alive)?.encounters ?? 0))
-    .replace(/\{\{weather\.type\}\}/g, ctx.currentWeather?.type ?? 'clear')
-    .replace(/\{\{weather\.description\}\}/g, ctx.currentWeather?.description ?? '')
-    .replace(/\{\{region\.flora\}\}/g, () => {
+  const pronouns = pronounsFor(ctx.animal.sex);
+  const npc = (type: NPC['type']) => ctx.npcs?.find((n) => n.type === type && n.alive);
+
+  const values: Record<TemplateVariable, () => string> = {
+    'animal.species': () => tv.speciesName,
+    'animal.sex_pronoun': () => pronouns.subject,
+    'animal.sex_object': () => pronouns.object,
+    'animal.sex_possessive': () => pronouns.possessive,
+    'animal.weight': () => String(ctx.animal.weight),
+    'animal.age': () => String(ctx.animal.age),
+    'time.season': () => ctx.time.season,
+    'time.month': () => ctx.time.month,
+    'region.name': () => tv.regionName,
+    'region.flora': () => {
       const flora = ctx.regionDef?.flora.filter((f) =>
         f.availableSeasons.includes(ctx.time.season) && f.abundanceByMonth[ctx.time.monthIndex] > 0.3
       );
       return flora && flora.length > 0 ? ctx.rng.pick(flora).name : 'browse';
-    });
+    },
+    'species.youngNoun': () => tv.youngNoun,
+    'species.youngNounPlural': () => tv.youngNounPlural,
+    'species.maleNoun': () => tv.maleNoun,
+    'species.femaleNoun': () => tv.femaleNoun,
+    'species.groupNoun': () => tv.groupNoun,
+    'species.habitat': () => tv.habitat,
+    'npc.rival.name': () => npc('rival')?.name ?? 'a rival',
+    'npc.rival.encounters': () => String(npc('rival')?.encounters ?? 0),
+    'npc.ally.name': () => npc('ally')?.name ?? 'a companion',
+    'npc.ally.encounters': () => String(npc('ally')?.encounters ?? 0),
+    'npc.predator.name': () => npc('predator')?.name ?? 'a predator',
+    'npc.predator.encounters': () => String(npc('predator')?.encounters ?? 0),
+    'npc.mate.name': () => npc('mate')?.name ?? 'a mate',
+    'npc.mate.encounters': () => String(npc('mate')?.encounters ?? 0),
+    'weather.type': () => ctx.currentWeather?.type ?? 'clear',
+    'weather.description': () => ctx.currentWeather?.description ?? '',
+  };
+
+  return text.replace(/\{\{\s*([\w.]+)\s*\}\}/g, (_token, name: string, offset: number) => {
+    const value = name in values
+      ? values[name as TemplateVariable]()
+      : unknownTemplateVariable(name, tv.speciesName);
+    // A fallback like "a rival" can open a sentence
+    return value && atSentenceStart(text, offset) ? value[0].toUpperCase() + value.slice(1) : value;
+  });
+}
+
+/** Never show raw braces to the player: warn in development and fall back to plain words */
+function unknownTemplateVariable(name: string, speciesName: string): string {
+  if (import.meta.env?.DEV) console.warn(`Unknown template variable {{${name}}}`);
+  return /species/i.test(name) ? speciesName.toLowerCase() : '';
 }
 
 /**
@@ -253,7 +297,7 @@ export function generateEvents(ctx: GenerationContext): ResolvedEvent[] {
 
   // ── Simulation event generation (only for simulation-mode species) ──
   let simEvents: ResolvedEvent[] = [];
-  let simCategories = new Set<string>();
+  const simCategories = new Set<string>();
 
   if (isSimulationMode(ctx.config)) {
     const simCtx: SimulationContext = {
@@ -361,9 +405,35 @@ export function generateEvents(ctx: GenerationContext): ResolvedEvent[] {
   return [...simEvents, ...results];
 }
 
+/**
+ * Resolve template variables in every player-visible text field of a set of
+ * choices: labels, descriptions, result text, death causes and escape options.
+ */
+export function resolveChoiceText(
+  choices: EventChoice[] | undefined,
+  resolve: (text: string) => string,
+): EventChoice[] | undefined {
+  return choices?.map((c) => ({
+    ...c,
+    label: resolve(c.label),
+    description: c.description && resolve(c.description),
+    narrativeResult: c.narrativeResult && resolve(c.narrativeResult),
+    deathChance: c.deathChance && {
+      ...c.deathChance,
+      cause: resolve(c.deathChance.cause),
+      escapeOptions: c.deathChance.escapeOptions?.map((o) => ({
+        ...o,
+        label: resolve(o.label),
+        description: resolve(o.description),
+      })),
+    },
+  }));
+}
+
 /** Resolve a single event: fill templates, trigger sub-events */
 function resolveEvent(event: GameEvent, ctx: GenerationContext): ResolvedEvent {
   const resolvedNarrative = resolveTemplate(event.narrativeText, ctx);
+  const choices = resolveChoiceText(event.choices, (text) => resolveTemplate(text, ctx));
 
   // Evaluate sub-event triggers
   const triggeredSubEvents: ResolvedSubEvent[] = [];
@@ -387,7 +457,7 @@ function resolveEvent(event: GameEvent, ctx: GenerationContext): ResolvedEvent {
   const image = event.image ?? pickIllustration(event, ctx.rng);
 
   return {
-    definition: image ? { ...event, image } : event,
+    definition: { ...event, choices, ...(image ? { image } : {}) },
     resolvedNarrative,
     triggeredSubEvents,
   };

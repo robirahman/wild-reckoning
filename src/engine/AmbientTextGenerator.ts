@@ -1,7 +1,9 @@
 import type { Rng } from './RandomUtils';
 import type { Season } from '../types/world';
+import type { Setting } from '../types/speciesConfig';
 import { AMBIENT_TEXTS, type AmbientTextEntry } from '../data/ambientText';
 import type { TurnResult } from '../types/turnResult';
+import { pronounsFor } from '../utils/pronouns';
 
 interface AmbientTextContext {
   season: Season;
@@ -10,12 +12,15 @@ interface AmbientTextContext {
   weatherType?: string;
   rng: Rng;
   animalSex?: 'male' | 'female';
+  /** Captive animals only hear lines written for confinement */
+  setting?: Setting;
 }
 
 export function generateAmbientText(ctx: AmbientTextContext): string | null {
   const eligible: { entry: AmbientTextEntry; weight: number }[] = [];
 
   for (const entry of AMBIENT_TEXTS) {
+    if (!(entry.settings ?? ['wild']).includes(ctx.setting ?? 'wild')) continue;
     if (entry.seasons && !entry.seasons.includes(ctx.season)) continue;
     if (entry.speciesIds && !entry.speciesIds.includes(ctx.speciesId)) continue;
     if (entry.regionIds && !entry.regionIds.includes(ctx.regionId)) continue;
@@ -48,17 +53,16 @@ export function generateAmbientText(ctx: AmbientTextContext): string | null {
  */
 export function synthesizeJournalEntry(result: TurnResult, ctx: AmbientTextContext): string {
   const ambient = generateAmbientText(ctx) ?? "The days passed in a blur of survival.";
-  const sex = ctx.animalSex ?? 'female';
-  const pronoun = sex === 'female' ? 'She' : 'He';
-  
+  const { subject, object } = pronounsFor(ctx.animalSex ?? 'female');
+
   let journal = ambient;
 
   if (result.newInjuries.length > 0) {
-    journal += ` The week was harsh, leaving ${pronoun.toLowerCase()} with a ${result.newInjuries[0].toLowerCase()}.`;
+    journal += ` It was a harsh stretch, leaving ${object} with a ${result.newInjuries[0].toLowerCase()}.`;
   } else if (result.weightChange < -0.5) {
-    journal += ` Hunger is a constant companion; ${pronoun.toLowerCase()} grew noticeably thinner.`;
+    journal += ` Hunger is a constant companion; ${subject} grew noticeably thinner.`;
   } else if (result.weightChange > 0.5) {
-    journal += ` A rare week of bounty allowed ${pronoun.toLowerCase()} to put on some much-needed weight.`;
+    journal += ` A rare spell of plenty allowed ${object} to put on some much-needed weight.`;
   }
 
   if (result.newParasites.length > 0) {

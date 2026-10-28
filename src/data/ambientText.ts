@@ -1,4 +1,5 @@
 import type { Season } from '../types/world';
+import type { Setting } from '../types/speciesConfig';
 
 export interface AmbientTextEntry {
   id: string;
@@ -11,11 +12,21 @@ export interface AmbientTextEntry {
   regionIds?: string[];
   /** Restrict to specific weather types */
   weatherTypes?: string[];
+  /** Settings this line fits (default: wild only, since most lines describe the outdoors) */
+  settings?: Setting[];
   /** Selection weight (default 1) */
   weight?: number;
 }
 
 export const AMBIENT_TEXTS: AmbientTextEntry[] = [
+  // ── Captivity ──
+  { id: 'captive-1', text: 'The light hums overhead and never changes.', settings: ['captive'] },
+  { id: 'captive-2', text: 'Something overhead roars without stopping. The air it pushes is hot with bodies.', settings: ['captive'] },
+  { id: 'captive-3', text: 'A sharp smell hangs in the air, strong enough to water your eyes.', settings: ['captive'] },
+  { id: 'captive-4', text: 'A rattle overhead, and every head turns toward the food.', settings: ['captive'] },
+  { id: 'captive-chicken-1', text: 'Peeping on every side. The noise never stops.', settings: ['captive'], speciesIds: ['chicken'] },
+  { id: 'captive-pig-1', text: 'Your snout pushes at the ground and finds nothing to dig. Hard and cold everywhere.', settings: ['captive'], speciesIds: ['pig'] },
+
   // ── Spring ──
   { id: 'spring-1', text: 'Swelling buds on every branch. Wet bark smell, strong.', seasons: ['spring'] },
   { id: 'spring-2', text: 'Water running under the softening ground. The soil smells different now.', seasons: ['spring'] },

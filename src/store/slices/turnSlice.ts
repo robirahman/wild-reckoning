@@ -19,8 +19,11 @@ import { getMetabolismConfig } from '../../simulation/physiology/configs';
 import { tickWorldMemory } from '../../simulation/memory/ticker';
 import { tickNodeResources, buildNPCNodeMap } from '../../simulation/spatial/resources';
 import { tickNPCBehavior } from '../../simulation/npc/engine';
+import { FAST_FORWARD_TURNS } from '../../engine/FastForward';
+import { isCaptive } from '../../engine/captivity';
 
 export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
+  turnPhase: 'awaiting-start',
   currentEvents: [],
   pendingChoices: [],
   revocableChoices: {},
@@ -55,6 +58,21 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
     set({
       currentEvents: updatedEvents,
       pendingChoices: pending,
+      revocableChoices: revocable,
+    });
+  },
+
+  clearChoice: (eventId) => {
+    const state = get();
+    const revocable = { ...state.revocableChoices };
+    delete revocable[eventId];
+    set({
+      currentEvents: state.currentEvents.map((e) =>
+        e.definition.id === eventId ? { ...e, choiceMade: undefined } : e
+      ),
+      pendingChoices: state.pendingChoices.includes(eventId)
+        ? state.pendingChoices
+        : [...state.pendingChoices, eventId],
       revocableChoices: revocable,
     });
   },
@@ -151,8 +169,14 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
         const weightScale = config.massType
           ? 1  // massType species have events calibrated for their scale
           : Math.min(1, animal.weight / 100);
-        const scaledAmount = consequence.amount * weightScale;
-        animal.weight = Math.max(config.weight.minFloor, animal.weight + scaledAmount);
+        let scaledAmount = consequence.amount * weightScale;
+        // Gains taper off near the species' maximum body size, as seasonal growth does;
+        // without this, repeated kills grew wolves to 500+ lbs
+        const maxWeight = config.weight.maximumBiologicalWeight;
+        if (scaledAmount > 0) {
+          scaledAmount *= Math.max(0, 1 - Math.pow(animal.weight / maxWeight, 2));
+        }
+        animal.weight = Math.min(maxWeight, Math.max(config.weight.minFloor, animal.weight + scaledAmount));
         set({ animal });
         break;
       }
@@ -224,7 +248,8 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
         break;
       }
       case 'restore_energy': {
-        animal.energy = Math.min(100, animal.energy + consequence.amount);
+        // Negative amounts are an energy cost
+        animal.energy = Math.max(0, Math.min(100, animal.energy + consequence.amount));
         set({ animal });
         break;
       }
@@ -407,7 +432,9 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
     const config = state.speciesBundle.config;
     const difficultyMult = DIFFICULTY_PRESETS[state.difficulty];
     const turnUnit = config.turnUnit ?? 'week';
-    const iterations = state.fastForward ? 12 : 1;
+    const iterations = state.fastForward ? FAST_FORWARD_TURNS : 1;
+    // Indoors, captive animals have no weather or outdoor climate
+    const captive = isCaptive(config);
     const massScale = config.massType === 'micro' ? 0.000001 : (config.massType === 'mega' ? 5 : 1);
     // For weather/node/climate penalties: use body-weight-proportional scaling
     // for species without explicit massType. Prevents tiny species (terns, frogs,
@@ -426,18 +453,30 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
     let currentWorldMemory = state.worldMemory;
     let currentNPCBehaviorStates = { ...state.npcBehaviorStates };
     let currentNPCs = [...state.npcs];
-    const currentHistory = [...state.turnHistory];
+
+    // What happened along the way, for the fast-forward summary. Developments
+    // are what the animal felt, in its own terms (no dates, numbers, or concepts
+    // it can't have, like pregnancy or migration as such).
+    const startTime = currentTime;
+    const startWeight = currentAnimal.weight;
+    const startRegion = currentAnimal.region;
+    const developments: string[] = [];
+    let stoppedFor: string | undefined;
+    let turnsAdvanced = 0;
 
     for (let i = 0; i < iterations; i++) {
       const newTime = advanceTime(currentTime, turnUnit);
+      const heaBefore = computeEffectiveValue(currentAnimal.stats[StatId.HEA]);
       let tickedStats = tickModifiers(currentAnimal.stats);
       
       // Advance weather
       const regionDef = getRegionDefinition(currentAnimal.region);
-      const climate = regionDef?.climate;
-      const newWeather = currentWeather
-        ? tickWeather(currentWeather, climate, newTime.season, newTime.monthIndex, state.rng, currentClimateShift)
-        : generateWeather(climate, newTime.season, newTime.monthIndex, state.rng, currentClimateShift);
+      const climate = captive ? undefined : regionDef?.climate;
+      const newWeather = captive
+        ? null
+        : currentWeather
+          ? tickWeather(currentWeather, climate, newTime.season, newTime.monthIndex, state.rng, currentClimateShift)
+          : generateWeather(climate, newTime.season, newTime.monthIndex, state.rng, currentClimateShift);
 
       // Climate Shift
       if (newTime.year > currentTime.year) {
@@ -476,10 +515,11 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
         currentNPCBehaviorStates = behaviorResult.behaviorStates;
       }
 
-      // Tick World Memory (accumulate event history, node state, threat tracking)
+      // Tick World Memory (accumulate event history, node state, threat tracking).
+      // Last turn's events happened once, not once per fast-forwarded turn.
       currentWorldMemory = tickWorldMemory(
         currentWorldMemory,
-        state.currentEvents,
+        i === 0 ? state.currentEvents : [],
         newTime.turn,
         currentMap?.currentLocationId,
         newTime.season,
@@ -695,6 +735,7 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
         if (physResult.deathCause && currentAnimal.alive) {
           currentAnimal.alive = false;
           currentAnimal.causeOfDeath = physResult.deathCause;
+          stoppedFor ??= 'a fatal decline';
         }
 
         // Physiology narratives are available on the last iteration for display
@@ -748,7 +789,14 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
         }
       }
 
-      const newWeight = Math.max(config.weight.minFloor, currentAnimal.weight + seasonalWeightChange);
+      const newWeight = Math.min(
+        config.weight.maximumBiologicalWeight,
+        Math.max(config.weight.minFloor, currentAnimal.weight + seasonalWeightChange),
+      );
+      if (currentAnimal.weight >= config.weight.starvationDebuff && newWeight < config.weight.starvationDebuff) {
+        developments.push('Hunger sits in you all the time now, and you are weaker for it.');
+        stoppedFor ??= 'starvation';
+      }
 
       tickedStats = removeModifiersBySource(tickedStats, 'age-phase');
       const currentAgePhase = config.agePhases.find(
@@ -828,10 +876,23 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
 
       const newFlags = new Set(currentAnimal.flags);
       if (currentReproduction.type === 'iteroparous') {
+        const wasPregnant = !!currentReproduction.pregnancy;
+        const offspringBefore = currentReproduction.offspring.length;
         const reproResult = tickReproduction(currentReproduction, currentAnimal, newTime, config, state.rng);
         for (const f of reproResult.flagsToAdd) newFlags.add(f as GameFlag);
         for (const f of reproResult.flagsToRemove) newFlags.delete(f as GameFlag);
         currentReproduction = reproResult.reproduction;
+        if (currentReproduction.type === 'iteroparous') {
+          const born = currentReproduction.offspring.length - offspringBefore;
+          const tv = config.templateVars;
+          if (born > 0) {
+            developments.push(born === 1 ? `Your ${tv.youngNoun} has come.` : `Your ${tv.youngNounPlural} have come.`);
+            stoppedFor ??= 'a birth';
+          } else if (!wasPregnant && currentReproduction.pregnancy) {
+            // Conception isn't felt as such; the end of estrus is
+            developments.push('The restless pull toward males has gone quiet. Something has changed inside you.');
+          }
+        }
       }
 
       // Auto-spawning for semelparous species: when the animal reaches
@@ -858,10 +919,12 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
             hea * reproConfig.eggCountHeaFactor +
             currentAnimal.weight * reproConfig.eggCountWeightFactor
           );
-          let survivalRate = reproConfig.eggSurvivalBase + wis * reproConfig.eggSurvivalWisFactor;
+          const survivalRate = reproConfig.eggSurvivalBase + wis * reproConfig.eggSurvivalWisFactor;
           const estimatedSurvivors = Math.round(eggCount * survivalRate);
 
           newFlags.add(reproConfig.spawningCompleteFlag as GameFlag);
+          developments.push(currentAnimal.sex === 'female' ? 'Your eggs have left your body.' : 'The urge that drove you is spent.');
+          stoppedFor ??= 'spawning';
           currentReproduction = {
             ...currentReproduction,
             spawned: true,
@@ -877,10 +940,12 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
         if (newTime.season === mig.migrationSeason && newFlags.has(mig.migrationFlag as GameFlag) && !newFlags.has(mig.migratedFlag as GameFlag)) {
           newFlags.add(mig.migratedFlag as GameFlag);
           newFlags.delete(mig.migrationFlag as GameFlag);
+          developments.push('The pull that drove you onward has eased. You are where your body wanted to be.');
         }
         if (newTime.season === mig.returnSeason && newFlags.has(mig.migratedFlag as GameFlag)) {
           newFlags.delete(mig.migratedFlag as GameFlag);
           newFlags.add(mig.returnFlag as GameFlag);
+          developments.push('The pull has brought you back to ground you know.');
         } else if (newFlags.has(mig.returnFlag as GameFlag)) {
           newFlags.delete(mig.returnFlag as GameFlag);
         }
@@ -912,22 +977,34 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
       };
       currentTime = newTime;
       currentWeather = newWeather;
+      turnsAdvanced = i + 1;
 
-      if (i === iterations - 1) {
-        const statSnapshot = {} as Record<StatId, number>;
-        for (const id of Object.values(StatId)) {
-          statSnapshot[id] = computeEffectiveValue(currentAnimal.stats[id]);
-        }
-        currentHistory.push({
-          turn: currentTime.turn,
-          month: currentTime.month,
-          year: currentTime.year,
-          season: currentTime.season,
-          events: state.currentEvents,
-          statSnapshot,
-        });
+      if (heaBefore >= 20 && computeEffectiveValue(tickedStats[StatId.HEA]) < 20) {
+        developments.push('Something inside you is going wrong, and you are weaker each day.');
+        stoppedFor ??= 'failing health';
       }
+      // Hand control back to the player as soon as something important happens
+      if (stoppedFor) break;
     }
+
+    // How much warmer or colder it is where the animal ended up (no weather indoors)
+    const startClimate = captive ? undefined : getRegionDefinition(startRegion)?.climate;
+    const endClimate = captive ? undefined : getRegionDefinition(currentAnimal.region)?.climate;
+    const temperatureChange = startClimate && endClimate
+      ? endClimate.temperatureByMonth[currentTime.monthIndex] - startClimate.temperatureByMonth[startTime.monthIndex]
+      : undefined;
+
+    const lastTimeSkip = iterations > 1 ? {
+      turnsAdvanced,
+      turnsRequested: iterations,
+      from: { month: startTime.month, year: startTime.year, season: startTime.season },
+      to: { month: currentTime.month, year: currentTime.year, season: currentTime.season },
+      startWeight,
+      weightChange: currentAnimal.weight - startWeight,
+      temperatureChange,
+      developments,
+      stoppedFor,
+    } : null;
 
     set({
       time: currentTime,
@@ -940,10 +1017,12 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
       npcBehaviorStates: currentNPCBehaviorStates,
       currentEvents: [],
       pendingChoices: [],
-      turnHistory: currentHistory,
       eventCooldowns: currentCooldowns,
       actionsPerformed: [],
       climateShift: currentClimateShift,
+      lastTimeSkip,
+      // A major development pauses fast-forward so the player sees it
+      ...(stoppedFor && state.fastForward ? { fastForward: false } : {}),
     });
   },
 

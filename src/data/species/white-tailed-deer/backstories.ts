@@ -4,8 +4,9 @@ export const WHITE_TAILED_DEER_BACKSTORIES: Backstory[] = [
   {
     type: 'rehabilitation',
     label: 'Rehabilitated & Released',
-    description: 'You were found injured as a fawn and nursed back to health at a wildlife rehabilitation center before being released into the wild.',
-    monthsSinceEvent: 11,
+    description: 'You were found injured as a fawn and spent eleven months recovering at a wildlife rehabilitation center. Today you are released back into the wild.',
+    // The release happens on the first turn, so the count starts at zero
+    monthsSinceEvent: 0,
     statAdjustments: [
       { stat: 'TRA', amount: 10 },
       { stat: 'NOV', amount: 15 },

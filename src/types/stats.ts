@@ -35,30 +35,30 @@ export const STAT_CATEGORIES: Record<StatId, StatCategory> = {
   [StatId.STR]: StatCategory.FITNESS,
 };
 
-/** Full display names for each stat abbreviation */
+/** Full display names for each stat abbreviation; strains and stresses say so */
 export const STAT_NAMES: Record<StatId, string> = {
-  [StatId.IMM]: 'IMMune',
-  [StatId.CLI]: 'CLImate',
-  [StatId.HOM]: 'HOmeostasis',
+  [StatId.IMM]: 'IMMune strain',
+  [StatId.CLI]: 'CLImate strain',
+  [StatId.HOM]: 'HOMeostatic strain',
   [StatId.TRA]: 'TRAuma',
   [StatId.ADV]: 'ADVersity',
-  [StatId.NOV]: 'NOVelty',
+  [StatId.NOV]: 'NOVelty stress',
   [StatId.WIS]: 'WISdom',
   [StatId.HEA]: 'HEAlth',
-  [StatId.STR]: 'STResses',
+  [StatId.STR]: 'STRess (total)',
 };
 
-/** Descriptions for each stat, shown in tooltips */
+/** What each stat means for the animal, and which direction is good */
 export const STAT_DESCRIPTIONS: Record<StatId, string> = {
-  [StatId.IMM]: 'Pressure on your immune system from parasites, disease, and environmental pathogens. Higher means more vulnerable to illness.',
-  [StatId.CLI]: 'Sensitivity to weather and temperature extremes. Higher means more affected by harsh conditions.',
-  [StatId.HOM]: 'Disruption to your body\'s internal balance from exertion, starvation, and physical strain. Higher means more physically stressed.',
-  [StatId.TRA]: 'Accumulated psychological trauma from predator encounters, injury, and loss. Higher means more fear and anxiety.',
-  [StatId.ADV]: 'General adversity and hardship pressure. Higher means life has been harder recently.',
-  [StatId.NOV]: 'Stress from unfamiliar situations and changes. Higher means more disoriented by new experiences.',
-  [StatId.WIS]: 'Learned survival knowledge from experience. Higher means better instincts and decision-making.',
-  [StatId.HEA]: 'Overall physical vitality and resilience. Higher means a stronger, healthier body.',
-  [StatId.STR]: 'Aggregate stress level across all systems. Higher means more total stress on your body and mind.',
+  [StatId.IMM]: 'How hard parasites, infection, and disease are pushing on your immune system. Lower is better: under heavy strain, illness takes hold more easily.',
+  [StatId.CLI]: 'How much heat, cold, and weather are wearing on you. Lower is better.',
+  [StatId.HOM]: 'Strain on your body\'s balance from hunger, thirst, exertion, and exposure. Lower is better.',
+  [StatId.TRA]: 'Lasting fear from predator attacks, injury, and loss. These marks fade slowly and never completely. Lower is better.',
+  [StatId.ADV]: 'How hard life has been lately: competition, scarcity, crowding. Shelter and security ease it. Lower is better.',
+  [StatId.NOV]: 'Stress from the unfamiliar: new places, human things, situations your instincts don\'t cover. It eases as you adapt. Lower is better.',
+  [StatId.WIS]: 'What experience has taught you about finding food and avoiding danger. Higher is better.',
+  [StatId.HEA]: 'Your overall physical condition. Higher is better; at zero your body gives out.',
+  [StatId.STR]: 'All your strains and stresses combined. Lower is better.',
 };
 
 /** Display level derived from numeric value (0-100) */

@@ -137,9 +137,10 @@ export function tickPhysiologyEngine(input: PhysiologyTickInput): PhysiologyTick
 
   let weightChange: number;
   if (caloricBalance >= 0) {
-    // Surplus → weight gain, capped by fat deposition rate
+    // Surplus → weight gain, capped by the (seasonal) fat deposition rate
+    const depositionCap = mc.maxFatDepositionBySeason?.[time.season] ?? mc.maxFatDeposition;
     weightChange = Math.min(
-      mc.maxFatDeposition * ffMult,
+      depositionCap * ffMult,
       caloricBalance / mc.caloricDensityPerLb
     );
     // Asymptotic growth: harder to gain weight near maximum, but no penalty when underweight.
@@ -153,9 +154,12 @@ export function tickPhysiologyEngine(input: PhysiologyTickInput): PhysiologyTick
     }
     // else: underweight — no saturation penalty, full weight recovery rate
   } else {
-    // Deficit → weight loss, capped by fat mobilization rate
+    // Deficit → weight loss, capped by fat mobilization rate (proportional to body size when set)
+    const mobilizationCap = mc.maxFatMobilizationFraction !== undefined
+      ? mc.maxFatMobilizationFraction * animal.weight
+      : mc.maxFatMobilization;
     weightChange = -Math.min(
-      mc.maxFatMobilization * ffMult,
+      mobilizationCap * ffMult,
       Math.abs(caloricBalance) / mc.caloricDensityPerLb
     );
   }
@@ -197,7 +201,7 @@ export function tickPhysiologyEngine(input: PhysiologyTickInput): PhysiologyTick
   //  STEP 5: IMMUNE SYSTEM
   // ═══════════════════════════════════════════
 
-  const bodyCondition = computeBodyCondition(animal.weight + weightChange, config);
+  const bodyCondition = computeBodyCondition(animal.weight + weightChange, config, animal.sex, animal.age);
   physio.bodyConditionScore = bodyCondition;
 
   // Immune capacity: starts at baseline, reduced by malnutrition, stress, age

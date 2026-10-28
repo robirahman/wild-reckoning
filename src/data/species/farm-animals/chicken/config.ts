@@ -9,6 +9,7 @@ export const CHICKEN_CONFIG: SpeciesConfig = {
   diet: 'omnivore',
   defaultRegion: 'farmstead',
   defaultRegionDisplayName: 'Intensive Confinement Facility',
+  setting: 'captive',
 
   startingWeight: { male: 0.1, female: 0.1 }, // Starting as chicks
   startingAge: {

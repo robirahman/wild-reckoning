@@ -1,5 +1,5 @@
 import type { StatId } from './stats';
-import type { Season } from './world';
+import type { Month, Season } from './world';
 import type { Diet, Backstory } from './species';
 import type { GameEvent } from './events';
 import type { ParasiteDefinition, InjuryDefinition } from './health';
@@ -43,6 +43,9 @@ export interface IteroparousReproConfig {
   matingMinAge: number;
   matingOnsetAge: number;
   matingSeasons: Season[] | 'any';
+  /** Months when conception happens, for species whose breeding peaks inside a
+   *  season (the white-tailed deer rut). Narrows matingSeasons when set. */
+  matingMonths?: Month[];
   matingSeasonResetMonth: string;
   /** Per-turn probability of automatic mating when conditions are met (female, right age/season, not pregnant).
    *  Calibrate so mean lifetime fitness ≈ 2 (demographic replacement rate). Default: 0.08. */
@@ -129,6 +132,9 @@ export interface MigrationConfig {
 //  MAIN SPECIES CONFIG
 // ════════════════════════════════════════════════
 
+/** Whether an animal lives free or confined under human control (farm animals) */
+export type Setting = 'wild' | 'captive';
+
 export interface SpeciesConfig {
   id: string;
   name: string;
@@ -137,6 +143,11 @@ export interface SpeciesConfig {
   diet: Diet;
   defaultRegion: string;
   defaultRegionDisplayName: string;
+  /**
+   * Captive animals have no outdoor map, weather, or wild-only actions and
+   * storylines. Defaults to 'wild'.
+   */
+  setting?: Setting;
 
   startingWeight: { male: number; female: number };
   startingAge: Record<string, number>;
@@ -149,6 +160,14 @@ export interface SpeciesConfig {
     minFloor: number;
     debuffMaxPenalty: number;
     maximumBiologicalWeight: number;
+    /**
+     * Live weight of a healthy adult, by sex. When set, body condition is
+     * judged against this (scaled down for animals still growing) instead
+     * of the midpoint of the species' whole weight range.
+     */
+    healthyAdult?: { male: number; female: number };
+    /** Age in months by which an animal reaches healthyAdult weight */
+    adultAgeMonths?: number;
   };
 
   age: {
@@ -253,6 +272,8 @@ export interface SpeciesConfig {
 
   /** Species-specific overrides for voluntary actions */
   actions?: {
+    /** Males advertise for mates with rubs and scrapes during the mating season (deer) */
+    rutSignposts?: boolean;
     overrides?: Record<string, {
       label?: string;
       description?: string;

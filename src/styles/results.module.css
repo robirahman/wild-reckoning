@@ -220,3 +220,10 @@
     grid-template-columns: 1fr;
   }
 }
+
+.badgeGroupLabel {
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  margin-right: 4px;
+}

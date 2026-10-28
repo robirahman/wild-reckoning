@@ -1,6 +1,9 @@
 import { useState, useMemo } from 'react';
 import { useGameStore } from '../store/gameStore';
 import type { TurnRecord } from '../store/slices/types';
+import { pluralize } from '../utils/pluralize';
+import { describeTurnSpan, formatAge } from '../utils/timeSpan';
+import type { SpeciesConfig } from '../types/speciesConfig';
 import styles from '../styles/runsummary.module.css';
 
 interface TimelineEntry {
@@ -32,7 +35,7 @@ function extractTimelineEntries(turnHistory: TurnRecord[], causeOfDeath?: string
                 turn: record.turn,
                 month: record.month,
                 year: record.year,
-                text: def.narrativeText.slice(0, 120) + (def.narrativeText.length > 120 ? '...' : ''),
+                text: event.resolvedNarrative.slice(0, 120) + (event.resolvedNarrative.length > 120 ? '...' : ''),
                 category: tags.includes('migration') ? 'migration' : 'milestone',
               });
             }
@@ -164,12 +167,13 @@ function generateTextSummary(
   sex: string,
   age: number,
   turnCount: number,
+  turnUnit: SpeciesConfig['turnUnit'],
   causeOfDeath: string | undefined,
   fitness: number,
 ): string {
   let text = `WILD RECKONING \u2014 Life of a ${speciesName}\n`;
   text += `${'='.repeat(40)}\n`;
-  text += `Sex: ${sex} | Survived: ${turnCount} turns | Age: ${age} months\n`;
+  text += `Sex: ${sex} | Survived: ${describeTurnSpan(turnCount, turnUnit)} (${pluralize(turnCount, 'turn')}) | Age: ${formatAge(age, turnCount, turnUnit)}\n`;
   text += `Cause of death: ${causeOfDeath || 'Unknown'}\n`;
   text += `Fitness score: ${fitness}\n\n`;
   text += `LIFE TIMELINE:\n`;
@@ -187,6 +191,7 @@ export function RunSummary() {
   const turnHistory = useGameStore((s) => s.turnHistory);
   const causeOfDeath = useGameStore((s) => s.animal.causeOfDeath);
   const speciesName = useGameStore((s) => s.speciesBundle.config.name);
+  const turnUnit = useGameStore((s) => s.speciesBundle.config.turnUnit);
   const sex = useGameStore((s) => s.animal.sex);
   const age = useGameStore((s) => s.animal.age);
   const turnCount = useGameStore((s) => s.time.turn);
@@ -202,7 +207,7 @@ export function RunSummary() {
   const sexLabel = sex === 'female' ? 'Female' : 'Male';
 
   function getTextSummary(): string {
-    return generateTextSummary(entries, speciesName, sexLabel, age, turnCount, causeOfDeath, fitness);
+    return generateTextSummary(entries, speciesName, sexLabel, age, turnCount, turnUnit, causeOfDeath, fitness);
   }
 
   function handleCopy() {

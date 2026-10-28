@@ -3,7 +3,9 @@ import type { ResolvedEvent, StatEffect, Consequence } from '../types/events';
 import type { EventOutcome, TurnResult, PendingDeathRoll } from '../types/turnResult';
 import { StatId, computeEffectiveValue } from '../types/stats';
 import { DIFFICULTY_PRESETS } from '../types/difficulty';
-import { generateEvents } from './EventGenerator';
+import { generateEvents, getCalibratedRates } from './EventGenerator';
+import { FAST_FORWARD_TURNS } from './FastForward';
+import type { SimulationContext } from '../simulation/events/types';
 import { tickHealth, tickBodyState } from './HealthSystem';
 import { computeBuckWinProbability, determineOffspringCount } from './ReproductionSystem';
 import { getRegionDefinition } from '../data/regions';
@@ -36,6 +38,30 @@ export function generateTurnEvents(state: GameState): ResolvedEvent[] {
   });
 }
 
+/** The simulation layer's view of the current turn (for instinct nudges and sim events) */
+export function buildSimulationContext(state: GameState): SimulationContext {
+  const currentNode = state.map?.nodes.find(n => n.id === state.map!.currentLocationId);
+  return {
+    animal: state.animal,
+    time: state.time,
+    behavior: state.behavioralSettings,
+    config: state.speciesBundle.config,
+    rng: state.rng,
+    difficulty: state.difficulty,
+    npcs: state.npcs,
+    npcBehaviorStates: state.npcBehaviorStates,
+    regionDef: getRegionDefinition(state.animal.region),
+    currentWeather: state.currentWeather ?? undefined,
+    ecosystem: state.ecosystem,
+    currentNodeId: state.map?.currentLocationId,
+    currentNodeType: currentNode?.type,
+    currentNodeResources: currentNode?.resources,
+    worldMemory: state.worldMemory,
+    calibratedRates: getCalibratedRates(state.speciesBundle.config.id),
+    fastForward: state.fastForward,
+  };
+}
+
 /**
  * Called after player has made all choices for the turn.
  * Resolves all event effects, processes death chances, buck competition, and ticks health.
@@ -55,7 +81,7 @@ export function resolveTurn(state: GameState): {
   const eventOutcomes: EventOutcome[] = [];
   const pendingDeathRolls: PendingDeathRoll[] = [];
   
-  const ffMult = state.fastForward ? 12 : 1;
+  const ffMult = state.fastForward ? FAST_FORWARD_TURNS : 1;
 
   // Capture pre-resolution stat snapshot for delta computation
   const preStats: Record<StatId, number> = {} as Record<StatId, number>;
@@ -64,7 +90,19 @@ export function resolveTurn(state: GameState): {
   }
 
   for (const event of state.currentEvents) {
+    // Already applied when it happened (e.g. Rest): report it, don't apply it again
+    if (event.preApplied) {
+      eventOutcomes.push({
+        eventId: event.definition.id,
+        eventNarrative: event.resolvedNarrative,
+        statEffects: event.definition.statEffects,
+        consequences: event.definition.consequences ?? [],
+      });
+      continue;
+    }
+
     const eventEffects: StatEffect[] = [];
+    const choiceEffects: StatEffect[] = [];
     const eventConsequences: Consequence[] = [];
     let deathRollSurvived: boolean | undefined;
     let deathRollProbability: number | undefined;
@@ -110,8 +148,9 @@ export function resolveTurn(state: GameState): {
         narrativeResult = choice.narrativeResult;
         
         for (const eff of choice.statEffects) {
-          eventEffects.push({ ...eff, amount: eff.amount * ffMult });
+          choiceEffects.push({ ...eff, amount: eff.amount * ffMult });
         }
+        eventEffects.push(...choiceEffects);
         for (const cons of choice.consequences) {
           if (cons.type === 'modify_weight') {
             eventConsequences.push({ ...cons, amount: cons.amount * ffMult });
@@ -189,6 +228,7 @@ export function resolveTurn(state: GameState): {
       choiceId,
       narrativeResult,
       statEffects: eventEffects,
+      choiceStatEffects: choiceEffects,
       consequences: eventConsequences,
       deathRollSurvived,
       deathRollProbability,
@@ -233,7 +273,7 @@ export function resolveTurn(state: GameState): {
 
   // Tick health system (SCALED in FF)
   // Injuries heal by 12 turns in 12x fast-forward mode
-  const healthFfMult = state.fastForward ? 12 : 1;
+  const healthFfMult = state.fastForward ? FAST_FORWARD_TURNS : 1;
   const healthResult = tickHealth(state.animal, state.rng, state.speciesBundle.parasites, state.difficulty, healthFfMult);
 
   // Tick anatomy-based body state (Phase 0+ simulation layer)

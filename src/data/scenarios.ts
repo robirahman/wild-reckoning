@@ -6,14 +6,14 @@ export const SCENARIOS: ScenarioDefinition[] = [
   {
     id: 'the-last-winter',
     name: 'The Last Winter',
-    description: 'An unusually harsh winter has left you emaciated and weak. Survive 20 turns to see spring, if your body can hold together.',
+    description: 'An unusually harsh winter has left you thin and weak. Survive 20 turns to see spring, if your body can hold together.',
     speciesId: 'white-tailed-deer',
     difficulty: 'hard',
     sex: 'female',
-    backstoryType: 'forest-born',
-    startingWeight: 95,
+    backstoryType: 'wild-born',
+    startingWeight: 84,
     startingAge: 24,
-    startingFlags: ['territory-established'],
+    startMonth: 11,
     winCondition: {
       type: 'survive_turns',
       target: 20,
@@ -26,8 +26,10 @@ export const SCENARIOS: ScenarioDefinition[] = [
     description: 'You have been hooked and released by a fisherman, leaving you with a torn jaw. Now you must complete the spawning run before your body gives out.',
     speciesId: 'chinook-salmon',
     difficulty: 'hard',
-    startingInjuries: [{ injuryId: 'jaw-damage', severity: 1 }],
-    startingFlags: ['upstream-journey-begun'],
+    startingAge: 44,
+    startMonth: 7,
+    startingInjuries: [{ injuryId: 'spawning-jaw-wound', severity: 1 }],
+    startingFlags: ['spawning-migration-begun'],
     winCondition: {
       type: 'reproduce',
       target: 1,
@@ -42,7 +44,7 @@ export const SCENARIOS: ScenarioDefinition[] = [
     difficulty: 'normal',
     sex: 'female',
     startingAge: 180,
-    startingFlags: ['dry-season-stress'],
+    startMonth: 8,
     winCondition: {
       type: 'survive_turns',
       target: 15,
@@ -109,6 +111,7 @@ export const SCENARIOS: ScenarioDefinition[] = [
     speciesId: 'gray-wolf',
     difficulty: 'normal',
     sex: 'male',
+    backstoryType: 'lone-wolf',
     startingAge: 24,
     startingWeight: 75,
     winCondition: {

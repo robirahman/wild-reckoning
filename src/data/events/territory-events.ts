@@ -2,6 +2,10 @@
 
 import type { GameEvent } from '../../types/events';
 import { StatId } from '../../types/stats';
+import { TERRITORIAL_SPECIES } from '../../engine/TerritorySystem';
+
+/** Defending a territory only makes sense for species that hold one */
+const territorialOnly = { type: 'species' as const, speciesIds: [...TERRITORIAL_SPECIES] };
 
 export const TERRITORY_EVENTS: GameEvent[] = [
   {
@@ -17,6 +21,7 @@ export const TERRITORY_EVENTS: GameEvent[] = [
       { type: 'set_flag', flag: 'territory-marked' },
     ],
     conditions: [
+      territorialOnly,
       { type: 'has_flag', flag: 'territory-established' },
     ],
     weight: 6,
@@ -65,6 +70,7 @@ export const TERRITORY_EVENTS: GameEvent[] = [
       },
     ],
     conditions: [
+      territorialOnly,
       { type: 'has_flag', flag: 'territory-established' },
     ],
     weight: 2,
@@ -111,6 +117,7 @@ export const TERRITORY_EVENTS: GameEvent[] = [
       },
     ],
     conditions: [
+      territorialOnly,
       { type: 'has_flag', flag: 'territory-established' },
       { type: 'no_flag', flag: 'territory-expanded' },
       { type: 'age_range', min: 12 },
@@ -157,6 +164,7 @@ export const TERRITORY_EVENTS: GameEvent[] = [
       },
     ],
     conditions: [
+      territorialOnly,
       { type: 'has_flag', flag: 'territory-established' },
     ],
     weight: 1,
@@ -201,8 +209,11 @@ export const TERRITORY_EVENTS: GameEvent[] = [
       },
     ],
     conditions: [
+      territorialOnly,
       { type: 'no_flag', flag: 'territory-established' },
       { type: 'age_range', min: 6 },
+      // "Ranging here long enough to know it" needs some time spent here first
+      { type: 'turn_above', threshold: 6 },
     ],
     weight: 4,
     cooldown: 10,
@@ -254,6 +265,7 @@ export const TERRITORY_EVENTS: GameEvent[] = [
       },
     ],
     conditions: [
+      territorialOnly,
       { type: 'has_flag', flag: 'territory-established' },
     ],
     weight: 2,

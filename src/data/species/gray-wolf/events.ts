@@ -11,7 +11,7 @@ const wolfEvents: GameEvent[] = [
     type: 'active',
     category: 'foraging',
     narrativeText:
-      'A white-tailed doe bursts from the undergrowth. The scent of autumn fat hits your nose. She is running uphill through deep snow. Your muscles lock.',
+      'A white-tailed doe bursts from the undergrowth. The scent of autumn fat hits your nose. She is running uphill, hooves tearing at the ground. Your muscles lock.',
     statEffects: [
       { stat: StatId.HOM, amount: 5, label: '+HOM' },
       { stat: StatId.ADV, amount: 3, label: '+ADV' },
@@ -158,7 +158,7 @@ const wolfEvents: GameEvent[] = [
     type: 'active',
     category: 'foraging',
     narrativeText:
-      'Ravens circling above the pines. Below, a deer carcass half-buried in snow. Ribs still red, meat frozen. No other predator scent on it yet.',
+      'Ravens circling above the pines. Below, a deer carcass half-hidden in the brush. Ribs still red, the meat gone cold. No other predator scent on it yet.',
     statEffects: [
       { stat: StatId.HOM, amount: -4, label: '-HOM' },
       { stat: StatId.ADV, amount: -3, label: '-ADV' },
@@ -202,7 +202,7 @@ const wolfEvents: GameEvent[] = [
     type: 'passive',
     category: 'foraging',
     narrativeText:
-      'Two wolves drive the deer toward the frozen lake edge. A third cuts the escape route. You and the alpha close from behind. The deer stumbles on the ice. The pack converges. You eat in order of rank, tearing into the hot viscera.',
+      'Two wolves drive the deer toward the lake edge. A third cuts the escape route. You and the alpha close from behind. The deer stumbles on the ice. The pack converges. You eat in order of rank, tearing into the hot viscera.',
     statEffects: [
       { stat: StatId.HOM, amount: -6, label: '-HOM' },
       { stat: StatId.ADV, amount: -5, label: '-ADV' },
@@ -739,7 +739,7 @@ const wolfEvents: GameEvent[] = [
     type: 'active',
     category: 'predator',
     narrativeText:
-      'Six wolves on the ridge at first light. Tight formation. Their scent is wrong: different territory, different prey. Hackles raised. The two packs face each other across the frozen meadow, thirty yards apart. Every wolf snarling.',
+      'Six wolves on the ridge at first light. Tight formation. Their scent is wrong: different territory, different prey. Hackles raised. The two packs face each other across the open meadow, thirty yards apart. Every wolf snarling.',
     statEffects: [
       { stat: StatId.TRA, amount: 12, label: '+TRA' },
       { stat: StatId.ADV, amount: 10, label: '+ADV' },
@@ -1021,7 +1021,7 @@ const wolfEvents: GameEvent[] = [
     type: 'active',
     category: 'environmental',
     narrativeText:
-      'Four lanes of asphalt cut through the forest. The smell is acrid: rubber, exhaust, heated metal. Headlights sweep past. You stand in the ditch at the tree line. The deer are on the far side. A dead wolf lies frozen on the shoulder a quarter mile north.',
+      'Four lanes of asphalt cut through the forest. The smell is acrid: rubber, exhaust, heated metal. Headlights sweep past. You stand in the ditch at the tree line. The deer are on the far side. A dead wolf lies stiff on the shoulder a quarter mile north.',
     statEffects: [
       { stat: StatId.TRA, amount: 8, label: '+TRA' },
       { stat: StatId.NOV, amount: 6, label: '+NOV' },
@@ -1478,7 +1478,7 @@ const wolfEvents: GameEvent[] = [
         id: 'wolf-pup-defend',
         label: 'Defend the pups',
         description: 'Fight the rival to protect your offspring.',
-        narrativeResult: 'You throw yourself at the rival. Teeth flash. Blood sprays across the snow. The rival backs down. For now.',
+        narrativeResult: 'You throw yourself at the rival. Teeth flash. Blood sprays across the ground. The rival backs down. For now.',
         statEffects: [{ stat: StatId.ADV, amount: 5, label: '+ADV' }],
         consequences: [],
         revocable: false,
@@ -1650,7 +1650,7 @@ const wolfEvents: GameEvent[] = [
         id: 'wolf-rival-fight',
         label: 'Stand your ground',
         description: 'If they find you, fight.',
-        narrativeResult: 'A patrol wolf finds you at dusk. You fight in the snow, snapping and circling, until you pin it by the throat. It submits. You release it and move on.',
+        narrativeResult: 'A patrol wolf finds you at dusk. You fight in the open, snapping and circling, until you pin it by the throat. It submits. You release it and move on.',
         statEffects: [{ stat: StatId.ADV, amount: 5, label: '+ADV' }],
         consequences: [],
         revocable: false,

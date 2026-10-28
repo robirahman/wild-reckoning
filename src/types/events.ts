@@ -1,4 +1,4 @@
-import type { Season } from './world';
+import type { Month, Season } from './world';
 import { StatId } from './stats';
 import type { GameFlag } from './flags';
 import type { HarmEvent } from '../simulation/harm/types';
@@ -32,6 +32,8 @@ export interface StatEffect {
 
 export type EventCondition =
   | { type: 'season'; seasons: Season[] }
+  /** Narrower than a season, for timing that matters within one (the rut) */
+  | { type: 'month'; months: Month[] }
   | { type: 'region'; regionIds: string[] }
   | { type: 'species'; speciesIds: string[] }
   | { type: 'diet'; diets: string[] }
@@ -55,7 +57,8 @@ export type EventCondition =
   | { type: 'no_npc'; npcType: 'rival' | 'ally' | 'mate' | 'predator' | 'offspring' }
   | { type: 'node_type'; nodeTypes: ('forest' | 'water' | 'mountain' | 'plain' | 'den')[] }
   | { type: 'social_rank'; ranks: ('alpha' | 'beta' | 'subordinate' | 'omega' | 'lone')[] }
-  | { type: 'mutation_active'; mutationId: string };
+  | { type: 'mutation_active'; mutationId: string }
+  | { type: 'backstory'; backstoryTypes: string[] };
 
 // ── Consequences ──
 
@@ -167,4 +170,9 @@ export interface ResolvedEvent {
   resolvedNarrative: string; // Template variables filled in
   triggeredSubEvents: ResolvedSubEvent[];
   choiceMade?: string; // Choice ID if the player has chosen
+  /**
+   * The event's effects were applied when it happened (e.g. a voluntary
+   * action), so turn resolution reports it but must not apply it again.
+   */
+  preApplied?: boolean;
 }

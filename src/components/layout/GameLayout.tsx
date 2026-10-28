@@ -18,10 +18,12 @@ import { AudioControls } from '../AudioControls';
 import styles from '../../styles/layout.module.css';
 
 import { MapPanel } from '../MapPanel';
+import { GameControls } from '../header/GameControls';
 
 export function GameLayout() {
   const { startTurn, showingResults } = useGameEngine();
-  const currentEvents = useGameStore((s) => s.currentEvents);
+  const phase = useGameStore((s) => s.phase);
+  const turnPhase = useGameStore((s) => s.turnPhase);
   const tutorialStep = useGameStore((s) => s.tutorialStep);
   const advanceTutorial = useGameStore((s) => s.advanceTutorial);
   const skipTutorial = useGameStore((s) => s.skipTutorial);
@@ -29,19 +31,21 @@ export function GameLayout() {
   const [showJournal, setShowJournal] = useState(false);
   useAudio();
 
-  // Generate first turn's events on mount
+  // Start a turn whenever one is due: a new game, a new generation, or a
+  // resumed save from between turns. The pipeline ignores repeat calls.
   useEffect(() => {
-    if (currentEvents.length === 0 && !showingResults) {
+    if (phase === 'playing' && turnPhase === 'awaiting-start') {
       startTurn();
     }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [phase, turnPhase, startTurn]);
 
   return (
     <div className={styles.gameLayout}>
       <header className={styles.header}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <TurnHeader onToggleHistory={() => setShowHistory((h) => !h)} />
-          <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+            <GameControls />
             <button
               onClick={() => setShowJournal((j) => !j)}
               style={{

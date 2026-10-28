@@ -1,7 +1,32 @@
 import { useGameStore } from '../store/gameStore';
 import { describeSurroundings } from '../engine/SensoryDescriptions';
+import { createRng } from '../engine/RandomUtils';
+import { isCaptive, describeConfinement } from '../engine/captivity';
 import { computeEffectiveValue, StatId } from '../types/stats';
 import styles from '../styles/map.module.css';
+
+/** Seed for display-only randomness: stable within a turn and place, never touches the game's RNG */
+function displaySeed(seed: number, turn: number, nodeId: string): number {
+  let hash = seed + turn * 7919;
+  for (let i = 0; i < nodeId.length; i++) hash = (hash * 31 + nodeId.charCodeAt(i)) | 0;
+  return Math.abs(hash) || 1;
+}
+
+/** Surroundings for a confined animal: what it perceives, and no way out */
+function ConfinementPanel() {
+  const habitat = useGameStore((s) => s.speciesBundle.config.templateVars.habitat);
+  const turn = useGameStore((s) => s.time.turn);
+
+  return (
+    <div className={styles.mapContainer}>
+      <h3 className={styles.mapTitle}>Surroundings</h3>
+      <div className={styles.currentLocation}>
+        <p className={styles.sensoryText}>{describeConfinement(habitat, turn)}</p>
+      </div>
+      <p className={styles.tiredText}>Whichever way you turn, something blocks you.</p>
+    </div>
+  );
+}
 
 /**
  * Animal-perspective sensory navigation panel.
@@ -18,11 +43,13 @@ export function MapPanel() {
   const config = useGameStore((s) => s.speciesBundle.config);
   const weather = useGameStore((s) => s.currentWeather);
   const worldMemory = useGameStore((s) => s.worldMemory);
-  const rng = useGameStore((s) => s.rng);
+  const seed = useGameStore((s) => s.seed);
   const turn = useGameStore((s) => s.time.turn);
   const phase = useGameStore((s) => s.phase);
 
-  if (!map || phase !== 'playing') return null;
+  if (phase !== 'playing') return null;
+  if (isCaptive(config)) return <ConfinementPanel />;
+  if (!map) return null;
 
   const currentNode = map.nodes.find((n) => n.id === map.currentLocationId);
   if (!currentNode) return null;
@@ -42,7 +69,7 @@ export function MapPanel() {
     weather,
     worldMemory,
     wisdom,
-    rng,
+    createRng(displaySeed(seed, turn, currentNode.id)),
     turn,
   );
 

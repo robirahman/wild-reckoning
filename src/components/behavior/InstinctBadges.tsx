@@ -1,5 +1,5 @@
 import { useGameStore } from '../../store/gameStore';
-import { BEHAVIOR_LABELS } from '../../types';
+import { instinctUrge } from '../../engine/needs';
 import styles from '../../styles/instinct.module.css';
 
 /**
@@ -7,8 +7,9 @@ import styles from '../../styles/instinct.module.css';
  *
  * Each badge shows a short label (e.g., "Exposed", "Starving") with a hover
  * tooltip that explains the instinct in animal-perspective prose. If the nudge
- * suggests a behavioral adjustment, the tooltip includes a hint like
- * "Instinct suggests: increase Caution."
+ * pulls on a behavior, the tooltip ends with the urge as the animal feels it
+ * ("You want to move on from here."), and the badge carries a ↑/↓ arrow. It
+ * never names a setting: the animal knows nothing of the game's controls.
  *
  * Nudges are advisory only — clicking does nothing. The player decides.
  */
@@ -41,8 +42,7 @@ export function InstinctBadges() {
               {nudge.description}
               {nudge.suggestedBehavior && nudge.suggestedDirection && (
                 <div className={styles.tooltipBehavior}>
-                  Instinct suggests: {nudge.suggestedDirection}{' '}
-                  {BEHAVIOR_LABELS[nudge.suggestedBehavior]}
+                  {instinctUrge(nudge.suggestedBehavior, nudge.suggestedDirection)}
                 </div>
               )}
             </span>
