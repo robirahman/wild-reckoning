@@ -18,6 +18,7 @@ import { AudioControls } from '../AudioControls';
 import styles from '../../styles/layout.module.css';
 
 import { MapPanel } from '../MapPanel';
+import { GameControls } from '../header/GameControls';
 
 export function GameLayout() {
   const { startTurn, showingResults } = useGameEngine();
@@ -43,7 +44,8 @@ export function GameLayout() {
       <header className={styles.header}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <TurnHeader onToggleHistory={() => setShowHistory((h) => !h)} />
-          <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+            <GameControls />
             <button
               onClick={() => setShowJournal((j) => !j)}
               style={{

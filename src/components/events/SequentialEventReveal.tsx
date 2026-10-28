@@ -1,8 +1,9 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import { useGameStore } from '../../store/gameStore';
 import { EventCard } from './EventCard';
 import { TurnControls } from '../TurnControls';
 import { ActionPanel } from '../ActionPanel';
+import { eventSignature, nextRevealCount, type RevealState } from './revealProgress';
 import styles from '../../styles/events.module.css';
 
 /**
@@ -15,28 +16,22 @@ import styles from '../../styles/events.module.css';
  */
 export function SequentialEventReveal() {
   const currentEvents = useGameStore((s) => s.currentEvents);
+  const turn = useGameStore((s) => s.time.turn);
   const makeChoice = useGameStore((s) => s.makeChoice);
   const clearChoice = useGameStore((s) => s.clearChoice);
 
-  // Track how many events have been "revealed" to the player
-  const [revealedCount, setRevealedCount] = useState(0);
-  const prevLengthRef = useRef(currentEvents.length);
-
-  // Reset only on new turn (length shrinks or goes to 0→N); auto-reveal appended events
-  useEffect(() => {
-    const prevLen = prevLengthRef.current;
-    prevLengthRef.current = currentEvents.length;
-
-    if (currentEvents.length === 0) {
-      setRevealedCount(0);
-    } else if (prevLen === 0 || currentEvents.length <= prevLen) {
-      // New turn: reset to show first event
-      setRevealedCount(1);
-    } else {
-      // Events were appended (e.g. action performed) — auto-reveal them
-      setRevealedCount(currentEvents.length);
-    }
-  }, [currentEvents]);
+  // How many events have been revealed. Keyed on the event list's identity
+  // (not the array object), so answering an event keeps the player's place.
+  const [reveal, setReveal] = useState<RevealState>(() => ({
+    signature: eventSignature(currentEvents, turn),
+    count: nextRevealCount(null, currentEvents, turn),
+  }));
+  const signature = eventSignature(currentEvents, turn);
+  if (signature !== reveal.signature) {
+    // A new turn or appended events: adjust during render rather than in an effect
+    setReveal({ signature, count: nextRevealCount(reveal, currentEvents, turn) });
+  }
+  const revealedCount = signature === reveal.signature ? reveal.count : nextRevealCount(reveal, currentEvents, turn);
 
   if (currentEvents.length === 0) {
     return (
@@ -61,12 +56,17 @@ export function SequentialEventReveal() {
 
   const handleAdvance = () => {
     if (revealedCount < currentEvents.length) {
-      setRevealedCount(revealedCount + 1);
+      setReveal({ signature, count: revealedCount + 1 });
     }
   };
 
   return (
     <div>
+      <div className={styles.eventProgress} aria-live="polite">
+        {allRevealed
+          ? `All ${currentEvents.length} events seen`
+          : `Event ${revealedCount} of ${currentEvents.length}`}
+      </div>
       {revealed.map((event, idx) => {
         const isActive = event.definition.type === 'active';
         const isCurrent = idx === revealed.length - 1;

@@ -1,24 +1,8 @@
 import { useGameEngine } from '../hooks/useGameEngine';
-import { useGameStore } from '../store/gameStore';
-import { saveGame } from '../store/persistence';
-import { FastForwardToggle } from './FastForwardToggle';
 
+/** End-of-turn control: shown once every event has been revealed */
 export function TurnControls() {
   const { confirmChoices, hasPendingChoices } = useGameEngine();
-  const returnToMenu = useGameStore((s) => s.returnToMenu);
-
-  const handleQuit = () => {
-    if (confirm('Are you sure you want to quit? Your progress will be saved.')) {
-      saveGame(useGameStore.getState());
-      returnToMenu();
-    }
-  };
-
-  const handleSave = () => {
-    alert(saveGame(useGameStore.getState())
-      ? 'Game saved.'
-      : 'The game could not be saved. Your browser storage may be full or disabled.');
-  };
 
   return (
     <div style={{
@@ -28,42 +12,6 @@ export function TurnControls() {
       alignItems: 'center',
       gap: 16,
     }}>
-      <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-        <FastForwardToggle />
-
-        <button
-          onClick={handleSave}
-          style={{
-            padding: '6px 12px',
-            fontSize: '0.8rem',
-            fontFamily: 'var(--font-ui)',
-            background: 'var(--color-panel-bg)',
-            border: '1px solid var(--color-border)',
-            borderRadius: 4,
-            cursor: 'pointer',
-            color: 'var(--color-text-muted)',
-          }}
-        >
-          Save Game
-        </button>
-
-        <button
-          onClick={handleQuit}
-          style={{
-            padding: '6px 12px',
-            fontSize: '0.8rem',
-            fontFamily: 'var(--font-ui)',
-            background: 'var(--color-panel-bg)',
-            border: '1px solid var(--color-border)',
-            borderRadius: 4,
-            cursor: 'pointer',
-            color: 'var(--color-danger)',
-          }}
-        >
-          Quit
-        </button>
-      </div>
-
       <div style={{
         display: 'flex',
         gap: 12,

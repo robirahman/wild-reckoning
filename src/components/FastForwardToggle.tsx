@@ -2,7 +2,7 @@ import { useGameStore } from '../store/gameStore';
 import { describeTurnSpan, FAST_FORWARD_TURNS } from '../engine/FastForward';
 
 /** Toggle that says how much of the animal's life each turn will cover */
-export function FastForwardToggle() {
+export function FastForwardToggle({ compact = false }: { compact?: boolean }) {
   const fastForward = useGameStore((s) => s.fastForward);
   const toggleFastForward = useGameStore((s) => s.toggleFastForward);
   const turnUnit = useGameStore((s) => s.speciesBundle.config.turnUnit);
@@ -14,8 +14,8 @@ export function FastForwardToggle() {
       aria-pressed={fastForward}
       title={`Fast-forward simulates ${skipSpan} of your animal's life each turn. It pauses on its own for births, injuries, and health crises.`}
       style={{
-        padding: '6px 12px',
-        fontSize: '0.8rem',
+        padding: compact ? '2px 8px' : '6px 12px',
+        fontSize: compact ? '0.75rem' : '0.8rem',
         fontFamily: 'var(--font-ui)',
         background: fastForward ? 'var(--color-danger-bg)' : 'var(--color-panel-bg)',
         border: `1px solid ${fastForward ? 'var(--color-danger)' : 'var(--color-border)'}`,
