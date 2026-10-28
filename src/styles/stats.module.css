@@ -60,6 +60,12 @@
   margin-top: var(--space-xs);
 }
 
+.conditionNote {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin-top: var(--space-xs);
+}
+
 .mutationsList {
   display: flex;
   flex-wrap: wrap;

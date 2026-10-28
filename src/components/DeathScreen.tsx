@@ -8,6 +8,7 @@ import { formatWeight } from '../utils/formatWeight';
 import { pluralize } from '../utils/pluralize';
 import { describeTurnSpan, formatAge } from '../utils/timeSpan';
 import { getLifeOutcome } from '../engine/LifeOutcome';
+import { isCaptive } from '../engine/captivity';
 import type { Offspring } from '../types/reproduction';
 import type { SpeciesConfig } from '../types/speciesConfig';
 import { useAchievementStore } from '../store/achievementStore';
@@ -109,6 +110,12 @@ export function DeathScreen() {
     ? topFoodEntry[0].split('-').slice(1).map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
     : null;
 
+  // Wandering and weather don't apply to an animal that never left its pen
+  const captive = isCaptive(config);
+  const { friendsMade, rivalsDefeated, predatorsEvaded, preyEaten } = animal.lifetimeStats;
+  const hasLifetimeStats = !captive || friendsMade > 0 || rivalsDefeated > 0
+    || predatorsEvaded > 0 || preyEaten > 0 || !!favoriteFood;
+
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>
@@ -195,7 +202,7 @@ export function DeathScreen() {
       </div>
 
       {/* ── Lifetime Achievements ── */}
-      <div className={styles.lifetimeStatsPanel}>
+      {hasLifetimeStats && <div className={styles.lifetimeStatsPanel}>
         <div className={styles.panelHeading}>
           Lifetime Achievements
         </div>
@@ -230,20 +237,24 @@ export function DeathScreen() {
               <span className={styles.statLabel}>Top Food Source</span>
             </div>
           )}
-          <div className={styles.statItem}>
-            <span className={styles.statValue}>{animal.lifetimeStats.distanceTraveled}</span>
-            <span className={styles.statLabel}>Nodes Traversed</span>
-          </div>
-          <div className={styles.statItem}>
-            <span className={styles.statValue}>{animal.lifetimeStats.weatherEventsSurvived}</span>
-            <span className={styles.statLabel}>Severe Weather Turns</span>
-          </div>
-          <div className={styles.statItem}>
-            <span className={styles.statValue}>{animal.lifetimeStats.regionsVisited.length}</span>
-            <span className={styles.statLabel}>Regions Explored</span>
-          </div>
+          {!captive && (
+            <>
+              <div className={styles.statItem}>
+                <span className={styles.statValue}>{animal.lifetimeStats.distanceTraveled}</span>
+                <span className={styles.statLabel}>Nodes Traversed</span>
+              </div>
+              <div className={styles.statItem}>
+                <span className={styles.statValue}>{animal.lifetimeStats.weatherEventsSurvived}</span>
+                <span className={styles.statLabel}>Severe Weather Turns</span>
+              </div>
+              <div className={styles.statItem}>
+                <span className={styles.statValue}>{animal.lifetimeStats.regionsVisited.length}</span>
+                <span className={styles.statLabel}>Regions Explored</span>
+              </div>
+            </>
+          )}
         </div>
-      </div>
+      </div>}
 
       {/* ── Genetic Legacy ── */}
       {animal.activeMutations.length > 0 && (

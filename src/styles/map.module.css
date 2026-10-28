@@ -18,6 +18,20 @@
   margin-bottom: 16px;
 }
 
+.sensoryText {
+  margin: 0;
+  font-family: var(--font-narrative);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.tiredText {
+  margin: 0 0 4px;
+  font-size: 0.8rem;
+  font-style: italic;
+  color: var(--color-text-muted);
+}
+
 .locationLabel {
   font-size: 0.75rem;
   color: var(--color-text-muted);
@@ -58,6 +72,43 @@
 .adjacentButton:disabled {
   opacity: 0.4;
   cursor: not-allowed;
+}
+
+.dirLabel {
+  display: block;
+}
+
+.effortLabel,
+.waterCue,
+.dangerCue {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.waterCue {
+  color: var(--color-positive);
+}
+
+.dangerCue {
+  color: var(--color-danger);
+}
+
+.sniffButton {
+  padding: 6px 12px;
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  color: var(--color-text);
+  font-size: 0.8rem;
+  font-family: var(--font-ui);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.sniffButton:hover {
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .energyBar {

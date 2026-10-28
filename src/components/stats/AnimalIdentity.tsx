@@ -61,7 +61,7 @@ export function AnimalIdentity() {
           </>
         )}
       </div>
-      <div className={styles.statusNote}>
+      <div className={styles.conditionNote}>
         <span title="Short-term energy for moving and acting. It comes back with rest.">Stamina: {stamina}</span>
         {bodyCondition && (
           <>
