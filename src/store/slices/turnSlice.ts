@@ -168,8 +168,14 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
         const weightScale = config.massType
           ? 1  // massType species have events calibrated for their scale
           : Math.min(1, animal.weight / 100);
-        const scaledAmount = consequence.amount * weightScale;
-        animal.weight = Math.max(config.weight.minFloor, animal.weight + scaledAmount);
+        let scaledAmount = consequence.amount * weightScale;
+        // Gains taper off near the species' maximum body size, as seasonal growth does;
+        // without this, repeated kills grew wolves to 500+ lbs
+        const maxWeight = config.weight.maximumBiologicalWeight;
+        if (scaledAmount > 0) {
+          scaledAmount *= Math.max(0, 1 - Math.pow(animal.weight / maxWeight, 2));
+        }
+        animal.weight = Math.min(maxWeight, Math.max(config.weight.minFloor, animal.weight + scaledAmount));
         set({ animal });
         break;
       }
@@ -777,7 +783,10 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
         }
       }
 
-      const newWeight = Math.max(config.weight.minFloor, currentAnimal.weight + seasonalWeightChange);
+      const newWeight = Math.min(
+        config.weight.maximumBiologicalWeight,
+        Math.max(config.weight.minFloor, currentAnimal.weight + seasonalWeightChange),
+      );
       if (currentAnimal.weight >= config.weight.starvationDebuff && newWeight < config.weight.starvationDebuff) {
         developments.push('Your body began to starve.');
         stoppedFor ??= 'starvation';
