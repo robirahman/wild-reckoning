@@ -18,7 +18,7 @@
  */
 
 import { useGameStore, type GameState } from '../store/gameStore';
-import { beginTurn, commitTurn, dismissResults } from '../engine/TurnPipeline';
+import { beginTurn, commitTurn, dismissResults, resolveDeathRoll as resolveTurnDeathRoll } from '../engine/TurnPipeline';
 import { getLifeOutcome } from '../engine/LifeOutcome';
 import { StatId, computeEffectiveValue } from '../types/stats';
 import { getSpeciesBundle, getAllSpeciesIds } from '../data/species';
@@ -310,7 +310,7 @@ export class GameAPI {
   resolveDeathRoll(eventId: string, escapeOptionId: string): { survived: boolean } {
     const stateBefore = this._store.getState();
     const wasDead = stateBefore.phase === 'dead';
-    this._store.getState().resolveDeathRoll(eventId, escapeOptionId);
+    resolveTurnDeathRoll(this._store, eventId, escapeOptionId);
     const stateAfter = this._store.getState();
     return { survived: stateAfter.phase !== 'dead' && !wasDead };
   }

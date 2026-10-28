@@ -3,9 +3,13 @@ import { installLocalStorage } from '../../test-utils/localStorage';
 import { createGameStore } from '../../store/gameStore';
 import { getSpeciesBundle } from '../../data/species';
 import { StatId, computeEffectiveValue } from '../../types/stats';
-import { beginTurn, commitTurn, dismissResults } from '../TurnPipeline';
+import { beginTurn, commitTurn, dismissResults, resolveDeathRoll, type TurnHooks } from '../TurnPipeline';
 import { FAST_FORWARD_TURNS } from '../FastForward';
 import { computeBodyCondition } from '../../simulation/physiology/helpers';
+import { SCENARIOS } from '../../data/scenarios';
+import { createMockRng } from './testHelpers';
+import type { ResolvedEvent } from '../../types/events';
+import type { ScenarioOutcome } from '../../types/scenario';
 
 beforeAll(installLocalStorage);
 
@@ -34,7 +38,7 @@ function playOneTurn(store: Store) {
   answerAll(store);
   commitTurn(store);
   for (const roll of store.getState().turnResult?.pendingDeathRolls ?? []) {
-    store.getState().resolveDeathRoll(roll.eventId, roll.escapeOptions[0].id);
+    resolveDeathRoll(store, roll.eventId, roll.escapeOptions[0].id);
   }
   dismissResults(store);
 }
@@ -244,5 +248,78 @@ describe('body condition', () => {
     beginTurn(store);
     expect(store.getState().animal.physiologyState?.bodyConditionScore).toBeGreaterThanOrEqual(3);
     expect(store.getState().instinctNudges.map((n) => n.id)).not.toContain('starving');
+  });
+});
+
+describe('challenge outcomes', () => {
+  /**
+   * "The Last Winter" (survive 20 turns), with one deadly encounter on the
+   * given turn whose escape the player still has to choose after Next Turn.
+   */
+  function deadlyEncounterOnTurn(turn: number) {
+    const scenario = SCENARIOS.find((s) => s.id === 'the-last-winter')!;
+    const bundle = getSpeciesBundle(scenario.speciesId);
+    const store = createGameStore();
+    store.getState().startGame(scenario.speciesId, bundle.backstories.find((b) => b.type === scenario.backstoryType)!,
+      scenario.sex ?? 'female', scenario.difficulty, 4242, scenario);
+    beginTurn(store);
+
+    const ambush: ResolvedEvent = {
+      definition: {
+        id: 'test-ambush', type: 'active', category: 'predator', narrativeText: 'A test.',
+        statEffects: [], conditions: [], weight: 1, tags: ['predator'],
+        choices: [{
+          id: 'freeze', label: 'Freeze', statEffects: [], consequences: [], revocable: false, style: 'danger',
+          deathChance: {
+            probability: 0.5,
+            cause: 'Taken by the test predator.',
+            escapeOptions: [{ id: 'run', label: 'Run', description: 'Run.', survivalModifier: 0 }],
+          },
+        }],
+      },
+      resolvedNarrative: 'A test.',
+      triggeredSubEvents: [],
+    };
+    store.setState({ currentEvents: [ambush], pendingChoices: ['test-ambush'], time: { ...store.getState().time, turn } });
+    store.getState().makeChoice('test-ambush', 'freeze');
+
+    const decided: ScenarioOutcome[] = [];
+    const hooks: TurnHooks = { onScenarioDecided: (_state, outcome) => decided.push(outcome) };
+    commitTurn(store, hooks);
+    expect(store.getState().phase).toBe('playing');
+    expect(store.getState().turnResult?.pendingDeathRolls).toHaveLength(1);
+    return { store, hooks, decided };
+  }
+
+  it('waits for the escape roll before deciding', () => {
+    const { store, decided } = deadlyEncounterOnTurn(20);
+    expect(store.getState().scenarioOutcome).toBeNull();
+    expect(decided).toEqual([]);
+  });
+
+  it("isn't won when the final turn's escape fails", () => {
+    const { store, hooks, decided } = deadlyEncounterOnTurn(20);
+    store.setState({ rng: createMockRng({ chance: true }) }); // the roll kills
+    resolveDeathRoll(store, 'test-ambush', 'run', hooks);
+    expect(store.getState().phase).toBe('dead');
+    expect(store.getState().scenarioOutcome?.status).toBe('lost');
+    expect(decided.map((o) => o.status)).toEqual(['lost']);
+  });
+
+  it('is won once the final escape succeeds', () => {
+    const { store, hooks, decided } = deadlyEncounterOnTurn(20);
+    store.setState({ rng: createMockRng({ chance: false }) }); // the animal gets away
+    resolveDeathRoll(store, 'test-ambush', 'run', hooks);
+    expect(store.getState().phase).toBe('playing');
+    expect(store.getState().scenarioOutcome?.status).toBe('won');
+    expect(decided.map((o) => o.status)).toEqual(['won']);
+  });
+
+  it('records a loss when an escape fails before the target turn', () => {
+    const { store, hooks, decided } = deadlyEncounterOnTurn(5);
+    store.setState({ rng: createMockRng({ chance: true }) });
+    resolveDeathRoll(store, 'test-ambush', 'run', hooks);
+    expect(store.getState().phase).toBe('dead');
+    expect(decided.map((o) => o.status)).toEqual(['lost']);
   });
 });

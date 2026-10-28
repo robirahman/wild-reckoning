@@ -1,6 +1,12 @@
 import { useCallback } from 'react';
 import { useGameStore, type GameState } from '../store/gameStore';
-import { beginTurn, commitTurn, dismissResults as dismissTurnResults, type TurnHooks } from '../engine/TurnPipeline';
+import {
+  beginTurn,
+  commitTurn,
+  dismissResults as dismissTurnResults,
+  resolveDeathRoll as resolveTurnDeathRoll,
+  type TurnHooks,
+} from '../engine/TurnPipeline';
 import { saveGame } from '../store/persistence';
 import { checkAchievements } from '../engine/AchievementChecker';
 import { useAchievementStore } from '../store/achievementStore';
@@ -72,10 +78,15 @@ export function useGameEngine() {
     if (dismissTurnResults(useGameStore)) startTurn();
   }, [startTurn]);
 
+  const resolveDeathRoll = useCallback((eventId: string, escapeOptionId: string) => {
+    resolveTurnDeathRoll(useGameStore, eventId, escapeOptionId, uiHooks);
+  }, []);
+
   return {
     startTurn,
     confirmChoices,
     dismissResults,
+    resolveDeathRoll,
     phase,
     hasPendingChoices,
     showingResults,

@@ -8,11 +8,10 @@ import styles from '../../styles/results.module.css';
 export function TurnResultsScreen() {
   const turnResult = useGameStore((s) => s.turnResult);
   const phase = useGameStore((s) => s.phase);
-  const resolveDeathRoll = useGameStore((s) => s.resolveDeathRoll);
   const scenario = useGameStore((s) => s.scenario);
   const scenarioOutcome = useGameStore((s) => s.scenarioOutcome);
   const turn = useGameStore((s) => s.time.turn);
-  const { dismissResults } = useGameEngine();
+  const { dismissResults, resolveDeathRoll } = useGameEngine();
 
   if (!turnResult) return null;
 

@@ -4,6 +4,9 @@
  *
  *   awaiting-start --beginTurn--> choosing --commitTurn--> results --dismissResults--> awaiting-start
  *
+ * Escape choices from a deadly encounter are made on the results screen with
+ * resolveDeathRoll, before the results can be dismissed.
+ *
  * Each step checks the phase first, so a double-click, React StrictMode's
  * doubled effects, or an API caller repeating a step can never advance time
  * or apply a turn's effects twice.
@@ -37,7 +40,7 @@ import { isMatingTime } from './ReproductionSystem';
 export type GameStore = Pick<StoreApi<GameState>, 'getState' | 'setState'>;
 
 export interface TurnHooks {
-  /** Runs after a turn's effects are applied and death has been checked */
+  /** Runs after a turn's effects are applied and death has been checked, and again if an escape roll then kills the animal */
   onCommitted?: (state: GameState) => void;
   /** Runs once, when a Challenge Mode scenario is won or lost */
   onScenarioDecided?: (state: GameState, outcome: ScenarioOutcome) => void;
@@ -262,16 +265,41 @@ export function commitTurn(store: GameStore, hooks: TurnHooks = {}): TurnResult 
   store.setState({ turnPhase: 'results' });
 
   checkDeathConditions(store);
-
-  const afterTurn = store.getState();
-  const outcome = scenarioOutcomeAfterTurn(afterTurn);
-  if (outcome) {
-    store.setState({ scenarioOutcome: outcome });
-    hooks.onScenarioDecided?.(store.getState(), outcome);
-  }
+  settleScenario(store, hooks);
 
   hooks.onCommitted?.(store.getState());
   return result.turnResult;
+}
+
+/**
+ * Decide a Challenge Mode scenario once the turn's fate is known: no escape
+ * rolls left to make, or the animal is dead. Deciding sooner could count a
+ * challenge won for an animal that a pending roll then kills.
+ */
+function settleScenario(store: GameStore, hooks: TurnHooks): void {
+  const state = store.getState();
+  if (state.phase === 'playing' && state.turnResult?.pendingDeathRolls?.length) return;
+  const outcome = scenarioOutcomeAfterTurn(state);
+  if (!outcome) return;
+  store.setState({ scenarioOutcome: outcome });
+  hooks.onScenarioDecided?.(store.getState(), outcome);
+}
+
+// ── Escape ───────────────────────────────────────────────────────────────
+
+/**
+ * Resolve the player's escape choice for one deadly encounter on the results
+ * screen, then settle the turn: decide a scenario once no rolls remain, and
+ * run the turn hooks again if the roll ended the animal's life (death, or a
+ * lineage species moving on to its next generation).
+ */
+export function resolveDeathRoll(store: GameStore, eventId: string, escapeOptionId: string, hooks: TurnHooks = {}): void {
+  const wasAlive = store.getState().phase === 'playing';
+  store.getState().resolveDeathRoll(eventId, escapeOptionId);
+  settleScenario(store, hooks);
+  if (wasAlive && store.getState().phase !== 'playing') {
+    hooks.onCommitted?.(store.getState());
+  }
 }
 
 /** Count predators evaded, prey eaten, rivals beaten and friends made; credit NPC encounters */
