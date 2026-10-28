@@ -59,6 +59,7 @@ export function applyScenarioStart(
     ...animal,
     weight,
     age,
+    startAge: age,
     region,
     flags,
     injuries,

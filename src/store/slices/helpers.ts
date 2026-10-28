@@ -35,6 +35,7 @@ export function createInitialAnimal(config: SpeciesConfig, backstory: Backstory,
   return {
     speciesId: config.id,
     age,
+    startAge: age,
     weight: sex === 'female' ? config.startingWeight.female : config.startingWeight.male,
     sex,
     region: config.defaultRegion,

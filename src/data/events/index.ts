@@ -1025,6 +1025,7 @@ export const allEvents: GameEvent[] = [
     ],
     conditions: [
       { type: 'has_flag', flag: 'returned-from-migration' },
+      { type: 'season', seasons: ['spring'] },
     ],
     weight: 25,
     cooldown: 20,
@@ -1082,6 +1083,8 @@ export const allEvents: GameEvent[] = [
     conditions: [
       { type: 'age_range', min: 12, max: 24 },
       { type: 'sex', sex: 'male' },
+      // Antlers grow in velvet from spring through summer
+      { type: 'season', seasons: ['spring', 'summer'] },
     ],
     weight: 15,
     cooldown: 12,

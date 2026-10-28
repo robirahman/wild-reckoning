@@ -485,15 +485,7 @@ function detectMemorySituations(ctx: SimulationContext, out: Situation[]): void 
     }
   }
 
-  // Rehabilitation intro (first few turns)
-  if (ctx.time.turn <= 3 && ctx.animal.backstory?.type === 'rehabilitated') {
-    out.push({
-      type: 'memory-trigger',
-      source: 'rehabilitation-intro',
-      weight: 1.0,
-      params: { turn: ctx.time.turn },
-    });
-  }
+  // (The rehabilitation intro is guaranteed by rehabilitationTemplate itself.)
 }
 
 // ── Activity Exposure Detection ──

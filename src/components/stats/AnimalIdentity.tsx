@@ -1,6 +1,7 @@
 import { useGameStore } from '../../store/gameStore';
 import { formatWeight } from '../../utils/formatWeight';
 import { describeTurnSpan, formatAge } from '../../utils/timeSpan';
+import { pluralize } from '../../utils/pluralize';
 import styles from '../../styles/stats.module.css';
 
 export function AnimalIdentity() {
@@ -14,6 +15,10 @@ export function AnimalIdentity() {
   const pregnancyTurnsLeft = reproduction.type === 'iteroparous' && reproduction.pregnancy
     ? reproduction.pregnancy.turnsRemaining
     : null;
+
+  // The backstory's event recedes as the animal ages
+  const monthsSinceBackstory = animal.backstory.monthsSinceEvent
+    + Math.max(0, animal.age - (animal.startAge ?? animal.age));
 
   const dependentYoung = reproduction.type === 'iteroparous'
     ? reproduction.offspring.filter((o) => o.alive && !o.independent).length
@@ -47,9 +52,9 @@ export function AnimalIdentity() {
           </>
         )}
       </div>
-      {animal.backstory.monthsSinceEvent > 0 && (
+      {monthsSinceBackstory > 0 && (
         <div className={styles.backstoryNote}>
-          {animal.backstory.monthsSinceEvent} months since {animal.backstory.label.toLowerCase()}
+          {pluralize(monthsSinceBackstory, 'month')} since {animal.backstory.label.toLowerCase()}
         </div>
       )}
       {currentPhase && config.phases && config.phases.length > 1 && (

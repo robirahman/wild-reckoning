@@ -429,7 +429,7 @@ export class GameAPI {
                   turn: record.turn,
                   month: record.month,
                   year: record.year,
-                  text: def.narrativeText.slice(0, 150),
+                  text: event.resolvedNarrative.slice(0, 150),
                   category: tags.includes('migration') ? 'migration' : 'milestone',
                 });
               }

@@ -35,7 +35,7 @@ function extractTimelineEntries(turnHistory: TurnRecord[], causeOfDeath?: string
                 turn: record.turn,
                 month: record.month,
                 year: record.year,
-                text: def.narrativeText.slice(0, 120) + (def.narrativeText.length > 120 ? '...' : ''),
+                text: event.resolvedNarrative.slice(0, 120) + (event.resolvedNarrative.length > 120 ? '...' : ''),
                 category: tags.includes('migration') ? 'migration' : 'milestone',
               });
             }

@@ -1,5 +1,6 @@
 // Territory
-export const TERRITORY_AUTO_ESTABLISH_TURN = 5;
+// Late enough that the territory-establish event (from turn 7) gets a chance first
+export const TERRITORY_AUTO_ESTABLISH_TURN = 12;
 export const TERRITORY_INITIAL_SIZE = 50;
 export const TERRITORY_INITIAL_QUALITY = 50;
 export const TERRITORY_UNMARKED_THRESHOLD = 4;

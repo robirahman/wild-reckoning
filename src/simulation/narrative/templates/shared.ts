@@ -90,7 +90,7 @@ function matches(f: ContextualFragment, ctx: FragmentContext): boolean {
  * 1. Filter to all fragments whose conditions match the context
  * 2. Among matches, prefer the most specific (most filters)
  * 3. Pick randomly from the most-specific tier
- * 4. Fallback: pick any fragment if nothing matches
+ * 4. Fallback: any fragment that fits the season, or any at all
  */
 export function pickContextual(
   pool: ContextualFragment[],
@@ -101,8 +101,10 @@ export function pickContextual(
   const matched = pool.filter((f) => matches(f, ctx));
 
   if (matched.length === 0) {
-    // Fallback: pick any fragment
-    return pool[rng.int(0, pool.length - 1)];
+    // Relax every filter except season, so a summer scene never gets a winter line
+    const seasonal = pool.filter((f) => f.season === undefined || f.season === ctx.season);
+    const fallback = seasonal.length > 0 ? seasonal : pool;
+    return fallback[rng.int(0, fallback.length - 1)];
   }
 
   // Find the highest specificity among matches

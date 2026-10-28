@@ -67,8 +67,9 @@ export const BACKSTORY_OPTIONS: Backstory[] = [
   {
     type: 'rehabilitation',
     label: 'Rehabilitated & Released',
-    description: 'You were found injured as a fawn and nursed back to health at a wildlife rehabilitation center before being released into the wild.',
-    monthsSinceEvent: 11,
+    description: 'You were found injured as a fawn and spent eleven months recovering at a wildlife rehabilitation center. Today you are released back into the wild.',
+    // The release happens on the first turn, so the count starts at zero
+    monthsSinceEvent: 0,
     statAdjustments: [
       { stat: 'TRA', amount: 10 },
       { stat: 'NOV', amount: 15 },
@@ -107,6 +108,8 @@ export interface AnimalState {
   speciesId: string;
   name?: string;
   age: number; // In months
+  /** Age in months when this life began in the game, for elapsed-time labels */
+  startAge?: number;
   weight: number; // In lbs
   sex: 'male' | 'female';
   region: string; // Current region ID

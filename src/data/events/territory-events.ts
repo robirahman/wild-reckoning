@@ -203,6 +203,8 @@ export const TERRITORY_EVENTS: GameEvent[] = [
     conditions: [
       { type: 'no_flag', flag: 'territory-established' },
       { type: 'age_range', min: 6 },
+      // "Ranging here long enough to know it" needs some time spent here first
+      { type: 'turn_above', threshold: 6 },
     ],
     weight: 4,
     cooldown: 10,
