@@ -21,6 +21,8 @@ import { calibrate } from '../simulation/calibration/calibrator';
 import { DEER_MORTALITY } from '../simulation/calibration/data/deer';
 import { getRegionDefinition } from '../data/regions';
 import { computeInstincts } from '../simulation/instinct/engine';
+import { scenarioOutcomeAfterTurn } from '../engine/ScenarioSystem';
+import { useScenarioStore } from '../store/scenarioStore';
 import type { SimulationContext } from '../simulation/events/types';
 import type { CalibratedRates } from '../simulation/calibration/types';
 
@@ -435,6 +437,20 @@ export function useGameEngine() {
 
     // Check for death conditions
     checkDeathConditions();
+
+    // Challenge Mode: record the outcome once the goal is met or the animal dies
+    const afterTurn = useGameStore.getState();
+    const outcome = scenarioOutcomeAfterTurn(afterTurn);
+    if (outcome && afterTurn.scenario) {
+      useGameStore.setState({ scenarioOutcome: outcome });
+      useScenarioStore.getState().addScore({
+        scenarioId: afterTurn.scenario.id,
+        turnsCompleted: afterTurn.time.turn,
+        won: outcome.status === 'won',
+        fitness: afterTurn.reproduction.totalFitness,
+        date: Date.now(),
+      });
+    }
 
     // Check achievements after turn
     checkAchievements(useGameStore.getState(), 'turn');

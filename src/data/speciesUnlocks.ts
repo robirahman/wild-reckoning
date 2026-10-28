@@ -109,3 +109,30 @@ export const SPECIES_UNLOCKS: SpeciesUnlockRequirement[] = [
   { speciesId: 'chicken', requirement: { type: 'default' } },
   { speciesId: 'pig', requirement: { type: 'default' } },
 ];
+
+/** The player's progression state that unlock requirements are checked against */
+export interface UnlockProgress {
+  unlockedAchievementIds: ReadonlySet<string>;
+  speciesPlayed: ReadonlySet<string>;
+  debugAllUnlocked: boolean;
+}
+
+export function isSpeciesUnlocked(speciesId: string, progress: UnlockProgress): boolean {
+  if (progress.debugAllUnlocked) return true;
+  const unlock = SPECIES_UNLOCKS.find((u) => u.speciesId === speciesId);
+  if (!unlock) return true;
+  switch (unlock.requirement.type) {
+    case 'default':
+      return true;
+    case 'achievement':
+      return progress.unlockedAchievementIds.has(unlock.requirement.achievementId);
+    case 'species_played':
+      return progress.speciesPlayed.has(unlock.requirement.speciesId);
+  }
+}
+
+export function getUnlockHint(speciesId: string): string | null {
+  const unlock = SPECIES_UNLOCKS.find((u) => u.speciesId === speciesId);
+  if (!unlock || unlock.requirement.type === 'default') return null;
+  return unlock.requirement.description;
+}

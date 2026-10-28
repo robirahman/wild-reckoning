@@ -1,5 +1,6 @@
 import type { SpeciesDataBundle } from '../../types/speciesConfig';
 import { whiteTailedDeerBundle } from './white-tailed-deer';
+import { grayWolfBundle } from './gray-wolf';
 import { africanElephantBundle } from './african-elephant';
 import { chinookSalmonBundle } from './chinook-salmon';
 import { polarBearBundle } from './polar-bear';
@@ -15,6 +16,7 @@ import { pigBundle } from './farm-animals/pig';
 
 const speciesRegistry: Record<string, SpeciesDataBundle> = {
   'white-tailed-deer': whiteTailedDeerBundle,
+  'gray-wolf': grayWolfBundle,
   'african-elephant': africanElephantBundle,
   'chinook-salmon': chinookSalmonBundle,
   'polar-bear': polarBearBundle,
@@ -35,6 +37,11 @@ export function getSpeciesBundle(id: string): SpeciesDataBundle {
     throw new Error(`Unknown species: ${id}`);
   }
   return bundle;
+}
+
+/** Like getSpeciesBundle, but returns undefined instead of throwing (for UI lookups). */
+export function findSpeciesBundle(id: string): SpeciesDataBundle | undefined {
+  return speciesRegistry[id];
 }
 
 export function getAllSpeciesIds(): string[] {

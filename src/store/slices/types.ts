@@ -12,7 +12,7 @@ import type { ReproductionState } from '../../types/reproduction';
 import type { TurnResult } from '../../types/turnResult';
 import type { EcosystemState } from '../../types/ecosystem';
 import type { TerritoryState } from '../../types/territory';
-import type { ScenarioDefinition } from '../../types/scenario';
+import type { ScenarioDefinition, ScenarioOutcome } from '../../types/scenario';
 import type { RegionMap } from '../../types/map';
 import type { WeatherState } from '../../engine/WeatherSystem';
 import type { EvolutionState } from '../../types/evolution';
@@ -62,7 +62,7 @@ export interface GameSystemSlice {
   seed: number;
   rng: Rng;
   
-  startGame: (speciesId: string, backstory: Backstory, sex: 'male' | 'female', difficulty?: Difficulty, seed?: number) => void;
+  startGame: (speciesId: string, backstory: Backstory, sex: 'male' | 'female', difficulty?: Difficulty, seed?: number, scenario?: ScenarioDefinition) => void;
   resumeGame: () => boolean;
 }
 
@@ -93,6 +93,7 @@ export interface WorldSlice {
   npcs: NPC[];
   activeStorylines: ActiveStoryline[];
   scenario: ScenarioDefinition | null;
+  scenarioOutcome: ScenarioOutcome | null;
   worldMemory: WorldMemory;
   /** NPC behavior states (keyed by NPC ID, stored separately for backward compatibility) */
   npcBehaviorStates: Record<string, NPCBehaviorState>;

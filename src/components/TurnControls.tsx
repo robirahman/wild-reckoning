@@ -16,8 +16,9 @@ export function TurnControls() {
   };
 
   const handleSave = () => {
-    saveGame(useGameStore.getState());
-    alert('Game saved successfully.');
+    alert(saveGame(useGameStore.getState())
+      ? 'Game saved.'
+      : 'The game could not be saved. Your browser storage may be full or disabled.');
   };
 
   return (

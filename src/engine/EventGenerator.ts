@@ -1,4 +1,4 @@
-import type { GameEvent, EventCondition, ResolvedEvent, ResolvedSubEvent } from '../types/events';
+import type { GameEvent, EventChoice, EventCondition, ResolvedEvent, ResolvedSubEvent } from '../types/events';
 import type { AnimalState } from '../types/species';
 import type { TimeState } from '../types/world';
 import type { BehavioralSettings } from '../types/behavior';
@@ -253,7 +253,7 @@ export function generateEvents(ctx: GenerationContext): ResolvedEvent[] {
 
   // ── Simulation event generation (only for simulation-mode species) ──
   let simEvents: ResolvedEvent[] = [];
-  let simCategories = new Set<string>();
+  const simCategories = new Set<string>();
 
   if (isSimulationMode(ctx.config)) {
     const simCtx: SimulationContext = {
@@ -361,9 +361,35 @@ export function generateEvents(ctx: GenerationContext): ResolvedEvent[] {
   return [...simEvents, ...results];
 }
 
+/**
+ * Resolve template variables in every player-visible text field of a set of
+ * choices: labels, descriptions, result text, death causes and escape options.
+ */
+export function resolveChoiceText(
+  choices: EventChoice[] | undefined,
+  resolve: (text: string) => string,
+): EventChoice[] | undefined {
+  return choices?.map((c) => ({
+    ...c,
+    label: resolve(c.label),
+    description: c.description && resolve(c.description),
+    narrativeResult: c.narrativeResult && resolve(c.narrativeResult),
+    deathChance: c.deathChance && {
+      ...c.deathChance,
+      cause: resolve(c.deathChance.cause),
+      escapeOptions: c.deathChance.escapeOptions?.map((o) => ({
+        ...o,
+        label: resolve(o.label),
+        description: resolve(o.description),
+      })),
+    },
+  }));
+}
+
 /** Resolve a single event: fill templates, trigger sub-events */
 function resolveEvent(event: GameEvent, ctx: GenerationContext): ResolvedEvent {
   const resolvedNarrative = resolveTemplate(event.narrativeText, ctx);
+  const choices = resolveChoiceText(event.choices, (text) => resolveTemplate(text, ctx));
 
   // Evaluate sub-event triggers
   const triggeredSubEvents: ResolvedSubEvent[] = [];
@@ -387,7 +413,7 @@ function resolveEvent(event: GameEvent, ctx: GenerationContext): ResolvedEvent {
   const image = event.image ?? pickIllustration(event, ctx.rng);
 
   return {
-    definition: image ? { ...event, image } : event,
+    definition: { ...event, choices, ...(image ? { image } : {}) },
     resolvedNarrative,
     triggeredSubEvents,
   };

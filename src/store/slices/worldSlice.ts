@@ -14,6 +14,7 @@ export const createWorldSlice: GameSlice<WorldSlice> = (set, get) => ({
   npcs: [],
   activeStorylines: [],
   scenario: null,
+  scenarioOutcome: null,
   worldMemory: createWorldMemory('spring'),
   npcBehaviorStates: {},
 

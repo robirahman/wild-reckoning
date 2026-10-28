@@ -133,8 +133,24 @@ function resolveEvent(event: any, ctx: any): any {
       }
     }
   }
+  const resolve = (text: string) => resolveTemplate(text, ctx);
+  const choices = event.choices?.map((c: any) => ({
+    ...c,
+    label: resolve(c.label),
+    description: c.description && resolve(c.description),
+    narrativeResult: c.narrativeResult && resolve(c.narrativeResult),
+    deathChance: c.deathChance && {
+      ...c.deathChance,
+      cause: resolve(c.deathChance.cause),
+      escapeOptions: c.deathChance.escapeOptions?.map((o: any) => ({
+        ...o,
+        label: resolve(o.label),
+        description: resolve(o.description),
+      })),
+    },
+  }));
   return {
-    definition: event,
+    definition: { ...event, choices },
     resolvedNarrative,
     triggeredSubEvents,
   };

@@ -1,8 +1,11 @@
 /** Phase 6: Territory/Home Range engine */
 
 import type { TerritoryState } from '../types/territory';
+import { INITIAL_TERRITORY } from '../types/territory';
 import type { Rng } from './RandomUtils';
 import {
+  TERRITORY_INITIAL_SIZE,
+  TERRITORY_INITIAL_QUALITY,
   TERRITORY_UNMARKED_THRESHOLD,
   TERRITORY_QUALITY_DECAY,
   TERRITORY_INTRUDER_CHANCE,
@@ -21,6 +24,13 @@ export const TERRITORIAL_SPECIES = new Set([
   'common-octopus',
   'poison-dart-frog',
 ]);
+
+/** Territory state consistent with the animal's flags (e.g. a scenario or old save that starts established) */
+export function initialTerritoryFor(flags: ReadonlySet<string>): TerritoryState {
+  return flags.has('territory-established')
+    ? { ...INITIAL_TERRITORY, established: true, size: TERRITORY_INITIAL_SIZE, quality: TERRITORY_INITIAL_QUALITY }
+    : { ...INITIAL_TERRITORY };
+}
 
 export function tickTerritory(
   territory: TerritoryState,

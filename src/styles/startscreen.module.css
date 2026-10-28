@@ -41,6 +41,16 @@
   margin-bottom: 40px;
 }
 
+.resumeError {
+  margin: -28px 0 32px;
+  padding: 10px 14px;
+  border: 1px solid var(--color-danger);
+  border-radius: 4px;
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  color: var(--color-danger);
+}
+
 .beginButton {
   composes: primaryButton;
   margin-bottom: 12px;

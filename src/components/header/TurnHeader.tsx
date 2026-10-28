@@ -1,5 +1,6 @@
 import { useGameStore } from '../../store/gameStore';
 import { WeatherBadge } from './WeatherBadge';
+import { describeScenarioProgress } from '../../engine/ScenarioSystem';
 import styles from '../../styles/header.module.css';
 
 interface Props {
@@ -11,6 +12,9 @@ export function TurnHeader({ onToggleHistory }: Props) {
   const config = useGameStore((s) => s.speciesBundle.config);
   const animal = useGameStore((s) => s.animal);
   const ambientText = useGameStore((s) => s.ambientText);
+  const scenario = useGameStore((s) => s.scenario);
+  const scenarioOutcome = useGameStore((s) => s.scenarioOutcome);
+  const reproduction = useGameStore((s) => s.reproduction);
 
   // Determine lifecycle phase for species with phases
   const currentPhase = config.phases?.slice().reverse().find(
@@ -30,6 +34,20 @@ export function TurnHeader({ onToggleHistory }: Props) {
         )}
         <WeatherBadge />
       </span>
+      {scenario && (
+        <div style={{
+          fontFamily: 'var(--font-ui)',
+          fontSize: '0.78rem',
+          marginTop: 4,
+          gridColumn: '1 / -1',
+          color: scenarioOutcome?.status === 'won' ? '#3a8a3a' : 'var(--color-text-muted)',
+        }}>
+          Challenge: {scenario.name} —{' '}
+          {scenarioOutcome?.status === 'won'
+            ? 'complete \u2713'
+            : describeScenarioProgress(scenario, { animal, time, reproduction })}
+        </div>
+      )}
       {ambientText && (
         <div style={{
           fontFamily: 'var(--font-narrative)',

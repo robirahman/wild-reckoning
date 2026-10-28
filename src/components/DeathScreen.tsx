@@ -63,6 +63,8 @@ export function DeathScreen() {
   const reproduction = useGameStore((s) => s.reproduction);
   const config = useGameStore((s) => s.speciesBundle.config);
   const lineage = useGameStore((s) => s.lineage);
+  const scenario = useGameStore((s) => s.scenario);
+  const scenarioOutcome = useGameStore((s) => s.scenarioOutcome);
   const tv = config.templateVars;
 
   const isIteroparous = reproduction.type === 'iteroparous';
@@ -152,6 +154,12 @@ export function DeathScreen() {
 
       {/* ── Summary Stats ── */}
       <div className={styles.detailPanelSummary}>
+        {scenario && (
+          <div>
+            <strong>Challenge:</strong> {scenario.name} —{' '}
+            {scenarioOutcome?.status === 'won' ? 'completed' : 'not completed'}
+          </div>
+        )}
         <div><strong>Species:</strong> {config.name}</div>
         <div><strong>Sex:</strong> {animal.sex === 'female' ? 'Female' : 'Male'}</div>
         <div>

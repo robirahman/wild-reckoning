@@ -9,6 +9,9 @@ export function TurnResultsScreen() {
   const turnResult = useGameStore((s) => s.turnResult);
   const phase = useGameStore((s) => s.phase);
   const resolveDeathRoll = useGameStore((s) => s.resolveDeathRoll);
+  const scenario = useGameStore((s) => s.scenario);
+  const scenarioOutcome = useGameStore((s) => s.scenarioOutcome);
+  const turn = useGameStore((s) => s.time.turn);
   const { dismissResults } = useGameEngine();
 
   if (!turnResult) return null;
@@ -32,6 +35,13 @@ export function TurnResultsScreen() {
   return (
     <div className={styles.resultsScreen}>
       <h3 className={styles.resultsTitle}>Turn Results</h3>
+
+      {scenario && scenarioOutcome?.status === 'won' && scenarioOutcome.turn === turn && (
+        <div role="status" className={styles.journalSummary} style={{ borderColor: '#3a8a3a' }}>
+          <strong>Challenge complete: {scenario.winCondition.description}.</strong>{' '}
+          You can keep playing to see how this life unfolds.
+        </div>
+      )}
 
       {/* Journal Synthesis (Ambient Text) */}
       {turnResult.journalEntry && (

@@ -6,7 +6,7 @@ import type { SpeciesConfig } from '../types/speciesConfig';
 import type { ResolvedEvent } from '../types/events';
 import type { Rng } from './RandomUtils';
 import type { NPC } from '../types/npc';
-import { resolveTemplate } from './EventGenerator';
+import { resolveTemplate, resolveChoiceText } from './EventGenerator';
 import { computeEffectiveValue } from '../types/stats';
 import { STORYLINES } from '../data/storylines';
 import { STORYLINE_ADVANCE_CHANCE } from './constants';
@@ -101,7 +101,7 @@ function createStorylineEvent(
       narrativeText: step.narrativeText,
       statEffects: step.statEffects,
       consequences,
-      choices: isActive ? step.choices : undefined,
+      choices: isActive ? resolveChoiceText(step.choices, (text) => resolveTemplate(text, templateCtx)) : undefined,
       conditions: [],
       weight: 0,
       tags: def.tags,

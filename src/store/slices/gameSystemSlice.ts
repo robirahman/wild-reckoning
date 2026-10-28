@@ -2,7 +2,7 @@ import type { GameSlice, GameSystemSlice } from './types';
 import { createRng } from '../../engine/RandomUtils';
 import { getSpeciesBundle } from '../../data/species';
 import { initializeEcosystem } from '../../engine/EcosystemSystem';
-import { INITIAL_TERRITORY } from '../../types/territory';
+import { initialTerritoryFor } from '../../engine/TerritorySystem';
 import { generateRegionMap } from '../../engine/MapSystem';
 import { createInitialTime } from '../../engine/TimeSystem';
 import { DEFAULT_BEHAVIORAL_SETTINGS } from '../../types/behavior';
@@ -11,6 +11,7 @@ import { createInitialAnimal, initialReproduction } from './helpers';
 import { createWorldMemory } from '../../simulation/memory/types';
 import type { WaterKnowledge, WaterSourceKnowledge } from '../../simulation/memory/types';
 import type { RegionMap } from '../../types/map';
+import { applyScenarioStart, scenarioStartMonth } from '../../engine/ScenarioSystem';
 
 /** Initialize elephant matriarch water knowledge from the generated map */
 function initializeWaterKnowledge(speciesId: string, backstoryType: string, map: RegionMap): WaterKnowledge | undefined {
@@ -51,14 +52,17 @@ export const createGameSystemSlice: GameSlice<GameSystemSlice> = (set) => {
     speciesBundle: defaultBundle,
     difficulty: 'normal',
 
-    startGame: (speciesId, backstory, sex, difficulty, seed) => {
+    startGame: (speciesId, backstory, sex, difficulty, seed, scenario) => {
       const newSeed = seed ?? Date.now();
       const bundle = getSpeciesBundle(speciesId);
       const tutorialSeen = localStorage.getItem('wild-reckoning-tutorial-seen') === 'true';
       const rng = createRng(newSeed);
       const map = generateRegionMap(rng);
+      const baseAnimal = createInitialAnimal(bundle.config, backstory, sex);
+      const animal = scenario ? applyScenarioStart(scenario, bundle, baseAnimal, rng) : baseAnimal;
 
-      const worldMemory = createWorldMemory('spring');
+      const time = createInitialTime(scenarioStartMonth(scenario), 1);
+      const worldMemory = createWorldMemory(time.season);
       const waterKnowledge = initializeWaterKnowledge(speciesId, backstory.type, map);
       if (waterKnowledge) {
         worldMemory.waterKnowledge = waterKnowledge;
@@ -70,8 +74,8 @@ export const createGameSystemSlice: GameSlice<GameSystemSlice> = (set) => {
         rng,
         difficulty: difficulty ?? 'normal',
         speciesBundle: bundle,
-        animal: createInitialAnimal(bundle.config, backstory, sex),
-        time: createInitialTime(5, 1),
+        animal,
+        time,
         behavioralSettings: { ...DEFAULT_BEHAVIORAL_SETTINGS },
         reproduction: initialReproduction(bundle.config),
         currentEvents: [],
@@ -87,9 +91,10 @@ export const createGameSystemSlice: GameSlice<GameSystemSlice> = (set) => {
         eventCooldowns: {},
         ambientText: null,
         ecosystem: initializeEcosystem(),
-        territory: { ...INITIAL_TERRITORY },
+        territory: initialTerritoryFor(animal.flags),
         map,
-        scenario: null,
+        scenario: scenario ?? null,
+        scenarioOutcome: null,
         climateShift: 0,
         worldMemory,
         npcBehaviorStates: {},
@@ -97,6 +102,7 @@ export const createGameSystemSlice: GameSlice<GameSystemSlice> = (set) => {
         actionsPerformed: [],
         evolution: { activeMutations: [], availableChoices: [], generationCount: 0, lineageHistory: [] },
         fastForward: false,
+        instinctNudges: [],
       });
     },
 

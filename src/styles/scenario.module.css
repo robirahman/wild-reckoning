@@ -120,3 +120,20 @@
   background: var(--color-panel-bg);
   cursor: pointer;
 }
+
+.locked {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.locked:hover {
+  border-color: var(--color-border);
+}
+
+.lockedHint {
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  font-style: italic;
+  color: var(--color-text-muted);
+  margin-top: 4px;
+}

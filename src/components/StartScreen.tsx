@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { getAllSpeciesBundles } from '../data/species';
-import { hasSaveGame } from '../store/persistence';
+import { hasSaveGame, deleteSaveGame } from '../store/persistence';
 import type { SpeciesDataBundle } from '../types/speciesConfig';
 import type { Backstory } from '../types/species';
 import type { Difficulty } from '../types/difficulty';
@@ -10,8 +10,9 @@ import { AchievementList } from './achievements/AchievementList';
 import { ScenarioSelect } from './ScenarioSelect';
 import { Encyclopedia } from './Encyclopedia';
 import { SpeciesComparison } from './SpeciesComparison';
-import { SPECIES_UNLOCKS } from '../data/speciesUnlocks';
+import { getUnlockHint } from '../data/speciesUnlocks';
 import { useAchievementStore } from '../store/achievementStore';
+import { useSpeciesUnlocks } from '../hooks/useSpeciesUnlocks';
 import { SCENARIOS } from '../data/scenarios';
 import { ThemeToggle } from './ThemeToggle';
 import styles from '../styles/startscreen.module.css';
@@ -22,8 +23,7 @@ export function StartScreen() {
   const allBundles = getAllSpeciesBundles();
   const saveExists = hasSaveGame();
   const [subScreen, setSubScreen] = useState<'none' | 'scenarios' | 'encyclopedia' | 'comparison'>('none');
-  const unlockedAchievements = useAchievementStore((s) => s.unlockedIds);
-  const speciesPlayed = useAchievementStore((s) => s.speciesPlayed);
+  const [resumeFailed, setResumeFailed] = useState(false);
   const debugAllUnlocked = useAchievementStore((s) => s.debugAllUnlocked);
   const toggleDebugAllUnlocked = useAchievementStore((s) => s.toggleDebugAllUnlocked);
 
@@ -35,21 +35,7 @@ export function StartScreen() {
     mode === 'farm' ? FARM_SPECIES.includes(b.config.id) : !FARM_SPECIES.includes(b.config.id)
   );
 
-  const isSpeciesUnlocked = (speciesId: string): boolean => {
-    if (debugAllUnlocked) return true;
-    const unlock = SPECIES_UNLOCKS.find((u) => u.speciesId === speciesId);
-    if (!unlock) return true;
-    if (unlock.requirement.type === 'default') return true;
-    if (unlock.requirement.type === 'achievement') return unlockedAchievements.has(unlock.requirement.achievementId);
-    if (unlock.requirement.type === 'species_played') return speciesPlayed.has(unlock.requirement.speciesId);
-    return true;
-  };
-
-  const getUnlockHint = (speciesId: string): string | null => {
-    const unlock = SPECIES_UNLOCKS.find((u) => u.speciesId === speciesId);
-    if (!unlock || unlock.requirement.type === 'default') return null;
-    return unlock.requirement.description;
-  };
+  const { isUnlocked: isSpeciesUnlocked } = useSpeciesUnlocks();
 
   const [selectedSpeciesId, setSelectedSpeciesId] = useState(filteredBundles[0].config.id);
   const selectedBundle = allBundles.find((b) => b.config.id === selectedSpeciesId)!;
@@ -93,7 +79,7 @@ export function StartScreen() {
       ? bundle.backstories.find((b) => b.type === scenario.backstoryType) ?? bundle.backstories[0]
       : bundle.backstories[0];
     const sex = scenario.sex ?? 'female';
-    startGame(scenario.speciesId, scenarioBackstory, sex, scenario.difficulty);
+    startGame(scenario.speciesId, scenarioBackstory, sex, scenario.difficulty, undefined, scenario);
   };
 
   if (subScreen === 'scenarios') {
@@ -132,11 +118,22 @@ export function StartScreen() {
 
       {saveExists && (
         <button
-          onClick={() => resumeGame()}
+          onClick={() => setResumeFailed(!resumeGame())}
           className={styles.resumeButton}
         >
           Resume Game
         </button>
+      )}
+      {saveExists && resumeFailed && (
+        <div role="alert" className={styles.resumeError}>
+          This save couldn't be loaded. It may be from an incompatible version of the game.{' '}
+          <button
+            onClick={() => { deleteSaveGame(); setResumeFailed(false); }}
+            className={styles.navButton}
+          >
+            Delete save
+          </button>
+        </div>
       )}
 
       {/* ── Species Selector ── */}
