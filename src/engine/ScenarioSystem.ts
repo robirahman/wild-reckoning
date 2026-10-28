@@ -24,6 +24,7 @@ export function applyScenarioStart(
   rng: Rng,
 ): AnimalState {
   const weight = scenario.startingWeight ?? animal.weight;
+  const age = scenario.startingAge ?? animal.age;
   const flags = new Set(animal.flags);
   for (const flag of scenario.startingFlags ?? []) flags.add(flag as GameFlag);
 
@@ -57,14 +58,14 @@ export function applyScenarioStart(
   return {
     ...animal,
     weight,
-    age: scenario.startingAge ?? animal.age,
+    age,
     region,
     flags,
     injuries,
     parasites,
-    // Fat reserves are derived from weight, so a starting weight change must re-seed them
-    physiologyState: animal.physiologyState && scenario.startingWeight !== undefined
-      ? initializePhysiology(bundle.config, weight)
+    // Fat reserves and body condition derive from weight and age, so re-seed them
+    physiologyState: animal.physiologyState && (scenario.startingWeight !== undefined || scenario.startingAge !== undefined)
+      ? initializePhysiology(bundle.config, weight, animal.sex, age)
       : animal.physiologyState,
     lifetimeStats: { ...animal.lifetimeStats, regionsVisited: [region] },
   };

@@ -42,6 +42,11 @@ export const WHITE_TAILED_DEER_CONFIG: SpeciesConfig = {
     minFloor: 40,
     debuffMaxPenalty: 15,
     maximumBiologicalWeight: 300,
+    // Healthy live weights for northern Minnesota adults. Body condition is
+    // judged against these (scaled down while growing), so a 130 lb doe is
+    // in good shape rather than measured against a 300 lb trophy buck.
+    healthyAdult: { male: 170, female: 130 },
+    adultAgeMonths: 30,
   },
 
   age: {

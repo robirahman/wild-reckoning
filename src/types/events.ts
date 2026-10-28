@@ -167,4 +167,9 @@ export interface ResolvedEvent {
   resolvedNarrative: string; // Template variables filled in
   triggeredSubEvents: ResolvedSubEvent[];
   choiceMade?: string; // Choice ID if the player has chosen
+  /**
+   * The event's effects were applied when it happened (e.g. a voluntary
+   * action), so turn resolution reports it but must not apply it again.
+   */
+  preApplied?: boolean;
 }

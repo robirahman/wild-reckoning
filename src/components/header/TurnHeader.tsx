@@ -1,6 +1,7 @@
 import { useGameStore } from '../../store/gameStore';
 import { WeatherBadge } from './WeatherBadge';
 import { describeScenarioProgress } from '../../engine/ScenarioSystem';
+import { describeTurnSpan, FAST_FORWARD_TURNS } from '../../engine/FastForward';
 import styles from '../../styles/header.module.css';
 
 interface Props {
@@ -15,6 +16,7 @@ export function TurnHeader({ onToggleHistory }: Props) {
   const scenario = useGameStore((s) => s.scenario);
   const scenarioOutcome = useGameStore((s) => s.scenarioOutcome);
   const reproduction = useGameStore((s) => s.reproduction);
+  const fastForward = useGameStore((s) => s.fastForward);
 
   // Determine lifecycle phase for species with phases
   const currentPhase = config.phases?.slice().reverse().find(
@@ -34,6 +36,18 @@ export function TurnHeader({ onToggleHistory }: Props) {
         )}
         <WeatherBadge />
       </span>
+      {fastForward && (
+        <div role="status" style={{
+          fontFamily: 'var(--font-ui)',
+          fontSize: '0.78rem',
+          marginTop: 4,
+          gridColumn: '1 / -1',
+          color: 'var(--color-danger)',
+        }}>
+          Fast-forward is on: each turn covers {describeTurnSpan(FAST_FORWARD_TURNS, config.turnUnit)}.
+          It pauses on its own for births, injuries, and health crises.
+        </div>
+      )}
       {scenario && (
         <div style={{
           fontFamily: 'var(--font-ui)',

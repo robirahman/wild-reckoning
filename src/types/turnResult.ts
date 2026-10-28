@@ -30,4 +30,18 @@ export interface TurnResult {
   statDelta: Record<StatId, number>;
   pendingDeathRolls?: PendingDeathRoll[];
   journalEntry?: string;
+  /** Short system notes shown above the results, e.g. why fast-forward paused */
+  notices?: string[];
+}
+
+/** What happened while fast-forward skipped several turns at once */
+export interface TimeSkipSummary {
+  turnsAdvanced: number;
+  turnsRequested: number;
+  from: { month: string; year: number; season: string };
+  to: { month: string; year: number; season: string };
+  weightChange: number;
+  developments: string[];
+  /** Set when the skip stopped early because something important happened */
+  stoppedFor?: string;
 }

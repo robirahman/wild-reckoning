@@ -16,6 +16,7 @@ import styles from '../../styles/events.module.css';
 export function SequentialEventReveal() {
   const currentEvents = useGameStore((s) => s.currentEvents);
   const makeChoice = useGameStore((s) => s.makeChoice);
+  const clearChoice = useGameStore((s) => s.clearChoice);
 
   // Track how many events have been "revealed" to the player
   const [revealedCount, setRevealedCount] = useState(0);
@@ -121,15 +122,7 @@ export function SequentialEventReveal() {
               choiceMade={event.choiceMade}
               onChoiceSelect={(choiceId) => {
                 if (event.choiceMade === choiceId) {
-                  // Deselect
-                  useGameStore.setState((s) => ({
-                    currentEvents: s.currentEvents.map((e) =>
-                      e.definition.id === event.definition.id
-                        ? { ...e, choiceMade: undefined }
-                        : e
-                    ),
-                    pendingChoices: [...s.pendingChoices, event.definition.id],
-                  }));
+                  clearChoice(event.definition.id);
                 } else {
                   makeChoice(event.definition.id, choiceId);
                 }

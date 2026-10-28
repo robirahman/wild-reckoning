@@ -66,6 +66,7 @@ export interface SerializedState {
   instinctNudges?: GameState['instinctNudges'];
   showingResults?: GameState['showingResults'];
   turnResult?: GameState['turnResult'];
+  turnPhase?: GameState['turnPhase'];
 }
 
 /** Convert live game state to a JSON-safe object */
@@ -111,6 +112,7 @@ export function serializeState(state: GameState): SerializedState {
     // effects can't be resolved a second time
     showingResults: state.showingResults,
     turnResult: state.turnResult,
+    turnPhase: state.turnPhase,
   };
 }
 
@@ -168,6 +170,9 @@ export function deserializeState(data: SerializedState): Partial<GameState> {
     instinctNudges: data.instinctNudges ?? [],
     showingResults,
     turnResult: showingResults ? data.turnResult ?? null : null,
+    // Older saves didn't record the phase; infer it from what's on screen
+    turnPhase: data.turnPhase
+      ?? (showingResults ? 'results' : data.currentEvents.length > 0 ? 'choosing' : 'awaiting-start'),
   };
 }
 

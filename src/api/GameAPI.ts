@@ -2,9 +2,9 @@
  * Headless Game API for Wild Reckoning.
  *
  * Allows the game to be played and tested programmatically without a browser
- * or React. The API drives the same Zustand store and engine modules that the
- * UI uses, but replaces the React hook + Web Worker event pipeline with
- * synchronous calls.
+ * or React. The API drives the same Zustand store and the same turn pipeline
+ * (engine/TurnPipeline) that the UI uses, so headless runs behave exactly
+ * like a player's game.
  *
  * Usage:
  *   import { GameAPI } from './api/GameAPI';
@@ -18,32 +18,15 @@
  */
 
 import { useGameStore, type GameState } from '../store/gameStore';
-import { generateTurnEvents, resolveTurn } from '../engine/TurnProcessor';
+import { beginTurn, commitTurn, dismissResults } from '../engine/TurnPipeline';
 import { StatId, computeEffectiveValue } from '../types/stats';
-import { getSpeciesBundle } from '../data/species';
-import { introduceNPC, introduceAllOfType, incrementEncounter, progressRelationship } from '../engine/NPCSystem';
-import { tickStorylines } from '../engine/StorylineSystem';
-import { generateAmbientText, synthesizeJournalEntry } from '../engine/AmbientTextGenerator';
-import { tickEcosystem } from '../engine/EcosystemSystem';
-import { tickTerritory, TERRITORIAL_SPECIES } from '../engine/TerritorySystem';
-import { NPC_INTRODUCTION_MIN_TURN, TERRITORY_AUTO_ESTABLISH_TURN, TERRITORY_INITIAL_SIZE, TERRITORY_INITIAL_QUALITY } from '../engine/constants';
-import { isSimulationMode } from '../simulation/mode';
-import { generateSimulationEvents, drainDebriefingEntries } from '../simulation/events/SimEventGenerator';
-import { calibrate } from '../simulation/calibration/calibrator';
-import { DEER_MORTALITY } from '../simulation/calibration/data/deer';
-import { getRegionDefinition } from '../data/regions';
-import { computeInstincts } from '../simulation/instinct/engine';
-import { pickIllustration } from '../engine/IllustrationPicker';
+import { getSpeciesBundle, getAllSpeciesIds } from '../data/species';
 import { BACKSTORY_OPTIONS } from '../types/species';
-import { getAllSpeciesIds } from '../data/species';
-import type { SimulationContext } from '../simulation/events/types';
-import type { CalibratedRates } from '../simulation/calibration/types';
 import type { ResolvedEvent, EventChoice } from '../types/events';
 import type { ActiveParasite, ActiveInjury, ActiveCondition } from '../types/health';
 import type { TurnResult } from '../types/turnResult';
 import type { BehavioralSettings, BehaviorLevel } from '../types/behavior';
 import type { MapNode } from '../types/map';
-import type { NPC } from '../types/npc';
 
 // ---------------------------------------------------------------------------
 // Types exposed by the API
@@ -164,21 +147,6 @@ export interface TurnResultSummary {
 }
 
 // ---------------------------------------------------------------------------
-// Calibration cache (mirrors useGameEngine)
-// ---------------------------------------------------------------------------
-
-const calibrationCache = new Map<string, CalibratedRates>();
-function getCalibratedRates(speciesId: string): CalibratedRates | undefined {
-  if (calibrationCache.has(speciesId)) return calibrationCache.get(speciesId);
-  if (speciesId === 'white-tailed-deer') {
-    const rates = calibrate(DEER_MORTALITY);
-    calibrationCache.set(speciesId, rates);
-    return rates;
-  }
-  return undefined;
-}
-
-// ---------------------------------------------------------------------------
 // API Class
 // ---------------------------------------------------------------------------
 
@@ -191,10 +159,6 @@ export class GameAPI {
 
   constructor(customStore?: any) {
     this._store = customStore || useGameStore;
-  }
-
-  private set(partial: Partial<GameState>) {
-    this._store.setState(partial);
   }
 
   // ── Lifecycle ──────────────────────────────────────────────────────────
@@ -236,182 +200,33 @@ export class GameAPI {
    * every active event that has choices, then call `endTurn()`.
    */
   generateTurn(): TurnInfo {
-    const store = this._store.getState();
+    this.finishPreviousTurn();
+    beginTurn(this._store);
 
-    // 1. Advance physical simulation (time, weather, physiology, etc.)
-    store.advanceTurn();
-
-    let state = this._store.getState();
-
-    // 2. Introduce NPCs on early turns (assign map positions)
-    if (state.npcs.length === 0 && state.time.turn >= NPC_INTRODUCTION_MIN_TURN) {
-      const npcs = [...state.npcs];
-      const mapNodes = state.map?.nodes ?? [];
-      const playerNodeId = state.map?.currentLocationId;
-      for (const type of ['rival', 'ally', 'predator'] as const) {
-        // For predators, introduce all unique species (e.g. wolf + hunter)
-        const newNPCs = type === 'predator'
-          ? introduceAllOfType(state.animal.speciesId, type, state.time.turn, npcs, state.rng)
-          : [introduceNPC(state.animal.speciesId, type, state.time.turn, npcs, state.rng)].filter(Boolean) as any[];
-        for (const npc of newNPCs) {
-          if (mapNodes.length > 0) {
-            const candidates = type === 'ally'
-              ? mapNodes.filter((n: MapNode) => n.id === playerNodeId || (playerNodeId && n.connections.includes(playerNodeId)))
-              : mapNodes.filter((n: MapNode) => n.id !== playerNodeId);
-            const startNode = candidates.length > 0 ? state.rng.pick(candidates) : mapNodes[0];
-            npc.currentNodeId = startNode.id;
-          }
-          npcs.push(npc);
-        }
-      }
-      if (npcs.length > 0) store.setNPCs(npcs);
-    }
-
-    // Introduce mate NPC at mating season
-    state = this._store.getState();
-    const hasMate = state.npcs.some((n: NPC) => n.type === 'mate' && n.alive);
-    if (!hasMate && state.time.turn >= NPC_INTRODUCTION_MIN_TURN) {
-      const reproConfig = state.speciesBundle.config.reproduction;
-      const isMating =
-        (reproConfig.type === 'iteroparous' &&
-          (reproConfig.matingSeasons === 'any' || reproConfig.matingSeasons.includes(state.time.season))) ||
-        (reproConfig.type === 'semelparous' &&
-          state.animal.flags.has(reproConfig.spawningMigrationFlag));
-      if (isMating) {
-        const mateNPC = introduceNPC(state.animal.speciesId, 'mate', state.time.turn, state.npcs, state.rng);
-        if (mateNPC) {
-          // Place mate near the player
-          const playerNodeId = state.map?.currentLocationId;
-          if (playerNodeId) mateNPC.currentNodeId = playerNodeId;
-          store.setNPCs([...state.npcs, mateNPC]);
-        }
-      }
-    }
-
-    state = this._store.getState();
-
-    // 3. Ambient text
-    const ambientText = generateAmbientText({
-      season: state.time.season,
-      speciesId: state.animal.speciesId,
-      regionId: state.animal.region,
-      weatherType: state.currentWeather?.type,
-      rng: state.rng,
-      animalSex: state.animal.sex,
-    });
-    this.set({ ambientText });
-
-    // 4. Ecosystem tick
-    const ecoResult = tickEcosystem(state.ecosystem, state.animal.region, state.time.turn, state.rng);
-    this.set({ ecosystem: ecoResult.ecosystem });
-
-    // 5. Territory
-    if (TERRITORIAL_SPECIES.has(state.animal.speciesId)) {
-      if (!state.territory.established && state.time.turn >= TERRITORY_AUTO_ESTABLISH_TURN) {
-        const flags = new Set(state.animal.flags);
-        flags.add('territory-established');
-        this.set({
-          territory: { ...state.territory, established: true, size: TERRITORY_INITIAL_SIZE, quality: TERRITORY_INITIAL_QUALITY, markedTurns: 0 },
-          animal: { ...state.animal, flags },
-        });
-      }
-      state = this._store.getState();
-      if (state.territory.established) {
-        const newTerritory = tickTerritory(state.territory, state.animal.speciesId, state.rng);
-        this.set({ territory: newTerritory });
-      }
-    }
-
-    state = this._store.getState();
-
-    // 6. Generate events synchronously (no Web Worker)
-    const generatedEvents = generateTurnEvents(state);
-
-    // 7. Generate simulation events (same as useGameEngine main-thread path)
-    let simEvents: ResolvedEvent[] = [];
-    const config = state.speciesBundle.config;
-    if (isSimulationMode(config)) {
-      const mapNode = state.map?.nodes.find((n: MapNode) => n.id === state.map!.currentLocationId);
-      const simCtx: SimulationContext = {
-        animal: state.animal,
-        time: state.time,
-        behavior: state.behavioralSettings,
-        config,
-        rng: state.rng,
-        difficulty: state.difficulty,
-        npcs: state.npcs,
-        npcBehaviorStates: state.npcBehaviorStates,
-        regionDef: getRegionDefinition(state.animal.region),
-        currentWeather: state.currentWeather ?? undefined,
-        ecosystem: state.ecosystem,
-        currentNodeId: state.map?.currentLocationId,
-        currentNodeType: mapNode?.type,
-        currentNodeResources: mapNode?.resources,
-        worldMemory: state.worldMemory,
-        calibratedRates: getCalibratedRates(config.id),
-        fastForward: state.fastForward,
-      };
-      simEvents = generateSimulationEvents(simCtx);
-
-      const nudges = computeInstincts(simCtx);
-      store.setInstinctNudges(nudges);
-
-      const newEntries = drainDebriefingEntries();
-      if (newEntries.length > 0) {
-        const animal = this._store.getState().animal;
-        const log = [...(animal.debriefingLog ?? []), ...newEntries];
-        this.set({ animal: { ...animal, debriefingLog: log } });
-      }
-
-      // Deduplicate: remove hardcoded events in sim-covered categories
-      const simCategories = new Set(simEvents.map(e => e.definition.category));
-      const filteredHardcoded = simCategories.size > 0
-        ? generatedEvents.filter(e => !simCategories.has(e.definition.category))
-        : generatedEvents;
-      generatedEvents.length = 0;
-      generatedEvents.push(...filteredHardcoded);
-    } else {
-      store.setInstinctNudges([]);
-    }
-
-    // 8. Illustrations
-    const workerEvents = generatedEvents.map(event => {
-      const image = event.definition.image ?? pickIllustration(event.definition, state.rng);
-      return {
-        ...event,
-        definition: image ? { ...event.definition, image } : event.definition,
-      };
-    });
-    const events = [...simEvents, ...workerEvents];
-
-    // 9. Storylines
-    const storylineResult = tickStorylines({
-      animal: state.animal,
-      time: state.time,
-      behavior: state.behavioralSettings,
-      config: state.speciesBundle.config,
-      rng: state.rng,
-      npcs: state.npcs,
-      activeStorylines: state.activeStorylines,
-      currentEvents: state.currentEvents,
-    });
-    const allStorylines = [...storylineResult.updatedStorylines, ...storylineResult.newStorylines];
-    store.setActiveStorylines(allStorylines);
-
-    const allEvents = [...events, ...storylineResult.injectedEvents];
-    store.setEvents(allEvents);
-
-    state = this._store.getState();
-
+    const state = this._store.getState();
     return {
       turn: state.time.turn,
       month: state.time.monthIndex,
       year: state.time.year,
       season: state.time.season,
-      events: allEvents.map(summarizeEvent),
+      events: state.currentEvents.map(summarizeEvent),
       pendingChoices: [...state.pendingChoices],
       ambientText: state.ambientText,
     };
+  }
+
+  /**
+   * Close a results screen the caller left open so the next turn can begin.
+   * Deadly encounters still awaiting an escape choice take the first option.
+   */
+  private finishPreviousTurn(): void {
+    const state = this._store.getState();
+    if (state.turnPhase !== 'results') return;
+    for (const roll of [...(state.turnResult?.pendingDeathRolls ?? [])]) {
+      if (this._store.getState().phase !== 'playing') return;
+      if (roll.escapeOptions.length > 0) this.resolveDeathRoll(roll.eventId, roll.escapeOptions[0].id);
+    }
+    dismissResults(this._store);
   }
 
   // ── Choices ────────────────────────────────────────────────────────────
@@ -475,122 +290,15 @@ export class GameAPI {
       );
     }
 
-    // Capture pre-resolution stats
-    const preStats = this.getStatSnapshot();
-
-    // Set cooldowns
-    const cooldownUpdates: Record<string, number> = {};
-    for (const event of state.currentEvents) {
-      if (event.definition.cooldown) {
-        cooldownUpdates[event.definition.id] = event.definition.cooldown;
-      }
+    const turnResult = commitTurn(this._store);
+    if (!turnResult) {
+      throw new Error(
+        this._store.getState().phase !== 'playing'
+          ? `Cannot end turn: the game is over (phase: ${this._store.getState().phase}).`
+          : 'Cannot end turn: no turn is in progress. Call generateTurn() first.'
+      );
     }
-    state.setEventCooldowns(cooldownUpdates);
-
-    // Resolve
-    const result = resolveTurn(state);
-
-    // Journal entry
-    const journalEntry = synthesizeJournalEntry(result.turnResult, {
-      season: state.time.season,
-      speciesId: state.animal.speciesId,
-      regionId: state.animal.region,
-      weatherType: state.currentWeather?.type,
-      rng: state.rng,
-      animalSex: state.animal.sex,
-    });
-    result.turnResult.journalEntry = journalEntry;
-
-    // Apply to state
-    this.set({ animal: result.animal });
-    if (result.statEffects.length > 0) {
-      this._store.getState().applyStatEffects(result.statEffects);
-    }
-    for (const consequence of result.consequences) {
-      this._store.getState().applyConsequence(consequence);
-    }
-
-    // Compute stat deltas
-    const postStats = this.getStatSnapshot();
-    const statDelta = {} as StatSnapshot;
-    for (const id of Object.values(StatId)) {
-      statDelta[id] = postStats[id] - preStats[id];
-    }
-    result.turnResult.statDelta = statDelta;
-
-    // NPC encounter tracking + lifetime stats (mirrors useGameEngine)
-    const encounterState = this._store.getState();
-    let updatedNPCs = encounterState.npcs;
-    let predatorsEvaded = 0;
-    let preyEaten = 0;
-    let rivalsDefeated = 0;
-    const foodSourceHits: Record<string, number> = {};
-
-    for (const outcome of result.turnResult.eventOutcomes) {
-      const event = state.currentEvents.find((e: ResolvedEvent) => e.definition.id === outcome.eventId);
-      if (!event) continue;
-      const tags = event.definition.tags;
-
-      if (tags.includes('foraging') && outcome.consequences.some((c: { type: string; amount?: number }) => c.type === 'modify_weight' && (c as { amount: number }).amount > 0)) {
-        foodSourceHits[event.definition.id] = (foodSourceHits[event.definition.id] || 0) + 1;
-      }
-      if (tags.includes('predator') && outcome.deathRollSurvived === true) predatorsEvaded++;
-      if (tags.includes('foraging') && outcome.consequences.some((c: { type: string; amount?: number }) => c.type === 'modify_weight' && (c as { amount: number }).amount > 0)) {
-        if (state.speciesBundle.config.diet !== 'herbivore') preyEaten++;
-      }
-      if (tags.includes('rival') && (outcome.choiceId?.includes('fight') || outcome.choiceId?.includes('challenge'))) {
-        if (!outcome.consequences.some((c: { type: string; severity?: number }) => c.type === 'add_injury' && (c.severity ?? 0) > 0)) {
-          rivalsDefeated++;
-        }
-      }
-
-      const npcType = tags.includes('predator') ? 'predator'
-        : tags.includes('rival') ? 'rival'
-        : tags.includes('ally') ? 'ally'
-        : tags.includes('mate') ? 'mate'
-        : null;
-      if (npcType) {
-        const npc = updatedNPCs.find((n: NPC) => n.type === npcType && n.alive);
-        if (npc) updatedNPCs = incrementEncounter(updatedNPCs, npc.id, encounterState.time.turn);
-      }
-    }
-
-    const previousFriends = encounterState.npcs.filter((n: NPC) => n.relationship === 'friendly' || n.relationship === 'bonded').length;
-    updatedNPCs = progressRelationship(updatedNPCs);
-    const currentFriends = updatedNPCs.filter((n: NPC) => n.relationship === 'friendly' || n.relationship === 'bonded').length;
-    const newFriendsMade = Math.max(0, currentFriends - previousFriends);
-
-    if (updatedNPCs !== encounterState.npcs) {
-      this._store.getState().setNPCs(updatedNPCs);
-    }
-
-    // Update lifetime stats
-    const latestAnimal = this._store.getState().animal;
-    const currentFoodSources = { ...latestAnimal.lifetimeStats.foodSources };
-    for (const [id, count] of Object.entries(foodSourceHits)) {
-      currentFoodSources[id] = (currentFoodSources[id] || 0) + count;
-    }
-    if (predatorsEvaded > 0 || preyEaten > 0 || rivalsDefeated > 0 || newFriendsMade > 0 || Object.keys(foodSourceHits).length > 0) {
-      this.set({
-        animal: {
-          ...this._store.getState().animal,
-          lifetimeStats: {
-            ...this._store.getState().animal.lifetimeStats,
-            predatorsEvaded: latestAnimal.lifetimeStats.predatorsEvaded + predatorsEvaded,
-            preyEaten: latestAnimal.lifetimeStats.preyEaten + preyEaten,
-            rivalsDefeated: latestAnimal.lifetimeStats.rivalsDefeated + rivalsDefeated,
-            friendsMade: latestAnimal.lifetimeStats.friendsMade + newFriendsMade,
-            foodSources: currentFoodSources,
-          },
-        },
-      });
-    }
-
-    // Show results + check death
-    this._store.getState().setTurnResult(result.turnResult);
-    this.checkDeathConditions();
-
-    return summarizeTurnResult(result.turnResult, statDelta);
+    return summarizeTurnResult(turnResult, turnResult.statDelta);
   }
 
   /**
@@ -925,6 +633,8 @@ export class GameAPI {
       this.autoMove();
 
       const turnInfo = this.generateTurn();
+      // The animal can die in the background before the turn's events (e.g. starvation)
+      if (!this.isAlive) break;
 
       if (choiceStrategy) {
         const choices = choiceStrategy(turnInfo.events);
@@ -946,10 +656,7 @@ export class GameAPI {
         }
       }
 
-      // Clear turn result state without triggering another advanceTurn()
-      // (dismissResults() calls advanceTurn() via the UI slice, which would
-      // double-tick physiology and corrupt map node types)
-      this.set({ showingResults: false, turnResult: null });
+      dismissResults(this._store);
 
       log.push({
         turn: turnInfo.turn,
@@ -959,68 +666,6 @@ export class GameAPI {
     }
 
     return log;
-  }
-
-  // ── Death check (mirrors useGameEngine.checkDeathConditions) ───────────
-
-  private checkDeathConditions(): void {
-    const state = this._store.getState();
-    const animal = state.animal;
-    const config = state.speciesBundle.config;
-    const parasiteDefs = state.speciesBundle.parasites;
-
-    if (!animal.alive) {
-      state.killAnimal(animal.causeOfDeath || 'Unknown cause');
-      return;
-    }
-
-    if (computeEffectiveValue(animal.stats[StatId.HEA]) <= 0) {
-      state.killAnimal('Systemic Failure -- health completely depleted.');
-      return;
-    }
-
-    if (animal.weight < config.weight.starvationDeath) {
-      state.killAnimal('Starvation -- body weight dropped below survival threshold.');
-      return;
-    }
-
-    // Dehydration death
-    const hydrationConfig = config.hydration;
-    if (hydrationConfig && animal.physiologicalStress.dehydration >= hydrationConfig.lethalThreshold) {
-      if (state.rng.chance(0.15)) {
-        state.killAnimal('Dehydration -- organ function failed without water.');
-        return;
-      }
-    }
-
-    for (const parasite of animal.parasites) {
-      const def = parasiteDefs[parasite.definitionId];
-      if (def && parasite.currentStage === def.stages.length - 1) {
-        const imm = computeEffectiveValue(animal.stats[StatId.IMM]);
-        const immFactor = 1.0 + (imm / 100);
-        // Scale disease death check by turn frequency — day-turn species
-        // get 4× more checks per day than weekly species
-        const turnScale = (config.turnUnit === 'day') ? 0.25 : 1;
-        if (state.rng.chance(config.diseaseDeathChanceAtCritical * immFactor * turnScale)) {
-          state.killAnimal(`Died from complications of ${def.name}.`);
-          return;
-        }
-      }
-    }
-
-    if (animal.age > config.age.oldAgeOnsetMonths) {
-      const yearsOver = (animal.age - config.age.oldAgeOnsetMonths) / 12;
-      const ageDeathChance = config.age.oldAgeBaseChance * Math.pow(config.age.oldAgeEscalation, yearsOver);
-      if (state.rng.chance(Math.min(ageDeathChance, config.age.maxOldAgeChance))) {
-        state.killAnimal(`Died of old age at ${Math.floor(animal.age / 12)} years.`);
-        return;
-      }
-    }
-
-    if (state.reproduction.type === 'semelparous' && state.reproduction.spawned) {
-      state.killAnimal('Post-spawning death -- the cycle is complete.');
-      return;
-    }
   }
 }
 

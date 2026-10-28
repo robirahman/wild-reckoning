@@ -36,7 +36,7 @@ export const createAnimalSlice: GameSlice<AnimalSlice> = (set, get) => {
     performAction: (actionId) => {
       const state = get();
       const action = VOLUNTARY_ACTIONS.find((a) => a.id === actionId);
-      if (!action || state.actionsPerformed.includes(actionId)) return;
+      if (!action || state.actionsPerformed.includes(actionId) || state.turnPhase !== 'choosing') return;
 
       const ctx = {
         speciesId: state.animal.speciesId,
@@ -51,6 +51,7 @@ export const createAnimalSlice: GameSlice<AnimalSlice> = (set, get) => {
         rng: state.rng,
         nutrients: state.animal.nutrients,
       };
+      if (!action.isAvailable(ctx)) return;
 
       const result = action.execute(ctx);
 
@@ -76,6 +77,8 @@ export const createAnimalSlice: GameSlice<AnimalSlice> = (set, get) => {
         },
         resolvedNarrative: result.narrative,
         triggeredSubEvents: [],
+        // Its effects were applied above; turn resolution must not apply them again
+        preApplied: true,
       };
 
       set({
@@ -324,6 +327,10 @@ export const createAnimalSlice: GameSlice<AnimalSlice> = (set, get) => {
         pendingChoices: [],
         revocableChoices: {},
         map: generateRegionMap(state.rng),
+        // The new generation starts a fresh turn rather than the parent's results
+        turnPhase: 'awaiting-start',
+        showingResults: false,
+        turnResult: null,
       });
     }
   };

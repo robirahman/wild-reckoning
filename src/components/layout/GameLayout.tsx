@@ -21,7 +21,8 @@ import { MapPanel } from '../MapPanel';
 
 export function GameLayout() {
   const { startTurn, showingResults } = useGameEngine();
-  const currentEvents = useGameStore((s) => s.currentEvents);
+  const phase = useGameStore((s) => s.phase);
+  const turnPhase = useGameStore((s) => s.turnPhase);
   const tutorialStep = useGameStore((s) => s.tutorialStep);
   const advanceTutorial = useGameStore((s) => s.advanceTutorial);
   const skipTutorial = useGameStore((s) => s.skipTutorial);
@@ -29,12 +30,13 @@ export function GameLayout() {
   const [showJournal, setShowJournal] = useState(false);
   useAudio();
 
-  // Generate first turn's events on mount
+  // Start a turn whenever one is due: a new game, a new generation, or a
+  // resumed save from between turns. The pipeline ignores repeat calls.
   useEffect(() => {
-    if (currentEvents.length === 0 && !showingResults) {
+    if (phase === 'playing' && turnPhase === 'awaiting-start') {
       startTurn();
     }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [phase, turnPhase, startTurn]);
 
   return (
     <div className={styles.gameLayout}>

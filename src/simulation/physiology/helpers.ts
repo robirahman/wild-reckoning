@@ -98,18 +98,54 @@ export function computeAverageSkinDamage(bodyState: BodyState | undefined): numb
 }
 
 /**
+ * Weight a healthy animal of this sex and age carries: the species' starting
+ * weight while young, growing to its healthy adult weight by adulthood.
+ * Undefined for species without a healthy-adult reference.
+ */
+export function healthyReferenceWeight(
+  config: SpeciesConfig,
+  sex: 'male' | 'female',
+  ageMonths: number,
+): number | undefined {
+  const adult = config.weight.healthyAdult;
+  if (!adult) return undefined;
+  const youngAge = Math.max(...Object.values(config.startingAge));
+  const adultAge = config.weight.adultAgeMonths ?? youngAge;
+  const young = config.startingWeight[sex];
+  if (ageMonths <= youngAge) return young;
+  if (ageMonths >= adultAge) return adult[sex];
+  return young + (adult[sex] - young) * ((ageMonths - youngAge) / (adultAge - youngAge));
+}
+
+/**
  * Body Condition Score (1-5) derived from weight relative to species frame.
  * Mirrors the real BCS system used by wildlife biologists.
  *
  * 5 = obese, 4 = fat, 3 = average, 2 = thin, 1 = emaciated
  */
-export function computeBodyCondition(weight: number, config: SpeciesConfig): number {
-  const midWeight = (config.weight.maximumBiologicalWeight + config.weight.starvationDeath) / 2;
-  const ratio = weight / midWeight;
+export function computeBodyCondition(
+  weight: number,
+  config: SpeciesConfig,
+  sex: 'male' | 'female',
+  ageMonths: number,
+): number {
+  const reference = healthyReferenceWeight(config, sex, ageMonths);
+  if (reference === undefined) {
+    const midWeight = (config.weight.maximumBiologicalWeight + config.weight.starvationDeath) / 2;
+    const ratio = weight / midWeight;
+    if (ratio >= 1.3) return 5;
+    if (ratio >= 1.1) return 4;
+    if (ratio >= 0.9) return 3;
+    if (ratio >= 0.7) return 2;
+    return 1;
+  }
 
-  if (ratio >= 1.3) return 5;
-  if (ratio >= 1.1) return 4;
-  if (ratio >= 0.9) return 3;
-  if (ratio >= 0.7) return 2;
+  // Reserves above the lethal minimum, relative to a healthy animal's
+  const floor = config.weight.starvationDeath;
+  const ratio = (weight - floor) / (reference - floor);
+  if (ratio >= 1.25) return 5;
+  if (ratio >= 1.08) return 4;
+  if (ratio >= 0.85) return 3;
+  if (ratio >= 0.6) return 2;
   return 1;
 }

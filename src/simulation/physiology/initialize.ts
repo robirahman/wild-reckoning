@@ -9,8 +9,10 @@ import { computeBodyCondition } from './helpers';
 export function initializePhysiology(
   config: SpeciesConfig,
   startingWeight: number,
+  sex: 'male' | 'female',
+  ageMonths: number,
 ): PhysiologyState {
-  const bodyCondition = computeBodyCondition(startingWeight, config);
+  const bodyCondition = computeBodyCondition(startingWeight, config, sex, ageMonths);
 
   return {
     // Metabolism: start with modest reserves (healthy but not fat)

@@ -36,6 +36,12 @@ export function TurnResultsScreen() {
     <div className={styles.resultsScreen}>
       <h3 className={styles.resultsTitle}>Turn Results</h3>
 
+      {turnResult.notices?.map((notice) => (
+        <p key={notice} role="status" className={styles.healthNarrative} style={{ fontStyle: 'italic' }}>
+          {notice}
+        </p>
+      ))}
+
       {scenario && scenarioOutcome?.status === 'won' && scenarioOutcome.turn === turn && (
         <div role="status" className={styles.journalSummary} style={{ borderColor: '#3a8a3a' }}>
           <strong>Challenge complete: {scenario.winCondition.description}.</strong>{' '}

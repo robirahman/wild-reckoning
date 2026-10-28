@@ -103,6 +103,8 @@ export const createGameSystemSlice: GameSlice<GameSystemSlice> = (set) => {
         evolution: { activeMutations: [], availableChoices: [], generationCount: 0, lineageHistory: [] },
         fastForward: false,
         instinctNudges: [],
+        turnPhase: 'awaiting-start',
+        lastTimeSkip: null,
       });
     },
 

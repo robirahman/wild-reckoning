@@ -9,7 +9,7 @@ import type { ResolvedEvent, StatEffect, Consequence } from '../../types/events'
 import type { NPC } from '../../types/npc';
 import type { ActiveStoryline } from '../../types/storyline';
 import type { ReproductionState } from '../../types/reproduction';
-import type { TurnResult } from '../../types/turnResult';
+import type { TurnResult, TimeSkipSummary } from '../../types/turnResult';
 import type { EcosystemState } from '../../types/ecosystem';
 import type { TerritoryState } from '../../types/territory';
 import type { ScenarioDefinition, ScenarioOutcome } from '../../types/scenario';
@@ -34,6 +34,12 @@ export interface TurnRecord {
   statSnapshot: Record<StatId, number>;
 }
 
+/**
+ * Where the current turn is in its lifecycle. The turn pipeline only moves
+ * forward one step at a time: awaiting-start → choosing → results → awaiting-start.
+ */
+export type TurnPhase = 'awaiting-start' | 'choosing' | 'results';
+
 export interface UISlice {
   phase: 'menu' | 'playing' | 'dead' | 'evolving';
   showingResults: boolean;
@@ -45,6 +51,8 @@ export interface UISlice {
   instinctNudges: InstinctNudge[];
   /** Stat currently being hovered over in event badges (for sidebar highlight) */
   highlightedStat: string | null;
+  /** Summary of the last fast-forward skip, consumed when the next turn begins */
+  lastTimeSkip: TimeSkipSummary | null;
 
   toggleFastForward: () => void;
   advanceTutorial: () => void;
@@ -104,6 +112,7 @@ export interface WorldSlice {
 }
 
 export interface TurnSlice {
+  turnPhase: TurnPhase;
   currentEvents: ResolvedEvent[];
   pendingChoices: string[];
   revocableChoices: Record<string, string>;
@@ -112,6 +121,8 @@ export interface TurnSlice {
 
   setEvents: (events: ResolvedEvent[]) => void;
   makeChoice: (eventId: string, choiceId: string) => void;
+  /** Undo a choice so the event is pending again */
+  clearChoice: (eventId: string) => void;
   applyStatEffects: (effects: StatEffect[]) => void;
   applyConsequence: (consequence: Consequence) => void;
   advanceTurn: () => void;

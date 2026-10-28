@@ -156,6 +156,7 @@ describe('GameAPI', () => {
       for (let turn = 0; turn < 10 && store.getState().phase === 'playing'; turn++) {
         const info = g.generateTurn();
         expect(info.turn).toBeGreaterThan(0);
+        if (store.getState().phase !== 'playing') break; // died in the background
         for (const event of store.getState().currentEvents) {
           for (const text of visibleText(event)) {
             expect(text, `${speciesId} / ${event.definition.id}`).not.toContain('{{');

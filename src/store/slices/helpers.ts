@@ -28,12 +28,13 @@ export function createInitialAnimal(config: SpeciesConfig, backstory: Backstory,
 
   // Initialize physiology state if species has a metabolism config
   const startWeight = sex === 'female' ? config.startingWeight.female : config.startingWeight.male;
+  const age = config.startingAge[backstory.type] ?? Object.values(config.startingAge)[0];
   const hasMetabolism = config.metabolismId ? getMetabolismConfig(config.metabolismId) : undefined;
-  const physiology = hasMetabolism ? initializePhysiology(config, startWeight) : undefined;
+  const physiology = hasMetabolism ? initializePhysiology(config, startWeight, sex, age) : undefined;
 
   return {
     speciesId: config.id,
-    age: config.startingAge[backstory.type] ?? Object.values(config.startingAge)[0],
+    age,
     weight: sex === 'female' ? config.startingWeight.female : config.startingWeight.male,
     sex,
     region: config.defaultRegion,

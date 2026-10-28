@@ -149,6 +149,14 @@ export interface SpeciesConfig {
     minFloor: number;
     debuffMaxPenalty: number;
     maximumBiologicalWeight: number;
+    /**
+     * Live weight of a healthy adult, by sex. When set, body condition is
+     * judged against this (scaled down for animals still growing) instead
+     * of the midpoint of the species' whole weight range.
+     */
+    healthyAdult?: { male: number; female: number };
+    /** Age in months by which an animal reaches healthyAdult weight */
+    adultAgeMonths?: number;
   };
 
   age: {

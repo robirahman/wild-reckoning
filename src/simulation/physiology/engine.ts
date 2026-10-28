@@ -197,7 +197,7 @@ export function tickPhysiologyEngine(input: PhysiologyTickInput): PhysiologyTick
   //  STEP 5: IMMUNE SYSTEM
   // ═══════════════════════════════════════════
 
-  const bodyCondition = computeBodyCondition(animal.weight + weightChange, config);
+  const bodyCondition = computeBodyCondition(animal.weight + weightChange, config, animal.sex, animal.age);
   physio.bodyConditionScore = bodyCondition;
 
   // Immune capacity: starts at baseline, reduced by malnutrition, stress, age

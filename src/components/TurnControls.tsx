@@ -1,11 +1,10 @@
 import { useGameEngine } from '../hooks/useGameEngine';
 import { useGameStore } from '../store/gameStore';
 import { saveGame } from '../store/persistence';
+import { FastForwardToggle } from './FastForwardToggle';
 
 export function TurnControls() {
   const { confirmChoices, hasPendingChoices } = useGameEngine();
-  const fastForward = useGameStore((s) => s.fastForward);
-  const toggleFastForward = useGameStore((s) => s.toggleFastForward);
   const returnToMenu = useGameStore((s) => s.returnToMenu);
 
   const handleQuit = () => {
@@ -30,22 +29,7 @@ export function TurnControls() {
       gap: 16,
     }}>
       <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-        <button
-          onClick={toggleFastForward}
-          style={{
-            padding: '6px 12px',
-            fontSize: '0.8rem',
-            fontFamily: 'var(--font-ui)',
-            background: fastForward ? 'var(--color-danger-bg)' : 'var(--color-panel-bg)',
-            border: `1px solid ${fastForward ? 'var(--color-danger)' : 'var(--color-border)'}`,
-            borderRadius: 4,
-            cursor: 'pointer',
-            color: fastForward ? 'var(--color-danger)' : 'var(--color-text-muted)',
-            transition: 'all 0.2s ease',
-          }}
-        >
-          {fastForward ? '▶▶ Fast Forward Active (12x)' : '▶ Normal Speed'}
-        </button>
+        <FastForwardToggle />
 
         <button
           onClick={handleSave}
@@ -99,6 +83,8 @@ export function TurnControls() {
           onClick={() => {
             confirmChoices();
           }}
+          disabled={hasPendingChoices}
+          title={hasPendingChoices ? 'Answer every event above first' : undefined}
           style={{
             padding: '10px 32px',
             fontSize: '1rem',
@@ -107,7 +93,8 @@ export function TurnControls() {
             border: '2px solid var(--color-text)',
             borderRadius: 4,
             background: 'var(--color-panel-bg)',
-            cursor: 'pointer',
+            cursor: hasPendingChoices ? 'not-allowed' : 'pointer',
+            opacity: hasPendingChoices ? 0.5 : 1,
             boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
           }}
         >

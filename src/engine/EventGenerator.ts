@@ -46,7 +46,7 @@ interface GenerationContext {
 
 // ── Calibration cache ──
 let cachedRates: CalibratedRates | undefined;
-function getCalibratedRates(speciesId: string): CalibratedRates | undefined {
+export function getCalibratedRates(speciesId: string): CalibratedRates | undefined {
   if (speciesId === 'white-tailed-deer') {
     if (!cachedRates) cachedRates = calibrate(DEER_MORTALITY);
     return cachedRates;

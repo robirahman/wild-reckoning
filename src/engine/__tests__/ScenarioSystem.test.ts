@@ -25,7 +25,8 @@ describe('scenario start', () => {
     expect(s.scenario?.id).toBe('the-last-winter');
     expect(s.time.month).toBe('December');
     expect(s.time.season).toBe('winter');
-    expect(s.animal.weight).toBe(95);
+    expect(s.animal.weight).toBe(84);
+    expect(s.animal.physiologyState?.bodyConditionScore).toBe(2); // thin for a 2-year-old doe
     expect(s.animal.age).toBe(24);
     expect(s.animal.backstory.type).toBe('wild-born');
     expect(s.animal.flags.has('territory-established')).toBe(true);
