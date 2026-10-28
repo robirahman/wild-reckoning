@@ -5,6 +5,7 @@ import { getRegionDefinition } from '../regions';
 import { TEMPLATE_VARIABLES, resolveTemplate, type GenerationContext } from '../../engine/EventGenerator';
 import { AMBIENT_TEXTS } from '../ambientText';
 import { describeConfinement } from '../../engine/captivity';
+import { INSTINCT_URGES } from '../../engine/needs';
 import { timeSkipEvent } from '../../engine/FastForward';
 import { MONTH_TO_SEASON } from '../../types/world';
 import { createRng } from '../../engine/RandomUtils';
@@ -124,6 +125,8 @@ describe('perspective', () => {
       ...AMBIENT_TEXTS.map((a) => ({ where: `ambient ${a.id}`, text: a.text })),
       ...['industrial shed', 'concrete pen', 'elsewhere'].flatMap((habitat) =>
         [0, 1, 2].map((turn) => ({ where: `confinement ${habitat}`, text: describeConfinement(habitat, turn) }))),
+      ...Object.entries(INSTINCT_URGES).flatMap(([behavior, urges]) =>
+        Object.values(urges).map((text) => ({ where: `instinct urge ${behavior}`, text }))),
     ];
     expect(texts.filter(({ text }) => TALKS_TO_PLAYER.test(text)).map(({ where, text }) => `${where}: ${text}`)).toEqual([]);
   });

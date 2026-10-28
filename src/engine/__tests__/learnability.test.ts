@@ -2,7 +2,8 @@ import { describe, it, expect, beforeAll } from 'vitest';
 import { installLocalStorage } from '../../test-utils/localStorage';
 import { createGameStore } from '../../store/gameStore';
 import { getSpeciesBundle } from '../../data/species';
-import { mostPressingSensation } from '../needs';
+import { instinctUrge, mostPressingSensation } from '../needs';
+import { BEHAVIOR_LABELS } from '../../types/behavior';
 import { resolveTurn } from '../TurnProcessor';
 import { StatId, STAT_DESCRIPTIONS, STAT_POLARITY } from '../../types/stats';
 import type { ResolvedEvent } from '../../types/events';
@@ -30,6 +31,19 @@ describe('most pressing sensation', () => {
     expect(mostPressingSensation([
       { id: 'sated', label: 'Well Fed', description: 'Your body feels solid.', priority: 'low', source: 'physiology' },
     ])).toBeNull();
+  });
+});
+
+describe('instinct urges', () => {
+  it('give every pull as a feeling, never a setting to change', () => {
+    const names = new RegExp(`\\b(${Object.values(BEHAVIOR_LABELS).join('|')}|settings?|increase|decrease|raise|lower)\\b`, 'i');
+    for (const behavior of Object.keys(BEHAVIOR_LABELS) as (keyof typeof BEHAVIOR_LABELS)[]) {
+      for (const direction of ['increase', 'decrease'] as const) {
+        const urge = instinctUrge(behavior, direction);
+        expect(urge, `${behavior} ${direction}`).toMatch(/^[A-Z].*\.$/);
+        expect(urge, `${behavior} ${direction}`).not.toMatch(names);
+      }
+    }
   });
 });
 
