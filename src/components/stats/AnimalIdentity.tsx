@@ -1,15 +1,17 @@
 import { useGameStore } from '../../store/gameStore';
 import { formatWeight } from '../../utils/formatWeight';
+import { describeTurnSpan, formatAge } from '../../utils/timeSpan';
 import styles from '../../styles/stats.module.css';
 
 export function AnimalIdentity() {
   const animal = useGameStore((s) => s.animal);
   const reproduction = useGameStore((s) => s.reproduction);
   const config = useGameStore((s) => s.speciesBundle.config);
+  const turn = useGameStore((s) => s.time.turn);
   const sexSymbol = animal.sex === 'female' ? '\u2640' : '\u2642';
   const tv = config.templateVars;
 
-  const pregnancyWeeks = reproduction.type === 'iteroparous' && reproduction.pregnancy
+  const pregnancyTurnsLeft = reproduction.type === 'iteroparous' && reproduction.pregnancy
     ? reproduction.pregnancy.turnsRemaining
     : null;
 
@@ -33,7 +35,7 @@ export function AnimalIdentity() {
         <span className={styles.region}>({tv.regionName})</span>
       </div>
       <div className={styles.identityDetails}>
-        <span>{animal.age} months old</span>
+        <span>{formatAge(animal.age, turn, config.turnUnit)} old</span>
         <span className={styles.separator}>|</span>
         <span>{formatWeight(animal.weight, config)}</span>
         <span className={styles.separator}>|</span>
@@ -55,9 +57,9 @@ export function AnimalIdentity() {
           {currentPhase.label}
         </div>
       )}
-      {pregnancyWeeks !== null && (
+      {pregnancyTurnsLeft !== null && (
         <div className={styles.statusNote}>
-          Pregnant — {pregnancyWeeks} weeks until birth
+          Pregnant — {describeTurnSpan(pregnancyTurnsLeft, config.turnUnit)} until birth
         </div>
       )}
       {dependentYoung > 0 && (

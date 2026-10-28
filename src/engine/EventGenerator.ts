@@ -22,7 +22,7 @@ import type { NPCBehaviorState } from '../simulation/npc/types';
 import { calibrate } from '../simulation/calibration/calibrator';
 import { DEER_MORTALITY } from '../simulation/calibration/data/deer';
 
-interface GenerationContext {
+export interface GenerationContext {
   animal: AnimalState;
   time: TimeState;
   behavior: BehavioralSettings;
@@ -55,7 +55,7 @@ export function getCalibratedRates(speciesId: string): CalibratedRates | undefin
 }
 
 /** Check if a single condition is met */
-function checkCondition(cond: EventCondition, ctx: GenerationContext): boolean {
+export function checkCondition(cond: EventCondition, ctx: GenerationContext): boolean {
   switch (cond.type) {
     case 'season':
       return cond.seasons.includes(ctx.time.season);
@@ -121,6 +121,8 @@ function checkCondition(cond: EventCondition, ctx: GenerationContext): boolean {
       return cond.ranks.includes(ctx.animal.social.rank);
     case 'mutation_active':
       return ctx.animal.activeMutations.some(m => m.id === cond.mutationId);
+    case 'backstory':
+      return cond.backstoryTypes.includes(ctx.animal.backstory.type);
     default:
       return true;
   }

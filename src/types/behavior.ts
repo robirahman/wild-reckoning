@@ -35,3 +35,31 @@ export const DEFAULT_BEHAVIORAL_SETTINGS: BehavioralSettings = {
   sociability: 3,
   caution: 3,
 };
+
+/** Attention budget for species that don't set their own */
+export const DEFAULT_ATTENTION_BUDGET = 18;
+
+/** Lowered first when settings exceed the budget: least survival-critical first */
+const REDUCTION_ORDER: (keyof BehavioralSettings)[] = [
+  'exploration', 'sociability', 'mating', 'belligerence', 'caution', 'foraging',
+];
+
+export function behaviorPointsUsed(settings: BehavioralSettings): number {
+  return REDUCTION_ORDER.reduce((sum, key) => sum + settings[key], 0);
+}
+
+/**
+ * Lower the highest settings until the total fits the species' attention
+ * budget, so a species with a small budget doesn't start over it.
+ */
+export function fitBehaviorToBudget(settings: BehavioralSettings, budget: number): BehavioralSettings {
+  const fitted = { ...settings };
+  let total = behaviorPointsUsed(fitted);
+  while (total > budget) {
+    const highest = REDUCTION_ORDER.reduce((a, b) => (fitted[b] > fitted[a] ? b : a));
+    if (fitted[highest] <= 1) break;
+    fitted[highest] = (fitted[highest] - 1) as BehaviorLevel;
+    total--;
+  }
+  return fitted;
+}

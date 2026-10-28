@@ -83,7 +83,10 @@ export interface AnimalSlice {
   lineage: LineageTraits | null;
   lifetimeStats: LifetimeStats;
 
+  /** Change one setting; increases beyond the species' attention budget are ignored */
   updateBehavioralSetting: (key: keyof BehavioralSettings, value: 1 | 2 | 3 | 4 | 5) => void;
+  /** Replace all settings (e.g. from a preset), trimmed to fit the attention budget */
+  loadBehavioralSettings: (settings: BehavioralSettings) => void;
   performAction: (actionId: string) => void;
   killAnimal: (cause: string) => void;
   moveLocation: (nodeId: string) => void;

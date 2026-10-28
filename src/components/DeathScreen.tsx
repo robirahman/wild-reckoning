@@ -5,7 +5,11 @@ import { RunSummary } from './RunSummary';
 import { DebriefingPanel } from './DebriefingPanel';
 import { CausalChainPanel } from './CausalChainPanel';
 import { formatWeight } from '../utils/formatWeight';
+import { pluralize } from '../utils/pluralize';
+import { describeTurnSpan, formatAge } from '../utils/timeSpan';
+import { getLifeOutcome } from '../engine/LifeOutcome';
 import type { Offspring } from '../types/reproduction';
+import type { SpeciesConfig } from '../types/speciesConfig';
 import { useAchievementStore } from '../store/achievementStore';
 import { SPECIES_UNLOCKS } from '../data/speciesUnlocks';
 import { ACHIEVEMENTS } from '../data/achievements';
@@ -27,27 +31,10 @@ const SPECIES_AVG_FITNESS: Record<string, number> = {
   'honeybee-worker': 50,
 };
 
-function getGrade(fitness: number, type: 'iteroparous' | 'semelparous'): { letter: string; color: string } {
-  if (fitness === 0) return { letter: 'F', color: 'var(--color-danger)' };
-  
-  if (type === 'iteroparous') {
-    if (fitness === 1) return { letter: 'D', color: '#c87533' };
-    if (fitness === 2) return { letter: 'C', color: 'var(--color-text)' };
-    if (fitness <= 4) return { letter: 'B', color: '#5a9e5a' };
-    return { letter: 'A', color: '#3a8a3a' };
-  } else {
-    // Semelparous scale (estimated survivors)
-    if (fitness <= 2) return { letter: 'D', color: '#c87533' };
-    if (fitness <= 5) return { letter: 'C', color: 'var(--color-text)' };
-    if (fitness <= 12) return { letter: 'B', color: '#5a9e5a' };
-    return { letter: 'A', color: '#3a8a3a' };
-  }
-}
-
-function offspringFate(o: Offspring): string {
+function offspringFate(o: Offspring, turnUnit: SpeciesConfig['turnUnit']): string {
   if (o.matured) return 'Survived to reproductive age';
   if (!o.alive) return o.causeOfDeath || 'Died';
-  return `Alive — ${o.ageTurns} weeks old`;
+  return `Alive — ${describeTurnSpan(o.ageTurns, turnUnit)} old`;
 }
 
 function offspringFateClass(o: Offspring): string {
@@ -70,16 +57,25 @@ export function DeathScreen() {
   const isIteroparous = reproduction.type === 'iteroparous';
   const isSemelparous = reproduction.type === 'semelparous';
 
-  const grade = getGrade(reproduction.totalFitness, reproduction.type);
+  const outcome = getLifeOutcome(animal, reproduction, config);
   const hasOffspring = isIteroparous && reproduction.offspring.length > 0;
+  const isMale = animal.sex === 'male';
 
-  // Calculate broods/births
-  const broodCount = isIteroparous 
-    ? new Set(reproduction.offspring.map(o => o.bornOnTurn)).size
-    : (reproduction.spawned ? 1 : 0);
-    
-  const broodLabel = config.id === 'honeybee-worker' ? 'Major contributions' 
-    : (isSemelparous ? 'Spawning events' : (config.reproduction.type === 'iteroparous' && config.reproduction.offspringCountFormula.maxOffspring > 1 ? 'Litters produced' : 'Births given'));
+  // Fathers sire offspring; mothers give birth to them (a litter counts once)
+  const broodCount = !isIteroparous
+    ? (reproduction.spawned ? 1 : 0)
+    : isMale
+      ? reproduction.offspring.length
+      : new Set(reproduction.offspring.map(o => o.bornOnTurn)).size;
+
+  const broodLabel = config.id === 'honeybee-worker' ? 'Major contributions'
+    : isSemelparous ? 'Spawning events'
+    : isMale ? 'Offspring sired'
+    : config.reproduction.type === 'iteroparous' && config.reproduction.offspringCountFormula.maxOffspring > 1
+      ? 'Litters produced'
+      : 'Births given';
+
+  const eventsExperienced = turnHistory.reduce((n, record) => n + record.events.length, 0);
 
   // Performance highlighting logic
   const lifeExpectancy = config.age.oldAgeOnsetMonths;
@@ -129,14 +125,21 @@ export function DeathScreen() {
 
       <CausalChainPanel />
 
-      {/* ── Survival Grade ── */}
+      {/* ── Reproductive outcome (a biological result, not a score of the player) ── */}
       <div className={styles.fitnessBox}>
         <div className={styles.fitnessLabel}>
-          Life Success Grade
+          Reproductive Success
         </div>
-        <div className={styles.gradeLetter} style={{ color: grade.color }}>
-          {grade.letter}
-        </div>
+        {outcome.grade ? (
+          <>
+            <div className={styles.gradeLetter} style={{ color: outcome.grade.color }}>
+              {outcome.grade.letter}
+            </div>
+            <div className={styles.fitnessNote}>Offspring that survived to adulthood</div>
+          </>
+        ) : (
+          <div className={styles.fitnessNote}>{outcome.note}</div>
+        )}
       </div>
 
       {/* ── Species Unlock Notification ── */}
@@ -165,13 +168,16 @@ export function DeathScreen() {
         <div>
           <strong>Age at death:</strong>{' '}
           <span className={ageColorClass}>
-            {animal.age} months ({Math.floor(animal.age / 12)} years)
+            {formatAge(animal.age, time.turn, config.turnUnit)}
           </span>
           {isLongLife && ' \u2014 Exceptional Longevity!'}
           {isPrematureDeath && ' \u2014 Premature Death'}
         </div>
         <div><strong>Final weight:</strong> {formatWeight(animal.weight, config)}</div>
-        <div><strong>Survived:</strong> {time.turn} turns ({time.month}, Year {time.year})</div>
+        <div>
+          <strong>Survived:</strong> {describeTurnSpan(time.turn, config.turnUnit)} ({pluralize(time.turn, 'turn')}),
+          until {time.month}, Year {time.year}
+        </div>
         <div style={{ marginTop: 8, borderTop: '1px solid var(--color-border-light)', paddingTop: 8 }}>
           <strong>{broodLabel}:</strong> {broodCount}
         </div>
@@ -182,7 +188,7 @@ export function DeathScreen() {
           </span>
         </div>
         <div style={{ marginTop: 8, borderTop: '1px solid var(--color-border-light)', paddingTop: 8 }}>
-          <strong>Events experienced:</strong> {turnHistory.length} turns
+          <strong>Events experienced:</strong> {eventsExperienced}
         </div>
         <div><strong>Parasites contracted:</strong> {animal.parasites.length}</div>
         <div><strong>Injuries sustained:</strong> {animal.injuries.length}</div>
@@ -288,7 +294,7 @@ export function DeathScreen() {
                 {o.siredByPlayer && <span className={styles.siredTag}> — sired</span>}
               </span>
               <span className={offspringFateClass(o)}>
-                {offspringFate(o)}
+                {offspringFate(o, config.turnUnit)}
               </span>
             </div>
           ))}

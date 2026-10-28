@@ -48,6 +48,17 @@
   margin-bottom: 8px;
 }
 
+.fitnessNote {
+  font-family: var(--font-narrative);
+  font-size: 0.9rem;
+  font-style: italic;
+  color: var(--color-text-muted);
+  margin-top: 6px;
+  max-width: 40ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .fitnessNumber {
   font-size: 3rem;
   font-weight: 700;

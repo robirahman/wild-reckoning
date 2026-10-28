@@ -179,6 +179,7 @@ export const PIG_EVENTS: GameEvent[] = [
       { type: 'death', cause: 'Slaughtered at processing plant after reaching market weight of approximately 280 lbs in 6 months.' },
     ],
     conditions: [
+      { type: 'backstory', backstoryTypes: ['grower-pig'] },
       { type: 'weight_above', threshold: 250 },
       { type: 'turn_above', threshold: 680 },  // ~170 days at 4 turns/day
     ],
@@ -201,6 +202,7 @@ export const PIG_EVENTS: GameEvent[] = [
     ],
     conditions: [
       { type: 'sex', sex: 'female' },
+      { type: 'backstory', backstoryTypes: ['industrial-sow'] },
       { type: 'turn_above', threshold: 800 },
       { type: 'no_flag', flag: 'pregnant' },
     ],

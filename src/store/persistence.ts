@@ -7,6 +7,7 @@ import { createWorldMemory } from '../simulation/memory/types';
 import { generateRegionMap } from '../engine/MapSystem';
 import { initializeEcosystem } from '../engine/EcosystemSystem';
 import { initialTerritoryFor } from '../engine/TerritorySystem';
+import { isCaptive } from '../engine/captivity';
 import { dehydrateAnimal, hydrateAnimal, type SerializedAnimal } from './slices/helpers';
 
 const STORAGE_KEY = 'wild-reckoning-save';
@@ -150,8 +151,8 @@ export function deserializeState(data: SerializedState): Partial<GameState> {
         nodesVisited: new Set(data.worldMemory.seasonalTotals.nodesVisited),
       },
     } : createWorldMemory(data.time.season),
-    // v1 saves never stored the map; give them a fresh one so movement works
-    map: isLegacy ? generateRegionMap(rng) : data.map ?? null,
+    // v1 saves never stored the map; give wild animals a fresh one so movement works
+    map: isLegacy && !isCaptive(speciesBundle.config) ? generateRegionMap(rng) : data.map ?? null,
     territory: data.territory ?? initialTerritoryFor(animal.flags),
     ecosystem: data.ecosystem ?? initializeEcosystem(),
     scenario: data.scenario ?? null,

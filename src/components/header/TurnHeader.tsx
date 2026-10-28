@@ -1,7 +1,8 @@
 import { useGameStore } from '../../store/gameStore';
 import { WeatherBadge } from './WeatherBadge';
 import { describeScenarioProgress } from '../../engine/ScenarioSystem';
-import { describeTurnSpan, FAST_FORWARD_TURNS } from '../../engine/FastForward';
+import { FAST_FORWARD_TURNS } from '../../engine/FastForward';
+import { describeTurnSpan } from '../../utils/timeSpan';
 import styles from '../../styles/header.module.css';
 
 interface Props {

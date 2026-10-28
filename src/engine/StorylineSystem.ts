@@ -6,8 +6,11 @@ import type { SpeciesConfig } from '../types/speciesConfig';
 import type { ResolvedEvent } from '../types/events';
 import type { Rng } from './RandomUtils';
 import type { NPC } from '../types/npc';
-import { resolveTemplate, resolveChoiceText } from './EventGenerator';
-import { computeEffectiveValue } from '../types/stats';
+import type { RegionDefinition } from '../types/world';
+import type { EcosystemState } from '../types/ecosystem';
+import type { WeatherState } from './WeatherSystem';
+import { resolveTemplate, resolveChoiceText, checkCondition, type GenerationContext } from './EventGenerator';
+import { fitsSetting } from './captivity';
 import { STORYLINES } from '../data/storylines';
 import { STORYLINE_ADVANCE_CHANCE } from './constants';
 
@@ -19,7 +22,28 @@ interface StorylineContext {
   rng: Rng;
   npcs: NPC[];
   activeStorylines: ActiveStoryline[];
+  /** Last turn's events, to read the choice made at a storyline step */
   currentEvents?: ResolvedEvent[];
+  currentWeather?: WeatherState;
+  regionDef?: RegionDefinition;
+  ecosystem?: EcosystemState;
+}
+
+/** The event generator's view of the turn, for conditions and template text */
+function generationContext(ctx: StorylineContext): GenerationContext {
+  return {
+    animal: ctx.animal,
+    time: ctx.time,
+    behavior: ctx.behavior,
+    cooldowns: {},
+    rng: ctx.rng,
+    events: [],
+    config: ctx.config,
+    npcs: ctx.npcs,
+    currentWeather: ctx.currentWeather,
+    regionDef: ctx.regionDef,
+    ecosystem: ctx.ecosystem,
+  };
 }
 
 interface StorylineTickResult {
@@ -35,35 +59,14 @@ function checkStorylineConditions(
   def: StorylineDefinition,
   ctx: StorylineContext,
 ): boolean {
-  // Check species restriction
+  // Storylines without a setting describe the outdoors, so they skip captive animals
+  if (!fitsSetting(def.settings, ctx.config)) return false;
   if (def.speciesIds.length > 0 && !def.speciesIds.includes(ctx.animal.speciesId)) {
     return false;
   }
-
-  // Check start conditions using a simple inline checker
-  for (const cond of def.startConditions) {
-    switch (cond.type) {
-      case 'season':
-        if (!cond.seasons.includes(ctx.time.season)) return false;
-        break;
-      case 'age_range':
-        if (cond.min !== undefined && ctx.animal.age < cond.min) return false;
-        if (cond.max !== undefined && ctx.animal.age > cond.max) return false;
-        break;
-      case 'has_flag':
-        if (!ctx.animal.flags.has(cond.flag)) return false;
-        break;
-      case 'stat_above': {
-        const val = computeEffectiveValue(ctx.animal.stats[cond.stat]);
-        if (val <= cond.threshold) return false;
-        break;
-      }
-      default:
-        break;
-    }
-  }
-
-  return true;
+  // Same condition rules as events, so no condition type is silently ignored
+  const genCtx = generationContext(ctx);
+  return def.startConditions.every((cond) => checkCondition(cond, genCtx));
 }
 
 function createStorylineEvent(
@@ -71,17 +74,7 @@ function createStorylineEvent(
   def: StorylineDefinition,
   ctx: StorylineContext,
 ): ResolvedEvent {
-  // Build a minimal GenerationContext for template resolution
-  const templateCtx = {
-    animal: ctx.animal,
-    time: ctx.time,
-    behavior: ctx.behavior,
-    cooldowns: {},
-    rng: ctx.rng,
-    events: [],
-    config: ctx.config,
-    npcs: ctx.npcs,
-  };
+  const templateCtx = generationContext(ctx);
 
   const resolvedNarrative = resolveTemplate(step.narrativeText, templateCtx);
 

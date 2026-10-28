@@ -26,6 +26,8 @@ import { tickTerritory, TERRITORIAL_SPECIES } from './TerritorySystem';
 import { pickIllustration } from './IllustrationPicker';
 import { scenarioOutcomeAfterTurn } from './ScenarioSystem';
 import { timeSkipEvent } from './FastForward';
+import { settingOf } from './captivity';
+import { getRegionDefinition } from '../data/regions';
 import { NPC_INTRODUCTION_MIN_TURN, TERRITORY_AUTO_ESTABLISH_TURN, TERRITORY_INITIAL_SIZE, TERRITORY_INITIAL_QUALITY } from './constants';
 import { isSimulationMode } from '../simulation/mode';
 import { drainDebriefingEntries } from '../simulation/events/SimEventGenerator';
@@ -75,6 +77,7 @@ export function beginTurn(store: GameStore): boolean {
     weatherType: state.currentWeather?.type,
     rng: state.rng,
     animalSex: state.animal.sex,
+    setting: settingOf(state.speciesBundle.config),
   });
   const ecoResult = tickEcosystem(state.ecosystem, state.animal.region, state.time.turn, state.rng);
   store.setState({ ambientText, ecosystem: ecoResult.ecosystem });
@@ -108,6 +111,9 @@ export function beginTurn(store: GameStore): boolean {
     npcs: state.npcs,
     activeStorylines: state.activeStorylines,
     currentEvents: previousEvents,
+    currentWeather: state.currentWeather ?? undefined,
+    regionDef: getRegionDefinition(state.animal.region),
+    ecosystem: state.ecosystem,
   });
 
   const timeSkip: ResolvedEvent[] = state.lastTimeSkip
@@ -222,6 +228,7 @@ export function commitTurn(store: GameStore, hooks: TurnHooks = {}): TurnResult 
     weatherType: state.currentWeather?.type,
     rng: state.rng,
     animalSex: state.animal.sex,
+    setting: settingOf(state.speciesBundle.config),
   });
 
   // Health/body changes first, then this turn's stat effects and consequences

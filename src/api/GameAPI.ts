@@ -19,6 +19,7 @@
 
 import { useGameStore, type GameState } from '../store/gameStore';
 import { beginTurn, commitTurn, dismissResults } from '../engine/TurnPipeline';
+import { getLifeOutcome } from '../engine/LifeOutcome';
 import { StatId, computeEffectiveValue } from '../types/stats';
 import { getSpeciesBundle, getAllSpeciesIds } from '../data/species';
 import { BACKSTORY_OPTIONS } from '../types/species';
@@ -115,6 +116,7 @@ export interface RunSummary {
   ageMonths: number;
   causeOfDeath?: string;
   totalFitness: number;
+  /** Reproductive-success letter grade, or 'N/A' if the animal died before it could breed */
   grade: string;
   lifetimeStats: any; // LifetimeStats type from stats.ts
   timeline: TimelineEntry[];
@@ -403,23 +405,8 @@ export class GameAPI {
     const animal = state.animal;
     const reproduction = state.reproduction;
 
-    // 1. Calculate Grade (mirrors DeathScreen.tsx)
-    const getGrade = (fitness: number, type: 'iteroparous' | 'semelparous'): string => {
-      if (fitness === 0) return 'F';
-      if (type === 'iteroparous') {
-        if (fitness === 1) return 'D';
-        if (fitness === 2) return 'C';
-        if (fitness <= 4) return 'B';
-        return 'A';
-      } else {
-        if (fitness <= 2) return 'D';
-        if (fitness <= 5) return 'C';
-        if (fitness <= 12) return 'B';
-        return 'A';
-      }
-    };
-
-    const grade = getGrade(reproduction.totalFitness, reproduction.type);
+    // 1. Reproductive outcome (same rules as the death screen)
+    const grade = getLifeOutcome(animal, reproduction, config).grade?.letter ?? 'N/A';
 
     // 2. Extract Timeline (mirrors RunSummary.tsx)
     const timeline: TimelineEntry[] = [];

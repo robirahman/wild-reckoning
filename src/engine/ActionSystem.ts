@@ -3,7 +3,9 @@
 import type { StatEffect, Consequence } from '../types/events';
 import { StatId } from '../types/stats';
 import { TERRITORIAL_SPECIES } from './TerritorySystem';
+import { isCaptive } from './captivity';
 import type { SpeciesConfig } from '../types/speciesConfig';
+import type { AnimalState } from '../types/species';
 
 // Minimal context to avoid circular import with gameStore
 export interface ActionContext {
@@ -15,6 +17,35 @@ export interface ActionContext {
   matingSeasons: string[] | 'any';
   rng: { chance: (p: number) => boolean };
   nutrients: { minerals: number; vitamins: number };
+  ageMonths: number;
+  sex: 'male' | 'female';
+  /** Confined animals can't roam, forage freely, or seek mates */
+  captive: boolean;
+}
+
+/** Build an action context from the slice of game state actions depend on */
+export function buildActionContext(state: {
+  animal: Pick<AnimalState, 'speciesId' | 'age' | 'sex' | 'nutrients'>;
+  speciesBundle: { config: SpeciesConfig };
+  territory: { established: boolean };
+  time: { season: string };
+  rng: { chance: (p: number) => boolean };
+}): ActionContext {
+  const config = state.speciesBundle.config;
+  const reproduction = config.reproduction;
+  return {
+    speciesId: state.animal.speciesId,
+    config,
+    territory: state.territory,
+    reproductionType: reproduction.type,
+    season: state.time.season,
+    matingSeasons: reproduction.type === 'iteroparous' ? reproduction.matingSeasons ?? 'any' : [],
+    rng: state.rng,
+    nutrients: state.animal.nutrients,
+    ageMonths: state.animal.age,
+    sex: state.animal.sex,
+    captive: isCaptive(config),
+  };
 }
 
 export interface ActionResult {
@@ -75,7 +106,7 @@ export const VOLUNTARY_ACTIONS: VoluntaryAction[] = [
     id: 'explore',
     label: 'Explore',
     description: 'Venture into unfamiliar ground looking for resources.',
-    isAvailable: () => true,
+    isAvailable: (ctx) => !ctx.captive,
     execute: (ctx) => {
       const override = ctx.config.actions?.overrides?.['explore'];
       const foundFood = ctx.rng.chance(0.4);
@@ -97,7 +128,10 @@ export const VOLUNTARY_ACTIONS: VoluntaryAction[] = [
     label: 'Search for Mate',
     description: 'Seek out a potential breeding partner.',
     isAvailable: (ctx) => {
-      if (ctx.reproductionType !== 'iteroparous') return false;
+      if (ctx.reproductionType !== 'iteroparous' || ctx.captive) return false;
+      // Too young to breed: no point searching
+      const reproduction = ctx.config.reproduction;
+      if (reproduction.type === 'iteroparous' && ctx.ageMonths < reproduction.matingMinAge) return false;
       if (ctx.matingSeasons === 'any') return true;
       return ctx.matingSeasons.includes(ctx.season);
     },
@@ -119,7 +153,7 @@ export const VOLUNTARY_ACTIONS: VoluntaryAction[] = [
     id: 'seek-minerals',
     label: 'Seek Salt/Minerals',
     description: 'Search for a mineral lick or rich clay to supplement your diet.',
-    isAvailable: (ctx) => ctx.nutrients.minerals < 60,
+    isAvailable: (ctx) => !ctx.captive && ctx.nutrients.minerals < 60,
     execute: (ctx) => {
       const found = ctx.rng.chance(0.4);
       return {
@@ -138,9 +172,9 @@ export const VOLUNTARY_ACTIONS: VoluntaryAction[] = [
     label: 'Search for Medicinal Plants',
     description: 'Look for specific plants to soothe your ailments.',
     isAvailable: (ctx) => {
-      // Logic would need to check actual HEA stat via ctx if we had it. 
+      // Logic would need to check actual HEA stat via ctx if we had it.
       // For now available if minerals or vitamins are low.
-      return ctx.nutrients.vitamins < 50;
+      return !ctx.captive && ctx.nutrients.vitamins < 50;
     },
     execute: (ctx) => {
       const found = ctx.rng.chance(0.3);

@@ -5,13 +5,14 @@ import { initializeEcosystem } from '../../engine/EcosystemSystem';
 import { initialTerritoryFor } from '../../engine/TerritorySystem';
 import { generateRegionMap } from '../../engine/MapSystem';
 import { createInitialTime } from '../../engine/TimeSystem';
-import { DEFAULT_BEHAVIORAL_SETTINGS } from '../../types/behavior';
+import { DEFAULT_BEHAVIORAL_SETTINGS, DEFAULT_ATTENTION_BUDGET, fitBehaviorToBudget } from '../../types/behavior';
 import { loadGame } from '../persistence';
 import { createInitialAnimal, initialReproduction } from './helpers';
 import { createWorldMemory } from '../../simulation/memory/types';
 import type { WaterKnowledge, WaterSourceKnowledge } from '../../simulation/memory/types';
 import type { RegionMap } from '../../types/map';
 import { applyScenarioStart, scenarioStartMonth } from '../../engine/ScenarioSystem';
+import { isCaptive } from '../../engine/captivity';
 
 /** Initialize elephant matriarch water knowledge from the generated map */
 function initializeWaterKnowledge(speciesId: string, backstoryType: string, map: RegionMap): WaterKnowledge | undefined {
@@ -57,13 +58,14 @@ export const createGameSystemSlice: GameSlice<GameSystemSlice> = (set) => {
       const bundle = getSpeciesBundle(speciesId);
       const tutorialSeen = localStorage.getItem('wild-reckoning-tutorial-seen') === 'true';
       const rng = createRng(newSeed);
-      const map = generateRegionMap(rng);
+      // Captive animals can't roam, so they get no outdoor map
+      const map = isCaptive(bundle.config) ? null : generateRegionMap(rng);
       const baseAnimal = createInitialAnimal(bundle.config, backstory, sex);
       const animal = scenario ? applyScenarioStart(scenario, bundle, baseAnimal, rng) : baseAnimal;
 
       const time = createInitialTime(scenarioStartMonth(scenario), 1);
       const worldMemory = createWorldMemory(time.season);
-      const waterKnowledge = initializeWaterKnowledge(speciesId, backstory.type, map);
+      const waterKnowledge = map && initializeWaterKnowledge(speciesId, backstory.type, map);
       if (waterKnowledge) {
         worldMemory.waterKnowledge = waterKnowledge;
       }
@@ -76,7 +78,10 @@ export const createGameSystemSlice: GameSlice<GameSystemSlice> = (set) => {
         speciesBundle: bundle,
         animal,
         time,
-        behavioralSettings: { ...DEFAULT_BEHAVIORAL_SETTINGS },
+        behavioralSettings: fitBehaviorToBudget(
+          DEFAULT_BEHAVIORAL_SETTINGS,
+          bundle.config.attentionBudget ?? DEFAULT_ATTENTION_BUDGET,
+        ),
         reproduction: initialReproduction(bundle.config),
         currentEvents: [],
         pendingChoices: [],

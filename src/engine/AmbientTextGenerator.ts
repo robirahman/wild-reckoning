@@ -1,5 +1,6 @@
 import type { Rng } from './RandomUtils';
 import type { Season } from '../types/world';
+import type { Setting } from '../types/speciesConfig';
 import { AMBIENT_TEXTS, type AmbientTextEntry } from '../data/ambientText';
 import type { TurnResult } from '../types/turnResult';
 
@@ -10,12 +11,15 @@ interface AmbientTextContext {
   weatherType?: string;
   rng: Rng;
   animalSex?: 'male' | 'female';
+  /** Captive animals only hear lines written for confinement */
+  setting?: Setting;
 }
 
 export function generateAmbientText(ctx: AmbientTextContext): string | null {
   const eligible: { entry: AmbientTextEntry; weight: number }[] = [];
 
   for (const entry of AMBIENT_TEXTS) {
+    if (!(entry.settings ?? ['wild']).includes(ctx.setting ?? 'wild')) continue;
     if (entry.seasons && !entry.seasons.includes(ctx.season)) continue;
     if (entry.speciesIds && !entry.speciesIds.includes(ctx.speciesId)) continue;
     if (entry.regionIds && !entry.regionIds.includes(ctx.regionId)) continue;

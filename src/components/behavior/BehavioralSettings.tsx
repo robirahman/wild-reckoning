@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useGameStore } from '../../store/gameStore';
 import { usePresetStore } from '../../store/presetStore';
 import { BEHAVIOR_LABELS, BEHAVIOR_DESCRIPTIONS, type BehavioralSettings as BehaviorType } from '../../types';
-import type { BehaviorLevel } from '../../types/behavior';
+import { DEFAULT_ATTENTION_BUDGET, behaviorPointsUsed, type BehaviorLevel } from '../../types/behavior';
 import styles from '../../styles/behavior.module.css';
 import { InstinctBadges } from './InstinctBadges';
 
@@ -13,14 +13,14 @@ const DISPLAYED_SETTINGS: (keyof BehaviorType)[] = [
 export function BehavioralSettings() {
   const settings = useGameStore((s) => s.behavioralSettings);
   const updateSetting = useGameStore((s) => s.updateBehavioralSetting);
+  const loadSettings = useGameStore((s) => s.loadBehavioralSettings);
   const config = useGameStore((s) => s.speciesBundle.config);
   const [expandedSetting, setExpandedSetting] = useState<keyof BehaviorType | null>(null);
   const [presetName, setPresetName] = useState('');
 
   // Attention budget: total slider points cannot exceed the species' budget
-  const baseBudget = config.attentionBudget ?? 18;
-  const totalUsed = DISPLAYED_SETTINGS.reduce((sum, key) => sum + settings[key], 0);
-  const remaining = baseBudget - totalUsed;
+  const baseBudget = config.attentionBudget ?? DEFAULT_ATTENTION_BUDGET;
+  const remaining = baseBudget - behaviorPointsUsed(settings);
 
   const presets = usePresetStore((s) => s.presets);
   const savePreset = usePresetStore((s) => s.savePreset);
@@ -29,11 +29,7 @@ export function BehavioralSettings() {
   const handleLoadPreset = (name: string) => {
     const preset = presets[name];
     if (!preset) return;
-    for (const key of DISPLAYED_SETTINGS) {
-      if (preset[key] !== undefined) {
-        updateSetting(key, preset[key]);
-      }
-    }
+    loadSettings({ ...settings, ...preset });
   };
 
   const handleSavePreset = () => {

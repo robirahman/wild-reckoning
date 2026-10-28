@@ -129,6 +129,9 @@ export interface MigrationConfig {
 //  MAIN SPECIES CONFIG
 // ════════════════════════════════════════════════
 
+/** Whether an animal lives free or confined under human control (farm animals) */
+export type Setting = 'wild' | 'captive';
+
 export interface SpeciesConfig {
   id: string;
   name: string;
@@ -137,6 +140,11 @@ export interface SpeciesConfig {
   diet: Diet;
   defaultRegion: string;
   defaultRegionDisplayName: string;
+  /**
+   * Captive animals have no outdoor map, weather, or wild-only actions and
+   * storylines. Defaults to 'wild'.
+   */
+  setting?: Setting;
 
   startingWeight: { male: number; female: number };
   startingAge: Record<string, number>;

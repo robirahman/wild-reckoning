@@ -161,17 +161,38 @@ describe('voluntary actions', () => {
   });
 });
 
-describe('event conditions', () => {
-  it('honors turn_above: a male chick is not culled before day two', () => {
+describe('farm events', () => {
+  it('shows the hatchery first, then culls a layer-strain male at sorting', () => {
     const store = startGame('chicken', 'layer', 'male');
-    let culledOn: number | undefined;
-    for (let i = 0; i < 8 && store.getState().phase === 'playing'; i++) {
-      playOneTurn(store);
-      if (store.getState().phase === 'dead') culledOn = store.getState().time.turn;
+    beginTurn(store);
+    expect(store.getState().currentEvents.map((e) => e.definition.id)).toContain('chicken-hatchery');
+    expect(store.getState().phase).toBe('playing');
+    answerAll(store);
+    commitTurn(store);
+    dismissResults(store);
+    playOneTurn(store);
+    expect(store.getState().phase).toBe('dead');
+    expect(store.getState().animal.causeOfDeath).toMatch(/Culled at the hatchery/);
+  });
+
+  it('raises broiler males for meat instead of culling them', () => {
+    const store = startGame('chicken', 'broiler', 'male');
+    for (let i = 0; i < 8 && store.getState().phase === 'playing'; i++) playOneTurn(store);
+    expect(store.getState().animal.causeOfDeath ?? '').not.toMatch(/Culled/);
+  });
+
+  it('honors turn_above: shed life starts only after hatch day', () => {
+    const store = startGame('chicken', 'broiler', 'female');
+    const seen: string[] = [];
+    for (let i = 0; i < 4 && store.getState().phase === 'playing'; i++) {
+      beginTurn(store);
+      seen.push(...store.getState().currentEvents.map((e) => e.definition.id));
+      answerAll(store);
+      commitTurn(store);
+      dismissResults(store);
     }
-    expect(culledOn).toBeDefined();
-    expect(culledOn!).toBeGreaterThan(4);
-    expect(store.getState().animal.causeOfDeath).toMatch(/Culled/);
+    expect(seen).not.toContain('chicken-ammonia-burn');
+    expect(seen).not.toContain('chicken-industrial-feeding');
   });
 });
 

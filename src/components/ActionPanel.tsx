@@ -1,34 +1,21 @@
 import { useGameStore } from '../store/gameStore';
-import { getAvailableActions, type ActionContext } from '../engine/ActionSystem';
+import { getAvailableActions, buildActionContext } from '../engine/ActionSystem';
 import styles from '../styles/actions.module.css';
 
 export function ActionPanel() {
-  const config = useGameStore((s) => s.speciesBundle.config);
+  const animal = useGameStore((s) => s.animal);
+  const speciesBundle = useGameStore((s) => s.speciesBundle);
   const territory = useGameStore((s) => s.territory);
-  const reproduction = config.reproduction;
-  const season = useGameStore((s) => s.time.season);
+  const time = useGameStore((s) => s.time);
   const phase = useGameStore((s) => s.phase);
   const showingResults = useGameStore((s) => s.showingResults);
   const actionsPerformed = useGameStore((s) => s.actionsPerformed);
   const performAction = useGameStore((s) => s.performAction);
   const rng = useGameStore((s) => s.rng);
-  const nutrients = useGameStore((s) => s.animal.nutrients);
 
   if (phase !== 'playing' || showingResults) return null;
 
-  const ctx: ActionContext = {
-    speciesId: config.id,
-    config,
-    territory,
-    reproductionType: reproduction.type,
-    season,
-    matingSeasons:
-      reproduction.type === 'iteroparous'
-        ? (reproduction as Extract<typeof reproduction, { type: 'iteroparous' }>).matingSeasons ?? 'any'
-        : [],
-    rng,
-    nutrients,
-  };
+  const ctx = buildActionContext({ animal, speciesBundle, territory, time, rng });
 
   const available = getAvailableActions(ctx);
   if (available.length === 0) return null;

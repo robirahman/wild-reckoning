@@ -20,6 +20,7 @@ import { tickWorldMemory } from '../../simulation/memory/ticker';
 import { tickNodeResources, buildNPCNodeMap } from '../../simulation/spatial/resources';
 import { tickNPCBehavior } from '../../simulation/npc/engine';
 import { FAST_FORWARD_TURNS } from '../../engine/FastForward';
+import { isCaptive } from '../../engine/captivity';
 
 export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
   turnPhase: 'awaiting-start',
@@ -431,6 +432,8 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
     const difficultyMult = DIFFICULTY_PRESETS[state.difficulty];
     const turnUnit = config.turnUnit ?? 'week';
     const iterations = state.fastForward ? FAST_FORWARD_TURNS : 1;
+    // Indoors, captive animals have no weather or outdoor climate
+    const captive = isCaptive(config);
     const massScale = config.massType === 'micro' ? 0.000001 : (config.massType === 'mega' ? 5 : 1);
     // For weather/node/climate penalties: use body-weight-proportional scaling
     // for species without explicit massType. Prevents tiny species (terns, frogs,
@@ -467,10 +470,12 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
       
       // Advance weather
       const regionDef = getRegionDefinition(currentAnimal.region);
-      const climate = regionDef?.climate;
-      const newWeather = currentWeather
-        ? tickWeather(currentWeather, climate, newTime.season, newTime.monthIndex, state.rng, currentClimateShift)
-        : generateWeather(climate, newTime.season, newTime.monthIndex, state.rng, currentClimateShift);
+      const climate = captive ? undefined : regionDef?.climate;
+      const newWeather = captive
+        ? null
+        : currentWeather
+          ? tickWeather(currentWeather, climate, newTime.season, newTime.monthIndex, state.rng, currentClimateShift)
+          : generateWeather(climate, newTime.season, newTime.monthIndex, state.rng, currentClimateShift);
 
       // Climate Shift
       if (newTime.year > currentTime.year) {

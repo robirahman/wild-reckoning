@@ -13,6 +13,7 @@ import { SpeciesComparison } from './SpeciesComparison';
 import { getUnlockHint } from '../data/speciesUnlocks';
 import { useAchievementStore } from '../store/achievementStore';
 import { useSpeciesUnlocks } from '../hooks/useSpeciesUnlocks';
+import { isCaptive } from '../engine/captivity';
 import { SCENARIOS } from '../data/scenarios';
 import { ThemeToggle } from './ThemeToggle';
 import styles from '../styles/startscreen.module.css';
@@ -29,11 +30,7 @@ export function StartScreen() {
 
   const [mode, setMode] = useState<'wild' | 'farm'>('wild');
 
-  const FARM_SPECIES = ['chicken', 'pig'];
-
-  const filteredBundles = allBundles.filter((b) => 
-    mode === 'farm' ? FARM_SPECIES.includes(b.config.id) : !FARM_SPECIES.includes(b.config.id)
-  );
+  const filteredBundles = allBundles.filter((b) => isCaptive(b.config) === (mode === 'farm'));
 
   const { isUnlocked: isSpeciesUnlocked } = useSpeciesUnlocks();
 
@@ -48,9 +45,7 @@ export function StartScreen() {
   const toggleMode = () => {
     const newMode = mode === 'wild' ? 'farm' : 'wild';
     setMode(newMode);
-    const firstOfNewMode = allBundles.find((b) => 
-      newMode === 'farm' ? FARM_SPECIES.includes(b.config.id) : !FARM_SPECIES.includes(b.config.id)
-    );
+    const firstOfNewMode = allBundles.find((b) => isCaptive(b.config) === (newMode === 'farm'));
     if (firstOfNewMode) {
       handleSpeciesChange(firstOfNewMode);
     }

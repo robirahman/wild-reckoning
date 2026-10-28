@@ -3,22 +3,13 @@
 import type { ResolvedEvent } from '../types/events';
 import type { SpeciesConfig } from '../types/speciesConfig';
 import type { TimeSkipSummary } from '../types/turnResult';
-import { pluralize } from '../utils/pluralize';
+import { describeTurnSpan } from '../utils/timeSpan';
 import { formatWeight } from '../utils/formatWeight';
 
 /** Turns of the animal's life simulated per fast-forwarded turn */
 export const FAST_FORWARD_TURNS = 12;
 
 type TurnUnit = NonNullable<SpeciesConfig['turnUnit']>;
-
-/** Real time covered by `turns` turns, e.g. "12 weeks", or "3 days" for 6-hour turns */
-export function describeTurnSpan(turns: number, turnUnit: TurnUnit = 'week'): string {
-  if (turnUnit === 'month') return pluralize(turns, 'month');
-  if (turnUnit === 'week') return pluralize(turns, 'week');
-  // Day-unit species take four 6-hour turns per day
-  const hours = turns * 6;
-  return hours % 24 === 0 ? pluralize(hours / 24, 'day') : pluralize(hours, 'hour');
-}
 
 export function fastForwardLabel(turnUnit: TurnUnit = 'week'): string {
   return `Skip ahead: ${describeTurnSpan(FAST_FORWARD_TURNS, turnUnit)} per turn`;

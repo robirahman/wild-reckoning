@@ -55,7 +55,8 @@ export type EventCondition =
   | { type: 'no_npc'; npcType: 'rival' | 'ally' | 'mate' | 'predator' | 'offspring' }
   | { type: 'node_type'; nodeTypes: ('forest' | 'water' | 'mountain' | 'plain' | 'den')[] }
   | { type: 'social_rank'; ranks: ('alpha' | 'beta' | 'subordinate' | 'omega' | 'lone')[] }
-  | { type: 'mutation_active'; mutationId: string };
+  | { type: 'mutation_active'; mutationId: string }
+  | { type: 'backstory'; backstoryTypes: string[] };
 
 // ── Consequences ──
 

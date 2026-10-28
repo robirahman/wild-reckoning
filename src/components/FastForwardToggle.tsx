@@ -1,5 +1,6 @@
 import { useGameStore } from '../store/gameStore';
-import { describeTurnSpan, FAST_FORWARD_TURNS } from '../engine/FastForward';
+import { FAST_FORWARD_TURNS } from '../engine/FastForward';
+import { describeTurnSpan } from '../utils/timeSpan';
 
 /** Toggle that says how much of the animal's life each turn will cover */
 export function FastForwardToggle({ compact = false }: { compact?: boolean }) {
