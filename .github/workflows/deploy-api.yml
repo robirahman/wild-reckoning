@@ -1,0 +1,30 @@
+name: Deploy headless API (Cloudflare Worker)
+
+# Kept separate from the Pages workflow so a Cloudflare failure can't
+# hide the status of the site build. Enable by setting the repository
+# variable CLOUDFLARE_ENABLED=true along with the two secrets below.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy-api:
+    if: vars.CLOUDFLARE_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: cd worker && npm ci && npx wrangler deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

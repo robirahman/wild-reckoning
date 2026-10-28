@@ -203,7 +203,7 @@ export function describeSurroundings(
   currentNode: MapNode,
   adjacentNodes: MapNode[],
   animal: AnimalState,
-  config: SpeciesConfig,
+  _config: SpeciesConfig,
   weather: WeatherState | null,
   worldMemory: WorldMemory,
   wisdom: number,
