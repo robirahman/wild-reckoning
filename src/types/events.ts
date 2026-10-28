@@ -1,4 +1,4 @@
-import type { Season } from './world';
+import type { Month, Season } from './world';
 import { StatId } from './stats';
 import type { GameFlag } from './flags';
 import type { HarmEvent } from '../simulation/harm/types';
@@ -32,6 +32,8 @@ export interface StatEffect {
 
 export type EventCondition =
   | { type: 'season'; seasons: Season[] }
+  /** Narrower than a season, for timing that matters within one (the rut) */
+  | { type: 'month'; months: Month[] }
   | { type: 'region'; regionIds: string[] }
   | { type: 'species'; speciesIds: string[] }
   | { type: 'diet'; diets: string[] }

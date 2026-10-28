@@ -357,8 +357,8 @@ function detectSeasonalSituations(ctx: SimulationContext, out: Situation[]): voi
   const sex = ctx.animal.sex;
   const age = ctx.animal.age;
 
-  // Rut season (autumn, males)
-  if (season === 'autumn' && sex === 'male' && age >= 18) {
+  // Rut (pre-rut and peak, males)
+  if ((month === 'October' || month === 'November') && sex === 'male' && age >= 18) {
     out.push({
       type: 'seasonal-phase',
       source: 'rut',

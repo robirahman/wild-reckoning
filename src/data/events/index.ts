@@ -446,7 +446,7 @@ export const allEvents: GameEvent[] = [
     ],
     conditions: [
       { type: 'species', speciesIds: ['white-tailed-deer'] },
-      { type: 'season', seasons: ['autumn'] },
+      { type: 'month', months: ['October', 'November'] },
       { type: 'sex', sex: 'female' },
       { type: 'age_range', min: 16 },
       { type: 'no_flag', flag: 'rut-seen' },
@@ -707,7 +707,7 @@ export const allEvents: GameEvent[] = [
     ],
     conditions: [
       { type: 'species', speciesIds: ['white-tailed-deer'] },
-      { type: 'season', seasons: ['autumn'] },
+      { type: 'month', months: ['October', 'November'] },
       { type: 'sex', sex: 'male' },
       { type: 'age_range', min: 16 },
       { type: 'no_flag', flag: 'rut-seen' },
@@ -759,7 +759,7 @@ export const allEvents: GameEvent[] = [
     ],
     conditions: [
       { type: 'species', speciesIds: ['white-tailed-deer'] },
-      { type: 'season', seasons: ['autumn'] },
+      { type: 'month', months: ['November', 'December'] },
       { type: 'sex', sex: 'female' },
       { type: 'age_range', min: 18 },
       { type: 'has_flag', flag: 'rut-seen' },
@@ -815,7 +815,7 @@ export const allEvents: GameEvent[] = [
     ],
     conditions: [
       { type: 'species', speciesIds: ['white-tailed-deer'] },
-      { type: 'season', seasons: ['autumn'] },
+      { type: 'month', months: ['November', 'December'] },
       { type: 'sex', sex: 'male' },
       { type: 'age_range', min: 18 },
       { type: 'no_flag', flag: 'mated-this-season' },

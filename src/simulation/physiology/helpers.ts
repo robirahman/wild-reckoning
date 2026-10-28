@@ -142,8 +142,9 @@ export function computeBodyCondition(
 
   // Reserves above the lethal minimum, relative to a healthy animal's
   const floor = config.weight.starvationDeath;
+  // Healthy deer carry 15-25% extra going into winter; that's well fed, not fat
   const ratio = (weight - floor) / (reference - floor);
-  if (ratio >= 1.25) return 5;
+  if (ratio >= 1.6) return 5;
   if (ratio >= 1.08) return 4;
   if (ratio >= 0.85) return 3;
   if (ratio >= 0.6) return 2;

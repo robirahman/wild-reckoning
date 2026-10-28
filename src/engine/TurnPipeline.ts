@@ -32,6 +32,7 @@ import { NPC_INTRODUCTION_MIN_TURN, TERRITORY_AUTO_ESTABLISH_TURN, TERRITORY_INI
 import { isSimulationMode } from '../simulation/mode';
 import { drainDebriefingEntries } from '../simulation/events/SimEventGenerator';
 import { computeInstincts } from '../simulation/instinct/engine';
+import { isMatingTime } from './ReproductionSystem';
 
 export type GameStore = Pick<StoreApi<GameState>, 'getState' | 'setState'>;
 
@@ -162,8 +163,7 @@ function introduceNPCs(store: GameStore): void {
   if (!hasMate && state.time.turn >= NPC_INTRODUCTION_MIN_TURN) {
     const reproConfig = state.speciesBundle.config.reproduction;
     const isMating =
-      (reproConfig.type === 'iteroparous' &&
-        (reproConfig.matingSeasons === 'any' || reproConfig.matingSeasons.includes(state.time.season))) ||
+      (reproConfig.type === 'iteroparous' && isMatingTime(reproConfig, state.time)) ||
       (reproConfig.type === 'semelparous' &&
         state.animal.flags.has(reproConfig.spawningMigrationFlag));
     if (isMating) {

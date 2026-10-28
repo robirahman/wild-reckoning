@@ -60,6 +60,8 @@ export function checkCondition(cond: EventCondition, ctx: GenerationContext): bo
   switch (cond.type) {
     case 'season':
       return cond.seasons.includes(ctx.time.season);
+    case 'month':
+      return cond.months.includes(ctx.time.month);
     case 'region':
       return cond.regionIds.includes(ctx.animal.region);
     case 'species':

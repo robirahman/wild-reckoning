@@ -1,6 +1,6 @@
 import type { AnimalState } from '../../types/species';
 import type { StatModifier } from '../../types/stats';
-import type { TimeState, RegionDefinition } from '../../types/world';
+import type { TimeState, RegionDefinition, Season } from '../../types/world';
 import type { SpeciesConfig } from '../../types/speciesConfig';
 import type { BehavioralSettings } from '../../types/behavior';
 import type { WeatherState } from '../../engine/WeatherSystem';
@@ -70,8 +70,14 @@ export interface MetabolismConfig {
   caloricDensityPerLb: number;
   /** Maximum weight loss from fat mobilization per turn (lbs). */
   maxFatMobilization: number;
+  /** Maximum loss per turn as a fraction of body weight, overriding maxFatMobilization.
+   *  Mass loss scales with body size: a small deer can't burn as much as a large one. */
+  maxFatMobilizationFraction?: number;
   /** Maximum weight gain from fat deposition per turn (lbs). */
   maxFatDeposition: number;
+  /** Seasonal limits on fat gain per turn (lbs), overriding maxFatDeposition.
+   *  Day length drives appetite in seasonal mammals, so they fatten fastest in autumn. */
+  maxFatDepositionBySeason?: Partial<Record<Season, number>>;
 
   // ── Foraging ──
   /** Base foraging yield in kcal-units per turn at quality=1.0, foraging=3. */

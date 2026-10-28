@@ -18,6 +18,8 @@ export interface SocialProfile {
   sex?: 'male' | 'female';
   /** Season filter (undefined = any) */
   seasons?: string[];
+  /** Month filter, narrowing seasons (undefined = any) */
+  months?: string[];
   /** Min/max age in months */
   minAge?: number;
   maxAge?: number;
@@ -228,6 +230,7 @@ const TERRITORIAL_SCRAPE: SocialProfile = {
   tags: ['social', 'territorial'],
   sex: 'male',
   seasons: ['autumn'],
+  months: ['October', 'November'],
   minAge: 18,
 
   baseWeight: 0.04,

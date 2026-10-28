@@ -89,11 +89,11 @@ describe('voluntary actions', () => {
 
   it('only offer a mate search once the animal is old enough to breed', () => {
     const s = start('white-tailed-deer', 'wild-born').getState();
-    const autumn = { ...s.time, season: 'autumn' as const };
+    const rut = { ...s.time, season: 'autumn' as const, month: 'November' as const };
     const minAge = s.speciesBundle.config.reproduction.type === 'iteroparous'
       ? s.speciesBundle.config.reproduction.matingMinAge : 0;
-    const young = buildActionContext({ ...s, time: autumn, animal: { ...s.animal, age: minAge - 1 } });
-    const adult = buildActionContext({ ...s, time: autumn, animal: { ...s.animal, age: minAge } });
+    const young = buildActionContext({ ...s, time: rut, animal: { ...s.animal, age: minAge - 1 } });
+    const adult = buildActionContext({ ...s, time: rut, animal: { ...s.animal, age: minAge } });
     expect(getAvailableActions(young).map((a) => a.id)).not.toContain('search-mate');
     expect(getAvailableActions(adult).map((a) => a.id)).toContain('search-mate');
   });

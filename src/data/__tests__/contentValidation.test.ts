@@ -6,6 +6,7 @@ import { TEMPLATE_VARIABLES, resolveTemplate, type GenerationContext } from '../
 import { AMBIENT_TEXTS } from '../ambientText';
 import { describeConfinement } from '../../engine/captivity';
 import { timeSkipEvent } from '../../engine/FastForward';
+import { MONTH_TO_SEASON } from '../../types/world';
 import { createRng } from '../../engine/RandomUtils';
 import { createInitialTime } from '../../engine/TimeSystem';
 import { createInitialAnimal } from '../../store/slices/helpers';
@@ -159,10 +160,12 @@ describe('seasonal wording', () => {
         // Simulation-mode species never see events the simulation replaces
         if (e.simulated && bundle.config.anatomyId) continue;
         const seasons = e.conditions.find((c) => c.type === 'season');
+        const months = e.conditions.find((c) => c.type === 'month');
         const weather = e.conditions.find((c) => c.type === 'weather');
         // Cold weather (a blizzard, snow, frost) only happens in winter
         const coldWeatherOnly = weather?.type === 'weather' && weather.weatherTypes.every((w) => ['blizzard', 'snow', 'frost'].includes(w));
         const allowed = coldWeatherOnly ? ['winter']
+          : months?.type === 'month' ? months.months.map((m) => MONTH_TO_SEASON[m])
           : seasons?.type === 'season' ? seasons.seasons : ['spring', 'summer', 'autumn', 'winter'];
         const text = eventTexts(e).join(' ');
         if (COLD.test(text) && allowed.includes('summer')) problems.push(`${e.id}: cold wording in summer`);

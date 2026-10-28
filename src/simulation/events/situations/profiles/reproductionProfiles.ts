@@ -20,6 +20,8 @@ export interface ReproductionProfile {
   sex: 'male' | 'female';
   /** Allowed seasons (undefined = all) */
   seasons?: string[];
+  /** Allowed months, narrowing seasons (undefined = all) */
+  months?: string[];
   /** All must be present */
   requiredFlags?: string[];
   /** Any present blocks */
@@ -317,6 +319,7 @@ export const RUT_DISPLAY_PROFILE: ReproductionProfile = {
   tags: ['mating', 'rut', 'social'],
   sex: 'male',
   seasons: ['autumn'],
+  months: ['October', 'November'],
   requiredFlags: ['rut-active'],
   minAge: 18,
 
@@ -434,6 +437,7 @@ export const RUT_COMBAT_PROFILE: ReproductionProfile = {
   tags: ['confrontation', 'territorial', 'mating'],
   sex: 'male',
   seasons: ['autumn'],
+  months: ['October', 'November'],
   minAge: 18,
 
   baseWeight: 0.015,

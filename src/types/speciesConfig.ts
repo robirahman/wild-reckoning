@@ -1,5 +1,5 @@
 import type { StatId } from './stats';
-import type { Season } from './world';
+import type { Month, Season } from './world';
 import type { Diet, Backstory } from './species';
 import type { GameEvent } from './events';
 import type { ParasiteDefinition, InjuryDefinition } from './health';
@@ -43,6 +43,9 @@ export interface IteroparousReproConfig {
   matingMinAge: number;
   matingOnsetAge: number;
   matingSeasons: Season[] | 'any';
+  /** Months when conception happens, for species whose breeding peaks inside a
+   *  season (the white-tailed deer rut). Narrows matingSeasons when set. */
+  matingMonths?: Month[];
   matingSeasonResetMonth: string;
   /** Per-turn probability of automatic mating when conditions are met (female, right age/season, not pregnant).
    *  Calibrate so mean lifetime fitness ≈ 2 (demographic replacement rate). Default: 0.08. */

@@ -6,6 +6,11 @@ import { TERRITORIAL_SPECIES } from './TerritorySystem';
 import { isCaptive } from './captivity';
 import type { SpeciesConfig } from '../types/speciesConfig';
 import type { AnimalState } from '../types/species';
+import type { Month } from '../types/world';
+import { isMatingTime } from './ReproductionSystem';
+
+/** When bucks make rubs and scrapes: the pre-rut and the rut itself */
+const RUT_SIGNPOST_MONTHS: Month[] = ['October', 'November'];
 
 // Minimal context to avoid circular import with gameStore
 export interface ActionContext {
@@ -14,7 +19,9 @@ export interface ActionContext {
   territory: { established: boolean };
   reproductionType: 'iteroparous' | 'semelparous';
   season: string;
-  matingSeasons: string[] | 'any';
+  month: Month;
+  /** Whether it's the time of year this species conceives */
+  matingTime: boolean;
   rng: { chance: (p: number) => boolean };
   nutrients: { minerals: number; vitamins: number };
   ageMonths: number;
@@ -28,7 +35,7 @@ export function buildActionContext(state: {
   animal: Pick<AnimalState, 'speciesId' | 'age' | 'sex' | 'nutrients'>;
   speciesBundle: { config: SpeciesConfig };
   territory: { established: boolean };
-  time: { season: string };
+  time: { season: string; month: Month };
   rng: { chance: (p: number) => boolean };
 }): ActionContext {
   const config = state.speciesBundle.config;
@@ -39,7 +46,8 @@ export function buildActionContext(state: {
     territory: state.territory,
     reproductionType: reproduction.type,
     season: state.time.season,
-    matingSeasons: reproduction.type === 'iteroparous' ? reproduction.matingSeasons ?? 'any' : [],
+    month: state.time.month,
+    matingTime: reproduction.type === 'iteroparous' && isMatingTime(reproduction, state.time),
     rng: state.rng,
     nutrients: state.animal.nutrients,
     ageMonths: state.animal.age,
@@ -132,8 +140,7 @@ export const VOLUNTARY_ACTIONS: VoluntaryAction[] = [
       // Too young to breed: no point searching
       const reproduction = ctx.config.reproduction;
       if (reproduction.type === 'iteroparous' && ctx.ageMonths < reproduction.matingMinAge) return false;
-      if (ctx.matingSeasons === 'any') return true;
-      return ctx.matingSeasons.includes(ctx.season);
+      return ctx.matingTime;
     },
     execute: (ctx) => {
       const override = ctx.config.actions?.overrides?.['search-mate'];
@@ -157,7 +164,8 @@ export const VOLUNTARY_ACTIONS: VoluntaryAction[] = [
       if (!ctx.config.actions?.rutSignposts || ctx.sex !== 'male' || ctx.captive) return false;
       const reproduction = ctx.config.reproduction;
       if (reproduction.type !== 'iteroparous' || ctx.ageMonths < reproduction.matingMinAge) return false;
-      return ctx.matingSeasons === 'any' || ctx.matingSeasons.includes(ctx.season);
+      // Bucks rub and scrape from the pre-rut through the peak of the rut
+      return RUT_SIGNPOST_MONTHS.includes(ctx.month);
     },
     execute: (ctx) => {
       // Does in estrus visit scrapes, so a buck's signposts can bring a mate to him

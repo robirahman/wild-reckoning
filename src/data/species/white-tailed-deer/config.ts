@@ -119,8 +119,14 @@ export const WHITE_TAILED_DEER_CONFIG: SpeciesConfig = {
     matingMinAge: 16,
     matingOnsetAge: 18,
     matingSeasons: ['autumn'],
+    // Minnesota does conceive in the November rut, or at the December second
+    // estrus; fawns follow about 200 days later, in late May and June
+    matingMonths: ['November', 'December'],
     matingSeasonResetMonth: 'September',
-    autoMatingProbability: 0.25,  // Nearly every doe conceives in first eligible autumn
+    // Nearly every doe conceives in her first eligible rut: over the eight rut
+    // weeks this gives the ~98% a season that 25%/week did over a whole
+    // autumn, concentrated in November like the real rut
+    autoMatingProbability: 0.4,
     maleCompetition: {
       enabled: true,
       baseWinProb: 0.15,

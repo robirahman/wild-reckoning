@@ -565,7 +565,7 @@ const deerEvents: GameEvent[] = [
     ],
     conditions: [
       { type: 'sex', sex: 'male' },
-      { type: 'season', seasons: ['autumn'] },
+      { type: 'month', months: ['October', 'November'] },
     ],
     weight: 12,
     cooldown: 5,
@@ -691,7 +691,7 @@ const deerEvents: GameEvent[] = [
     ],
     conditions: [
       { type: 'sex', sex: 'male' },
-      { type: 'season', seasons: ['autumn'] },
+      { type: 'month', months: ['October', 'November'] },
       { type: 'no_flag', flag: 'rut-active' },
       { type: 'age_range', min: 18 },
     ],
@@ -1127,7 +1127,7 @@ const deerEvents: GameEvent[] = [
     ],
     conditions: [
       { type: 'sex', sex: 'male' },
-      { type: 'season', seasons: ['autumn'] },
+      { type: 'month', months: ['October', 'November'] },
       { type: 'has_flag', flag: 'rut-active' },
       { type: 'no_injury', injuryId: 'antler-break' },
     ],
@@ -1268,7 +1268,7 @@ const deerEvents: GameEvent[] = [
     ],
     conditions: [
       { type: 'sex', sex: 'male' },
-      { type: 'season', seasons: ['autumn'] },
+      { type: 'month', months: ['October', 'November'] },
       { type: 'has_flag', flag: 'rut-active' },
       { type: 'has_injury', injuryId: 'antler-break' },
     ],

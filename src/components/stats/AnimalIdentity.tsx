@@ -1,7 +1,6 @@
 import { useGameStore } from '../../store/gameStore';
 import { formatWeight } from '../../utils/formatWeight';
 import { describeTurnSpan, formatAge } from '../../utils/timeSpan';
-import { pluralize } from '../../utils/pluralize';
 import styles from '../../styles/stats.module.css';
 
 export function AnimalIdentity() {
@@ -24,10 +23,6 @@ export function AnimalIdentity() {
   const bodyCondition = animal.physiologyState
     ? ['Emaciated', 'Thin', 'Good', 'Well fed', 'Fat'][animal.physiologyState.bodyConditionScore - 1]
     : null;
-
-  // The backstory's event recedes as the animal ages
-  const monthsSinceBackstory = animal.backstory.monthsSinceEvent
-    + Math.max(0, animal.age - (animal.startAge ?? animal.age));
 
   const dependentYoung = reproduction.type === 'iteroparous'
     ? reproduction.offspring.filter((o) => o.alive && !o.independent).length
@@ -70,11 +65,9 @@ export function AnimalIdentity() {
           </>
         )}
       </div>
-      {monthsSinceBackstory > 0 && (
-        <div className={styles.backstoryNote}>
-          {pluralize(monthsSinceBackstory, 'month')} since {animal.backstory.label.toLowerCase()}
-        </div>
-      )}
+      {/* Who the animal is. A count of months "since" reads wrong for labels
+          like "Pack-Raised", and the age above already shows time passing. */}
+      <div className={styles.backstoryNote}>{animal.backstory.label}</div>
       {currentPhase && config.phases && config.phases.length > 1 && (
         <div className={styles.statusNote}>
           {currentPhase.label}
