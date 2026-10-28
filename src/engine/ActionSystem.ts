@@ -150,6 +150,32 @@ export const VOLUNTARY_ACTIONS: VoluntaryAction[] = [
     },
   },
   {
+    id: 'rub-scrape',
+    label: 'Make Rubs and Scrapes',
+    description: 'Thrash saplings with your antlers and paw scrapes under low branches, leaving your scent for does to find.',
+    isAvailable: (ctx) => {
+      if (!ctx.config.actions?.rutSignposts || ctx.sex !== 'male' || ctx.captive) return false;
+      const reproduction = ctx.config.reproduction;
+      if (reproduction.type !== 'iteroparous' || ctx.ageMonths < reproduction.matingMinAge) return false;
+      return ctx.matingSeasons === 'any' || ctx.matingSeasons.includes(ctx.season);
+    },
+    execute: (ctx) => {
+      // Does in estrus visit scrapes, so a buck's signposts can bring a mate to him
+      const visited = ctx.rng.chance(0.35);
+      const marking = 'You shred the bark of a sapling with your antlers, paw a scrape beneath a low branch, and mark it.';
+      return {
+        narrative: visited
+          ? `${marking} By the next dawn a doe has stood over it; her scent hangs over yours.`
+          : `${marking} The woods carry your scent outward. No doe has answered yet.`,
+        statEffects: [{ stat: StatId.ADV, amount: -2, label: '-ADV' }],
+        consequences: [
+          { type: 'restore_energy', amount: -8 },
+          ...(visited ? [{ type: 'introduce_npc' as const, npcType: 'mate' as const }] : []),
+        ],
+      };
+    },
+  },
+  {
     id: 'seek-minerals',
     label: 'Seek Salt/Minerals',
     description: 'Search for a mineral lick or rich clay to supplement your diet.',

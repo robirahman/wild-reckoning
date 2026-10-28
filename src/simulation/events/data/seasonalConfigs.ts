@@ -259,8 +259,8 @@ export const WINTER_YARD_CONFIG: SeasonalTriggerConfig = {
   consequences: [],
 
   narrative: () => ({
-    text: 'The snow is belly-deep. Every step costs more than it earns. Ahead, through falling snow, you see dark hemlocks and cedars. The trails are already packed by earlier arrivals. Other deer are here, does and fawns mostly. The air between the evergreens is warmer. The browse within reach will be stripped bare within weeks.',
-    actionDetail: 'Hemlock and cedar shelter ahead, packed trails, other deer. The browse will thin fast.',
+    text: 'The snow is belly-deep. Every step costs more than it earns. Ahead, through falling snow, you see dark cedar and spruce. The trails are already packed by earlier arrivals. Other deer are here, does and fawns mostly. The air between the evergreens is warmer. The browse within reach will be stripped bare within weeks.',
+    actionDetail: 'Cedar and spruce shelter ahead, packed trails, other deer. The browse will thin fast.',
     clinicalDetail: 'Winter deer yard (traditional conifer shelter). Communal wintering site with packed trail network. Browse competition will intensify as winter progresses.',
     intensity: 'medium' as const,
     emotionalTone: 'cold',
@@ -288,7 +288,7 @@ export const WINTER_YARD_CONFIG: SeasonalTriggerConfig = {
       label: 'Stay independent',
       description: 'More browse, but no shelter and no herd warmth.',
       style: 'default' as const,
-      narrativeResult: 'You turn away from the yard and push back into open forest. The browse here is untouched. Hemlock boughs heavy with needles, red maple twigs with dried buds. But the wind cuts through you and the snow is unbroken.',
+      narrativeResult: 'You turn away from the yard and push back into open forest. The browse here is untouched. Balsam fir boughs heavy with needles, red maple twigs with dried buds. But the wind cuts through you and the snow is unbroken.',
       modifyOutcome(base, innerCtx) {
         const exposure = resolveExposure(innerCtx, {
           type: 'cold',

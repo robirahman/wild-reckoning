@@ -174,6 +174,10 @@ export const WHITE_TAILED_DEER_CONFIG: SpeciesConfig = {
     independenceFlag: 'fawns-just-independent',
   },
 
+  actions: {
+    rutSignposts: true,
+  },
+
   templateVars: {
     speciesName: 'White-Tailed Deer',
     regionName: 'Northern Minnesota',

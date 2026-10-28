@@ -157,7 +157,7 @@ const DOE_HIERARCHY: SocialProfile = {
   narratives: [
     { text: 'The dominant doe approaches with stiff, deliberate steps, ears pinned flat against her skull. Her body language is unmistakable: this feeding ground is hers, and you are trespassing. She lowers her head and stamps, demanding submission or challenge.' },
   ],
-  clinicalDetail: 'Doe hierarchy challenge. Dominance display for territory and feeding priority.',
+  clinicalDetail: 'Doe hierarchy challenge. Dominance display for feeding priority.',
   emotionalTone: 'tension',
 
   choices(_ctx) {
@@ -165,7 +165,7 @@ const DOE_HIERARCHY: SocialProfile = {
       {
         id: 'challenge-doe',
         label: 'Challenge her',
-        description: 'Meet her display with your own. Winner gets the prime territory.',
+        description: 'Meet her display with your own. Winner feeds first.',
         style: 'danger' as const,
         narrativeResult: 'You lower your head and step forward, matching her posture. Nose to nose. Neither moves. Her breath is hot on your muzzle.',
         modifyOutcome: (base, innerCtx) => {
@@ -392,7 +392,7 @@ const YEARLING_DISPERSAL: SocialProfile = {
     { stat: StatId.ADV, amount: 4, duration: 2, label: '+ADV' },
   ],
   narratives: [
-    { text: 'The dominant buck finds you again at the edge of the cedar stand. He approaches with lowered head and flattened ears, his body a wall of intent. There is no room for you here anymore — this territory belongs to him, and his tolerance has run out. The message is as old as the species: leave, or be driven out.' },
+    { text: 'The dominant buck finds you again at the edge of the cedar stand. He approaches with lowered head and flattened ears, his body a wall of intent. There is no room for you here anymore. His tolerance has run out. The message is as old as the species: leave, or be driven out.' },
   ],
   clinicalDetail: 'Yearling dispersal pressure. Dominant male forcing subordinate dispersal.',
   emotionalTone: 'tension',
@@ -404,7 +404,7 @@ const YEARLING_DISPERSAL: SocialProfile = {
         {
           id: 'resist-dispersal',
           label: 'Resist the pressure',
-          description: 'Stay in familiar territory despite the hostility.',
+          description: 'Stay on familiar ground despite the hostility.',
           style: 'default' as const,
           narrativeResult: 'You hold your ground, but the message is clear — this confrontation will come again, and next time it will be worse.',
           modifyOutcome: (base) => ({
@@ -434,7 +434,7 @@ const YEARLING_DISPERSAL: SocialProfile = {
         label: 'Leave before it gets worse',
         description: 'The dominant buck won\'t ask again.',
         style: 'default' as const,
-        narrativeResult: 'You lower your head and go. Behind you, the dominant buck watches until you are out of sight, then turns back to his territory. The world ahead is vast and unknown and entirely yours to survive in.',
+        narrativeResult: 'You lower your head and go. Behind you, the dominant buck watches until you are out of sight, then turns back toward the does. The world ahead is vast and unknown and entirely yours to survive in.',
         modifyOutcome: (base) => ({
           ...base,
           statEffects: [{ stat: StatId.NOV, amount: 10, duration: 3, label: '+NOV' }],

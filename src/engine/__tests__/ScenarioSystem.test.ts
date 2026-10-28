@@ -29,8 +29,6 @@ describe('scenario start', () => {
     expect(s.animal.physiologyState?.bodyConditionScore).toBe(2); // thin for a 2-year-old doe
     expect(s.animal.age).toBe(24);
     expect(s.animal.backstory.type).toBe('wild-born');
-    expect(s.animal.flags.has('territory-established')).toBe(true);
-    expect(s.territory.established).toBe(true);
   });
 
   it('adds starting injuries and parasites', () => {

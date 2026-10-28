@@ -1173,7 +1173,7 @@ export const allEvents: GameEvent[] = [
     type: 'passive',
     category: 'foraging',
     simulated: true,
-    narrativeText: "Your sprint carried you deeper into the forest than you have ever been, past old hemlocks, past mossy boulders, into a hollow. A spring bubbles up between two rocks, clear and cold. Wild mushrooms and fiddlehead ferns grow thick around it. The smell of cold water and green growth fills your nostrils.",
+    narrativeText: "Your sprint carried you deeper into the forest than you have ever been, past old white pines, past mossy boulders, into a hollow. A spring bubbles up between two rocks, clear and cold. Wild mushrooms and fiddlehead ferns grow thick around it. The smell of cold water and green growth fills your nostrils.",
     statEffects: [
       { stat: StatId.HOM, amount: -8, label: '-HOM' },
       { stat: StatId.ADV, amount: -6, label: '-ADV' },

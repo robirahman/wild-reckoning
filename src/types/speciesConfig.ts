@@ -269,6 +269,8 @@ export interface SpeciesConfig {
 
   /** Species-specific overrides for voluntary actions */
   actions?: {
+    /** Males advertise for mates with rubs and scrapes during the mating season (deer) */
+    rutSignposts?: boolean;
     overrides?: Record<string, {
       label?: string;
       description?: string;

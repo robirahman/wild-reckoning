@@ -79,11 +79,11 @@ export const CROSSING_OUTCOMES: CrossingOutcome[] = [
 // ── Winter Yard Arrival ──
 
 export const WINTER_YARD_ARRIVAL: string[] = [
-  'The hemlock valley opens before you, dark and sheltered, the old hemlocks forming a living windbreak. The packed snow is marked by dozens of hoofprints. Other deer have already arrived.',
+  'The cedar swamp opens before you, dark and sheltered, the old cedar and balsam fir forming a living windbreak. The packed snow is marked by dozens of hoofprints. Other deer have already arrived.',
   'You push through the last ridge of deep snow and descend into the traditional wintering grounds. The air is warmer here, shielded from the wind, and the scent of other deer is everywhere.',
   'The yard is as your inherited memory promised: dense conifer cover, packed trails between feeding areas, and the warmth of many bodies in a sheltered place.',
   'You arrive in a whiteout, the snowstorm erasing everything beyond the length of your own body. But the scent is unmistakable. Cedar, packed snow, the warm musk of huddled deer. You push toward it blind, and the yard receives you.',
-  'The sky is clear and the sun almost warm as you descend into the wintering grounds. Steam rises from the backs of deer already bedded in the shelter of the hemlocks. The scent of the herd is thick and warm.',
+  'The sky is clear and the sun almost warm as you descend into the wintering grounds. Steam rises from the backs of deer already bedded in the shelter of the cedars. The scent of the herd is thick and warm.',
   'Sleet drives sideways through the canopy as you stumble into the yard, ice crusting your coat, your legs trembling from the final push through deep snow. Other deer lift their heads, then look away. Another survivor. The yard makes room.',
 ];
 

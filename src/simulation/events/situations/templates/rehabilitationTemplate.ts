@@ -107,7 +107,7 @@ function getReleaseChoices(): SimulationChoice[] {
       label: 'Step out cautiously',
       description: 'The world outside the gate is enormous. Take it slowly.',
       style: 'default',
-      narrativeResult: 'You cross the threshold with deliberate care, testing each step. The ground feels different under your hooves -- softer, less predictable. You lower your nose to the leaf litter and breathe in: fungal decay, earthworm casings, the distant musk of something that might be another deer. You drift toward the nearest cover, a stand of young hemlocks, and stand there for a long time. Ears turning, nostrils working, testing each smell.',
+      narrativeResult: 'You cross the threshold with deliberate care, testing each step. The ground feels different under your hooves -- softer, less predictable. You lower your nose to the leaf litter and breathe in: fungal decay, earthworm casings, the distant musk of something that might be another deer. You drift toward the nearest cover, a stand of young balsam fir, and stand there for a long time. Ears turning, nostrils working, testing each smell.',
       modifyOutcome(base) {
         return {
           ...base,
@@ -161,7 +161,7 @@ function resolveFirstForage(ctx: SimulationContext): SimulationOutcome {
 
   if (isWinter) {
     weightChange = -1;
-    narrative = 'The browse is sparse. Dry twigs, frozen lichen, bark stripped from saplings by others before you. You chew cedar needles and find them bitter, resinous, barely worth the effort. Your rumen cramps around the unfamiliar roughage. Your flanks are thinner than yesterday.';
+    narrative = 'The browse is sparse. You find one cedar branch low enough to reach and strip it greedily; it is the best thing you have eaten in days, and there is not enough of it. The rest is dry twigs and bark stripped by others before you. Your rumen cramps around the unfamiliar roughage. Your flanks are thinner than yesterday.';
   } else if (isSummer) {
     weightChange = 1;
     narrative = 'Clover in the clearings. Tender maple shoots. Mushrooms pushing through damp litter. You nose through the undergrowth and your mouth fills with saliva before you decide to bite. Your legs carry you from patch to patch without hesitation. The green smell pulls you forward and you follow it.';

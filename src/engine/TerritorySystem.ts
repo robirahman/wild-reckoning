@@ -15,9 +15,12 @@ import {
   TERRITORY_INTRUDER_LEAVE_CHANCE,
 } from './constants';
 
-/** Territorial species IDs — others ignore territory mechanics */
+/**
+ * Territorial species IDs — others ignore territory mechanics. White-tailed
+ * deer aren't territorial: they keep overlapping home ranges, and does only
+ * defend the spot where their fawns are hidden.
+ */
 export const TERRITORIAL_SPECIES = new Set([
-  'white-tailed-deer',
   'gray-wolf',
   'african-elephant',
   'polar-bear',

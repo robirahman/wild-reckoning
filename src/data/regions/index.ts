@@ -15,7 +15,8 @@ export const REGION_DEFINITIONS: Record<string, RegionDefinition> = {
       { id: 'forest-browse', name: 'Forest Browse', availableSeasons: ['spring', 'summer', 'autumn'], nutritiveValue: 40, abundanceByMonth: [0, 0, 0.2, 0.6, 0.8, 0.9, 0.9, 0.8, 0.6, 0.3, 0, 0] },
       { id: 'clover', name: 'Clover', availableSeasons: ['spring', 'summer'], nutritiveValue: 55, abundanceByMonth: [0, 0, 0.1, 0.5, 0.8, 0.9, 0.8, 0.6, 0.3, 0, 0, 0] },
       { id: 'frozen-browse', name: 'Frozen Browse', availableSeasons: ['winter'], nutritiveValue: 15, abundanceByMonth: [0.6, 0.5, 0, 0, 0, 0, 0, 0, 0, 0, 0.4, 0.7] },
-      { id: 'white-cedar-browse', name: 'White Cedar Browse', availableSeasons: ['winter', 'spring'], nutritiveValue: 30, abundanceByMonth: [0.6, 0.5, 0.3, 0.2, 0, 0, 0, 0, 0, 0, 0.3, 0.6] },
+      // Among the best winter browse, but over-browsed and scarce within a deer's reach
+      { id: 'white-cedar-browse', name: 'White Cedar Browse', availableSeasons: ['winter', 'spring'], nutritiveValue: 45, abundanceByMonth: [0.4, 0.33, 0.2, 0.13, 0, 0, 0, 0, 0, 0, 0.2, 0.4] },
       { id: 'standing-dead-grass', name: 'Standing Dead Grass', availableSeasons: ['winter'], nutritiveValue: 25, abundanceByMonth: [0.5, 0.4, 0, 0, 0, 0, 0, 0, 0, 0, 0.4, 0.6] },
     ],
     fauna: ['white-tailed-deer', 'gray-wolf', 'turkey', 'grouse', 'moose', 'snowshoe-hare'],
@@ -36,7 +37,8 @@ export const REGION_DEFINITIONS: Record<string, RegionDefinition> = {
       lastFrostMonth: 5,
     },
     flora: [
-      { id: 'cedar-browse', name: 'Cedar Browse', availableSeasons: ['winter', 'spring'], nutritiveValue: 20, abundanceByMonth: [0.5, 0.4, 0.3, 0.2, 0, 0, 0, 0, 0, 0.1, 0.3, 0.5] },
+      // Nutritious, but deer yards are browsed down to a bare line
+      { id: 'cedar-browse', name: 'Cedar Browse', availableSeasons: ['winter', 'spring'], nutritiveValue: 45, abundanceByMonth: [0.22, 0.18, 0.13, 0.09, 0, 0, 0, 0, 0, 0.04, 0.13, 0.22] },
       { id: 'alder-bark', name: 'Alder Bark', availableSeasons: ['winter'], nutritiveValue: 10, abundanceByMonth: [0.6, 0.5, 0.3, 0, 0, 0, 0, 0, 0, 0, 0.3, 0.6] },
     ],
     fauna: ['white-tailed-deer', 'snowshoe-hare', 'raven'],

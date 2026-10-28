@@ -248,7 +248,8 @@ export const createTurnSlice: GameSlice<TurnSlice> = (set, get) => ({
         break;
       }
       case 'restore_energy': {
-        animal.energy = Math.min(100, animal.energy + consequence.amount);
+        // Negative amounts are an energy cost
+        animal.energy = Math.max(0, Math.min(100, animal.energy + consequence.amount));
         set({ animal });
         break;
       }

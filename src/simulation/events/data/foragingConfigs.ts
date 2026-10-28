@@ -146,7 +146,7 @@ export const SEASONAL_BROWSE_CONFIG: SeasonalBrowseConfig = {
       season: 'winter',
       bonusCalories: 0,
       homChange: 2,
-      narrative: 'Cedar and hemlock still have needles. You strip the lower branches. Resinous, bitter. It fills the rumen.',
+      narrative: 'The cedar is browsed bare as high as you can reach. You strip balsam fir instead. Resinous, bitter. It fills the rumen.',
       clinicalDetail: 'Baseline winter browse on conifers. 0 bonus kcal.',
     },
     // Spring

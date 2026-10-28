@@ -14,7 +14,6 @@ export const SCENARIOS: ScenarioDefinition[] = [
     startingWeight: 84,
     startingAge: 24,
     startMonth: 11,
-    startingFlags: ['territory-established'],
     winCondition: {
       type: 'survive_turns',
       target: 20,
